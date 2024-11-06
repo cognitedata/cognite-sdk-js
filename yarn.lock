@@ -3313,7 +3313,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@cognite/sdk-alpha@workspace:packages/alpha"
   dependencies:
-    "@cognite/sdk": "npm:^9.15.7"
+    "@cognite/sdk": "npm:^9.16.0"
     "@cognite/sdk-core": "npm:^4.10.6"
   languageName: unknown
   linkType: soft
@@ -3322,7 +3322,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@cognite/sdk-beta@workspace:packages/beta"
   dependencies:
-    "@cognite/sdk": "npm:^9.15.7"
+    "@cognite/sdk": "npm:^9.16.0"
     "@cognite/sdk-core": "npm:^4.10.6"
   languageName: unknown
   linkType: soft
@@ -3339,7 +3339,7 @@ __metadata:
   dependencies:
     "@types/geojson": "npm:^7946.0.8"
     cross-fetch: "npm:^3.0.4"
-    happy-dom: "npm:^14.12.3"
+    happy-dom: "npm:^15.10.1"
     lodash: "npm:^4.17.11"
   languageName: unknown
   linkType: soft
@@ -3383,7 +3383,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@cognite/sdk-playground@workspace:packages/playground"
   dependencies:
-    "@cognite/sdk": "npm:^9.15.7"
+    "@cognite/sdk": "npm:^9.16.0"
     "@cognite/sdk-core": "npm:^4.10.6"
   languageName: unknown
   linkType: soft
@@ -3397,7 +3397,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@cognite/sdk@npm:^9, @cognite/sdk@npm:^9.15.7, @cognite/sdk@workspace:packages/stable":
+"@cognite/sdk@npm:^9, @cognite/sdk@npm:^9.16.0, @cognite/sdk@workspace:packages/stable":
   version: 0.0.0-use.local
   resolution: "@cognite/sdk@workspace:packages/stable"
   dependencies:
@@ -12247,14 +12247,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"happy-dom@npm:^14.12.3":
-  version: 14.12.3
-  resolution: "happy-dom@npm:14.12.3"
+"happy-dom@npm:^15.10.1":
+  version: 15.10.1
+  resolution: "happy-dom@npm:15.10.1"
   dependencies:
     entities: "npm:^4.5.0"
     webidl-conversions: "npm:^7.0.0"
     whatwg-mimetype: "npm:^3.0.0"
-  checksum: 10c0/72e817bc9d03c4c0dbb794f8fb5b69aac4b4dbe0ee789a6b6a02a60298a9aa99bac766967a5c642153e5c95c02489437f878de5641ed64fd13b2271c56805df5
+  checksum: 10c0/2951f40e8051b7c031a5887098b772a729c677322b8ebf4918111e2abb65ad451cf93cf1925cb86c1ab8b2fe922f4e5d746104bb3e4caa6a6a31b67f7bb71bab
   languageName: node
   linkType: hard
 
