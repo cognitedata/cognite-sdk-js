@@ -17,8 +17,8 @@ for (const packageFilePath of packageFilesPaths) {
     // 6.0.0-rc.1 --> [6.0.0, -rc.1]
     packageJson.version = packageJson.version.split('-rc')[0];
     fs.writeFileSync(
-      packageFilePath, 
+      packageFilePath,
       `${JSON.stringify(packageJson, null, 2)}\n`
     );
   }
-};
+}
