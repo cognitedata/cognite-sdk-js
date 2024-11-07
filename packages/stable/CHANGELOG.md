@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [9.16.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.16.0...@cognite/sdk@9.16.1) (2024-11-07)
+
+
+### Bug Fixes
+
+* **files:** arrange-imports for multipart session ([#1171](https://github.com/cognitedata/cognite-sdk-js/issues/1171)) ([0848b3f](https://github.com/cognitedata/cognite-sdk-js/commit/0848b3f57bf788cee8d991b76b19a647590a063d))
+
+
+
+
+
 # [9.16.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.15.7...@cognite/sdk@9.16.0) (2024-10-07)
 
 
