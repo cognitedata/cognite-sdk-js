@@ -2,14 +2,14 @@ import {
   BaseResourceAPI,
   type CDFHttpClient,
   type MetadataMap,
-} from "@cognite/sdk-core";
+} from '@cognite/sdk-core';
 import type {
   FileContent,
   FileInfo,
   MultiPartFileChunkResponse,
   MultiPartFileUploadResponse,
-} from "../../types";
-import { UploadAlreadyFinishedError } from "./errors";
+} from '../../types';
+import { UploadAlreadyFinishedError } from './errors';
 
 export class FilesMultipartUploadSessionAPI extends BaseResourceAPI<FileInfo> {
   public multiPartFileUploadResponse: MultiPartFileUploadResponse;
@@ -34,7 +34,7 @@ export class FilesMultipartUploadSessionAPI extends BaseResourceAPI<FileInfo> {
   ): Promise<undefined | MultiPartFileChunkResponse> {
     const hasFileContent = fileContent != null;
     if (!hasFileContent) {
-      throw Error("you are uploading empty content");
+      throw Error('you are uploading empty content');
     }
     if (
       partNumber < 0 ||
@@ -54,7 +54,7 @@ export class FilesMultipartUploadSessionAPI extends BaseResourceAPI<FileInfo> {
       return;
     }
     if (this.multiPartFileUploadResponse.uploadUrls[partNumber] === null) {
-      throw Error("part number is not valid");
+      throw Error('part number is not valid');
     }
     if (fileContent != null) {
       const response = await this.put(
@@ -93,7 +93,7 @@ export class FilesMultipartUploadSessionAPI extends BaseResourceAPI<FileInfo> {
       return;
     }
 
-    const path = this.url("completemultipartupload");
+    const path = this.url('completemultipartupload');
     const requestBody = {
       id: this.multiPartFileUploadResponse.id,
       uploadId: this.multiPartFileUploadResponse.uploadId,
@@ -103,7 +103,7 @@ export class FilesMultipartUploadSessionAPI extends BaseResourceAPI<FileInfo> {
       data: requestBody,
     });
     if (response.status !== 200) {
-      throw Error("upload cannot be completed");
+      throw Error('upload cannot be completed');
     }
     this.finished = true;
   }
