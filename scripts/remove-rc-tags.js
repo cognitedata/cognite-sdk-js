@@ -8,7 +8,6 @@ const packageFilesPaths = glob.sync('packages/*/package.json');
 
 // loop through each and remove rc tag
 for (const packageFilePath of packageFilesPaths) {
-
   //get the package content to json file
   const packageJson = JSON.parse(fs.readFileSync(packageFilePath, 'utf-8'));
 
