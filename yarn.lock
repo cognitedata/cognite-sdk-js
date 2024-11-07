@@ -204,8 +204,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@cognite/sdk-alpha@workspace:packages/alpha"
   dependencies:
-    "@cognite/sdk": "npm:^10.0.0-rc.2"
-    "@cognite/sdk-core": "npm:^5.0.0-rc.2"
+    "@cognite/sdk": "npm:^10.0.0-rc.3"
+    "@cognite/sdk-core": "npm:^5.0.0-rc.3"
   languageName: unknown
   linkType: soft
 
@@ -213,8 +213,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@cognite/sdk-beta@workspace:packages/beta"
   dependencies:
-    "@cognite/sdk": "npm:^10.0.0-rc.2"
-    "@cognite/sdk-core": "npm:^5.0.0-rc.2"
+    "@cognite/sdk": "npm:^10.0.0-rc.3"
+    "@cognite/sdk-core": "npm:^5.0.0-rc.3"
   languageName: unknown
   linkType: soft
 
@@ -224,7 +224,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@cognite/sdk-core@npm:^5.0.0-rc.0, @cognite/sdk-core@npm:^5.0.0-rc.2, @cognite/sdk-core@workspace:packages/core":
+"@cognite/sdk-core@npm:^5.0.0-rc.0, @cognite/sdk-core@npm:^5.0.0-rc.3, @cognite/sdk-core@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@cognite/sdk-core@workspace:packages/core"
   dependencies:
@@ -271,8 +271,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@cognite/sdk-playground@workspace:packages/playground"
   dependencies:
-    "@cognite/sdk": "npm:^10.0.0-rc.2"
-    "@cognite/sdk-core": "npm:^5.0.0-rc.2"
+    "@cognite/sdk": "npm:^10.0.0-rc.3"
+    "@cognite/sdk-core": "npm:^5.0.0-rc.3"
   languageName: unknown
   linkType: soft
 
@@ -285,11 +285,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@cognite/sdk@npm:^10.0.0-rc.0, @cognite/sdk@npm:^10.0.0-rc.2, @cognite/sdk@workspace:packages/stable":
+"@cognite/sdk@npm:^10.0.0-rc.0, @cognite/sdk@npm:^10.0.0-rc.3, @cognite/sdk@workspace:packages/stable":
   version: 0.0.0-use.local
   resolution: "@cognite/sdk@workspace:packages/stable"
   dependencies:
-    "@cognite/sdk-core": "npm:^5.0.0-rc.2"
+    "@cognite/sdk-core": "npm:^5.0.0-rc.3"
     "@types/geojson": "npm:^7946.0.14"
     geojson: "npm:^0.5.0"
     lodash: "npm:^4.17.21"

@@ -5,7 +5,7 @@
   "homepage": "https://github.com/cognitedata/cognite-sdk-js#readme",
   "main": "dist/index.js",
   "types": "dist/src/index.d.ts",
-  "version": "1.0.0-rc.2",
+  "version": "1.0.0-rc.3",
   "type": "module",
   "scripts": {
     "clean": "rm -rf dist/ docs/ codeSnippets/",
@@ -23,8 +23,8 @@
     "test-snippets": ""
   },
   "dependencies": {
-    "@cognite/sdk": "^10.0.0-rc.2",
-    "@cognite/sdk-core": "^5.0.0-rc.2"
+    "@cognite/sdk": "^10.0.0-rc.3",
+    "@cognite/sdk-core": "^5.0.0-rc.3"
   },
   "files": [
     "dist"

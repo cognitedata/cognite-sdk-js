@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-rc.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@5.0.0-rc.1...@cognite/sdk-core@5.0.0-rc.3) (2024-11-07)
+
+
+### Bug Fixes
+
+* add instance id support to timeseries API ([#1165](https://github.com/cognitedata/cognite-sdk-js/issues/1165)) ([070dbb3](https://github.com/cognitedata/cognite-sdk-js/commit/070dbb399a63a74079a606951610cdf1b67febdf))
+
+
+
+
+
 # [5.0.0-rc.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@5.0.0-rc.0...@cognite/sdk-core@5.0.0-rc.1) (2024-09-18)
 
 **Note:** Version bump only for package @cognite/sdk-core

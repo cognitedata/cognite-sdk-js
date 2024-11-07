@@ -6,7 +6,7 @@
   "main": "dist/index.js",
   "types": "dist/src/index.d.ts",
   "type": "module",
-  "version": "8.0.0-rc.2",
+  "version": "8.0.0-rc.3",
   "scripts": {
     "clean": "rm -rf dist/ docs/",
     "test": "yarn g:vitest run",
@@ -22,8 +22,8 @@
     "test-snippets": ""
   },
   "dependencies": {
-    "@cognite/sdk": "^10.0.0-rc.2",
-    "@cognite/sdk-core": "^5.0.0-rc.2"
+    "@cognite/sdk": "^10.0.0-rc.3",
+    "@cognite/sdk-core": "^5.0.0-rc.3"
   },
   "files": [
     "dist"

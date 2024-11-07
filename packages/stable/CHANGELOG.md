@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [10.0.0-rc.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@10.0.0-rc.1...@cognite/sdk@10.0.0-rc.3) (2024-11-07)
+
+
+### Bug Fixes
+
+* add instance id support to files API ([#1166](https://github.com/cognitedata/cognite-sdk-js/issues/1166)) ([a188294](https://github.com/cognitedata/cognite-sdk-js/commit/a1882943c701ac3b70f57e2a9cd9c15a4e262645))
+* add instance id support to timeseries API ([#1165](https://github.com/cognitedata/cognite-sdk-js/issues/1165)) ([070dbb3](https://github.com/cognitedata/cognite-sdk-js/commit/070dbb399a63a74079a606951610cdf1b67febdf))
+
+
+
+
+
 # [10.0.0-rc.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@10.0.0-rc.0...@cognite/sdk@10.0.0-rc.1) (2024-09-18)
 
 
