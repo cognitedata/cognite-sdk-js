@@ -7,7 +7,7 @@ const glob = require('glob');
 const packageFilesPaths = glob.sync('packages/*/package.json');
 
 // loop through each and remove rc tag
-packageFilesPaths.forEach(packageFilePath => {
+for (const packageFilePath of packageFilesPaths) {
 
   //get the package content to json file
   const packageJson = JSON.parse(fs.readFileSync(packageFilePath, 'utf-8'));
@@ -18,7 +18,7 @@ packageFilesPaths.forEach(packageFilePath => {
     packageJson.version = packageJson.version.split('-rc')[0];
     fs.writeFileSync(
       packageFilePath, 
-      `${JSON.stringify(packageJson,null,2)}\n`
+      `${JSON.stringify(packageJson, null, 2)}\n`
     );
   }
-});
+};
