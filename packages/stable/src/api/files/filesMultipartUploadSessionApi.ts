@@ -3,8 +3,9 @@ import {
   type CDFHttpClient,
   type MetadataMap,
 } from '@cognite/sdk-core';
-import type { FileContent, FileInfo } from '@cognite/sdk/src/types';
 import type {
+  FileContent,
+  FileInfo,
   MultiPartFileChunkResponse,
   MultiPartFileUploadResponse,
 } from '../../types';
@@ -40,7 +41,9 @@ export class FilesMultipartUploadSessionAPI extends BaseResourceAPI<FileInfo> {
       partNumber >= this.multiPartFileUploadResponse.uploadUrls.length
     ) {
       throw Error(
-        `part number is outside allowed range 0 to ${this.multiPartFileUploadResponse.uploadUrls.length - 1}`
+        `part number is outside allowed range 0 to ${
+          this.multiPartFileUploadResponse.uploadUrls.length - 1
+        }`
       );
     }
     if (this.canCompleteUpload()) {
