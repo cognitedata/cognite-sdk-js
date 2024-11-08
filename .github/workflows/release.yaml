@@ -35,15 +35,13 @@ jobs:
       ${{
         !contains(github.event.commits[0].message, '[skip-ci]') &&
         (
-        # if the branch is master and with [release tag]
-          (github.ref == 'ref/heads/master' && contains(github.event.commits[0].message, '[release]')) ||
-          # Or release branch with fix/feat/[release]
-          (startswith(github.ref, 'ref/heads/release-') &&
-            startsWith(github.event.commits[0].message, 'fix:')  ||
+          (github.ref == 'refs/heads/master' && contains(github.event.commits[0].message, '[release]')) ||
+          (startswith(github.ref, 'refs/heads/release-') &&
+            (startsWith(github.event.commits[0].message, 'fix:')  ||
             startsWith(github.event.commits[0].message, 'fix(')  ||
             startsWith(github.event.commits[0].message, 'feat:') ||
             startsWith(github.event.commits[0].message, 'feat(') ||
-            contains(github.event.commits[0].message, '[release]'))
+            contains(github.event.commits[0].message, '[release]')))
           )
         )
       }}
@@ -86,16 +84,29 @@ jobs:
       - name: Build doc
         run: yarn docs:bundle
 
+        # Remove rc tag in master branch when it is a [release] commit
+      - name: Remove RC tags
+        if: github.ref == 'refs/heads/master' && contains(github.event.commits[0].message, '[release]') && startsWith(github.head_ref , 'release-')
+        run: |
+            node scripts/remove-rc-tags.js
+            git config --global user.email "cognite-cicd@users.noreply.github.com"
+            git config --global user.name "Cognite CICD"
+            git add packages/*/package.json
+            git commit -m "chore: remove rc tags [skip-ci]"
+            git push
+
       - name: Lerna version
         env:
           GH_TOKEN: ${{ secrets.GH_LERNA_TOKEN }} # Temporary fix to make lerna able to push the new versions commit to master
           GITHUB_TOKEN: ${{ secrets.GH_LERNA_TOKEN }} # Temporary fix to make lerna able to push the new versions commit to master
         run: |
-          if [[ "${{ github.ref }}" == "ref/head/master" ]]; then
-            if [[ "${{ contains(github.event.commits[0].message, '[bump-version]') }}" == "true"]]; then
+          if [[ "${{ github.ref }}" == "refs/heads/master" ]]; then
+            if [[ "${{ startsWith(github.head_ref , 'release-') }}"]]; then
+              echo "Skipping version bump for release merge"
+            elif [[ "${{ contains(github.event.commits[0].message, '[bump-version]') }}" == "true"]]; then
               yarn lerna version --conventional-commits --create-release github --no-private --yes
             fi
-          elif [[ "${{ github.ref }}" == ref/head/release-*  ]]; then
+          elif [[ "${{ github.ref }}" == refs/heads/release-*  ]]; then
             if [[ "${{ contains(github.event.commits[0].message, '[bump-version]') }}" == "true"]]; then
               yarn lerna version --conventional-commits --conventional-prerelease --preid rc --create-release github --no-private --yes
             fi
@@ -106,9 +117,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
         run: |
-          if [[ "${{ github.ref }}" == "ref/head/master" ]]; then
+          if [[ "${{ github.ref }}" == "refs/heads/master" ]]; then
             yarn lerna publish from-package  --yes --no-git-reset --no-verify-access 
-          elif [[ "${{ github.ref }}" == ref/head/release-* ]]; then
+          elif [[ "${{ github.ref }}" == refs/heads/release-* ]]; then
             yarn lerna publish from-package  --pre-dist-tag rc --yes --no-git-reset --no-verify-access
           fi
 

@@ -1,5 +1,4 @@
-// Remove -rc tag from release branch when it merge to master\
-// TODO: modify release.yaml to run this when merging from a release branch to the master branch
+// Remove -rc tag from release branch when it merge to master
 const fs = require('node:fs');
 const glob = require('glob');
 
