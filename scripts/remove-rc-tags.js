@@ -13,7 +13,8 @@ for (const packageFilePath of packageFilesPaths) {
   // check for rc, remove it, reassign the version and rewrite
   if (packageJson.version?.includes('-rc')) {
     // 6.0.0-rc.1 --> [6.0.0, -rc.1]
-    packageJson.version = packageJson.version.split('-rc')[0];
+    // 5.0.0 which then convert to 6.0.0 by release.yaml
+    packageJson.version = parseInt(packageJson.version.split('-rc')[0]) - 1;
     fs.writeFileSync(
       packageFilePath,
       `${JSON.stringify(packageJson, null, 2)}\n`
