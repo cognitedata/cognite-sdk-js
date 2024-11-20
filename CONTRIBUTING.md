@@ -114,7 +114,7 @@ Also, keep in mind that the `[release]` commit has to be the HEAD of
 master, and Github Action only runs on the HEAD. If HEAD has changed by the time
 the versioning happens, Github Action will fail.
 
-In order to perform a major release by merging a release candidate branch to master by keeping the release version as it is.
+In order to perform a major release by merging a release candidate branch to master by keeping the same major version in release candidate version.
 
 - Create a PR from release-* to master
 - Make a PR title and the message when merging to be ` chore(): details [release]`
