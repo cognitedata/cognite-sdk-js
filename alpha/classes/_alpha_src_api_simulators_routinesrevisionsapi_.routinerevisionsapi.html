@@ -91,7 +91,7 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_alpha_src_api_simulators_routinesrevisionsapi_.routinerevisionsapi.html#create" class="tsd-kind-icon">create</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_alpha_src_api_simulators_routinesrevisionsapi_.routinerevisionsapi.html#delete" class="tsd-kind-icon">delete</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_alpha_src_api_simulators_routinesrevisionsapi_.routinerevisionsapi.html#list" class="tsd-kind-icon">list</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-external"><a href="_alpha_src_api_simulators_routinesrevisionsapi_.routinerevisionsapi.html#list" class="tsd-kind-icon">list</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_alpha_src_api_simulators_routinesrevisionsapi_.routinerevisionsapi.html#retrieve" class="tsd-kind-icon">retrieve</a></li>
 							</ul>
 						</section>
@@ -110,7 +110,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/0848b3f57b/packages/alpha/src/api/simulators/routinesRevisionsAPI.ts#L18">packages/alpha/src/api/simulators/routinesRevisionsAPI.ts:18</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/96bddf183e/packages/alpha/src/api/simulators/routinesRevisionsAPI.ts#L22">packages/alpha/src/api/simulators/routinesRevisionsAPI.ts:22</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -133,7 +133,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/0848b3f57b/packages/alpha/src/api/simulators/routinesRevisionsAPI.ts#L33">packages/alpha/src/api/simulators/routinesRevisionsAPI.ts:33</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/96bddf183e/packages/alpha/src/api/simulators/routinesRevisionsAPI.ts#L56">packages/alpha/src/api/simulators/routinesRevisionsAPI.ts:56</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -146,26 +146,32 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-external">
 					<a name="list" class="tsd-anchor"></a>
 					<h3>list</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">list<span class="tsd-signature-symbol">(</span>filter<span class="tsd-signature-symbol">?: </span><a href="../interfaces/_alpha_src_types_.simulatorroutinerevisionsfilterquery.html" class="tsd-signature-type">SimulatorRoutineRevisionsFilterQuery</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/_stable_src_api_documents_types_gen_.documentlistresponse.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_core_src_types_.listresponse.html" class="tsd-signature-type">ListResponse</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_alpha_src_types_.simulatorroutinerevision.html" class="tsd-signature-type">SimulatorRoutineRevision</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">list&lt;RevisionResponseType&gt;<span class="tsd-signature-symbol">(</span>query<span class="tsd-signature-symbol">?: </span><a href="../interfaces/_alpha_src_types_.simulatorroutinerevisionsfilterquery.html" class="tsd-signature-type">SimulatorRoutineRevisionsFilterQuery</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/_core_src_types_.html#cursorandasynciterator" class="tsd-signature-type">CursorAndAsyncIterator</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">RevisionResponseType</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/0848b3f57b/packages/alpha/src/api/simulators/routinesRevisionsAPI.ts#L22">packages/alpha/src/api/simulators/routinesRevisionsAPI.ts:22</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/96bddf183e/packages/alpha/src/api/simulators/routinesRevisionsAPI.ts#L40">packages/alpha/src/api/simulators/routinesRevisionsAPI.ts:40</a></li>
 								</ul>
 							</aside>
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
+								<li>
+									<h4>RevisionResponseType<span class="tsd-signature-symbol">: </span><a href="../interfaces/_alpha_src_types_.simulatorroutinerevisionbase.html" class="tsd-signature-type">SimulatorRoutineRevisionBase</a> = <span class="tsd-signature-type">SimulatorRoutineRevisionView</span></h4>
+								</li>
+							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> filter: <a href="../interfaces/_alpha_src_types_.simulatorroutinerevisionsfilterquery.html" class="tsd-signature-type">SimulatorRoutineRevisionsFilterQuery</a></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> query: <a href="../interfaces/_alpha_src_types_.simulatorroutinerevisionsfilterquery.html" class="tsd-signature-type">SimulatorRoutineRevisionsFilterQuery</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_stable_src_api_documents_types_gen_.documentlistresponse.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_core_src_types_.listresponse.html" class="tsd-signature-type">ListResponse</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_alpha_src_types_.simulatorroutinerevision.html" class="tsd-signature-type">SimulatorRoutineRevision</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="../modules/_core_src_types_.html#cursorandasynciterator" class="tsd-signature-type">CursorAndAsyncIterator</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">RevisionResponseType</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -179,7 +185,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/0848b3f57b/packages/alpha/src/api/simulators/routinesRevisionsAPI.ts#L29">packages/alpha/src/api/simulators/routinesRevisionsAPI.ts:29</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/96bddf183e/packages/alpha/src/api/simulators/routinesRevisionsAPI.ts#L52">packages/alpha/src/api/simulators/routinesRevisionsAPI.ts:52</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -218,7 +224,7 @@
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
 								<a href="_alpha_src_api_simulators_routinesrevisionsapi_.routinerevisionsapi.html#delete" class="tsd-kind-icon">delete</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-external">
 								<a href="_alpha_src_api_simulators_routinesrevisionsapi_.routinerevisionsapi.html#list" class="tsd-kind-icon">list</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
