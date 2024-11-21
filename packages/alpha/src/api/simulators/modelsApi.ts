@@ -25,7 +25,7 @@ export class ModelsAPI extends BaseResourceAPI<SimulatorModel> {
     return this.createEndpoint(items);
   };
 
-  public list = async (filter?: SimulatorModelFilterQuery) => {
+  public list = (filter?: SimulatorModelFilterQuery) => {
     return this.listEndpoint<SimulatorModelFilterQuery>(
       this.callListEndpointWithPost,
       filter

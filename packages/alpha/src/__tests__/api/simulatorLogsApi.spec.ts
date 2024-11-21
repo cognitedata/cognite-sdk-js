@@ -1,5 +1,6 @@
 // Copyright 2023 Cognite AS
 import { describe, expect, test } from 'vitest';
+import type CogniteClientAlpha from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
 
 const SHOULD_RUN_TESTS = process.env.RUN_SDK_SIMINT_TESTS === 'true';

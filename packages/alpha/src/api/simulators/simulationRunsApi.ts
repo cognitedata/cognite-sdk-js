@@ -28,7 +28,7 @@ export class SimulationRunsAPI extends BaseResourceAPI<SimulationRun> {
     return this.createEndpoint(items, runUrl);
   };
 
-  public list = async (filter?: SimulationRunFilterQuery) => {
+  public list = (filter?: SimulationRunFilterQuery) => {
     return this.listEndpoint<SimulationRunFilterQuery>(
       this.callListEndpointWithPost,
       filter

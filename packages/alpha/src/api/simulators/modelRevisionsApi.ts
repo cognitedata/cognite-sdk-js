@@ -20,7 +20,7 @@ export class ModelRevisionsAPI extends BaseResourceAPI<SimulatorModelRevision> {
     return this.createEndpoint(items);
   };
 
-  public list = async (filter?: SimulatorModelRevisionFilterQuery) => {
+  public list = (filter?: SimulatorModelRevisionFilterQuery) => {
     return this.listEndpoint<SimulatorModelRevisionFilterQuery>(
       this.callListEndpointWithPost,
       filter

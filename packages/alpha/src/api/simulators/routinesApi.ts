@@ -1,11 +1,6 @@
 // Copyright 2024 Cognite AS
 
-import {
-  BaseResourceAPI,
-  type CDFHttpClient,
-  type IdEither,
-  type MetadataMap,
-} from '@cognite/sdk-core';
+import { BaseResourceAPI, type IdEither } from '@cognite/sdk-core';
 import type {
   SimulatorRoutine,
   SimulatorRoutineCreate,
@@ -24,7 +19,7 @@ export class RoutinesAPI extends BaseResourceAPI<SimulatorRoutine> {
     return this.createEndpoint(items);
   };
 
-  public list = async (filter?: SimulatorRoutineFilterQuery) => {
+  public list = (filter?: SimulatorRoutineFilterQuery) => {
     return this.listEndpoint<SimulatorRoutineFilterQuery>(
       this.callListEndpointWithPost,
       filter

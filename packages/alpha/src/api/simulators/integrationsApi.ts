@@ -12,7 +12,7 @@ export class IntegrationsAPI extends BaseResourceAPI<SimulatorIntegration> {
     return this.createEndpoint(items);
   };
 
-  public list = async (filter?: SimulatorIntegrationFilterQuery) => {
+  public list = (filter?: SimulatorIntegrationFilterQuery) => {
     return this.listEndpoint<SimulatorIntegrationFilterQuery>(
       this.callListEndpointWithPost,
       filter
