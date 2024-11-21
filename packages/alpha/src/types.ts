@@ -557,19 +557,8 @@ export interface SimulatorRoutineRevisionView
 }
 
 export interface SimulatorRoutineRevision extends SimulatorRoutineRevisionBase {
-  id: CogniteInternalId;
-  externalId: CogniteExternalId;
-  simulatorExternalId: CogniteExternalId;
-  routineExternalId: CogniteExternalId;
-  simulatorIntegrationExternalId: CogniteExternalId;
-  modelExternalId: CogniteExternalId;
-  dataSetId: CogniteInternalId;
-  createdByUserId: string;
-  createdTime: Date;
-  versionNumber: number;
-
   configuration: SimulatorRoutineRevisionConfiguration;
-  script?: SimulatorRoutineScript[];
+  script: SimulatorRoutineScript[];
 }
 
 export interface SimulatorRoutineRevisionCreate {
