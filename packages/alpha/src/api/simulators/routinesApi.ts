@@ -15,7 +15,7 @@ export class RoutinesAPI extends BaseResourceAPI<SimulatorRoutine> {
     return this.pickDateProps(['items'], ['createdTime', 'lastUpdatedTime']);
   }
 
-  public create = async (items: SimulatorRoutineCreate[]) => {
+  public create = (items: SimulatorRoutineCreate[]) => {
     return this.createEndpoint(items);
   };
 
@@ -26,7 +26,7 @@ export class RoutinesAPI extends BaseResourceAPI<SimulatorRoutine> {
     );
   };
 
-  public delete = async (ids: IdEither[]) => {
+  public delete = (ids: IdEither[]) => {
     return this.deleteEndpoint(ids);
   };
 }

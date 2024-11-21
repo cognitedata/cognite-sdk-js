@@ -2,7 +2,6 @@
 
 import { BaseResourceAPI, type IdEither } from '@cognite/sdk-core';
 import type {
-  CursorAndAsyncIterator,
   CursorResponse,
   HttpResponse,
   SimulatorRoutineRevision,
@@ -20,7 +19,7 @@ export class RoutineRevisionsAPI extends BaseResourceAPI<SimulatorRoutineRevisio
     return this.pickDateProps(['items'], ['createdTime']);
   }
 
-  public create = async (items: SimulatorRoutineRevisionCreate[]) => {
+  public create = (items: SimulatorRoutineRevisionCreate[]) => {
     return this.createEndpoint(items);
   };
 
@@ -43,7 +42,7 @@ export class RoutineRevisionsAPI extends BaseResourceAPI<SimulatorRoutineRevisio
       SimulatorRoutineRevisionBase = SimulatorRoutineRevisionView,
   >(
     query?: SimulatorRoutineRevisionsFilterQuery
-  ): CursorAndAsyncIterator<RevisionResponseType> => {
+  ) => {
     return this.cursorBasedEndpoint<
       SimulatorRoutineRevisionsFilterQuery,
       RevisionResponseType
@@ -54,7 +53,7 @@ export class RoutineRevisionsAPI extends BaseResourceAPI<SimulatorRoutineRevisio
     return this.retrieveEndpoint(items);
   }
 
-  public delete = async (ids: IdEither[]) => {
+  public delete = (ids: IdEither[]) => {
     return this.deleteEndpoint(ids);
   };
 }

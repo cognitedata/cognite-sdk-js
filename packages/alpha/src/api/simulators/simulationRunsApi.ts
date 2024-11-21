@@ -1,11 +1,6 @@
 // Copyright 2023 Cognite AS
 
-import {
-  BaseResourceAPI,
-  type CDFHttpClient,
-  type CogniteInternalId,
-  type MetadataMap,
-} from '@cognite/sdk-core';
+import { BaseResourceAPI, type CogniteInternalId } from '@cognite/sdk-core';
 import type {
   SimulationRun,
   SimulationRunCreate,
@@ -23,7 +18,7 @@ export class SimulationRunsAPI extends BaseResourceAPI<SimulationRun> {
     );
   }
 
-  public run = async (items: SimulationRunCreate[]) => {
+  public run = (items: SimulationRunCreate[]) => {
     const runUrl = this.url().slice(0, -2); // `/run` instead of `/runs`
     return this.createEndpoint(items, runUrl);
   };
@@ -35,7 +30,7 @@ export class SimulationRunsAPI extends BaseResourceAPI<SimulationRun> {
     );
   };
 
-  public retrieve = async (ids: CogniteInternalId[]) => {
+  public retrieve = (ids: CogniteInternalId[]) => {
     const items = ids.map((id) => ({ id }));
     return this.retrieveEndpoint(items);
   };

@@ -21,7 +21,7 @@ export class ModelsAPI extends BaseResourceAPI<SimulatorModel> {
     return this.pickDateProps(['items'], ['createdTime', 'lastUpdatedTime']);
   }
 
-  public create = async (items: SimulatorModelCreate[]) => {
+  public create = (items: SimulatorModelCreate[]) => {
     return this.createEndpoint(items);
   };
 
@@ -36,11 +36,11 @@ export class ModelsAPI extends BaseResourceAPI<SimulatorModel> {
     return this.retrieveEndpoint(items);
   }
 
-  public update = async (changes: SimulatorModelChange[]) => {
+  public update = (changes: SimulatorModelChange[]) => {
     return this.updateEndpoint(changes);
   };
 
-  public delete = async (ids: IdEither[]) => {
+  public delete = (ids: IdEither[]) => {
     return this.deleteEndpoint(ids);
   };
 }
