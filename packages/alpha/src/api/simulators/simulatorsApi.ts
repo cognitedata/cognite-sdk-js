@@ -23,7 +23,9 @@ import type {
   SimulatorModelRevisionFilterQuery,
   SimulatorRoutineCreate,
   SimulatorRoutineFilterQuery,
+  SimulatorRoutineRevisionBase,
   SimulatorRoutineRevisionCreate,
+  SimulatorRoutineRevisionView,
   SimulatorRoutineRevisionsFilterQuery,
 } from '../../types';
 import { IntegrationsAPI } from './integrationsApi';
@@ -102,127 +104,120 @@ export class SimulatorsAPI extends BaseResourceAPI<Simulator> {
     this.logsApi = new LogsAPI(`${resourcePath}/logs`, client, metadataMap);
   }
 
-  public create = async (items: SimulatorCreate[]) => {
+  public create = (items: SimulatorCreate[]) => {
     return this.createEndpoint(items);
   };
 
-  public list = async (filter?: SimulatorFilterQuery) => {
+  public list = (filter?: SimulatorFilterQuery) => {
     return this.listEndpoint(this.callListEndpointWithPost, filter);
   };
 
-  public update = async (changes: SimulatorChange[]) => {
+  public update = (changes: SimulatorChange[]) => {
     return this.updateEndpoint(changes);
   };
 
-  public delete = async (ids: IdEither[]) => {
+  public delete = (ids: IdEither[]) => {
     return this.deleteEndpoint(ids);
   };
 
-  public listIntegrations = async (
-    filter?: SimulatorIntegrationFilterQuery
-  ) => {
+  public listIntegrations = (filter?: SimulatorIntegrationFilterQuery) => {
     return this.integrationsApi.list(filter);
   };
 
-  public createIntegrations = async (items: SimulatorIntegrationCreate[]) => {
+  public createIntegrations = (items: SimulatorIntegrationCreate[]) => {
     return this.integrationsApi.create(items);
   };
 
-  public deleteIntegrations = async (ids: IdEither[]) => {
+  public deleteIntegrations = (ids: IdEither[]) => {
     return this.integrationsApi.delete(ids);
   };
 
-  public listRuns = async (filter?: SimulationRunFilterQuery) => {
+  public listRuns = (filter?: SimulationRunFilterQuery) => {
     return this.runsApi.list(filter);
   };
 
-  public listRunData = async (ids: SimulationRunId[]) => {
+  public listRunData = (ids: SimulationRunId[]) => {
     return this.runDataApi.retrieve(ids);
   };
 
-  public runSimulation = async (items: SimulationRunCreate[]) => {
+  public runSimulation = (items: SimulationRunCreate[]) => {
     return this.runsApi.run(items);
   };
 
-  public retrieveRuns = async (ids: CogniteInternalId[]) => {
+  public retrieveRuns = (ids: CogniteInternalId[]) => {
     return this.runsApi.retrieve(ids);
   };
 
-  public listModels = async (filter?: SimulatorModelFilterQuery) => {
+  public listModels = (filter?: SimulatorModelFilterQuery) => {
     return this.modelsApi.list(filter);
   };
 
-  public retrieveModels = async (items: IdEither[]) => {
+  public retrieveModels = (items: IdEither[]) => {
     return this.modelsApi.retrieve(items);
   };
 
-  public createModels = async (items: SimulatorModelCreate[]) => {
+  public createModels = (items: SimulatorModelCreate[]) => {
     return this.modelsApi.create(items);
   };
 
-  public deleteModels = async (ids: IdEither[]) => {
+  public deleteModels = (ids: IdEither[]) => {
     return this.modelsApi.delete(ids);
   };
 
-  public updateModels = async (changes: SimulatorModelChange[]) => {
+  public updateModels = (changes: SimulatorModelChange[]) => {
     return this.modelsApi.update(changes);
   };
 
-  public listModelRevisions = async (
-    filter?: SimulatorModelRevisionFilterQuery
-  ) => {
+  public listModelRevisions = (filter?: SimulatorModelRevisionFilterQuery) => {
     return this.modelRevisionsApi.list(filter);
   };
 
-  public retrieveModelRevisions = async (items: IdEither[]) => {
+  public retrieveModelRevisions = (items: IdEither[]) => {
     return this.modelRevisionsApi.retrieve(items);
   };
 
-  public createModelRevisions = async (
-    items: SimulatorModelRevisionCreate[]
-  ) => {
+  public createModelRevisions = (items: SimulatorModelRevisionCreate[]) => {
     return this.modelRevisionsApi.create(items);
   };
 
-  public deleteModelRevisions = async (ids: IdEither[]) => {
+  public deleteModelRevisions = (ids: IdEither[]) => {
     return this.modelRevisionsApi.delete(ids);
   };
 
-  public updateModelRevisions = async (
-    changes: SimulatorModelRevisionChange[]
-  ) => {
+  public updateModelRevisions = (changes: SimulatorModelRevisionChange[]) => {
     return this.modelRevisionsApi.update(changes);
   };
 
-  public listRoutines = async (filter?: SimulatorRoutineFilterQuery) => {
+  public listRoutines = (filter?: SimulatorRoutineFilterQuery) => {
     return this.routinesApi.list(filter);
   };
 
-  public createRoutines = async (items: SimulatorRoutineCreate[]) => {
+  public createRoutines = (items: SimulatorRoutineCreate[]) => {
     return this.routinesApi.create(items);
   };
 
-  public deleteRoutines = async (ids: IdEither[]) => {
+  public deleteRoutines = (ids: IdEither[]) => {
     return this.routinesApi.delete(ids);
   };
 
-  public listRoutineRevisions = async (
+  public listRoutineRevisions = <
+    RevisionResponseType extends
+      SimulatorRoutineRevisionBase = SimulatorRoutineRevisionView,
+  >(
     filter?: SimulatorRoutineRevisionsFilterQuery
   ) => {
-    return this.routineRevisionsApi.list(filter);
+    return this.routineRevisionsApi.list<RevisionResponseType>(filter);
   };
 
-  public retrieveRoutineRevisions = async (items: IdEither[]) => {
+  public retrieveRoutineRevisions = (items: IdEither[]) => {
     return this.routineRevisionsApi.retrieve(items);
   };
 
-  public createRoutineRevisions = async (
-    items: SimulatorRoutineRevisionCreate[]
-  ) => {
+  public createRoutineRevisions = (items: SimulatorRoutineRevisionCreate[]) => {
     return this.routineRevisionsApi.create(items);
   };
 
-  public retrieveLogs = async (items: InternalId[]) => {
+  public retrieveLogs = (items: InternalId[]) => {
     return this.logsApi.retrieve(items);
   };
 }

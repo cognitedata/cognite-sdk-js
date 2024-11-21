@@ -1,6 +1,7 @@
 // Copyright 2023 Cognite AS
 
 import { describe, expect, test } from 'vitest';
+import type CogniteClientAlpha from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
 import {
   fileExtensionTypes,
@@ -46,7 +47,6 @@ describeIf('simulator models api', () => {
         name: 'Test Simulator Model',
         description: 'Test Simulator Model Desc',
         dataSetId: 97552494921583,
-        labels: [{ externalId: 'air-quality-po-1' }],
         type: 'WaterWell',
       },
     ]);

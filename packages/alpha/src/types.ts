@@ -322,6 +322,7 @@ export interface SimulatorModelCreate {
 
 export interface SimulatorModelFilter {
   simulatorExternalIds?: CogniteExternalId[];
+  simulatorIntegrationExternalIds?: CogniteExternalId[];
 }
 
 export interface SimulatorModelFilterQuery extends FilterQuery {
@@ -452,7 +453,7 @@ export interface SimulatorRoutineFilterQuery extends FilterQuery {
 
 export interface SimulatorRoutineDataSampling {
   enabled: true;
-  validationWindow: number;
+  validationWindow?: number;
   samplingWindow: number;
   granularity: number;
 }
@@ -523,16 +524,21 @@ export interface SimulatorRoutineScript {
   description?: string;
   steps: SimulatorRoutineScriptStep[];
 }
-export interface SimulatorRoutineRevisionConfiguration {
+
+export interface SimulatorRoutineRevisionConfigurationBase {
   dataSampling: SimulatorRoutineConfigDisabled | SimulatorRoutineDataSampling;
   schedule: SimulatorRoutineConfigDisabled | SimulatorRoutineSchedule;
   steadyStateDetection: SimulatorRoutineSteadyStateDetection[];
   logicalCheck: SimulatorRoutineLogicalCheck[];
+}
 
+export interface SimulatorRoutineRevisionConfiguration
+  extends SimulatorRoutineRevisionConfigurationBase {
   inputs: SimulatorRoutineInput[];
   outputs: SimulatorRoutineOutput[];
 }
-export interface SimulatorRoutineRevision {
+
+export interface SimulatorRoutineRevisionBase {
   id: CogniteInternalId;
   externalId: CogniteExternalId;
   simulatorExternalId: CogniteExternalId;
@@ -542,9 +548,17 @@ export interface SimulatorRoutineRevision {
   dataSetId: CogniteInternalId;
   createdByUserId: string;
   createdTime: Date;
+  versionNumber: number;
+}
+
+export interface SimulatorRoutineRevisionView
+  extends SimulatorRoutineRevisionBase {
+  configuration: SimulatorRoutineRevisionConfigurationBase;
+}
+
+export interface SimulatorRoutineRevision extends SimulatorRoutineRevisionBase {
   configuration: SimulatorRoutineRevisionConfiguration;
   script: SimulatorRoutineScript[];
-  versionNumber: number;
 }
 
 export interface SimulatorRoutineRevisionCreate {
@@ -554,7 +568,7 @@ export interface SimulatorRoutineRevisionCreate {
   script: SimulatorRoutineScript[];
 }
 
-export interface SimulatorRoutineRevisionslFilter {
+export interface SimulatorRoutineRevisionsFilter {
   routineExternalIds?: CogniteExternalId[];
   allVersions?: boolean;
   modelExternalIds?: CogniteExternalId[];
@@ -564,6 +578,7 @@ export interface SimulatorRoutineRevisionslFilter {
 }
 
 export interface SimulatorRoutineRevisionsFilterQuery extends FilterQuery {
-  filter?: SimulatorRoutineRevisionslFilter;
+  filter?: SimulatorRoutineRevisionsFilter;
   sort?: SortItem[];
+  includeAllFields?: boolean;
 }
