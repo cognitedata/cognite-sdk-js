@@ -241,4 +241,3 @@ The SDK will call this method when:
 - The user calls `authenticate` on the client.
 - The SDK receives a 401 from the API.
   When multiple requests receives a 401, then only a single call to `oidcTokenProvider` will be invoked. All requests will wait for `oidcTokenProvider` to resolve/reject. If it's resolved, then all the requests will retry before returning the response to the SDK caller. However, if the resolved access token matches the original access token, then no retry will be performed.
-Make sure you are logged in to npm, talk to a maintainer.
