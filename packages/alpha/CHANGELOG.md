@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.34.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.33.0...@cognite/sdk-alpha@0.34.0) (2024-12-05)
+
+
+### Features
+
+* use enum for connector status ([#1175](https://github.com/cognitedata/cognite-sdk-js/issues/1175)) ([ad0d6d9](https://github.com/cognitedata/cognite-sdk-js/commit/ad0d6d9c3243cd1121d1c02f462e552107319fd4))
+
+
+
+
+
 # [0.33.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.32.2...@cognite/sdk-alpha@0.33.0) (2024-11-21)
 
 
