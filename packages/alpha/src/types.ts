@@ -84,6 +84,14 @@ export interface SimulatorCreate {
   unitQuantities?: SimulatorUnitQuantity[];
 }
 
+export type SimulatorIntegrationConnectorStatus = 'IDLE' | 'RUNNING_SIMULATION';
+
+export const SimulatorIntegrationConnectorStatus = {
+  IDLE: 'IDLE' as SimulatorIntegrationConnectorStatus,
+  RUNNING_SIMULATION:
+    'RUNNING_SIMULATION' as SimulatorIntegrationConnectorStatus,
+};
+
 export interface SimulatorIntegration {
   id: CogniteInternalId;
   externalId: CogniteExternalId;
@@ -94,7 +102,7 @@ export interface SimulatorIntegration {
   simulatorVersion: string;
   licenseStatus?: string;
   licenseLastCheckedTime?: Date;
-  connectorStatus?: string;
+  connectorStatus?: SimulatorIntegrationConnectorStatus;
   connectorStatusUpdatedTime?: Date;
   logId: CogniteInternalId;
   createdTime: Date;
