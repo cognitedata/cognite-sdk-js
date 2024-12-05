@@ -69,22 +69,22 @@ More details are documented in the [codegen README](packages/codegen/README.md).
 
 ## Pull request
 
-Make a pull request from your branch to the main branch. When merging the pull request,
+Make a pull request from your branch to the master branch. When merging the pull request,
 only use squashing if the resulting squash commit can accurately describe the change as a single conventional commit.
-Once the change is pushed to the main branch, it is time for a release.
+Once the change is pushed to the master branch, it is time for a release.
 
 ## Releases & Versioning
 
-Releases are done from the main branch, so when a pull request is merged,
+Releases are done from the master branch, so when a pull request is merged,
 CI/CD will run tests, and if successful, do deploys.
 Documentation is built and deployed, and code snippets
 are exported to the service contract repo as a pull request.
 
-Updating and uploading npm packages only happens if the HEAD commit of the main branch
-contains `[release]` in its description or the PR title starts with `feat` or `fix`.
+Updating and uploading npm packages only happens if the HEAD commit of the master branch
+contains `[release]` in its description and the PR title starts with `feat` or `fix`.
 When CI/CD sees this, it will use lerna to update
 package versions of changed packages based on commit messages, and add the
-changes to the changelogs. The changes are comitted to the main branch
+changes to the changelogs. The changes are comitted to the master branch
 with the new versions as git tags, and the new package versions are uploaded to npm.
 
 We restrict new npm releases to `[release]`-tagged commits because lerna is
@@ -93,7 +93,7 @@ cause a PATCH bump. Markdown files and tests are ignored, but changing anything 
 like a comment in a source file, will trigger a new version,
 irrespective of conventional commits.
 
-This does _not_ mean you should store unfinished work on the main branch.
+This does _not_ mean you should store unfinished work on the master branch.
 Another package may be ready for release, and once a `[release]`
 commit is pushed, all changed packages are updated.
 Repository administrators should be in control of `[release]` commits.
@@ -111,8 +111,14 @@ If you want to push the empty commit to master via a pull request,
 use a squash merge (not rebase+ff). Otherwise GitHub will ignore the empty PR.
 
 Also, keep in mind that the `[release]` commit has to be the HEAD of
-main, and Github Action only runs on the HEAD. If HEAD has changed by the time
+master, and Github Action only runs on the HEAD. If HEAD has changed by the time
 the versioning happens, Github Action will fail.
+
+In order to perform a major release by merging a release candidate branch to master by keeping the same major version in release candidate version.
+
+- Create a PR from release-* to master
+- Make a PR title and the message when merging to be ` chore(): details [release]`
+- The release tag is to trigger the release of the package.
 
 ## Patching older major versions
 
