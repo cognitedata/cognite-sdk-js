@@ -33,7 +33,7 @@ export const SessionType = {
 is short-lived and should be immediately passed to the endpoint that will use
 the session.
 */
-export interface SessionCreateResponseItem {
+export interface SessionCreateResultItem {
   /** ID of the session */
   id: number;
   /** Client ID in identity provider. Returned only if the session was created using client credentials */

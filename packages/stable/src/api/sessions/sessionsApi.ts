@@ -7,7 +7,7 @@ import {
 import type {
   Session,
   SessionCreate,
-  SessionCreateResponseItem,
+  SessionCreateResultItem,
   SessionFilterQuery,
 } from './types';
 
@@ -21,10 +21,11 @@ export class SessionsApi extends BaseResourceAPI<Session> {
    * */
   public create = async (
     items: SessionCreate[]
-  ): Promise<SessionCreateResponseItem[]> => {
-    const response = await this.post<
-      CursorResponse<SessionCreateResponseItem[]>
-    >(this.url(), { data: { items } });
+  ): Promise<SessionCreateResultItem[]> => {
+    const response = await this.post<CursorResponse<SessionCreateResultItem[]>>(
+      this.url(),
+      { data: { items } }
+    );
     return response.data.items;
   };
 
