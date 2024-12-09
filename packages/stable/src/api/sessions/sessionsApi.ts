@@ -1,8 +1,8 @@
 import {
   BaseResourceAPI,
-  type CursorResponse,
   type InternalId,
   type ItemsResponse,
+  type ItemsWrapper,
 } from '@cognite/sdk-core';
 import type {
   Session,
@@ -22,7 +22,7 @@ export class SessionsApi extends BaseResourceAPI<Session> {
   public create = async (
     items: SessionCreate[]
   ): Promise<SessionCreateResultItem[]> => {
-    const response = await this.post<CursorResponse<SessionCreateResultItem[]>>(
+    const response = await this.post<ItemsWrapper<SessionCreateResultItem[]>>(
       this.url(),
       { data: { items } }
     );
