@@ -32,6 +32,7 @@ import { RelationshipsApi } from './api/relationships/relationshipsApi';
 import { SecurityCategoriesAPI } from './api/securityCategories/securityCategoriesApi';
 import { SequencesAPI } from './api/sequences/sequencesApi';
 import { ServiceAccountsAPI } from './api/serviceAccounts/serviceAccountsApi';
+import { SessionsApi } from './api/sessions/sessionsApi';
 import { SpacesAPI } from './api/spaces/spacesApi';
 import {
   TemplateGraphQlApi,
@@ -126,6 +127,9 @@ export default class CogniteClient extends BaseCogniteClient {
   public get profiles() {
     return accessApi(this.profilesApi);
   }
+  public get sessions() {
+    return accessApi(this.sessionsApi);
+  }
   public get templates() {
     return {
       groups: accessApi(this.apiFactory(TemplateGroupsApi, 'templategroups')),
@@ -215,6 +219,7 @@ export default class CogniteClient extends BaseCogniteClient {
   private viewsApi?: ViewsAPI;
   private spacesApi?: SpacesAPI;
   private dataModelsApi?: DataModelsAPI;
+  private sessionsApi?: SessionsApi;
 
   protected get version() {
     return version;
@@ -275,6 +280,7 @@ export default class CogniteClient extends BaseCogniteClient {
     this.viewsApi = this.apiFactory(ViewsAPI, 'models/views');
     this.spacesApi = this.apiFactory(SpacesAPI, 'models/spaces');
     this.dataModelsApi = this.apiFactory(DataModelsAPI, 'models/datamodels');
+    this.sessionsApi = this.apiFactory(SessionsApi, 'sessions');
   }
 
   static urlEncodeExternalId(externalId: string): string {
