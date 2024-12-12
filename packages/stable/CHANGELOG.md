@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [9.17.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.16.1...@cognite/sdk@9.17.0) (2024-12-12)
+
+
+### Features
+
+* **stable:** add support for sessions API ([#1177](https://github.com/cognitedata/cognite-sdk-js/issues/1177)) ([28b0fdd](https://github.com/cognitedata/cognite-sdk-js/commit/28b0fddf880091508238fea416b87d72cea32529))
+
+
+
+
+
 ## [9.16.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.16.0...@cognite/sdk@9.16.1) (2024-11-07)
 
 
