@@ -12,6 +12,7 @@ import type {
   SimulatorModelChange,
   SimulatorModelCreate,
   SimulatorModelFilterQuery,
+  SimulatorModelAggregateQuery,
 } from '../../types';
 
 export class ModelsAPI extends BaseResourceAPI<SimulatorModel> {
@@ -27,9 +28,9 @@ export class ModelsAPI extends BaseResourceAPI<SimulatorModel> {
   };
 
   public aggregate = (
-    filter?: SimulatorModelFilterQuery
+    query?: SimulatorModelAggregateQuery
   ): Promise<SimulatorModelAggregate[]> => {
-    return this.aggregateEndpoint(filter);
+    return this.aggregateEndpoint(query);
   };
 
   public list = (filter?: SimulatorModelFilterQuery) => {

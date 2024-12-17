@@ -19,11 +19,6 @@ export * from '@cognite/sdk';
 // This file is here mostly to allow apis to import { ... } from '../../types';
 // Overriding types should probably be done in their respective API endpoint files, where possible
 
-/**
- * Response from models aggregate endpoint
- */
-export type SimulatorModelAggregate = AggregateResponse;
-
 export type ArrayPatchExternalIds =
   | { set: ExternalId[] }
   | { add?: ExternalId[]; remove?: ExternalId[] };
@@ -336,6 +331,19 @@ export interface SimulatorModelCreate {
   description?: string;
   dataSetId: CogniteInternalId;
   type?: string;
+}
+
+/**
+ * Response from models aggregate endpoint
+ */
+export type SimulatorModelAggregate = AggregateResponse;
+
+export interface SimulatorModelAggregateQuery {
+  /**
+   * Filter on models with strict matching.
+   */
+  filter?: SimulatorModelFilterQuery;
+  aggregate: 'count';
 }
 
 export interface SimulatorModelFilter {
