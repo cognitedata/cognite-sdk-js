@@ -22,7 +22,7 @@ export * from '@cognite/sdk';
 /**
  * Response from models aggregate endpoint
  */
-export type ModelAggregate = AggregateResponse;
+export type SimulatorModelAggregate = AggregateResponse;
 
 export type ArrayPatchExternalIds =
   | { set: ExternalId[] }

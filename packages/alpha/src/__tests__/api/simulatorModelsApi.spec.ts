@@ -55,8 +55,8 @@ describeIf('simulator models api', () => {
   });
 
   test('aggregate models', async () => {
-    const aggregate_response = await client.simulators.aggregateModels();
-    expect(aggregate_response[0].count).toBeGreaterThan(0);
+    const aggregateResponse = await client.simulators.aggregateModels();
+    expect(aggregateResponse[0].count).toBeGreaterThan(0);
   });
 
   test('list models', async () => {
