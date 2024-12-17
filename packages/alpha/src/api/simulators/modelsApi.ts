@@ -28,7 +28,7 @@ export class ModelsAPI extends BaseResourceAPI<SimulatorModel> {
   };
 
   public aggregate = (
-    query?: SimulatorModelAggregateQuery
+    query: SimulatorModelAggregateQuery
   ): Promise<SimulatorModelAggregate[]> => {
     return this.aggregateEndpoint(query);
   };

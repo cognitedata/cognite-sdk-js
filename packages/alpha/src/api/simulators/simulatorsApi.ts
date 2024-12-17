@@ -149,7 +149,7 @@ export class SimulatorsAPI extends BaseResourceAPI<Simulator> {
     return this.runsApi.retrieve(ids);
   };
 
-  public aggregateModels = (query?: SimulatorModelAggregateQuery) => {
+  public aggregateModels = (query: SimulatorModelAggregateQuery) => {
     return this.modelsApi.aggregate(query);
   };
 
