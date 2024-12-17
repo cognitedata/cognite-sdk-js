@@ -148,6 +148,10 @@ export class SimulatorsAPI extends BaseResourceAPI<Simulator> {
     return this.runsApi.retrieve(ids);
   };
 
+  public aggregateModels = (filter?: SimulatorModelFilterQuery) => {
+    return this.modelsApi.aggregate(filter);
+  };
+
   public listModels = (filter?: SimulatorModelFilterQuery) => {
     return this.modelsApi.list(filter);
   };
@@ -201,8 +205,7 @@ export class SimulatorsAPI extends BaseResourceAPI<Simulator> {
   };
 
   public listRoutineRevisions = <
-    RevisionResponseType extends
-      SimulatorRoutineRevisionBase = SimulatorRoutineRevisionView,
+    RevisionResponseType extends SimulatorRoutineRevisionBase = SimulatorRoutineRevisionView
   >(
     filter?: SimulatorRoutineRevisionsFilterQuery
   ) => {

@@ -1,6 +1,11 @@
 // Copyright 2020 Cognite AS
 
-import type { DateRange, SinglePatch, SortOrder } from '@cognite/sdk';
+import type {
+  AggregateResponse,
+  DateRange,
+  SinglePatch,
+  SortOrder,
+} from '@cognite/sdk';
 import type {
   CogniteExternalId,
   CogniteInternalId,
@@ -13,6 +18,11 @@ export * from '@cognite/sdk';
 
 // This file is here mostly to allow apis to import { ... } from '../../types';
 // Overriding types should probably be done in their respective API endpoint files, where possible
+
+/**
+ * Response from models aggregate endpoint
+ */
+export type ModelAggregate = AggregateResponse;
 
 export type ArrayPatchExternalIds =
   | { set: ExternalId[] }

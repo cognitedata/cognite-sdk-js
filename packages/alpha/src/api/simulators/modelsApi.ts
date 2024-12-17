@@ -7,6 +7,7 @@ import {
   type MetadataMap,
 } from '@cognite/sdk-core';
 import type {
+  ModelAggregate,
   SimulatorModel,
   SimulatorModelChange,
   SimulatorModelCreate,
@@ -23,6 +24,12 @@ export class ModelsAPI extends BaseResourceAPI<SimulatorModel> {
 
   public create = (items: SimulatorModelCreate[]) => {
     return this.createEndpoint(items);
+  };
+
+  public aggregate = (
+    filter?: SimulatorModelFilterQuery
+  ): Promise<ModelAggregate[]> => {
+    return this.aggregateEndpoint(filter);
   };
 
   public list = (filter?: SimulatorModelFilterQuery) => {
