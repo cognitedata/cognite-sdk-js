@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.35.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.35.0...@cognite/sdk-alpha@0.35.1) (2024-12-18)
+
+
+### Bug Fixes
+
+* use correct type for aggregate query ([#1180](https://github.com/cognitedata/cognite-sdk-js/issues/1180)) ([f2e30c6](https://github.com/cognitedata/cognite-sdk-js/commit/f2e30c653324d9c991afa3c981494f33e4a42533))
+
+
+
+
+
 # [0.35.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.34.1...@cognite/sdk-alpha@0.35.0) (2024-12-18)
 
 
