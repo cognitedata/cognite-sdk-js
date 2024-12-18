@@ -56,6 +56,9 @@ describeIf('simulator models api', () => {
 
   test('aggregate models', async () => {
     const aggregateResponse = await client.simulators.aggregateModels({
+      filter: {
+        simulatorExternalIds: [simulatorExternalId],
+      },
       aggregate: 'count',
     });
 
