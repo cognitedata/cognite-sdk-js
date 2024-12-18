@@ -15,6 +15,7 @@ import type {
   SimulatorFilterQuery,
   SimulatorIntegrationCreate,
   SimulatorIntegrationFilterQuery,
+  SimulatorModelAggregateQuery,
   SimulatorModelChange,
   SimulatorModelCreate,
   SimulatorModelFilterQuery,
@@ -146,6 +147,10 @@ export class SimulatorsAPI extends BaseResourceAPI<Simulator> {
 
   public retrieveRuns = (ids: CogniteInternalId[]) => {
     return this.runsApi.retrieve(ids);
+  };
+
+  public aggregateModels = (query: SimulatorModelAggregateQuery) => {
+    return this.modelsApi.aggregate(query);
   };
 
   public listModels = (filter?: SimulatorModelFilterQuery) => {

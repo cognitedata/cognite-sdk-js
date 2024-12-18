@@ -1,6 +1,11 @@
 // Copyright 2020 Cognite AS
 
-import type { DateRange, SinglePatch, SortOrder } from '@cognite/sdk';
+import type {
+  AggregateResponse,
+  DateRange,
+  SinglePatch,
+  SortOrder,
+} from '@cognite/sdk';
 import type {
   CogniteExternalId,
   CogniteInternalId,
@@ -326,6 +331,19 @@ export interface SimulatorModelCreate {
   description?: string;
   dataSetId: CogniteInternalId;
   type?: string;
+}
+
+/**
+ * Response from models aggregate endpoint
+ */
+export type SimulatorModelAggregate = AggregateResponse;
+
+export interface SimulatorModelAggregateQuery {
+  /**
+   * Filter on models with strict matching.
+   */
+  filter?: SimulatorModelFilterQuery;
+  aggregate: 'count';
 }
 
 export interface SimulatorModelFilter {
