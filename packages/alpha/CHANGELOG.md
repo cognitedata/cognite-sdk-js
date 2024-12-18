@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.35.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.34.1...@cognite/sdk-alpha@0.35.0) (2024-12-18)
+
+
+### Features
+
+* add aggregate to modelsApi ([#1179](https://github.com/cognitedata/cognite-sdk-js/issues/1179)) ([7173057](https://github.com/cognitedata/cognite-sdk-js/commit/7173057b76e4ec6a7dc66a226eea864ba08e89f8))
+
+
+
+
+
 ## [0.34.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.34.0...@cognite/sdk-alpha@0.34.1) (2024-12-12)
 
 **Note:** Version bump only for package @cognite/sdk-alpha
