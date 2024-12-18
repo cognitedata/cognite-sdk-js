@@ -342,7 +342,7 @@ export interface SimulatorModelAggregateQuery {
   /**
    * Filter on models with strict matching.
    */
-  filter?: SimulatorModelFilterQuery;
+  filter?: SimulatorModelFilter;
   aggregate: 'count';
 }
 
