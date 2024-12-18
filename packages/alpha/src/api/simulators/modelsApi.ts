@@ -7,12 +7,12 @@ import {
   type MetadataMap,
 } from '@cognite/sdk-core';
 import type {
-  SimulatorModelAggregate,
   SimulatorModel,
+  SimulatorModelAggregate,
+  SimulatorModelAggregateQuery,
   SimulatorModelChange,
   SimulatorModelCreate,
   SimulatorModelFilterQuery,
-  SimulatorModelAggregateQuery,
 } from '../../types';
 
 export class ModelsAPI extends BaseResourceAPI<SimulatorModel> {
