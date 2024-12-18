@@ -31,6 +31,6 @@
   ],
   "devDependencies": {
     "@types/geojson": "^7946.0.8",
-    "happy-dom": "^14.12.3"
+    "happy-dom": "^15.0.0"
   }
 }
