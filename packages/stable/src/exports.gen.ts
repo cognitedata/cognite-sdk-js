@@ -1,7 +1,5 @@
 // Copyright 2022 Cognite AS
-export type {
-  EpochTimestamp,
-} from './types.gen';
+export type { EpochTimestamp } from './types.gen';
 export type {
   AnnotationData,
   AnnotationsAssetRef,
