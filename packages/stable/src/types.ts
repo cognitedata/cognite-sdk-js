@@ -436,6 +436,8 @@ export interface AssetMapping3DBase {
    * The ID of the associated asset (Cognite's Assets API).
    */
   assetId: CogniteInternalId;
+  
+  assetInstanceId?: UnitDMSUniqueIdentifier,
 }
 
 export interface AssetMappings3DListFilter extends FilterQuery {
@@ -445,6 +447,7 @@ export interface AssetMappings3DListFilter extends FilterQuery {
    * If given, only return asset mappings for assets whose bounding box intersects the given bounding box.
    */
   intersectsBoundingBox?: BoundingBox3D;
+  getDmsInstances?: boolean;
 }
 
 export interface AssetMappings3DAssetFilter {
@@ -467,6 +470,8 @@ export interface Filter3DAssetMappingsQuery extends FilterQuery {
     | AssetMappings3DAssetFilter
     | AssetMappings3DNodeFilter
     | AssetMappings3DTreeIndexFilter;
+
+  getDmsInstances?: boolean;
 }
 
 /**
@@ -3417,6 +3422,11 @@ export interface Unit {
   source?: string;
   sourceReference?: string;
 }
+
+export interface UnitDMSUniqueIdentifier {
+  space: string;
+  externalId: string;
+};
 
 export interface UnitConversion {
   multiplier: number;
