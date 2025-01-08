@@ -241,25 +241,25 @@ describe('CogniteClient', () => {
         nock(mockBaseUrl)
           .get('/test')
           .reply(function () {
-            expect(this.req.headers[AUTHORIZATION_HEADER]).toStrictEqual([
-              'Bearer test-token0',
-            ]);
+            expect(
+              this.req.headers[AUTHORIZATION_HEADER.toLowerCase()]
+            ).toStrictEqual(['Bearer test-token0']);
             return [401];
           });
         nock(mockBaseUrl)
           .get('/test')
           .reply(function () {
-            expect(this.req.headers[AUTHORIZATION_HEADER]).toStrictEqual([
-              'Bearer test-token1',
-            ]);
+            expect(
+              this.req.headers[AUTHORIZATION_HEADER.toLowerCase()]
+            ).toStrictEqual(['Bearer test-token1']);
             return [401];
           });
         nock(mockBaseUrl)
           .get('/test')
           .reply(function () {
-            expect(this.req.headers[AUTHORIZATION_HEADER]).toStrictEqual([
-              'Bearer test-token2',
-            ]);
+            expect(
+              this.req.headers[AUTHORIZATION_HEADER.toLowerCase()]
+            ).toStrictEqual(['Bearer test-token2']);
             return [200];
           });
 
