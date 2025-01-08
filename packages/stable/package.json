@@ -5,7 +5,7 @@
   "homepage": "https://github.com/cognitedata/cognite-sdk-js#readme",
   "main": "dist/index.js",
   "types": "dist/src/index.d.ts",
-  "version": "10.0.0-rc.3",
+  "version": "10.0.0-rc.4",
   "type": "module",
   "scripts": {
     "clean": "rm -rf dist/ docs/ codeSnippets/",
@@ -22,7 +22,7 @@
     "test-snippets": "yarn extract-snippets && yarn g:tsc -p codeSnippets/tsconfig.build.json"
   },
   "dependencies": {
-    "@cognite/sdk-core": "^5.0.0-rc.3",
+    "@cognite/sdk-core": "^5.0.0-rc.4",
     "@types/geojson": "^7946.0.14",
     "geojson": "^0.5.0",
     "lodash": "^4.17.21"
