@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-rc.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@5.0.0-rc.3...@cognite/sdk-core@5.0.0-rc.4) (2025-01-08)
+
+
+### Bug Fixes
+
+* revert to using Capital A in AUTHORIZATION_HEADER ([#1183](https://github.com/cognitedata/cognite-sdk-js/issues/1183)) ([a05c5fc](https://github.com/cognitedata/cognite-sdk-js/commit/a05c5fc4818e1d52e1d6268f6a3bfbfd93e8f56f))
+
+
+
+
+
 # [5.0.0-rc.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@5.0.0-rc.1...@cognite/sdk-core@5.0.0-rc.3) (2024-11-07)
 
 
