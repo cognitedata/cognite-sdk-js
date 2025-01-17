@@ -16,12 +16,12 @@ export default defineConfig({
     sourcemap: true,
     target: 'es6',
     lib: {
-      formats: ['es'],
+      formats: ['es','cjs'],
       // Could also be a dictionary or array of multiple entry points
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'index',
       // the proper extensions will be added
-      fileName: 'index',
+      fileName: (format) => (format === 'es' ? 'index.js' : 'index.cjs'), // Output files for different formats
     },
     rollupOptions: {
       // make sure to externalize deps that shouldn't be bundled
