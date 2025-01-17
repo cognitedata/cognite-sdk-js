@@ -141,6 +141,13 @@ export class SimulatorsAPI extends BaseResourceAPI<Simulator> {
     return this.runDataApi.retrieve(ids);
   };
 
+  /**
+   * [Run a simulation](Run a simulation <https://developer.cognite.com/api#tag/Simulation-Runs/operation/run_simulation_simulators_run_post)
+   *
+   * ```js
+   * const simulationRun = await client.simulators.runSimulation([{ "routineExternalId": "DWSIM-ShowerMixer" }]);
+   * ```
+   */
   public runSimulation = (items: SimulationRunCreate[]) => {
     return this.runsApi.run(items);
   };
