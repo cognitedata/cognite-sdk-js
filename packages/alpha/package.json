@@ -12,7 +12,7 @@
     }
   },
   "types": "dist/src/index.d.ts",
-  "version": "1.0.0-rc.5",
+  "version": "1.0.0-rc.6",
   "type": "module",
   "scripts": {
     "clean": "rm -rf dist/ docs/ codeSnippets/",
@@ -30,8 +30,8 @@
     "test-snippets": ""
   },
   "dependencies": {
-    "@cognite/sdk": "^10.0.0-rc.4",
-    "@cognite/sdk-core": "^5.0.0-rc.4"
+    "@cognite/sdk": "^10.0.0-rc.5",
+    "@cognite/sdk-core": "^5.0.0-rc.5"
   },
   "files": [
     "dist"

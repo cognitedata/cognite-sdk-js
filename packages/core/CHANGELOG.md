@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-rc.5](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@5.0.0-rc.4...@cognite/sdk-core@5.0.0-rc.5) (2025-01-17)
+
+
+### Bug Fixes
+
+* **vite:** fallback for CommonJS ([7b4cbff](https://github.com/cognitedata/cognite-sdk-js/commit/7b4cbffd5890886a015408e33232486619f22255))
+
+
+
+
+
 # [5.0.0-rc.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@5.0.0-rc.3...@cognite/sdk-core@5.0.0-rc.4) (2025-01-08)
 
 
