@@ -5,13 +5,12 @@
   "homepage": "https://github.com/cognitedata/cognite-sdk-js#readme",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
+  "types": "dist/index",
   "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
-    }
+    "import": "./dist/index.js",
+    "require": "./dist/index.cjs",
+    "types": "./dist/index.d.ts"
   },
-  "types": "dist/src/index.d.ts",
   "type": "module",
   "version": "8.0.0-rc.4",
   "scripts": {
