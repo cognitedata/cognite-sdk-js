@@ -21,7 +21,7 @@ export default defineConfig({
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'index',
       // the proper extensions will be added
-      fileName: (format) => (format === 'es' ? 'index.js' : 'index.cjs'), // Output files for different formats
+      fileName: 'index',
     },
     rollupOptions: {
       // make sure to externalize deps that shouldn't be bundled
