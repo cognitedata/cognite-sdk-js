@@ -7,16 +7,17 @@ const externals = ['@cognite/sdk-core', 'geojson', 'lodash'];
 export default defineConfig({
   plugins: [
     dts({
-      exclude: ['**/__tests__/**/*'],
+      exclude: ['**/__tests__/**/*', '**/*.spec.ts'],
       entryRoot: '.',
       aliasesExclude: externals,
+      insertTypesEntry: true,
     }),
   ],
   build: {
     sourcemap: true,
     target: 'es6',
     lib: {
-      formats: ['es'],
+      formats: ['es', 'cjs'],
       // Could also be a dictionary or array of multiple entry points
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'index',
