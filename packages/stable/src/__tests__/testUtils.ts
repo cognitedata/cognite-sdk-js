@@ -1,9 +1,6 @@
 // Copyright 2020 Cognite AS
 
-import {
-  mockBaseUrl,
-  randomInt,
-} from '../../../core/src/__tests__/testUtils';
+import { mockBaseUrl, randomInt } from '../../../core/src/__tests__/testUtils';
 import CogniteClient from '../cogniteClient';
 import type { ExternalFileInfo, NodeOrEdge } from '../types';
 import { login } from './login';

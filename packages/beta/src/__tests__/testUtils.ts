@@ -3,10 +3,7 @@
 import { createReadStream, readFileSync, statSync } from 'node:fs';
 import { PassThrough } from 'node:stream';
 import { Constants } from '@cognite/sdk-core';
-import {
-  mockBaseUrl,
-  project,
-} from '../../../core/src/__tests__/testUtils';
+import { mockBaseUrl, project } from '../../../core/src/__tests__/testUtils';
 import CogniteClient from '../cogniteClient';
 import { login } from './login';
 

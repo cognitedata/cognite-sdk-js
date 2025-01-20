@@ -2,7 +2,6 @@
 
 // @ts-nocheck
 
-import { randomInt } from '../../../../core/src/__tests__/testUtils';
 import {
   afterAll,
   afterEach,
@@ -13,6 +12,7 @@ import {
   it,
   test,
 } from 'vitest';
+import { randomInt } from '../../../../core/src/__tests__/testUtils';
 import type CogniteClient from '../../cogniteClient';
 import type { ExternalTemplateInstance } from '../../types';
 import { setupLoggedInClient } from '../testUtils';
