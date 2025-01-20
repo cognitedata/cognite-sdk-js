@@ -7,9 +7,10 @@ const externals = ['@cognite/sdk-core', 'geojson', 'lodash'];
 export default defineConfig({
   plugins: [
     dts({
-      exclude: ['**/__tests__/**/*'],
+      exclude: ['**/__tests__/**/*', '**/*.spec.ts'],
       entryRoot: '.',
       aliasesExclude: externals,
+      insertTypesEntry: true,
     }),
   ],
   build: {
