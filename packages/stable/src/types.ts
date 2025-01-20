@@ -396,7 +396,7 @@ export interface AssetMapping3DBase {
   /**
    * The ID of the associated Cognite Asset instance from Core Data Model.
    */
-  assetInstanceId?: UnitDMSUniqueIdentifier,
+  assetInstanceId?: UnitDMSUniqueIdentifier;
 }
 
 export interface AssetMappings3DListFilter extends FilterQuery {
@@ -3280,7 +3280,7 @@ export interface UnitSystem {
 export interface UnitDMSUniqueIdentifier {
   space: string;
   externalId: string;
-};
+}
 
 export type {
   AggregatedHistogramValue,
