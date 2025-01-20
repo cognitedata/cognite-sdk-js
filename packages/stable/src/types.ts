@@ -407,7 +407,7 @@ export interface AssetMappings3DListFilter extends FilterQuery {
    */
   intersectsBoundingBox?: BoundingBox3D;
   /**
-   * if is true, the response will include the mappings associated with the Cognite Asset Data Model instances.
+   * If true, the response will include the mappings with assetInstanceId values, for DMS based assets.
    */
   getDmsInstances?: boolean;
 }
