@@ -393,6 +393,10 @@ export interface AssetMapping3DBase {
    * The ID of the associated asset (Cognite's Assets API).
    */
   assetId: CogniteInternalId;
+  /**
+   * The ID of the associated Cognite Asset instance from Core Data Model.
+   */
+  assetInstanceId?: UnitDMSUniqueIdentifier;
 }
 
 export interface AssetMappings3DListFilter extends FilterQuery {
@@ -402,6 +406,10 @@ export interface AssetMappings3DListFilter extends FilterQuery {
    * If given, only return asset mappings for assets whose bounding box intersects the given bounding box.
    */
   intersectsBoundingBox?: BoundingBox3D;
+  /**
+   * If true, the response will include the mappings with assetInstanceId values, for DM based assets.
+   */
+  getDmsInstances?: boolean;
 }
 
 export interface AssetMappings3DAssetFilter {
@@ -3267,6 +3275,11 @@ export interface UnitSystemQuantity {
 export interface UnitSystem {
   name: string;
   quantities: UnitSystemQuantity[];
+}
+
+export interface UnitDMSUniqueIdentifier {
+  space: string;
+  externalId: string;
 }
 
 export type {
