@@ -3,7 +3,7 @@
 import {
   randomInt,
   runTestWithRetryWhenFailing,
-} from '@cognite/sdk-core/src/__tests__/testUtils';
+} from '../../../../core/src/__tests__/testUtils';
 import { afterAll, beforeAll, describe, expect, test } from 'vitest';
 import type CogniteClient from '../../cogniteClient';
 import type { ExternalEntityToMatch } from '../../types';

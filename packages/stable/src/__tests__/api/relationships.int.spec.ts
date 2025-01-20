@@ -1,7 +1,7 @@
 // Copyright 2020 Cognite AS
 
 import type { Asset, CogniteEvent, DataSet, Label } from '@cognite/sdk';
-import { randomInt } from '@cognite/sdk-core/src/__tests__/testUtils';
+import { randomInt } from '../../../../core/src/__tests__/testUtils';
 import {
   afterAll,
   beforeAll,

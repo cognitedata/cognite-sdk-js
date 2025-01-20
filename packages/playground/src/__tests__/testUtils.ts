@@ -4,7 +4,7 @@ import {
   accessToken,
   mockBaseUrl,
   project,
-} from '@cognite/sdk-core/src/__tests__/testUtils';
+} from '../../../core/src/__tests__/testUtils';
 import CogniteClientPlayground from '../cogniteClientPlayground';
 import { login } from './login';
 

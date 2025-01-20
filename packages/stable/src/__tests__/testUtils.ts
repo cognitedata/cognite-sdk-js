@@ -3,7 +3,7 @@
 import {
   mockBaseUrl,
   randomInt,
-} from '@cognite/sdk-core/src/__tests__/testUtils';
+} from '../../../core/src/__tests__/testUtils';
 import CogniteClient from '../cogniteClient';
 import type { ExternalFileInfo, NodeOrEdge } from '../types';
 import { login } from './login';
@@ -194,7 +194,7 @@ export {
   runTestWithRetryWhenFailing,
   string2arrayBuffer,
   retryInSeconds,
-} from '@cognite/sdk-core/src/__tests__/testUtils';
+} from '../../../core/src/__tests__/testUtils';
 
 export {
   setupClient,

@@ -6,7 +6,7 @@ import { Constants } from '@cognite/sdk-core';
 import {
   mockBaseUrl,
   project,
-} from '@cognite/sdk-core/src/__tests__/testUtils';
+} from '../../../core/src/__tests__/testUtils';
 import CogniteClient from '../cogniteClient';
 import { login } from './login';
 

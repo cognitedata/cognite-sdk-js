@@ -2,7 +2,7 @@
 
 // @ts-nocheck
 
-import { randomInt } from '@cognite/sdk-core/src/__tests__/testUtils';
+import { randomInt } from '../../../../core/src/__tests__/testUtils';
 import {
   afterAll,
   afterEach,
