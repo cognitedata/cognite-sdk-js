@@ -5,7 +5,7 @@
   "homepage": "https://github.com/cognitedata/cognite-sdk-js#readme",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
-  "types": "dist/index",
+  "types": "dist/index.d.ts",
   "exports": {
     "import": "./dist/index.js",
     "require": "./dist/index.cjs",
