@@ -407,7 +407,7 @@ export interface AssetMappings3DListFilter extends FilterQuery {
    */
   intersectsBoundingBox?: BoundingBox3D;
   /**
-   * If true, the response will include the mappings with assetInstanceId values, for DMS based assets.
+   * If true, the response will include the mappings with assetInstanceId values, for DM based assets.
    */
   getDmsInstances?: boolean;
 }
