@@ -12,7 +12,7 @@
     "types": "./dist/index.d.ts"
   },
   "type": "module",
-  "version": "8.0.0-rc.6",
+  "version": "8.0.0-rc.7",
   "scripts": {
     "clean": "rm -rf dist/ docs/",
     "test": "yarn g:vitest run",
@@ -28,8 +28,8 @@
     "test-snippets": ""
   },
   "dependencies": {
-    "@cognite/sdk": "^10.0.0-rc.6",
-    "@cognite/sdk-core": "^5.0.0-rc.6"
+    "@cognite/sdk": "^10.0.0-rc.7",
+    "@cognite/sdk-core": "^5.0.0-rc.7"
   },
   "files": [
     "dist"

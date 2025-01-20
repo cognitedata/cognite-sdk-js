@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [8.0.0-rc.7](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@8.0.0-rc.4...@cognite/sdk-playground@8.0.0-rc.7) (2025-01-20)
+
+
+### Bug Fixes
+
+* bump rc version due to jfrog conflict [release] ([#1190](https://github.com/cognitedata/cognite-sdk-js/issues/1190)) ([fe5f2fa](https://github.com/cognitedata/cognite-sdk-js/commit/fe5f2fa3a7746169ea5091a2f73e83a539ff318f))
+* bump version due to git tag conflict [release] ([#1191](https://github.com/cognitedata/cognite-sdk-js/issues/1191)) ([5c9da8e](https://github.com/cognitedata/cognite-sdk-js/commit/5c9da8e89cb4b31bc726b7b67a4f4987c838c825))
+* **vite:** adding common js as fallback [release] ([#1187](https://github.com/cognitedata/cognite-sdk-js/issues/1187)) ([85564e1](https://github.com/cognitedata/cognite-sdk-js/commit/85564e1430e0f721117269b7223b82ccabdf98eb))
+
+
+
+
+
 # [8.0.0-rc.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@8.0.0-rc.3...@cognite/sdk-playground@8.0.0-rc.4) (2025-01-08)
 
 **Note:** Version bump only for package @cognite/sdk-playground
