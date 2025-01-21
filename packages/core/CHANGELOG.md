@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-rc.8](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@5.0.0-rc.7...@cognite/sdk-core@5.0.0-rc.8) (2025-01-21)
+
+
+### Bug Fixes
+
+* **package:** adding core export [release] ([#1192](https://github.com/cognitedata/cognite-sdk-js/issues/1192)) ([b5efcf0](https://github.com/cognitedata/cognite-sdk-js/commit/b5efcf09dbd6315e8d37ad50d71f873ca2f060bd))
+
+
+
+
+
 # [5.0.0-rc.7](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@5.0.0-rc.4...@cognite/sdk-core@5.0.0-rc.7) (2025-01-20)
 
 
