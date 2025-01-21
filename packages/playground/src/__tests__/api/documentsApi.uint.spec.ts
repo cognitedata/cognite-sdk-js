@@ -1,11 +1,8 @@
 // Copyright 2020 Cognite AS
 
-import {
-  mockBaseUrl,
-  project,
-} from '@cognite/sdk-core/src/__tests__/testUtils';
 import nock from 'nock';
 import { beforeEach, describe, expect, test } from 'vitest';
+import { mockBaseUrl, project } from '../../../../core/src/__tests__/testUtils';
 import type CogniteClientPlayground from '../../cogniteClientPlayground';
 import { setupMockableClient } from '../testUtils';
 
