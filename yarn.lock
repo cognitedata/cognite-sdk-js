@@ -6406,11 +6406,11 @@ __metadata:
   linkType: hard
 
 "@types/es6-promise@npm:^3.3.0":
-  version: 3.3.0
-  resolution: "@types/es6-promise@npm:3.3.0"
+  version: 3.3.2
+  resolution: "@types/es6-promise@npm:3.3.2"
   dependencies:
     es6-promise: "npm:*"
-  checksum: 10c0/3164fbed229b2f27ea5e163849525fa4fbe965d63919d0fc4e1f3515204acca024cb285a48b4b189babdc1eebfe598f2887a398a5b29db44e7e6bc1d16ee5f41
+  checksum: 10c0/9af64688ef691b3246d15e65e162cfcef21b54cdfc13d7c6677e46702c7d912b283fa66ecc53a723326e7d6acf66ede2ae5b2cf2f3097404804f271ce1c01a81
   languageName: node
   linkType: hard
 
