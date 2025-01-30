@@ -5727,8 +5727,8 @@ __metadata:
   linkType: hard
 
 "@rollup/plugin-alias@npm:^4.0.0":
-  version: 4.0.3
-  resolution: "@rollup/plugin-alias@npm:4.0.3"
+  version: 4.0.4
+  resolution: "@rollup/plugin-alias@npm:4.0.4"
   dependencies:
     slash: "npm:^4.0.0"
   peerDependencies:
@@ -5736,7 +5736,7 @@ __metadata:
   peerDependenciesMeta:
     rollup:
       optional: true
-  checksum: 10c0/0d3e4718a5c6ed7512164868d5737ec37aa9e989625529fb20c836e152301a5efe1375bf969a4291c4ac2c06ffc761da5ebde85d7df9718da4fa16d95a0d5cb7
+  checksum: 10c0/53c10a4e1b76aa317295f634cab41e335b738e2fef584c113d89d8200d6745bc1afba7e80353016e1093313903558dc2c5425df432e3b70e371c8d5c66a7a4be
   languageName: node
   linkType: hard
 
