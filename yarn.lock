@@ -6608,30 +6608,32 @@ __metadata:
   linkType: hard
 
 "@types/node@npm:*":
-  version: 10.12.0
-  resolution: "@types/node@npm:10.12.0"
-  checksum: 10c0/ed397daa402e94ce4248f2b42af64cbd235f6f21f92f3c82eca859828f41e71868e1bc4850eccb1bd5f23b9239aec176bc8c190a9586c590fd6b6289b277331b
+  version: 22.12.0
+  resolution: "@types/node@npm:22.12.0"
+  dependencies:
+    undici-types: "npm:~6.20.0"
+  checksum: 10c0/be220706732d95db2ed1c441c1e64cab90bf9a47519ce6f4c79cc5a9ec9d5c517131a149a9ac30afac1a30103e67e3a00d453ba7c1b0141608a3a7ba6397c303
   languageName: node
   linkType: hard
 
 "@types/node@npm:^12.0.0":
-  version: 12.20.28
-  resolution: "@types/node@npm:12.20.28"
-  checksum: 10c0/6159de8bb36f98de4f82dc2661ef9d84ce4f203b3d4f57990ffb7b7fba4e6269d0f391a663d1e6f81280844d9beb1d3ddb2afb123901277793977d55ab62774c
+  version: 12.20.55
+  resolution: "@types/node@npm:12.20.55"
+  checksum: 10c0/3b190bb0410047d489c49bbaab592d2e6630de6a50f00ba3d7d513d59401d279972a8f5a598b5bb8ddc1702f8a2f4ec57a65d93852f9c329639738e7053637d1
   languageName: node
   linkType: hard
 
 "@types/node@npm:^14.0.24":
-  version: 14.0.24
-  resolution: "@types/node@npm:14.0.24"
-  checksum: 10c0/a50adeff545aa06691cdfa92a04c964014114c002421ad40f8b65377b16a792f4eba5c5c4beb28512b1b97281b5f654066cbc7d1c83c55a822df27f7903312e6
+  version: 14.18.63
+  resolution: "@types/node@npm:14.18.63"
+  checksum: 10c0/626a371419a6a0e11ca460b22bb4894abe5d75c303739588bc96267e380aa8b90ba5a87bc552400584f0ac2a84b5c458dadcbcf0dfd2396ebeb765f7a7f95893
   languageName: node
   linkType: hard
 
 "@types/node@npm:^16.7":
-  version: 16.7.10
-  resolution: "@types/node@npm:16.7.10"
-  checksum: 10c0/c4c1562696a9160ca2ba74dbf01ec8eb1b1dba89265ceffb4d8395493fa2644599da20eccb868f91017b8221afb310a3e6d56c1ba11529cd2333bb47b14186ba
+  version: 16.18.125
+  resolution: "@types/node@npm:16.18.125"
+  checksum: 10c0/870c56fb7f863fa0a5771988221a6758e19f1e977cf6c0dc793a017ec11427dbead2e929d61769231fb4bd82051488149c8feee089992db200b5a17802d712e4
   languageName: node
   linkType: hard
 
@@ -21192,6 +21194,13 @@ __metadata:
     has-symbols: "npm:^1.0.3"
     which-boxed-primitive: "npm:^1.0.2"
   checksum: 10c0/81ca2e81134167cc8f75fa79fbcc8a94379d6c61de67090986a2273850989dd3bae8440c163121b77434b68263e34787a675cbdcb34bb2f764c6b9c843a11b66
+  languageName: node
+  linkType: hard
+
+"undici-types@npm:~6.20.0":
+  version: 6.20.0
+  resolution: "undici-types@npm:6.20.0"
+  checksum: 10c0/68e659a98898d6a836a9a59e6adf14a5d799707f5ea629433e025ac90d239f75e408e2e5ff086afc3cace26f8b26ee52155293564593fbb4a2f666af57fc59bf
   languageName: node
   linkType: hard
 
