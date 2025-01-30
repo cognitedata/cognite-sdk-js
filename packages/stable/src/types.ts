@@ -3327,7 +3327,6 @@ export type {
   MaxAggregateFunctionV3,
   MinAggregateFunctionV3,
   NextCursorV3,
-  NodeAndEdgeCollectionResponseV3Response,
   NodeAndEdgeCollectionResponseWithCursorV3Response,
   NodeAndEdgeCreateCollection,
   NodeDefinition,
@@ -3397,11 +3396,9 @@ export type {
   TypePropertyDefinition,
   TypingViewOrContainer,
   UpsertConflict,
-  ViewAggregationRequest,
   ViewCorePropertyDefinition,
   ViewDirectNodeRelation,
   ViewOrContainer,
-  ViewPropertyReference,
   ViewReference,
 } from './api/instances/types.gen';
 
