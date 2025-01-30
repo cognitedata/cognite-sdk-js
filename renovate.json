@@ -1,15 +1,8 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:base"],
-  "schedule": ["every weekend"],
-  "timezone": "Europe/Oslo",
-  "rebaseWhen": "behind-base-branch",
-  "prCreation": "not-pending",
-  "labels": ["dependencies"],
-  "packageRules": [
-    {
-      "matchDatasources": ["npm"],
-      "stabilityDays": 5
-    }
-  ]
+  "extends": [
+    "local>cognitedata/renovate-config-public",
+    ":automergeMinor"
+  ],
+  "stabilityDays": 14
 }
