@@ -27,10 +27,8 @@ describe('utils', () => {
 
   test('api version constraints', () => {
     const v1: CogniteAPIVersion = 'v1';
-    const playground: CogniteAPIVersion = 'playground';
 
     expect(apiUrl(v1)).toEqual(`/api/${v1}`);
-    expect(apiUrl(playground)).toEqual(`/api/${playground}`);
   });
 
   test('convertToTimestampToDateTime', () => {

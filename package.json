@@ -23,7 +23,6 @@
     "packages/beta",
     "packages/codegen",
     "packages/core",
-    "packages/playground",
     "packages/stable",
     "packages/template",
     "samples/**"

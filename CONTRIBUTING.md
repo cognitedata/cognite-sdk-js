@@ -225,7 +225,6 @@ There is a Cognite Client per SDK package:
 - [Stable](./packages/stable/src/cogniteClient.ts)
 - [Beta](./packages/beta/src/cogniteClient.ts)
 - [Alpha](./packages/alpha/src/cogniteClient.ts)
-- [Playground](./packages/playground/src/cogniteClientPlayground.ts)
 - [Template](./packages/template/src/cogniteClient.ts)
 
 The Core one is the base, meaning the others extends from it.

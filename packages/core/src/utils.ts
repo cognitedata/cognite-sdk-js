@@ -7,7 +7,7 @@ import type { CogniteError } from './error';
 import { CogniteMultiError, type MultiErrorRawSummary } from './multiError';
 
 /** @hidden */
-export type CogniteAPIVersion = 'v1' | 'playground';
+export type CogniteAPIVersion = 'v1';
 
 /** @hidden */
 export function getBaseUrl(baseUrl?: string) {
