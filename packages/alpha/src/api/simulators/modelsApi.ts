@@ -8,6 +8,8 @@ import {
 } from '@cognite/sdk-core';
 import type {
   SimulatorModel,
+  SimulatorModelAggregate,
+  SimulatorModelAggregateQuery,
   SimulatorModelChange,
   SimulatorModelCreate,
   SimulatorModelFilterQuery,
@@ -23,6 +25,12 @@ export class ModelsAPI extends BaseResourceAPI<SimulatorModel> {
 
   public create = (items: SimulatorModelCreate[]) => {
     return this.createEndpoint(items);
+  };
+
+  public aggregate = (
+    query: SimulatorModelAggregateQuery
+  ): Promise<SimulatorModelAggregate[]> => {
+    return this.aggregateEndpoint(query);
   };
 
   public list = (filter?: SimulatorModelFilterQuery) => {

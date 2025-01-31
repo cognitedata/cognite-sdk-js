@@ -15,6 +15,7 @@ import type {
   SimulatorFilterQuery,
   SimulatorIntegrationCreate,
   SimulatorIntegrationFilterQuery,
+  SimulatorModelAggregateQuery,
   SimulatorModelChange,
   SimulatorModelCreate,
   SimulatorModelFilterQuery,
@@ -140,12 +141,23 @@ export class SimulatorsAPI extends BaseResourceAPI<Simulator> {
     return this.runDataApi.retrieve(ids);
   };
 
+  /**
+   * [Run a simulation](Run a simulation <https://developer.cognite.com/api#tag/Simulation-Runs/operation/run_simulation_simulators_run_post)
+   *
+   * ```js
+   * const simulationRun = await client.simulators.runSimulation([{ "routineExternalId": "DWSIM-ShowerMixer" }]);
+   * ```
+   */
   public runSimulation = (items: SimulationRunCreate[]) => {
     return this.runsApi.run(items);
   };
 
   public retrieveRuns = (ids: CogniteInternalId[]) => {
     return this.runsApi.retrieve(ids);
+  };
+
+  public aggregateModels = (query: SimulatorModelAggregateQuery) => {
+    return this.modelsApi.aggregate(query);
   };
 
   public listModels = (filter?: SimulatorModelFilterQuery) => {

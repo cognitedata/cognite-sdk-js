@@ -54,6 +54,17 @@ describeIf('simulator models api', () => {
     expect(res[0].externalId).toBe(modelExternalId);
   });
 
+  test('aggregate models', async () => {
+    const aggregateResponse = await client.simulators.aggregateModels({
+      filter: {
+        simulatorExternalIds: [simulatorExternalId],
+      },
+      aggregate: 'count',
+    });
+
+    expect(aggregateResponse[0].count).toBeGreaterThan(0);
+  });
+
   test('list models', async () => {
     const list_response = await client.simulators.listModels();
     expect(list_response.items.length).toBeGreaterThan(0);
