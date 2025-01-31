@@ -5,7 +5,7 @@
   "homepage": "https://github.com/cognitedata/cognite-sdk-js#readme",
   "main": "dist/index.js",
   "types": "dist/src/index.d.js",
-  "version": "4.10.6",
+  "version": "4.10.7",
   "scripts": {
     "clean": "rm -rf dist/ docs/",
     "test": "yarn g:vitest run",
@@ -31,6 +31,6 @@
   ],
   "devDependencies": {
     "@types/geojson": "^7946.0.8",
-    "happy-dom": "^14.12.3"
+    "happy-dom": "^15.0.0"
   }
 }

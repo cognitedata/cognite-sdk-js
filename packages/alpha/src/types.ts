@@ -1,6 +1,11 @@
 // Copyright 2020 Cognite AS
 
-import type { DateRange, SinglePatch, SortOrder } from '@cognite/sdk';
+import type {
+  AggregateResponse,
+  DateRange,
+  SinglePatch,
+  SortOrder,
+} from '@cognite/sdk';
 import type {
   CogniteExternalId,
   CogniteInternalId,
@@ -84,6 +89,14 @@ export interface SimulatorCreate {
   unitQuantities?: SimulatorUnitQuantity[];
 }
 
+export type SimulatorIntegrationConnectorStatus = 'IDLE' | 'RUNNING_SIMULATION';
+
+export const SimulatorIntegrationConnectorStatus = {
+  IDLE: 'IDLE' as SimulatorIntegrationConnectorStatus,
+  RUNNING_SIMULATION:
+    'RUNNING_SIMULATION' as SimulatorIntegrationConnectorStatus,
+};
+
 export interface SimulatorIntegration {
   id: CogniteInternalId;
   externalId: CogniteExternalId;
@@ -94,7 +107,7 @@ export interface SimulatorIntegration {
   simulatorVersion: string;
   licenseStatus?: string;
   licenseLastCheckedTime?: Date;
-  connectorStatus?: string;
+  connectorStatus?: SimulatorIntegrationConnectorStatus;
   connectorStatusUpdatedTime?: Date;
   logId: CogniteInternalId;
   createdTime: Date;
@@ -320,8 +333,22 @@ export interface SimulatorModelCreate {
   type?: string;
 }
 
+/**
+ * Response from models aggregate endpoint
+ */
+export type SimulatorModelAggregate = AggregateResponse;
+
+export interface SimulatorModelAggregateQuery {
+  /**
+   * Filter on models with strict matching.
+   */
+  filter?: SimulatorModelFilter;
+  aggregate: 'count';
+}
+
 export interface SimulatorModelFilter {
   simulatorExternalIds?: CogniteExternalId[];
+  simulatorIntegrationExternalIds?: CogniteExternalId[];
 }
 
 export interface SimulatorModelFilterQuery extends FilterQuery {
@@ -452,7 +479,7 @@ export interface SimulatorRoutineFilterQuery extends FilterQuery {
 
 export interface SimulatorRoutineDataSampling {
   enabled: true;
-  validationWindow: number;
+  validationWindow?: number;
   samplingWindow: number;
   granularity: number;
 }
@@ -523,16 +550,21 @@ export interface SimulatorRoutineScript {
   description?: string;
   steps: SimulatorRoutineScriptStep[];
 }
-export interface SimulatorRoutineRevisionConfiguration {
+
+export interface SimulatorRoutineRevisionConfigurationBase {
   dataSampling: SimulatorRoutineConfigDisabled | SimulatorRoutineDataSampling;
   schedule: SimulatorRoutineConfigDisabled | SimulatorRoutineSchedule;
   steadyStateDetection: SimulatorRoutineSteadyStateDetection[];
   logicalCheck: SimulatorRoutineLogicalCheck[];
+}
 
+export interface SimulatorRoutineRevisionConfiguration
+  extends SimulatorRoutineRevisionConfigurationBase {
   inputs: SimulatorRoutineInput[];
   outputs: SimulatorRoutineOutput[];
 }
-export interface SimulatorRoutineRevision {
+
+export interface SimulatorRoutineRevisionBase {
   id: CogniteInternalId;
   externalId: CogniteExternalId;
   simulatorExternalId: CogniteExternalId;
@@ -542,9 +574,17 @@ export interface SimulatorRoutineRevision {
   dataSetId: CogniteInternalId;
   createdByUserId: string;
   createdTime: Date;
+  versionNumber: number;
+}
+
+export interface SimulatorRoutineRevisionView
+  extends SimulatorRoutineRevisionBase {
+  configuration: SimulatorRoutineRevisionConfigurationBase;
+}
+
+export interface SimulatorRoutineRevision extends SimulatorRoutineRevisionBase {
   configuration: SimulatorRoutineRevisionConfiguration;
   script: SimulatorRoutineScript[];
-  versionNumber: number;
 }
 
 export interface SimulatorRoutineRevisionCreate {
@@ -554,7 +594,7 @@ export interface SimulatorRoutineRevisionCreate {
   script: SimulatorRoutineScript[];
 }
 
-export interface SimulatorRoutineRevisionslFilter {
+export interface SimulatorRoutineRevisionsFilter {
   routineExternalIds?: CogniteExternalId[];
   allVersions?: boolean;
   modelExternalIds?: CogniteExternalId[];
@@ -564,6 +604,7 @@ export interface SimulatorRoutineRevisionslFilter {
 }
 
 export interface SimulatorRoutineRevisionsFilterQuery extends FilterQuery {
-  filter?: SimulatorRoutineRevisionslFilter;
+  filter?: SimulatorRoutineRevisionsFilter;
   sort?: SortItem[];
+  includeAllFields?: boolean;
 }

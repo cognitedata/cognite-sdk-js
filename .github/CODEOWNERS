@@ -1,7 +1,7 @@
-* @cognitedata/cdf-user-experience @BugGambit
+* @cognitedata/javascript-sdk-maintainers
 
-/packages/alpha @cognitedata/airviz
-/packages/beta @cognitedata/deg-code-owners
+/packages/alpha @cognitedata/simulator-integration
+/packages/beta @cognitedata/simulator-integration
 
 /packages/playground/src/api/documents @cognitedata/matchmakers
 /packages/playground/src/__tests__/api/documents* @cognitedata/matchmakers
