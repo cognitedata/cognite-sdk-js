@@ -23,6 +23,7 @@ export type {
   Cursor,
   Limit,
   IdEither,
+  IdEitherWithInstance,
   InternalId,
   ExternalId,
   CogniteExternalId,
