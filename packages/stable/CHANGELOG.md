@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [9.17.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.17.0...@cognite/sdk@9.17.1) (2025-01-17)
+
+**Note:** Version bump only for package @cognite/sdk
+
+
+
+
+
 # [9.17.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.16.1...@cognite/sdk@9.17.0) (2024-12-12)
 
 
