@@ -267,15 +267,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@cognite/sdk-playground@workspace:packages/playground":
-  version: 0.0.0-use.local
-  resolution: "@cognite/sdk-playground@workspace:packages/playground"
-  dependencies:
-    "@cognite/sdk": "npm:^10.0.0-rc.9"
-    "@cognite/sdk-core": "npm:^5.0.0-rc.8"
-  languageName: unknown
-  linkType: soft
-
 "@cognite/sdk-template@workspace:packages/template":
   version: 0.0.0-use.local
   resolution: "@cognite/sdk-template@workspace:packages/template"

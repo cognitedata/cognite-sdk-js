@@ -1,9 +1,0 @@
-{
-  "service": "documents",
-  "filter": {
-    "serviceName": "documents"
-  },
-  "inlinedSchemas": {
-    "autoNameRequest": true
-  }
-}
