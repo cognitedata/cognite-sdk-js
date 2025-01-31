@@ -12768,24 +12768,24 @@ __metadata:
   linkType: hard
 
 "husky@npm:^3.0.2":
-  version: 3.0.2
-  resolution: "husky@npm:3.0.2"
+  version: 3.1.0
+  resolution: "husky@npm:3.1.0"
   dependencies:
     chalk: "npm:^2.4.2"
+    ci-info: "npm:^2.0.0"
     cosmiconfig: "npm:^5.2.1"
     execa: "npm:^1.0.0"
     get-stdin: "npm:^7.0.0"
-    is-ci: "npm:^2.0.0"
     opencollective-postinstall: "npm:^2.0.2"
     pkg-dir: "npm:^4.2.0"
-    please-upgrade-node: "npm:^3.1.1"
-    read-pkg: "npm:^5.1.1"
+    please-upgrade-node: "npm:^3.2.0"
+    read-pkg: "npm:^5.2.0"
     run-node: "npm:^1.0.0"
     slash: "npm:^3.0.0"
   bin:
     husky-run: ./run.js
     husky-upgrade: ./lib/upgrader/bin.js
-  checksum: 10c0/fd72a7c387397524c59d4ac6ff1feb035b83407bb01a25699727feb3006f176b5091b66f5e1a57fbb3ffcd2e40c5155b734a87dd16def15ec3db2cf9f85e27f4
+  checksum: 10c0/f88f41f2ca49780df339098310c8d6c68dba66219d32bf8530585f395eabee9e8bac31012ecaeb9daad3a0697f395a7e321855b8118c725dfc2c72164952aac6
   languageName: node
   linkType: hard
 
@@ -17064,12 +17064,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"please-upgrade-node@npm:^3.1.1":
-  version: 3.1.1
-  resolution: "please-upgrade-node@npm:3.1.1"
+"please-upgrade-node@npm:^3.2.0":
+  version: 3.2.0
+  resolution: "please-upgrade-node@npm:3.2.0"
   dependencies:
     semver-compare: "npm:^1.0.0"
-  checksum: 10c0/83ea1e7e5f899906d161ad3484b135d83ceb6acd4ccb3232f17c7281bb579394e8f698802e3cce4206250923a76e537a8cd7dfc40dd5ed41bac236d85fa4ac9d
+  checksum: 10c0/222514d2841022be4b843f38d415beadcc6409c0545d6d153778d71c601bba7bbf1cd5827d650c7fae6a9a2ba7cf00f4b6729b40d015a3a5ba2937e57bc1c435
   languageName: node
   linkType: hard
 
@@ -18579,7 +18579,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"read-pkg@npm:^5.1.1, read-pkg@npm:^5.2.0":
+"read-pkg@npm:^5.2.0":
   version: 5.2.0
   resolution: "read-pkg@npm:5.2.0"
   dependencies:
