@@ -65,7 +65,7 @@
     "husky": "^3.0.2",
     "lerna": "^6.0.0",
     "markdown-link-check": "^3.10.3",
-    "nock": "13.3.1",
+    "nock": "13.5.6",
     "openapi-types": "^11.0.1",
     "rollup": "^2.22.2",
     "swagger-typescript-api-nextgen": "^10.0.1",
