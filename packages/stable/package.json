@@ -11,7 +11,7 @@
     "require": "./dist/index.cjs",
     "types": "./dist/index.d.ts"
   },
-  "version": "10.0.0-rc.8",
+  "version": "10.0.0-rc.9",
   "type": "module",
   "scripts": {
     "clean": "rm -rf dist/ docs/ codeSnippets/",

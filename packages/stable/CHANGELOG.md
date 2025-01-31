@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [10.0.0-rc.9](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@10.0.0-rc.8...@cognite/sdk@10.0.0-rc.9) (2025-01-31)
+
+
+### Features
+
+* export more types ([#1208](https://github.com/cognitedata/cognite-sdk-js/issues/1208)) ([9e3117b](https://github.com/cognitedata/cognite-sdk-js/commit/9e3117b4368dd93beafc13f96015f17abf80aead))
+
+
+
+
+
 # [10.0.0-rc.8](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@10.0.0-rc.7...@cognite/sdk@10.0.0-rc.8) (2025-01-21)
 
 
