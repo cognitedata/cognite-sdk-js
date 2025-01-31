@@ -36,7 +36,6 @@ Before you begin, ensure that you have the following:
 - The redirect_uri registered with your OIDC IdP for your application.
 - Our SDK installed and integrated into your application.
 
-
 ### Setting up OIDC Authentication
 
 - Initialize the SDK: Import and initialize the SDK in your application, providing the necessary configuration options such as the client ID, client secret, and redirect URI obtained from your OIDC IdP.
@@ -101,7 +100,6 @@ To run integration tests, you would have to pass the following environment varia
 Set the environment variable `REVISION_3D_INTEGRATION_TEST=true` to run 3D revision integration tests.
 
 We use `vitest` to run tests, see [their documentation](https://vitest.dev/) for more information.
-
 
 ### Versioning
 
