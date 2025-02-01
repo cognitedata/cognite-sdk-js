@@ -50,7 +50,7 @@ Please see [this guide](./guides/authentication.md) for a detailed guide.
 
 ## Response header & http status
 
-Methods are design to only return the response body. For fetching the http response status and/or header you must utilize client.getMetadata:
+Methods are designed to only return the response body. For fetching the http response status and/or header you must utilize client.getMetadata:
 
 ```ts
 const createdAsset = await client.assets.create([{ name: 'My first asset' }]);
