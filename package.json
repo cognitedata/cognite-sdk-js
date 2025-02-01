@@ -102,5 +102,5 @@
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
-  "packageManager": "yarn@4.4.0"
+  "packageManager": "yarn@4.6.0"
 }
