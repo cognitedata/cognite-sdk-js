@@ -1,24 +1,36 @@
 # Authentication in browsers
 
 - [Authentication in browsers](#authentication-in-browsers)
-  - [Use access tokens instead of API keys](#use-access-tokens-instead-of-api-keys)
+  - [Use of access tokens](#use-of-access-tokens)
   - [Accessing different clusters](#accessing-different-clusters)
   - [How to authenticate with the SDK?](#how-to-authenticate-with-the-sdk)
-  - [OpenID Connect (OIDC)](#openid-connect-oidc)
-    - [OIDC authentication using code authorization w pkce](#oidc-authentication-using-code-authorization-w-pkce)
+    - [Example using Entra ID through MSAL](#example-using-entra-id-through-msal)
     - [OIDC authentication using client credentials](#oidc-authentication-using-client-credentials)
       - [Example](#example)
   - [Manually trigger authentication](#manually-trigger-authentication)
   - [Cache access tokens](#cache-access-tokens)
   - [More](#more)
 
-## Use access tokens instead of API keys
+## Use of access tokens
 
-We **strongly recommend** that you don't use API keys in web applications since the API key is easily readable by everyone with access to the application. Another restriction is that all users of your app share the same API key. All users will have the same access level, you lose tracing/auditing per user, keys are not time-limited, etc.
+The Cognite Data Fusion API only supports [access tokens](https://datatracker.ietf.org/doc/html/rfc6749#section-1.4), which are short-lived tokens (typically a [JSON Web Token](https://datatracker.ietf.org/doc/html/rfc7519)). Therefore, the SDK must attach such a token to each request. The SDK doesn't itself generate an access token but provides a mechanism to ask for a valid access token when the SDK needs one. This is done through the `oidcTokenProvider` field in the CogniteClient constructor:
 
-Instead of API keys, use **access tokens**. These are short-lived tokens that grant the user access to CDF. The application gets an access token by asking the user (or client credential) to sign in to a CDF project's identity provider (Google, Active Directory, etc.).
+```ts
+const client = new CogniteClient({
+  appId: 'sample-app',
+  baseUrl: 'https://api.cognitedata.com',
+  project: 'demo-project',
+  oidcTokenProvider: async () => { ... },
+});
+```
 
-The access token expires after a time, and as a result, the user will get `401` from CDF again, and the SDK triggers a new authentication process.
+`oidcTokenProvider` is a function that must be provided and has the return type `Promise<string>`. The return value should be a promise resolving into a valid access token. It's the developer's responsibility to get hold of such a token. How to get the token depends on the Identity Provider (IdP) that is configured to be used for the Cognite Data Fusion project/organization. The most common is to use Entra ID (former Azure AD), and there is an example below on how to authenticate with Entra ID.
+
+The first invocation of `oidcTokenProvider` will happen after one of these actions:
+1. `client.authenticate()` is called.
+2. The SDK gets a [HTTP 401 status code](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401) response from the Cognite Data Fusion API.
+
+`oidcTokenProvider` may be invoked several times as the access token is short-lived. Whenever the SDK receives a 401, the SDK will call `oidcTokenProvider` to get an updated token. If the new token differs from the token used in the 401 request, then the request will be retried with the new token.
 
 ## Accessing different clusters
 
@@ -37,21 +49,12 @@ const client = new CogniteClient({
 
 ## How to authenticate with the SDK?
 
-Quickly summarized, the application passes a `oidcTokenProvider` callback to the SDK and uses it to
-get and renew tokens as needed. If you need to integrate your application and the SDK with, for example, Azure Active Directory, use the appropriate library
-from Microsoft. If you need to integrate with Auth0, use their libraries and integrate with the SDK
-via `oidcTokenProvider`.
+Quickly summarized, the application passes a `oidcTokenProvider` callback to the SDK and uses it to get and renew tokens as needed. If you need to integrate your application and the SDK with, for example, Entra ID (Microsoft), use the appropriate library
+from Microsoft ([msal](https://www.npmjs.com/package/@azure/msal-browser)). If you need to integrate with Auth0, use their libraries and integrate with the SDK via `oidcTokenProvider`.
 
-## OpenID Connect (OIDC)
+### Example using Entra ID through MSAL
 
-See
-[this article](https://docs.cognite.com/cdf/access/concepts/best_practices_oidc/)
-for details about OIDC and Cognite.
-
-### OIDC authentication using code authorization w pkce
-
-This example shows how to use the Microsoft [msal](https://github.com/AzureAD/microsoft-authentication-library-for-js/tree/dev/lib/msal-browser) library to get a token from Azure Active directory on behalf of a user using the [authorization code
-flow](https://oauth.net/2/grant-types/authorization-code/) with [pkce](https://oauth.net/2/pkce/):
+This example shows how to use the Microsoft [msal](https://github.com/AzureAD/microsoft-authentication-library-for-js/tree/dev/lib/msal-browser) library to get a token from Microsoft on behalf of a user using the [authorization code flow](https://oauth.net/2/grant-types/authorization-code/) with [PKCE](https://oauth.net/2/pkce/):
 
 ```js
 import { Configuration, PublicClientApplication } from "@azure/msal-browser";
@@ -98,20 +101,16 @@ const client = new CogniteClient({
 
 ```
 
-You can find a full sample application [here](https://github.com/cognitedata/cognite-sdk-js/tree/master/samples/react/msal-browser-react/) and
-[here](https://github.com/cognitedata/cognite-sdk-js/tree/master/samples/react/msal-advanced-browser-react).
+You can find a full sample application [here](https://github.com/cognitedata/cognite-sdk-js/tree/master/samples/react/msal-browser-react/) and [here](https://github.com/cognitedata/cognite-sdk-js/tree/master/samples/react/msal-advanced-browser-react).
 
 ### OIDC authentication using client credentials
 
-This flow gets a token on behalf of a [client
-credential](https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-client-creds-grant-flow).
-This is typically a non-human entity with some access to a system and is appropriate for
-background operations like extractors. Client credentials have a similar use case as API keys have for
-legacy authenticated projects.
+This flow gets a token on behalf of a [client credential](https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-client-creds-grant-flow). This is typically a non-human entity with some access to a system and is appropriate for
+background operations like extractors.
 
 #### Example
 
-```js
+```ts
 import { ConfidentialClientApplication } from "@azure/msal-node";
 
 async function quickstart() {
@@ -160,7 +159,7 @@ quickstart()
 
 Instead of waiting for the first `401` response, you can trigger the authentication flow manually like this:
 
-```js
+```ts
 
 const client = new CogniteClient({ ... });
 await client.authenticate(); // this also returns the token received
