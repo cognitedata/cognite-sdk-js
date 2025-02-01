@@ -16300,9 +16300,9 @@ __metadata:
   linkType: hard
 
 "openapi-types@npm:^11.0.1":
-  version: 11.0.1
-  resolution: "openapi-types@npm:11.0.1"
-  checksum: 10c0/e259c4493888d9f23dbacbf69a4df8127122649c05a86276552a251a7c8f04ef87286063c995aa627b355849635b4fcd2263d878ff5b7244dff6726573d58cf6
+  version: 11.1.0
+  resolution: "openapi-types@npm:11.1.0"
+  checksum: 10c0/5fdd35abea4a42bd62e86b179bfa4a72bef2a6e3159634d501e7295fa311b64176a6963681bd5af936172d35c05fc6011564f058becfe61ae0ef70c9ec9ad2fa
   languageName: node
   linkType: hard
 
