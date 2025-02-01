@@ -71,7 +71,7 @@
     "swagger-typescript-api-nextgen": "^10.0.1",
     "tmp-promise": "^3.0.3",
     "ts-node": "^10.8.0",
-    "typedoc": "^0.19.2",
+    "typedoc": "^0.27.0",
     "typescript": "^3.9",
     "vitest": "^2.0.5",
     "yargs": "^17.5.1"
