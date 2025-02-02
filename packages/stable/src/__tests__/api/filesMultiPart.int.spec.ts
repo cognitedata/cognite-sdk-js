@@ -14,9 +14,9 @@ import {
   divideFileIntoChunks,
   divideFileIntoStreams,
   getFileStats,
-  setupMockableClientForIntegrationTests,
   toArrayBuffer,
 } from '../testUtils';
+import { randomInt, setupLoggedInClient } from '../testUtils';
 // file to upload for integration tests
 const testfile = join(__dirname, '../VAL.nwd');
 
@@ -25,7 +25,11 @@ describe.skip('Files: Multi part Upload Integration Tests', () => {
   let label: LabelDefinition;
 
   beforeAll(async () => {
-    client = setupMockableClientForIntegrationTests();
+    client = setupLoggedInClient();
+    const labelExternalId = `testLabel ${randomInt()}`;
+    [label] = await client.labels.create([
+      { externalId: labelExternalId, name: labelExternalId },
+    ]);
   });
 
   afterAll(async () => {

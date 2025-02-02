@@ -3,8 +3,9 @@ import {
   type CDFHttpClient,
   type MetadataMap,
 } from '@cognite/sdk-core';
-import type { FileContent, FileInfo } from '@cognite/sdk/src/types';
 import type {
+  FileContent,
+  FileInfo,
   MultiPartFileChunkResponse,
   MultiPartFileUploadResponse,
 } from '../../types';
@@ -22,7 +23,7 @@ export class FilesMultipartUploadSessionAPI extends BaseResourceAPI<FileInfo> {
     [, , , this.multiPartFileUploadResponse] = args;
 
     this.uploadedUrls = this.multiPartFileUploadResponse.uploadUrls.map(
-      () => false
+      (_) => false
     );
     this.finished = false;
   }
@@ -33,13 +34,17 @@ export class FilesMultipartUploadSessionAPI extends BaseResourceAPI<FileInfo> {
   ): Promise<undefined | MultiPartFileChunkResponse> {
     const hasFileContent = fileContent != null;
     if (!hasFileContent) {
-      throw Error('you are uploading an empty content');
+      throw Error('you are uploading empty content');
     }
     if (
       partNumber < 0 ||
       partNumber >= this.multiPartFileUploadResponse.uploadUrls.length
     ) {
-      throw Error('part number is greater than the number of parts');
+      throw Error(
+        `part number is outside allowed range 0 to ${
+          this.multiPartFileUploadResponse.uploadUrls.length - 1
+        }`
+      );
     }
     if (this.canCompleteUpload()) {
       await this.completeMultiPartUpload();

@@ -29,6 +29,7 @@ export { DataSetsAPI } from './api/datasets/datasetsApi';
 export { EventsAggregateAPI } from './api/events/eventsAggregateApi';
 export { EventsAPI } from './api/events/eventsApi';
 export { FilesAPI } from './api/files/filesApi';
+export { FilesMultipartUploadSessionAPI } from './api/files/filesMultipartUploadSessionApi';
 export { GroupsAPI } from './api/groups/groupsApi';
 export { LabelsAPI } from './api/labels/labelsApi';
 export { ProjectsAPI } from './api/projects/projectsApi';

@@ -3,7 +3,7 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-# [6.0.0-rc.10](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@6.0.0-rc.9...@cognite/sdk-beta@6.0.0-rc.10) (2025-01-31)
+## [5.12.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@5.12.2...@cognite/sdk-beta@5.12.3) (2025-01-17)
 
 **Note:** Version bump only for package @cognite/sdk-beta
 
@@ -11,7 +11,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-# [6.0.0-rc.9](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@6.0.0-rc.8...@cognite/sdk-beta@6.0.0-rc.9) (2025-01-31)
+## [5.12.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@5.12.1...@cognite/sdk-beta@5.12.2) (2024-12-12)
 
 **Note:** Version bump only for package @cognite/sdk-beta
 
@@ -19,31 +19,37 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-# [6.0.0-rc.8](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@6.0.0-rc.7...@cognite/sdk-beta@6.0.0-rc.8) (2025-01-21)
+## [5.12.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@5.12.0...@cognite/sdk-beta@5.12.1) (2024-11-07)
+
+**Note:** Version bump only for package @cognite/sdk-beta
+
+
+
+
+
+# [5.12.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@5.11.6...@cognite/sdk-beta@5.12.0) (2024-10-07)
+
+
+### Features
+
+* **files:** move multipart functionality to stable [BND3D-4545] ([#1132](https://github.com/cognitedata/cognite-sdk-js/issues/1132)) ([1e33003](https://github.com/cognitedata/cognite-sdk-js/commit/1e33003f364ad0932cca24ea2a9d457ac382f9ec))
+
+
+
+
+
+## [5.11.6](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@5.11.4...@cognite/sdk-beta@5.11.6) (2024-08-26)
 
 
 ### Bug Fixes
 
-* **package:** adding core export [release] ([#1192](https://github.com/cognitedata/cognite-sdk-js/issues/1192)) ([b5efcf0](https://github.com/cognitedata/cognite-sdk-js/commit/b5efcf09dbd6315e8d37ad50d71f873ca2f060bd))
+* dummy release to override a bad one ([#1139](https://github.com/cognitedata/cognite-sdk-js/issues/1139)) ([5b036da](https://github.com/cognitedata/cognite-sdk-js/commit/5b036dabd4630b45d51558ee7f95d951c7227137))
 
 
 
 
 
-# [6.0.0-rc.7](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@6.0.0-rc.4...@cognite/sdk-beta@6.0.0-rc.7) (2025-01-20)
-
-
-### Bug Fixes
-
-* bump rc version due to jfrog conflict [release] ([#1190](https://github.com/cognitedata/cognite-sdk-js/issues/1190)) ([fe5f2fa](https://github.com/cognitedata/cognite-sdk-js/commit/fe5f2fa3a7746169ea5091a2f73e83a539ff318f))
-* bump version due to git tag conflict [release] ([#1191](https://github.com/cognitedata/cognite-sdk-js/issues/1191)) ([5c9da8e](https://github.com/cognitedata/cognite-sdk-js/commit/5c9da8e89cb4b31bc726b7b67a4f4987c838c825))
-* **vite:** adding common js as fallback [release] ([#1187](https://github.com/cognitedata/cognite-sdk-js/issues/1187)) ([85564e1](https://github.com/cognitedata/cognite-sdk-js/commit/85564e1430e0f721117269b7223b82ccabdf98eb))
-
-
-
-
-
-# [6.0.0-rc.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@6.0.0-rc.3...@cognite/sdk-beta@6.0.0-rc.4) (2025-01-08)
+## [5.11.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@5.11.3...@cognite/sdk-beta@5.11.4) (2024-08-26)
 
 **Note:** Version bump only for package @cognite/sdk-beta
 
@@ -51,40 +57,9 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-# [6.0.0-rc.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@6.0.0-rc.1...@cognite/sdk-beta@6.0.0-rc.3) (2024-11-07)
-
-
-### Bug Fixes
-
-* add instance id support to timeseries API ([#1165](https://github.com/cognitedata/cognite-sdk-js/issues/1165)) ([070dbb3](https://github.com/cognitedata/cognite-sdk-js/commit/070dbb399a63a74079a606951610cdf1b67febdf))
-
-
-
-
-
-# [6.0.0-rc.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@6.0.0-rc.0...@cognite/sdk-beta@6.0.0-rc.1) (2024-09-18)
+## [5.11.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@5.11.2...@cognite/sdk-beta@5.11.3) (2024-08-22)
 
 **Note:** Version bump only for package @cognite/sdk-beta
-
-
-
-
-
-# [6.0.0-rc.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@5.11.2...@cognite/sdk-beta@6.0.0-rc.0) (2024-08-26)
-
-
-### chore
-
-* upgrade to typescript 5 ([#1135](https://github.com/cognitedata/cognite-sdk-js/issues/1135)) ([1530809](https://github.com/cognitedata/cognite-sdk-js/commit/15308098e64ec27a6c33049b2712f9cbc49dac38))
-
-
-### BREAKING CHANGES
-
-* es6 module (vs es5) and typescript 3 -> 5
-
-* chore: release pre-release from the release-v10 branch
-
-* test: skip flaky alerts test
 
 
 

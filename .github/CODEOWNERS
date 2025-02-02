@@ -1,4 +1,7 @@
-* @cognitedata/cdf-user-experience @BugGambit
+* @cognitedata/javascript-sdk-maintainers
+
+/packages/alpha @cognitedata/simulator-integration
+/packages/beta @cognitedata/simulator-integration
 
 /packages/stable/src/api/documents @cognitedata/matchmakers
 /packages/stable/src/__tests__/api/documents* @cognitedata/matchmakers

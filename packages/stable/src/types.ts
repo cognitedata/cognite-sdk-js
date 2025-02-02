@@ -3252,7 +3252,7 @@ export interface AnnotationReverseLookupFilterProps {
 }
 
 export interface Unit {
-  externalId: CogniteInternalId;
+  externalId: CogniteExternalId;
   name: string;
   longName: string;
   symbol: string;
@@ -3270,12 +3270,21 @@ export interface UnitConversion {
 
 export interface UnitSystemQuantity {
   name: string;
-  unitExternalId: CogniteInternalId;
+  unitExternalId: CogniteExternalId;
 }
 
 export interface UnitSystem {
   name: string;
   quantities: UnitSystemQuantity[];
+}
+export interface MultiPartFileUploadResponse extends FileInfo {
+  uploadUrls: string[];
+  uploadId: string;
+}
+
+export interface MultiPartFileChunkResponse {
+  partNumber: number;
+  status: number;
 }
 
 export interface UnitDMSUniqueIdentifier {
@@ -3421,3 +3430,5 @@ export type {
   ViewDefinitionProperty,
   ViewPropertyDefinition,
 } from './api/models/types.gen';
+
+export * from './api/sessions/types';

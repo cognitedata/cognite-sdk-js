@@ -54,7 +54,7 @@
   },
   "devDependencies": {
     "@azure/msal-node": "^1.18.4",
-    "@biomejs/biome": "1.8.3",
+    "@biomejs/biome": "1.9.4",
     "@commitlint/cli": "^17.8.1",
     "@commitlint/config-conventional": "^17.8.1",
     "@types/lodash": "^4.17.7",
@@ -66,7 +66,7 @@
     "husky": "^3.0.2",
     "lerna": "^6.0.0",
     "markdown-link-check": "^3.10.3",
-    "nock": "13.3.1",
+    "nock": "13.5.6",
     "openapi-types": "^11.0.1",
     "swagger-typescript-api-nextgen": "^10.0.1",
     "tmp-promise": "^3.0.3",
@@ -105,5 +105,5 @@
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
-  "packageManager": "yarn@4.4.0"
+  "packageManager": "yarn@4.6.0"
 }
