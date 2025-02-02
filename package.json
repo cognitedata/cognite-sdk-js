@@ -51,7 +51,7 @@
     "@biomejs/biome": "1.9.4",
     "@commitlint/cli": "^17.0.0",
     "@commitlint/config-conventional": "^17.0.0",
-    "@rollup/plugin-alias": "^4.0.0",
+    "@rollup/plugin-alias": "^5.0.0",
     "@rollup/plugin-json": "^6.0.0",
     "@rollup/plugin-typescript": "^11.0.0",
     "@types/es6-promise": "^3.3.0",
