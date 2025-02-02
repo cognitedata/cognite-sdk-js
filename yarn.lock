@@ -3049,7 +3049,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.16.3, @babel/runtime@npm:^7.18.9, @babel/runtime@npm:^7.7.6":
+"@babel/runtime@npm:^7.16.3, @babel/runtime@npm:^7.18.9":
   version: 7.19.0
   resolution: "@babel/runtime@npm:7.19.0"
   dependencies:
@@ -5186,6 +5186,13 @@ __metadata:
     webpack-plugin-serve:
       optional: true
   checksum: 10c0/11bc7e2223eda628ee90164b2dbdc8e3c7a83c4d43871c3ed217e3cae6f70df76e7e2270da9377c77ca7ef14e3886654e8497cce3792011f34dd07730fc59706
+  languageName: node
+  linkType: hard
+
+"@remix-run/router@npm:1.22.0":
+  version: 1.22.0
+  resolution: "@remix-run/router@npm:1.22.0"
+  checksum: 10c0/6fbfbdddb485af6bc24635272436fc9884b40d2517581b5cc66ab866279d238ccb11b6f8f67ad99d43ff21c0ea8bc088c96d510a42dcc0cc05a716760fe5a633
   languageName: node
   linkType: hard
 
@@ -12187,15 +12194,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"history@npm:^5.2.0":
-  version: 5.3.0
-  resolution: "history@npm:5.3.0"
-  dependencies:
-    "@babel/runtime": "npm:^7.7.6"
-  checksum: 10c0/812ec839386222d6437bd78d9f05db32e47d105ada0ad8834b32626919dd2fee7a10001bc489510f93a8069d02f118214bd8d42a82f7cf9daf8e84fbcbbb2016
-  languageName: node
-  linkType: hard
-
 "hoopy@npm:^0.1.4":
   version: 0.1.4
   resolution: "hoopy@npm:0.1.4"
@@ -18371,26 +18369,26 @@ __metadata:
   linkType: hard
 
 "react-router-dom@npm:^6.3.0":
-  version: 6.3.0
-  resolution: "react-router-dom@npm:6.3.0"
+  version: 6.29.0
+  resolution: "react-router-dom@npm:6.29.0"
   dependencies:
-    history: "npm:^5.2.0"
-    react-router: "npm:6.3.0"
+    "@remix-run/router": "npm:1.22.0"
+    react-router: "npm:6.29.0"
   peerDependencies:
     react: ">=16.8"
     react-dom: ">=16.8"
-  checksum: 10c0/490b0c50d46c32ad1a3264f8bcaf6b423bef86dc3b62e9070d5e81d90ce086a73af55834133920fc4125e7c8661ede901a550d73429c969b303d4dd9ce7bbaf2
+  checksum: 10c0/f89f922006b6ff896ba81d82088812e42ae56790ccb838e7041eebe0f7d36ac2a4eca56512a422da4249cca23f389f998e84cf8ff868d4a83defd72951b8fbf9
   languageName: node
   linkType: hard
 
-"react-router@npm:6.3.0":
-  version: 6.3.0
-  resolution: "react-router@npm:6.3.0"
+"react-router@npm:6.29.0":
+  version: 6.29.0
+  resolution: "react-router@npm:6.29.0"
   dependencies:
-    history: "npm:^5.2.0"
+    "@remix-run/router": "npm:1.22.0"
   peerDependencies:
     react: ">=16.8"
-  checksum: 10c0/ac8785a0b28d363940763e49119e5160331099d4f0196235b143ba9cdc984048ca44a77497f393b12165c99baf8ae6c11386f1f6f20ef52d99c2e07b31920862
+  checksum: 10c0/0ad27b34e2ccb6db68ef124cd4492ba86b5422ea3e2af01c9de95e372eb3a36fb4727b40488ebc90e5e0cea41bc655c53569a754713554a465ca9423aa233df8
   languageName: node
   linkType: hard
 
