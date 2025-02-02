@@ -9116,11 +9116,11 @@ __metadata:
   linkType: hard
 
 "cross-fetch@npm:^3.0.4":
-  version: 3.1.5
-  resolution: "cross-fetch@npm:3.1.5"
+  version: 3.2.0
+  resolution: "cross-fetch@npm:3.2.0"
   dependencies:
-    node-fetch: "npm:2.6.7"
-  checksum: 10c0/29b457f8df11b46b8388a53c947de80bfe04e6466a59c1628c9870b48505b90ec1d28a05b543a0247416a99f1cfe147d1efe373afdeb46a192334ba5fe91b871
+    node-fetch: "npm:^2.7.0"
+  checksum: 10c0/d8596adf0269130098a676f6739a0922f3cc7b71cc89729925411ebe851a87026171c82ea89154c4811c9867c01c44793205a52e618ce2684650218c7fbeeb9f
   languageName: node
   linkType: hard
 
