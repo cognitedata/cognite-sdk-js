@@ -114,7 +114,6 @@ export const routineRevisionConfiguration: SimulatorRoutineRevisionConfiguration
     schedule: { enabled: false },
     dataSampling: {
       enabled: true,
-      validationWindow: 0,
       samplingWindow: 0,
       granularity: 0,
     },

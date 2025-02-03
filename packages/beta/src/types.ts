@@ -9,7 +9,6 @@ import type {
   DateRange,
   DoubleDatapoint as DoubleDatapointStable,
   DoubleDatapoints as DoubleDatapointsStable,
-  FileInfo,
   Metadata,
   MetadataPatch,
   SinglePatchRequired,
@@ -346,16 +345,6 @@ export interface Subscription {
   subscriberId: CogniteInternalId;
   subscriberExternalId?: CogniteExternalId;
   metadata?: Metadata;
-}
-
-export interface MultiPartFileUploadResponse extends FileInfo {
-  uploadUrls: string[];
-  uploadId: string;
-}
-
-export interface MultiPartFileChunkResponse {
-  partNumber: number;
-  status: number;
 }
 
 export interface DatapointsMultiQuery extends DatapointsMultiQueryBase {

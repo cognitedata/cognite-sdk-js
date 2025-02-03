@@ -2,6 +2,7 @@
 
 import { describe, expect, test } from 'vitest';
 import type CogniteClientAlpha from '../../cogniteClient';
+import type { SimulatorRoutineRevision } from '../../types';
 import { setupLoggedInClient } from '../testUtils';
 import {
   fileExtensionTypes,
@@ -69,7 +70,6 @@ describeIf('simulator routines api', () => {
         name: 'Test Simulator Model',
         description: 'Test Simulator Model Desc',
         dataSetId: 97552494921583,
-        labels: [{ externalId: 'air-quality-po-1' }],
         type: 'WaterWell',
       },
     ]);
@@ -159,10 +159,45 @@ describeIf('simulator routines api', () => {
   });
 
   test('list routine revision', async () => {
-    const listResponse = await client.simulators.listRoutineRevisions();
+    const listResponse = await client.simulators.listRoutineRevisions({
+      sort: [
+        {
+          property: 'createdTime',
+          order: 'desc',
+        },
+      ],
+    });
     expect(listResponse.items.length).toBeGreaterThan(0);
-    const routineRevisionFound = listResponse.items.find(
+    const routineRevisionFound = listResponse.items.filter(
+      (item) => item.routineExternalId === routineExternalId
+    );
+    expect(routineRevisionFound.length).toBe(1);
+    expect(routineRevisionFound[0].externalId).toBe(
+      `${routineRevisionExternalId}_2`
+    );
+  });
+
+  test('list routine revision include all fields', async () => {
+    const listResponse = await client.simulators
+      .listRoutineRevisions<SimulatorRoutineRevision>({
+        filter: { allVersions: true },
+        includeAllFields: true,
+        sort: [
+          {
+            property: 'createdTime',
+            order: 'desc',
+          },
+        ],
+      })
+      .autoPagingToArray();
+    expect(listResponse.length).toBeGreaterThan(0);
+    const routineRevisionFound = listResponse.find(
       (item) => item.externalId === routineRevisionExternalId
+    );
+    expect(routineRevisionFound).toBeDefined();
+    expect(routineRevisionFound?.script).toEqual(routineRevisionScript);
+    expect(routineRevisionFound?.configuration).toEqual(
+      routineRevisionConfiguration
     );
     expect(routineRevisionFound?.externalId).toBe(routineRevisionExternalId);
   });

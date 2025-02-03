@@ -69,7 +69,6 @@ describeIf('simulator runs api', () => {
         name: 'Test Simulator Model',
         description: 'Test Simulator Model Desc',
         dataSetId: 97552494921583,
-        labels: [{ externalId: 'air-quality-po-1' }],
         type: 'WaterWell',
       },
     ]);

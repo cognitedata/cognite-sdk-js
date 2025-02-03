@@ -5,7 +5,6 @@ import { accessApi } from '@cognite/sdk-core';
 import { version } from '../package.json';
 import { AlertsAPI } from './api/alerts/alertsApi';
 import { DataPointsAPI } from './api/dataPoints/dataPointsApi';
-import { FilesAPI } from './api/files/filesApi';
 import { MonitoringTasksAPI } from './api/monitoringTasks/monitoringTasksApi';
 
 class CogniteClientCleaned extends CogniteClientStable {
@@ -31,7 +30,6 @@ class CogniteClientCleaned extends CogniteClientStable {
  */
 export default class CogniteClient extends CogniteClientCleaned {
   private alertsApi?: AlertsAPI;
-  protected filesApi?: FilesAPI;
   private monitoringTasksApi?: MonitoringTasksAPI;
 
   public get alerts() {
@@ -61,7 +59,6 @@ export default class CogniteClient extends CogniteClientCleaned {
     this.httpClient.setDefaultHeader('cdf-version', 'beta');
 
     this.alertsApi = this.apiFactory(AlertsAPI, 'alerts');
-    this.filesApi = this.apiFactory(FilesAPI, 'files');
     this.monitoringTasksApi = this.apiFactory(
       MonitoringTasksAPI,
       'monitoringtasks'

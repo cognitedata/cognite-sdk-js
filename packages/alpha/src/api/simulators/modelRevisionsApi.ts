@@ -16,11 +16,11 @@ export class ModelRevisionsAPI extends BaseResourceAPI<SimulatorModelRevision> {
     return this.pickDateProps(['items'], ['createdTime', 'lastUpdatedTime']);
   }
 
-  public create = async (items: SimulatorModelRevisionCreate[]) => {
+  public create = (items: SimulatorModelRevisionCreate[]) => {
     return this.createEndpoint(items);
   };
 
-  public list = async (filter?: SimulatorModelRevisionFilterQuery) => {
+  public list = (filter?: SimulatorModelRevisionFilterQuery) => {
     return this.listEndpoint<SimulatorModelRevisionFilterQuery>(
       this.callListEndpointWithPost,
       filter
@@ -31,11 +31,11 @@ export class ModelRevisionsAPI extends BaseResourceAPI<SimulatorModelRevision> {
     return this.retrieveEndpoint(items);
   }
 
-  public update = async (changes: SimulatorModelRevisionChange[]) => {
+  public update = (changes: SimulatorModelRevisionChange[]) => {
     return this.updateEndpoint(changes);
   };
 
-  public delete = async (ids: IdEither[]) => {
+  public delete = (ids: IdEither[]) => {
     return this.deleteEndpoint(ids);
   };
 }

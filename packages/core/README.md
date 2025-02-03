@@ -6,4 +6,3 @@ See the repository README [here](https://github.com/cognitedata/cognite-sdk-js#r
 See the stable SDK (`@cognite/sdk`) [here](https://github.com/cognitedata/cognite-sdk-js/blob/master/packages/stable/README.md).
 
 See the beta SDK (`@cognite/sdk-beta`) [here](https://github.com/cognitedata/cognite-sdk-js/blob/master/packages/beta/README.md).
-
