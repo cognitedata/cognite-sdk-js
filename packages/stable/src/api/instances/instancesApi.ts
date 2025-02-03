@@ -2,9 +2,12 @@
 
 import { BaseResourceAPI } from '@cognite/sdk-core';
 import type {
+  AggregationRequest,
   AggregationResponse,
+  ByIdsResponse,
+  InstanceInspectRequest,
+  InstanceInspectResponse,
   ListOfSpaceExternalIdsRequestWithTyping,
-  NodeAndEdgeCollectionResponseV3Response,
   NodeAndEdgeCollectionResponseWithCursorV3Response,
   NodeAndEdgeCreateCollection,
   NodeOrEdge,
@@ -15,7 +18,6 @@ import type {
   QueryResponse,
   SlimNodeAndEdgeCollectionResponse,
   SyncRequest,
-  ViewAggregationRequest,
 } from './types.gen';
 
 export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
@@ -43,13 +45,10 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    */
   public search = async (
     params: NodeOrEdgeSearchRequest
-  ): Promise<NodeAndEdgeCollectionResponseV3Response> => {
-    const response = await this.post<NodeAndEdgeCollectionResponseV3Response>(
-      this.searchUrl,
-      {
-        data: params,
-      }
-    );
+  ): Promise<ByIdsResponse> => {
+    const response = await this.post<ByIdsResponse>(this.searchUrl, {
+      data: params,
+    });
     return response.data;
   };
 
@@ -117,13 +116,10 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    */
   public retrieve = async (
     params: ListOfSpaceExternalIdsRequestWithTyping
-  ): Promise<NodeAndEdgeCollectionResponseV3Response> => {
-    const response = await this.post<NodeAndEdgeCollectionResponseV3Response>(
-      this.byIdsUrl,
-      {
-        data: params,
-      }
-    );
+  ): Promise<ByIdsResponse> => {
+    const response = await this.post<ByIdsResponse>(this.byIdsUrl, {
+      data: params,
+    });
     return response.data;
   };
 
@@ -210,7 +206,7 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    * ```
    */
   public aggregate = async (
-    params: ViewAggregationRequest
+    params: AggregationRequest
   ): Promise<AggregationResponse> => {
     const response = await this.post<AggregationResponse>(this.aggregateUrl, {
       data: params,
@@ -275,6 +271,38 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
     const response = await this.post<QueryResponse>(this.url('sync'), {
       data: params,
     });
+    return response.data;
+  };
+
+  /**
+   * [Inspect instances](https://developer.cognite.com/api#tag/Instances/operation/instanceInspect)
+   *
+   * ```js
+   *  const response = await client.instances.inspect({
+   *    inspectionOperations: {
+   *      involvedViews: {
+   *        allVersions: true,
+   *      },
+   *    },
+   *    items: [
+   *      {
+   *        instanceType: 'node',
+   *        externalId: 'my-node-id',
+   *        space: 'my-space',
+   *      },
+   *    ],
+   *  });
+   * ```
+   */
+  public inspect = async (
+    params: InstanceInspectRequest
+  ): Promise<InstanceInspectResponse> => {
+    const response = await this.post<InstanceInspectResponse>(
+      this.url('inspect'),
+      {
+        data: params,
+      }
+    );
     return response.data;
   };
 }

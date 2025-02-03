@@ -11,6 +11,7 @@ export interface CursorQueryParameter {
  * The number of milliseconds since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
  * @format int64
  * @min 0
+ * @example 1730204346000
  */
 export type EpochTimestamp = number;
 export interface IncludeGlobalQueryParameter {
