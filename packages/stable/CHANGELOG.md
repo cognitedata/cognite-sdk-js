@@ -3,6 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [10.0.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.17.1...@cognite/sdk@10.0.0) (2025-02-03)
+
+
+### Features
+
+* release v10 [release] ([#1243](https://github.com/cognitedata/cognite-sdk-js/issues/1243)) ([b3d5595](https://github.com/cognitedata/cognite-sdk-js/commit/b3d55951bb2a302981fa67ce694d21749461386a)), closes [#1135](https://github.com/cognitedata/cognite-sdk-js/issues/1135) [#1144](https://github.com/cognitedata/cognite-sdk-js/issues/1144) [#1148](https://github.com/cognitedata/cognite-sdk-js/issues/1148) [#1150](https://github.com/cognitedata/cognite-sdk-js/issues/1150) [#1151](https://github.com/cognitedata/cognite-sdk-js/issues/1151) [#1152](https://github.com/cognitedata/cognite-sdk-js/issues/1152) [#1153](https://github.com/cognitedata/cognite-sdk-js/issues/1153) [#1029](https://github.com/cognitedata/cognite-sdk-js/issues/1029)
+
+
+### BREAKING CHANGES
+
+* es6 module (vs es5) and typescript 3 -> 5
+
+* chore: release pre-release from the release-v10 branch
+
+* test: skip flaky alerts test
+
+* chore: trigger [release]
+
+* chore(release): publish new package versions [skip ci]
+
+ - @cognite/sdk-alpha@1.0.0-rc.0
+ - @cognite/sdk-beta@6.0.0-rc.0
+ - @cognite/sdk-core@5.0.0-rc.0
+ - @cognite/sdk-playground@8.0.0-rc.0
+ - @cognite/sdk@10.0.0-rc.0
+
+
+
+
+
 ## [9.17.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.17.0...@cognite/sdk@9.17.1) (2025-01-17)
 
 **Note:** Version bump only for package @cognite/sdk

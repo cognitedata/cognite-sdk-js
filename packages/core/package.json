@@ -11,7 +11,7 @@
     "require": "./dist/index.cjs",
     "types": "./dist/index.d.ts"
   },
-  "version": "4.10.7",
+  "version": "5.0.0",
   "type": "module",
   "scripts": {
     "clean": "rm -rf dist/ docs/",

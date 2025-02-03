@@ -11,7 +11,7 @@
     "require": "./dist/index.cjs",
     "types": "./dist/index.d.ts"
   },
-  "version": "9.17.1",
+  "version": "10.0.0",
   "type": "module",
   "scripts": {
     "clean": "rm -rf dist/ docs/ codeSnippets/",
@@ -28,7 +28,7 @@
     "test-snippets": "yarn extract-snippets && yarn g:tsc -p codeSnippets/tsconfig.build.json"
   },
   "dependencies": {
-    "@cognite/sdk-core": "^4.10.7",
+    "@cognite/sdk-core": "^5.0.0",
     "@types/geojson": "^7946.0.14",
     "geojson": "^0.5.0",
     "lodash": "^4.17.21"
