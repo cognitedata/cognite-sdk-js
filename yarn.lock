@@ -204,8 +204,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@cognite/sdk-alpha@workspace:packages/alpha"
   dependencies:
-    "@cognite/sdk": "npm:^10.0.0"
-    "@cognite/sdk-core": "npm:^5.0.0"
+    "@cognite/sdk": "npm:^9.17.1"
+    "@cognite/sdk-core": "npm:^4.10.7"
   languageName: unknown
   linkType: soft
 
@@ -213,8 +213,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@cognite/sdk-beta@workspace:packages/beta"
   dependencies:
-    "@cognite/sdk": "npm:^10.0.0"
-    "@cognite/sdk-core": "npm:^5.0.0"
+    "@cognite/sdk": "npm:^9.17.1"
+    "@cognite/sdk-core": "npm:^4.10.7"
   languageName: unknown
   linkType: soft
 
@@ -224,7 +224,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@cognite/sdk-core@npm:^5.0.0, @cognite/sdk-core@workspace:packages/core":
+"@cognite/sdk-core@npm:^4.10.7, @cognite/sdk-core@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@cognite/sdk-core@workspace:packages/core"
   dependencies:
@@ -271,16 +271,16 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@cognite/sdk-template@workspace:packages/template"
   dependencies:
-    "@cognite/sdk": "npm:^10.0.0"
-    "@cognite/sdk-core": "npm:^5.0.0"
+    "@cognite/sdk": "npm:^9.17.1"
+    "@cognite/sdk-core": "npm:^4.10.7"
   languageName: unknown
   linkType: soft
 
-"@cognite/sdk@npm:^10.0.0, @cognite/sdk@workspace:packages/stable":
+"@cognite/sdk@npm:^9.17.1, @cognite/sdk@workspace:packages/stable":
   version: 0.0.0-use.local
   resolution: "@cognite/sdk@workspace:packages/stable"
   dependencies:
-    "@cognite/sdk-core": "npm:^5.0.0"
+    "@cognite/sdk-core": "npm:^4.10.7"
     "@types/geojson": "npm:^7946.0.14"
     geojson: "npm:^0.5.0"
     lodash: "npm:^4.17.21"
@@ -7151,7 +7151,7 @@ __metadata:
   resolution: "oidc-client-credentials-sample@workspace:samples/nodejs/oidc-typescript"
   dependencies:
     "@azure/msal-node": "npm:^1.3.2"
-    "@cognite/sdk": "npm:^10.0.0"
+    "@cognite/sdk": "npm:^9.17.1"
     "@types/node": "npm:^16.7"
     typescript: "npm:^4.4"
   languageName: unknown
