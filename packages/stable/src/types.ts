@@ -3293,6 +3293,27 @@ export interface UnitDMSUniqueIdentifier {
 }
 
 export type {
+  BtreeIndex,
+  ConstraintDefinition,
+  ContainerCollectionResponse,
+  ContainerCollectionResponseWithCursorResponse,
+  ContainerCorePropertyDefinition,
+  ContainerCreateCollection,
+  ContainerCreateDefinition,
+  ContainerDefinition,
+  ContainerPropertyDefinition,
+  IndexDefinition,
+  InvertedIndex,
+  ListOfContainerSubObjectIdentifierRequest,
+  ListOfContainerSubObjectIdentifierResponse,
+  ListOfSpaceExternalIdsRequest,
+  ListOfSpaceExternalIdsResponse,
+  RequiresConstraintDefinition,
+  SpaceQueryParameter,
+  UniquenessConstraintDefinition,
+} from './api/containers/types.gen';
+
+export type {
   AggregatedHistogramValue,
   AggregatedNumberValue,
   AggregatedResultItem,
