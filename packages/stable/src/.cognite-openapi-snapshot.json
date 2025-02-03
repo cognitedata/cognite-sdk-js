@@ -50784,7 +50784,7 @@
           "assetTagPredictions": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Annotations.cogmono__annotation_types__images__AssetLink"
+              "$ref": "#/components/schemas/Annotations_types__images__AssetLink"
             }
           },
           "peoplePredictions": {
@@ -61043,16 +61043,16 @@
             "$ref": "#/components/schemas/Annotations.UnhandledTextObject"
           },
           {
-            "$ref": "#/components/schemas/Annotations.cogmono__annotation_types__diagrams__AssetLink"
+            "$ref": "#/components/schemas/Annotations_types__diagrams__AssetLink"
           },
           {
-            "$ref": "#/components/schemas/Annotations.cogmono__annotation_types__diagrams__InstanceLink"
+            "$ref": "#/components/schemas/Annotations_types__diagrams__InstanceLink"
           },
           {
-            "$ref": "#/components/schemas/Annotations.cogmono__annotation_types__images__AssetLink"
+            "$ref": "#/components/schemas/Annotations_types__images__AssetLink"
           },
           {
-            "$ref": "#/components/schemas/Annotations.cogmono__annotation_types__images__InstanceLink"
+            "$ref": "#/components/schemas/Annotations_types__images__InstanceLink"
           }
         ],
         "example": {
@@ -61783,7 +61783,7 @@
         "title": "primitives.references.View",
         "type": "object"
       },
-      "Annotations.cogmono__annotation_types__primitives__geometry2d__Geometry": {
+      "Annotations_types__primitives__geometry2d__Geometry": {
         "additionalProperties": false,
         "description": "A geometry represented by exactly *one of* ` bounding_box`, `polygon` and\n`polyline` which, respectively, represents a BoundingBox, Polygon and\nPolyLine.",
         "properties": {
@@ -61815,7 +61815,7 @@
         "title": "primitives.geometry2d.Geometry",
         "type": "object"
       },
-      "Annotations.cogmono__annotation_types__primitives__geometry3d__Geometry": {
+      "Annotations_types__primitives__geometry3d__Geometry": {
         "additionalProperties": false,
         "description": "A 3D geometry model represented by exactly *one of* `cylinder` and `box`.",
         "properties": {
@@ -61869,7 +61869,7 @@
           "region": {
             "description": "The region of the annotation defined by a list of geometry primitives (cylinder and box).",
             "items": {
-              "$ref": "#/components/schemas/Annotations.cogmono__annotation_types__primitives__geometry3d__Geometry"
+              "$ref": "#/components/schemas/Annotations_types__primitives__geometry3d__Geometry"
             },
             "maxItems": 1000,
             "minItems": 1,
@@ -62525,7 +62525,7 @@
         "title": "diagrams.UnhandledTextObject",
         "type": "object"
       },
-      "Annotations.cogmono__annotation_types__diagrams__AssetLink": {
+      "Annotations_types__diagrams__AssetLink": {
         "additionalProperties": false,
         "description": "Models a link to a CDF Asset referenced in an engineering diagram",
         "properties": {
@@ -62589,7 +62589,7 @@
         "title": "diagrams.AssetLink",
         "type": "object"
       },
-      "Annotations.cogmono__annotation_types__diagrams__InstanceLink": {
+      "Annotations_types__diagrams__InstanceLink": {
         "additionalProperties": false,
         "description": "Models a link to an FDM instance referenced in an engineering diagram",
         "properties": {
@@ -62653,7 +62653,7 @@
         "title": "diagrams.InstanceLink",
         "type": "object"
       },
-      "Annotations.cogmono__annotation_types__images__AssetLink": {
+      "Annotations_types__images__AssetLink": {
         "additionalProperties": false,
         "description": "Models a link to a CDF Asset referenced in an image",
         "properties": {
@@ -62689,7 +62689,7 @@
           "objectRegion": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/Annotations.cogmono__annotation_types__primitives__geometry2d__Geometry"
+                "$ref": "#/components/schemas/Annotations_types__primitives__geometry2d__Geometry"
               }
             ],
             "default": null,
@@ -62704,7 +62704,7 @@
         "title": "images.AssetLink",
         "type": "object"
       },
-      "Annotations.cogmono__annotation_types__images__InstanceLink": {
+      "Annotations_types__images__InstanceLink": {
         "additionalProperties": false,
         "description": "Models a link to an FDM instance referenced in an image",
         "properties": {

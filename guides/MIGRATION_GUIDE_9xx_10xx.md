@@ -14,6 +14,7 @@ const client = new CogniteClient({ oidcTokenProvider: () => {}, ...})
 ```
 Using `getToken` is still supported but will trigger a console warning. [PR #1153](https://github.com/cognitedata/cognite-sdk-js/pull/1153)
 
+
 ## Breaking Changes
 
 - **Deprecated API-key feature removed:** API-key authentication has been removed since the backend no longer supports it. [PR #1148](https://github.com/cognitedata/cognite-sdk-js/pull/1148)
@@ -25,6 +26,13 @@ Using `getToken` is still supported but will trigger a console warning. [PR #115
 - **Made `treeIndex` and `subtreeSize` optional in AssetMapping3D:** These fields are now optional. [PR #1029](https://github.com/cognitedata/cognite-sdk-js/pull/1029)
 - **Removed deprecated Playground package:** The API is no longer supported. [PR #1218](https://github.com/cognitedata/cognite-sdk-js/pull/1218)
 - **Removed noAuthMode option**: The same behavior can be achieved with a dummy `oidcTokenProvider` function. [PR #1150](https://github.com/cognitedata/cognite-sdk-js/pull/1150)
+- **Cleaned up Annotation types**: Removed long prefix from annotation types. [PR #1248](https://github.com/cognitedata/cognite-sdk-js/pull/1248)
+  - AnnotationsCogniteAnnotationTypesDiagramsAssetLink -> AnnotationsTypesDiagramsAssetLink
+  - AnnotationsCogniteAnnotationTypesDiagramsInstanceLink -> AnnotationsTypesDiagramsInstanceLink
+  - AnnotationsCogniteAnnotationTypesImagesInstanceLink -> AnnotationsTypesImagesInstanceLink
+  - AnnotationsCogniteAnnotationTypesPrimitivesGeometry3DGeometry -> AnnotationsTypesPrimitivesGeometry3DGeometry
+  - AnnotationsCogniteAnnotationTypesPrimitivesGeometry2DGeometry -> AnnotationsTypesPrimitivesGeometry2DGeometry
+  - AnnotationsCogniteAnnotationTypesImagesAssetLink -> AnnotationsTypesImagesAssetLink
 
 
 ## New features:
