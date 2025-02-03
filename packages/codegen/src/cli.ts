@@ -1,6 +1,5 @@
 // Copyright 2022 Cognite AS
-import yargs from 'yargs';
-import type { CommandModule, Options } from 'yargs';
+import yargs, { type CommandModule, type Options } from 'yargs';
 import { cleanupService, createConfiguration } from './configuration';
 import { generateTypes } from './generate';
 import { updateSnapshot } from './snapshot';

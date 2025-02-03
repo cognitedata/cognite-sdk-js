@@ -1,7 +1,6 @@
 // Copyright 2020 Cognite AS
 
 import {
-  API_KEY_HEADER,
   AUTHORIZATION_HEADER,
   X_CDF_APP_HEADER,
   X_CDF_SDK_HEADER,
@@ -103,11 +102,7 @@ export class CDFHttpClient extends RetryableHttpClient {
       if (!(err instanceof HttpError)) {
         throw err;
       }
-      if (
-        err.status === 401 &&
-        !this.isLoginOrLogoutApi(request.path) &&
-        !this.isTokenInspect(request.path)
-      ) {
+      if (err.status === 401 && !this.isTokenInspect(request.path)) {
         return new Promise((resolvePromise, rejectPromise) => {
           const retry = () => resolvePromise(this.request(request));
           const reject = () => rejectPromise(err);
@@ -136,23 +131,14 @@ export class CDFHttpClient extends RetryableHttpClient {
     }
     return CDFHttpClient.filterHeaders(headers, [
       AUTHORIZATION_HEADER,
-      API_KEY_HEADER,
       X_CDF_APP_HEADER,
       X_CDF_SDK_HEADER,
     ]);
   }
 
-  private isLoginOrLogoutApi(url: string) {
-    const lowerCaseUrl = url.toLowerCase();
-    return (
-      lowerCaseUrl.indexOf('/logout/url') !== -1 ||
-      lowerCaseUrl.indexOf('/login/status') !== -1
-    );
-  }
-
-  private isTokenInspect(url: string) {
-    const lowerCaseUrl = url.toLowerCase();
-    return lowerCaseUrl.indexOf('/token/inspect') !== -1;
+  private isTokenInspect(path: string) {
+    const lowerCasePath = path.toLowerCase();
+    return lowerCasePath === '/api/v1/token/inspect';
   }
 }
 

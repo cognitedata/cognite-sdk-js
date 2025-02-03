@@ -7,7 +7,6 @@ import {
   convertToTimestampToDateTime,
   isJson,
   isSameProject,
-  isUsingSSL,
   projectUrl,
   promiseAllAtOnce,
   promiseCache,
@@ -28,10 +27,8 @@ describe('utils', () => {
 
   test('api version constraints', () => {
     const v1: CogniteAPIVersion = 'v1';
-    const playground: CogniteAPIVersion = 'playground';
 
     expect(apiUrl(v1)).toEqual(`/api/${v1}`);
-    expect(apiUrl(playground)).toEqual(`/api/${playground}`);
   });
 
   test('convertToTimestampToDateTime', () => {
@@ -159,10 +156,6 @@ describe('utils', () => {
         responses: ['1r', '2r'],
       });
     });
-  });
-
-  test('isUsingSSL', () => {
-    expect(isUsingSSL()).toBeTruthy();
   });
 
   test('should isJson returns false in case of ArrayBuffer', () => {

@@ -4,6 +4,14 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { HttpResponseType } from '@cognite/sdk-core';
 import { afterAll, beforeAll, describe, expect, test } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
+import type {
+  Asset,
+  FileGeoLocation,
+  FileInfo,
+  LabelDefinition,
+  NodeWrite,
+} from '../../types';
 import {
   getFileCreateArgs,
   randomInt,
@@ -13,10 +21,38 @@ import {
 
 const testfile = join(__dirname, '../test3dFile.fbx');
 
-describe.skip('Files integration test', () => {
+describe('Files integration test', () => {
   let client: CogniteClient;
   let asset: Asset;
   let label: LabelDefinition;
+
+  const testSpace = {
+    space: 'test_data_space',
+    name: 'test_data_space',
+    description: 'Instance space used for integration tests.',
+  };
+
+  const fileCdmInstance: NodeWrite = {
+    externalId: `external_${randomInt()}`,
+    space: testSpace.space,
+    instanceType: 'node',
+    sources: [
+      {
+        source: {
+          externalId: 'CogniteFile',
+          space: 'cdf_cdm',
+          type: 'view',
+          version: 'v1',
+        },
+        properties: {},
+      },
+    ],
+  };
+
+  const fileCdmInstanceId = {
+    externalId: fileCdmInstance.externalId,
+    space: fileCdmInstance.space,
+  };
 
   beforeAll(async () => {
     client = setupLoggedInClient();
@@ -32,11 +68,22 @@ describe.skip('Files integration test', () => {
         description: 'test label',
       },
     ]);
+    await client.spaces.upsert([testSpace]);
+    await client.instances.upsert({
+      items: [fileCdmInstance],
+    });
   });
 
   afterAll(async () => {
     await client.assets.delete([{ id: asset.id }]);
     await client.labels.delete([{ externalId: label.externalId }]);
+    await client.instances.delete([
+      {
+        instanceType: 'node',
+        externalId: fileCdmInstance.externalId,
+        space: fileCdmInstance.space,
+      },
+    ]);
   });
 
   const geoLocation: FileGeoLocation = {
@@ -71,7 +118,7 @@ describe.skip('Files integration test', () => {
     expect(file.geoLocation).toEqual(localFileMeta.geoLocation);
   });
 
-  test('validate directoryPrefix format against CDF', async () => {
+  test.skip('validate directoryPrefix format against CDF', async () => {
     await client.files.list({
       filter: {
         directoryPrefix: '/test',
@@ -79,7 +126,7 @@ describe.skip('Files integration test', () => {
     });
   });
 
-  test('retrieve', async () => {
+  test.skip('retrieve', async () => {
     const [retrievedFile] = await client.files.retrieve([{ id: file.id }]);
     expect(retrievedFile.mimeType).toBe(localFileMeta.mimeType);
     expect(retrievedFile.uploaded).toBeTruthy();
@@ -87,14 +134,48 @@ describe.skip('Files integration test', () => {
     expect(retrievedFile.directory).toEqual('/test/testing');
   });
 
-  test('retrieve with non-existent id', async () => {
+  test('retrieve by instance id', async () => {
+    // Syncing from instance to files API is eventually consistant
+    await runTestWithRetryWhenFailing(async () => {
+      const [retrievedFile] = await client.files.retrieve([
+        { instanceId: fileCdmInstanceId },
+      ]);
+      expect(retrievedFile.instanceId).toEqual(fileCdmInstanceId);
+    });
+  });
+
+  test('update by instance id', async () => {
+    // Syncing from instance to files API is eventually consistant
+    await runTestWithRetryWhenFailing(async () => {
+      const testMetadata = { testKey: 'testVal' };
+      const [retrievedFile] = await client.files.update([
+        {
+          instanceId: fileCdmInstanceId,
+          update: { metadata: { set: testMetadata } },
+        },
+      ]);
+      expect(retrievedFile.instanceId).toEqual(fileCdmInstanceId);
+      expect(retrievedFile.metadata).toEqual(testMetadata);
+    });
+  });
+
+  test('download by instance id', async () => {
+    // Syncing from instance to files API is eventually consistant
+    await runTestWithRetryWhenFailing(async () => {
+      expect(
+        client.files.getDownloadUrls([{ instanceId: fileCdmInstanceId }])
+      ).rejects.toThrow(/Files not uploaded/);
+    });
+  });
+
+  test.skip('retrieve with non-existent id', async () => {
     const res = await client.files.retrieve([{ id: 1 }], {
       ignoreUnknownIds: true,
     });
     expect(res.length).toBe(0);
   });
 
-  test('count aggregate', async () => {
+  test.skip('count aggregate', async () => {
     const aggregates = await client.files.aggregate({
       filter: {
         name: file.name,
@@ -104,7 +185,7 @@ describe.skip('Files integration test', () => {
     expect(aggregates[0].count).toBeDefined();
   });
 
-  test('count aggregate by label', async () => {
+  test.skip('count aggregate by label', async () => {
     const aggregates = await client.files.aggregate({
       filter: {
         labels: {
@@ -117,7 +198,7 @@ describe.skip('Files integration test', () => {
     expect(aggregates[0].count).toBeDefined();
   });
 
-  test('count aggregate by geoLocation', async () => {
+  test.skip('count aggregate by geoLocation', async () => {
     const aggregates = await client.files.aggregate({
       filter: {
         geoLocation: {
@@ -134,7 +215,7 @@ describe.skip('Files integration test', () => {
     expect(aggregates[0].count).toBeDefined();
   });
 
-  test('download', async () => {
+  test.skip('download', async () => {
     const [{ downloadUrl }] = await client.files.getDownloadUrls([
       { id: file.id },
     ]);
@@ -145,7 +226,7 @@ describe.skip('Files integration test', () => {
     expect(response.data).toBe(fileContent);
   });
 
-  test('update', async () => {
+  test.skip('update', async () => {
     const newAssetIds = [asset.id];
     const newSecurityCategories = [123];
     const newSource = 'def';
@@ -179,7 +260,7 @@ describe.skip('Files integration test', () => {
     expect(updatedFiles[0].geoLocation).toEqual(location);
   });
 
-  test('list rootAssetIds filter', async () => {
+  test.skip('list rootAssetIds filter', async () => {
     runTestWithRetryWhenFailing(async () => {
       const { items } = await client.files.list({
         filter: {
@@ -191,7 +272,7 @@ describe.skip('Files integration test', () => {
     });
   });
 
-  test('list assetSubtreeIds filter', async () => {
+  test.skip('list assetSubtreeIds filter', async () => {
     const { items } = await client.files.list({
       filter: {
         assetSubtreeIds: [{ id: asset.id }],
@@ -201,11 +282,11 @@ describe.skip('Files integration test', () => {
     expect(items).toBeInstanceOf(Array); // cannot check exact response because of [CDF-1614] bug
   });
 
-  test('upload with overwrite', async () => {
+  test.skip('upload with overwrite', async () => {
     await client.files.upload(localFileMeta, fileContent, true, true);
   });
 
-  test('list geoLocation filter', async () => {
+  test.skip('list geoLocation filter', async () => {
     runTestWithRetryWhenFailing(async () => {
       const items = await client.files
         .list({
@@ -230,13 +311,13 @@ describe.skip('Files integration test', () => {
     });
   });
 
-  test('list', async () => {
+  test.skip('list', async () => {
     const response = await client.files.list().autoPagingToArray({ limit: 10 });
     expect(response.length).toBeGreaterThan(0);
     expect(response[0].id).toBeDefined();
   });
 
-  test('search', async () => {
+  test.skip('search', async () => {
     const result = await client.files.search({
       search: {
         name: 'filename_',
@@ -246,7 +327,7 @@ describe.skip('Files integration test', () => {
     expect(result.length).toBeGreaterThan(0);
   });
 
-  describe('binary file', () => {
+  describe.skip('binary file', () => {
     const binaryFileMeta = {
       name: `filename_1_${postfix}`,
       mimeType: 'application/octet-stream',
@@ -263,7 +344,7 @@ describe.skip('Files integration test', () => {
       );
     });
 
-    test('download', async () => {
+    test.skip('download', async () => {
       const [{ downloadUrl }] = await client.files.getDownloadUrls([
         { id: binaryFile.id },
       ]);
@@ -275,7 +356,7 @@ describe.skip('Files integration test', () => {
     });
   });
 
-  test('list by label', async () => {
+  test.skip('list by label', async () => {
     const { items } = await client.files.list({
       filter: {
         labels: {
@@ -288,7 +369,7 @@ describe.skip('Files integration test', () => {
     expect(items[0].id).toBe(file.id);
   });
 
-  test('update file by removing label', async () => {
+  test.skip('update file by removing label', async () => {
     const [updatedFile] = await client.files.update([
       {
         id: file.id,
@@ -303,7 +384,7 @@ describe.skip('Files integration test', () => {
     expect(updatedFile.labels).toBe(undefined);
   });
 
-  test('update file by removing geoLocation', async () => {
+  test.skip('update file by removing geoLocation', async () => {
     const [updatedFile] = await client.files.update([
       {
         id: file.id,
@@ -316,7 +397,7 @@ describe.skip('Files integration test', () => {
     expect(updatedFile.geoLocation).toBe(undefined);
   });
 
-  test('delete', async () => {
+  test.skip('delete', async () => {
     const response = await client.files.delete([{ id: file.id }]);
     expect(response).toEqual({});
   });

@@ -1,9 +1,10 @@
 // Copyright 2020 Cognite AS
+
 import { createReadStream, readFileSync, statSync } from 'node:fs';
 import { PassThrough } from 'node:stream';
-import { mockBaseUrl } from '@cognite/sdk-core/src/__tests__/testUtils';
-import { randomInt } from '@cognite/sdk-core/src/__tests__/testUtils';
+import { mockBaseUrl, randomInt } from '../../../core/src/__tests__/testUtils';
 import CogniteClient from '../cogniteClient';
+import type { ExternalFileInfo, NodeOrEdge } from '../types';
 import { login } from './login';
 
 function setupClient(baseUrl: string = process.env.COGNITE_BASE_URL as string) {
@@ -11,7 +12,7 @@ function setupClient(baseUrl: string = process.env.COGNITE_BASE_URL as string) {
     appId: 'JS SDK integration tests',
     project: 'unit-test',
     baseUrl,
-    getToken: () => Promise.resolve('not logged in'),
+    oidcTokenProvider: () => Promise.resolve('not logged in'),
   });
 }
 
@@ -20,7 +21,7 @@ function setupLoggedInClient() {
     appId: 'JS SDK integration tests',
     baseUrl: process.env.COGNITE_BASE_URL,
     project: process.env.COGNITE_PROJECT as string,
-    getToken: () =>
+    oidcTokenProvider: () =>
       login().then((account) => {
         return account.access_token;
       }),
@@ -33,7 +34,7 @@ function setupMockableClient() {
     appId: 'JS SDK integration tests',
     project: process.env.COGNITE_PROJECT as string,
     baseUrl: mockBaseUrl,
-    getToken: () => Promise.resolve('test accessToken'),
+    oidcTokenProvider: () => Promise.resolve('test accessToken'),
   });
 }
 
@@ -279,16 +280,13 @@ export {
 };
 
 export {
-  apiKey,
   mockBaseUrl,
   project,
   randomInt,
   runTestWithRetryWhenFailing,
   string2arrayBuffer,
-  getSortedPropInArray,
   retryInSeconds,
-  simpleCompare,
-} from '@cognite/sdk-core/src/__tests__/testUtils';
+} from '../../../core/src/__tests__/testUtils';
 
 export {
   setupClient,

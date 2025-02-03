@@ -39,14 +39,17 @@ Before you begin, ensure that you have the following:
 ### Setting up OIDC Authentication
 
 - Initialize the SDK: Import and initialize the SDK in your application, providing the necessary configuration options such as the client ID, client secret, and redirect URI obtained from your OIDC IdP.
-- Pass your authentication method to `getToken` property of SDK.
+- Setup a token provider using the `oidcTokenProvider` property of SDK. Here you can provide a valid access token for the CDF API.
 
 For code example you can check [quickstart.ts](https://github.com/cognitedata/cognite-sdk-js/blob/master/samples/nodejs/oidc-typescript/quickstart.ts#L1)
 
+### Browser authentication
+
+Please see [this guide](./guides/authentication.md) for a detailed guide.
 
 ## Response header & http status
 
-Methods are design to only return the response body. For fetching the http response status and/or header you must utilize client.getMetadata:
+Methods are designed to only return the response body. For fetching the http response status and/or header you must utilize client.getMetadata:
 
 ```ts
 const createdAsset = await client.assets.create([{ name: 'My first asset' }]);
@@ -114,4 +117,3 @@ Each package in the monorepo has its own changelog.
 - [@cognite/sdk-beta](./packages/beta/CHANGELOG.md)
 - [@cognite/sdk-core](./packages/core/CHANGELOG.md)
 - [@cognite/sdk-alpha](./packages/alpha/CHANGELOG.md)
-- [@cognite/sdk-playground](./packages/playground/CHANGELOG.md)

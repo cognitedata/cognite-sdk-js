@@ -1,6 +1,8 @@
 // Copyright 2020 Cognite AS
 
 import { afterAll, beforeAll, describe, expect, test } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
+import type { RawDB, RawDBTable } from '../../types';
 import { randomInt, setupLoggedInClient } from '../testUtils';
 
 let index = 0;

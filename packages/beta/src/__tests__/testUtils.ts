@@ -3,10 +3,7 @@
 import { createReadStream, readFileSync, statSync } from 'node:fs';
 import { PassThrough } from 'node:stream';
 import { Constants } from '@cognite/sdk-core';
-import {
-  mockBaseUrl,
-  project,
-} from '@cognite/sdk-core/src/__tests__/testUtils';
+import { mockBaseUrl, project } from '../../../core/src/__tests__/testUtils';
 import CogniteClient from '../cogniteClient';
 import { login } from './login';
 
@@ -15,7 +12,7 @@ export function setupClient(baseUrl: string = Constants.BASE_URL) {
     appId: 'JS SDK integration tests (beta)',
     baseUrl: process.env.COGNITE_BASE_URL || baseUrl,
     project: process.env.COGNITE_PROJECT || (project as string),
-    getToken: () =>
+    oidcTokenProvider: () =>
       login().then((account) => {
         return account.access_token;
       }),
@@ -30,7 +27,7 @@ export function setupLoggedInClient() {
     appId: 'JS SDK integration tests (beta)',
     baseUrl: process.env.COGNITE_BASE_URL,
     project: process.env.COGNITE_PROJECT as string,
-    getToken: () =>
+    oidcTokenProvider: () =>
       login().then((account) => {
         return account.access_token;
       }),
@@ -52,7 +49,7 @@ export function setupLoggedInClientForUnitTest(
     appId: 'JS SDK integration tests (beta)',
     baseUrl: baseUrl || process.env.COGNITE_BASE_URL,
     project: process.env.COGNITE_PROJECT as string,
-    getToken: () =>
+    oidcTokenProvider: () =>
       login().then((account) => {
         return account.access_token;
       }),

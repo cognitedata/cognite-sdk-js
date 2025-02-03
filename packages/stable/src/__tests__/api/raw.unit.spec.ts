@@ -2,6 +2,7 @@
 
 import nock from 'nock';
 import { beforeAll, describe, expect, test } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
 import { mockBaseUrl, setupMockableClient } from '../testUtils';
 
 describe('raw unit tests', () => {

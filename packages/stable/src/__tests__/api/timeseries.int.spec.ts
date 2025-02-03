@@ -1,6 +1,8 @@
 // Copyright 2020 Cognite AS
 
 import { afterAll, beforeAll, describe, expect, test } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
+import type { Asset, NodeWrite, Timeseries } from '../../types';
 import {
   randomInt,
   runTestWithRetryWhenFailing,
@@ -18,10 +20,21 @@ describe('Timeseries integration test', () => {
         externalId: `external_${randomInt()}`,
       },
     ]);
+    await client.spaces.upsert([testSpace]);
+    await client.instances.upsert({
+      items: [timeseriesCdmInstance],
+    });
   });
 
   afterAll(async () => {
     await client.assets.delete([{ id: asset.id }]);
+    await client.instances.delete([
+      {
+        instanceType: 'node',
+        externalId: timeseriesCdmInstance.externalId,
+        space: timeseriesCdmInstance.space,
+      },
+    ]);
   });
 
   const timeseries = [
@@ -89,6 +102,36 @@ describe('Timeseries integration test', () => {
     },
   ];
 
+  const testSpace = {
+    space: 'test_data_space',
+    name: 'test_data_space',
+    description: 'Instance space used for integration tests.',
+  };
+
+  const timeseriesCdmInstance: NodeWrite = {
+    externalId: `external_${randomInt()}`,
+    space: testSpace.space,
+    instanceType: 'node',
+    sources: [
+      {
+        source: {
+          externalId: 'CogniteTimeSeries',
+          space: 'cdf_cdm',
+          type: 'view',
+          version: 'v1',
+        },
+        properties: {
+          type: 'numeric',
+        },
+      },
+    ],
+  };
+
+  const timeseriesCdmInstanceId = {
+    externalId: timeseriesCdmInstance.externalId,
+    space: timeseriesCdmInstance.space,
+  };
+
   let createdTimeseries: Timeseries[];
 
   test('create', async () => {
@@ -103,6 +146,15 @@ describe('Timeseries integration test', () => {
       { id: createdTimeseries[0].id },
     ]);
     expect(single.name).toBe(timeseries[0].name);
+  });
+
+  test('retrieve by instance id', async () => {
+    const [single] = await client.timeseries.retrieve([
+      { instanceId: timeseriesCdmInstanceId },
+    ]);
+    expect(single.instanceId?.externalId).toBe(
+      timeseriesCdmInstance.externalId
+    );
   });
 
   test('retrieve with non-existent external id', async () => {
@@ -124,6 +176,22 @@ describe('Timeseries integration test', () => {
     ]);
     expect(updateResult[0].externalId).toBe(timeseries[0].externalId);
     expect(updateResult[0].name).toBe(newName);
+  });
+
+  test('update by instance id', async () => {
+    const testMetadata = { testKey: 'testValue' };
+    const updateResult = await client.timeseries.update([
+      {
+        instanceId: timeseriesCdmInstanceId,
+        update: {
+          metadata: {
+            set: testMetadata,
+          },
+        },
+      },
+    ]);
+    expect(updateResult[0].instanceId).toEqual(timeseriesCdmInstanceId);
+    expect(updateResult[0].metadata).toEqual(testMetadata);
   });
 
   test('connect to an asset', async () => {
@@ -180,9 +248,10 @@ describe('Timeseries integration test', () => {
 
   test('list with assetExternalIds', async () => {
     const { items } = await client.timeseries.list({
-      filter: { assetExternalIds: [asset.externalId] },
+      filter: { assetExternalIds: [asset.externalId || ''] },
       limit: 1,
     });
+    expect(items.length).toBe(1);
     expect(items[0].id).toBe(createdTimeseries[0].id);
   });
 

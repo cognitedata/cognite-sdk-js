@@ -8,10 +8,10 @@ import { HttpError } from '../httpClient/httpError';
 import { sleepPromise } from '../utils';
 export { sleepPromise };
 
-export const apiKey = 'TEST_KEY';
 export const project = 'TEST_PROJECT';
 export const projectId = 123;
 export const user = 'user@example.com';
+export const accessToken = 'access_token';
 export const loggedInResponse = {
   data: { loggedIn: true, user, project, projectId },
 };
@@ -28,8 +28,8 @@ export function setupClient(baseUrl: string = BASE_URL) {
   return new BaseCogniteClient({
     appId: 'JS SDK integration tests',
     project: process.env.COGNITE_PROJECT as string,
-    apiKeyMode: true,
-    getToken: () => Promise.resolve(process.env.COGNITE_CREDENTIALS as string),
+    oidcTokenProvider: () =>
+      Promise.resolve(process.env.COGNITE_CREDENTIALS as string),
     baseUrl,
   });
 }
@@ -90,15 +90,6 @@ export async function runTestWithRetryWhenFailing(
     }
   } while (numberOfRetries < maxNumberOfRetries);
   throw error;
-}
-
-export const simpleCompare = (a: number, b: number) => a - b;
-
-export function getSortedPropInArray<T extends { [key: string]: unknown }>(
-  arr: T[],
-  propName: string
-) {
-  return arr.map((elem) => elem[propName]).sort();
 }
 
 export function createErrorResponse(

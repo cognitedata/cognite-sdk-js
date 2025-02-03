@@ -1,5 +1,7 @@
 // Copyright 2023 Cognite AS
+
 import { describe, expect, it } from 'vitest';
+import type CogniteClientBeta from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
 
 describe('units api', () => {

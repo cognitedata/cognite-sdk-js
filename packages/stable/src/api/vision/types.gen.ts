@@ -55,35 +55,6 @@ export interface AnnotationsBoundingBox {
   yMin: number;
 }
 /**
- * Models a link to a CDF Asset referenced in an image
- */
-export interface AnnotationsCogniteAnnotationTypesImagesAssetLink {
-  /** The asset this annotation is pointing to */
-  assetRef: AnnotationsAssetRef;
-  /**
-   * The confidence score for the primitive. It should be between 0 and 1.
-   * @min 0
-   * @max 1
-   */
-  confidence?: number;
-  /** The region of the object representing the asset */
-  objectRegion?: AnnotationsCogniteAnnotationTypesPrimitivesGeometry2DGeometry;
-  /** The extracted text */
-  text: string;
-  /** The location of the text mentioning the asset */
-  textRegion: AnnotationsBoundingBox;
-}
-/**
-* A geometry represented by exactly *one of* ` bounding_box`, `polygon` and
-`polyline` which, respectively, represents a BoundingBox, Polygon and
-PolyLine.
-*/
-export interface AnnotationsCogniteAnnotationTypesPrimitivesGeometry2DGeometry {
-  boundingBox?: AnnotationsBoundingBox;
-  polygon?: AnnotationsPolygon;
-  polyline?: AnnotationsPolyLine;
-}
-/**
 * A point attached with additional information such as a confidence value and
 various attribute(s).
 */
@@ -211,6 +182,35 @@ export interface AnnotationsTextRegion {
   textRegion: AnnotationsBoundingBox;
 }
 /**
+ * Models a link to a CDF Asset referenced in an image
+ */
+export interface AnnotationsTypesImagesAssetLink {
+  /** The asset this annotation is pointing to */
+  assetRef: AnnotationsAssetRef;
+  /**
+   * The confidence score for the primitive. It should be between 0 and 1.
+   * @min 0
+   * @max 1
+   */
+  confidence?: number;
+  /** The region of the object representing the asset */
+  objectRegion?: AnnotationsTypesPrimitivesGeometry2DGeometry;
+  /** The extracted text */
+  text: string;
+  /** The location of the text mentioning the asset */
+  textRegion: AnnotationsBoundingBox;
+}
+/**
+* A geometry represented by exactly *one of* ` bounding_box`, `polygon` and
+`polyline` which, respectively, represents a BoundingBox, Polygon and
+PolyLine.
+*/
+export interface AnnotationsTypesPrimitivesGeometry2DGeometry {
+  boundingBox?: AnnotationsBoundingBox;
+  polygon?: AnnotationsPolygon;
+  polyline?: AnnotationsPolyLine;
+}
+/**
  * Detect external ID or name of assets (from your CDF projects) in images. Usage of this feature requires `['assetsAcl:READ']` capability.
  */
 export type AssetTagDetection = 'AssetTagDetection';
@@ -333,7 +333,7 @@ export interface FeatureParameters {
   valveDetectionParameters?: ValveDetectionParameters;
 }
 /**
- * An object containing file (external) id.
+ * An external-id or instance-id reference to the referenced file.
  */
 export type FileReference =
   | {
@@ -341,6 +341,9 @@ export type FileReference =
     }
   | {
       fileExternalId: VisionFileExternalId;
+    }
+  | {
+      fileInstanceId: VisionInstanceId;
     };
 /**
  * Detect industrial objects such as gauges and valves in images. In beta. Available only when the `cdf-version: beta` header is provided.
@@ -357,6 +360,14 @@ export interface IndustrialObjectDetectionParameters {
    */
   threshold?: ThresholdParameter;
 }
+/**
+ * @pattern ^[a-zA-Z]([a-zA-Z0-9_]{0,253}[a-zA-Z0-9])?$
+ */
+export type InstanceExternalId = string;
+/**
+ * @pattern ^[a-zA-Z][a-zA-Z0-9_-]{0,41}[a-zA-Z0-9]?$
+ */
+export type InstanceSpace = string;
 /**
  * Contextualization job ID.
  * @format int64
@@ -500,6 +511,8 @@ export interface VisionAllOfFileId {
   fileExternalId?: VisionFileExternalId;
   /** The ID of a file in CDF. */
   fileId: VisionFileId;
+  /** The instance id of a file in CDF. */
+  fileInstanceId?: VisionInstanceId;
 }
 export type VisionExtractFeature =
   | TextDetection
@@ -536,7 +549,7 @@ export type VisionExtractPostResponse = StatusSchema & {
  * @example {"textPredictions":[{"confidence":0.9,"text":"string","textRegion":{"xMin":0.5,"xMax":0.9,"yMin":0.5,"yMax":0.9}}],"assetTagPredictions":[{"confidence":0.9,"assetRef":{"id":1233},"text":"string","textRegion":{"xMin":0.5,"xMax":0.9,"yMin":0.5,"yMax":0.9}}],"peoplePredictions":[{"label":"person","confidence":0.8,"boundingBox":{"xMin":0.5,"xMax":0.9,"yMin":0.5,"yMax":0.9}}]}
  */
 export interface VisionExtractPredictions {
-  assetTagPredictions?: AnnotationsCogniteAnnotationTypesImagesAssetLink[];
+  assetTagPredictions?: AnnotationsTypesImagesAssetLink[];
   /** In beta. Available only when the `cdf-version: beta` header is provided. */
   dialGaugePredictions?: {
     objectDetection?: AnnotationsObjectDetection;
@@ -572,3 +585,11 @@ export type VisionFileExternalId = string;
  * @example 1234
  */
 export type VisionFileId = number;
+/**
+ * The instance id of a file in CDF.
+ * @example {"space":"space","externalId":"externalId"}
+ */
+export interface VisionInstanceId {
+  externalId: InstanceExternalId;
+  space: InstanceSpace;
+}

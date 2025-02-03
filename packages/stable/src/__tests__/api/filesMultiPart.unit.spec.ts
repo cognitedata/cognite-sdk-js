@@ -1,10 +1,11 @@
 // Copyright 2020 Cognite AS
 
 import { sleepPromise } from '@cognite/sdk-core';
-import { mockBaseUrl } from '@cognite/sdk-core/src/__tests__/testUtils';
 import nock from 'nock';
 import { beforeEach, describe, expect, it, test } from 'vitest';
+import { mockBaseUrl } from '../../../../core/src/__tests__/testUtils';
 import type { FilesMultipartUploadSessionAPI } from '../../api/files/filesMultipartUploadSessionApi';
+import type CogniteClient from '../../cogniteClient';
 import type { MultiPartFileChunkResponse } from '../../types';
 import { setupMockableClient } from '../testUtils';
 

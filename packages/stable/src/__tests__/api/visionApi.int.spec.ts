@@ -4,8 +4,16 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import type { VisionExtractPostResponse } from '@cognite/sdk';
 import noop from 'lodash/noop';
-import { beforeAll, describe, expect, test, vi } from 'vitest';
+import {
+  type MockInstance,
+  beforeAll,
+  describe,
+  expect,
+  test,
+  vi,
+} from 'vitest';
 import { BETA_FEATURES } from '../../api/vision/visionApi';
+import type CogniteClient from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
 
 function readFile(filename: string): Buffer {
@@ -15,7 +23,7 @@ function readFile(filename: string): Buffer {
 describe('Vision API', () => {
   let TEST_IMAGE_ID = -1;
   let client: CogniteClient;
-  let consoleSpy: vi.SpyInstance;
+  let consoleSpy: MockInstance;
   let extractJob: VisionExtractPostResponse;
   let extractBetaJob: VisionExtractPostResponse;
 
@@ -117,17 +125,20 @@ describe('Vision API', () => {
       // we care in the following checks is that the *data structure* is
       // correctly filled.
       expect(result.parameters).toBeDefined();
-      expect(result.parameters.textDetectionParameters).toEqual({
+      expect(result.parameters?.textDetectionParameters).toEqual({
         threshold: 0.4,
       });
 
       expect(result.items?.length).toBeGreaterThan(0);
-      const resultItem = result.items[0];
+      const resultItem = result.items?.[0];
       expect(resultItem.fileId).toEqual(TEST_IMAGE_ID);
 
       // Check if text prediction exist
       expect(resultItem.predictions.textPredictions?.length).toBeGreaterThan(0);
-      const textPrediction = resultItem.predictions.textPredictions[0];
+      const textPrediction = resultItem.predictions.textPredictions?.[0];
+      if (!textPrediction) {
+        throw new Error('Text prediction is undefined');
+      }
       // Check that its values are defined. D
       expect(textPrediction.confidence).toBeGreaterThanOrEqual(0.0);
       expect(textPrediction.text).toEqual('TEST');

@@ -1,6 +1,7 @@
 // Copyright 2020 Cognite AS
 
 import { beforeAll, describe, expect, test } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
 
 describe('Projects integration test', () => {
@@ -15,13 +16,5 @@ describe('Projects integration test', () => {
     expect(projectInfo.name).toBeDefined();
     expect(projectInfo.name.length).toBeGreaterThan(0);
     expect(projectInfo.urlName).toBe(project);
-  });
-
-  test('deprecated update', () => {
-    // no tests because endpoint is overriding config
-  });
-
-  test('update', () => {
-    // no tests because endpoint is overriding config
   });
 });

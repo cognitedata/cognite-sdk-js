@@ -47,6 +47,9 @@ describe('Sessions integration test', () => {
 
   test('retrieve', async () => {
     expect(testSessionId).toBeTruthy();
+    if (testSessionId === undefined) {
+      throw new Error('testSessionId is undefined');
+    }
     const result = await client.sessions.retrieve([{ id: testSessionId }]);
     expect(result).toHaveLength(1);
     expect(result[0].id).toBe(testSessionId);
@@ -54,6 +57,9 @@ describe('Sessions integration test', () => {
 
   test('revoke', async () => {
     expect(testSessionId).toBeTruthy();
+    if (testSessionId === undefined) {
+      throw new Error('testSessionId is undefined');
+    }
     const result = await client.sessions.revoke([{ id: testSessionId }]);
     expect(result).toHaveLength(1);
     expect(result[0].status).toBe('REVOKED');

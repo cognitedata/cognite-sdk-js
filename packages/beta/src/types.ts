@@ -9,7 +9,6 @@ import type {
   DateRange,
   DoubleDatapoint as DoubleDatapointStable,
   DoubleDatapoints as DoubleDatapointsStable,
-  FileInfo,
   Metadata,
   MetadataPatch,
   SinglePatchRequired,
@@ -25,6 +24,7 @@ import type {
   CogniteInternalId,
   ExternalId,
   FilterQuery,
+  InstanceId,
   InternalId,
 } from '@cognite/sdk-core';
 
@@ -363,7 +363,10 @@ export interface DatapointsMultiQueryBase
   aggregates?: Aggregate[];
 }
 
-export type DatapointsQuery = DatapointsQueryId | DatapointsQueryExternalId;
+export type DatapointsQuery =
+  | DatapointsQueryId
+  | DatapointsQueryExternalId
+  | DatapointsQueryInstanceId;
 
 export interface DatapointsQueryExternalId
   extends DatapointsQueryProperties,
@@ -372,6 +375,10 @@ export interface DatapointsQueryExternalId
 export interface DatapointsQueryId
   extends DatapointsQueryProperties,
     InternalId {}
+
+export interface DatapointsQueryInstanceId
+  extends DatapointsQueryProperties,
+    InstanceId {}
 
 export type Aggregate =
   | AggregateStable

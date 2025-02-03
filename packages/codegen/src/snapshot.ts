@@ -3,13 +3,13 @@ import { promises as fs } from 'node:fs';
 import fetch from 'cross-fetch';
 import { PackageConfigManager } from './configuration';
 import type { OpenApiDocument } from './openapi';
-import type {
-  DirectoryOption,
-  PackageOption,
-  PathOption,
-  VersionOption,
+import {
+  type DirectoryOption,
+  type PackageOption,
+  type PathOption,
+  type VersionOption,
+  closestConfigDirectoryPath,
 } from './utils';
-import { closestConfigDirectoryPath } from './utils';
 
 /**
  * OpenApiSnapshotManagerOptions options for the snapshot.

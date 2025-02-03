@@ -69,22 +69,22 @@ More details are documented in the [codegen README](packages/codegen/README.md).
 
 ## Pull request
 
-Make a pull request from your branch to the main branch. When merging the pull request,
+Make a pull request from your branch to the master branch. When merging the pull request,
 only use squashing if the resulting squash commit can accurately describe the change as a single conventional commit.
-Once the change is pushed to the main branch, it is time for a release.
+Once the change is pushed to the master branch, it is time for a release.
 
 ## Releases & Versioning
 
-Releases are done from the main branch, so when a pull request is merged,
+Releases are done from the master branch, so when a pull request is merged,
 CI/CD will run tests, and if successful, do deploys.
 Documentation is built and deployed, and code snippets
 are exported to the service contract repo as a pull request.
 
-Updating and uploading npm packages only happens if the HEAD commit of the main branch
-contains `[release]` in its description or the PR title starts with `feat` or `fix`.
+Updating and uploading npm packages only happens if the HEAD commit of the master branch
+contains `[release]` in its description and the PR title starts with `feat` or `fix`.
 When CI/CD sees this, it will use lerna to update
 package versions of changed packages based on commit messages, and add the
-changes to the changelogs. The changes are comitted to the main branch
+changes to the changelogs. The changes are comitted to the master branch
 with the new versions as git tags, and the new package versions are uploaded to npm.
 
 We restrict new npm releases to `[release]`-tagged commits because lerna is
@@ -93,7 +93,7 @@ cause a PATCH bump. Markdown files and tests are ignored, but changing anything 
 like a comment in a source file, will trigger a new version,
 irrespective of conventional commits.
 
-This does _not_ mean you should store unfinished work on the main branch.
+This does _not_ mean you should store unfinished work on the master branch.
 Another package may be ready for release, and once a `[release]`
 commit is pushed, all changed packages are updated.
 Repository administrators should be in control of `[release]` commits.
@@ -111,8 +111,14 @@ If you want to push the empty commit to master via a pull request,
 use a squash merge (not rebase+ff). Otherwise GitHub will ignore the empty PR.
 
 Also, keep in mind that the `[release]` commit has to be the HEAD of
-main, and Github Action only runs on the HEAD. If HEAD has changed by the time
+master, and Github Action only runs on the HEAD. If HEAD has changed by the time
 the versioning happens, Github Action will fail.
+
+In order to perform a major release by merging a release candidate branch to master by keeping the same major version in release candidate version.
+
+- Create a PR from release-* to master
+- Make a PR title and the message when merging to be ` chore(): details [release]`
+- The release tag is to trigger the release of the package.
 
 ## Patching older major versions
 
@@ -167,3 +173,70 @@ git push && git push --tags
 
 This will make a commit with the updated `package.json`, create a new git tag, and publish to npm.
 Make sure you are logged in to npm, talk to a maintainer.
+
+## Code overview
+
+### HTTP Client
+
+The core of the SDK is the HTTP client. The HTTP client is divided into multiple layers:
+
+1. [BasicHttpClient](./packages/core/src/httpClient/basicHttpClient.ts)
+2. [RetryableHttpClient](./packages/core/src/httpClient/retryableHttpClient.ts)
+3. [CDFHttpClient](./packages/core/src/httpClient/cdfHttpClient.ts)
+
+See each file for a description of what they do.
+
+### Pagination
+
+We have multiple utilities to easy pagination handling. The first entrypoint is [cursorBasedEndpoint](./packages/core/src/baseResourceApi.ts) which adds a `next()` function on the response to fetch the next page of result. Then we use [makeAutoPaginationMethods](./packages/core/src/autoPagination.ts) to add the following methods:
+
+- autoPagingToArray
+  ```ts
+  const assets = await client.assets.list().autoPagingToArray({ limit: 100 });
+  ```
+- autoPagingEach
+  ```ts
+  for await (const asset of client.assets.list().autoPagingEach({ limit: Infinity })) {
+    // ...
+  }
+  ```
+
+### Date parser
+
+Some API responses includes DateTime responses represented as UNIX timestamps. We have utility class to automatically translate the number response into a Javascript [Date instance](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date).
+
+See the [DateParser class](./packages/core/src/dateParser.ts).
+
+### Metadata
+
+We offer users to get hold of the HTTP response status code and headers through the [MetadataMap class](./packages/core/src/metadata.ts).
+
+### Core utilities
+
+- [promiseAllWithData](./packages/core/src/utils.ts)
+- [promiseCache](./packages/core/src/utils.ts)
+- [topologicalSort](./packages/core/src/graphUtils.ts)
+- [RevertableArraySorter](./packages/core/src/revertableArraySorter.ts)
+
+### Cognite Clients
+
+There is a Cognite Client per SDK package:
+- [Core](./packages/core/src/baseCogniteClient.ts)
+- [Stable](./packages/stable/src/cogniteClient.ts)
+- [Beta](./packages/beta/src/cogniteClient.ts)
+- [Alpha](./packages/alpha/src/cogniteClient.ts)
+- [Template](./packages/template/src/cogniteClient.ts)
+
+The Core one is the base, meaning the others extends from it.
+
+
+#### Authentication
+
+The authentication logic lives in the [core BaseCogniteClient](./packages/core/src/baseCogniteClient.ts).
+The client constructor offer the field `oidcTokenProvider` (formely called `getToken`) where the SDK user will provide a valid access token.
+
+The SDK will call this method when:
+
+- The user calls `authenticate` on the client.
+- The SDK receives a 401 from the API.
+  When multiple requests receives a 401, then only a single call to `oidcTokenProvider` will be invoked. All requests will wait for `oidcTokenProvider` to resolve/reject. If it's resolved, then all the requests will retry before returning the response to the SDK caller. However, if the resolved access token matches the original access token, then no retry will be performed.

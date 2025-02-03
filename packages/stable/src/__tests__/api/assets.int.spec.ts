@@ -2,6 +2,8 @@
 
 import { CogniteError, CogniteMultiError } from '@cognite/sdk-core';
 import { afterAll, beforeAll, describe, expect, test } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
+import type { Asset, LabelDefinition } from '../../types';
 import {
   randomInt,
   runTestWithRetryWhenFailing,
@@ -222,7 +224,7 @@ describe.skip('Asset integration test', () => {
       },
     ]);
 
-    expect(metadata[key]).toEqual(updatedMetadata[key]);
+    expect(metadata?.[key]).toEqual(updatedMetadata[key]);
 
     const [{ metadata: wipedMetadata }] = await client.assets.update([
       {
@@ -266,7 +268,10 @@ describe.skip('Asset integration test', () => {
   test('list.next', async () => {
     const response = await client.assets.list({ limit: 1 });
     expect(response.next).toBeDefined();
-    const nextPage = await response.next?.();
+    if (!response.next) {
+      throw new Error('Expected next to be defined');
+    }
+    const nextPage = await response.next();
     expect(nextPage.items[0]).toBeTruthy();
   });
 
@@ -328,7 +333,7 @@ describe.skip('Asset integration test', () => {
       const { items } = await client.assets.list({
         limit: 1,
         filter: {
-          parentExternalIds: [createdRoot1.externalId],
+          parentExternalIds: [createdRoot1.externalId || ''],
         },
       });
       expect(items[0].id).toEqual(createdChild1.id);
@@ -352,7 +357,7 @@ describe.skip('Asset integration test', () => {
   test('count aggregate', async () => {
     const aggregates = await client.assets.aggregate({
       filter: {
-        parentExternalIds: [createdRoot1.externalId],
+        parentExternalIds: [createdRoot1.externalId || ''],
       },
     });
     expect(aggregates.length).toBe(1);

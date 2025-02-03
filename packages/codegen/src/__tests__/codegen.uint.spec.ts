@@ -7,10 +7,9 @@ import {
   createServiceNameFilter,
   passThroughFilter,
 } from '../codegen';
+import { AcacodeOpenApiGenerator } from '../generator/acacode';
 import type { OpenApiDocument } from '../openapi';
 import { OpenApiSnapshotManager } from '../snapshot';
-
-import { AcacodeOpenApiGenerator } from '../generator/acacode';
 
 describe('code generation', () => {
   const testFolder = __dirname;

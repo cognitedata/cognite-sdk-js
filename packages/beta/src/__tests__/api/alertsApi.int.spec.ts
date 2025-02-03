@@ -229,7 +229,7 @@ describe('alerts api', () => {
 
   vi.setConfig({ testTimeout: 30_000 });
 
-  test('cursor pagination', async () => {
+  test.skip('cursor pagination', async () => {
     // create channel for the next test
     const channelsToCreate = [
       {

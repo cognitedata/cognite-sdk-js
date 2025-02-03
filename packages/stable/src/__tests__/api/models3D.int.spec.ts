@@ -1,11 +1,9 @@
 // Copyright 2020 Cognite AS
 
 import { beforeAll, describe, expect, test } from 'vitest';
-import {
-  getSortedPropInArray,
-  randomInt,
-  setupLoggedInClient,
-} from '../testUtils';
+import type CogniteClient from '../../cogniteClient';
+import type { CreateModel3D, Model3D } from '../../types';
+import { randomInt, setupLoggedInClient } from '../testUtils';
 
 describe('Model3d integration test', () => {
   let client: CogniteClient;
@@ -15,13 +13,13 @@ describe('Model3d integration test', () => {
 
   let models: Model3D[];
   test('create', async () => {
-    const modelsToCreate = [
+    const modelsToCreate: CreateModel3D[] = [
       { name: `Model 0 ${randomInt()}` },
       { name: `Model 2 ${randomInt()}`, metadata: { prop: 'value' } },
     ];
     models = await client.models3D.create(modelsToCreate);
-    expect(getSortedPropInArray(models, 'name')).toEqual(
-      getSortedPropInArray(modelsToCreate, 'name')
+    expect(models.map((t) => t.name).sort()).toEqual(
+      modelsToCreate.map((t) => t.name).sort()
     );
   });
 

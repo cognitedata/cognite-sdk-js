@@ -8,7 +8,7 @@ export function setupLoggedInClient() {
     appId: 'JS SDK integration tests (alpha)',
     baseUrl: process.env.COGNITE_BASE_URL,
     project: process.env.COGNITE_PROJECT as string,
-    getToken: () =>
+    oidcTokenProvider: () =>
       login().then((account) => {
         return account.access_token;
       }),

@@ -1,6 +1,7 @@
 // Copyright 2020 Cognite AS
 
 import { afterAll, beforeAll, describe, expect, test } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
 import { type Asset, type CogniteEvent, SortOrder } from '../../types';
 import { randomInt, setupLoggedInClient } from '../testUtils';
 

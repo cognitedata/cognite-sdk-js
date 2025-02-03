@@ -4,6 +4,7 @@ import path, { join } from 'node:path';
 import { afterAll, beforeAll, describe, expect, it, test } from 'vitest';
 import { retryInSeconds } from '../../../../stable/src/__tests__/testUtils';
 import type { FilesMultipartUploadSessionAPI } from '../../api/files/filesMultipartUploadSessionApi';
+import type CogniteClient from '../../cogniteClient';
 import type {
   ExternalFileInfo,
   LabelDefinition,
@@ -15,6 +16,7 @@ import {
   getFileStats,
   toArrayBuffer,
 } from '../testUtils';
+import { randomInt, setupLoggedInClient } from '../testUtils';
 // file to upload for integration tests
 const testfile = join(__dirname, '../VAL.nwd');
 
@@ -24,6 +26,10 @@ describe.skip('Files: Multi part Upload Integration Tests', () => {
 
   beforeAll(async () => {
     client = setupLoggedInClient();
+    const labelExternalId = `testLabel ${randomInt()}`;
+    [label] = await client.labels.create([
+      { externalId: labelExternalId, name: labelExternalId },
+    ]);
   });
 
   afterAll(async () => {

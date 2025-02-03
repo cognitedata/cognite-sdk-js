@@ -3,6 +3,7 @@
 import matches from 'lodash/matches';
 import nock from 'nock';
 import { beforeAll, describe, expect, test } from 'vitest';
+import type { CogniteClient, ExternalLabelDefinition } from '../..';
 import { mockBaseUrl, setupMockableClient } from '../testUtils';
 
 describe('Labels unit test', () => {

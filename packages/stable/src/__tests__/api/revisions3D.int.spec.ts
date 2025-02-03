@@ -2,6 +2,7 @@
 
 import { readFileSync } from 'node:fs';
 import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
 import type {
   Asset,
   AssetMapping3D,
@@ -15,13 +16,7 @@ import type {
   Tuple3,
   UpdateRevision3D,
 } from '../../types';
-import {
-  getSortedPropInArray,
-  randomInt,
-  retryInSeconds,
-  setupLoggedInClient,
-  simpleCompare,
-} from '../testUtils';
+import { randomInt, retryInSeconds, setupLoggedInClient } from '../testUtils';
 
 const describeIfCondition =
   process.env.REVISION_3D_INTEGRATION_TEST === 'true'
@@ -176,8 +171,8 @@ describeIfCondition(
 
     test('list', async () => {
       const list = await client.revisions3D.list(model.id).autoPagingToArray();
-      expect(revisions.map((r) => r.id).sort(simpleCompare)).toEqual(
-        list.map((r) => r.id).sort(simpleCompare)
+      expect(revisions.map((r) => r.id).sort()).toEqual(
+        list.map((r) => r.id).sort()
       );
     });
 
@@ -296,8 +291,8 @@ describeIfCondition(
         revisions[0].id,
         assetMappingsToCreate
       );
-      expect(getSortedPropInArray(assetMappings, 'assetId')).toEqual(
-        getSortedPropInArray(assetMappingsToCreate, 'assetId')
+      expect(assetMappings.map((t) => t.assetId).sort()).toEqual(
+        assetMappingsToCreate.map((t) => t.assetId).sort()
       );
       expect(assetMappings.length).toBe(2);
     });
@@ -307,11 +302,11 @@ describeIfCondition(
         .list(model.id, revisions[0].id)
         .autoPagingToArray({ limit: 2 });
 
-      expect(getSortedPropInArray(list, 'assetId')).toEqual(
-        getSortedPropInArray(assetMappingsToCreate, 'assetId')
+      expect(list.map((t) => t.assetId).sort()).toEqual(
+        assetMappingsToCreate.map((t) => t.assetId).sort()
       );
-      expect(getSortedPropInArray(list, 'nodeId')).toEqual(
-        getSortedPropInArray(list, 'nodeId')
+      expect(list.map((t) => t.nodeId).sort()).toEqual(
+        assetMappingsToCreate.map((t) => t.nodeId).sort()
       );
       expect(list.length).toBe(2);
     });

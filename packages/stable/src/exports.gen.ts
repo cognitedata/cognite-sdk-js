@@ -1,6 +1,6 @@
 // Copyright 2022 Cognite AS
-export { EpochTimestamp } from './types.gen';
-export {
+export type { EpochTimestamp } from './types.gen';
+export type {
   AnnotationData,
   AnnotationsAssetRef,
   AnnotationsBoolean,
@@ -8,12 +8,6 @@ export {
   AnnotationsBoundingVolume,
   AnnotationsBox,
   AnnotationsClassification,
-  AnnotationsCogniteAnnotationTypesDiagramsAssetLink,
-  AnnotationsCogniteAnnotationTypesDiagramsInstanceLink,
-  AnnotationsCogniteAnnotationTypesImagesAssetLink,
-  AnnotationsCogniteAnnotationTypesImagesInstanceLink,
-  AnnotationsCogniteAnnotationTypesPrimitivesGeometry2DGeometry,
-  AnnotationsCogniteAnnotationTypesPrimitivesGeometry3DGeometry,
   AnnotationsCylinder,
   AnnotationsDetection,
   AnnotationsExtractedText,
@@ -32,11 +26,17 @@ export {
   AnnotationsPolygon,
   AnnotationsSizeAndClassType,
   AnnotationsTextRegion,
+  AnnotationsTypesDiagramsAssetLink,
+  AnnotationsTypesDiagramsInstanceLink,
+  AnnotationsTypesImagesAssetLink,
+  AnnotationsTypesImagesInstanceLink,
+  AnnotationsTypesPrimitivesGeometry2DGeometry,
+  AnnotationsTypesPrimitivesGeometry3DGeometry,
   AnnotationsUnhandledSymbolObject,
   AnnotationsUnhandledTextObject,
   AnnotationsView,
 } from './api/annotations/types.gen';
-export {
+export type {
   CogniteExternalId,
   CogniteInternalId,
   Document,
@@ -115,7 +115,7 @@ export {
   Label,
   LabelList,
 } from './api/documents/types.gen';
-export {
+export type {
   CursorQueryParameter,
   IncludeGlobalQueryParameter,
   ListOfSpaceIdsRequest,
@@ -130,7 +130,7 @@ export {
   SpaceSpecification,
   UpsertConflict,
 } from './api/spaces/types.gen';
-export {
+export type {
   IdentityType,
   IdentityTypeFilter,
   UserIdentifier,
@@ -143,7 +143,7 @@ export {
   UserProfilesSearchRequest,
   UserProfilesSearchResponse,
 } from './api/userProfiles/types.gen';
-export {
+export type {
   AssetTagDetection,
   AssetTagDetectionParameters,
   CommaPos,
@@ -157,6 +157,8 @@ export {
   FileReference,
   IndustrialObjectDetection,
   IndustrialObjectDetectionParameters,
+  InstanceExternalId,
+  InstanceSpace,
   JobId,
   JobStatus,
   LevelGaugeDetection,
@@ -184,4 +186,5 @@ export {
   VisionExtractPredictions,
   VisionFileExternalId,
   VisionFileId,
+  VisionInstanceId,
 } from './api/vision/types.gen';
