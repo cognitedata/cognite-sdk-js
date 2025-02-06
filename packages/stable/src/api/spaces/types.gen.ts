@@ -4,7 +4,7 @@
 
 import type { CursorAndAsyncIterator } from '@cognite/sdk-core';
 export interface CursorQueryParameter {
-  /** @example 4zj0Vy2fo0NtNMb229mI9r1V3YG5NBL752kQz1cKtwo */
+  /** @example "4zj0Vy2fo0NtNMb229mI9r1V3YG5NBL752kQz1cKtwo" */
   cursor?: string;
 }
 /**
@@ -14,26 +14,36 @@ export interface CursorQueryParameter {
  */
 export type EpochTimestamp = number;
 export interface IncludeGlobalQueryParameter {
+  /** @default false */
   includeGlobal?: boolean;
 }
 export interface ListOfSpaceIdsRequest {
+  /**
+   * @maxItems 100
+   * @minItems 1
+   */
   items: {
+    /** Ids for the spaces to perform operations on */
     space: SpaceSpecification;
   }[];
 }
 export interface ListOfSpaceIdsResponse {
+  /**
+   * @maxItems 100
+   * @minItems 1
+   */
   items: {
+    /** List of space ids for the requested item(s) */
     space: SpaceSpecification;
   }[];
 }
-/**
- * The cursor value used to return (paginate to) the next page of results, when more data is available.
- */
+/** The cursor value used to return (paginate to) the next page of results, when more data is available. */
 export type NextCursorV3 = string;
 export interface ReducedLimitQueryParameter {
   /**
    * @min 1
    * @max 1000
+   * @default 10
    */
   limit?: number;
 }
@@ -44,16 +54,27 @@ export interface SpaceCollectionResponseV3Response {
 export interface SpaceCollectionResponseWithCursorResponse
   extends CursorAndAsyncIterator<SpaceDefinition> {}
 export interface SpaceCreateCollection {
-  /** List of spaces to create/update */
+  /**
+   * List of spaces to create/update
+   * @maxItems 100
+   * @minItems 1
+   */
   items: SpaceCreateDefinition[];
 }
 export interface SpaceCreateDefinition {
-  /** Used to describe the space you're defining. */
+  /**
+   * Used to describe the space you're defining.
+   * @maxLength 1024
+   */
   description?: string;
-  /** Human-readable name for the space. */
+  /**
+   * Human-readable name for the space.
+   * @maxLength 255
+   */
   name?: string;
   /**
    * The Space identifier (id).
+   *
    *
    * Note that we have reserved the use of certain space ids.  These reserved spaces are:
    *  * `space`
@@ -65,23 +86,36 @@ export interface SpaceCreateDefinition {
    *  * `node`
    *  * `edge`
    *
+   * @minLength 1
+   * @maxLength 43
    * @pattern (?!^(space|cdf|dms|pg3|shared|system|node|edge)$)(^[a-zA-Z][a-zA-Z0-9_-]{0,41}[a-zA-Z0-9]?$)
    */
   space: string;
 }
 export type SpaceDefinition = SpaceCreateDefinition & {
+  /** The number of milliseconds since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds. */
   createdTime: EpochTimestamp;
+  /** The number of milliseconds since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds. */
   lastUpdatedTime: EpochTimestamp;
+  /** Is this a global space. */
   isGlobal: boolean;
 };
 /**
+ * @minLength 1
+ * @maxLength 43
  * @pattern ^[a-zA-Z][a-zA-Z0-9_-]{0,41}[a-zA-Z0-9]?$
  */
 export type SpaceSpecification = string;
 export interface UpsertConflict {
   /** Details about the error caused by the upsert/update. */
   error: {
+    /**
+     * The HTTP status code returned
+     * @format int32
+     * @example 409
+     */
     code: number;
+    /** The error message returned from the service. */
     message: string;
   };
 }

@@ -4,6 +4,7 @@
 
 /**
  * External Id provided by client. Should be unique within a given project/resource combination.
+ * @maxLength 255
  */
 export type CogniteExternalId = string;
 /**
@@ -23,7 +24,8 @@ export type EpochTimestamp = number;
 export interface Function {
     /**
      * (Deprecated) API key that can be used inside the function to access data in CDF. This is deprecated and will be replaced by OIDC tokens. With OIDC tokens, a session is created on behalf of the user/service principal at the point when either (1) the function is called directly, or (2) when a schedule is created for the function.
-     * @example ***
+     * @maxLength 50
+     * @example "***"
      */
     apiKey?: string;
     /**
@@ -35,7 +37,8 @@ export interface Function {
     createdTime: EpochTimestamp;
     /**
      * Description of the function.
-     * @example My fantastic function with advanced ML
+     * @maxLength 500
+     * @example "My fantastic function with advanced ML"
      */
     description?: string;
     /**
@@ -65,7 +68,8 @@ export interface Function {
     fileId: FunctionFileId;
     /**
      * Relative path from the root folder to the file containing the `handle` function. Defaults to `handler.py`. Must be on POSIX path format.
-     * @example myfunction/handler.py
+     * @maxLength 500
+     * @example "myfunction/handler.py"
      */
     functionPath?: string;
     id: CogniteInternalId;
@@ -76,7 +80,7 @@ export interface Function {
      * [documentation](https://docs.cognite.com/cdf/functions/#additional-arguments)
      * for additional information related to the security risks of using this
      * option.
-     * @example https://username:password@pypi.company.com/simple
+     * @example "https://username:password@pypi.company.com/simple"
      */
     indexUrl?: string;
     /**
@@ -92,7 +96,8 @@ export interface Function {
     owner?: FunctionOwner;
     /**
      * The runtime of the function. Runtime "py3x" translates to the latest version of the Python 3.x.y series.
-     * @example py38
+     * @default "py38"
+     * @example "py38"
      */
     runtime?: "py37" | "py38" | "py39";
     /**
@@ -102,9 +107,7 @@ export interface Function {
     secrets?: object;
     status: FunctionStatus;
 }
-/**
- * Cognite Function API error.
- */
+/** Cognite Function API error. */
 export interface FunctionBuildError {
     /**
      * HTTP status code.
@@ -114,13 +117,11 @@ export interface FunctionBuildError {
     code: number;
     /**
      * Error message.
-     * @example Could not build function.
+     * @example "Could not build function."
      */
     message: string;
 }
-/**
- * Cognite Function API error.
- */
+/** Cognite Function API error. */
 export interface FunctionErrorBasic {
     /**
      * HTTP status code.
@@ -130,7 +131,7 @@ export interface FunctionErrorBasic {
     code: number;
     /**
      * Error message.
-     * @example Could not authenticate.
+     * @example "Could not authenticate."
      */
     message: string;
 }
@@ -139,19 +140,29 @@ export interface FunctionErrorResponse {
     error: FunctionErrorBasic;
 }
 /**
-* The file ID to a file uploaded to Cognite's Files API. This file must be a zip file and contain a file called `handler.py` (unless otherwise specified through the `functionPath` argument). This file must contain a function named `handle` with any of the following arguments: `data`, `client`, `secrets` and `function_call_info`, which are passed into the function. The zip file can contain other files as well (model binary data, libraries etc).
-
-Custom packages can be pip installed by providing a requirements.txt file in the root of the zip file. The latest version of the Cognite Python SDK is automatically installed. If a specific version is needed, please specify this in the requirements.txt file.
-*/
+ * The file ID to a file uploaded to Cognite's Files API. This file must be a zip file and contain a file called `handler.py` (unless otherwise specified through the `functionPath` argument). This file must contain a function named `handle` with any of the following arguments: `data`, `client`, `secrets` and `function_call_info`, which are passed into the function. The zip file can contain other files as well (model binary data, libraries etc).
+ *
+ * Custom packages can be pip installed by providing a requirements.txt file in the root of the zip file. The latest version of the Cognite Python SDK is automatically installed. If a specific version is needed, please specify this in the requirements.txt file.
+ */
 export type FunctionFileId = CogniteInternalId;
 export interface FunctionFilter {
     /** FunctionFilter */
     filter?: {
+        /** The name of the function. */
         name?: FunctionName;
+        /** Owner of this function. Typically used to know who created it. */
         owner?: FunctionOwner;
+        /**
+         * The file ID to a file uploaded to Cognite's Files API. This file must be a zip file and contain a file called `handler.py` (unless otherwise specified through the `functionPath` argument). This file must contain a function named `handle` with any of the following arguments: `data`, `client`, `secrets` and `function_call_info`, which are passed into the function. The zip file can contain other files as well (model binary data, libraries etc).
+         *
+         * Custom packages can be pip installed by providing a requirements.txt file in the root of the zip file. The latest version of the Cognite Python SDK is automatically installed. If a specific version is needed, please specify this in the requirements.txt file.
+         */
         fileId?: FunctionFileId;
+        /** Status of the function. It starts in a Queued state, is then Deploying before it is either Ready or Failed. If the function is Ready, it can be called. */
         status?: FunctionStatus;
+        /** External Id provided by client. Should be unique within a given project/resource combination. */
         externalIdPrefix?: CogniteExternalId;
+        /** The number of milliseconds since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds. */
         createdTime?: EpochTimestamp;
     };
 }
@@ -161,17 +172,20 @@ export interface FunctionListResponse {
 export type FunctionListScope = FunctionFilter & LimitList;
 /**
  * The name of the function.
- * @example myfunction
+ * @minLength 1
+ * @maxLength 140
+ * @example "myfunction"
  */
 export type FunctionName = string;
 /**
  * Owner of this function. Typically used to know who created it.
- * @example anders.hafreager@cognite.com
+ * @maxLength 128
+ * @example "anders.hafreager@cognite.com"
  */
 export type FunctionOwner = string;
 /**
  * Status of the function. It starts in a Queued state, is then Deploying before it is either Ready or Failed. If the function is Ready, it can be called.
- * @example Queued
+ * @example "Queued"
  */
 export type FunctionStatus = "Queued" | "Deploying" | "Ready" | "Failed";
 export interface LimitList {
@@ -179,6 +193,7 @@ export interface LimitList {
      * Limits the number of results to be returned.
      * @format int32
      * @min 1
+     * @default 100
      */
     limit?: number;
 }

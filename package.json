@@ -68,7 +68,7 @@
     "markdown-link-check": "^3.10.3",
     "nock": "13.5.6",
     "openapi-types": "^11.0.1",
-    "swagger-typescript-api-nextgen": "^10.0.1",
+    "swagger-typescript-api": "^13.0.23",
     "tmp-promise": "^3.0.3",
     "ts-node": "^10.9.2",
     "typedoc": "^0.26.5",

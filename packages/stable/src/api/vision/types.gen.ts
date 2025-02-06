@@ -3,23 +3,39 @@
 // Instead update the code generation logic or the OpenAPI document.
 
 /**
+ * primitives.references.AssetRef
  * A reference to an asset. Either the internal ID or the external ID must be provided (exactly one).
  */
 export type AnnotationsAssetRef = {
+  /**
+   * The internal ID of the referenced resource
+   * @default null
+   */
   id?: number;
+  /**
+   * The external ID of the referenced resource
+   * @maxLength 256
+   * @default null
+   */
   externalId?: string;
 };
 /**
+ * primitives.attributes.Boolean
  * The boolean value of something
  */
 export interface AnnotationsBoolean {
-  /** The description of a primitive */
+  /**
+   * The description of a primitive
+   * @maxLength 500
+   * @default null
+   */
   description?: string;
-  type: 'boolean';
+  type: boolean;
   /** The boolean value */
   value: boolean;
 }
 /**
+ * primitives.geometry2d.BoundingBox
  * A plain rectangle
  */
 export interface AnnotationsBoundingBox {
@@ -27,6 +43,7 @@ export interface AnnotationsBoundingBox {
    * The confidence score for the primitive. It should be between 0 and 1.
    * @min 0
    * @max 1
+   * @default null
    */
   confidence?: number;
   /**
@@ -55,70 +72,126 @@ export interface AnnotationsBoundingBox {
   yMin: number;
 }
 /**
-* A point attached with additional information such as a confidence value and
-various attribute(s).
-*/
+ * primitives.geometry2d.Keypoint
+ * A point attached with additional information such as a confidence value and
+ * various attribute(s).
+ */
 export interface AnnotationsKeypoint {
-  /** Additional attributes data for a compound. */
-  attributes?: Record<string, AnnotationsBoolean | AnnotationsNumerical>;
+  /**
+   * Additional attributes data for a compound.
+   * @default null
+   */
+  attributes?: Record<
+    string,
+    | ({
+        type: 'boolean';
+      } & AnnotationsBoolean)
+    | ({
+        type: 'numerical';
+      } & AnnotationsNumerical)
+  >;
   /**
    * The confidence score for the primitive. It should be between 0 and 1.
    * @min 0
    * @max 1
+   * @default null
    */
   confidence?: number;
   /** The position of the keypoint */
   point: AnnotationsPoint;
 }
 /**
-* Models a collection of keypoints represented by a label, a dictionary of
-keypoints (mapping from a (unique) label name to a keypoint), and
-optionally a confidence value and an attributes dictionary.
-*/
+ * images.KeypointCollection
+ * Models a collection of keypoints represented by a label, a dictionary of
+ * keypoints (mapping from a (unique) label name to a keypoint), and
+ * optionally a confidence value and an attributes dictionary.
+ */
 export interface AnnotationsKeypointCollection {
-  /** Additional attributes data for a compound. */
-  attributes?: Record<string, AnnotationsBoolean | AnnotationsNumerical>;
+  /**
+   * Additional attributes data for a compound.
+   * @default null
+   */
+  attributes?: Record<
+    string,
+    | ({
+        type: 'boolean';
+      } & AnnotationsBoolean)
+    | ({
+        type: 'numerical';
+      } & AnnotationsNumerical)
+  >;
   /**
    * The confidence score for the primitive. It should be between 0 and 1.
    * @min 0
    * @max 1
+   * @default null
    */
   confidence?: number;
   /** The detected keypoints */
   keypoints: Record<string, AnnotationsKeypoint>;
-  /** The label describing what type of object it is */
+  /**
+   * The label describing what type of object it is
+   * @minLength 1
+   * @maxLength 128
+   */
   label: string;
 }
 /**
+ * primitives.attributes.Numerical
  * The numerical value of something
  */
 export interface AnnotationsNumerical {
-  /** The description of a primitive */
+  /**
+   * The description of a primitive
+   * @maxLength 500
+   * @default null
+   */
   description?: string;
   type: 'numerical';
   /** The numerical value */
-  value: number | number;
+  value: number;
 }
 /**
-* Models an image object detection represented by a label, a geometry, and
-optionally a confidence value.
-*/
+ * images.ObjectDetection
+ * Models an image object detection represented by a label, a geometry, and
+ * optionally a confidence value.
+ */
 export interface AnnotationsObjectDetection {
-  /** Additional attributes data for a compound. */
-  attributes?: Record<string, AnnotationsBoolean | AnnotationsNumerical>;
+  /**
+   * Additional attributes data for a compound.
+   * @default null
+   */
+  attributes?: Record<
+    string,
+    | ({
+        type: 'boolean';
+      } & AnnotationsBoolean)
+    | ({
+        type: 'numerical';
+      } & AnnotationsNumerical)
+  >;
+  /** @default null */
   boundingBox?: AnnotationsBoundingBox;
   /**
    * The confidence score for the primitive. It should be between 0 and 1.
    * @min 0
    * @max 1
+   * @default null
    */
   confidence?: number;
-  /** The label describing what type of object it is */
+  /**
+   * The label describing what type of object it is
+   * @minLength 1
+   * @maxLength 128
+   */
   label: string;
+  /** @default null */
   polygon?: AnnotationsPolygon;
+  /** @default null */
   polyline?: AnnotationsPolyLine;
 }
 /**
+ * primitives.geometry2d.Point
  * Point in a 2D-Cartesian coordinate system with origin at the top-left corner of the page
  */
 export interface AnnotationsPoint {
@@ -126,6 +199,7 @@ export interface AnnotationsPoint {
    * The confidence score for the primitive. It should be between 0 and 1.
    * @min 0
    * @max 1
+   * @default null
    */
   confidence?: number;
   /**
@@ -142,19 +216,26 @@ export interface AnnotationsPoint {
   y: number;
 }
 /**
-* A _closed_ polygon represented by _n_ vertices. In other words, we assume
-that the first and last vertex are connected.
-*/
+ * primitives.geometry2d.Polygon
+ * A _closed_ polygon represented by _n_ vertices. In other words, we assume
+ * that the first and last vertex are connected.
+ */
 export interface AnnotationsPolygon {
   /**
    * The confidence score for the primitive. It should be between 0 and 1.
    * @min 0
    * @max 1
+   * @default null
    */
   confidence?: number;
+  /**
+   * @maxItems 1000
+   * @minItems 3
+   */
   vertices: AnnotationsPoint[];
 }
 /**
+ * primitives.geometry2d.PolyLine
  * A polygonal chain consisting of _n_ vertices
  */
 export interface AnnotationsPolyLine {
@@ -162,11 +243,17 @@ export interface AnnotationsPolyLine {
    * The confidence score for the primitive. It should be between 0 and 1.
    * @min 0
    * @max 1
+   * @default null
    */
   confidence?: number;
+  /**
+   * @maxItems 1000
+   * @minItems 2
+   */
   vertices: AnnotationsPoint[];
 }
 /**
+ * images.TextRegion
  * Models an extracted text region in an image
  */
 export interface AnnotationsTextRegion {
@@ -174,14 +261,20 @@ export interface AnnotationsTextRegion {
    * The confidence score for the primitive. It should be between 0 and 1.
    * @min 0
    * @max 1
+   * @default null
    */
   confidence?: number;
-  /** The extracted text */
+  /**
+   * The extracted text
+   * @minLength 1
+   * @maxLength 128
+   */
   text: string;
   /** The location of the extracted text */
   textRegion: AnnotationsBoundingBox;
 }
 /**
+ * images.AssetLink
  * Models a link to a CDF Asset referenced in an image
  */
 export interface AnnotationsTypesImagesAssetLink {
@@ -191,51 +284,60 @@ export interface AnnotationsTypesImagesAssetLink {
    * The confidence score for the primitive. It should be between 0 and 1.
    * @min 0
    * @max 1
+   * @default null
    */
   confidence?: number;
-  /** The region of the object representing the asset */
+  /**
+   * The region of the object representing the asset
+   * @default null
+   */
   objectRegion?: AnnotationsTypesPrimitivesGeometry2DGeometry;
-  /** The extracted text */
+  /**
+   * The extracted text
+   * @minLength 1
+   * @maxLength 128
+   */
   text: string;
   /** The location of the text mentioning the asset */
   textRegion: AnnotationsBoundingBox;
 }
 /**
-* A geometry represented by exactly *one of* ` bounding_box`, `polygon` and
-`polyline` which, respectively, represents a BoundingBox, Polygon and
-PolyLine.
-*/
+ * primitives.geometry2d.Geometry
+ * A geometry represented by exactly *one of* ` bounding_box`, `polygon` and
+ * `polyline` which, respectively, represents a BoundingBox, Polygon and
+ * PolyLine.
+ */
 export interface AnnotationsTypesPrimitivesGeometry2DGeometry {
+  /** @default null */
   boundingBox?: AnnotationsBoundingBox;
+  /** @default null */
   polygon?: AnnotationsPolygon;
+  /** @default null */
   polyline?: AnnotationsPolyLine;
 }
 /**
+ * AssetTagDetection
  * Detect external ID or name of assets (from your CDF projects) in images. Usage of this feature requires `['assetsAcl:READ']` capability.
  */
 export type AssetTagDetection = 'AssetTagDetection';
-/**
- * Parameters for asset tag detection.
- */
+/** Parameters for asset tag detection. */
 export interface AssetTagDetectionParameters {
   /**
    * Search for external ID or name of assets that are in a subtree rooted at one of
    * the assetSubtreeIds (including the roots given).
-   *
    * @example [1,2]
    */
   assetSubtreeIds?: number[];
   /**
    * Allow partial (fuzzy) matching of detected external IDs in the file.
    * Will only match when it is possible to do so unambiguously.
-   *
+   * @default false
    * @example true
    */
   partialMatch?: boolean;
   /**
    * The confidence threshold returns predictions as positive if their confidence score is the selected value or higher.
    * A higher confidence threshold increases precision but lowers recall, and vice versa.
-   *
    */
   threshold?: ThresholdParameter;
 }
@@ -250,12 +352,11 @@ export type CommaPos = number;
  */
 export type DeadAngle = number;
 /**
+ * DialGaugeDetection
  * Detect and read value of dial gauges in images. In beta. Available only when the `cdf-version: beta` header is provided.
  */
 export type DialGaugeDetection = 'DialGaugeDetection';
-/**
- * Parameters for dial gauge detection and reading. In beta. Available only when the `cdf-version: beta` header is provided.
- */
+/** Parameters for dial gauge detection and reading. In beta. Available only when the `cdf-version: beta` header is provided. */
 export interface DialGaugeDetectionParameters {
   /** The angle between the start and end point on the bottom part of an analog gauge, measured in degrees. */
   deadAngle?: DeadAngle;
@@ -268,17 +369,15 @@ export interface DialGaugeDetectionParameters {
   /**
    * The confidence threshold returns predictions as positive if their confidence score is the selected value or higher.
    * A higher confidence threshold increases precision but lowers recall, and vice versa.
-   *
    */
   threshold?: ThresholdParameter;
 }
 /**
+ * DigitalGaugeDetection
  * Detect and read value of digital gauges in images. In beta. Available only when the `cdf-version: beta` header is provided.
  */
 export type DigitalGaugeDetection = 'DigitalGaugeDetection';
-/**
- * Parameters for digital gauge detection and reading. In beta. Available only when the `cdf-version: beta` header is provided.
- */
+/** Parameters for digital gauge detection and reading. In beta. Available only when the `cdf-version: beta` header is provided. */
 export interface DigitalGaugeDetectionParameters {
   /** Number of digits after comma in a digital gauge. */
   commaPos?: CommaPos;
@@ -289,7 +388,6 @@ export interface DigitalGaugeDetectionParameters {
   /**
    * The confidence threshold returns predictions as positive if their confidence score is the selected value or higher.
    * A higher confidence threshold increases precision but lowers recall, and vice versa.
-   *
    */
   threshold?: ThresholdParameter;
 }
@@ -299,9 +397,7 @@ export interface DigitalGaugeDetectionParameters {
  * @min 0
  */
 export type EpochTimestamp = number;
-/**
- * List of the items and the corresponding error message(s) per failed batch.
- */
+/** List of the items and the corresponding error message(s) per failed batch. */
 export interface FailedBatch {
   /** The error message(s) of the failed batch. */
   errorMessage?: string;
@@ -332,39 +428,42 @@ export interface FeatureParameters {
   /** Parameters for detecting and reading the state of a valve. In beta. Available only when the `cdf-version: beta` header is provided. */
   valveDetectionParameters?: ValveDetectionParameters;
 }
-/**
- * An external-id or instance-id reference to the referenced file.
- */
+/** An external-id or instance-id reference to the referenced file. */
 export type FileReference =
   | {
+      /** The ID of a file in CDF. */
       fileId: VisionFileId;
     }
   | {
+      /** The external ID of a file in CDF. */
       fileExternalId: VisionFileExternalId;
     }
   | {
+      /** The instance id of a file in CDF. */
       fileInstanceId: VisionInstanceId;
     };
 /**
+ * IndustrialObjectDetection
  * Detect industrial objects such as gauges and valves in images. In beta. Available only when the `cdf-version: beta` header is provided.
  */
 export type IndustrialObjectDetection = 'IndustrialObjectDetection';
-/**
- * Parameters for industrial object detection. In beta. Available only when the `cdf-version: beta` header is provided.
- */
+/** Parameters for industrial object detection. In beta. Available only when the `cdf-version: beta` header is provided. */
 export interface IndustrialObjectDetectionParameters {
   /**
    * The confidence threshold returns predictions as positive if their confidence score is the selected value or higher.
    * A higher confidence threshold increases precision but lowers recall, and vice versa.
-   *
    */
   threshold?: ThresholdParameter;
 }
 /**
+ * @minLength 1
+ * @maxLength 255
  * @pattern ^[a-zA-Z]([a-zA-Z0-9_]{0,253}[a-zA-Z0-9])?$
  */
 export type InstanceExternalId = string;
 /**
+ * @minLength 1
+ * @maxLength 43
  * @pattern ^[a-zA-Z][a-zA-Z0-9_-]{0,41}[a-zA-Z0-9]?$
  */
 export type InstanceSpace = string;
@@ -374,17 +473,14 @@ export type InstanceSpace = string;
  * @example 123
  */
 export type JobId = number;
-/**
- * The status of the job.
- */
+/** The status of the job. */
 export type JobStatus = 'Queued' | 'Running' | 'Completed' | 'Failed';
 /**
+ * LevelGaugeDetection
  * Detect and read value of level gauges in images. In beta. Available only when the `cdf-version: beta` header is provided.
  */
 export type LevelGaugeDetection = 'LevelGaugeDetection';
-/**
- * Parameters for level gauge detection and reading. In beta. Available only when the `cdf-version: beta` header is provided.
- */
+/** Parameters for level gauge detection and reading. In beta. Available only when the `cdf-version: beta` header is provided. */
 export interface LevelGaugeDetectionParameters {
   /** The max value of the gauge. */
   maxLevel?: MaxLevel;
@@ -393,7 +489,6 @@ export interface LevelGaugeDetectionParameters {
   /**
    * The confidence threshold returns predictions as positive if their confidence score is the selected value or higher.
    * A higher confidence threshold increases precision but lowers recall, and vice versa.
-   *
    */
   threshold?: ThresholdParameter;
 }
@@ -423,33 +518,29 @@ export type MinNumDigits = number;
  */
 export type NonLinAngle = number;
 /**
+ * PeopleDetection
  * Detect people in images.
  */
 export type PeopleDetection = 'PeopleDetection';
-/**
- * Parameters for people detection.
- */
+/** Parameters for people detection. */
 export interface PeopleDetectionParameters {
   /**
    * The confidence threshold returns predictions as positive if their confidence score is the selected value or higher.
    * A higher confidence threshold increases precision but lowers recall, and vice versa.
-   *
    */
   threshold?: ThresholdParameter;
 }
 /**
+ * PersonalProtectiveEquipmentDetection
  * Detect personal protective equipment, such as helmet, protective eyewear, and mask in images. In beta. Available only when the `cdf-version: beta` header is provided.
  */
 export type PersonalProtectiveEquipmentDetection =
   'PersonalProtectiveEquipmentDetection';
-/**
- * Parameters for industrial personal protective equipment detection. In beta. Available only when the `cdf-version: beta` header is provided.
- */
+/** Parameters for industrial personal protective equipment detection. In beta. Available only when the `cdf-version: beta` header is provided. */
 export interface PersonalProtectiveEquipmentDetectionParameters {
   /**
    * The confidence threshold returns predictions as positive if their confidence score is the selected value or higher.
    * A higher confidence threshold increases precision but lowers recall, and vice versa.
-   *
    */
   threshold?: ThresholdParameter;
 }
@@ -458,6 +549,7 @@ export interface StatusSchema {
   createdTime: EpochTimestamp;
   /**
    * If the job failed, some more information about the error cause.
+   * @default null
    * @example null
    */
   errorMessage?: string;
@@ -469,40 +561,37 @@ export interface StatusSchema {
   statusTime: EpochTimestamp;
 }
 /**
+ * TextDetection
  * Detect text in images.
  */
 export type TextDetection = 'TextDetection';
-/**
- * Parameters for text detection
- */
+/** Parameters for text detection */
 export interface TextDetectionParameters {
   /**
    * The confidence threshold returns predictions as positive if their confidence score is the selected value or higher.
    * A higher confidence threshold increases precision but lowers recall, and vice versa.
-   *
    */
   threshold?: ThresholdParameter;
 }
 /**
-* The confidence threshold returns predictions as positive if their confidence score is the selected value or higher.
-A higher confidence threshold increases precision but lowers recall, and vice versa.
-* @min 0
-* @max 1
-* @example 0.8
-*/
+ * Threshold
+ * The confidence threshold returns predictions as positive if their confidence score is the selected value or higher.
+ * A higher confidence threshold increases precision but lowers recall, and vice versa.
+ * @min 0
+ * @max 1
+ * @example 0.8
+ */
 export type ThresholdParameter = number;
 /**
+ * ValveDetection
  * Detect and read state of a valve in an image. In beta. Available only when the `cdf-version: beta` header is provided.
  */
 export type ValveDetection = 'ValveDetection';
-/**
- * Parameters for detecting and reading the state of a valve. In beta. Available only when the `cdf-version: beta` header is provided.
- */
+/** Parameters for detecting and reading the state of a valve. In beta. Available only when the `cdf-version: beta` header is provided. */
 export interface ValveDetectionParameters {
   /**
    * The confidence threshold returns predictions as positive if their confidence score is the selected value or higher.
    * A higher confidence threshold increases precision but lowers recall, and vice versa.
-   *
    */
   threshold?: ThresholdParameter;
 }
@@ -525,9 +614,12 @@ export type VisionExtractFeature =
   | DigitalGaugeDetection
   | ValveDetection;
 export type VisionExtractGetResponse = StatusSchema & {
+  /** Contextualization job ID. */
   jobId: JobId;
+  /** List of file IDs and their corresponding predictions. */
   items: VisionExtractItem[];
   failedItems?: FailedBatch[];
+  /** Feature-specific parameters. New feature extractor parameters may appear. */
   parameters?: FeatureParameters;
 };
 export interface VisionExtractItem {
@@ -539,12 +631,23 @@ export interface VisionExtractItem {
   predictions: VisionExtractPredictions;
 }
 export type VisionExtractPostResponse = StatusSchema & {
+  /** Contextualization job ID. */
   jobId: JobId;
+  /** List of files to be analyzed by the feature extractors. */
   items: VisionAllOfFileId[];
+  /**
+   * The type of detections to perform. New feature extractors may appear.
+   * @min 1
+   * @max 3
+   * @uniqueItems true
+   * @example ["TextDetection","AssetTagDetection","PeopleDetection"]
+   */
   features: VisionExtractFeature[];
+  /** Feature-specific parameters. New feature extractor parameters may appear. */
   parameters?: FeatureParameters;
 };
 /**
+ * Predictions
  * Detected features in images. New fields may appear in case new feature extractors are add.
  * @example {"textPredictions":[{"confidence":0.9,"text":"string","textRegion":{"xMin":0.5,"xMax":0.9,"yMin":0.5,"yMax":0.9}}],"assetTagPredictions":[{"confidence":0.9,"assetRef":{"id":1233},"text":"string","textRegion":{"xMin":0.5,"xMax":0.9,"yMin":0.5,"yMax":0.9}}],"peoplePredictions":[{"label":"person","confidence":0.8,"boundingBox":{"xMin":0.5,"xMax":0.9,"yMin":0.5,"yMax":0.9}}]}
  */
@@ -552,7 +655,16 @@ export interface VisionExtractPredictions {
   assetTagPredictions?: AnnotationsTypesImagesAssetLink[];
   /** In beta. Available only when the `cdf-version: beta` header is provided. */
   dialGaugePredictions?: {
+    /**
+     * Models an image object detection represented by a label, a geometry, and
+     * optionally a confidence value.
+     */
     objectDetection?: AnnotationsObjectDetection;
+    /**
+     * Models a collection of keypoints represented by a label, a dictionary of
+     * keypoints (mapping from a (unique) label name to a keypoint), and
+     * optionally a confidence value and an attributes dictionary.
+     */
     keypointCollection?: AnnotationsKeypointCollection;
   }[];
   /** In beta. Available only when the `cdf-version: beta` header is provided. */
@@ -561,7 +673,16 @@ export interface VisionExtractPredictions {
   industrialObjectPredictions?: AnnotationsObjectDetection[];
   /** In beta. Available only when the `cdf-version: beta` header is provided. */
   levelGaugePredictions?: {
+    /**
+     * Models an image object detection represented by a label, a geometry, and
+     * optionally a confidence value.
+     */
     objectDetection?: AnnotationsObjectDetection;
+    /**
+     * Models a collection of keypoints represented by a label, a dictionary of
+     * keypoints (mapping from a (unique) label name to a keypoint), and
+     * optionally a confidence value and an attributes dictionary.
+     */
     keypointCollection?: AnnotationsKeypointCollection;
   }[];
   peoplePredictions?: AnnotationsObjectDetection[];
@@ -570,13 +691,22 @@ export interface VisionExtractPredictions {
   textPredictions?: AnnotationsTextRegion[];
   /** In beta. Available only when the `cdf-version: beta` header is provided. */
   valvePredictions?: {
+    /**
+     * Models an image object detection represented by a label, a geometry, and
+     * optionally a confidence value.
+     */
     objectDetection?: AnnotationsObjectDetection;
+    /**
+     * Models a collection of keypoints represented by a label, a dictionary of
+     * keypoints (mapping from a (unique) label name to a keypoint), and
+     * optionally a confidence value and an attributes dictionary.
+     */
     keypointCollection?: AnnotationsKeypointCollection;
   }[];
 }
 /**
  * The external ID of a file in CDF.
- * @example 1234
+ * @example "1234"
  */
 export type VisionFileExternalId = string;
 /**

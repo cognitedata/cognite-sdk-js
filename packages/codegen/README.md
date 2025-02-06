@@ -32,7 +32,7 @@ frequently made automatically available via SDK updates.
 After updating the OpenAPI document snapshot types must be updated. E.g:
 
 ```console
-yarn codegen generate-types --package=stable
+yarn codegen generate-types --package=stable && yarn lint:fix
 ```
 
 ## Overriding the OpenAPI document
