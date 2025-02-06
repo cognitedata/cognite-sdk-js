@@ -7,123 +7,106 @@
  * attribute.
  * @example {"assetRef":{"externalId":"abc"},"symbolRegion":{"xMin":0.1,"xMax":0.2,"yMin":0.1,"yMax":0.2},"textRegion":{"xMin":0.2,"xMax":0.3,"yMin":0.2,"yMax":0.3},"pageNumber":43}
  */
-export type AnnotationData =
-  | AnnotationsBoundingVolume
-  | AnnotationsClassification
-  | AnnotationsDetection
-  | AnnotationsExtractedText
-  | AnnotationsFileLink
-  | AnnotationsIsoPlanAnnotation
-  | AnnotationsJunction
-  | AnnotationsKeypointCollection
-  | AnnotationsLine
-  | AnnotationsObjectDetection
-  | AnnotationsTextRegion
-  | AnnotationsUnhandledSymbolObject
-  | AnnotationsUnhandledTextObject
-  | AnnotationsTypesDiagramsAssetLink
-  | AnnotationsTypesDiagramsInstanceLink
-  | AnnotationsTypesImagesAssetLink
-  | AnnotationsTypesImagesInstanceLink;
+export type AnnotationData = AnnotationsBoundingVolume | AnnotationsClassification | AnnotationsDetection | AnnotationsExtractedText | AnnotationsFileLink | AnnotationsIsoPlanAnnotation | AnnotationsJunction | AnnotationsKeypointCollection | AnnotationsLine | AnnotationsObjectDetection | AnnotationsTextRegion | AnnotationsUnhandledSymbolObject | AnnotationsUnhandledTextObject | AnnotationsTypesDiagramsAssetLink | AnnotationsTypesDiagramsInstanceLink | AnnotationsTypesImagesAssetLink | AnnotationsTypesImagesInstanceLink;
 /**
  * primitives.references.AssetRef
  * A reference to an asset. Either the internal ID or the external ID must be provided (exactly one).
  */
 export type AnnotationsAssetRef = {
-  /**
-   * The internal ID of the referenced resource
-   * @default null
-   */
-  id?: number;
-  /**
-   * The external ID of the referenced resource
-   * @maxLength 256
-   * @default null
-   */
-  externalId?: string;
+    /**
+     * The internal ID of the referenced resource
+     * @default null
+     */
+    id?: number;
+    /**
+     * The external ID of the referenced resource
+     * @maxLength 256
+     * @default null
+     */
+    externalId?: string;
 };
 /**
  * primitives.attributes.Boolean
  * The boolean value of something
  */
 export interface AnnotationsBoolean {
-  /**
-   * The description of a primitive
-   * @maxLength 500
-   * @default null
-   */
-  description?: string;
-  type: boolean;
-  /** The boolean value */
-  value: boolean;
+    /**
+     * The description of a primitive
+     * @maxLength 500
+     * @default null
+     */
+    description?: string;
+    type: boolean;
+    /** The boolean value */
+    value: boolean;
 }
 /**
  * primitives.geometry2d.BoundingBox
  * A plain rectangle
  */
 export interface AnnotationsBoundingBox {
-  /**
-   * The confidence score for the primitive. It should be between 0 and 1.
-   * @min 0
-   * @max 1
-   * @default null
-   */
-  confidence?: number;
-  /**
-   * Maximum abscissa of the bounding box (right edge). Must be strictly more than x_min.
-   * @min 0
-   * @max 1
-   */
-  xMax: number;
-  /**
-   * Minimum abscissa of the bounding box (left edge). Must be strictly less than x_max.
-   * @min 0
-   * @max 1
-   */
-  xMin: number;
-  /**
-   * Maximum ordinate of the bounding box (top edge). Must be strictly more than y_min.
-   * @min 0
-   * @max 1
-   */
-  yMax: number;
-  /**
-   * Minimum ordinate of the bounding box (bottom edge). Must be strictly less than y_max.
-   * @min 0
-   * @max 1
-   */
-  yMin: number;
+    /**
+     * The confidence score for the primitive. It should be between 0 and 1.
+     * @min 0
+     * @max 1
+     * @default null
+     */
+    confidence?: number;
+    /**
+     * Maximum abscissa of the bounding box (right edge). Must be strictly more than x_min.
+     * @min 0
+     * @max 1
+     */
+    xMax: number;
+    /**
+     * Minimum abscissa of the bounding box (left edge). Must be strictly less than x_max.
+     * @min 0
+     * @max 1
+     */
+    xMin: number;
+    /**
+     * Maximum ordinate of the bounding box (top edge). Must be strictly more than y_min.
+     * @min 0
+     * @max 1
+     */
+    yMax: number;
+    /**
+     * Minimum ordinate of the bounding box (bottom edge). Must be strictly less than y_max.
+     * @min 0
+     * @max 1
+     */
+    yMin: number;
 }
 /**
  * pointcloud.BoundingVolume
  * A bounding volume represents a region in a point cloud
  */
 export interface AnnotationsBoundingVolume {
-  /**
-   * The asset this annotation is pointing to
-   * @default null
-   */
-  assetRef?: AnnotationsAssetRef;
-  /**
-   * The confidence score for the primitive. It should be between 0 and 1.
-   * @min 0
-   * @max 1
-   * @default null
-   */
-  confidence?: number;
-  /**
-   * The label describing what type of object it is
-   * @minLength 1
-   * @maxLength 128
-   * @default null
-   */
-  label?: string;
-  /**
-   * The region of the annotation defined by a list of geometry primitives (cylinder and box).
-   * @maxItems 1000
-   * @minItems 1
-   */
-  region: AnnotationsTypesPrimitivesGeometry3DGeometry[];
+    /**
+     * The asset this annotation is pointing to
+     * @default null
+     */
+    assetRef?: AnnotationsAssetRef;
+    /**
+     * The confidence score for the primitive. It should be between 0 and 1.
+     * @min 0
+     * @max 1
+     * @default null
+     */
+    confidence?: number;
+    /**
+     * The label describing what type of object it is
+     * @minLength 1
+     * @maxLength 128
+     * @default null
+     */
+    label?: string;
+    /**
+     * The region of the annotation defined by a list of geometry primitives (cylinder and box).
+     * @maxItems 1000
+     * @minItems 1
+     */
+    region: AnnotationsTypesPrimitivesGeometry3DGeometry[];
 }
 /**
  * primitives.geometry3d.Box
@@ -133,26 +116,26 @@ export interface AnnotationsBoundingVolume {
  * the points (-1, -1, -1) and (1, 1, 1).
  */
 export interface AnnotationsBox {
-  /**
-   * The confidence score for the primitive. It should be between 0 and 1.
-   * @min 0
-   * @max 1
-   * @default null
-   */
-  confidence?: number;
-  /**
-   * The label describing what type of object it is
-   * @minLength 1
-   * @maxLength 128
-   * @default null
-   */
-  label?: string;
-  /**
-   * The homogeneous transformation matrix
-   * @maxItems 16
-   * @minItems 16
-   */
-  matrix: number[];
+    /**
+     * The confidence score for the primitive. It should be between 0 and 1.
+     * @min 0
+     * @max 1
+     * @default null
+     */
+    confidence?: number;
+    /**
+     * The label describing what type of object it is
+     * @minLength 1
+     * @maxLength 128
+     * @default null
+     */
+    label?: string;
+    /**
+     * The homogeneous transformation matrix
+     * @maxItems 16
+     * @minItems 16
+     */
+    matrix: number[];
 }
 /**
  * images.Classification
@@ -160,56 +143,56 @@ export interface AnnotationsBox {
  * confidence value.
  */
 export interface AnnotationsClassification {
-  /**
-   * The confidence score for the primitive. It should be between 0 and 1.
-   * @min 0
-   * @max 1
-   * @default null
-   */
-  confidence?: number;
-  /**
-   * The label describing what type of object it is
-   * @minLength 1
-   * @maxLength 128
-   */
-  label: string;
+    /**
+     * The confidence score for the primitive. It should be between 0 and 1.
+     * @min 0
+     * @max 1
+     * @default null
+     */
+    confidence?: number;
+    /**
+     * The label describing what type of object it is
+     * @minLength 1
+     * @maxLength 128
+     */
+    label: string;
 }
 /**
  * primitives.geometry3d.Cylinder
  * A cylinder in 3D space, defined by the centers of the two end surfaces and the radius.
  */
 export interface AnnotationsCylinder {
-  /**
-   * The center of the first cap.
-   * @maxItems 3
-   * @minItems 3
-   */
-  centerA: number[];
-  /**
-   * The center of the second cap.
-   * @maxItems 3
-   * @minItems 3
-   */
-  centerB: number[];
-  /**
-   * The confidence score for the primitive. It should be between 0 and 1.
-   * @min 0
-   * @max 1
-   * @default null
-   */
-  confidence?: number;
-  /**
-   * The label describing what type of object it is
-   * @minLength 1
-   * @maxLength 128
-   * @default null
-   */
-  label?: string;
-  /**
-   * The radius of the cylinder.
-   * @min 0
-   */
-  radius: number;
+    /**
+     * The center of the first cap.
+     * @maxItems 3
+     * @minItems 3
+     */
+    centerA: number[];
+    /**
+     * The center of the second cap.
+     * @maxItems 3
+     * @minItems 3
+     */
+    centerB: number[];
+    /**
+     * The confidence score for the primitive. It should be between 0 and 1.
+     * @min 0
+     * @max 1
+     * @default null
+     */
+    confidence?: number;
+    /**
+     * The label describing what type of object it is
+     * @minLength 1
+     * @maxLength 128
+     * @default null
+     */
+    label?: string;
+    /**
+     * The radius of the cylinder.
+     * @min 0
+     */
+    radius: number;
 }
 /**
  * forms.Detection
@@ -219,140 +202,140 @@ export interface AnnotationsCylinder {
  * an unnormalized_value and the unit.
  */
 export interface AnnotationsDetection {
-  /** Bounding box of the detection area */
-  boundingBox: AnnotationsBoundingBox;
-  /**
-   * Name of subcomponent that the detection belongs to
-   * @minLength 1
-   * @maxLength 128
-   * @default null
-   */
-  componentName?: string;
-  /**
-   * Type of subcomponent that the detection belongs to
-   * @minLength 1
-   * @maxLength 128
-   * @default null
-   */
-  componentType?: string;
-  /**
-   * The confidence score for the primitive. It should be between 0 and 1.
-   * @min 0
-   * @max 1
-   * @default null
-   */
-  confidence?: number;
-  /**
-   * Name of field that has been detected
-   * @minLength 1
-   * @maxLength 128
-   */
-  fieldName: string;
-  /**
-   * The number of the page on which this annotation is located. The first page has number 1.
-   * @min 1
-   * @max 100000
-   * @default 1
-   */
-  pageNumber?: number;
-  /**
-   * The unit of the value field. Optional.
-   * @minLength 1
-   * @maxLength 128
-   * @default null
-   */
-  unit?: string;
-  /**
-   * The value that has been detected
-   * @maxLength 128
-   */
-  value: string;
-  /**
-   * The value that has been detected, before normalization. Optional.
-   * @maxLength 128
-   * @default null
-   */
-  valueUnnormalized?: string;
+    /** Bounding box of the detection area */
+    boundingBox: AnnotationsBoundingBox;
+    /**
+     * Name of subcomponent that the detection belongs to
+     * @minLength 1
+     * @maxLength 128
+     * @default null
+     */
+    componentName?: string;
+    /**
+     * Type of subcomponent that the detection belongs to
+     * @minLength 1
+     * @maxLength 128
+     * @default null
+     */
+    componentType?: string;
+    /**
+     * The confidence score for the primitive. It should be between 0 and 1.
+     * @min 0
+     * @max 1
+     * @default null
+     */
+    confidence?: number;
+    /**
+     * Name of field that has been detected
+     * @minLength 1
+     * @maxLength 128
+     */
+    fieldName: string;
+    /**
+     * The number of the page on which this annotation is located. The first page has number 1.
+     * @min 1
+     * @max 100000
+     * @default 1
+     */
+    pageNumber?: number;
+    /**
+     * The unit of the value field. Optional.
+     * @minLength 1
+     * @maxLength 128
+     * @default null
+     */
+    unit?: string;
+    /**
+     * The value that has been detected
+     * @maxLength 128
+     */
+    value: string;
+    /**
+     * The value that has been detected, before normalization. Optional.
+     * @maxLength 128
+     * @default null
+     */
+    valueUnnormalized?: string;
 }
 /**
  * documents.ExtractedText
  * Represents text extracted from a document. Annotations of this type are low-level and not specific to any domain.
  */
 export interface AnnotationsExtractedText {
-  /**
-   * The extracted text
-   * @minLength 1
-   * @maxLength 1024
-   */
-  extractedText: string;
-  /**
-   * The number of the page on which this annotation is located. The first page has number 1.
-   * @min 1
-   * @max 100000
-   * @default 1
-   */
-  pageNumber?: number;
-  /** The location of the extracted text */
-  textRegion: AnnotationsBoundingBox;
+    /**
+     * The extracted text
+     * @minLength 1
+     * @maxLength 1024
+     */
+    extractedText: string;
+    /**
+     * The number of the page on which this annotation is located. The first page has number 1.
+     * @min 1
+     * @max 100000
+     * @default 1
+     */
+    pageNumber?: number;
+    /** The location of the extracted text */
+    textRegion: AnnotationsBoundingBox;
 }
 /**
  * diagrams.FileLink
  * Models a link to a CDF File referenced in an engineering diagram
  */
 export interface AnnotationsFileLink {
-  /**
-   * The description of a primitive
-   * @maxLength 500
-   * @default null
-   */
-  description?: string;
-  /** The file this annotation is pointing to */
-  fileRef: AnnotationsFileRef;
-  /**
-   * The number of the page on which this annotation is located. The first page has number 1.
-   * @min 1
-   * @max 100000
-   * @default 1
-   */
-  pageNumber?: number;
-  /**
-   * The symbol found in the file
-   * @minLength 1
-   * @maxLength 128
-   * @default null
-   */
-  symbol?: string;
-  /**
-   * The location of the symbol representing the file
-   * @default null
-   */
-  symbolRegion?: AnnotationsBoundingBox;
-  /**
-   * The extracted text
-   * @minLength 1
-   * @maxLength 128
-   * @default null
-   */
-  text?: string;
-  /** The location of the text mentioning the file */
-  textRegion: AnnotationsBoundingBox;
+    /**
+     * The description of a primitive
+     * @maxLength 500
+     * @default null
+     */
+    description?: string;
+    /** The file this annotation is pointing to */
+    fileRef: AnnotationsFileRef;
+    /**
+     * The number of the page on which this annotation is located. The first page has number 1.
+     * @min 1
+     * @max 100000
+     * @default 1
+     */
+    pageNumber?: number;
+    /**
+     * The symbol found in the file
+     * @minLength 1
+     * @maxLength 128
+     * @default null
+     */
+    symbol?: string;
+    /**
+     * The location of the symbol representing the file
+     * @default null
+     */
+    symbolRegion?: AnnotationsBoundingBox;
+    /**
+     * The extracted text
+     * @minLength 1
+     * @maxLength 128
+     * @default null
+     */
+    text?: string;
+    /** The location of the text mentioning the file */
+    textRegion: AnnotationsBoundingBox;
 }
 /**
  * primitives.references.FileRef
  * A reference to a file. Either the internal ID or the external ID must be provided (exactly one).
  */
 export type AnnotationsFileRef = {
-  /**
-   * The internal ID of the referenced resource
-   * @default null
-   */
-  id?: number;
-  /**
-   * The external ID of the referenced resource
-   * @maxLength 256
-   * @default null
-   */
-  externalId?: string;
+    /**
+     * The internal ID of the referenced resource
+     * @default null
+     */
+    id?: number;
+    /**
+     * The external ID of the referenced resource
+     * @maxLength 256
+     * @default null
+     */
+    externalId?: string;
 };
 /**
  * primitives.references.InstanceRef
@@ -361,165 +344,165 @@ export type AnnotationsFileRef = {
  * that define how the data should be interpreted
  */
 export interface AnnotationsInstanceRef {
-  /**
-   * External id of the instance
-   * @minLength 1
-   * @maxLength 255
-   * @pattern ^[^\x00]{1,255}$
-   */
-  externalId: string;
-  /** The type of instance, an edge or a node. */
-  instanceType: 'node' | 'edge';
-  /**
-   * References to views
-   * @maxItems 10
-   */
-  sources: ({
-    type: 'view';
-  } & AnnotationsView)[];
-  /**
-   * Id of the space that the instance belongs to
-   * @minLength 1
-   * @maxLength 43
-   * @pattern ^[a-zA-Z][a-zA-Z0-9_-]{0,41}[a-zA-Z0-9]?$
-   */
-  space: string;
+    /**
+     * External id of the instance
+     * @minLength 1
+     * @maxLength 255
+     * @pattern ^[^\x00]{1,255}$
+     */
+    externalId: string;
+    /** The type of instance, an edge or a node. */
+    instanceType: "node" | "edge";
+    /**
+     * References to views
+     * @maxItems 10
+     */
+    sources: ({
+        type: "view";
+    } & AnnotationsView)[];
+    /**
+     * Id of the space that the instance belongs to
+     * @minLength 1
+     * @maxLength 43
+     * @pattern ^[a-zA-Z][a-zA-Z0-9_-]{0,41}[a-zA-Z0-9]?$
+     */
+    space: string;
 }
 /**
  * isoplan.IsoPlanAnnotation
  * Model a custom link in a engineering diagram where it capture details from the texts and linked to assets when necessary
  */
 export interface AnnotationsIsoPlanAnnotation {
-  /**
-   * Detail describing the equipment.
-   * @minLength 1
-   * @maxLength 128
-   * @default null
-   */
-  detail?: string;
-  /**
-   * The asset this annotation is pointing at. Store the id of the file assets to generate downloadable URL.
-   * @default null
-   */
-  fileRef?: AnnotationsFileRef;
-  /**
-   * The indirectExternalId is the external id of the equipment used to identify the hotspot indirectly. Exa. this is the <indirectRelation> of <indirectExternalId>.
-   * @default null
-   */
-  indirectExternalId?: AnnotationsAssetRef;
-  /**
-   * Relation connecting this hotspot to a tag in case the hotspot has no tag. E.g. 'second valve upstreams of'. This references the 'indirectExternalId'.
-   * @minLength 1
-   * @maxLength 128
-   * @default null
-   */
-  indirectRelation?: string;
-  /**
-   * The id of the Pipe that the hotspot belongs to.
-   * @default null
-   */
-  lineExternalId?: AnnotationsAssetRef;
-  /**
-   * Stores Functional Locations (FLOC) external ID linked to the annotation.
-   * @minLength 1
-   * @maxLength 128
-   * @default null
-   */
-  linkedResourceExternalId?: string;
-  /**
-   * Stores Functional Locations' (FLOC) ID linked to the annotation.
-   * @default null
-   */
-  linkedResourceInternalId?: number;
-  /**
-   * Stores Functional Location (FLOC) type the annotation linked to.
-   * @default null
-   */
-  linkedResourceType?: 'asset' | 'file';
-  /**
-   * Keep track of data link with old annotations.
-   * @minLength 1
-   * @maxLength 128
-   * @default null
-   */
-  oldAnnotationId?: string;
-  /**
-   * The number of the page on which this annotation is located. The first page has number 1.
-   * @min 1
-   * @max 100000
-   * @default 1
-   */
-  pageNumber?: number;
-  /**
-   * Indicate the relative position of an annotation.
-   * @minLength 1
-   * @maxLength 128
-   * @default null
-   */
-  relativePosition?: string;
-  /**
-   * Keeps track of the modification to an annotation.
-   * @minLength 1
-   * @maxLength 128
-   * @default null
-   */
-  revision?: string;
-  /**
-   * Stores the dimensions of a valve or spade.
-   * @default null
-   */
-  sizeAndClass?: AnnotationsSizeAndClassType;
-  /**
-   * Use to identify whether the annotation is user created one or ditected via pipeline.
-   * @default null
-   */
-  sourceType?: 'pipeline' | 'user';
-  /**
-   * Use to save the fluid code of pipes Exa. LO for Lube oil and etc.
-   * @minLength 1
-   * @maxLength 128
-   * @default null
-   */
-  subDetail?: string;
-  /**
-   * The pattern identified by the detection API results.
-   * @minLength 1
-   * @maxLength 128
-   * @default null
-   */
-  text?: string;
-  /**
-   * The location of the hotspot represented with a bounding box.
-   * @default null
-   */
-  textRegion?: AnnotationsBoundingBox;
-  /**
-   * Type of equipment, valve, pump etc.
-   * @minLength 1
-   * @maxLength 128
-   * @default null
-   */
-  type?: string;
-  /**
-   * Stores the (x,y) coordinate pairs of a line or polyline.
-   * @default null
-   */
-  vertices?: AnnotationsPolyLine;
+    /**
+     * Detail describing the equipment.
+     * @minLength 1
+     * @maxLength 128
+     * @default null
+     */
+    detail?: string;
+    /**
+     * The asset this annotation is pointing at. Store the id of the file assets to generate downloadable URL.
+     * @default null
+     */
+    fileRef?: AnnotationsFileRef;
+    /**
+     * The indirectExternalId is the external id of the equipment used to identify the hotspot indirectly. Exa. this is the <indirectRelation> of <indirectExternalId>.
+     * @default null
+     */
+    indirectExternalId?: AnnotationsAssetRef;
+    /**
+     * Relation connecting this hotspot to a tag in case the hotspot has no tag. E.g. 'second valve upstreams of'. This references the 'indirectExternalId'.
+     * @minLength 1
+     * @maxLength 128
+     * @default null
+     */
+    indirectRelation?: string;
+    /**
+     * The id of the Pipe that the hotspot belongs to.
+     * @default null
+     */
+    lineExternalId?: AnnotationsAssetRef;
+    /**
+     * Stores Functional Locations (FLOC) external ID linked to the annotation.
+     * @minLength 1
+     * @maxLength 128
+     * @default null
+     */
+    linkedResourceExternalId?: string;
+    /**
+     * Stores Functional Locations' (FLOC) ID linked to the annotation.
+     * @default null
+     */
+    linkedResourceInternalId?: number;
+    /**
+     * Stores Functional Location (FLOC) type the annotation linked to.
+     * @default null
+     */
+    linkedResourceType?: "asset" | "file";
+    /**
+     * Keep track of data link with old annotations.
+     * @minLength 1
+     * @maxLength 128
+     * @default null
+     */
+    oldAnnotationId?: string;
+    /**
+     * The number of the page on which this annotation is located. The first page has number 1.
+     * @min 1
+     * @max 100000
+     * @default 1
+     */
+    pageNumber?: number;
+    /**
+     * Indicate the relative position of an annotation.
+     * @minLength 1
+     * @maxLength 128
+     * @default null
+     */
+    relativePosition?: string;
+    /**
+     * Keeps track of the modification to an annotation.
+     * @minLength 1
+     * @maxLength 128
+     * @default null
+     */
+    revision?: string;
+    /**
+     * Stores the dimensions of a valve or spade.
+     * @default null
+     */
+    sizeAndClass?: AnnotationsSizeAndClassType;
+    /**
+     * Use to identify whether the annotation is user created one or ditected via pipeline.
+     * @default null
+     */
+    sourceType?: "pipeline" | "user";
+    /**
+     * Use to save the fluid code of pipes Exa. LO for Lube oil and etc.
+     * @minLength 1
+     * @maxLength 128
+     * @default null
+     */
+    subDetail?: string;
+    /**
+     * The pattern identified by the detection API results.
+     * @minLength 1
+     * @maxLength 128
+     * @default null
+     */
+    text?: string;
+    /**
+     * The location of the hotspot represented with a bounding box.
+     * @default null
+     */
+    textRegion?: AnnotationsBoundingBox;
+    /**
+     * Type of equipment, valve, pump etc.
+     * @minLength 1
+     * @maxLength 128
+     * @default null
+     */
+    type?: string;
+    /**
+     * Stores the (x,y) coordinate pairs of a line or polyline.
+     * @default null
+     */
+    vertices?: AnnotationsPolyLine;
 }
 /**
  * diagrams.Junction
  * Models a junction between lines in an engineering diagram
  */
 export interface AnnotationsJunction {
-  /**
-   * The number of the page on which this annotation is located. The first page has number 1.
-   * @min 1
-   * @max 100000
-   * @default 1
-   */
-  pageNumber?: number;
-  /** The point representing the junction */
-  position: AnnotationsPoint;
+    /**
+     * The number of the page on which this annotation is located. The first page has number 1.
+     * @min 1
+     * @max 100000
+     * @default 1
+     */
+    pageNumber?: number;
+    /** The point representing the junction */
+    position: AnnotationsPoint;
 }
 /**
  * primitives.geometry2d.Keypoint
@@ -527,28 +510,24 @@ export interface AnnotationsJunction {
  * various attribute(s).
  */
 export interface AnnotationsKeypoint {
-  /**
-   * Additional attributes data for a compound.
-   * @default null
-   */
-  attributes?: Record<
-    string,
-    | ({
-        type: 'boolean';
-      } & AnnotationsBoolean)
-    | ({
-        type: 'numerical';
-      } & AnnotationsNumerical)
-  >;
-  /**
-   * The confidence score for the primitive. It should be between 0 and 1.
-   * @min 0
-   * @max 1
-   * @default null
-   */
-  confidence?: number;
-  /** The position of the keypoint */
-  point: AnnotationsPoint;
+    /**
+     * Additional attributes data for a compound.
+     * @default null
+     */
+    attributes?: Record<string, ({
+        type: "boolean";
+    } & AnnotationsBoolean) | ({
+        type: "numerical";
+    } & AnnotationsNumerical)>;
+    /**
+     * The confidence score for the primitive. It should be between 0 and 1.
+     * @min 0
+     * @max 1
+     * @default null
+     */
+    confidence?: number;
+    /** The position of the keypoint */
+    point: AnnotationsPoint;
 }
 /**
  * images.KeypointCollection
@@ -557,70 +536,66 @@ export interface AnnotationsKeypoint {
  * optionally a confidence value and an attributes dictionary.
  */
 export interface AnnotationsKeypointCollection {
-  /**
-   * Additional attributes data for a compound.
-   * @default null
-   */
-  attributes?: Record<
-    string,
-    | ({
-        type: 'boolean';
-      } & AnnotationsBoolean)
-    | ({
-        type: 'numerical';
-      } & AnnotationsNumerical)
-  >;
-  /**
-   * The confidence score for the primitive. It should be between 0 and 1.
-   * @min 0
-   * @max 1
-   * @default null
-   */
-  confidence?: number;
-  /** The detected keypoints */
-  keypoints: Record<string, AnnotationsKeypoint>;
-  /**
-   * The label describing what type of object it is
-   * @minLength 1
-   * @maxLength 128
-   */
-  label: string;
+    /**
+     * Additional attributes data for a compound.
+     * @default null
+     */
+    attributes?: Record<string, ({
+        type: "boolean";
+    } & AnnotationsBoolean) | ({
+        type: "numerical";
+    } & AnnotationsNumerical)>;
+    /**
+     * The confidence score for the primitive. It should be between 0 and 1.
+     * @min 0
+     * @max 1
+     * @default null
+     */
+    confidence?: number;
+    /** The detected keypoints */
+    keypoints: Record<string, AnnotationsKeypoint>;
+    /**
+     * The label describing what type of object it is
+     * @minLength 1
+     * @maxLength 128
+     */
+    label: string;
 }
 /**
  * diagrams.Line
  * Models a line in an engineering diagram
  */
 export interface AnnotationsLine {
-  /**
-   * The label describing what type of object it is
-   * @minLength 1
-   * @maxLength 128
-   */
-  label: string;
-  /**
-   * The number of the page on which this annotation is located. The first page has number 1.
-   * @min 1
-   * @max 100000
-   * @default 1
-   */
-  pageNumber?: number;
-  /** The polyline representing the line */
-  polyline: AnnotationsPolyLine;
+    /**
+     * The label describing what type of object it is
+     * @minLength 1
+     * @maxLength 128
+     */
+    label: string;
+    /**
+     * The number of the page on which this annotation is located. The first page has number 1.
+     * @min 1
+     * @max 100000
+     * @default 1
+     */
+    pageNumber?: number;
+    /** The polyline representing the line */
+    polyline: AnnotationsPolyLine;
 }
 /**
  * primitives.attributes.Numerical
  * The numerical value of something
  */
 export interface AnnotationsNumerical {
-  /**
-   * The description of a primitive
-   * @maxLength 500
-   * @default null
-   */
-  description?: string;
-  type: 'numerical';
-  /** The numerical value */
-  value: number;
+    /**
+     * The description of a primitive
+     * @maxLength 500
+     * @default null
+     */
+    description?: string;
+    type: "numerical";
+    /** The numerical value */
+    value: number;
 }
 /**
  * images.ObjectDetection
@@ -628,63 +603,59 @@ export interface AnnotationsNumerical {
  * optionally a confidence value.
  */
 export interface AnnotationsObjectDetection {
-  /**
-   * Additional attributes data for a compound.
-   * @default null
-   */
-  attributes?: Record<
-    string,
-    | ({
-        type: 'boolean';
-      } & AnnotationsBoolean)
-    | ({
-        type: 'numerical';
-      } & AnnotationsNumerical)
-  >;
-  /** @default null */
-  boundingBox?: AnnotationsBoundingBox;
-  /**
-   * The confidence score for the primitive. It should be between 0 and 1.
-   * @min 0
-   * @max 1
-   * @default null
-   */
-  confidence?: number;
-  /**
-   * The label describing what type of object it is
-   * @minLength 1
-   * @maxLength 128
-   */
-  label: string;
-  /** @default null */
-  polygon?: AnnotationsPolygon;
-  /** @default null */
-  polyline?: AnnotationsPolyLine;
+    /**
+     * Additional attributes data for a compound.
+     * @default null
+     */
+    attributes?: Record<string, ({
+        type: "boolean";
+    } & AnnotationsBoolean) | ({
+        type: "numerical";
+    } & AnnotationsNumerical)>;
+    /** @default null */
+    boundingBox?: AnnotationsBoundingBox;
+    /**
+     * The confidence score for the primitive. It should be between 0 and 1.
+     * @min 0
+     * @max 1
+     * @default null
+     */
+    confidence?: number;
+    /**
+     * The label describing what type of object it is
+     * @minLength 1
+     * @maxLength 128
+     */
+    label: string;
+    /** @default null */
+    polygon?: AnnotationsPolygon;
+    /** @default null */
+    polyline?: AnnotationsPolyLine;
 }
 /**
  * primitives.geometry2d.Point
  * Point in a 2D-Cartesian coordinate system with origin at the top-left corner of the page
  */
 export interface AnnotationsPoint {
-  /**
-   * The confidence score for the primitive. It should be between 0 and 1.
-   * @min 0
-   * @max 1
-   * @default null
-   */
-  confidence?: number;
-  /**
-   * The abscissa of the point in a coordinate system with origin at the top-left corner of the page. Normalized in (0,1).
-   * @min 0
-   * @max 1
-   */
-  x: number;
-  /**
-   * The ordinate of the point in a coordinate system with origin at the top-left corner of the page. Normalized in (0,1).
-   * @min 0
-   * @max 1
-   */
-  y: number;
+    /**
+     * The confidence score for the primitive. It should be between 0 and 1.
+     * @min 0
+     * @max 1
+     * @default null
+     */
+    confidence?: number;
+    /**
+     * The abscissa of the point in a coordinate system with origin at the top-left corner of the page. Normalized in (0,1).
+     * @min 0
+     * @max 1
+     */
+    x: number;
+    /**
+     * The ordinate of the point in a coordinate system with origin at the top-left corner of the page. Normalized in (0,1).
+     * @min 0
+     * @max 1
+     */
+    y: number;
 }
 /**
  * primitives.geometry2d.Polygon
@@ -692,216 +663,216 @@ export interface AnnotationsPoint {
  * that the first and last vertex are connected.
  */
 export interface AnnotationsPolygon {
-  /**
-   * The confidence score for the primitive. It should be between 0 and 1.
-   * @min 0
-   * @max 1
-   * @default null
-   */
-  confidence?: number;
-  /**
-   * @maxItems 1000
-   * @minItems 3
-   */
-  vertices: AnnotationsPoint[];
+    /**
+     * The confidence score for the primitive. It should be between 0 and 1.
+     * @min 0
+     * @max 1
+     * @default null
+     */
+    confidence?: number;
+    /**
+     * @maxItems 1000
+     * @minItems 3
+     */
+    vertices: AnnotationsPoint[];
 }
 /**
  * primitives.geometry2d.PolyLine
  * A polygonal chain consisting of _n_ vertices
  */
 export interface AnnotationsPolyLine {
-  /**
-   * The confidence score for the primitive. It should be between 0 and 1.
-   * @min 0
-   * @max 1
-   * @default null
-   */
-  confidence?: number;
-  /**
-   * @maxItems 1000
-   * @minItems 2
-   */
-  vertices: AnnotationsPoint[];
+    /**
+     * The confidence score for the primitive. It should be between 0 and 1.
+     * @min 0
+     * @max 1
+     * @default null
+     */
+    confidence?: number;
+    /**
+     * @maxItems 1000
+     * @minItems 2
+     */
+    vertices: AnnotationsPoint[];
 }
 /**
  * primitives.dimensions.SizeAndClassType
  * Store the dimension, units and class of a given annotation
  */
 export interface AnnotationsSizeAndClassType {
-  /**
-   * The class type of the valve or spade
-   * @minLength 1
-   * @maxLength 128
-   * @default null
-   */
-  classType?: string;
-  /**
-   * The size of the valve or spade
-   * @default null
-   */
-  size?: number;
-  /**
-   * The units of the size (mm/inches)
-   * @minLength 1
-   * @maxLength 128
-   * @default null
-   */
-  unit?: string;
+    /**
+     * The class type of the valve or spade
+     * @minLength 1
+     * @maxLength 128
+     * @default null
+     */
+    classType?: string;
+    /**
+     * The size of the valve or spade
+     * @default null
+     */
+    size?: number;
+    /**
+     * The units of the size (mm/inches)
+     * @minLength 1
+     * @maxLength 128
+     * @default null
+     */
+    unit?: string;
 }
 /**
  * images.TextRegion
  * Models an extracted text region in an image
  */
 export interface AnnotationsTextRegion {
-  /**
-   * The confidence score for the primitive. It should be between 0 and 1.
-   * @min 0
-   * @max 1
-   * @default null
-   */
-  confidence?: number;
-  /**
-   * The extracted text
-   * @minLength 1
-   * @maxLength 128
-   */
-  text: string;
-  /** The location of the extracted text */
-  textRegion: AnnotationsBoundingBox;
+    /**
+     * The confidence score for the primitive. It should be between 0 and 1.
+     * @min 0
+     * @max 1
+     * @default null
+     */
+    confidence?: number;
+    /**
+     * The extracted text
+     * @minLength 1
+     * @maxLength 128
+     */
+    text: string;
+    /** The location of the extracted text */
+    textRegion: AnnotationsBoundingBox;
 }
 /**
  * diagrams.AssetLink
  * Models a link to a CDF Asset referenced in an engineering diagram
  */
 export interface AnnotationsTypesDiagramsAssetLink {
-  /** The asset this annotation is pointing to */
-  assetRef: AnnotationsAssetRef;
-  /**
-   * The description of a primitive
-   * @maxLength 500
-   * @default null
-   */
-  description?: string;
-  /**
-   * The number of the page on which this annotation is located. The first page has number 1.
-   * @min 1
-   * @max 100000
-   * @default 1
-   */
-  pageNumber?: number;
-  /**
-   * The symbol representing the asset
-   * @minLength 1
-   * @maxLength 128
-   * @default null
-   */
-  symbol?: string;
-  /**
-   * The location of the symbol representing the asset
-   * @default null
-   */
-  symbolRegion?: AnnotationsBoundingBox;
-  /**
-   * The extracted text
-   * @minLength 1
-   * @maxLength 128
-   * @default null
-   */
-  text?: string;
-  /** The location of the text mentioning the asset */
-  textRegion: AnnotationsBoundingBox;
+    /** The asset this annotation is pointing to */
+    assetRef: AnnotationsAssetRef;
+    /**
+     * The description of a primitive
+     * @maxLength 500
+     * @default null
+     */
+    description?: string;
+    /**
+     * The number of the page on which this annotation is located. The first page has number 1.
+     * @min 1
+     * @max 100000
+     * @default 1
+     */
+    pageNumber?: number;
+    /**
+     * The symbol representing the asset
+     * @minLength 1
+     * @maxLength 128
+     * @default null
+     */
+    symbol?: string;
+    /**
+     * The location of the symbol representing the asset
+     * @default null
+     */
+    symbolRegion?: AnnotationsBoundingBox;
+    /**
+     * The extracted text
+     * @minLength 1
+     * @maxLength 128
+     * @default null
+     */
+    text?: string;
+    /** The location of the text mentioning the asset */
+    textRegion: AnnotationsBoundingBox;
 }
 /**
  * diagrams.InstanceLink
  * Models a link to an FDM instance referenced in an engineering diagram
  */
 export interface AnnotationsTypesDiagramsInstanceLink {
-  /**
-   * The description of a primitive
-   * @maxLength 500
-   * @default null
-   */
-  description?: string;
-  /** The FDM instance this annotation is pointing to */
-  instanceRef: AnnotationsInstanceRef;
-  /**
-   * The number of the page on which this annotation is located. The first page has number 1.
-   * @min 1
-   * @max 100000
-   * @default 1
-   */
-  pageNumber?: number;
-  /**
-   * The symbol found in the file
-   * @minLength 1
-   * @maxLength 128
-   * @default null
-   */
-  symbol?: string;
-  /**
-   * Optional location of a symbol
-   * @default null
-   */
-  symbolRegion?: AnnotationsBoundingBox;
-  /**
-   * The extracted text
-   * @minLength 1
-   * @maxLength 128
-   */
-  text: string;
-  /** The location of the text mentioning the file */
-  textRegion: AnnotationsBoundingBox;
+    /**
+     * The description of a primitive
+     * @maxLength 500
+     * @default null
+     */
+    description?: string;
+    /** The FDM instance this annotation is pointing to */
+    instanceRef: AnnotationsInstanceRef;
+    /**
+     * The number of the page on which this annotation is located. The first page has number 1.
+     * @min 1
+     * @max 100000
+     * @default 1
+     */
+    pageNumber?: number;
+    /**
+     * The symbol found in the file
+     * @minLength 1
+     * @maxLength 128
+     * @default null
+     */
+    symbol?: string;
+    /**
+     * Optional location of a symbol
+     * @default null
+     */
+    symbolRegion?: AnnotationsBoundingBox;
+    /**
+     * The extracted text
+     * @minLength 1
+     * @maxLength 128
+     */
+    text: string;
+    /** The location of the text mentioning the file */
+    textRegion: AnnotationsBoundingBox;
 }
 /**
  * images.AssetLink
  * Models a link to a CDF Asset referenced in an image
  */
 export interface AnnotationsTypesImagesAssetLink {
-  /** The asset this annotation is pointing to */
-  assetRef: AnnotationsAssetRef;
-  /**
-   * The confidence score for the primitive. It should be between 0 and 1.
-   * @min 0
-   * @max 1
-   * @default null
-   */
-  confidence?: number;
-  /**
-   * The region of the object representing the asset
-   * @default null
-   */
-  objectRegion?: AnnotationsTypesPrimitivesGeometry2DGeometry;
-  /**
-   * The extracted text
-   * @minLength 1
-   * @maxLength 128
-   */
-  text: string;
-  /** The location of the text mentioning the asset */
-  textRegion: AnnotationsBoundingBox;
+    /** The asset this annotation is pointing to */
+    assetRef: AnnotationsAssetRef;
+    /**
+     * The confidence score for the primitive. It should be between 0 and 1.
+     * @min 0
+     * @max 1
+     * @default null
+     */
+    confidence?: number;
+    /**
+     * The region of the object representing the asset
+     * @default null
+     */
+    objectRegion?: AnnotationsTypesPrimitivesGeometry2DGeometry;
+    /**
+     * The extracted text
+     * @minLength 1
+     * @maxLength 128
+     */
+    text: string;
+    /** The location of the text mentioning the asset */
+    textRegion: AnnotationsBoundingBox;
 }
 /**
  * images.InstanceLink
  * Models a link to an FDM instance referenced in an image
  */
 export interface AnnotationsTypesImagesInstanceLink {
-  /**
-   * The confidence score for the primitive. It should be between 0 and 1.
-   * @min 0
-   * @max 1
-   * @default null
-   */
-  confidence?: number;
-  /** The FDM instance this annotation is pointing to */
-  instanceRef: AnnotationsInstanceRef;
-  /**
-   * The extracted text
-   * @minLength 1
-   * @maxLength 128
-   */
-  text: string;
-  /** The location of the text mentioning the FDM instance */
-  textRegion: AnnotationsBoundingBox;
+    /**
+     * The confidence score for the primitive. It should be between 0 and 1.
+     * @min 0
+     * @max 1
+     * @default null
+     */
+    confidence?: number;
+    /** The FDM instance this annotation is pointing to */
+    instanceRef: AnnotationsInstanceRef;
+    /**
+     * The extracted text
+     * @minLength 1
+     * @maxLength 128
+     */
+    text: string;
+    /** The location of the text mentioning the FDM instance */
+    textRegion: AnnotationsBoundingBox;
 }
 /**
  * primitives.geometry2d.Geometry
@@ -910,102 +881,102 @@ export interface AnnotationsTypesImagesInstanceLink {
  * PolyLine.
  */
 export interface AnnotationsTypesPrimitivesGeometry2DGeometry {
-  /** @default null */
-  boundingBox?: AnnotationsBoundingBox;
-  /** @default null */
-  polygon?: AnnotationsPolygon;
-  /** @default null */
-  polyline?: AnnotationsPolyLine;
+    /** @default null */
+    boundingBox?: AnnotationsBoundingBox;
+    /** @default null */
+    polygon?: AnnotationsPolygon;
+    /** @default null */
+    polyline?: AnnotationsPolyLine;
 }
 /**
  * primitives.geometry3d.Geometry
  * A 3D geometry model represented by exactly *one of* `cylinder` and `box`.
  */
 export interface AnnotationsTypesPrimitivesGeometry3DGeometry {
-  /** @default null */
-  box?: AnnotationsBox;
-  /** @default null */
-  cylinder?: AnnotationsCylinder;
+    /** @default null */
+    box?: AnnotationsBox;
+    /** @default null */
+    cylinder?: AnnotationsCylinder;
 }
 /**
  * diagrams.UnhandledSymbolObject
  * Models an extracted symbol region in an engineering diagram
  */
 export interface AnnotationsUnhandledSymbolObject {
-  /**
-   * The description of a primitive
-   * @maxLength 500
-   * @default null
-   */
-  description?: string;
-  /**
-   * The number of the page on which this annotation is located. The first page has number 1.
-   * @min 1
-   * @max 100000
-   * @default 1
-   */
-  pageNumber?: number;
-  /**
-   * The symbol found in the file
-   * @minLength 1
-   * @maxLength 128
-   */
-  symbol: string;
-  /** The location of the symbol */
-  symbolRegion: AnnotationsBoundingBox;
+    /**
+     * The description of a primitive
+     * @maxLength 500
+     * @default null
+     */
+    description?: string;
+    /**
+     * The number of the page on which this annotation is located. The first page has number 1.
+     * @min 1
+     * @max 100000
+     * @default 1
+     */
+    pageNumber?: number;
+    /**
+     * The symbol found in the file
+     * @minLength 1
+     * @maxLength 128
+     */
+    symbol: string;
+    /** The location of the symbol */
+    symbolRegion: AnnotationsBoundingBox;
 }
 /**
  * diagrams.UnhandledTextObject
  * Models an extracted text region in an engineering diagram
  */
 export interface AnnotationsUnhandledTextObject {
-  /**
-   * The description of a primitive
-   * @maxLength 500
-   * @default null
-   */
-  description?: string;
-  /**
-   * The number of the page on which this annotation is located. The first page has number 1.
-   * @min 1
-   * @max 100000
-   * @default 1
-   */
-  pageNumber?: number;
-  /**
-   * The extracted text
-   * @minLength 1
-   * @maxLength 128
-   */
-  text: string;
-  /** The location of the text */
-  textRegion: AnnotationsBoundingBox;
+    /**
+     * The description of a primitive
+     * @maxLength 500
+     * @default null
+     */
+    description?: string;
+    /**
+     * The number of the page on which this annotation is located. The first page has number 1.
+     * @min 1
+     * @max 100000
+     * @default 1
+     */
+    pageNumber?: number;
+    /**
+     * The extracted text
+     * @minLength 1
+     * @maxLength 128
+     */
+    text: string;
+    /** The location of the text */
+    textRegion: AnnotationsBoundingBox;
 }
 /**
  * primitives.references.View
  * Defines a DMS source (e.g. view)
  */
 export interface AnnotationsView {
-  /**
-   * External id of the view
-   * @minLength 1
-   * @maxLength 255
-   * @pattern ^[a-zA-Z]([a-zA-Z0-9_]{0,253}[a-zA-Z0-9])?$
-   */
-  externalId: string;
-  /**
-   * Id of the space that the view belongs to
-   * @minLength 1
-   * @maxLength 43
-   * @pattern ^[a-zA-Z][a-zA-Z0-9_-]{0,41}[a-zA-Z0-9]?$
-   */
-  space: string;
-  type: 'view';
-  /**
-   * Version of the view
-   * @minLength 1
-   * @maxLength 43
-   * @pattern ^[a-zA-Z0-9]([a-zA-Z0-9_-]{0,41}[a-zA-Z0-9])?$
-   */
-  version: string;
+    /**
+     * External id of the view
+     * @minLength 1
+     * @maxLength 255
+     * @pattern ^[a-zA-Z]([a-zA-Z0-9_]{0,253}[a-zA-Z0-9])?$
+     */
+    externalId: string;
+    /**
+     * Id of the space that the view belongs to
+     * @minLength 1
+     * @maxLength 43
+     * @pattern ^[a-zA-Z][a-zA-Z0-9_-]{0,41}[a-zA-Z0-9]?$
+     */
+    space: string;
+    type: "view";
+    /**
+     * Version of the view
+     * @minLength 1
+     * @maxLength 43
+     * @pattern ^[a-zA-Z0-9]([a-zA-Z0-9_-]{0,41}[a-zA-Z0-9])?$
+     */
+    version: string;
 }
