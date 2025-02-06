@@ -4,7 +4,7 @@
 
 import type { CursorAndAsyncIterator } from '@cognite/sdk-core';
 export interface CursorQueryParameter {
-  /** @example 4zj0Vy2fo0NtNMb229mI9r1V3YG5NBL752kQz1cKtwo */
+  /** @example "4zj0Vy2fo0NtNMb229mI9r1V3YG5NBL752kQz1cKtwo" */
   cursor?: string;
 }
 /**
@@ -14,33 +14,33 @@ export interface CursorQueryParameter {
  */
 export type EpochTimestamp = number;
 /**
-* The identity type field indicates the type of principal.
-- `USER`: Human user.
-- `SERVICE_PRINCIPAL`: Service account.
-- `INTERNAL_SERVICE`: Internal CDF service.
-*/
+ * The identity type field indicates the type of principal.
+ * - `USER`: Human user.
+ * - `SERVICE_PRINCIPAL`: Service account.
+ * - `INTERNAL_SERVICE`: Internal CDF service.
+ */
 export type IdentityType = 'USER' | 'SERVICE_PRINCIPAL' | 'INTERNAL_SERVICE';
 /**
-* The identity type filter field indicates the type of principal the request should be filtered to show.
-If no value is specified, the default value is `USER`.
-- `ALL`: All types of principals.
-- `USER`: Human user.
-- `SERVICE_PRINCIPAL`: Service account.
-- `INTERNAL_SERVICE`: Internal CDF service.
-*/
+ * The identity type filter field indicates the type of principal the request should be filtered to show.
+ * If no value is specified, the default value is `USER`.
+ * - `ALL`: All types of principals.
+ * - `USER`: Human user.
+ * - `SERVICE_PRINCIPAL`: Service account.
+ * - `INTERNAL_SERVICE`: Internal CDF service.
+ */
 export type IdentityTypeFilter =
   | 'ALL'
   | 'USER'
   | 'SERVICE_PRINCIPAL'
   | 'INTERNAL_SERVICE';
 export interface UserIdentifier {
-  /** @example abcd */
+  /** @example "abcd" */
   userIdentifier: string;
 }
 export interface UserProfileItem {
   /**
    * The display name for the user.
-   * @example Jane Doe
+   * @example "Jane Doe"
    */
   displayName?: string | null;
   /**
@@ -48,13 +48,12 @@ export interface UserProfileItem {
    * the identity provider and not guaranteed to be verified.
    * Note that the email is mutable and can be updated in the identity provider. It should
    * _not_ be used to uniquely identify as a user. Use the `userIdentifier` property instead.
-   *
-   * @example jane.doe@example.com
+   * @example "jane.doe@example.com"
    */
   email?: string | null;
   /**
    * The user's first name.
-   * @example Jane
+   * @example "Jane"
    */
   givenName?: string | null;
   /**
@@ -62,32 +61,28 @@ export interface UserProfileItem {
    * - `USER`: Human user.
    * - `SERVICE_PRINCIPAL`: Service account.
    * - `INTERNAL_SERVICE`: Internal CDF service.
-   *
    */
   identityType?: IdentityType;
   /**
    * The user's job title.
-   * @example Software Engineer
+   * @example "Software Engineer"
    */
   jobTitle?: string | null;
   /** The number of milliseconds since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds. */
   lastUpdatedTime: EpochTimestamp;
   /**
    * The user's last name.
-   * @example Doe
+   * @example "Doe"
    */
   surname?: string | null;
   /**
    * Uniquely identifies the principal the profile is associated with.
    * This property is _guaranteed_ to be immutable.
-   *
-   * @example abcd
+   * @example "abcd"
    */
   userIdentifier: string;
 }
-/**
- * Array of user identifiers
- */
+/** Array of user identifiers */
 export interface UserProfilesByIdsRequest {
   items?: UserIdentifier[];
 }
@@ -96,9 +91,13 @@ export interface UserProfilesByIdsResponse {
 }
 export interface UserProfilesErrorResponse {
   error: {
+    /** HTTP status code. */
     code: number;
+    /** Error message. */
     message: string;
+    /** List of lookup objects that do not match any results. */
     missing?: UserIdentifier[];
+    /** List of objects that are not unique. */
     duplicated?: UserIdentifier[];
   };
 }
@@ -106,7 +105,9 @@ export interface UserProfilesListResponse
   extends CursorAndAsyncIterator<UserProfileItem> {}
 export interface UserProfilesNotFoundResponse {
   error: {
+    /** HTTP status code. */
     code: number;
+    /** Error message. */
     message: string;
   };
 }
@@ -116,9 +117,11 @@ export interface UserProfilesSearchRequest {
    * @format int32
    * @min 1
    * @max 1000
+   * @default 25
    */
   limit?: number;
   search?: {
+    /** Prefix search on name. */
     name?: string;
   };
 }

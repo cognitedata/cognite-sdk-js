@@ -31,7 +31,8 @@ export class AcacodeOpenApiGenerator {
       .map((modelType) => modelType.name)
       .sort();
 
-    const code = generated.files.length > 0 ? generated.files[0].fileContent : '';
+    const code =
+      generated.files.length > 0 ? generated.files[0].fileContent : '';
     const result: TypeGeneratorResult = {
       typeNames: typeNames,
       code: code,
