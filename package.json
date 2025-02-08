@@ -50,7 +50,8 @@
     "validateDocLinks": "find . -name \\*.md -not -path '*/node_modules/*' -print0 | xargs -0 -n1 yarn markdown-link-check -c ./markdownlint.json",
     "test-snippets": "yarn allsdk test-snippets --stream",
     "test-samples": "SKIP_PREFLIGHT_CHECK=true yarn allsamples test --stream",
-    "codegen": "ts-node packages/codegen/src/cli.ts"
+    "codegen": "ts-node packages/codegen/src/cli.ts",
+    "prepare": "husky"
   },
   "devDependencies": {
     "@azure/msal-node": "^1.18.4",
@@ -63,8 +64,8 @@
     "@types/yargs": "^17.0.10",
     "es-check": "^7.2.1",
     "happy-dom": "^15.0.0",
-    "husky": "^3.0.2",
-    "lerna": "^6.0.0",
+    "husky": "^9.1.7",
+    "lerna": "^7.4.2",
     "markdown-link-check": "^3.10.3",
     "nock": "13.5.6",
     "openapi-types": "^11.0.1",
@@ -99,11 +100,6 @@
     "set-value": "^2.0.1",
     "shell-quote": "^1.7.3",
     "is-svg": "^4.3.0"
-  },
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }
   },
   "packageManager": "yarn@4.6.0"
 }
