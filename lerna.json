@@ -1,5 +1,4 @@
 {
-  "useWorkspaces": true,
   "version": "independent",
   "npmClient": "yarn",
   "command": {
