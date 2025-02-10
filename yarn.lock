@@ -236,7 +236,7 @@ __metadata:
     "@types/node": "npm:^22.3.0"
     "@types/yargs": "npm:^17.0.10"
     es-check: "npm:^7.2.1"
-    happy-dom: "npm:^15.0.0"
+    happy-dom: "npm:^16.0.0"
     husky: "npm:^9.1.7"
     lerna: "npm:^7.4.2"
     markdown-link-check: "npm:^3.10.3"
@@ -4257,14 +4257,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"happy-dom@npm:^15.0.0":
-  version: 15.11.7
-  resolution: "happy-dom@npm:15.11.7"
+"happy-dom@npm:^16.0.0":
+  version: 16.8.1
+  resolution: "happy-dom@npm:16.8.1"
   dependencies:
-    entities: "npm:^4.5.0"
     webidl-conversions: "npm:^7.0.0"
     whatwg-mimetype: "npm:^3.0.0"
-  checksum: 10c0/22b08cac20192b08edf2e9c857ceeda8333a3301c4b5965a9550787b00db60d6d107c726390bd45a35305cd12ab086abd656bf957a408be0fcdc9fcd389f1973
+  checksum: 10c0/3e6e4ce3bf67871304fadc7a0e661397b3d6c12de149cafce5a9062b47038a4c12f5f29c2fc9a070be3e56f2b5a1625cc79570e1fd1a30ffea9aa107f844d57b
   languageName: node
   linkType: hard
 
