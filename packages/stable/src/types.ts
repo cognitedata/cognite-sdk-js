@@ -55,6 +55,10 @@ export type AclActionAssets = READ | WRITE;
 
 export type AclActionDataSets = READ | WRITE | OWNER;
 
+export type AclDataModelInstances = READ | WRITE 
+
+export type AclDataModelInstances = READ | WRITE | WRITE_PROPERTIES
+
 export type AclActionEvents = READ | WRITE;
 
 export type AclActionFiles = READ | WRITE;
@@ -82,6 +86,11 @@ export type AclAnalytics = Acl<AclActionAnalytics, AclScopeAnalytics>;
 export type AclAssets = Acl<AclActionAssets, AclScopeAssets>;
 
 export type AclDataSets = Acl<AclActionDataSets, AclScopeDatasets>;
+
+export type AclDataModel = Acl<AclDataModel, AclScopeDataModel>;
+
+
+export type AclDataModelInstances = Acl<AclDataModelInstances, AclScopeDataModelInstances>;
 
 export type AclEvents = Acl<AclActionEvents, AclScopeEvents>;
 
@@ -115,6 +124,12 @@ export interface AclScopeIds {
   };
 }
 
+export interface AclScopeSpaceIds {
+  spaceIdScope: {
+    spaceIds: CogniteExternalId[];
+  };
+}
+
 export type AclScopeAnalytics = AclScopeAll;
 
 export type AclScopeAssets = AclScopeAll | AclScopeDatasetsIds;
@@ -136,6 +151,10 @@ export interface AclScopeDatasetsIds {
     ids: CogniteInternalId[];
   };
 }
+
+export type AclScopeDataModel = AclScopeAll | AclScopeSpaceIds;
+
+export type AclScopeDataModelInstances = AclScopeAll | AclScopeSpaceIds;
 
 export type AclScopeEvents = AclScopeAll | AclScopeDatasetsIds;
 
@@ -2279,7 +2298,9 @@ export type SingleCogniteCapability =
   | { analyticsAcl: AclAnalytics }
   | { datasetsAcl: AclDataSets }
   | { templateGroupsAcl: AclTemplateGroups }
-  | { templateInstancesAcl: AclTemplateInstances };
+  | { templateInstancesAcl: AclTemplateInstances }
+  | { dataModelAcl: AclDataModel }
+  | { dataModelInstancesAcl: AclDataModelInstances };
 
 export type SinglePatch<T> = { set: T } | { setNull: boolean };
 export type SinglePatchRequired<T> = { set: T };
