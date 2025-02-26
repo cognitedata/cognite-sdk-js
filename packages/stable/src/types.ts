@@ -55,9 +55,9 @@ export type AclActionAssets = READ | WRITE;
 
 export type AclActionDataSets = READ | WRITE | OWNER;
 
-export type AclDataModelInstances = READ | WRITE 
+export type AclActionDataModelInstances = READ | WRITE;
 
-export type AclDataModelInstances = READ | WRITE | WRITE_PROPERTIES
+export type AclActionDataModel = READ | WRITE | WRITE_PROPERTIES;
 
 export type AclActionEvents = READ | WRITE;
 
@@ -87,9 +87,9 @@ export type AclAssets = Acl<AclActionAssets, AclScopeAssets>;
 
 export type AclDataSets = Acl<AclActionDataSets, AclScopeDatasets>;
 
-export type AclDataModel = Acl<AclDataModel, AclScopeDataModel>;
+export type AclDataModel = Acl<AclActionDataModel, AclScopeDataModel>;
 
-export type AclDataModelInstances = Acl<AclDataModelInstances, AclScopeDataModelInstances>;
+export type AclDataModelInstances = Acl<AclActionDataModelInstances, AclScopeDataModelInstances>;
 
 export type AclEvents = Acl<AclActionEvents, AclScopeEvents>;
 
@@ -2563,6 +2563,9 @@ export interface Versioned3DFile {
 }
 
 export type WRITE = 'WRITE';
+
+export type WRITE_PROPERTIES = 'WRITE_PROPERTIES';
+
 
 export type ContextJobStatus = 'QUEUED' | 'RUNNING' | 'COMPLETED' | 'FAILED';
 
