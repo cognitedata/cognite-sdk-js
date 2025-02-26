@@ -89,7 +89,6 @@ export type AclDataSets = Acl<AclActionDataSets, AclScopeDatasets>;
 
 export type AclDataModel = Acl<AclDataModel, AclScopeDataModel>;
 
-
 export type AclDataModelInstances = Acl<AclDataModelInstances, AclScopeDataModelInstances>;
 
 export type AclEvents = Acl<AclActionEvents, AclScopeEvents>;
