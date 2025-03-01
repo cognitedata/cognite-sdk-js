@@ -113,6 +113,7 @@ const upsertSourcables = async (
           source: SourcableView,
           properties: {
             sourceId: sourcable.sourceId,
+            source: sourcable.source,
             sourceContext: sourcable.sourceContext,
             sourceCreatedTime: sourcable.sourceCreatedTime,
             sourceUpdatedTime: sourcable.sourceUpdatedTime,
@@ -430,7 +431,7 @@ describe('Instances integration test', () => {
       aggregates: [{ count: { property: 'source' } }],
       filter: undefined,
     });
-    expect(response.items[0]).toEqual({
+    expect(response.items).toEqual({
       aggregates: [{ aggregate: 'count', value: 2 }],
       group: { source: { externalId: 'CogniteSourceSystem', space: 'cdf_dm' } },
     });
