@@ -30,7 +30,6 @@ type CdmDescribable = {
   description: string;
   tags: string[];
   aliases: string[];
-
 };
 
 type Sourcable = {
