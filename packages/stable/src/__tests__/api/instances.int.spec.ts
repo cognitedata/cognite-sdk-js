@@ -2,7 +2,6 @@
 
 import type {
   DirectRelationReference,
-  Timestamp,
   ViewReference,
 } from 'stable/src/types';
 import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest';
