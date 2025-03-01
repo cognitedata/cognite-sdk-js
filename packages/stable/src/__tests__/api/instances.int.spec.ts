@@ -425,7 +425,7 @@ describe('Instances integration test', () => {
 
   test('aggregate response  with DirectRelationReference', async () => {
     const response = await client.instances.aggregate({
-      view: DescribableView,
+      view: SourcableView,
       groupBy: ['source'],
       aggregates: [{ count: { property: 'source' } }],
       filter: undefined,
