@@ -139,14 +139,14 @@ describe('Instances integration test', () => {
 
   const SourcableView: ViewReference = {
     externalId: 'Sourcable',
-    space: 'cdf_core',
+    space: 'cdf_cdm',
     type: 'view',
     version: 'v1',
   };
 
   const SourceSystemView: ViewReference = {
     externalId: 'CogniteSourceSystem',
-    space: 'cdf_core',
+    space: 'cdf_cdm',
     type: 'view',
     version: 'v1',
   };
