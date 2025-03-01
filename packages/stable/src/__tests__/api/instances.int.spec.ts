@@ -31,7 +31,7 @@ type CdmDescribable = {
 type Sourcable = {
   sourceId: string;
   sourceContext: string;
-  source: CogniteSourceSystem;
+  source: DirectRelationReference;
   sourceCreatedTime: string;
   sourceUpdatedTime: string;
   sourceCreatedUser: string;
@@ -184,10 +184,15 @@ describe('Instances integration test', () => {
     manufacturer: 'Cognite',
   };
 
+  const source = {
+    externalId: sourceSystem.externalId,
+    space: sourceSystem.space,
+  };
+
   const sourcable1: Sourcable = {
     sourceId: `sourcable_1_${timestamp}`,
     sourceContext: testSpace.space,
-    source: sourceSystem,
+    source: source,
     sourceCreatedTime: cdmTimeStamp,
     sourceUpdatedTime: cdmTimeStamp,
     sourceCreatedUser: 'user1',
@@ -197,7 +202,7 @@ describe('Instances integration test', () => {
   const sourcable2: Sourcable = {
     sourceId: `sourcable_2_${timestamp}`,
     sourceContext: testSpace.space,
-    source: sourceSystem,
+    source: source,
     sourceCreatedTime: cdmTimeStamp,
     sourceUpdatedTime: cdmTimeStamp,
     sourceCreatedUser: 'user1',
