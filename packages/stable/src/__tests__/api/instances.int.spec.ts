@@ -36,8 +36,8 @@ type Sourcable = {
   sourceId: string;
   sourceContext: string;
   source: CogniteSourceSystem;
-  sourceCreatedTime: Timestamp;
-  sourceUpdatedTime: Timestamp;
+  sourceCreatedTime: string;
+  sourceUpdatedTime: string;
   sourceCreatedUser: string;
   sourceUpdatedUser: string;
 };
@@ -132,6 +132,8 @@ const upsertSourcables = async (
 describe('Instances integration test', () => {
   let client: CogniteClient;
   const timestamp = Date.now();
+  // @cognite/sdk: Unknown Error: The value of property 'sourceUpdatedTime' must be a string in the format 'YYYY-MM-DDTHH:MM:SS[.millis][Z|time zone]' with optional milliseconds having precision of 1-3 decimal digits and optional timezone with format ±HH:MM, ±HHMM, ±HH or Z, where Z represents UTC, Year must be between 0001 and 9999. Got value '1740839823145'.
+  const cdmTimeStamp = new Date().toISOString();
 
   const testSpace: SpaceDefinition = {
     space: 'test_data_space',
@@ -189,8 +191,8 @@ describe('Instances integration test', () => {
     sourceId: `sourcable_1_${timestamp}`,
     sourceContext: testSpace.space,
     source: sourceSystem,
-    sourceCreatedTime: timestamp,
-    sourceUpdatedTime: timestamp,
+    sourceCreatedTime: cdmTimeStamp,
+    sourceUpdatedTime: cdmTimeStamp,
     sourceCreatedUser: 'user1',
     sourceUpdatedUser: 'user2',
   };
@@ -199,8 +201,8 @@ describe('Instances integration test', () => {
     sourceId: `sourcable_2_${timestamp}`,
     sourceContext: testSpace.space,
     source: sourceSystem,
-    sourceCreatedTime: timestamp,
-    sourceUpdatedTime: timestamp,
+    sourceCreatedTime: cdmTimeStamp,
+    sourceUpdatedTime: cdmTimeStamp,
     sourceCreatedUser: 'user1',
     sourceUpdatedUser: 'user2',
   };
