@@ -1,6 +1,6 @@
 // Copyright 2024 Cognite AS
 
-import type { ViewReference } from 'stable/src/types';
+import type { DirectRelationReference, ViewReference } from 'stable/src/types';
 import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest';
 import type CogniteClient from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
@@ -267,6 +267,20 @@ describe('Instances integration test', () => {
       response.items[0].aggregates[0].aggregate === 'count' &&
         (response.items[0].aggregates[0].value || 0)
     ).toBeGreaterThan(0);
+  });
+
+  test('aggregate response  with DirectRelationReference', async () => {
+    const response = await client.instances.aggregate({
+      view,
+      groupBy: ['createdBy'],
+      aggregates: [{ count: { property: 'createdBy' } }],
+      filter: undefined,
+    });
+
+    const createdBy = response.items[0].group?.['createdBy'];
+    if (typeof createdBy === 'object' && 'space' in createdBy) {
+      expect((createdBy satisfies DirectRelationReference));
+    }
   });
 
   test('retrieve', async () => {
