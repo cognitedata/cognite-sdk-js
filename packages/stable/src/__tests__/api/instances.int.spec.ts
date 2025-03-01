@@ -90,9 +90,9 @@ const upsertCogniteSourceSystem = async (
           {
             source: SourcableView,
             properties: {
-              title: sourceSystem.name,
+              name: sourceSystem.name,
               description: sourceSystem.description,
-              labels: sourceSystem.tags,
+              tags: sourceSystem.tags,
               version: sourceSystem.version,
               manufacturer: sourceSystem.manufacturer,
             },
