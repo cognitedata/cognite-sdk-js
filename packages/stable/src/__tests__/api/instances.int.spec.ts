@@ -129,7 +129,6 @@ const upsertSourcables = async (
 describe('Instances integration test', () => {
   let client: CogniteClient;
   const timestamp = Date.now();
-  // @cognite/sdk: Unknown Error: The value of property 'sourceUpdatedTime' must be a string in the format 'YYYY-MM-DDTHH:MM:SS[.millis][Z|time zone]' with optional milliseconds having precision of 1-3 decimal digits and optional timezone with format ±HH:MM, ±HHMM, ±HH or Z, where Z represents UTC, Year must be between 0001 and 9999. Got value '1740839823145'.
   const cdmTimeStamp = new Date().toISOString();
 
   const testSpace: SpaceDefinition = {
