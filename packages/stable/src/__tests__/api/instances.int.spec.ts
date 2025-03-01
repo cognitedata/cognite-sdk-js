@@ -1,9 +1,6 @@
 // Copyright 2024 Cognite AS
 
-import type {
-  DirectRelationReference,
-  ViewReference,
-} from 'stable/src/types';
+import type { DirectRelationReference, ViewReference } from 'stable/src/types';
 import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest';
 import type CogniteClient from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
