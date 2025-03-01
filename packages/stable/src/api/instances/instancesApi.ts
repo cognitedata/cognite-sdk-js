@@ -2,9 +2,9 @@
 
 import { BaseResourceAPI } from '@cognite/sdk-core';
 import type {
-  AggregationResponse,
+  ByIdsResponse,
   ListOfSpaceExternalIdsRequestWithTyping,
-  NodeAndEdgeCollectionResponseV3Response,
+  SearchResponse,
   NodeAndEdgeCollectionResponseWithCursorV3Response,
   NodeAndEdgeCreateCollection,
   NodeOrEdge,
@@ -15,7 +15,8 @@ import type {
   QueryResponse,
   SlimNodeAndEdgeCollectionResponse,
   SyncRequest,
-  ViewAggregationRequest,
+  AggregatedResultItemCollection,
+  AggregationRequest,
 } from './types.gen';
 
 export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
@@ -43,8 +44,8 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    */
   public search = async (
     params: NodeOrEdgeSearchRequest
-  ): Promise<NodeAndEdgeCollectionResponseV3Response> => {
-    const response = await this.post<NodeAndEdgeCollectionResponseV3Response>(
+  ): Promise<SearchResponse> => {
+    const response = await this.post<SearchResponse>(
       this.searchUrl,
       {
         data: params,
@@ -117,8 +118,8 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    */
   public retrieve = async (
     params: ListOfSpaceExternalIdsRequestWithTyping
-  ): Promise<NodeAndEdgeCollectionResponseV3Response> => {
-    const response = await this.post<NodeAndEdgeCollectionResponseV3Response>(
+  ): Promise<ByIdsResponse> => {
+    const response = await this.post<ByIdsResponse>(
       this.byIdsUrl,
       {
         data: params,
@@ -210,9 +211,9 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    * ```
    */
   public aggregate = async (
-    params: ViewAggregationRequest
-  ): Promise<AggregationResponse> => {
-    const response = await this.post<AggregationResponse>(this.aggregateUrl, {
+    params: AggregationRequest
+  ): Promise<AggregatedResultItemCollection> => {
+    const response = await this.post<AggregatedResultItemCollection>(this.aggregateUrl, {
       data: params,
     });
     return response.data;
