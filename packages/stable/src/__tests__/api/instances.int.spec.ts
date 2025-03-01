@@ -24,26 +24,25 @@ type Describable = {
 };
 
 type CdmDescribable = {
-  name: String
-  description: String
-  tags: [String]
-  aliases: [String]
+  name: string;
+  description: string;
+  tags: [string];
+  aliases: [string];
 };
 
-
 type Sourcable = {
-  sourceId: String
-  sourceContext: String
-  source: CogniteSourceSystem
-  sourceCreatedTime: Timestamp
-  sourceUpdatedTime: Timestamp
-  sourceCreatedUser: String
-  sourceUpdatedUser: String
+  sourceId: string;
+  sourceContext: string;
+  source: CogniteSourceSystem;
+  sourceCreatedTime: Timestamp;
+  sourceUpdatedTime: Timestamp;
+  sourceCreatedUser: string;
+  sourceUpdatedUser: string;
 };
 
 type CogniteSourceSystem = CdmDescribable & {
-  version: String
-  manufacturer: String
+  version: string;
+  manufacturer: string;
 };
 
 const upsertSpace = async (client: CogniteClient, space: SpaceDefinition) => {
