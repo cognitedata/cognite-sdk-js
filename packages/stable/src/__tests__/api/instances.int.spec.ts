@@ -276,11 +276,14 @@ describe('Instances integration test', () => {
       aggregates: [{ count: { property: 'createdBy' } }],
       filter: undefined,
     });
-
     const createdBy = response.items[0].group?.['createdBy'];
-    if (typeof createdBy === 'object' && 'space' in createdBy) {
-      expect((createdBy satisfies DirectRelationReference));
-    }
+    
+      expect(createdBy).toBeDefined();
+      expect(createdBy).toMatchObject<DirectRelationReference>({
+        externalId: 'createdBy',
+        space: view.space,
+      });
+
   });
 
   test('retrieve', async () => {
