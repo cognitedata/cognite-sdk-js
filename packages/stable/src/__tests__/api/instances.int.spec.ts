@@ -146,7 +146,7 @@ describe('Instances integration test', () => {
   };
 
   const SourcableView: ViewReference = {
-    externalId: 'Sourcable',
+    externalId: 'CogniteSourceable',
     space: 'cdf_cdm',
     type: 'view',
     version: 'v1',
