@@ -430,9 +430,11 @@ describe('Instances integration test', () => {
       aggregates: [{ count: { property: 'source' } }],
       filter: undefined,
     });
-    const createdBy = response.items[0].group?.source;
-
-    expect(createdBy).toBeDefined();
+    expect(response.items[0]).toEqual({
+      aggregates: [{ aggregate: 'count', value: 2 }],
+      group: { source: { externalId: 'CogniteSourceSystem', space: 'cdf_dm' } },
+    });
+    const createdBy = response?.items[0];
     expect(createdBy).toMatchObject<DirectRelationReference>({
       externalId: 'source',
       space: DescribableView.space,
