@@ -1,9 +1,0 @@
-{
-  "service": "models/spaces",
-  "filter": {
-    "serviceName": "models/spaces"
-  },
-  "inlinedSchemas": {
-    "autoNameRequest": true
-  }
-}
