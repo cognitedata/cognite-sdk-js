@@ -24,10 +24,13 @@ type Describable = {
 };
 
 type CdmDescribable = {
+  space: string;
+  externalId: string;
   name: string;
   description: string;
-  tags: [string];
-  aliases: [string];
+  tags: string[];
+  aliases: string[];
+
 };
 
 type Sourcable = {
@@ -88,9 +91,9 @@ const upsertCogniteSourceSystem = async (
           {
             source: SourcableView,
             properties: {
-              title: sourceSystem.title,
+              title: sourceSystem.name,
               description: sourceSystem.description,
-              labels: sourceSystem.labels,
+              labels: sourceSystem.tags,
               version: sourceSystem.version,
               manufacturer: sourceSystem.manufacturer,
             },
@@ -100,7 +103,6 @@ const upsertCogniteSourceSystem = async (
     ],
   });
 };
-
 const upsertSourcables = async (
   client: CogniteClient,
   sourcables: Sourcable[],
@@ -176,9 +178,10 @@ describe('Instances integration test', () => {
   const sourceSystem: CogniteSourceSystem = {
     externalId: `source_system_${timestamp}`,
     space: testSpace.space,
-    title: `source_system_title_${timestamp}`,
+    name: `source_system_title_${timestamp}`,
     description: `source_system_description_${timestamp}`,
-    labels: ['label1', 'label2'],
+    tags: ['label1', 'label2'],
+    aliases: ['alias1', 'alias2'],
     version: '1.0',
     manufacturer: 'Cognite',
   };
