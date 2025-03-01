@@ -1,9 +1,0 @@
-{
-  "service": "models/instances",
-  "filter": {
-    "serviceName": "models/instances"
-  },
-  "inlinedSchemas": {
-    "autoNameRequest": true
-  }
-}
