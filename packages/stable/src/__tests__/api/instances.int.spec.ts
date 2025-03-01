@@ -23,19 +23,27 @@ type Describable = {
   labels: string[];
 };
 
-type Sourcable = {
-  sourceId: string;
-  sourceContext: string;
-  source: CogniteSourceSystem;
-  sourceCreatedTime: Timestamp;
-  sourceUpdatedTime: Timestamp;
-  sourceCreatedUser: string;
-  sourceUpdatedUser: string;
+type CdmDescribable = {
+  name: String
+  description: String
+  tags: [String]
+  aliases: [String]
 };
 
-type CogniteSourceSystem = Describable & {
-  version: string;
-  manufacturer: string;
+
+type Sourcable = {
+  sourceId: String
+  sourceContext: String
+  source: CogniteSourceSystem
+  sourceCreatedTime: Timestamp
+  sourceUpdatedTime: Timestamp
+  sourceCreatedUser: String
+  sourceUpdatedUser: String
+};
+
+type CogniteSourceSystem = CdmDescribable & {
+  version: String
+  manufacturer: String
 };
 
 const upsertSpace = async (client: CogniteClient, space: SpaceDefinition) => {
