@@ -2,9 +2,10 @@
 
 import { BaseResourceAPI } from '@cognite/sdk-core';
 import type {
+  AggregatedResultItemCollection,
+  AggregationRequest,
   ByIdsResponse,
   ListOfSpaceExternalIdsRequestWithTyping,
-  SearchResponse,
   NodeAndEdgeCollectionResponseWithCursorV3Response,
   NodeAndEdgeCreateCollection,
   NodeOrEdge,
@@ -13,10 +14,9 @@ import type {
   NodeOrEdgeSearchRequest,
   QueryRequest,
   QueryResponse,
+  SearchResponse,
   SlimNodeAndEdgeCollectionResponse,
   SyncRequest,
-  AggregatedResultItemCollection,
-  AggregationRequest,
 } from './types.gen';
 
 export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
@@ -45,12 +45,9 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
   public search = async (
     params: NodeOrEdgeSearchRequest
   ): Promise<SearchResponse> => {
-    const response = await this.post<SearchResponse>(
-      this.searchUrl,
-      {
-        data: params,
-      }
-    );
+    const response = await this.post<SearchResponse>(this.searchUrl, {
+      data: params,
+    });
     return response.data;
   };
 
@@ -119,12 +116,9 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
   public retrieve = async (
     params: ListOfSpaceExternalIdsRequestWithTyping
   ): Promise<ByIdsResponse> => {
-    const response = await this.post<ByIdsResponse>(
-      this.byIdsUrl,
-      {
-        data: params,
-      }
-    );
+    const response = await this.post<ByIdsResponse>(this.byIdsUrl, {
+      data: params,
+    });
     return response.data;
   };
 
@@ -213,9 +207,12 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
   public aggregate = async (
     params: AggregationRequest
   ): Promise<AggregatedResultItemCollection> => {
-    const response = await this.post<AggregatedResultItemCollection>(this.aggregateUrl, {
-      data: params,
-    });
+    const response = await this.post<AggregatedResultItemCollection>(
+      this.aggregateUrl,
+      {
+        data: params,
+      }
+    );
     return response.data;
   };
 
