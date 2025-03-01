@@ -50,7 +50,7 @@ const upsertSpace = async (client: CogniteClient, space: SpaceDefinition) => {
 const upsertDescribables = async (
   client: CogniteClient,
   describables: Describable[],
-  DescribableView: ViewReference
+  describableView: ViewReference
 ) => {
   await client.instances.upsert({
     items: describables.map((describable) => ({
@@ -59,7 +59,7 @@ const upsertDescribables = async (
       space: describable.space,
       sources: [
         {
-          source: DescribableView,
+          source: describableView,
           properties: {
             title: describable.title,
             description: describable.description,
@@ -74,7 +74,7 @@ const upsertDescribables = async (
 const upsertCogniteSourceSystem = async (
   client: CogniteClient,
   sourceSystem: CogniteSourceSystem,
-  SourcableView: ViewReference
+  sourcableView: ViewReference
 ) => {
   await client.instances.upsert({
     items: [
@@ -84,7 +84,7 @@ const upsertCogniteSourceSystem = async (
         space: sourceSystem.space,
         sources: [
           {
-            source: SourcableView,
+            source: sourcableView,
             properties: {
               name: sourceSystem.name,
               description: sourceSystem.description,
@@ -101,7 +101,7 @@ const upsertCogniteSourceSystem = async (
 const upsertSourcables = async (
   client: CogniteClient,
   sourcables: Sourcable[],
-  SourcableView: ViewReference
+  sourcableView: ViewReference
 ) => {
   await client.instances.upsert({
     items: sourcables.map((sourcable) => ({
@@ -110,7 +110,7 @@ const upsertSourcables = async (
       space: sourcable.sourceContext,
       sources: [
         {
-          source: SourcableView,
+          source: sourcableView,
           properties: {
             sourceId: sourcable.sourceId,
             source: sourcable.source,
@@ -137,14 +137,14 @@ describe('Instances integration test', () => {
     name: 'test_data_space',
     description: 'Instance space used for integration tests.',
   };
-  const DescribableView: ViewReference = {
+  const describableView: ViewReference = {
     externalId: 'Describable',
     space: 'cdf_core',
     type: 'view',
     version: 'v1',
   };
 
-  const SourcableView: ViewReference = {
+  const sourcableView: ViewReference = {
     externalId: 'CogniteSourceable',
     space: 'cdf_cdm',
     type: 'view',
@@ -215,10 +215,10 @@ describe('Instances integration test', () => {
     await upsertDescribables(
       client,
       [describable1, describable2],
-      DescribableView
+      describableView
     );
     await upsertCogniteSourceSystem(client, sourceSystem, SourceSystemView);
-    await upsertSourcables(client, [sourcable1, sourcable2], SourcableView);
+    await upsertSourcables(client, [sourcable1, sourcable2], sourcableView);
   }, 10000);
 
   afterAll(async () => {
@@ -251,9 +251,9 @@ describe('Instances integration test', () => {
     ]);
   }, 10000);
 
-  test('list nodes from a single DescribableView with limit 2', async () => {
+  test('list nodes from a single describableView with limit 2', async () => {
     const response = await client.instances.list({
-      sources: [{ source: DescribableView }],
+      sources: [{ source: describableView }],
       instanceType: 'node',
       limit: 2,
     });
@@ -264,7 +264,7 @@ describe('Instances integration test', () => {
 
   test('list nodes with a filter that returns 1 result', async () => {
     const response = await client.instances.list({
-      sources: [{ source: DescribableView }],
+      sources: [{ source: describableView }],
       filter: {
         equals: {
           property: ['node', 'externalId'],
@@ -281,7 +281,7 @@ describe('Instances integration test', () => {
 
   test('list nodes with a filter that returns no results', async () => {
     const response = await client.instances.list({
-      sources: [{ source: DescribableView }],
+      sources: [{ source: describableView }],
       filter: {
         equals: {
           property: ['node', 'externalId'],
@@ -296,12 +296,12 @@ describe('Instances integration test', () => {
 
   test('list nodes sorted in ascending order', async () => {
     const response = await client.instances.list({
-      sources: [{ source: DescribableView }],
+      sources: [{ source: describableView }],
       sort: [
         {
           property: [
-            DescribableView.space,
-            `${DescribableView.externalId}/${DescribableView.version}`,
+            describableView.space,
+            `${describableView.externalId}/${describableView.version}`,
             'title',
           ],
           direction: 'ascending',
@@ -316,24 +316,24 @@ describe('Instances integration test', () => {
     expect(response.items[1].externalId).toBeDefined();
 
     const title1 =
-      response.items[0].properties?.[DescribableView.space][
-        `${DescribableView.externalId}/${DescribableView.version}`
+      response.items[0].properties?.[describableView.space][
+        `${describableView.externalId}/${describableView.version}`
       ].title.toString() || '';
     const title2 =
-      response.items[0].properties?.[DescribableView.space][
-        `${DescribableView.externalId}/${DescribableView.version}`
+      response.items[0].properties?.[describableView.space][
+        `${describableView.externalId}/${describableView.version}`
       ].title.toString() || '';
     expect(title1 < title2);
   });
 
   test('list nodes sorted in descending order', async () => {
     const response = await client.instances.list({
-      sources: [{ source: DescribableView }],
+      sources: [{ source: describableView }],
       sort: [
         {
           property: [
-            DescribableView.space,
-            `${DescribableView.externalId}/${DescribableView.version}`,
+            describableView.space,
+            `${describableView.externalId}/${describableView.version}`,
             'title',
           ],
           direction: 'descending',
@@ -348,12 +348,12 @@ describe('Instances integration test', () => {
     expect(response.items[1].externalId).toBeDefined();
 
     const title1 =
-      response.items[0].properties?.[DescribableView.space][
-        `${DescribableView.externalId}/${DescribableView.version}`
+      response.items[0].properties?.[describableView.space][
+        `${describableView.externalId}/${describableView.version}`
       ].title.toString() || '';
     const title2 =
-      response.items[0].properties?.[DescribableView.space][
-        `${DescribableView.externalId}/${DescribableView.version}`
+      response.items[0].properties?.[describableView.space][
+        `${describableView.externalId}/${describableView.version}`
       ].title.toString() || '';
     expect(title1 > title2);
   });
@@ -361,7 +361,7 @@ describe('Instances integration test', () => {
   test('search nodes with limit 2', async () => {
     await vi.waitFor(async () => {
       const response = await client.instances.search({
-        view: DescribableView,
+        view: describableView,
         instanceType: 'node',
         limit: 2,
       });
@@ -373,7 +373,7 @@ describe('Instances integration test', () => {
 
   test('search with query', async () => {
     const response = await client.instances.search({
-      view: DescribableView,
+      view: describableView,
       query: describable1.description,
       limit: 1,
     });
@@ -385,7 +385,7 @@ describe('Instances integration test', () => {
     await vi.waitFor(
       async () => {
         const response = await client.instances.search({
-          view: DescribableView,
+          view: describableView,
           filter: {
             prefix: {
               property: ['title'],
@@ -397,8 +397,8 @@ describe('Instances integration test', () => {
         expect(response.items).toHaveLength(1);
         expect(response.items[0].properties);
         const title =
-          response.items[0].properties?.[DescribableView.space][
-            `${DescribableView.externalId}/${DescribableView.version}`
+          response.items[0].properties?.[describableView.space][
+            `${describableView.externalId}/${describableView.version}`
           ].title.toString() || '';
         expect(title.startsWith('titl'));
       },
@@ -408,7 +408,7 @@ describe('Instances integration test', () => {
 
   test('aggregate', async () => {
     const response = await client.instances.aggregate({
-      view: DescribableView,
+      view: describableView,
       groupBy: ['externalId'],
       aggregates: [{ count: { property: 'externalId' } }],
       filter: {
@@ -431,7 +431,7 @@ describe('Instances integration test', () => {
 
   test('aggregate response  with DirectRelationReference', async () => {
     const response = await client.instances.aggregate({
-      view: SourcableView,
+      view: sourcableView,
       groupBy: ['source'],
       aggregates: [{ count: { property: 'source' } }],
       filter: undefined,
@@ -449,7 +449,7 @@ describe('Instances integration test', () => {
 
   test('retrieve', async () => {
     const response = await client.instances.retrieve({
-      sources: [{ source: DescribableView }],
+      sources: [{ source: describableView }],
       items: [
         {
           externalId: describable1.externalId,
@@ -461,8 +461,8 @@ describe('Instances integration test', () => {
     expect(response.items).toHaveLength(1);
     expect(response.items[0].properties);
     const title =
-      response.items[0].properties?.[DescribableView.space][
-        `${DescribableView.externalId}/${DescribableView.version}`
+      response.items[0].properties?.[describableView.space][
+        `${describableView.externalId}/${describableView.version}`
       ].title.toString() || '';
     expect(title.startsWith('titl'));
   });
