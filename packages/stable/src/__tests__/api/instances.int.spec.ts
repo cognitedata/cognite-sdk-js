@@ -441,7 +441,9 @@ describe('Instances integration test', () => {
     });
 
     expect(response.items[0].aggregates[0]).toEqual({
-      source: { aggregate: 'count', property: 'source', value: 2 },
+      aggregate: 'count',
+      property: 'source',
+      value: 2,
     });
   });
 
