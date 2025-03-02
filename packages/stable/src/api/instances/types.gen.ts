@@ -700,7 +700,7 @@ export interface QueryRequest {
 }
 export interface QueryResponse {
   items: Record<string, NodeOrEdge[]>;
-  nextCursor: Record<string, unknown>;
+  nextCursor: Record<string, any>;
   /** Property type information for selected result expressions. */
   typing?: Record<string, TypeInformationOuter>;
 }
