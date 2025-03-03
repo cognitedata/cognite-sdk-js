@@ -89,7 +89,10 @@ export type AclDataSets = Acl<AclActionDataSets, AclScopeDatasets>;
 
 export type AclDataModel = Acl<AclActionDataModel, AclScopeDataModel>;
 
-export type AclDataModelInstances = Acl<AclActionDataModelInstances, AclScopeDataModelInstances>;
+export type AclDataModelInstances = Acl<
+  AclActionDataModelInstances,
+  AclScopeDataModelInstances
+>;
 
 export type AclEvents = Acl<AclActionEvents, AclScopeEvents>;
 
@@ -2565,7 +2568,6 @@ export interface Versioned3DFile {
 export type WRITE = 'WRITE';
 
 export type WRITE_PROPERTIES = 'WRITE_PROPERTIES';
-
 
 export type ContextJobStatus = 'QUEUED' | 'RUNNING' | 'COMPLETED' | 'FAILED';
 
