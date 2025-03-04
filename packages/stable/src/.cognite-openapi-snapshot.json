@@ -69295,6 +69295,9 @@
           },
           "type": {
             "const": "boolean",
+            "enum": [
+              "boolean"
+            ],
             "type": "string"
           },
           "value": {
@@ -69628,6 +69631,9 @@
           },
           "type": {
             "const": "numerical",
+            "enum": [
+              "numerical"
+            ],
             "type": "string"
           },
           "value": {
@@ -69812,6 +69818,9 @@
         "properties": {
           "type": {
             "const": "view",
+            "enum": [
+              "view"
+            ],
             "type": "string"
           },
           "space": {

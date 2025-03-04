@@ -38,7 +38,7 @@ export type AnnotationsAssetRef = {
 export interface AnnotationsBoolean {
   /** The description of a primitive */
   description?: string;
-  type: string;
+  type: 'boolean';
   /** The boolean value */
   value: boolean;
 }
@@ -364,7 +364,7 @@ export interface AnnotationsLine {
 export interface AnnotationsNumerical {
   /** The description of a primitive */
   description?: string;
-  type: string;
+  type: 'numerical';
   /** The numerical value */
   value: number | number;
 }
@@ -627,7 +627,7 @@ export interface AnnotationsView {
    * @pattern ^[a-zA-Z][a-zA-Z0-9_-]{0,41}[a-zA-Z0-9]?$
    */
   space: string;
-  type: string;
+  type: 'view';
   /**
    * Version of the view
    * @pattern ^[a-zA-Z0-9]([a-zA-Z0-9_-]{0,41}[a-zA-Z0-9])?$
