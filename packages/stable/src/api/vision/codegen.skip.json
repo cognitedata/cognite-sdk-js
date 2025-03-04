@@ -1,4 +1,5 @@
 {
+  "//": "Skipped based on discussion here: https://github.com/cognitedata/cognite-sdk-js/pull/1120#issuecomment-2273408074",
   "service": "vision",
   "filter": {
     "serviceName": "context/vision/extract"
