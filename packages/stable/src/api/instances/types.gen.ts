@@ -464,6 +464,15 @@ export interface MinAggregateFunctionV3 {
  * The cursor value used to return (paginate to) the next page of results, when more data is available.
  */
 export type NextCursorV3 = string;
+/**
+ * @deprecated
+ */
+export interface NodeAndEdgeCollectionResponseV3Response {
+  /** List of nodes and edges */
+  items: NodeOrEdge[];
+  /** Spaces for the requested view and containers */
+  typing?: TypeInformationOuter;
+}
 export interface NodeAndEdgeCollectionResponseWithCursorV3Response {
   /** List of nodes and edges */
   items: NodeOrEdge[];
@@ -1928,6 +1937,13 @@ export interface UpsertConflict {
     message: string;
   };
 }
+/**
+ * @deprecated
+ */
+export type ViewAggregationRequest = CommonAggregationRequest & {
+  instanceType?: InstanceType;
+  view: ViewReference;
+};
 export type ViewCorePropertyDefinition = CorePropertyDefinition & {
   type:
     | TextProperty
