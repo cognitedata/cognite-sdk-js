@@ -3,6 +3,41 @@
 // Instead update the code generation logic or the OpenAPI document.
 
 /**
+ * Models a link to a CDF Asset referenced in an image
+ */
+export interface AnnotationsAnnotationTypesImagesAssetLink {
+  /** The asset this annotation is pointing to */
+  assetRef: AnnotationsAssetRef;
+  /**
+   * The confidence score for the primitive. It should be between 0 and 1.
+   * @min 0
+   * @max 1
+   */
+  confidence?: number;
+  /** The region of the object representing the asset */
+  objectRegion?: AnnotationsAnnotationTypesPrimitivesGeometry2DGeometry;
+  /** The extracted text */
+  text: string;
+  /** The location of the text mentioning the asset */
+  textRegion: AnnotationsBoundingBox;
+}
+/**
+* A geometry represented by exactly *one of* ` bounding_box`, `polygon` and
+`polyline` which, respectively, represents a BoundingBox, Polygon and
+PolyLine.
+*/
+export interface AnnotationsAnnotationTypesPrimitivesGeometry2DGeometry {
+  /** A plain rectangle */
+  boundingBox?: AnnotationsBoundingBox;
+  /**
+   * A _closed_ polygon represented by _n_ vertices. In other words, we assume
+   * that the first and last vertex are connected.
+   */
+  polygon?: AnnotationsPolygon;
+  /** A polygonal chain consisting of _n_ vertices */
+  polyline?: AnnotationsPolyLine;
+}
+/**
  * A reference to an asset. Either the internal ID or the external ID must be provided (exactly one).
  */
 export type AnnotationsAssetRef = {
@@ -15,7 +50,7 @@ export type AnnotationsAssetRef = {
 export interface AnnotationsBoolean {
   /** The description of a primitive */
   description?: string;
-  type: 'boolean';
+  type: string;
   /** The boolean value */
   value: boolean;
 }
@@ -95,7 +130,7 @@ export interface AnnotationsKeypointCollection {
 export interface AnnotationsNumerical {
   /** The description of a primitive */
   description?: string;
-  type: 'numerical';
+  type: string;
   /** The numerical value */
   value: number | number;
 }
@@ -106,6 +141,7 @@ optionally a confidence value.
 export interface AnnotationsObjectDetection {
   /** Additional attributes data for a compound. */
   attributes?: Record<string, AnnotationsBoolean | AnnotationsNumerical>;
+  /** A plain rectangle */
   boundingBox?: AnnotationsBoundingBox;
   /**
    * The confidence score for the primitive. It should be between 0 and 1.
@@ -115,7 +151,12 @@ export interface AnnotationsObjectDetection {
   confidence?: number;
   /** The label describing what type of object it is */
   label: string;
+  /**
+   * A _closed_ polygon represented by _n_ vertices. In other words, we assume
+   * that the first and last vertex are connected.
+   */
   polygon?: AnnotationsPolygon;
+  /** A polygonal chain consisting of _n_ vertices */
   polyline?: AnnotationsPolyLine;
 }
 /**
@@ -180,35 +221,6 @@ export interface AnnotationsTextRegion {
   text: string;
   /** The location of the extracted text */
   textRegion: AnnotationsBoundingBox;
-}
-/**
- * Models a link to a CDF Asset referenced in an image
- */
-export interface AnnotationsTypesImagesAssetLink {
-  /** The asset this annotation is pointing to */
-  assetRef: AnnotationsAssetRef;
-  /**
-   * The confidence score for the primitive. It should be between 0 and 1.
-   * @min 0
-   * @max 1
-   */
-  confidence?: number;
-  /** The region of the object representing the asset */
-  objectRegion?: AnnotationsTypesPrimitivesGeometry2DGeometry;
-  /** The extracted text */
-  text: string;
-  /** The location of the text mentioning the asset */
-  textRegion: AnnotationsBoundingBox;
-}
-/**
-* A geometry represented by exactly *one of* ` bounding_box`, `polygon` and
-`polyline` which, respectively, represents a BoundingBox, Polygon and
-PolyLine.
-*/
-export interface AnnotationsTypesPrimitivesGeometry2DGeometry {
-  boundingBox?: AnnotationsBoundingBox;
-  polygon?: AnnotationsPolygon;
-  polyline?: AnnotationsPolyLine;
 }
 /**
  * Detect external ID or name of assets (from your CDF projects) in images. Usage of this feature requires `['assetsAcl:READ']` capability.
@@ -297,6 +309,7 @@ export interface DigitalGaugeDetectionParameters {
  * The number of milliseconds since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
  * @format int64
  * @min 0
+ * @example 1730204346000
  */
 export type EpochTimestamp = number;
 /**
@@ -549,7 +562,7 @@ export type VisionExtractPostResponse = StatusSchema & {
  * @example {"textPredictions":[{"confidence":0.9,"text":"string","textRegion":{"xMin":0.5,"xMax":0.9,"yMin":0.5,"yMax":0.9}}],"assetTagPredictions":[{"confidence":0.9,"assetRef":{"id":1233},"text":"string","textRegion":{"xMin":0.5,"xMax":0.9,"yMin":0.5,"yMax":0.9}}],"peoplePredictions":[{"label":"person","confidence":0.8,"boundingBox":{"xMin":0.5,"xMax":0.9,"yMin":0.5,"yMax":0.9}}]}
  */
 export interface VisionExtractPredictions {
-  assetTagPredictions?: AnnotationsTypesImagesAssetLink[];
+  assetTagPredictions?: AnnotationsAnnotationTypesImagesAssetLink[];
   /** In beta. Available only when the `cdf-version: beta` header is provided. */
   dialGaugePredictions?: {
     objectDetection?: AnnotationsObjectDetection;

@@ -9,6 +9,13 @@ import type { CursorAndAsyncIterator } from '@cognite/sdk-core';
  */
 export type CogniteExternalId = string;
 /**
+ * The ID of an [instance in Cognite Data Models](https://docs.cognite.com/cdf/dm/dm_concepts/dm_spaces_instances#instance).
+ */
+export interface CogniteInstanceId {
+  externalId: string;
+  space: string;
+}
+/**
  * A server-generated ID for the object.
  * @format int64
  * @min 1
@@ -57,6 +64,8 @@ export interface Document {
    * @example 2384
    */
   id: CogniteInternalId;
+  /** The instance ID for documents created through Data Modeling. This field will be the same as the value set in the Files API. */
+  instanceId?: CogniteInstanceId;
   labels?: LabelList;
   /**
    * The detected language used in the document
@@ -143,6 +152,22 @@ export interface DocumentAggregateFilterPrefix {
   };
 }
 export type DocumentAggregateValue = string | number | Label;
+export interface DocumentContentExternalId {
+  /** The external ID provided by the client. Must be unique for the resource type. */
+  externalId: CogniteExternalId;
+}
+export interface DocumentContentInstanceId {
+  /** The ID of an [instance in Cognite Data Models](https://docs.cognite.com/cdf/dm/dm_concepts/dm_spaces_instances#instance). */
+  instanceId: CogniteInstanceId;
+}
+export interface DocumentContentInternalId {
+  /** A server-generated ID for the object. */
+  id: CogniteInternalId;
+}
+export type DocumentContentRequest =
+  | DocumentContentInternalId
+  | DocumentContentExternalId
+  | DocumentContentInstanceId;
 export interface DocumentCursor {
   /** Cursor for paging through results. */
   cursor?: string;
@@ -261,6 +286,16 @@ export type DocumentFilterLeaf =
   | DocumentFilterGeoJsonDisjoint
   | DocumentFilterGeoJsonWithin
   | DocumentFilterInAssetSubtree;
+export interface DocumentFilterLexicalSearch {
+  /**
+   * Matches passages that contains specified keywords.
+   * @example {"property":["content"],"value":"Report"}
+   */
+  lexicalSearch: {
+    property: DocumentFilterProperty;
+    value: string;
+  };
+}
 export interface DocumentFilterPrefix {
   /**
    * Matches items that contain a specific prefix in the provided property.
@@ -311,10 +346,25 @@ export interface DocumentFilterSearch {
     value: string;
   };
 }
+export interface DocumentFilterSemanticSearch {
+  /**
+   * Matches passages that have similar semantic meaning as the search query.
+   * @example {"property":["content"],"value":"Report"}
+   */
+  semanticSearch: {
+    property: DocumentFilterProperty;
+    value: string;
+  };
+}
 /**
  * Value you wish to find in the provided property.
  */
-export type DocumentFilterValue = string | number | boolean | Label;
+export type DocumentFilterValue =
+  | string
+  | number
+  | boolean
+  | Label
+  | CogniteInstanceId;
 /**
  * One or more values you wish to find in the provided property.
  */
@@ -373,6 +423,93 @@ export type DocumentListRequest = DocumentListFilter &
   DocumentCursor;
 export interface DocumentListResponse
   extends CursorAndAsyncIterator<Document> {}
+/**
+ * Insight about a search result
+ * @example {"page":7,"left":68.78,"right":478.56,"top":75.04,"bottom":386.1}
+ */
+export interface DocumentPassageLocation {
+  /** @format float */
+  bottom?: number;
+  /** @format float */
+  left?: number;
+  /** @format int32 */
+  pageNumber?: number;
+  /** @format float */
+  right?: number;
+  /** @format float */
+  up?: number;
+}
+/**
+ * A JSON based filtering language. See detailed documentation above.
+ */
+export type DocumentPassagesFilter =
+  | DocumentPassagesFilterBool
+  | DocumentPassagesFilterLeaf;
+/**
+* A query that matches items matching boolean combinations of other queries.
+Currently only supports `and` clause.
+*/
+export type DocumentPassagesFilterBool = {
+  and: DocumentPassagesFilter[];
+};
+/**
+ * Leaf filter
+ */
+export type DocumentPassagesFilterLeaf =
+  | DocumentFilterEquals
+  | DocumentFilterIn
+  | DocumentFilterSemanticSearch
+  | DocumentFilterLexicalSearch;
+/**
+ * Narrow down search results. You must specify atleast one filter of type `semanticSearch`, `lexicalSearch` or both.
+ */
+export interface DocumentPassagesSearchFilter {
+  /**
+   * A JSON based filtering language. See detailed documentation above.
+   *
+   */
+  filter: DocumentPassagesFilter;
+}
+/**
+ * Each item contains the semantic match and the relevant document it belongs to.
+ * @example {"text":"Pump installation\nFollow these 15 steps:\n ...","document":{"id":1234},"locations":[{"page_number":3,"left":68.78,"right":478.56,"top":75.04,"bottom":386.1},{"page_number":4,"left":68.78,"right":478.56,"top":75.04,"bottom":386.1}]}
+ */
+export interface DocumentPassagesSearchItem {
+  /** A document */
+  document: PassageDocument;
+  locations: DocumentPassageLocation[];
+  /** The text representing the document passage that was related to your search query. */
+  text: string;
+}
+export interface DocumentPassagesSearchLimit {
+  /**
+   * Maximum number of items.
+   * @format int32
+   * @min 1
+   * @max 10
+   */
+  limit?: number;
+}
+export interface DocumentPassagesSearchPassageExpansion {
+  /** A expansion strategy to to increase the text view for each passage returned. Helpful to increase context for an LLM. */
+  expansionStrategy: DocumentPassagesSearchPassageExpansionSymmetric;
+}
+export interface DocumentPassagesSearchPassageExpansionSymmetric {
+  /**
+   * Number of passages to expand a given passage by
+   * @min 1
+   * @max 4
+   */
+  chunk_count: number;
+  /** Expand the passage with adjacent passages that exists before and after a passage. */
+  strategy: 'symmetric';
+}
+export type DocumentPassagesSearchRequest = DocumentPassagesSearchFilter &
+  DocumentPassagesSearchPassageExpansion &
+  DocumentPassagesSearchLimit;
+export interface DocumentPassagesSearchResponse {
+  items: DocumentPassagesSearchItem[];
+}
 export interface DocumentsAggregateAllUniquePropertiesItem {
   /**
    * Number of properties with this name
@@ -753,6 +890,7 @@ export interface DocumentsPreviewTemporaryLinkResponse {
  * The number of milliseconds since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
  * @format int64
  * @min 0
+ * @example 1730204346000
  */
 export type EpochTimestamp = number;
 /**
@@ -766,3 +904,37 @@ export interface Label {
  * A list of the labels associated with this resource item.
  */
 export type LabelList = Label[];
+/**
+ * A document
+ */
+export interface PassageDocument {
+  /**
+   * The external ID for the document. This field will be the same as the value set in the Files API.
+   * @example haml001
+   */
+  externalId?: CogniteExternalId;
+  /**
+   * The unique identifier for the document. This is automatically generated by CDF, and will be the same as the corresponding value in the Files API.
+   * @example 2384
+   */
+  id: CogniteInternalId;
+  /** The instance ID for documents created through Data Modeling. This field will be the same as the value set in the Files API. */
+  instanceId?: CogniteInstanceId;
+  /** The source file that this document is derived from. */
+  sourceFile: PassageSourceFile;
+}
+/**
+ * The source file that this document is derived from.
+ */
+export interface PassageSourceFile {
+  /**
+   * The hash of the source file. This is a SHA256 hash of the original file. The hash only covers the file content, and not other CDF metadata.
+   * @example 23203f9264161714cdb8d2f474b9b641e6a735f8cea4098c40a3cab8743bd749
+   */
+  hash?: string;
+  /**
+   * Name of the file.
+   * @example hamlet.txt
+   */
+  name: string;
+}
