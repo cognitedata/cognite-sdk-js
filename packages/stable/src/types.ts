@@ -55,9 +55,9 @@ export type AclActionAssets = READ | WRITE;
 
 export type AclActionDataSets = READ | WRITE | OWNER;
 
-export type AclActionDataModelInstances = READ | WRITE;
+export type AclActionDataModelInstances = READ | WRITE | WRITE_PROPERTIES;
 
-export type AclActionDataModel = READ | WRITE | WRITE_PROPERTIES;
+export type AclActionDataModel = READ | WRITE;
 
 export type AclActionEvents = READ | WRITE;
 
