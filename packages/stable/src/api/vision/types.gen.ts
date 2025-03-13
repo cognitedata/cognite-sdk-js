@@ -15,7 +15,7 @@ export type AnnotationsAssetRef = {
 export interface AnnotationsBoolean {
   /** The description of a primitive */
   description?: string;
-  type: string;
+  type: 'boolean';
   /** The boolean value */
   value: boolean;
 }
@@ -130,7 +130,7 @@ export interface AnnotationsKeypointCollection {
 export interface AnnotationsNumerical {
   /** The description of a primitive */
   description?: string;
-  type: 'numerical';
+  type: string;
   /** The numerical value */
   value: number | number;
 }

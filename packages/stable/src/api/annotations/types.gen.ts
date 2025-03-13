@@ -476,7 +476,7 @@ export interface AnnotationsLine {
 export interface AnnotationsNumerical {
   /** The description of a primitive */
   description?: string;
-  type: string;
+  type: 'numerical';
   /** The numerical value */
   value: number | number;
 }
