@@ -15,7 +15,7 @@ export type AnnotationsAssetRef = {
 export interface AnnotationsBoolean {
   /** The description of a primitive */
   description?: string;
-  type: 'boolean';
+  type: string;
   /** The boolean value */
   value: boolean;
 }
@@ -53,6 +53,41 @@ export interface AnnotationsBoundingBox {
    * @max 1
    */
   yMin: number;
+}
+/**
+ * Models a link to a CDF Asset referenced in an image
+ */
+export interface AnnotationsCogmonoAnnotationTypesImagesAssetLink {
+  /** The asset this annotation is pointing to */
+  assetRef: AnnotationsAssetRef;
+  /**
+   * The confidence score for the primitive. It should be between 0 and 1.
+   * @min 0
+   * @max 1
+   */
+  confidence?: number;
+  /** The region of the object representing the asset */
+  objectRegion?: AnnotationsCogmonoAnnotationTypesPrimitivesGeometry2DGeometry;
+  /** The extracted text */
+  text: string;
+  /** The location of the text mentioning the asset */
+  textRegion: AnnotationsBoundingBox;
+}
+/**
+* A geometry represented by exactly *one of* ` bounding_box`, `polygon` and
+`polyline` which, respectively, represents a BoundingBox, Polygon and
+PolyLine.
+*/
+export interface AnnotationsCogmonoAnnotationTypesPrimitivesGeometry2DGeometry {
+  /** A plain rectangle */
+  boundingBox?: AnnotationsBoundingBox;
+  /**
+   * A _closed_ polygon represented by _n_ vertices. In other words, we assume
+   * that the first and last vertex are connected.
+   */
+  polygon?: AnnotationsPolygon;
+  /** A polygonal chain consisting of _n_ vertices */
+  polyline?: AnnotationsPolyLine;
 }
 /**
 * A point attached with additional information such as a confidence value and
@@ -95,7 +130,7 @@ export interface AnnotationsKeypointCollection {
 export interface AnnotationsNumerical {
   /** The description of a primitive */
   description?: string;
-  type: 'numerical';
+  type: string;
   /** The numerical value */
   value: number | number;
 }
@@ -186,41 +221,6 @@ export interface AnnotationsTextRegion {
   text: string;
   /** The location of the extracted text */
   textRegion: AnnotationsBoundingBox;
-}
-/**
- * Models a link to a CDF Asset referenced in an image
- */
-export interface AnnotationsTypesImagesAssetLink {
-  /** The asset this annotation is pointing to */
-  assetRef: AnnotationsAssetRef;
-  /**
-   * The confidence score for the primitive. It should be between 0 and 1.
-   * @min 0
-   * @max 1
-   */
-  confidence?: number;
-  /** The region of the object representing the asset */
-  objectRegion?: AnnotationsTypesPrimitivesGeometry2DGeometry;
-  /** The extracted text */
-  text: string;
-  /** The location of the text mentioning the asset */
-  textRegion: AnnotationsBoundingBox;
-}
-/**
-* A geometry represented by exactly *one of* ` bounding_box`, `polygon` and
-`polyline` which, respectively, represents a BoundingBox, Polygon and
-PolyLine.
-*/
-export interface AnnotationsTypesPrimitivesGeometry2DGeometry {
-  /** A plain rectangle */
-  boundingBox?: AnnotationsBoundingBox;
-  /**
-   * A _closed_ polygon represented by _n_ vertices. In other words, we assume
-   * that the first and last vertex are connected.
-   */
-  polygon?: AnnotationsPolygon;
-  /** A polygonal chain consisting of _n_ vertices */
-  polyline?: AnnotationsPolyLine;
 }
 /**
  * Detect external ID or name of assets (from your CDF projects) in images. Usage of this feature requires `['assetsAcl:READ']` capability.
@@ -562,7 +562,7 @@ export type VisionExtractPostResponse = StatusSchema & {
  * @example {"textPredictions":[{"confidence":0.9,"text":"string","textRegion":{"xMin":0.5,"xMax":0.9,"yMin":0.5,"yMax":0.9}}],"assetTagPredictions":[{"confidence":0.9,"assetRef":{"id":1233},"text":"string","textRegion":{"xMin":0.5,"xMax":0.9,"yMin":0.5,"yMax":0.9}}],"peoplePredictions":[{"label":"person","confidence":0.8,"boundingBox":{"xMin":0.5,"xMax":0.9,"yMin":0.5,"yMax":0.9}}]}
  */
 export interface VisionExtractPredictions {
-  assetTagPredictions?: AnnotationsTypesImagesAssetLink[];
+  assetTagPredictions?: AnnotationsCogmonoAnnotationTypesImagesAssetLink[];
   /** In beta. Available only when the `cdf-version: beta` header is provided. */
   dialGaugePredictions?: {
     objectDetection?: AnnotationsObjectDetection;

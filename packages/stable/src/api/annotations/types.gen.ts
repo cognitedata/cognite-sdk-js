@@ -21,10 +21,10 @@ export type AnnotationData =
   | AnnotationsTextRegion
   | AnnotationsUnhandledSymbolObject
   | AnnotationsUnhandledTextObject
-  | AnnotationsTypesDiagramsAssetLink
-  | AnnotationsTypesDiagramsInstanceLink
-  | AnnotationsTypesImagesAssetLink
-  | AnnotationsTypesImagesInstanceLink;
+  | AnnotationsCogmonoAnnotationTypesDiagramsAssetLink
+  | AnnotationsCogmonoAnnotationTypesDiagramsInstanceLink
+  | AnnotationsCogmonoAnnotationTypesImagesAssetLink
+  | AnnotationsCogmonoAnnotationTypesImagesInstanceLink;
 /**
  * A reference to an asset. Either the internal ID or the external ID must be provided (exactly one).
  */
@@ -38,7 +38,7 @@ export type AnnotationsAssetRef = {
 export interface AnnotationsBoolean {
   /** The description of a primitive */
   description?: string;
-  type: 'boolean';
+  type: string;
   /** The boolean value */
   value: boolean;
 }
@@ -92,7 +92,7 @@ export interface AnnotationsBoundingVolume {
   /** The label describing what type of object it is */
   label?: string;
   /** The region of the annotation defined by a list of geometry primitives (cylinder and box). */
-  region: AnnotationsTypesPrimitivesGeometry3DGeometry[];
+  region: AnnotationsCogmonoAnnotationTypesPrimitivesGeometry3DGeometry[];
 }
 /**
 * A box in 3D space, defined by a 4x4 row-major homogeneous transformation matrix that rotates,
@@ -125,6 +125,118 @@ export interface AnnotationsClassification {
   confidence?: number;
   /** The label describing what type of object it is */
   label: string;
+}
+/**
+ * Models a link to a CDF Asset referenced in an engineering diagram
+ */
+export interface AnnotationsCogmonoAnnotationTypesDiagramsAssetLink {
+  /** The asset this annotation is pointing to */
+  assetRef: AnnotationsAssetRef;
+  /** The description of a primitive */
+  description?: string;
+  /**
+   * The number of the page on which this annotation is located. The first page has number 1.
+   * @min 1
+   * @max 100000
+   */
+  pageNumber?: number;
+  /** The symbol representing the asset */
+  symbol?: string;
+  /** The location of the symbol representing the asset */
+  symbolRegion?: AnnotationsBoundingBox;
+  /** The extracted text */
+  text?: string;
+  /** The location of the text mentioning the asset */
+  textRegion: AnnotationsBoundingBox;
+}
+/**
+ * Models a link to an FDM instance referenced in an engineering diagram
+ */
+export interface AnnotationsCogmonoAnnotationTypesDiagramsInstanceLink {
+  /** The description of a primitive */
+  description?: string;
+  /** The FDM instance this annotation is pointing to */
+  instanceRef: AnnotationsInstanceRef;
+  /**
+   * The number of the page on which this annotation is located. The first page has number 1.
+   * @min 1
+   * @max 100000
+   */
+  pageNumber?: number;
+  /** The symbol found in the file */
+  symbol?: string;
+  /** Optional location of a symbol */
+  symbolRegion?: AnnotationsBoundingBox;
+  /** The extracted text */
+  text: string;
+  /** The location of the text mentioning the file */
+  textRegion: AnnotationsBoundingBox;
+}
+/**
+ * Models a link to a CDF Asset referenced in an image
+ */
+export interface AnnotationsCogmonoAnnotationTypesImagesAssetLink {
+  /** The asset this annotation is pointing to */
+  assetRef: AnnotationsAssetRef;
+  /**
+   * The confidence score for the primitive. It should be between 0 and 1.
+   * @min 0
+   * @max 1
+   */
+  confidence?: number;
+  /** The region of the object representing the asset */
+  objectRegion?: AnnotationsCogmonoAnnotationTypesPrimitivesGeometry2DGeometry;
+  /** The extracted text */
+  text: string;
+  /** The location of the text mentioning the asset */
+  textRegion: AnnotationsBoundingBox;
+}
+/**
+ * Models a link to an FDM instance referenced in an image
+ */
+export interface AnnotationsCogmonoAnnotationTypesImagesInstanceLink {
+  /**
+   * The confidence score for the primitive. It should be between 0 and 1.
+   * @min 0
+   * @max 1
+   */
+  confidence?: number;
+  /** The FDM instance this annotation is pointing to */
+  instanceRef: AnnotationsInstanceRef;
+  /** The extracted text */
+  text: string;
+  /** The location of the text mentioning the FDM instance */
+  textRegion: AnnotationsBoundingBox;
+}
+/**
+* A geometry represented by exactly *one of* ` bounding_box`, `polygon` and
+`polyline` which, respectively, represents a BoundingBox, Polygon and
+PolyLine.
+*/
+export interface AnnotationsCogmonoAnnotationTypesPrimitivesGeometry2DGeometry {
+  /** A plain rectangle */
+  boundingBox?: AnnotationsBoundingBox;
+  /**
+   * A _closed_ polygon represented by _n_ vertices. In other words, we assume
+   * that the first and last vertex are connected.
+   */
+  polygon?: AnnotationsPolygon;
+  /** A polygonal chain consisting of _n_ vertices */
+  polyline?: AnnotationsPolyLine;
+}
+/**
+ * A 3D geometry model represented by exactly *one of* `cylinder` and `box`.
+ */
+export interface AnnotationsCogmonoAnnotationTypesPrimitivesGeometry3DGeometry {
+  /**
+   * A box in 3D space, defined by a 4x4 row-major homogeneous transformation matrix that rotates,
+   * translates and scales a box centered at the origin to its location and orientation in 3D space.
+   * The box that is transformed is the axis-aligned cube spanning the volume between
+   * the points (-1, -1, -1) and (1, 1, 1).
+   */
+  box?: AnnotationsBox;
+  /** A cylinder in 3D space, defined by the centers of the two end surfaces and the radius. */
+  cylinder?: AnnotationsCylinder;
 }
 /**
  * A cylinder in 3D space, defined by the centers of the two end surfaces and the radius.
@@ -364,7 +476,7 @@ export interface AnnotationsLine {
 export interface AnnotationsNumerical {
   /** The description of a primitive */
   description?: string;
-  type: 'numerical';
+  type: string;
   /** The numerical value */
   value: number | number;
 }
@@ -468,118 +580,6 @@ export interface AnnotationsTextRegion {
   textRegion: AnnotationsBoundingBox;
 }
 /**
- * Models a link to a CDF Asset referenced in an engineering diagram
- */
-export interface AnnotationsTypesDiagramsAssetLink {
-  /** The asset this annotation is pointing to */
-  assetRef: AnnotationsAssetRef;
-  /** The description of a primitive */
-  description?: string;
-  /**
-   * The number of the page on which this annotation is located. The first page has number 1.
-   * @min 1
-   * @max 100000
-   */
-  pageNumber?: number;
-  /** The symbol representing the asset */
-  symbol?: string;
-  /** The location of the symbol representing the asset */
-  symbolRegion?: AnnotationsBoundingBox;
-  /** The extracted text */
-  text?: string;
-  /** The location of the text mentioning the asset */
-  textRegion: AnnotationsBoundingBox;
-}
-/**
- * Models a link to an FDM instance referenced in an engineering diagram
- */
-export interface AnnotationsTypesDiagramsInstanceLink {
-  /** The description of a primitive */
-  description?: string;
-  /** The FDM instance this annotation is pointing to */
-  instanceRef: AnnotationsInstanceRef;
-  /**
-   * The number of the page on which this annotation is located. The first page has number 1.
-   * @min 1
-   * @max 100000
-   */
-  pageNumber?: number;
-  /** The symbol found in the file */
-  symbol?: string;
-  /** Optional location of a symbol */
-  symbolRegion?: AnnotationsBoundingBox;
-  /** The extracted text */
-  text: string;
-  /** The location of the text mentioning the file */
-  textRegion: AnnotationsBoundingBox;
-}
-/**
- * Models a link to a CDF Asset referenced in an image
- */
-export interface AnnotationsTypesImagesAssetLink {
-  /** The asset this annotation is pointing to */
-  assetRef: AnnotationsAssetRef;
-  /**
-   * The confidence score for the primitive. It should be between 0 and 1.
-   * @min 0
-   * @max 1
-   */
-  confidence?: number;
-  /** The region of the object representing the asset */
-  objectRegion?: AnnotationsTypesPrimitivesGeometry2DGeometry;
-  /** The extracted text */
-  text: string;
-  /** The location of the text mentioning the asset */
-  textRegion: AnnotationsBoundingBox;
-}
-/**
- * Models a link to an FDM instance referenced in an image
- */
-export interface AnnotationsTypesImagesInstanceLink {
-  /**
-   * The confidence score for the primitive. It should be between 0 and 1.
-   * @min 0
-   * @max 1
-   */
-  confidence?: number;
-  /** The FDM instance this annotation is pointing to */
-  instanceRef: AnnotationsInstanceRef;
-  /** The extracted text */
-  text: string;
-  /** The location of the text mentioning the FDM instance */
-  textRegion: AnnotationsBoundingBox;
-}
-/**
-* A geometry represented by exactly *one of* ` bounding_box`, `polygon` and
-`polyline` which, respectively, represents a BoundingBox, Polygon and
-PolyLine.
-*/
-export interface AnnotationsTypesPrimitivesGeometry2DGeometry {
-  /** A plain rectangle */
-  boundingBox?: AnnotationsBoundingBox;
-  /**
-   * A _closed_ polygon represented by _n_ vertices. In other words, we assume
-   * that the first and last vertex are connected.
-   */
-  polygon?: AnnotationsPolygon;
-  /** A polygonal chain consisting of _n_ vertices */
-  polyline?: AnnotationsPolyLine;
-}
-/**
- * A 3D geometry model represented by exactly *one of* `cylinder` and `box`.
- */
-export interface AnnotationsTypesPrimitivesGeometry3DGeometry {
-  /**
-   * A box in 3D space, defined by a 4x4 row-major homogeneous transformation matrix that rotates,
-   * translates and scales a box centered at the origin to its location and orientation in 3D space.
-   * The box that is transformed is the axis-aligned cube spanning the volume between
-   * the points (-1, -1, -1) and (1, 1, 1).
-   */
-  box?: AnnotationsBox;
-  /** A cylinder in 3D space, defined by the centers of the two end surfaces and the radius. */
-  cylinder?: AnnotationsCylinder;
-}
-/**
  * Models an extracted symbol region in an engineering diagram
  */
 export interface AnnotationsUnhandledSymbolObject {
@@ -627,7 +627,7 @@ export interface AnnotationsView {
    * @pattern ^[a-zA-Z][a-zA-Z0-9_-]{0,41}[a-zA-Z0-9]?$
    */
   space: string;
-  type: 'view';
+  type: string;
   /**
    * Version of the view
    * @pattern ^[a-zA-Z0-9]([a-zA-Z0-9_-]{0,41}[a-zA-Z0-9])?$
