@@ -57,7 +57,7 @@ export interface AnnotationsBoundingBox {
 /**
  * Models a link to a CDF Asset referenced in an image
  */
-export interface AnnotationsCogmonoAnnotationTypesImagesAssetLink {
+export interface AnnotationsTypesImagesAssetLink {
   /** The asset this annotation is pointing to */
   assetRef: AnnotationsAssetRef;
   /**
@@ -67,7 +67,7 @@ export interface AnnotationsCogmonoAnnotationTypesImagesAssetLink {
    */
   confidence?: number;
   /** The region of the object representing the asset */
-  objectRegion?: AnnotationsCogmonoAnnotationTypesPrimitivesGeometry2DGeometry;
+  objectRegion?: AnnotationsTypesPrimitivesGeometry2DGeometry;
   /** The extracted text */
   text: string;
   /** The location of the text mentioning the asset */
@@ -78,7 +78,7 @@ export interface AnnotationsCogmonoAnnotationTypesImagesAssetLink {
 `polyline` which, respectively, represents a BoundingBox, Polygon and
 PolyLine.
 */
-export interface AnnotationsCogmonoAnnotationTypesPrimitivesGeometry2DGeometry {
+export interface AnnotationsTypesPrimitivesGeometry2DGeometry {
   /** A plain rectangle */
   boundingBox?: AnnotationsBoundingBox;
   /**
@@ -562,7 +562,7 @@ export type VisionExtractPostResponse = StatusSchema & {
  * @example {"textPredictions":[{"confidence":0.9,"text":"string","textRegion":{"xMin":0.5,"xMax":0.9,"yMin":0.5,"yMax":0.9}}],"assetTagPredictions":[{"confidence":0.9,"assetRef":{"id":1233},"text":"string","textRegion":{"xMin":0.5,"xMax":0.9,"yMin":0.5,"yMax":0.9}}],"peoplePredictions":[{"label":"person","confidence":0.8,"boundingBox":{"xMin":0.5,"xMax":0.9,"yMin":0.5,"yMax":0.9}}]}
  */
 export interface VisionExtractPredictions {
-  assetTagPredictions?: AnnotationsCogmonoAnnotationTypesImagesAssetLink[];
+  assetTagPredictions?: AnnotationsTypesImagesAssetLink[];
   /** In beta. Available only when the `cdf-version: beta` header is provided. */
   dialGaugePredictions?: {
     objectDetection?: AnnotationsObjectDetection;

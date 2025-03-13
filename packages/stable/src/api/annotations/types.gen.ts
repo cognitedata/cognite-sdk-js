@@ -21,10 +21,10 @@ export type AnnotationData =
   | AnnotationsTextRegion
   | AnnotationsUnhandledSymbolObject
   | AnnotationsUnhandledTextObject
-  | AnnotationsCogmonoAnnotationTypesDiagramsAssetLink
-  | AnnotationsCogmonoAnnotationTypesDiagramsInstanceLink
-  | AnnotationsCogmonoAnnotationTypesImagesAssetLink
-  | AnnotationsCogmonoAnnotationTypesImagesInstanceLink;
+  | AnnotationsTypesDiagramsAssetLink
+  | AnnotationsTypesDiagramsInstanceLink
+  | AnnotationsTypesImagesAssetLink
+  | AnnotationsTypesImagesInstanceLink;
 /**
  * A reference to an asset. Either the internal ID or the external ID must be provided (exactly one).
  */
@@ -38,7 +38,7 @@ export type AnnotationsAssetRef = {
 export interface AnnotationsBoolean {
   /** The description of a primitive */
   description?: string;
-  type: string;
+  type: 'boolean';
   /** The boolean value */
   value: boolean;
 }
@@ -92,7 +92,7 @@ export interface AnnotationsBoundingVolume {
   /** The label describing what type of object it is */
   label?: string;
   /** The region of the annotation defined by a list of geometry primitives (cylinder and box). */
-  region: AnnotationsCogmonoAnnotationTypesPrimitivesGeometry3DGeometry[];
+  region: AnnotationsTypesPrimitivesGeometry3DGeometry[];
 }
 /**
 * A box in 3D space, defined by a 4x4 row-major homogeneous transformation matrix that rotates,
@@ -129,7 +129,7 @@ export interface AnnotationsClassification {
 /**
  * Models a link to a CDF Asset referenced in an engineering diagram
  */
-export interface AnnotationsCogmonoAnnotationTypesDiagramsAssetLink {
+export interface AnnotationsTypesDiagramsAssetLink {
   /** The asset this annotation is pointing to */
   assetRef: AnnotationsAssetRef;
   /** The description of a primitive */
@@ -152,7 +152,7 @@ export interface AnnotationsCogmonoAnnotationTypesDiagramsAssetLink {
 /**
  * Models a link to an FDM instance referenced in an engineering diagram
  */
-export interface AnnotationsCogmonoAnnotationTypesDiagramsInstanceLink {
+export interface AnnotationsTypesDiagramsInstanceLink {
   /** The description of a primitive */
   description?: string;
   /** The FDM instance this annotation is pointing to */
@@ -175,7 +175,7 @@ export interface AnnotationsCogmonoAnnotationTypesDiagramsInstanceLink {
 /**
  * Models a link to a CDF Asset referenced in an image
  */
-export interface AnnotationsCogmonoAnnotationTypesImagesAssetLink {
+export interface AnnotationsTypesImagesAssetLink {
   /** The asset this annotation is pointing to */
   assetRef: AnnotationsAssetRef;
   /**
@@ -185,7 +185,7 @@ export interface AnnotationsCogmonoAnnotationTypesImagesAssetLink {
    */
   confidence?: number;
   /** The region of the object representing the asset */
-  objectRegion?: AnnotationsCogmonoAnnotationTypesPrimitivesGeometry2DGeometry;
+  objectRegion?: AnnotationsTypesPrimitivesGeometry2DGeometry;
   /** The extracted text */
   text: string;
   /** The location of the text mentioning the asset */
@@ -194,7 +194,7 @@ export interface AnnotationsCogmonoAnnotationTypesImagesAssetLink {
 /**
  * Models a link to an FDM instance referenced in an image
  */
-export interface AnnotationsCogmonoAnnotationTypesImagesInstanceLink {
+export interface AnnotationsTypesImagesInstanceLink {
   /**
    * The confidence score for the primitive. It should be between 0 and 1.
    * @min 0
@@ -213,7 +213,7 @@ export interface AnnotationsCogmonoAnnotationTypesImagesInstanceLink {
 `polyline` which, respectively, represents a BoundingBox, Polygon and
 PolyLine.
 */
-export interface AnnotationsCogmonoAnnotationTypesPrimitivesGeometry2DGeometry {
+export interface AnnotationsTypesPrimitivesGeometry2DGeometry {
   /** A plain rectangle */
   boundingBox?: AnnotationsBoundingBox;
   /**
@@ -227,7 +227,7 @@ export interface AnnotationsCogmonoAnnotationTypesPrimitivesGeometry2DGeometry {
 /**
  * A 3D geometry model represented by exactly *one of* `cylinder` and `box`.
  */
-export interface AnnotationsCogmonoAnnotationTypesPrimitivesGeometry3DGeometry {
+export interface AnnotationsTypesPrimitivesGeometry3DGeometry {
   /**
    * A box in 3D space, defined by a 4x4 row-major homogeneous transformation matrix that rotates,
    * translates and scales a box centered at the origin to its location and orientation in 3D space.
