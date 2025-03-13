@@ -627,7 +627,7 @@ export interface AnnotationsView {
    * @pattern ^[a-zA-Z][a-zA-Z0-9_-]{0,41}[a-zA-Z0-9]?$
    */
   space: string;
-  type: string;
+  type: 'view';
   /**
    * Version of the view
    * @pattern ^[a-zA-Z0-9]([a-zA-Z0-9_-]{0,41}[a-zA-Z0-9])?$
