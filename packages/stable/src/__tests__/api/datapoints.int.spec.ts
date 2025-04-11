@@ -181,11 +181,12 @@ describe('Datapoints integration test', () => {
 
 describe('Datapoints integration test with chunking', () => {
   let client: CogniteClient;
+  let timeseries: Timeseries[];
 
   beforeAll(async () => {
     client = setupLoggedInClient();
     const externalIdPrefix = 'test-ts-with-one-dp';
-    const timeseries = await client.timeseries
+    timeseries = await client.timeseries
       .list({
         filter: {
           externalIdPrefix: externalIdPrefix,
@@ -193,7 +194,7 @@ describe('Datapoints integration test with chunking', () => {
       })
       .autoPagingToArray({ limit: 200 });
     if (timeseries.length < 100) {
-      const newTs = await client.timeseries.create(
+      timeseries = await client.timeseries.create(
         new Array(200).fill(0).map((_) => ({
           name: externalIdPrefix,
           externalId: `${externalIdPrefix}-${randomInt()}`,
@@ -202,7 +203,7 @@ describe('Datapoints integration test with chunking', () => {
       );
       const timestampToWrite = new Date(Date.now() - 1000);
       await client.datapoints.insert(
-        newTs.map(({ id }) => ({
+        timeseries.map(({ id }) => ({
           id,
           datapoints: [
             {
@@ -216,23 +217,15 @@ describe('Datapoints integration test with chunking', () => {
   });
 
   test('retrieve latest with chunking', async () => {
-    const ts = await client.timeseries
-      .list({
-        filter: {
-          externalIdPrefix: 'test-ts-with-one-dp',
-        },
-      })
-      .autoPagingToArray({ limit: 200 });
-    expect(ts.length > 100, 'There should be more than 100 timeseries');
     const response = await client.datapoints.retrieveLatest(
-      ts.map((t) => ({
-        id: t.id,
-      }))
+      timeseries.map(({ id }) => ({ id }))
     );
-    expect(response.length).toEqual(ts.length);
+    expect(response.length).toEqual(timeseries.length);
     expect(response[0].datapoints.every((d) => d.value === 1)).toBeTruthy();
     // expect order to be the same as in the request
-    expect(response.map(({ id }) => id)).toEqual(ts.map(({ id }) => id));
+    expect(response.map(({ id }) => id)).toEqual(
+      timeseries.map(({ id }) => id)
+    );
   });
 });
 
