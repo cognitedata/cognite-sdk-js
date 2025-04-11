@@ -47,8 +47,8 @@ describe('Views integration test', () => {
   };
 
   beforeAll(async () => {
-    vi.setConfig({ testTimeout: 30 * 1000 });
     client = setupLoggedInClient();
+    vi.setConfig({ testTimeout: 30 * 1000 });
     await deleteOldSpaces(client);
     await client.spaces.upsert([
       {

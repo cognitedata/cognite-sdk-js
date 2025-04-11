@@ -2,6 +2,7 @@
 
 import { createReadStream, readFileSync, statSync } from 'node:fs';
 import { PassThrough } from 'node:stream';
+import { vi } from 'vitest';
 import { mockBaseUrl, randomInt } from '../../../core/src/__tests__/testUtils';
 import CogniteClient from '../cogniteClient';
 import type { ExternalFileInfo, NodeOrEdge } from '../types';
@@ -17,6 +18,9 @@ function setupClient(baseUrl: string = process.env.COGNITE_BASE_URL as string) {
 }
 
 function setupLoggedInClient() {
+  vi.setConfig({
+    testTimeout: 25 * 1000,
+  });
   const client = new CogniteClient({
     appId: 'JS SDK integration tests',
     baseUrl: process.env.COGNITE_BASE_URL,

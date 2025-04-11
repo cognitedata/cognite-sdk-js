@@ -1,6 +1,6 @@
 // Copyright 2020 Cognite AS
 
-import { afterAll, beforeAll, describe, expect, test } from 'vitest';
+import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest';
 import type CogniteClient from '../../cogniteClient';
 import type { Asset, NodeWrite, Timeseries } from '../../types';
 import {
@@ -20,11 +20,19 @@ describe('Timeseries integration test', () => {
         externalId: `external_${randomInt()}`,
       },
     ]);
-    await client.spaces.upsert([testSpace]);
-    await client.instances.upsert({
-      items: [timeseriesCdmInstance],
-    });
-  });
+    await vi.waitFor(
+      async () => {
+        await client.spaces.upsert([testSpace]);
+        await client.instances.upsert({
+          items: [timeseriesCdmInstance],
+        });
+      },
+      {
+        timeout: 25 * 1000,
+        interval: 1000,
+      }
+    );
+  }, 25_000);
 
   afterAll(async () => {
     await client.assets.delete([{ id: asset.id }]);
