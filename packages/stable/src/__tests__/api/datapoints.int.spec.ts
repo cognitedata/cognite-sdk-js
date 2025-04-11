@@ -179,6 +179,63 @@ describe('Datapoints integration test', () => {
   });
 });
 
+describe('Datapoints integration test with chunking', () => {
+  let client: CogniteClient;
+
+  beforeAll(async () => {
+    client = setupLoggedInClient();
+    const externalIdPrefix = 'test-ts-with-one-dp';
+    const timeseries = await client.timeseries
+      .list({
+        filter: {
+          externalIdPrefix: externalIdPrefix,
+        },
+      })
+      .autoPagingToArray({ limit: 200 });
+    if (timeseries.length < 100) {
+      const newTs = await client.timeseries.create(
+        new Array(200).fill(0).map((_) => ({
+          name: externalIdPrefix,
+          externalId: `${externalIdPrefix}-${randomInt()}`,
+          description: 'Test timeseries with one datapoint',
+        }))
+      );
+      const timestampToWrite = new Date(Date.now() - 1000);
+      await client.datapoints.insert(
+        newTs.map(({ id }) => ({
+          id,
+          datapoints: [
+            {
+              timestamp: timestampToWrite,
+              value: 1,
+            },
+          ],
+        }))
+      );
+    }
+  });
+
+  test('retrieve latest with chunking', async () => {
+    const ts = await client.timeseries
+      .list({
+        filter: {
+          externalIdPrefix: 'test-ts-with-one-dp',
+        },
+      })
+      .autoPagingToArray({ limit: 200 });
+    expect(ts.length > 100, 'There should be more than 100 timeseries');
+    const response = await client.datapoints.retrieveLatest(
+      ts.map((t) => ({
+        id: t.id,
+      }))
+    );
+    expect(response.length).toEqual(ts.length);
+    expect(response[0].datapoints.every((d) => d.value === 1)).toBeTruthy();
+    // expect order to be the same as in the request
+    expect(response.map(({ id }) => id)).toEqual(ts.map(({ id }) => id));
+  });
+});
+
 describe.skip('Datapoints integration test for monthly granularity', () => {
   let client: CogniteClient;
   let timeserie: Timeseries;

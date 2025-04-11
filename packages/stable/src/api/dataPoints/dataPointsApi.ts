@@ -183,12 +183,16 @@ export class DataPointsAPI extends BaseResourceAPI<
   private async retrieveLatestEndpoint(
     items: LatestDataBeforeRequest[],
     params: LatestDataParams
-  ) {
+  ): Promise<Datapoints[]> {
     const path = this.url('latest');
-    const response = await this.post<ItemsWrapper<Datapoints[]>>(path, {
-      data: { items, ...params },
-    });
-    return this.addToMapAndReturn(response.data.items, response);
+    return this.callEndpointWithMergeAndTransform(items, (request) =>
+      this.postInParallelWithAutomaticChunking({
+        items: request,
+        params,
+        path,
+        chunkSize: 100,
+      })
+    ) as Promise<Datapoints[]>;
   }
 
   private async deleteDatapointsEndpoint(items: DatapointsDeleteRequest[]) {
