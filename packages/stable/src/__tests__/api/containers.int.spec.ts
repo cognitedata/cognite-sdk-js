@@ -36,13 +36,23 @@ describe('Containers integration test', () => {
   beforeAll(async () => {
     client = setupLoggedInClient();
     await deleteOldSpaces(client);
-    await client.spaces.upsert([
+
+    // Eventual consistency
+    await vi.waitFor(
+      async () =>
+        client.spaces.upsert([
+          {
+            space: TEST_SPACE_NAME,
+            name: TEST_SPACE_NAME,
+            description:
+              'Instance space used for containers integration tests.',
+          },
+        ]),
       {
-        space: TEST_SPACE_NAME,
-        name: TEST_SPACE_NAME,
-        description: 'Instance space used for containers integration tests.',
-      },
-    ]);
+        timeout: 25 * 1000,
+        interval: 1000,
+      }
+    );
   }, 25_000);
   afterAll(async () => {
     client = setupLoggedInClient();

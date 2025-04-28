@@ -7,7 +7,12 @@ import type {
 } from 'stable/src/types';
 import { beforeAll, describe, expect, it, vi } from 'vitest';
 import type CogniteClient from '../../cogniteClient';
-import { deleteOldSpaces, randomInt, setupLoggedInClient } from '../testUtils';
+import {
+  deleteOldSpaces,
+  randomInt,
+  runTestWithRetryWhenFailing,
+  setupLoggedInClient,
+} from '../testUtils';
 
 describe('Data models integration test', () => {
   let client: CogniteClient;
@@ -51,9 +56,9 @@ describe('Data models integration test', () => {
   };
 
   beforeAll(async () => {
-    vi.setConfig({ testTimeout: 30 * 1000 });
-
     client = setupLoggedInClient();
+
+    vi.setConfig({ testTimeout: 30 * 1000 });
     await deleteOldSpaces(client);
     await client.spaces.upsert([
       {
@@ -80,14 +85,16 @@ describe('Data models integration test', () => {
   }, 25_000);
 
   it('should successfully upsert datamodels', async () => {
-    const createdModelResponse = await client.dataModels.upsert([
-      datamodelCreationDefinition,
-    ]);
+    await runTestWithRetryWhenFailing(async () => {
+      const createdModelResponse = await client.dataModels.upsert([
+        datamodelCreationDefinition,
+      ]);
 
-    expect(createdModelResponse.items).toHaveLength(1);
-    expect(createdModelResponse.items[0].name).toEqual(
-      datamodelCreationDefinition.name
-    );
+      expect(createdModelResponse.items).toHaveLength(1);
+      expect(createdModelResponse.items[0].name).toEqual(
+        datamodelCreationDefinition.name
+      );
+    });
   });
 
   it('should successfully list datamodels', async () => {
