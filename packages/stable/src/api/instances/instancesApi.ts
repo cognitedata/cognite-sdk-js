@@ -2,9 +2,10 @@
 
 import { BaseResourceAPI } from '@cognite/sdk-core';
 import type {
-  AggregationResponse,
+  AggregatedResultItemCollection,
+  AggregationRequest,
+  ByIdsResponse,
   ListOfSpaceExternalIdsRequestWithTyping,
-  NodeAndEdgeCollectionResponseV3Response,
   NodeAndEdgeCollectionResponseWithCursorV3Response,
   NodeAndEdgeCreateCollection,
   NodeOrEdge,
@@ -13,9 +14,9 @@ import type {
   NodeOrEdgeSearchRequest,
   QueryRequest,
   QueryResponse,
+  SearchResponse,
   SlimNodeAndEdgeCollectionResponse,
   SyncRequest,
-  ViewAggregationRequest,
 } from './types.gen';
 
 export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
@@ -43,13 +44,10 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    */
   public search = async (
     params: NodeOrEdgeSearchRequest
-  ): Promise<NodeAndEdgeCollectionResponseV3Response> => {
-    const response = await this.post<NodeAndEdgeCollectionResponseV3Response>(
-      this.searchUrl,
-      {
-        data: params,
-      }
-    );
+  ): Promise<SearchResponse> => {
+    const response = await this.post<SearchResponse>(this.searchUrl, {
+      data: params,
+    });
     return response.data;
   };
 
@@ -117,13 +115,10 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    */
   public retrieve = async (
     params: ListOfSpaceExternalIdsRequestWithTyping
-  ): Promise<NodeAndEdgeCollectionResponseV3Response> => {
-    const response = await this.post<NodeAndEdgeCollectionResponseV3Response>(
-      this.byIdsUrl,
-      {
-        data: params,
-      }
-    );
+  ): Promise<ByIdsResponse> => {
+    const response = await this.post<ByIdsResponse>(this.byIdsUrl, {
+      data: params,
+    });
     return response.data;
   };
 
@@ -210,11 +205,14 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    * ```
    */
   public aggregate = async (
-    params: ViewAggregationRequest
-  ): Promise<AggregationResponse> => {
-    const response = await this.post<AggregationResponse>(this.aggregateUrl, {
-      data: params,
-    });
+    params: AggregationRequest
+  ): Promise<AggregatedResultItemCollection> => {
+    const response = await this.post<AggregatedResultItemCollection>(
+      this.aggregateUrl,
+      {
+        data: params,
+      }
+    );
     return response.data;
   };
 
