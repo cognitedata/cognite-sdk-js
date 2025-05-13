@@ -28,9 +28,9 @@ describe('Vision API', () => {
   let extractBetaJob: VisionExtractPostResponse;
 
   beforeAll(async () => {
-    vi.setConfig({ testTimeout: 3 * 60 * 1000 }); // timeout after 3 minutes
     consoleSpy = vi.spyOn(console, 'warn').mockImplementation(noop);
     client = setupLoggedInClient();
+    vi.setConfig({ testTimeout: 3 * 60 * 1000 }); // timeout after 3 minutes
 
     const testFileExternalId = 'vision_extract_test_image';
     const files = await client.files.retrieve(
