@@ -14,13 +14,13 @@ export class ExponentialJitterBackoff {
 
   /**
    * Initializes a new instance of the ExponentialJitterBackoff class.
-   * @param baseDelayMs - The base delay in milliseconds. This will be the average delay for the first retry attempt.
-   * @param maxDelayMs - The maximum delay in milliseconds. This will be the maximum delay for the last retry attempt.
+   * @param baseDelayMs - The base delay in milliseconds. This will be the average delay for the first retry attempt. Defaults to 250ms.
+   * @param maxDelayMs - The maximum delay in milliseconds. This will be the maximum delay for the last retry attempt. Defaults to 15000ms.
    * @param randomCallback - The callback to use for generating a random number between 0 and 1. Used by test only.
    */
   constructor(
-    baseDelayMs: number = 100,
-    maxDelayMs: number = 5000,
+    baseDelayMs: number = 250,
+    maxDelayMs: number = 15000,
     randomCallback: typeof Math.random = Math.random,
   ) {
     this.baseDelayMs = baseDelayMs;
