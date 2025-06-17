@@ -8,8 +8,8 @@ import {
   type HttpRequestOptions,
   type HttpResponse,
 } from './basicHttpClient';
-import { MAX_RETRY_ATTEMPTS, type RetryValidator } from './retryValidator';
 import { ExponentialJitterBackoff } from './exponentialJitterBackoff';
+import { MAX_RETRY_ATTEMPTS, type RetryValidator } from './retryValidator';
 
 /**
  * The `RetryableHttpClient` class extends the functionality of a basic HTTP client
