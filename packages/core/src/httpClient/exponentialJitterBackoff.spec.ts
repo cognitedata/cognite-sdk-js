@@ -58,11 +58,16 @@ describe(ExponentialJitterBackoff.name, () => {
   });
 
   test('should cap delay to max delay', () => { 
-    // Arrange
-    const backoff = new ExponentialJitterBackoff(100000, 1000, mathRandomCallback);
-
-    // Act/Assert
     vi.mocked(mathRandomCallback).mockReturnValue(1.0);
+    const backoff = new ExponentialJitterBackoff(100000, 1000, mathRandomCallback);
     expect(backoff.calculateDelayInMs(100)).toEqual(1000);
   });
+
+  test('should not grow indefinitely when number of attempts is huge', () => { 
+    vi.mocked(mathRandomCallback).mockReturnValue(1.0);
+    const backoff = new ExponentialJitterBackoff(100, 1000, mathRandomCallback);
+    const retryCount = Number.MAX_SAFE_INTEGER - 1;
+    expect(backoff.calculateDelayInMs(retryCount)).toEqual(1000);
+  });
+
 });
