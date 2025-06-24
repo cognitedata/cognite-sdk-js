@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   build:
@@ -33,19 +34,38 @@ jobs:
       - name: Build
         run: yarn build
 
+  #--------------------------------------------------------------------------------------------------------------------
+  # (if the commit message of the PR not containing the [skip-ci])
+  #   And 
+  #     - (if it is merge to master AND (contains [release] OR chore(release) in the commit message of the PR))
+  #        OR
+  #     - (if it is merge to release- branch AND (contain feat OR fix OR [release] tag in commit message)
+  # Above condition will trigger publish workflow
+  #--------------------------------------------------------------------------------------------------------------------
   publish:
-    if: ${{ !contains(github.event.head_commit.message, '[skip-ci]') &&
+    if: |
+        !contains(github.event.head_commit.message, '[skip-ci]') && 
+        ( 
+            (
+              github.ref == 'refs/heads/master' && 
+                ( 
+                  contains(github.event.head_commit.message, '[release]') || 
+                  startsWith(github.event.head_commit.message, 'chore(release)') 
+                )
+            ) || 
           (
-            (github.ref == 'refs/heads/master' && contains(github.event.head_commit.message, '[release]')) ||
-            (startsWith(github.ref, 'refs/heads/release-') &&
-              (
-                startsWith(github.event.head_commit.message, 'fix:') ||
-                startsWith(github.event.head_commit.message, 'feat:') ||
-                contains(github.event.head_commit.message, '[release]')
-              )
-            )
+            startsWith(github.ref, 'refs/heads/release-') && 
+            (
+              startsWith(github.event.head_commit.message, 'feat:') || 
+              startsWith(github.event.head_commit.message, 'feat('
+            )|| 
+            (
+              startsWith(github.event.head_commit.message, 'fix:') || 
+              startsWith(github.event.head_commit.message, 'fix(')
+            ) || 
+            contains(github.event.head_commit.message, '[release]') )
           )
-        }}
+        )
     runs-on: ubuntu-latest
     environment: CD
     steps:
@@ -66,7 +86,7 @@ jobs:
           path: node_modules
           key: ${{ runner.OS }}-build-${{ hashFiles('package.json') }}
 
-      - name: Install 🔧
+      - name: Install dependencies 🔧
         run: yarn install --immutable
 
       - name: Build
@@ -76,109 +96,139 @@ jobs:
         run: yarn docs:bundle
 
 
-      - name: Lerna env config
+      #--------------------------------------------------------------------------------------------------------------------
+      # 01. Configure the NPM access and GitHub access
+      #--------------------------------------------------------------------------------------------------------------------
+      - name: Configure Git & NPM
+        env:
+          GH_LERNA_TOKEN:    ${{ secrets.GH_LERNA_TOKEN }}
+          NPM_PUBLISH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
         run: |
           git config user.email "cognite-cicd@users.noreply.github.com"
           git config user.name  "Cognite CICD"
           git remote set-url origin "https://${{ secrets.GH_LERNA_TOKEN }}@github.com/${{ github.repository }}.git"
           echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_PUBLISH_TOKEN }}" >> .npmrc
+      
+
+      #--------------------------------------------------------------------------------------------------------------------
+      # 02. Remove RC tag
+      #       - If a PR merge message to master contains 'Merge pull request' AND
+      #       - 'release-' AND
+      #       - '[release]' AND
+      #       - Not the commit made by the CD github workflow to push the changelog  
+      #     Then this will proceed
+      #--------------------------------------------------------------------------------------------------------------------
+      - name: Remove RC suffix from version
+        if: |
+          github.ref == 'refs/heads/master' &&
+          contains(github.event.head_commit.message, 'Merge pull request') &&
+          contains(github.event.head_commit.message, 'release-') &&
+          contains(github.event.head_commit.message, '[release]') &&
+          !contains(github.event.head_commit.message, 'chore(release): Release after updating changelog [release]')
+        run: |
+          echo "Remove "-rc.X" from package versions on master after RC branch merge"
+          node scripts/remove-rc-tags.js
+          git add packages/*/package.json
+          git commit -m "chore: remove RC tags (from release branch merge)"
+
+          
+      #--------------------------------------------------------------------------------------------------------------------
+      # 03. Bump version using Lerna without pushing directly to master
+      #     - Senario 01:
+      #          - If the PR is from master branch and Not the PR create by the CD github workflow
+      #             - If the commit message of the PR to the master contains 
+      #                  - Merge pull request AND release- AND [release] in the current commit OR 
+      #                  - Merge pull request AND release- AND [release] in the previous commit (when rc branch merge to master)
+      #                  - Then perform major release based on conventional commits versioning
+      #             - elif it is PR with [release] commit msg to master do minor release
+      #          - elif this is a release branch perform rc version update no push
+      #--------------------------------------------------------------------------------------------------------------------
+      - name: Bump version with Lerna
         env:
           GH_LERNA_TOKEN:    ${{ secrets.GH_LERNA_TOKEN }}
           NPM_PUBLISH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
-
-      # ────────────────────────────────────────────────────────
-      # 1️⃣  Master: version bump via PR (no direct push)
-      # ────────────────────────────────────────────────────────
-      - name: Generate version bump (no-push)
-        if: github.ref == 'refs/heads/master'
         run: |
-          yarn lerna version \
-            --conventional-commits \
-            --yes \
-            --force-publish \
-            --no-push
+          EVENT_JSON=$(cat "${GITHUB_EVENT_PATH}")
+          HEAD_MSG=$(echo "$EVENT_JSON" | jq -r '.head_commit.message')
+          MERGE_MSG=$(echo "$EVENT_JSON" | jq -r '.commits[-1].message')
 
-      - name: Create bump PR
-        if: github.ref == 'refs/heads/master'
-        uses: peter-evans/create-pull-request@v5
-        with:
-          token: ${{ secrets.GH_LERNA_TOKEN }}
-          commit-message: "chore(release): bump versions [skip ci]"
-          branch: "release/bumps/${{ github.sha }}"
-          title: "chore(release): bump versions"
-          body: |
-            This PR was auto-generated to bump package versions.
-          labels: auto-release
+          echo "Head message -> ${HEAD_MSG}"
+          echo "Merge message -> ${MERGE_MSG}"
 
-      # ────────────────────────────────────────────────────────
-      # 2️⃣  Master: remove RC tags via PR after RC-branch merge
-      # ────────────────────────────────────────────────────────
-      - name: Stage RC-tag removal
-        if: >-
-          github.ref == 'refs/heads/master' &&
-          contains(github.event.head_commit.message, 'Merge pull request') &&
-          contains(github.event.head_commit.message, 'release-') &&
-          contains(github.event.head_commit.message, '[release]')
-        run: |
-            node scripts/remove-rc-tags.js
-            node scripts/remove-rc-tags.js
-            git config --global user.email "cognite-cicd@users.noreply.github.com"
-            git config --global user.name "Cognite CICD"
-            node scripts/remove-rc-tags.js
-            git config --global user.email "cognite-cicd@users.noreply.github.com"
-            git config --global user.name "Cognite CICD"
-            git add packages/*/package.json
+          if [[ "${GITHUB_REF}" == "refs/heads/master" ]] && [[ "$HEAD_MSG" != *"chore(release): Release after updating changelog [release]"* ]]; then
+            echo "On master, checking release merge or manual release..."
+            if ( [[ "$HEAD_MSG" == *"Merge pull request"* && "$HEAD_MSG" == *"release-"* && "$HEAD_MSG" == *"[release]"* ]] \
+              || [[ "$MERGE_MSG" == *"Merge pull request"* && "$MERGE_MSG" == *"release-"* && "$MERGE_MSG" == *"[release]"* ]] ); then
+              echo "Detected release- branch merge; doing major bump"
+              yarn lerna version major --conventional-commits --yes --no-push
+            elif [[ "$HEAD_MSG" == *"[release]"* ]]; then
+              echo "Manual release commit; doing standard bump"
+              yarn lerna version --conventional-commits --yes --no-push
+            else
+              echo "No version bump needed"
+            fi
 
-      - name: Create remove-rc PR
-        id: create-remove-rc-pr
-        if: >-
-          github.ref == 'refs/heads/master' &&
-          contains(github.event.head_commit.message, 'Merge pull request') &&
-          contains(github.event.head_commit.message, 'release-') &&
-          contains(github.event.head_commit.message, '[release]')
-        uses: peter-evans/create-pull-request@v5
-        with:
-          token: ${{ secrets.GH_LERNA_TOKEN }}
-          commit-message: "chore(release): remove rc tags [skip ci]"
-          branch: "release/remove-rc/${{ github.sha }}"
-          title: "chore(release): remove rc tags"
-          body: |
-            This PR automatically removes “rc” prerelease tags after a release merge.
-          labels: auto-release
+          elif [[ "${GITHUB_REF}" == refs/heads/release-* ]]; then
+            echo "On release- branch; doing prerelease bump"
+            yarn lerna version --conventional-commits --conventional-prerelease --preid rc --yes --no-push
+          fi
+     
 
-      - name: Auto-merge remove-rc PR
-        if: steps.create-remove-rc-pr.outputs.pull-request-number
-        uses: peter-evans/enable-pull-request-automerge@v1
-        with:
-          pull-request-number: ${{ steps.create-remove-rc-pr.outputs.pull-request-number }}
-          merge-method: squash
-          token: ${{ secrets.GH_LERNA_TOKEN }}
-
-      # ────────────────────────────────────────────────────────
-      # 3️⃣  release-* branches: original prerelease bump
-      # ────────────────────────────────────────────────────────
-      - name: Pre-release bump on release-* branches
-        if: startsWith(github.ref, 'refs/heads/release-')
-        run: |
-          yarn lerna version \
-            --conventional-commits \
-            --conventional-prerelease \
-            --preid rc \
-            --create-release github \
-            --no-private \
-            --yes
-
-      # ────────────────────────────────────────────────────────
-      # 4️⃣  Lerna publish (unchanged)
-      # ────────────────────────────────────────────────────────
-      - name: Lerna Publish
-        if: contains(github.event.head_commit.message, '[release]')
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN:      ${{ secrets.NPM_PUBLISH_TOKEN }}
+      #--------------------------------------------------------------------------------------------------------------------
+      # 04. Push release changes using seperate branch
+      #     - If in a master branch create seperate release branch to push tags
+      #     - elif in release- branch just push tags
+      #--------------------------------------------------------------------------------------------------------------------
+      - name: Push release changes
         run: |
           if [[ "${GITHUB_REF}" == "refs/heads/master" ]]; then
-            yarn lerna publish from-package --yes --no-git-reset --no-verify-access
-          else
-            yarn lerna publish from-package --pre-dist-tag rc --yes --no-git-reset --no-verify-access
+            echo "Create a new branch for the version bump PR"
+            releaseBranch="release-bump-${{ github.run_id }}"
+            git checkout -b "$releaseBranch"
+            echo "Include tags when pushing (Lerna has created tags locally with --no-push)"
+            git push origin "$releaseBranch" --follow-tags
+          elif [[ "${GITHUB_REF}" == refs/heads/release-* ]]; then
+            echo "On release branch, push changes (including tags) back to origin"
+            git push origin "${GITHUB_REF#refs/heads/}" --follow-tags
+          fi     
+          
+      #--------------------------------------------------------------------------------------------------------------------
+      # 05. Create a release PR
+      #     - If from master and not a CD workflow created PR
+      #--------------------------------------------------------------------------------------------------------------------
+      - name: Create release PR
+        if: |
+            github.ref == 'refs/heads/master' &&
+            !contains(github.event.head_commit.message, 'chore(release): Release after updating changelog [release]')
+        env:
+          GH_LERNA_TOKEN:    ${{ secrets.GH_LERNA_TOKEN }}
+          NPM_PUBLISH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
+        run: |
+          gh pr create --base master --head "$releaseBranch" \
+            --title "chore(release): Release after updating changelog [release]" \
+            --body "🤖 **Automated PR** Version bump and changelog for new release. Please review and merge to publish."   
+
+      #--------------------------------------------------------------------------------------------------------------------
+      # 05. Publish to NPM 
+      #     - If from release- OR from a CD workflow created PR to master
+      #          - If from master publish as normal package
+      #          - If from release- publish as rc
+      #--------------------------------------------------------------------------------------------------------------------
+      - name: Publish to NPM
+        if: |
+          startsWith(github.ref, 'refs/heads/release-') || 
+          (
+            contains(github.event.head_commit.message, 'chore(release): Release after updating changelog [release]') &&
+            github.ref == 'refs/heads/master' 
+          )
+        env:
+          GH_LERNA_TOKEN:    ${{ secrets.GH_LERNA_TOKEN }}
+          NPM_PUBLISH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
+        run: |
+          if [[ "${GITHUB_REF}" == "refs/heads/master" ]]; then
+            echo "Publishing final release to NPM…"
+            yarn lerna publish from-package --yes --no-git-reset
+          elif [[ "${GITHUB_REF}" == refs/heads/release-* ]]; then
+            echo "Publishing pre-release (rc) to NPM…"
+            yarn lerna publish from-package --pre-dist-tag rc --yes --no-git-reset
           fi
