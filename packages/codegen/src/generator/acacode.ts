@@ -2,12 +2,13 @@
 import { promises as fs } from 'node:fs';
 import * as tmp from 'tmp-promise';
 
-import { generateApi } from 'swagger-typescript-api-nextgen';
+import { type Hooks, generateApi } from 'swagger-typescript-api-nextgen';
 import type { TypeGeneratorResult } from './generator';
 
 export class AcacodeOpenApiGenerator {
   public generateTypes = async (
-    openApiJson: string
+    openApiJson: string,
+    codeGenHooks: Partial<Hooks>
   ): Promise<TypeGeneratorResult> => {
     const file = await tmp.file({ postfix: '.json' });
     await fs.writeFile(file.path, openApiJson);
@@ -25,6 +26,7 @@ export class AcacodeOpenApiGenerator {
       generateUnionEnums: true,
       cleanOutput: false,
       enumNamesAsValues: true,
+      hooks: codeGenHooks,
     });
 
     const typeNames = generated.configuration.modelTypes
