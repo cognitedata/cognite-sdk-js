@@ -4,6 +4,11 @@ import * as pathUtil from 'node:path';
 
 import * as ts from 'typescript';
 
+import type {
+  Hooks,
+  SchemaComponent,
+  SchemaTypePrimitiveContent,
+} from 'swagger-typescript-api-nextgen';
 import cursorAndAsyncIteratorTransformer from './ast_transformer/cursor_and_async_iterator';
 import sorterTransformer from './ast_transformer/sorter';
 import type { TypeGenerator, TypeGeneratorResult } from './generator/generator';
@@ -22,7 +27,6 @@ import {
   operationsInPath,
 } from './openapi';
 import type { AutoNameInlinedRequestOption } from './utils';
-
 export type StringFilter = (str: string) => boolean;
 
 export const passThroughFilter: StringFilter = (): boolean => true;
@@ -49,6 +53,52 @@ export interface CodeGenOptions extends AutoNameInlinedRequestOption {
   };
   outputDir: string;
 }
+
+/**
+ * Due to service-contracts having removed backwards compatibility
+ * with OpenAPI v2 spec, and the swagger-typescript-api-nextgen
+ * lacking support for at least the "const" concept introduced in
+ * the OpenAPI v3 spec, we need to manually transform consts into
+ * enums such that the type gen will correctly handle const properties.
+ */
+const hotfixConstsAsEnums = (component: SchemaComponent) => {
+  const properties = component.rawTypeData?.properties;
+  if (component.rawTypeData && properties) {
+    const patchedProperties = Object.entries(properties).reduce(
+      (newProps, [key, value]) => {
+        // The types exported from the lib are wrong
+        const valueAsRecord = value as Record<string, unknown>;
+        if ('const' in valueAsRecord) {
+          valueAsRecord.enum = valueAsRecord.enum ?? [valueAsRecord.const];
+        }
+        newProps[key] = value;
+        return newProps;
+      },
+      {} as Record<
+        string,
+        {
+          name?: string | undefined;
+          type: string;
+          required: boolean;
+          $parsed?: SchemaTypePrimitiveContent | undefined;
+        }
+      >
+    );
+
+    component.rawTypeData.properties = patchedProperties;
+  }
+
+  return component;
+};
+
+const formatProblematicServiceContractTypeNames = (typeName: string) => {
+  return typeName.replace('CogmonoAnnotation', '');
+};
+
+const CODE_GEN_HOOKS: Partial<Hooks> = {
+  onCreateComponent: hotfixConstsAsEnums,
+  onFormatTypeName: formatProblematicServiceContractTypeNames,
+};
 
 export const createPathFilter = (
   includePredicates: StringFilter[],
@@ -362,7 +412,7 @@ export class CodeGen {
     }, {} as OpenApiSchemas);
 
     const docJson = JSON.stringify(doc);
-    const result = await this.generator.generateTypes(docJson);
+    const result = await this.generator.generateTypes(docJson, CODE_GEN_HOOKS);
     result.astProcessedCode = this.astPostProcessing(result.code);
 
     return result;

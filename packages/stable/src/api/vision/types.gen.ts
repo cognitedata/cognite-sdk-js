@@ -199,7 +199,13 @@ export interface AnnotationsTypesImagesAssetLink {
    * @max 1
    */
   confidence?: number;
-  /** The region of the object representing the asset */
+  /**
+   *
+   *     A geometry represented by exactly *one of* ` bounding_box`, `polygon` and
+   *     `polyline` which, respectively, represents a BoundingBox, Polygon and
+   *     PolyLine.
+   *
+   */
   objectRegion?: AnnotationsTypesPrimitivesGeometry2DGeometry;
   /** The extracted text */
   text: string;
