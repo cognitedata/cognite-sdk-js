@@ -6,6 +6,9 @@ import type { CursorAndAsyncIterator } from '@cognite/sdk-core';
 export interface AllVersionsQueryParameter {
   allVersions?: boolean;
 }
+export type ByExternalIdsViewsRequest =
+  | ListOfVersionReferences
+  | ListOfAllVersionsReferences;
 /**
 * An external-id reference to an existing CDF resource type item, such as a time series.
 
@@ -18,15 +21,20 @@ Currently, time series, sequence and file references are supported.
 */
 export interface CDFExternalIdReference {
   /**
-   * Specifies that the data type is a list of values.
+   * Specifies that the data type is a list of values. The ordering of values is preserved.
    *
    */
   list?: boolean;
+  /** Specifies the maximum number of values in the list */
+  maxListSize?: number;
   type: 'timeseries' | 'file' | 'sequence';
 }
 export type ConnectionDefinition =
   | EdgeConnection
   | ReverseDirectRelationConnection;
+export type ConnectionDefinitionRead =
+  | EdgeConnection
+  | ReverseDirectRelationConnectionRead;
 /**
  * Reference to an existing container
  */
@@ -52,7 +60,7 @@ export interface ContainsAnyFilterV3 {
   };
 }
 export interface CorePropertyDefinition {
-  /** When set to ```true```, the API will increment the property based on its highest current value  (max value).  You can only use this functionality to increment properties of type `int32` or `int64`.  If the property has a different data type, the API will return an error. */
+  /** When set to ```true```, the API will increment the property based on its highest current value (max value).  You can only use this functionality to increment properties of type `int32` or `int64`. If the property has a different data type, the API will return an error. */
   autoIncrement?: boolean;
   /**
    * Default value to use when you do not specify a value for the property.  The default value must be of the same type as what you defined for the property itself.
@@ -62,6 +70,8 @@ export interface CorePropertyDefinition {
   defaultValue?: string | number | boolean | object;
   /** Description of the content and suggested use for this property. */
   description?: string;
+  /** Should updates to this property be rejected after the initial population? */
+  immutable?: boolean;
   /** Readable property name. */
   name?: string;
   /** Does this property need to be set to a value, or not? */
@@ -76,7 +86,7 @@ export interface CreateViewProperty {
   description?: string;
   /** Readable property name. */
   name?: string;
-  /** Indicates on what type a referenced direct relation is expected to be (although not required).  Only applicable for direct relation properties. */
+  /** Indicates on what type a referenced direct relation is expected to be (although not required). Only applicable for direct relation properties. */
   source?: ViewReference;
 }
 export interface CursorQueryParameter {
@@ -111,7 +121,8 @@ export type DataModelsLeafFilter =
   | MatchAllFilter
   | DataModelsNestedFilter
   | OverlapsFilterV3
-  | HasExistingDataFilterV3;
+  | HasExistingDataFilterV3
+  | InstanceReferenceFilterV3;
 export interface DataModelsNestedFilter {
   /**
    * Use `nested` to apply the properties of the direct relation as the filter.  `scope` specifies the direct
@@ -142,6 +153,13 @@ export interface DataModelsNestedFilter {
 export interface DirectNodeRelation {
   /** The (optional) required type for the node the direct relation points to. If specified, the node must exist before the direct relation is referenced and of the specified type. If no container specification is used, the node will be auto created with the built-in ```node``` container type, and it does not explicitly have to be created before the node that references it. */
   container?: ContainerReference;
+  /**
+   * Specifies that the data type is a list of values. The ordering of values is preserved.
+   *
+   */
+  list?: boolean;
+  /** Specifies the maximum number of values in the list */
+  maxListSize?: number;
   type: 'direct';
 }
 /**
@@ -165,23 +183,30 @@ export interface DMSExistsFilter {
  */
 export type DMSExternalId = string;
 /**
-* Property you want to filter. Use a list of strings to specify nested properties.
+* A reference to either a DMS base property or a container property.
+For nodes the DMS base properties are `instanceType`, `version`,
+`space`, `externalId`, `type`, `createdTime`, `lastUpdatedTime`,
+and `deletedTime`. For edges the DMS base properties
+are all of the node base properties with the addition of
+`startNode` and `endNode`.
 
-<u>Example:</u>
+References to DMS base properties are on the form
+`["node", "identifier"]` or `["edge", "identifier"]` where
+`identifier` is a DMS base property.
 
-You have the object
-```
-{
-  "room": {
-    "id": "b53"
-  },
-  "roomId": "a23"
-}
-```
-
-Use `["room", "id"]` to return the value in the nested `id` property, which is a part of the `room` object.
-
-You can also read the value(s) in the standalone property `roomId` with `["roomId"]`.
+Container properties can be referenced either through a view
+ or through the container where it is defined.
+- To reference a property through the container where it
+    is defined the format is
+    `["space", "externalId", "identifier"]` where `space`,
+    `externalId` is the space and
+    externalId of the container and `identifier` is one of the
+    property identifiers defined in the container.
+- To reference a property through one of the views mapping it the format
+  is `["space", "externalId/version", "identifier"]`
+  where `space`, `externalId`, `version` is the space, externalId,
+  and version of the view respectively, and `identifier` is one of the
+  property identifiers defined in the view.
 */
 export type DMSFilterProperty = string[];
 /**
@@ -207,9 +232,39 @@ export interface EdgeConnection {
   type: DirectRelationReference;
 }
 /**
+* An enum type property.
+
+An enum property can only consist for predefined values.
+* @example {"unknownValue":"unknown","values":{"value1":{"name":"Value 1","description":"This is value 1"},"value2":{},"unknown":{"name":"Unknown","description":"Used if the client does not recognize the returned value."}}}
+*/
+export interface EnumProperty {
+  type: 'enum';
+  /**
+   * The value to use when the enum value is unknown.
+   * This can optionally be used to provide forward-compatibility, Specifying what value to use if the client does not recognize the returned value. It is not possible to ingest the unknown value, but it must be part of the allowed values.
+   */
+  unknownValue?: string;
+  /**
+   * A set of all possible values for the enum property.  The enum value identifier has to have a length of between 1 and 127 characters.  It must also match the pattern ```^[_A-Za-z][_0-9A-Za-z]{0,127}$```.
+   *
+   * Example: ```{ "value1": { "name": "Value 1", "description": "This is value 1" }, "value2": { } }```
+   */
+  values: Record<string, EnumValueProperties>;
+}
+/**
+ * Metadata of the enum value.
+ */
+export interface EnumValueProperties {
+  /** Description of the enum value. */
+  description?: string;
+  /** Name of the enum value. */
+  name?: string;
+}
+/**
  * The number of milliseconds since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
  * @format int64
  * @min 0
+ * @example 1730204346000
  */
 export type EpochTimestamp = number;
 export interface EqualsFilterV3 {
@@ -230,7 +285,7 @@ export type FilterValueList =
   | ReferencedPropertyValueV3;
 export type FilterValueRange = RangeValue | ReferencedPropertyValueV3;
 export interface HasExistingDataFilterV3 {
-  /** Matches items where data is present in the referenced views, or containers. */
+  /** Matches instances that have data in the referenced views or containers. */
   hasData: SourceReference[];
 }
 export interface IncludeGlobalQueryParameter {
@@ -240,17 +295,23 @@ export interface IncludeInheritedPropertiesQueryParameter {
   includeInheritedProperties?: boolean;
 }
 export interface InFilterV3 {
-  /** Matches items where the property **exactly** matches one of the given values. You can only apply this  filter to properties containing a single value. */
+  /** Matches items where the property **exactly** matches one of the given values. */
   in: {
     property: DMSFilterProperty;
     values: FilterValueList;
   };
 }
+export interface InstanceReferenceFilterV3 {
+  /** Matches instances with any of the specified space/externalId pairs. */
+  instanceReferences: {
+    space: SpaceSpecification;
+    externalId: NodeOrEdgeExternalId;
+  }[];
+}
 export interface ListOfAllVersionsReferences {
   items: {
     externalId: DMSExternalId;
     space: SpaceSpecification;
-    version?: DMSVersion;
   }[];
 }
 export interface ListOfVersionReferences {
@@ -269,11 +330,14 @@ export interface MatchAllFilter {
  */
 export type NextCursorV3 = string;
 /**
- * @pattern ^[^\\x00]{1,255}$
+ * @pattern ^[^\\x00]{1,256}$
  */
 export type NodeOrEdgeExternalId = string;
 export interface OverlapsFilterV3 {
-  /** Matches items where the range made up of the two properties overlap with the provided range. */
+  /**
+   * Matches items where the range made up of the two properties overlap with the provided range.
+   * Not available for search queries.
+   */
   overlaps: {
     startProperty: DMSFilterProperty;
     endProperty: DMSFilterProperty;
@@ -301,15 +365,18 @@ export interface PrefixFilterV3 {
 
 We expect dates to be in the ISO-8601 format, while timestamps are expected to be an epoch value with
 millisecond precision. JSON values have to be valid JSON fragments. The maximum allowed size for a JSON
-object is 40960 bytes. The maximum allowed length of a key is 128, while the maximum allowed size of a value
-is 10240 bytes and you can have up to 256 key-value pairs.
+object is 40960 bytes. For list of json values, the size of the entire list must be within this limit.
+The maximum allowed length of a key is 128, while the maximum allowed size of a value is 10240 bytes
+and you can have up to 256 key-value pairs.
 */
 export interface PrimitiveProperty {
   /**
-   * Specifies that the data type is a list of values.
+   * Specifies that the data type is a list of values. The ordering of values is preserved.
    *
    */
   list?: boolean;
+  /** Specifies the maximum number of values in the list */
+  maxListSize?: number;
   type:
     | 'boolean'
     | 'float32'
@@ -319,6 +386,16 @@ export interface PrimitiveProperty {
     | 'timestamp'
     | 'date'
     | 'json';
+  /**
+   * The unit of the data stored in this property, can only be assign to type float32 or float64.
+   * ExternalId needs to match with a unit in the Cognite unit catalog.
+   *
+   * @example externalId: temperature:deg_c, sourceUnit: Celsius
+   */
+  unit?: {
+    externalId: NodeOrEdgeExternalId;
+    sourceUnit?: string;
+  };
 }
 /**
  * @pattern ^[a-zA-Z]([a-zA-Z0-9_]{0,253}[a-zA-Z0-9])?$
@@ -359,9 +436,11 @@ export type RawPropertyValueV3 =
   | number
   | boolean
   | object
+  | object
   | string[]
   | boolean[]
   | number[]
+  | object[]
   | object[];
 export interface ReducedLimitQueryParameter {
   /**
@@ -393,13 +472,17 @@ export interface ReverseDirectRelationConnection {
   /** The view or container of the node containing the direct relation property. */
   through: ThroughReference;
 }
+export type ReverseDirectRelationConnectionRead =
+  ReverseDirectRelationConnection & {
+    targetsList: boolean;
+  };
 /**
  * Reference to a view, or a container
  */
 export type SourceReference = ViewReference | ContainerReference;
 export interface SpaceQueryParameter {
   /**
-   * @pattern ^[a-zA-Z0-9][a-zA-Z0-9_-]{0,41}[a-zA-Z0-9]?$
+   * @pattern (?!^(space|cdf|dms|pg3|shared|system|node|edge)$)(^[a-zA-Z][a-zA-Z0-9_-]{0,41}[a-zA-Z0-9]?$)
    * @example timeseries
    */
   space?: string;
@@ -1199,12 +1282,17 @@ export interface TextProperty {
     | 'zu'
     | 'zu-ZA';
   /**
-   * Specifies that the data type is a list of values.
+   * Specifies that the data type is a list of values. The ordering of values is preserved.
    *
    */
   list?: boolean;
+  /** Specifies the maximum number of values in the list */
+  maxListSize?: number;
   type: 'text';
 }
+/**
+ * Traverse from another table expression using a direct relation. Only applicable when `from` is specified. The view or container property to use when we traverse direct relations. Has to reference a direct relation property.
+ */
 export interface ThroughReference {
   identifier: PropertyIdentifierV3;
   /** Reference to a view, or a container */
@@ -1240,7 +1328,7 @@ export interface ViewCommon {
   /** A filter Domain Specific Language (DSL) used to create advanced filter queries. */
   filter?: FilterDefinition;
   /**
-   * References to the views from where this view will inherit properties and edges.
+   * References to the views from where this view will inherit properties - both mapped properties (properties pointing to container properties like text, integers, direct relations) and connection properties (like reverse direct relations).
    *
    * Note: The order you list the views in is significant. We use this order to deduce the priority when we encounter duplicate property references.
    * If you do not specify a view version, we will use the most recent version available at the time of creation.
@@ -1257,7 +1345,8 @@ export type ViewCorePropertyDefinition = CorePropertyDefinition & {
     | TextProperty
     | PrimitiveProperty
     | CDFExternalIdReference
-    | ViewDirectNodeRelation;
+    | ViewDirectNodeRelation
+    | EnumProperty;
 };
 export interface ViewCreateCollection {
   /** List of views to create/update */
@@ -1269,7 +1358,7 @@ export type ViewCreateDefinition = {
     properties?: Record<string, ViewCreateDefinitionProperty>;
   };
 /**
-* A reference to a container property (ViewProperty) or a connection describing edges that are expected to
+* A reference to a container property or a connection describing edges that are expected to
 exist (ConnectionDefinition).
 
 If the referenced container property is a direct relation, a view of the node can be specified. The view is
@@ -1289,13 +1378,15 @@ export type ViewDefinition = {
     createdTime: EpochTimestamp;
     lastUpdatedTime: EpochTimestamp;
     writable: boolean;
+    queryable: boolean;
     usedFor: UsedFor;
     isGlobal: boolean;
     properties: Record<string, ViewDefinitionProperty>;
+    mappedContainers: ContainerReference[];
   };
 export type ViewDefinitionProperty =
   | ViewPropertyDefinition
-  | ConnectionDefinition;
+  | ConnectionDefinitionRead;
 /**
  * Direct node relation. Can include a hint to specify the view that this direct relation points to. This hint is optional.
  */
