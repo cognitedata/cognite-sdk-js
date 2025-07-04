@@ -5,6 +5,8 @@ import type {
   AggregationRequest,
   AggregationResponse,
   ByIdsResponse,
+  InstanceInspectRequest,
+  InstanceInspectResponse,
   ListOfSpaceExternalIdsRequestWithTyping,
   NodeAndEdgeCollectionResponseWithCursorV3Response,
   NodeAndEdgeCreateCollection,
@@ -269,6 +271,38 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
     const response = await this.post<QueryResponse>(this.url('sync'), {
       data: params,
     });
+    return response.data;
+  };
+
+  /**
+   * [Inspect instances](https://developer.cognite.com/api#tag/Instances/operation/instanceInspect)
+   *
+   * ```js
+   *  const response = await client.instances.inspect({
+   *    inspectionOperations: {
+   *      involvedViews: {
+   *        allVersions: true,
+   *      },
+   *    },
+   *    items: [
+   *      {
+   *        instanceType: 'node',
+   *        externalId: 'my-node-id',
+   *        space: 'my-space',
+   *      },
+   *    ],
+   *  });
+   * ```
+   */
+  public inspect = async (
+    params: InstanceInspectRequest
+  ): Promise<InstanceInspectResponse> => {
+    const response = await this.post<InstanceInspectResponse>(
+      this.url('inspect'),
+      {
+        data: params,
+      }
+    );
     return response.data;
   };
 }
