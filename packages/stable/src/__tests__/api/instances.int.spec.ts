@@ -336,4 +336,22 @@ describe('Instances integration test', () => {
     });
     expect(response.items.result_set_1).toHaveLength(1);
   });
+
+  test('inspect', async () => {
+    const response = await client.instances.inspect({
+      inspectionOperations: {
+        involvedViews: {
+          allVersions: true,
+        },
+      },
+      items: [
+        {
+          instanceType: 'node',
+          externalId: describable1.externalId,
+          space: describable1.space,
+        },
+      ],
+    });
+    expect(response.items).toHaveLength(1);
+  });
 });
