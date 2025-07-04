@@ -3516,4 +3516,15 @@ export type {
   ViewPropertyDefinition,
 } from './api/models/types.gen';
 
+export type {
+  ByExternalIdsViewsRequest,
+  IncludeInheritedPropertiesQueryParameter,
+  NextCursorV3,
+  SpaceSpecification,
+  UpsertConflict,
+  ViewCollectionResponse,
+  ViewCollectionResponseWithCursorResponse,
+  ViewCreateCollection,
+} from './api/views/types.gen';
+
 export * from './api/sessions/types';
