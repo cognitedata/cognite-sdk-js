@@ -2308,7 +2308,8 @@ export type SingleCogniteCapability =
   | { templateGroupsAcl: AclTemplateGroups }
   | { templateInstancesAcl: AclTemplateInstances }
   | { dataModelAcl: AclDataModel }
-  | { dataModelInstancesAcl: AclDataModelInstances };
+  | { dataModelInstancesAcl: AclDataModelInstances }
+  | { sessionsAcl: AclSessions };
 
 export type SinglePatch<T> = { set: T } | { setNull: boolean };
 export type SinglePatchRequired<T> = { set: T };
