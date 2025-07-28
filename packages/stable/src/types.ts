@@ -49,6 +49,8 @@ export type Acl3D = Acl<AclAction3D, AclScope3D>;
 
 export type AclAction3D = READ | CREATE | UPDATE | DELETE;
 
+export type AclActionAgents = READ | WRITE | RUN;
+
 export type AclActionAnalytics = READ | EXECUTE | LIST;
 
 export type AclActionAssets = READ | WRITE;
@@ -81,6 +83,8 @@ export type AclActionTimeseries = READ | WRITE;
 
 export type AclActionUsers = LIST | CREATE | DELETE;
 
+export type AclAgents = Acl<AclActionAgents, AclScopeAgents>;
+
 export type AclAnalytics = Acl<AclActionAnalytics, AclScopeAnalytics>;
 
 export type AclAssets = Acl<AclActionAssets, AclScopeAssets>;
@@ -105,6 +109,8 @@ export type AclProjects = Acl<AclActionProjects, AclScopeProjects>;
 export type AclRaw = Acl<AclActionRaw, AclScopeRaw>;
 
 export type AclScope3D = AclScopeAll;
+
+export type AclScopeAgents = AclScopeAll;
 
 export type AclTemplateGroups = Acl<
   AclActionTemplateGroups,
@@ -1732,6 +1738,8 @@ export interface OidcConfiguration {
 
 export type READ = 'READ';
 
+export type RUN = 'RUN';
+
 export interface Range<T> {
   min?: T;
   max?: T;
@@ -2286,6 +2294,7 @@ export interface SetField<T> {
 }
 
 export type SingleCogniteCapability =
+  | { agentsAcl: AclAgents }
   | { groupsAcl: AclGroups }
   | { assetsAcl: AclAssets }
   | { eventsAcl: AclEvents }
