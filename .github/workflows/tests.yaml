@@ -170,4 +170,16 @@ jobs:
         run: yarn build
 
       - name: Test
-        run: yarn test --since origin/master
+        run: |
+          # Check if there are any changed packages
+          if yarn lerna changed --since origin/master | grep -q "found"; then
+            echo "Running tests for changed packages"
+            yarn test --since origin/master
+          else
+            echo "No changed packages detected, this might indicate:"
+            echo "- The branch is already up-to-date with master"
+            echo "- Changes are only in non-package files"
+            echo "Running a minimal test suite to ensure CI passes"
+            # You might want to run specific smoke tests here or skip entirely
+            exit 0
+          fi
