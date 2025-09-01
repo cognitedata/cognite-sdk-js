@@ -1,0 +1,188 @@
+lerna notice cli v7.4.2
+lerna info versioning independent
+lerna notice filter excluding "*-sample"
+lerna notice filter changed since "origin/master"
+lerna info Looking for changed packages since origin/master
+lerna info filter [ '!*-sample' ]
+
+ >  Lerna (powered by Nx)   Running target test for 4 projects:
+
+    - @cognite/sdk-alpha
+    - @cognite/sdk-beta
+    - @cognite/sdk-core
+    - @cognite/sdk
+
+ 
+
+> @cognite/sdk-core:test
+
+(node:10707) [DEP0060] DeprecationWarning: The `util._extend` API is deprecated. Please use Object.assign() instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+@cognite/sdk-core: [1m[7m[36m RUN [39m[27m[22m [36mv2.1.9 [39m[90m/workspace/packages/core[39m
+@cognite/sdk-core:  [32m✓[39m src/httpClient/basicHttpClient.unit.spec.ts [2m([22m[2m24 tests[22m[2m)[22m[90m 81[2mms[22m[39m
+@cognite/sdk-core:  [32m✓[39m src/httpClient/cdfHttpClient.unit.spec.ts [2m([22m[2m17 tests[22m[2m)[22m[90m 97[2mms[22m[39m
+@cognite/sdk-core: [90mstderr[2m | src/__tests__/cogniteClient.unit.spec.ts[2m > [22m[2mCogniteClient[2m > [22m[2mconstructor[2m > [22m[2moidcTokenProvider[2m > [22m[2mensure deprecated getToken still works
+@cognite/sdk-core: [22m[39moptions.getToken is deprecated and has been renamed to `options.oidcTokenProvider`.
+@cognite/sdk-core:  [32m✓[39m src/__tests__/error.unit.spec.ts [2m([22m[2m6 tests[22m[2m)[22m[90m 10[2mms[22m[39m
+@cognite/sdk-core:  [32m✓[39m src/__tests__/utils.unit.spec.ts [2m([22m[2m11 tests[22m[2m)[22m[33m 313[2mms[22m[39m
+@cognite/sdk-core:  [32m✓[39m src/__tests__/cogniteClient.unit.spec.ts [2m([22m[2m17 tests[22m[2m)[22m[33m 726[2mms[22m[39m
+@cognite/sdk-core:  [32m✓[39m src/httpClient/exponentialJitterBackoff.spec.ts [2m([22m[2m10 tests[22m[2m)[22m[90m 4[2mms[22m[39m
+@cognite/sdk-core:  [32m✓[39m src/httpClient/retryValidator.unit.spec.ts [2m([22m[2m8 tests[22m[2m)[22m[90m 3[2mms[22m[39m
+@cognite/sdk-core:  [32m✓[39m src/__tests__/graphUtils.unit.spec.ts [2m([22m[2m4 tests[22m[2m)[22m[90m 8[2mms[22m[39m
+@cognite/sdk-core:  [32m✓[39m src/__tests__/httpClient/basicHttpClient.unit.spec.ts [2m([22m[2m3 tests[22m[2m)[22m[90m 3[2mms[22m[39m
+@cognite/sdk-core:  [32m✓[39m src/__tests__/multiError.unit.spec.ts [2m([22m[2m2 tests[22m[2m)[22m[90m 6[2mms[22m[39m
+@cognite/sdk-core:  [32m✓[39m src/__tests__/dateParser.unit.spec.ts [2m([22m[2m2 tests[22m[2m)[22m[90m 3[2mms[22m[39m
+@cognite/sdk-core:  [32m✓[39m src/httpClient/retryableHttpClient.unit.spec.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 1479[2mms[22m[39m
+@cognite/sdk-core:    [33m[2m✓[22m[39m RetryableHttpClient[2m > [22mshould retry [33m1103[2mms[22m[39m
+@cognite/sdk-core:  [32m✓[39m src/__tests__/revertableArraySorter.unit.spec.ts [2m([22m[2m1 test[22m[2m)[22m[90m 8[2mms[22m[39m
+@cognite/sdk-core:  [32m✓[39m src/__tests__/queue.unit.spec.ts [2m([22m[2m5 tests[22m[2m)[22m[90m 2[2mms[22m[39m
+@cognite/sdk-core:  [32m✓[39m src/__tests__/metadata.unit.spec.ts [2m([22m[2m1 test[22m[2m)[22m[90m 2[2mms[22m[39m
+@cognite/sdk-core:  [32m✓[39m src/__tests__/constants.spec.ts [2m([22m[2m1 test[22m[2m)[22m[90m 7[2mms[22m[39m
+@cognite/sdk-core:  [32m✓[39m src/__tests__/autoPagination.unit.spec.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 3616[2mms[22m[39m
+@cognite/sdk-core:    [33m[2m✓[22m[39m makeAutoPaginationMethods[2m > [22mcorrect usage [33m2311[2mms[22m[39m
+@cognite/sdk-core:    [33m[2m✓[22m[39m makeAutoPaginationMethods[2m > [22mhas default limit [33m1304[2mms[22m[39m
+@cognite/sdk-core: [2m Test Files [22m [1m[32m17 passed[39m[22m[90m (17)[39m
+@cognite/sdk-core: [2m      Tests [22m [1m[32m119 passed[39m[22m[90m (119)[39m
+@cognite/sdk-core: [2m   Start at [22m 10:36:19
+@cognite/sdk-core: [2m   Duration [22m 5.17s[2m (transform 223ms, setup 82ms, collect 587ms, tests 6.37s, environment 2.74s, prepare 742ms)[22m
+
+> @cognite/sdk:test
+
+@cognite/sdk: [1m[7m[36m RUN [39m[27m[22m [36mv2.1.9 [39m[90m/workspace/packages/stable[39m
+@cognite/sdk:  [32m✓[39m src/__tests__/api/documentsApi.unit.spec.ts [2m([22m[2m22 tests[22m[2m | [22m[33m1 skipped[39m[2m)[22m[90m 97[2mms[22m[39m
+@cognite/sdk:  [2m[90m↓[39m[22m src/__tests__/api/assets.int.spec.ts [2m([22m[2m25 tests[22m[2m | [22m[33m25 skipped[39m[2m)[22m
+@cognite/sdk:  [31m❯[39m src/__tests__/api/datapoints.int.spec.ts [2m([22m[2m19 tests[22m[2m | [22m[33m19 skipped[39m[2m)[22m[33m 486[2mms[22m[39m
+@cognite/sdk:  [32m✓[39m src/__tests__/api/3d.mock.spec.ts [2m([22m[2m20 tests[22m[2m)[22m[90m 82[2mms[22m[39m
+@cognite/sdk:  [2m[90m↓[39m[22m src/__tests__/api/revisions3D.int.spec.ts [2m([22m[2m21 tests[22m[2m | [22m[33m21 skipped[39m[2m)[22m
+@cognite/sdk: [90mstdout[2m | src/__tests__/api/filesMultiPart.unit.spec.ts[2m > [22m[2mMulti part upload unit test[2m > [22m[2mif a concurrent upload call fails, we can resume that part
+@cognite/sdk: [22m[39mle [Error]: Request failed | status code: 408
+@cognite/sdk:     at Function.throwCustomErrorResponse (/workspace/packages/core/src/httpClient/basicHttpClient.ts:39:11)
+@cognite/sdk:     at O.<anonymous> (/workspace/packages/core/src/httpClient/basicHttpClient.ts:196:23)
+@cognite/sdk:     at Generator.next (<anonymous>)
+@cognite/sdk:     at /workspace/packages/core/dist/index.js:28:25
+@cognite/sdk:     at new Promise (<anonymous>)
+@cognite/sdk:     at __async (/workspace/packages/core/dist/index.js:14:22)
+@cognite/sdk:     at O.postRequest (/workspace/packages/core/src/httpClient/basicHttpClient.ts:193:31)
+@cognite/sdk:     at O.<anonymous> (/workspace/packages/core/src/httpClient/retryableHttpClient.ts:99:18)
+@cognite/sdk:     at Generator.next (<anonymous>)
+@cognite/sdk:     at /workspace/packages/core/dist/index.js:28:25 {
+@cognite/sdk:   status: [33m408[39m,
+@cognite/sdk:   data: [32m'timeout'[39m,
+@cognite/sdk:   headers: {}
+@cognite/sdk: }
+@cognite/sdk:  [2m[90m↓[39m[22m src/__tests__/api/filesMultiPart.int.spec.ts [2m([22m[2m10 tests[22m[2m | [22m[33m10 skipped[39m[2m)[22m
+@cognite/sdk:  [31m❯[39m src/__tests__/api/files.int.spec.ts [2m([22m[2m25 tests[22m[2m | [22m[33m25 skipped[39m[2m)[22m[33m 585[2mms[22m[39m
+@cognite/sdk: [90mstdout[2m | src/__tests__/api/filesMultiPart.unit.spec.ts[2m > [22m[2mMulti part upload unit test[2m > [22m[2mif complete call fails, retrying uploadparts can complete the upload
+@cognite/sdk: [22m[39mle [Error]: Request failed | status code: 408
+@cognite/sdk:     at Function.throwCustomErrorResponse (/workspace/packages/core/src/httpClient/basicHttpClient.ts:39:11)
+@cognite/sdk:     at O.<anonymous> (/workspace/packages/core/src/httpClient/basicHttpClient.ts:196:23)
+@cognite/sdk:     at Generator.next (<anonymous>)
+@cognite/sdk:     at /workspace/packages/core/dist/index.js:28:25
+@cognite/sdk:     at new Promise (<anonymous>)
+@cognite/sdk:     at __async (/workspace/packages/core/dist/index.js:14:22)
+@cognite/sdk:     at O.postRequest (/workspace/packages/core/src/httpClient/basicHttpClient.ts:193:31)
+@cognite/sdk:     at O.<anonymous> (/workspace/packages/core/src/httpClient/retryableHttpClient.ts:99:18)
+@cognite/sdk:     at Generator.next (<anonymous>)
+@cognite/sdk:     at /workspace/packages/core/dist/index.js:28:25 {
+@cognite/sdk:   status: [33m408[39m,
+@cognite/sdk:   data: [32m'timeout'[39m,
+@cognite/sdk:   headers: {}
+@cognite/sdk: }
+@cognite/sdk: [90mstdout[2m | src/__tests__/api/filesMultiPart.unit.spec.ts[2m > [22m[2mMulti part upload unit test[2m > [22m[2mpart uploads can be run concurrently with progress
+@cognite/sdk: [22m[39mUploaded part 0 with 5 length uploaded. completed 5/590 bytes 
+@cognite/sdk: Uploaded part 1 with 5 length uploaded. completed 10/590 bytes 
+@cognite/sdk: Uploaded part 2 with 5 length uploaded. completed 15/590 bytes 
+@cognite/sdk: Uploaded part 3 with 5 length uploaded. completed 20/590 bytes 
+@cognite/sdk: Uploaded part 4 with 5 length uploaded. completed 25/590 bytes 
+@cognite/sdk: Uploaded part 5 with 5 length uploaded. completed 30/590 bytes 
+@cognite/sdk: Uploaded part 6 with 5 length uploaded. completed 35/590 bytes 
+@cognite/sdk: Uploaded part 7 with 5 length uploaded. completed 40/590 bytes 
+@cognite/sdk: Uploaded part 8 with 5 length uploaded. completed 45/590 bytes 
+@cognite/sdk: Uploaded part 9 with 5 length uploaded. completed 50/590 bytes 
+@cognite/sdk: Uploaded part 10 with 6 length uploaded. completed 56/590 bytes 
+@cognite/sdk: Uploaded part 11 with 6 length uploaded. completed 62/590 bytes 
+@cognite/sdk: Uploaded part 12 with 6 length uploaded. completed 68/590 bytes 
+@cognite/sdk: Uploaded part 13 with 6 length uploaded. completed 74/590 bytes 
+@cognite/sdk: Uploaded part 14 with 6 length uploaded. completed 80/590 bytes 
+@cognite/sdk: Uploaded part 15 with 6 length uploaded. completed 86/590 bytes 
+@cognite/sdk: Uploaded part 16 with 6 length uploaded. completed 92/590 bytes 
+@cognite/sdk: Uploaded part 17 with 6 length uploaded. completed 98/590 bytes 
+@cognite/sdk: Uploaded part 18 with 6 length uploaded. completed 104/590 bytes 
+@cognite/sdk: Uploaded part 19 with 6 length uploaded. completed 110/590 bytes 
+@cognite/sdk: Uploaded part 20 with 6 length uploaded. completed 116/590 bytes 
+@cognite/sdk: Uploaded part 21 with 6 length uploaded. completed 122/590 bytes 
+@cognite/sdk: Uploaded part 22 with 6 length uploaded. completed 128/590 bytes 
+@cognite/sdk: Uploaded part 23 with 6 length uploaded. completed 134/590 bytes 
+@cognite/sdk: Uploaded part 24 with 6 length uploaded. completed 140/590 bytes 
+@cognite/sdk: Uploaded part 25 with 6 length uploaded. completed 146/590 bytes 
+@cognite/sdk: Uploaded part 26 with 6 length uploaded. completed 152/590 bytes 
+@cognite/sdk: Uploaded part 27 with 6 length uploaded. completed 158/590 bytes 
+@cognite/sdk: Uploaded part 28 with 6 length uploaded. completed 164/590 bytes 
+@cognite/sdk: Uploaded part 29 with 6 length uploaded. completed 170/590 bytes 
+@cognite/sdk: Uploaded part 30 with 6 length uploaded. completed 176/590 bytes 
+@cognite/sdk: Uploaded part 31 with 6 length uploaded. completed 182/590 bytes 
+@cognite/sdk: Uploaded part 32 with 6 length uploaded. completed 188/590 bytes 
+@cognite/sdk: Uploaded part 33 with 6 length uploaded. completed 194/590 bytes 
+@cognite/sdk: Uploaded part 34 with 6 length uploaded. completed 200/590 bytes 
+@cognite/sdk: Uploaded part 35 with 6 length uploaded. completed 206/590 bytes 
+@cognite/sdk: Uploaded part 36 with 6 length uploaded. completed 212/590 bytes 
+@cognite/sdk: Uploaded part 37 with 6 length uploaded. completed 218/590 bytes 
+@cognite/sdk: Uploaded part 38 with 6 length uploaded. completed 224/590 bytes 
+@cognite/sdk: Uploaded part 39 with 6 length uploaded. completed 230/590 bytes 
+@cognite/sdk: Uploaded part 40 with 6 length uploaded. completed 236/590 bytes 
+@cognite/sdk: Uploaded part 41 with 6 length uploaded. completed 242/590 bytes 
+@cognite/sdk: Uploaded part 42 with 6 length uploaded. completed 248/590 bytes 
+@cognite/sdk: Uploaded part 43 with 6 length uploaded. completed 254/590 bytes 
+@cognite/sdk: Uploaded part 44 with 6 length uploaded. completed 260/590 bytes 
+@cognite/sdk: Uploaded part 45 with 6 length uploaded. completed 266/590 bytes 
+@cognite/sdk: Uploaded part 46 with 6 length uploaded. completed 272/590 bytes 
+@cognite/sdk: Uploaded part 47 with 6 length uploaded. completed 278/590 bytes 
+@cognite/sdk: Uploaded part 48 with 6 length uploaded. completed 284/590 bytes 
+@cognite/sdk: Uploaded part 49 with 6 length uploaded. completed 290/590 bytes 
+@cognite/sdk: Uploaded part 50 with 6 length uploaded. completed 296/590 bytes 
+@cognite/sdk: Uploaded part 51 with 6 length uploaded. completed 302/590 bytes 
+@cognite/sdk: Uploaded part 52 with 6 length uploaded. completed 308/590 bytes 
+@cognite/sdk: Uploaded part 53 with 6 length uploaded. completed 314/590 bytes 
+@cognite/sdk: Uploaded part 54 with 6 length uploaded. completed 320/590 bytes 
+@cognite/sdk: Uploaded part 55 with 6 length uploaded. completed 326/590 bytes 
+@cognite/sdk: Uploaded part 56 with 6 length uploaded. completed 332/590 bytes 
+@cognite/sdk: Uploaded part 57 with 6 length uploaded. completed 338/590 bytes 
+@cognite/sdk: Uploaded part 58 with 6 length uploaded. completed 344/590 bytes 
+@cognite/sdk: Uploaded part 59 with 6 length uploaded. completed 350/590 bytes 
+@cognite/sdk: Uploaded part 60 with 6 length uploaded. completed 356/590 bytes 
+@cognite/sdk: Uploaded part 61 with 6 length uploaded. completed 362/590 bytes 
+@cognite/sdk: Uploaded part 62 with 6 length uploaded. completed 368/590 bytes 
+@cognite/sdk: Uploaded part 63 with 6 length uploaded. completed 374/590 bytes 
+@cognite/sdk: Uploaded part 64 with 6 length uploaded. completed 380/590 bytes 
+@cognite/sdk: Uploaded part 65 with 6 length uploaded. completed 386/590 bytes 
+@cognite/sdk: Uploaded part 66 with 6 length uploaded. completed 392/590 bytes 
+@cognite/sdk: Uploaded part 67 with 6 length uploaded. completed 398/590 bytes 
+@cognite/sdk: Uploaded part 68 with 6 length uploaded. completed 404/590 bytes 
+@cognite/sdk: Uploaded part 69 with 6 length uploaded. completed 410/590 bytes 
+@cognite/sdk: Uploaded part 70 with 6 length uploaded. completed 416/590 bytes 
+@cognite/sdk: Uploaded part 71 with 6 length uploaded. completed 422/590 bytes 
+@cognite/sdk: Uploaded part 72 with 6 length uploaded. completed 428/590 bytes 
+@cognite/sdk: Uploaded part 73 with 6 length uploaded. completed 434/590 bytes 
+@cognite/sdk: Uploaded part 74 with 6 length uploaded. completed 440/590 bytes 
+@cognite/sdk: Uploaded part 75 with 6 length uploaded. completed 446/590 bytes 
+@cognite/sdk: Uploaded part 76 with 6 length uploaded. completed 452/590 bytes 
+@cognite/sdk: Uploaded part 77 with 6 length uploaded. completed 458/590 bytes 
+@cognite/sdk: Uploaded part 78 with 6 length uploaded. completed 464/590 bytes 
+@cognite/sdk: Uploaded part 79 with 6 length uploaded. completed 470/590 bytes 
+@cognite/sdk: Uploaded part 80 with 6 length uploaded. completed 476/590 bytes 
+@cognite/sdk: Uploaded part 81 with 6 length uploaded. completed 482/590 bytes 
+@cognite/sdk: Uploaded part 82 with 6 length uploaded. completed 488/590 bytes 
+@cognite/sdk: Uploaded part 83 with 6 length uploaded. completed 494/590 bytes 
+@cognite/sdk: Uploaded part 84 with 6 length uploaded. completed 500/590 bytes 
+@cognite/sdk: Uploaded part 85 with 6 length uploaded. completed 506/590 bytes 
+@cognite/sdk: Uploaded part 86 with 6 length uploaded. completed 512/590 bytes 
+@cognite/sdk: Uploaded part 87 with 6 length uploaded. completed 518/590 bytes 
+@cognite/sdk: Uploaded part 88 with 6 length uploaded. completed 524/590 bytes 
+@cognite/sdk: Uploaded part 89 with 6 length uploaded. completed 530/590 bytes 
+@cognite/sdk: Uploaded part 90 with 6 length uploaded. completed 536/590 bytes 
+@cognite/sdk: Uploaded part 91 with 6 length uploaded. completed 542/590 bytes 
+@cognite/sdk: Uploaded part 92 with 6 length uploaded. completed 548/590 bytes 
+@cognite/sdk: Uploaded part 93 with 6 length uploaded. completed 554/590 bytes 
+@cognite/sdk: Uploaded part 94 with 6 length uploaded. completed 560/590 bytes 
+@cognite/sdk: Uploaded part 95 with 6 length uploaded. completed 566/590 bytes 
+@cognite/sdk: Uploaded part 96 with 6 length uploaded. completed 572/590 bytes 

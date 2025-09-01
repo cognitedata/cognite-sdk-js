@@ -1,0 +1,100 @@
+lerna notice cli v7.4.2
+lerna info versioning independent
+lerna notice filter excluding "*-sample"
+lerna notice filter changed since "origin/master"
+lerna info Looking for changed packages since origin/master
+lerna info filter [ '!*-sample' ]
+
+ >  Lerna (powered by Nx)   Running target test for 4 projects:
+
+    - @cognite/sdk-alpha
+    - @cognite/sdk-beta
+    - @cognite/sdk-core
+    - @cognite/sdk
+
+ 
+
+> @cognite/sdk-core:test
+
+(node:4827) [DEP0060] DeprecationWarning: The `util._extend` API is deprecated. Please use Object.assign() instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+@cognite/sdk-core: [1m[7m[36m RUN [39m[27m[22m [36mv2.1.9 [39m[90m/workspace/packages/core[39m
+@cognite/sdk-core:  [32m✓[39m src/httpClient/basicHttpClient.unit.spec.ts [2m([22m[2m24 tests[22m[2m)[22m[90m 84[2mms[22m[39m
+@cognite/sdk-core: [90mstderr[2m | src/__tests__/cogniteClient.unit.spec.ts[2m > [22m[2mCogniteClient[2m > [22m[2mconstructor[2m > [22m[2moidcTokenProvider[2m > [22m[2mensure deprecated getToken still works
+@cognite/sdk-core: [22m[39moptions.getToken is deprecated and has been renamed to `options.oidcTokenProvider`.
+@cognite/sdk-core:  [32m✓[39m src/httpClient/cdfHttpClient.unit.spec.ts [2m([22m[2m17 tests[22m[2m)[22m[33m 428[2mms[22m[39m
+@cognite/sdk-core:    [33m[2m✓[22m[39m CDFHttpClient[2m > [22mhandle one time headers[2m > [22mshould send it after retry [33m355[2mms[22m[39m
+@cognite/sdk-core:  [32m✓[39m src/__tests__/utils.unit.spec.ts [2m([22m[2m11 tests[22m[2m)[22m[33m 312[2mms[22m[39m
+@cognite/sdk-core:  [32m✓[39m src/__tests__/error.unit.spec.ts [2m([22m[2m6 tests[22m[2m)[22m[90m 9[2mms[22m[39m
+@cognite/sdk-core:  [32m✓[39m src/__tests__/cogniteClient.unit.spec.ts [2m([22m[2m17 tests[22m[2m)[22m[33m 747[2mms[22m[39m
+@cognite/sdk-core:  [32m✓[39m src/httpClient/exponentialJitterBackoff.spec.ts [2m([22m[2m10 tests[22m[2m)[22m[90m 4[2mms[22m[39m
+@cognite/sdk-core:  [32m✓[39m src/httpClient/retryValidator.unit.spec.ts [2m([22m[2m8 tests[22m[2m)[22m[90m 5[2mms[22m[39m
+@cognite/sdk-core:  [32m✓[39m src/__tests__/graphUtils.unit.spec.ts [2m([22m[2m4 tests[22m[2m)[22m[90m 7[2mms[22m[39m
+@cognite/sdk-core:  [32m✓[39m src/__tests__/httpClient/basicHttpClient.unit.spec.ts [2m([22m[2m3 tests[22m[2m)[22m[90m 2[2mms[22m[39m
+@cognite/sdk-core:  [32m✓[39m src/__tests__/multiError.unit.spec.ts [2m([22m[2m2 tests[22m[2m)[22m[90m 5[2mms[22m[39m
+@cognite/sdk-core:  [32m✓[39m src/__tests__/dateParser.unit.spec.ts [2m([22m[2m2 tests[22m[2m)[22m[90m 3[2mms[22m[39m
+@cognite/sdk-core:  [32m✓[39m src/__tests__/revertableArraySorter.unit.spec.ts [2m([22m[2m1 test[22m[2m)[22m[90m 7[2mms[22m[39m
+@cognite/sdk-core:  [32m✓[39m src/__tests__/queue.unit.spec.ts [2m([22m[2m5 tests[22m[2m)[22m[90m 2[2mms[22m[39m
+@cognite/sdk-core:  [32m✓[39m src/__tests__/metadata.unit.spec.ts [2m([22m[2m1 test[22m[2m)[22m[90m 2[2mms[22m[39m
+@cognite/sdk-core:  [32m✓[39m src/httpClient/retryableHttpClient.unit.spec.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 2176[2mms[22m[39m
+@cognite/sdk-core:    [33m[2m✓[22m[39m RetryableHttpClient[2m > [22mshould retry [33m659[2mms[22m[39m
+@cognite/sdk-core:    [33m[2m✓[22m[39m RetryableHttpClient[2m > [22mthrow on 400 after retry [33m1033[2mms[22m[39m
+@cognite/sdk-core:    [33m[2m✓[22m[39m RetryableHttpClient[2m > [22mrespect when a function is passed as retryValidator [33m476[2mms[22m[39m
+@cognite/sdk-core:  [32m✓[39m src/__tests__/constants.spec.ts [2m([22m[2m1 test[22m[2m)[22m[90m 6[2mms[22m[39m
+@cognite/sdk-core:  [32m✓[39m src/__tests__/autoPagination.unit.spec.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 3612[2mms[22m[39m
+@cognite/sdk-core:    [33m[2m✓[22m[39m makeAutoPaginationMethods[2m > [22mcorrect usage [33m2307[2mms[22m[39m
+@cognite/sdk-core:    [33m[2m✓[22m[39m makeAutoPaginationMethods[2m > [22mhas default limit [33m1303[2mms[22m[39m
+@cognite/sdk-core: [2m Test Files [22m [1m[32m17 passed[39m[22m[90m (17)[39m
+@cognite/sdk-core: [2m      Tests [22m [1m[32m119 passed[39m[22m[90m (119)[39m
+@cognite/sdk-core: [2m   Start at [22m 10:31:53
+@cognite/sdk-core: [2m   Duration [22m 5.39s[2m (transform 223ms, setup 83ms, collect 589ms, tests 7.41s, environment 2.70s, prepare 716ms)[22m
+
+> @cognite/sdk:test
+
+@cognite/sdk: [1m[7m[36m RUN [39m[27m[22m [36mv2.1.9 [39m[90m/workspace/packages/stable[39m
+@cognite/sdk:  [31m❯[39m src/__tests__/api/filesMultiPart.unit.spec.ts [2m([22m[2m0 test[22m[2m)[22m
+@cognite/sdk:  [31m❯[39m src/__tests__/api/datapoints.int.spec.ts [2m([22m[2m0 test[22m[2m)[22m
+@cognite/sdk:  [31m❯[39m src/__tests__/api/documentsApi.unit.spec.ts [2m([22m[2m0 test[22m[2m)[22m
+@cognite/sdk:  [31m❯[39m src/__tests__/api/assets.int.spec.ts [2m([22m[2m0 test[22m[2m)[22m
+@cognite/sdk:  [31m❯[39m src/__tests__/api/3d.mock.spec.ts [2m([22m[2m0 test[22m[2m)[22m
+@cognite/sdk:  [31m❯[39m src/__tests__/api/files.int.spec.ts [2m([22m[2m0 test[22m[2m)[22m
+@cognite/sdk:  [31m❯[39m src/__tests__/api/revisions3D.int.spec.ts [2m([22m[2m0 test[22m[2m)[22m
+@cognite/sdk:  [31m❯[39m src/__tests__/api/filesMultiPart.int.spec.ts [2m([22m[2m0 test[22m[2m)[22m
+@cognite/sdk:  [31m❯[39m src/__tests__/api/instances.int.spec.ts [2m([22m[2m0 test[22m[2m)[22m
+@cognite/sdk:  [31m❯[39m src/__tests__/api/annotationsApi.int.spec.ts [2m([22m[2m0 test[22m[2m)[22m
+@cognite/sdk:  [31m❯[39m src/__tests__/api/geospatial.int.spec.ts [2m([22m[2m0 test[22m[2m)[22m
+@cognite/sdk:  [31m❯[39m src/__tests__/api/assets.unit.spec.ts [2m([22m[2m0 test[22m[2m)[22m
+@cognite/sdk:  [31m❯[39m src/__tests__/api/datasets.int.spec.ts [2m([22m[2m0 test[22m[2m)[22m
+@cognite/sdk:  [31m❯[39m src/__tests__/api/timeseries.int.spec.ts [2m([22m[2m0 test[22m[2m)[22m
+@cognite/sdk:  [31m❯[39m src/__tests__/api/documentsApi.int.spec.ts [2m([22m[2m0 test[22m[2m)[22m
+@cognite/sdk:  [31m❯[39m src/__tests__/api/relationships.int.spec.ts [2m([22m[2m0 test[22m[2m)[22m
+@cognite/sdk:  [31m❯[39m src/__tests__/api/raw.int.spec.ts [2m([22m[2m0 test[22m[2m)[22m
+@cognite/sdk:  [31m❯[39m src/__tests__/api/sequences.int.spec.ts [2m([22m[2m0 test[22m[2m)[22m
+@cognite/sdk:  [31m❯[39m src/__tests__/api/visionApi.int.spec.ts [2m([22m[2m0 test[22m[2m)[22m
+@cognite/sdk:  [31m❯[39m src/__tests__/api/datamodels.int.spec.ts [2m([22m[2m0 test[22m[2m)[22m
+@cognite/sdk:  [31m❯[39m src/__tests__/api/events.int.spec.ts [2m([22m[2m0 test[22m[2m)[22m
+@cognite/sdk:  [31m❯[39m src/__tests__/api/containers.int.spec.ts [2m([22m[2m0 test[22m[2m)[22m
+@cognite/sdk:  [31m❯[39m src/__tests__/api/views.int.spec.ts [2m([22m[2m0 test[22m[2m)[22m
+@cognite/sdk:  [31m❯[39m src/__tests__/api/templateInstances.int.spec.ts [2m([22m[2m0 test[22m[2m)[22m
+@cognite/sdk:  [31m❯[39m src/__tests__/api/entityMatching.int.spec.ts [2m([22m[2m0 test[22m[2m)[22m
+@cognite/sdk:  [31m❯[39m src/__tests__/api/assetMappings3D.int.spec.ts [2m([22m[2m0 test[22m[2m)[22m
+@cognite/sdk:  [31m❯[39m src/__tests__/api/spaces.int.spec.ts [2m([22m[2m0 test[22m[2m)[22m
+@cognite/sdk:  [31m❯[39m src/__tests__/api/timeseriesWithUnits.int.spec.ts [2m([22m[2m0 test[22m[2m)[22m
+@cognite/sdk:  [31m❯[39m src/__tests__/api/groups.int.spec.ts [2m([22m[2m0 test[22m[2m)[22m
+@cognite/sdk:  [31m❯[39m src/__tests__/api/viewApi.int.spec.ts [2m([22m[2m0 test[22m[2m)[22m
+@cognite/sdk:  [31m❯[39m src/__tests__/api/templateGroups.int.spec.ts [2m([22m[2m0 test[22m[2m)[22m
+@cognite/sdk:  [31m❯[39m src/__tests__/api/labels.unit.spec.ts [2m([22m[2m0 test[22m[2m)[22m
+@cognite/sdk:  [31m❯[39m src/__tests__/api/templateGroupVersions.int.spec.ts [2m([22m[2m0 test[22m[2m)[22m
+@cognite/sdk:  [31m❯[39m src/__tests__/api/sessions.int.spec.ts [2m([22m[2m0 test[22m[2m)[22m
+@cognite/sdk:  [31m❯[39m src/__tests__/api/sequences.unit.spec.ts [2m([22m[2m0 test[22m[2m)[22m
+@cognite/sdk:  [31m❯[39m src/__tests__/api/cogniteClient.unit.spec.ts [2m([22m[2m0 test[22m[2m)[22m
+@cognite/sdk:  [31m❯[39m src/__tests__/api/templateGraphQlApi.int.spec.ts [2m([22m[2m0 test[22m[2m)[22m
+@cognite/sdk:  [31m❯[39m src/__tests__/api/models3D.int.spec.ts [2m([22m[2m0 test[22m[2m)[22m
+@cognite/sdk:  [31m❯[39m src/__tests__/api/sessions.unit.spec.ts [2m([22m[2m0 test[22m[2m)[22m
+@cognite/sdk:  [32m✓[39m src/types.spec.ts [2m([22m[2m4 tests[22m[2m)[22m[90m 2[2mms[22m[39m
+@cognite/sdk:  [31m❯[39m src/__tests__/api/userProfiles.int.spec.ts [2m([22m[2m0 test[22m[2m)[22m
+@cognite/sdk:  [31m❯[39m src/__tests__/api/securityCategories.int.spec.ts [2m([22m[2m0 test[22m[2m)[22m
+@cognite/sdk:  [31m❯[39m src/__tests__/api/groups.unit.spec.ts [2m([22m[2m0 test[22m[2m)[22m
+@cognite/sdk:  [31m❯[39m src/__tests__/api/labels.int.spec.ts [2m([22m[2m0 test[22m[2m)[22m
+@cognite/sdk:  [31m❯[39m src/__tests__/api/files.unit.spec.ts [2m([22m[2m0 test[22m[2m)[22m
+@cognite/sdk:  [31m❯[39m src/__tests__/api/cogniteClient.int.spec.ts [2m([22m[2m0 test[22m[2m)[22m
