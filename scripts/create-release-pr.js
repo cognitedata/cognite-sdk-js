@@ -4,18 +4,19 @@ const { execSync } = require("child_process");
 
 async function createReleasePR() {
   try {
-    // Calculate versions without pushing
+    // Create release branch first
+    const branchName = `release/automated-${
+      new Date().toISOString().split("T")[0]
+    }`;
+    console.log(`Creating release branch: ${branchName}`);
+    execSync(`git checkout -b ${branchName}`);
+
+    // Calculate versions without pushing (now on the release branch)
     console.log("Calculating version changes...");
     execSync(
       "lerna version --conventional-commits --no-push --no-git-tag-version --yes",
       { stdio: "inherit" }
     );
-
-    // Create release branch
-    const branchName = `release/automated-${
-      new Date().toISOString().split("T")[0]
-    }`;
-    execSync(`git checkout -b ${branchName}`);
 
     // Commit changes
     execSync("git add .");

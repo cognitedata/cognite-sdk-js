@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [10.1.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@10.0.0...@cognite/sdk@10.1.0) (2025-09-04)
+
+
+### Features
+
+* **datapoints-latest:** add automatic chunking [release] ([#1283](https://github.com/cognitedata/cognite-sdk-js/issues/1283)) ([7f53521](https://github.com/cognitedata/cognite-sdk-js/commit/7f5352175e4659973947d8b73a71d1938fbde442))
+* **stable:** added datamodelacl and dataModelInstancesacl to group type ([#1274](https://github.com/cognitedata/cognite-sdk-js/issues/1274)) ([ae36253](https://github.com/cognitedata/cognite-sdk-js/commit/ae36253c53c2a5fad086e047f805f2e9447c0bda))
+* **stable:** generate latest types (04.03.25) ([#1279](https://github.com/cognitedata/cognite-sdk-js/issues/1279)) ([79abb79](https://github.com/cognitedata/cognite-sdk-js/commit/79abb793f40f44ec34fe79aafdfeaab19f57603d))
+
+
+
+
+
 # [10.0.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.17.1...@cognite/sdk@10.0.0) (2025-02-03)
 
 
