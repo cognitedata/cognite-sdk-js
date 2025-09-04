@@ -2,45 +2,19 @@
 
 ## Overview
 
-A streamlined release process where releases are initiated manually but executed automatically through pull requests:
+A streamlined release process that eliminates security risks while maintaining simplicity:
 
-1. **Release Manager**: Pull latest master, run release command
-2. **Automated**: Command creates PR with version bumps and release notes
-3. **Release Manager**: Review and merge PR
-4. **Automated**: Packages published to NPM and git tags created
+1. **Release Manager**: `yarn release` (creates PR automatically)
+2. **Review**: Review and approve the generated PR
+3. **Publish**: Merge PR → packages automatically publish to NPM
 
-## Release Workflow
+## Security Issue Resolved
 
-### 1. Initiate Release
+**Problem**: The previous automated workflow used `lerna version` commands that pushed commits directly to the `master` branch, bypassing code review and branch protection rules.
 
-```bash
-# Pull latest master
-git checkout master
-git pull origin master
-
-# Run release command (creates PR automatically)
-yarn release
-```
-
-### 2. Review & Merge
-
-- Review the generated PR for version changes and release notes
-- Merge PR to master when ready
-- Packages automatically publish to NPM
+**Solution**: All version changes now go through pull request workflow with proper review and validation.
 
 ## Implementation
-
-### Required Scripts
-
-**`package.json`**:
-
-```json
-{
-  "scripts": {
-    "release": "node scripts/create-release-pr.js"
-  }
-}
-```
 
 ### Release Script (`scripts/create-release-pr.js`)
 
@@ -87,9 +61,17 @@ async function createReleasePR() {
 createReleasePR();
 ```
 
-### GitHub Workflows
+### Package.json Script
 
-**`.github/workflows/publish-on-merge.yaml`**:
+```json
+{
+  "scripts": {
+    "release": "node scripts/create-release-pr.js"
+  }
+}
+```
+
+### GitHub Workflow (`.github/workflows/publish-on-merge.yaml`)
 
 ```yaml
 name: Publish on Release PR Merge
@@ -101,49 +83,34 @@ on:
 
 jobs:
   publish:
-    # Only run when a commit contains our release message (from the automated PR)
     if: contains(github.event.head_commit.message, 'chore(release): version bump')
     runs-on: ubuntu-latest
-    environment: production  # Requires manual approval for production deployments
+    environment: production
 
     steps:
       - uses: actions/checkout@v4
-        # Get the merged code with updated package.json versions
-
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-        # Set up Node.js environment for building and publishing
 
       - name: Install dependencies
         run: yarn install --immutable
-        # Install all dependencies needed for build and publish
 
       - name: Build packages
         run: yarn build
-        # Build all packages before publishing (ensures clean artifacts)
 
       - name: Configure NPM
         run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc
         env:
           NPM_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
-        # Authenticate with NPM registry for publishing
 
       - name: Publish to NPM and create tags
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          # lerna publish from-package does the following:
-          # 1. Reads current versions from package.json files
-          # 2. Publishes changed packages to NPM registry
-          # 3. Creates and pushes git tags for published versions
-          # 4. Does NOT modify package.json or create commits (versions already set by PR)
-          lerna publish from-package --yes --no-git-reset
+        run: lerna publish from-package --yes --no-git-reset
 ```
 
-### Configuration Updates
-
-**`lerna.json`**:
+### Lerna Configuration (`lerna.json`)
 
 ```json
 {
@@ -166,93 +133,90 @@ jobs:
 }
 ```
 
-**Remove existing automated triggers** from `.github/workflows/release.yaml` or delete the file entirely.
+### Branch Protection Setup
 
-## How Lerna Publish Works
+To ensure an outdated release PR cannot be merged.
 
-### `lerna publish from-package` explained:
+**Required GitHub Settings for `master` branch:**
 
-When the GitHub workflow runs `lerna publish from-package`, here's exactly what happens:
+- ✅ Require pull request reviews before merging
+- ✅ Require status checks to pass before merging
+- ✅ Require branches to be up to date before merging
+- ✅ Include administrators in restrictions
 
-1. **Version Detection**: Reads current versions from each `package.json` file
-2. **Change Detection**: Compares current versions with what's published on NPM
-3. **Package Publishing**: Publishes only packages that have new versions to NPM
-4. **Git Tagging**: Creates git tags (e.g., `@cognite/sdk@1.2.3`) for each published package
-5. **Tag Pushing**: Pushes all new tags to the GitHub repository
+**Add validation CI check (`.github/workflows/validate-release-pr.yaml`):**
 
-### Key Benefits:
+```yaml
+name: Validate Release PR
 
-- ✅ **Idempotent**: Safe to run multiple times - won't republish existing versions
-- ✅ **Selective**: Only publishes packages that actually changed versions
-- ✅ **Automatic tagging**: Creates consistent git tags without manual intervention
-- ✅ **No version bumping**: Doesn't modify `package.json` files (versions already set by PR)
+on:
+  pull_request:
+    branches: [master]
 
-### Command Flags Explained:
+jobs:
+  validate-release:
+    if: startsWith(github.head_ref, 'release/automated-')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-- `--yes`: Skip all confirmation prompts (required for CI)
-- `--no-git-reset`: Don't reset git state after publishing
-- `from-package`: Use current `package.json` versions instead of calculating new ones
-
-## Security & Branch Protection
-
-### Required GitHub Settings
-
-1. **Branch Protection for `master`**:
-
-   - Require pull request reviews (1+ reviewer)
-   - Require status checks to pass
-   - Include administrators in restrictions
-   - No direct pushes allowed
-
-2. **Environment Protection for `production`**:
-   - Require manual approval for NPM publishing
-   - Restrict to repository administrators
+      - name: Check if release PR is up-to-date
+        run: |
+          COMMITS_BEHIND=$(git rev-list --count HEAD..origin/master)
+          if [ "$COMMITS_BEHIND" -gt 0 ]; then
+            echo "❌ Release PR is $COMMITS_BEHIND commits behind master"
+            echo "Please close this PR and create a fresh one with 'yarn release'"
+            exit 1
+          else
+            echo "✅ Release PR is up-to-date with master"
+          fi
+```
 
 ## Usage
 
 ### Standard Release
 
 ```bash
+git checkout master && git pull origin master
 yarn release
 # Review PR → Merge → Packages published automatically
 ```
 
-### Emergency Hotfix
+### Handling Outdated Release PRs
 
-```bash
-git checkout master
-git pull origin master
-yarn release
-# Same process - no exceptions for emergencies
-```
+If other PRs are merged before your release PR:
+
+1. Close the outdated release PR
+2. Run `yarn release` again to create a fresh PR
+3. Review and merge the new PR
+
+The branch protection + CI check prevents merging outdated PRs automatically.
+
+## What Lerna Publish Does
+
+`lerna publish from-package`:
+
+- Reads versions from `package.json` files
+- Publishes only packages with new versions to NPM
+- Creates and pushes git tags automatically
+- Safe to run multiple times (idempotent)
+
+## Prerequisites
+
+- **GitHub CLI**: `brew install gh`
+- **NPM Token**: `NPM_PUBLISH_TOKEN` secret configured
+- **GitHub Environment**: `production` environment with manual approval
+- **Branch Protection**: Rules configured as described above
 
 ## Benefits
 
-- **Simple**: One command starts the release process
-- **Safe**: All changes go through PR review
-- **Automated**: Publishing happens automatically on merge
-- **Auditable**: Clear git history and PR trail
-- **Consistent**: Same process for all releases
-
-## Rollback
-
-If a release needs to be rolled back:
-
-```bash
-# Unpublish from NPM (within 24 hours)
-npm unpublish @cognite/sdk@<version>
-
-# Or deprecate (after 24 hours)
-npm deprecate @cognite/sdk@<version> "Critical issue - use previous version"
-
-# Revert version changes via PR
-git checkout master
-git pull origin master
-git checkout -b hotfix/revert-version
-git revert <release-commit-hash>
-git push origin hotfix/revert-version
-gh pr create --title "Revert problematic release" --body "Reverting version changes"
-```
+- **Enhanced Security**: No direct master branch commits
+- **Simple Process**: One command starts release flow
+- **Clear Audit Trail**: Every release documented in PR history
+- **Automatic Publishing**: Merge triggers immediate NPM publication
+- **Prevents Accidents**: Branch protection prevents outdated releases
 
 ## Dependencies
 
