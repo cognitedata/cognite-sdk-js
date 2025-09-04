@@ -7,41 +7,28 @@ on:
 
 jobs:
   publish:
-    # Only run when a commit contains our release message (from the automated PR)
     if: contains(github.event.head_commit.message, 'chore(release): version bump')
     runs-on: ubuntu-latest
-    environment: production  # Requires manual approval for production deployments
+    environment: production
 
     steps:
       - uses: actions/checkout@v4
-        # Get the merged code with updated package.json versions
-        
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-        # Set up Node.js environment for building and publishing
 
       - name: Install dependencies
         run: yarn install --immutable
-        # Install all dependencies needed for build and publish
 
       - name: Build packages
         run: yarn build
-        # Build all packages before publishing (ensures clean artifacts)
 
       - name: Configure NPM
         run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc
         env:
           NPM_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
-        # Authenticate with NPM registry for publishing
 
       - name: Publish to NPM and create tags
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          # lerna publish from-package does the following:
-          # 1. Reads current versions from package.json files
-          # 2. Publishes changed packages to NPM registry
-          # 3. Creates and pushes git tags for published versions
-          # 4. Does NOT modify package.json or create commits (versions already set by PR)
-          lerna publish from-package --yes --no-git-reset
+        run: lerna publish from-package --yes --no-git-reset

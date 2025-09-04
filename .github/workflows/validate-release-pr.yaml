@@ -1,0 +1,25 @@
+name: Validate Release PR
+
+on:
+  pull_request:
+    branches: [master]
+
+jobs:
+  validate-release:
+    if: startsWith(github.head_ref, 'release/automated-')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check if release PR is up-to-date
+        run: |
+          COMMITS_BEHIND=$(git rev-list --count HEAD..origin/master)
+          if [ "$COMMITS_BEHIND" -gt 0 ]; then
+            echo "❌ Release PR is $COMMITS_BEHIND commits behind master"
+            echo "Please close this PR and create a fresh one with 'yarn release'"
+            exit 1
+          else
+            echo "✅ Release PR is up-to-date with master"
+          fi
