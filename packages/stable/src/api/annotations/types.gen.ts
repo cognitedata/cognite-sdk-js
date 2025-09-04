@@ -7,92 +7,77 @@
 attribute.
 * @example {"assetRef":{"externalId":"abc"},"symbolRegion":{"xMin":0.1,"xMax":0.2,"yMin":0.1,"yMax":0.2},"textRegion":{"xMin":0.2,"xMax":0.3,"yMin":0.2,"yMax":0.3},"pageNumber":43}
 */
-export type AnnotationData =
-  | AnnotationsBoundingVolume
-  | AnnotationsClassification
-  | AnnotationsDetection
-  | AnnotationsExtractedText
-  | AnnotationsFileLink
-  | AnnotationsIsoPlanAnnotation
-  | AnnotationsJunction
-  | AnnotationsKeypointCollection
-  | AnnotationsLine
-  | AnnotationsObjectDetection
-  | AnnotationsTextRegion
-  | AnnotationsUnhandledSymbolObject
-  | AnnotationsUnhandledTextObject
-  | AnnotationsTypesDiagramsAssetLink
-  | AnnotationsTypesDiagramsInstanceLink
-  | AnnotationsTypesImagesAssetLink
-  | AnnotationsTypesImagesInstanceLink;
+export type AnnotationData = AnnotationsBoundingVolume | AnnotationsClassification | AnnotationsDetection | AnnotationsExtractedText | AnnotationsFileLink | AnnotationsIsoPlanAnnotation | AnnotationsJunction | AnnotationsKeypointCollection | AnnotationsLine | AnnotationsObjectDetection | AnnotationsTextRegion | AnnotationsUnhandledSymbolObject | AnnotationsUnhandledTextObject | AnnotationsCogmonoAnnotationTypesDiagramsAssetLink | AnnotationsCogmonoAnnotationTypesDiagramsInstanceLink | AnnotationsCogmonoAnnotationTypesImagesAssetLink | AnnotationsCogmonoAnnotationTypesImagesInstanceLink;
 /**
  * A reference to an asset. Either the internal ID or the external ID must be provided (exactly one).
  */
 export type AnnotationsAssetRef = {
-  id?: number;
-  externalId?: string;
+    id?: number;
+    externalId?: string;
 };
 /**
  * The boolean value of something
  */
 export interface AnnotationsBoolean {
-  /** The description of a primitive */
-  description?: string;
-  type: 'boolean';
-  /** The boolean value */
-  value: boolean;
+    /** The description of a primitive */
+    description?: string;
+    type: string;
+    /** The boolean value */
+    value: boolean;
 }
 /**
  * A plain rectangle
  */
 export interface AnnotationsBoundingBox {
-  /**
-   * The confidence score for the primitive. It should be between 0 and 1.
-   * @min 0
-   * @max 1
-   */
-  confidence?: number;
-  /**
-   * Maximum abscissa of the bounding box (right edge). Must be strictly more than x_min.
-   * @min 0
-   * @max 1
-   */
-  xMax: number;
-  /**
-   * Minimum abscissa of the bounding box (left edge). Must be strictly less than x_max.
-   * @min 0
-   * @max 1
-   */
-  xMin: number;
-  /**
-   * Maximum ordinate of the bounding box (top edge). Must be strictly more than y_min.
-   * @min 0
-   * @max 1
-   */
-  yMax: number;
-  /**
-   * Minimum ordinate of the bounding box (bottom edge). Must be strictly less than y_max.
-   * @min 0
-   * @max 1
-   */
-  yMin: number;
+    /**
+     * The confidence score for the primitive. It should be between 0 and 1.
+     * @min 0
+     * @max 1
+     */
+    confidence?: number;
+    /**
+     * Maximum abscissa of the bounding box (right edge). Must be strictly more than x_min.
+     * @min 0
+     * @max 1
+     */
+    xMax: number;
+    /**
+     * Minimum abscissa of the bounding box (left edge). Must be strictly less than x_max.
+     * @min 0
+     * @max 1
+     */
+    xMin: number;
+    /**
+     * Maximum ordinate of the bounding box (top edge). Must be strictly more than y_min.
+     * @min 0
+     * @max 1
+     */
+    yMax: number;
+    /**
+     * Minimum ordinate of the bounding box (bottom edge). Must be strictly less than y_max.
+     * @min 0
+     * @max 1
+     */
+    yMin: number;
 }
 /**
  * A bounding volume represents a region in a point cloud
  */
 export interface AnnotationsBoundingVolume {
-  /** The asset this annotation is pointing to */
-  assetRef?: AnnotationsAssetRef;
-  /**
-   * The confidence score for the primitive. It should be between 0 and 1.
-   * @min 0
-   * @max 1
-   */
-  confidence?: number;
-  /** The label describing what type of object it is */
-  label?: string;
-  /** The region of the annotation defined by a list of geometry primitives (cylinder and box). */
-  region: AnnotationsTypesPrimitivesGeometry3DGeometry[];
+    /** The asset this annotation is pointing to */
+    assetRef?: AnnotationsAssetRef;
+    /**
+     * The confidence score for the primitive. It should be between 0 and 1.
+     * @min 0
+     * @max 1
+     */
+    confidence?: number;
+    /** The Data Modeling Instance this annotation is pointing to */
+    instanceRef?: AnnotationsInstanceRef;
+    /** The label describing what type of object it is */
+    label?: string;
+    /** The region of the annotation defined by a list of geometry primitives (cylinder and box). */
+    region: AnnotationsCogmonoAnnotationTypesPrimitivesGeometry3DGeometry[];
 }
 /**
 * A box in 3D space, defined by a 4x4 row-major homogeneous transformation matrix that rotates,
@@ -101,52 +86,178 @@ The box that is transformed is the axis-aligned cube spanning the volume between
 the points (-1, -1, -1) and (1, 1, 1).
 */
 export interface AnnotationsBox {
-  /**
-   * The confidence score for the primitive. It should be between 0 and 1.
-   * @min 0
-   * @max 1
-   */
-  confidence?: number;
-  /** The label describing what type of object it is */
-  label?: string;
-  /** The homogeneous transformation matrix */
-  matrix: number[];
+    /**
+     * The confidence score for the primitive. It should be between 0 and 1.
+     * @min 0
+     * @max 1
+     */
+    confidence?: number;
+    /** The label describing what type of object it is */
+    label?: string;
+    /** The homogeneous transformation matrix */
+    matrix: number[];
 }
 /**
 * Models an image classification represented by a label, and optionally a
 confidence value.
 */
 export interface AnnotationsClassification {
-  /**
-   * The confidence score for the primitive. It should be between 0 and 1.
-   * @min 0
-   * @max 1
-   */
-  confidence?: number;
-  /** The label describing what type of object it is */
-  label: string;
+    /**
+     * The confidence score for the primitive. It should be between 0 and 1.
+     * @min 0
+     * @max 1
+     */
+    confidence?: number;
+    /** The label describing what type of object it is */
+    label: string;
+}
+/**
+ * Models a link to a CDF Asset referenced in an engineering diagram
+ */
+export interface AnnotationsCogmonoAnnotationTypesDiagramsAssetLink {
+    /** The asset this annotation is pointing to */
+    assetRef: AnnotationsAssetRef;
+    /** The description of a primitive */
+    description?: string;
+    /**
+     * The number of the page on which this annotation is located. The first page has number 1.
+     * @min 1
+     * @max 100000
+     */
+    pageNumber?: number;
+    /** The symbol representing the asset */
+    symbol?: string;
+    /** The location of the symbol representing the asset */
+    symbolRegion?: AnnotationsBoundingBox;
+    /** The extracted text */
+    text?: string;
+    /** The location of the text mentioning the asset */
+    textRegion: AnnotationsBoundingBox;
+}
+/**
+ * Models a link to an FDM instance referenced in an engineering diagram
+ */
+export interface AnnotationsCogmonoAnnotationTypesDiagramsInstanceLink {
+    /** The description of a primitive */
+    description?: string;
+    /** The FDM instance this annotation is pointing to */
+    instanceRef: AnnotationsInstanceRef;
+    /**
+     * The number of the page on which this annotation is located. The first page has number 1.
+     * @min 1
+     * @max 100000
+     */
+    pageNumber?: number;
+    /** The symbol found in the file */
+    symbol?: string;
+    /** Optional location of a symbol */
+    symbolRegion?: AnnotationsBoundingBox;
+    /** The extracted text */
+    text: string;
+    /** The location of the text mentioning the file */
+    textRegion: AnnotationsBoundingBox;
+}
+/**
+ * Models a link to a CDF Asset referenced in an image
+ */
+export interface AnnotationsCogmonoAnnotationTypesImagesAssetLink {
+    /** The asset this annotation is pointing to */
+    assetRef: AnnotationsAssetRef;
+    /**
+     * The confidence score for the primitive. It should be between 0 and 1.
+     * @min 0
+     * @max 1
+     */
+    confidence?: number;
+    /**
+     *
+     *     A geometry represented by exactly *one of* ` bounding_box`, `polygon` and
+     *     `polyline` which, respectively, represents a BoundingBox, Polygon and
+     *     PolyLine.
+     *
+     */
+    objectRegion?: AnnotationsCogmonoAnnotationTypesPrimitivesGeometry2DGeometry;
+    /** The extracted text */
+    text: string;
+    /** The location of the text mentioning the asset */
+    textRegion: AnnotationsBoundingBox;
+}
+/**
+ * Models a link to an Data Modeling Instance referenced in an image
+ */
+export interface AnnotationsCogmonoAnnotationTypesImagesInstanceLink {
+    /**
+     * The confidence score for the primitive. It should be between 0 and 1.
+     * @min 0
+     * @max 1
+     */
+    confidence?: number;
+    /** The Data Modeling Instance this annotation is pointing to */
+    instanceRef: AnnotationsInstanceRef;
+    /**
+     *
+     *     A geometry represented by exactly *one of* ` bounding_box`, `polygon` and
+     *     `polyline` which, respectively, represents a BoundingBox, Polygon and
+     *     PolyLine.
+     *
+     */
+    objectRegion?: AnnotationsCogmonoAnnotationTypesPrimitivesGeometry2DGeometry;
+    /** The extracted text */
+    text: string;
+    /** The location of the text mentioning the Data Modeling Instance */
+    textRegion: AnnotationsBoundingBox;
+}
+/**
+* A geometry represented by exactly *one of* ` bounding_box`, `polygon` and
+`polyline` which, respectively, represents a BoundingBox, Polygon and
+PolyLine.
+*/
+export interface AnnotationsCogmonoAnnotationTypesPrimitivesGeometry2DGeometry {
+    /** A plain rectangle */
+    boundingBox?: AnnotationsBoundingBox;
+    /**
+     * A _closed_ polygon represented by _n_ vertices. In other words, we assume
+     * that the first and last vertex are connected.
+     */
+    polygon?: AnnotationsPolygon;
+    /** A polygonal chain consisting of _n_ vertices */
+    polyline?: AnnotationsPolyLine;
+}
+/**
+ * A 3D geometry model represented by exactly *one of* `cylinder` and `box`.
+ */
+export interface AnnotationsCogmonoAnnotationTypesPrimitivesGeometry3DGeometry {
+    /**
+     * A box in 3D space, defined by a 4x4 row-major homogeneous transformation matrix that rotates,
+     * translates and scales a box centered at the origin to its location and orientation in 3D space.
+     * The box that is transformed is the axis-aligned cube spanning the volume between
+     * the points (-1, -1, -1) and (1, 1, 1).
+     */
+    box?: AnnotationsBox;
+    /** A cylinder in 3D space, defined by the centers of the two end surfaces and the radius. */
+    cylinder?: AnnotationsCylinder;
 }
 /**
  * A cylinder in 3D space, defined by the centers of the two end surfaces and the radius.
  */
 export interface AnnotationsCylinder {
-  /** The center of the first cap. */
-  centerA: number[];
-  /** The center of the second cap. */
-  centerB: number[];
-  /**
-   * The confidence score for the primitive. It should be between 0 and 1.
-   * @min 0
-   * @max 1
-   */
-  confidence?: number;
-  /** The label describing what type of object it is */
-  label?: string;
-  /**
-   * The radius of the cylinder.
-   * @min 0
-   */
-  radius: number;
+    /** The center of the first cap. */
+    centerA: number[];
+    /** The center of the second cap. */
+    centerB: number[];
+    /**
+     * The confidence score for the primitive. It should be between 0 and 1.
+     * @min 0
+     * @max 1
+     */
+    confidence?: number;
+    /** The label describing what type of object it is */
+    label?: string;
+    /**
+     * The radius of the cylinder.
+     * @min 0
+     */
+    radius: number;
 }
 /**
 * Represents a detection of a field value in a form.
@@ -155,77 +266,77 @@ The bounding_box indicates the position of the detection. The content of the fie
 an unnormalized_value and the unit.
 */
 export interface AnnotationsDetection {
-  /** Bounding box of the detection area */
-  boundingBox: AnnotationsBoundingBox;
-  /** Name of subcomponent that the detection belongs to */
-  componentName?: string;
-  /** Type of subcomponent that the detection belongs to */
-  componentType?: string;
-  /**
-   * The confidence score for the primitive. It should be between 0 and 1.
-   * @min 0
-   * @max 1
-   */
-  confidence?: number;
-  /** Name of field that has been detected */
-  fieldName: string;
-  /**
-   * The number of the page on which this annotation is located. The first page has number 1.
-   * @min 1
-   * @max 100000
-   */
-  pageNumber?: number;
-  /** The unit of the value field. Optional. */
-  unit?: string;
-  /** The value that has been detected */
-  value: string;
-  /** The value that has been detected, before normalization. Optional. */
-  valueUnnormalized?: string;
+    /** Bounding box of the detection area */
+    boundingBox: AnnotationsBoundingBox;
+    /** Name of subcomponent that the detection belongs to */
+    componentName?: string;
+    /** Type of subcomponent that the detection belongs to */
+    componentType?: string;
+    /**
+     * The confidence score for the primitive. It should be between 0 and 1.
+     * @min 0
+     * @max 1
+     */
+    confidence?: number;
+    /** Name of field that has been detected */
+    fieldName: string;
+    /**
+     * The number of the page on which this annotation is located. The first page has number 1.
+     * @min 1
+     * @max 100000
+     */
+    pageNumber?: number;
+    /** The unit of the value field. Optional. */
+    unit?: string;
+    /** The value that has been detected */
+    value: string;
+    /** The value that has been detected, before normalization. Optional. */
+    valueUnnormalized?: string;
 }
 /**
  * Represents text extracted from a document. Annotations of this type are low-level and not specific to any domain.
  */
 export interface AnnotationsExtractedText {
-  /** The extracted text */
-  extractedText: string;
-  /**
-   * The number of the page on which this annotation is located. The first page has number 1.
-   * @min 1
-   * @max 100000
-   */
-  pageNumber?: number;
-  /** The location of the extracted text */
-  textRegion: AnnotationsBoundingBox;
+    /** The extracted text */
+    extractedText: string;
+    /**
+     * The number of the page on which this annotation is located. The first page has number 1.
+     * @min 1
+     * @max 100000
+     */
+    pageNumber?: number;
+    /** The location of the extracted text */
+    textRegion: AnnotationsBoundingBox;
 }
 /**
  * Models a link to a CDF File referenced in an engineering diagram
  */
 export interface AnnotationsFileLink {
-  /** The description of a primitive */
-  description?: string;
-  /** The file this annotation is pointing to */
-  fileRef: AnnotationsFileRef;
-  /**
-   * The number of the page on which this annotation is located. The first page has number 1.
-   * @min 1
-   * @max 100000
-   */
-  pageNumber?: number;
-  /** The symbol found in the file */
-  symbol?: string;
-  /** The location of the symbol representing the file */
-  symbolRegion?: AnnotationsBoundingBox;
-  /** The extracted text */
-  text?: string;
-  /** The location of the text mentioning the file */
-  textRegion: AnnotationsBoundingBox;
+    /** The description of a primitive */
+    description?: string;
+    /** The file this annotation is pointing to */
+    fileRef: AnnotationsFileRef;
+    /**
+     * The number of the page on which this annotation is located. The first page has number 1.
+     * @min 1
+     * @max 100000
+     */
+    pageNumber?: number;
+    /** The symbol found in the file */
+    symbol?: string;
+    /** The location of the symbol representing the file */
+    symbolRegion?: AnnotationsBoundingBox;
+    /** The extracted text */
+    text?: string;
+    /** The location of the text mentioning the file */
+    textRegion: AnnotationsBoundingBox;
 }
 /**
  * A reference to a file. Either the internal ID or the external ID must be provided (exactly one).
  */
 export type AnnotationsFileRef = {
-  id?: number;
-  externalId?: string;
+    id?: number;
+    externalId?: string;
 };
 /**
 * A reference to an DMS instance,
@@ -233,96 +344,96 @@ defined by the instance itself and the sources (views)
 that define how the data should be interpreted
 */
 export interface AnnotationsInstanceRef {
-  /**
-   * External id of the instance
-   * @pattern ^[^\x00]{1,255}$
-   */
-  externalId: string;
-  /** The type of instance, an edge or a node. */
-  instanceType: 'node' | 'edge';
-  /** References to views */
-  sources: AnnotationsView[];
-  /**
-   * Id of the space that the instance belongs to
-   * @pattern ^[a-zA-Z][a-zA-Z0-9_-]{0,41}[a-zA-Z0-9]?$
-   */
-  space: string;
+    /**
+     * External id of the instance
+     * @pattern ^[^\x00]{1,255}$
+     */
+    externalId: string;
+    /** The type of instance, an edge or a node. */
+    instanceType: "node" | "edge";
+    /** References to views */
+    sources: AnnotationsView[];
+    /**
+     * Id of the space that the instance belongs to
+     * @pattern ^[a-zA-Z][a-zA-Z0-9_-]{0,41}[a-zA-Z0-9]?$
+     */
+    space: string;
 }
 /**
  * Model a custom link in a engineering diagram where it capture details from the texts and linked to assets when necessary
  */
 export interface AnnotationsIsoPlanAnnotation {
-  /** Detail describing the equipment. */
-  detail?: string;
-  /** The asset this annotation is pointing at. Store the id of the file assets to generate downloadable URL. */
-  fileRef?: AnnotationsFileRef;
-  /** The indirectExternalId is the external id of the equipment used to identify the hotspot indirectly. Exa. this is the <indirectRelation> of <indirectExternalId>. */
-  indirectExternalId?: AnnotationsAssetRef;
-  /** Relation connecting this hotspot to a tag in case the hotspot has no tag. E.g. 'second valve upstreams of'. This references the 'indirectExternalId'. */
-  indirectRelation?: string;
-  /** The id of the Pipe that the hotspot belongs to. */
-  lineExternalId?: AnnotationsAssetRef;
-  /** Stores Functional Locations (FLOC) external ID linked to the annotation. */
-  linkedResourceExternalId?: string;
-  /** Stores Functional Locations' (FLOC) ID linked to the annotation. */
-  linkedResourceInternalId?: number;
-  /** Stores Functional Location (FLOC) type the annotation linked to. */
-  linkedResourceType?: 'asset' | 'file';
-  /** Keep track of data link with old annotations. */
-  oldAnnotationId?: string;
-  /**
-   * The number of the page on which this annotation is located. The first page has number 1.
-   * @min 1
-   * @max 100000
-   */
-  pageNumber?: number;
-  /** Indicate the relative position of an annotation. */
-  relativePosition?: string;
-  /** Keeps track of the modification to an annotation. */
-  revision?: string;
-  /** Stores the dimensions of a valve or spade. */
-  sizeAndClass?: AnnotationsSizeAndClassType;
-  /** Use to identify whether the annotation is user created one or ditected via pipeline. */
-  sourceType?: 'pipeline' | 'user';
-  /** Use to save the fluid code of pipes Exa. LO for Lube oil and etc. */
-  subDetail?: string;
-  /** The pattern identified by the detection API results. */
-  text?: string;
-  /** The location of the hotspot represented with a bounding box. */
-  textRegion?: AnnotationsBoundingBox;
-  /** Type of equipment, valve, pump etc. */
-  type?: string;
-  /** Stores the (x,y) coordinate pairs of a line or polyline. */
-  vertices?: AnnotationsPolyLine;
+    /** Detail describing the equipment. */
+    detail?: string;
+    /** The asset this annotation is pointing at. Store the id of the file assets to generate downloadable URL. */
+    fileRef?: AnnotationsFileRef;
+    /** The indirectExternalId is the external id of the equipment used to identify the hotspot indirectly. Exa. this is the <indirectRelation> of <indirectExternalId>. */
+    indirectExternalId?: AnnotationsAssetRef;
+    /** Relation connecting this hotspot to a tag in case the hotspot has no tag. E.g. 'second valve upstreams of'. This references the 'indirectExternalId'. */
+    indirectRelation?: string;
+    /** The id of the Pipe that the hotspot belongs to. */
+    lineExternalId?: AnnotationsAssetRef;
+    /** Stores Functional Locations (FLOC) external ID linked to the annotation. */
+    linkedResourceExternalId?: string;
+    /** Stores Functional Locations' (FLOC) ID linked to the annotation. */
+    linkedResourceInternalId?: number;
+    /** Stores Functional Location (FLOC) type the annotation linked to. */
+    linkedResourceType?: "asset" | "file";
+    /** Keep track of data link with old annotations. */
+    oldAnnotationId?: string;
+    /**
+     * The number of the page on which this annotation is located. The first page has number 1.
+     * @min 1
+     * @max 100000
+     */
+    pageNumber?: number;
+    /** Indicate the relative position of an annotation. */
+    relativePosition?: string;
+    /** Keeps track of the modification to an annotation. */
+    revision?: string;
+    /** Stores the dimensions of a valve or spade. */
+    sizeAndClass?: AnnotationsSizeAndClassType;
+    /** Use to identify whether the annotation is user created one or ditected via pipeline. */
+    sourceType?: "pipeline" | "user";
+    /** Use to save the fluid code of pipes Exa. LO for Lube oil and etc. */
+    subDetail?: string;
+    /** The pattern identified by the detection API results. */
+    text?: string;
+    /** The location of the hotspot represented with a bounding box. */
+    textRegion?: AnnotationsBoundingBox;
+    /** Type of equipment, valve, pump etc. */
+    type?: string;
+    /** Stores the (x,y) coordinate pairs of a line or polyline. */
+    vertices?: AnnotationsPolyLine;
 }
 /**
  * Models a junction between lines in an engineering diagram
  */
 export interface AnnotationsJunction {
-  /**
-   * The number of the page on which this annotation is located. The first page has number 1.
-   * @min 1
-   * @max 100000
-   */
-  pageNumber?: number;
-  /** The point representing the junction */
-  position: AnnotationsPoint;
+    /**
+     * The number of the page on which this annotation is located. The first page has number 1.
+     * @min 1
+     * @max 100000
+     */
+    pageNumber?: number;
+    /** The point representing the junction */
+    position: AnnotationsPoint;
 }
 /**
 * A point attached with additional information such as a confidence value and
 various attribute(s).
 */
 export interface AnnotationsKeypoint {
-  /** Additional attributes data for a compound. */
-  attributes?: Record<string, AnnotationsBoolean | AnnotationsNumerical>;
-  /**
-   * The confidence score for the primitive. It should be between 0 and 1.
-   * @min 0
-   * @max 1
-   */
-  confidence?: number;
-  /** The position of the keypoint */
-  point: AnnotationsPoint;
+    /** Additional attributes data for a compound. */
+    attributes?: Record<string, AnnotationsBoolean | AnnotationsNumerical>;
+    /**
+     * The confidence score for the primitive. It should be between 0 and 1.
+     * @min 0
+     * @max 1
+     */
+    confidence?: number;
+    /** The position of the keypoint */
+    point: AnnotationsPoint;
 }
 /**
 * Models a collection of keypoints represented by a label, a dictionary of
@@ -330,307 +441,195 @@ keypoints (mapping from a (unique) label name to a keypoint), and
 optionally a confidence value and an attributes dictionary.
 */
 export interface AnnotationsKeypointCollection {
-  /** Additional attributes data for a compound. */
-  attributes?: Record<string, AnnotationsBoolean | AnnotationsNumerical>;
-  /**
-   * The confidence score for the primitive. It should be between 0 and 1.
-   * @min 0
-   * @max 1
-   */
-  confidence?: number;
-  /** The detected keypoints */
-  keypoints: Record<string, AnnotationsKeypoint>;
-  /** The label describing what type of object it is */
-  label: string;
+    /** Additional attributes data for a compound. */
+    attributes?: Record<string, AnnotationsBoolean | AnnotationsNumerical>;
+    /**
+     * The confidence score for the primitive. It should be between 0 and 1.
+     * @min 0
+     * @max 1
+     */
+    confidence?: number;
+    /** The detected keypoints */
+    keypoints: Record<string, AnnotationsKeypoint>;
+    /** The label describing what type of object it is */
+    label: string;
 }
 /**
  * Models a line in an engineering diagram
  */
 export interface AnnotationsLine {
-  /** The label describing what type of object it is */
-  label: string;
-  /**
-   * The number of the page on which this annotation is located. The first page has number 1.
-   * @min 1
-   * @max 100000
-   */
-  pageNumber?: number;
-  /** The polyline representing the line */
-  polyline: AnnotationsPolyLine;
+    /** The label describing what type of object it is */
+    label: string;
+    /**
+     * The number of the page on which this annotation is located. The first page has number 1.
+     * @min 1
+     * @max 100000
+     */
+    pageNumber?: number;
+    /** The polyline representing the line */
+    polyline: AnnotationsPolyLine;
 }
 /**
  * The numerical value of something
  */
 export interface AnnotationsNumerical {
-  /** The description of a primitive */
-  description?: string;
-  type: 'numerical';
-  /** The numerical value */
-  value: number | number;
+    /** The description of a primitive */
+    description?: string;
+    type: string;
+    /** The numerical value */
+    value: number | number;
 }
 /**
 * Models an image object detection represented by a label, a geometry, and
 optionally a confidence value.
 */
 export interface AnnotationsObjectDetection {
-  /** Additional attributes data for a compound. */
-  attributes?: Record<string, AnnotationsBoolean | AnnotationsNumerical>;
-  /** A plain rectangle */
-  boundingBox?: AnnotationsBoundingBox;
-  /**
-   * The confidence score for the primitive. It should be between 0 and 1.
-   * @min 0
-   * @max 1
-   */
-  confidence?: number;
-  /** The label describing what type of object it is */
-  label: string;
-  /**
-   * A _closed_ polygon represented by _n_ vertices. In other words, we assume
-   * that the first and last vertex are connected.
-   */
-  polygon?: AnnotationsPolygon;
-  /** A polygonal chain consisting of _n_ vertices */
-  polyline?: AnnotationsPolyLine;
+    /** Additional attributes data for a compound. */
+    attributes?: Record<string, AnnotationsBoolean | AnnotationsNumerical>;
+    /** A plain rectangle */
+    boundingBox?: AnnotationsBoundingBox;
+    /**
+     * The confidence score for the primitive. It should be between 0 and 1.
+     * @min 0
+     * @max 1
+     */
+    confidence?: number;
+    /** The label describing what type of object it is */
+    label: string;
+    /**
+     * A _closed_ polygon represented by _n_ vertices. In other words, we assume
+     * that the first and last vertex are connected.
+     */
+    polygon?: AnnotationsPolygon;
+    /** A polygonal chain consisting of _n_ vertices */
+    polyline?: AnnotationsPolyLine;
 }
 /**
  * Point in a 2D-Cartesian coordinate system with origin at the top-left corner of the page
  */
 export interface AnnotationsPoint {
-  /**
-   * The confidence score for the primitive. It should be between 0 and 1.
-   * @min 0
-   * @max 1
-   */
-  confidence?: number;
-  /**
-   * The abscissa of the point in a coordinate system with origin at the top-left corner of the page. Normalized in (0,1).
-   * @min 0
-   * @max 1
-   */
-  x: number;
-  /**
-   * The ordinate of the point in a coordinate system with origin at the top-left corner of the page. Normalized in (0,1).
-   * @min 0
-   * @max 1
-   */
-  y: number;
+    /**
+     * The confidence score for the primitive. It should be between 0 and 1.
+     * @min 0
+     * @max 1
+     */
+    confidence?: number;
+    /**
+     * The abscissa of the point in a coordinate system with origin at the top-left corner of the page. Normalized in (0,1).
+     * @min 0
+     * @max 1
+     */
+    x: number;
+    /**
+     * The ordinate of the point in a coordinate system with origin at the top-left corner of the page. Normalized in (0,1).
+     * @min 0
+     * @max 1
+     */
+    y: number;
 }
 /**
 * A _closed_ polygon represented by _n_ vertices. In other words, we assume
 that the first and last vertex are connected.
 */
 export interface AnnotationsPolygon {
-  /**
-   * The confidence score for the primitive. It should be between 0 and 1.
-   * @min 0
-   * @max 1
-   */
-  confidence?: number;
-  vertices: AnnotationsPoint[];
+    /**
+     * The confidence score for the primitive. It should be between 0 and 1.
+     * @min 0
+     * @max 1
+     */
+    confidence?: number;
+    vertices: AnnotationsPoint[];
 }
 /**
  * A polygonal chain consisting of _n_ vertices
  */
 export interface AnnotationsPolyLine {
-  /**
-   * The confidence score for the primitive. It should be between 0 and 1.
-   * @min 0
-   * @max 1
-   */
-  confidence?: number;
-  vertices: AnnotationsPoint[];
+    /**
+     * The confidence score for the primitive. It should be between 0 and 1.
+     * @min 0
+     * @max 1
+     */
+    confidence?: number;
+    vertices: AnnotationsPoint[];
 }
 /**
  * Store the dimension, units and class of a given annotation
  */
 export interface AnnotationsSizeAndClassType {
-  /** The class type of the valve or spade */
-  classType?: string;
-  /** The size of the valve or spade */
-  size?: number;
-  /** The units of the size (mm/inches) */
-  unit?: string;
+    /** The class type of the valve or spade */
+    classType?: string;
+    /** The size of the valve or spade */
+    size?: number;
+    /** The units of the size (mm/inches) */
+    unit?: string;
 }
 /**
  * Models an extracted text region in an image
  */
 export interface AnnotationsTextRegion {
-  /**
-   * The confidence score for the primitive. It should be between 0 and 1.
-   * @min 0
-   * @max 1
-   */
-  confidence?: number;
-  /** The extracted text */
-  text: string;
-  /** The location of the extracted text */
-  textRegion: AnnotationsBoundingBox;
-}
-/**
- * Models a link to a CDF Asset referenced in an engineering diagram
- */
-export interface AnnotationsTypesDiagramsAssetLink {
-  /** The asset this annotation is pointing to */
-  assetRef: AnnotationsAssetRef;
-  /** The description of a primitive */
-  description?: string;
-  /**
-   * The number of the page on which this annotation is located. The first page has number 1.
-   * @min 1
-   * @max 100000
-   */
-  pageNumber?: number;
-  /** The symbol representing the asset */
-  symbol?: string;
-  /** The location of the symbol representing the asset */
-  symbolRegion?: AnnotationsBoundingBox;
-  /** The extracted text */
-  text?: string;
-  /** The location of the text mentioning the asset */
-  textRegion: AnnotationsBoundingBox;
-}
-/**
- * Models a link to an FDM instance referenced in an engineering diagram
- */
-export interface AnnotationsTypesDiagramsInstanceLink {
-  /** The description of a primitive */
-  description?: string;
-  /** The FDM instance this annotation is pointing to */
-  instanceRef: AnnotationsInstanceRef;
-  /**
-   * The number of the page on which this annotation is located. The first page has number 1.
-   * @min 1
-   * @max 100000
-   */
-  pageNumber?: number;
-  /** The symbol found in the file */
-  symbol?: string;
-  /** Optional location of a symbol */
-  symbolRegion?: AnnotationsBoundingBox;
-  /** The extracted text */
-  text: string;
-  /** The location of the text mentioning the file */
-  textRegion: AnnotationsBoundingBox;
-}
-/**
- * Models a link to a CDF Asset referenced in an image
- */
-export interface AnnotationsTypesImagesAssetLink {
-  /** The asset this annotation is pointing to */
-  assetRef: AnnotationsAssetRef;
-  /**
-   * The confidence score for the primitive. It should be between 0 and 1.
-   * @min 0
-   * @max 1
-   */
-  confidence?: number;
-  /** The region of the object representing the asset */
-  objectRegion?: AnnotationsTypesPrimitivesGeometry2DGeometry;
-  /** The extracted text */
-  text: string;
-  /** The location of the text mentioning the asset */
-  textRegion: AnnotationsBoundingBox;
-}
-/**
- * Models a link to an FDM instance referenced in an image
- */
-export interface AnnotationsTypesImagesInstanceLink {
-  /**
-   * The confidence score for the primitive. It should be between 0 and 1.
-   * @min 0
-   * @max 1
-   */
-  confidence?: number;
-  /** The FDM instance this annotation is pointing to */
-  instanceRef: AnnotationsInstanceRef;
-  /** The extracted text */
-  text: string;
-  /** The location of the text mentioning the FDM instance */
-  textRegion: AnnotationsBoundingBox;
-}
-/**
-* A geometry represented by exactly *one of* ` bounding_box`, `polygon` and
-`polyline` which, respectively, represents a BoundingBox, Polygon and
-PolyLine.
-*/
-export interface AnnotationsTypesPrimitivesGeometry2DGeometry {
-  /** A plain rectangle */
-  boundingBox?: AnnotationsBoundingBox;
-  /**
-   * A _closed_ polygon represented by _n_ vertices. In other words, we assume
-   * that the first and last vertex are connected.
-   */
-  polygon?: AnnotationsPolygon;
-  /** A polygonal chain consisting of _n_ vertices */
-  polyline?: AnnotationsPolyLine;
-}
-/**
- * A 3D geometry model represented by exactly *one of* `cylinder` and `box`.
- */
-export interface AnnotationsTypesPrimitivesGeometry3DGeometry {
-  /**
-   * A box in 3D space, defined by a 4x4 row-major homogeneous transformation matrix that rotates,
-   * translates and scales a box centered at the origin to its location and orientation in 3D space.
-   * The box that is transformed is the axis-aligned cube spanning the volume between
-   * the points (-1, -1, -1) and (1, 1, 1).
-   */
-  box?: AnnotationsBox;
-  /** A cylinder in 3D space, defined by the centers of the two end surfaces and the radius. */
-  cylinder?: AnnotationsCylinder;
+    /**
+     * The confidence score for the primitive. It should be between 0 and 1.
+     * @min 0
+     * @max 1
+     */
+    confidence?: number;
+    /** The extracted text */
+    text: string;
+    /** The location of the extracted text */
+    textRegion: AnnotationsBoundingBox;
 }
 /**
  * Models an extracted symbol region in an engineering diagram
  */
 export interface AnnotationsUnhandledSymbolObject {
-  /** The description of a primitive */
-  description?: string;
-  /**
-   * The number of the page on which this annotation is located. The first page has number 1.
-   * @min 1
-   * @max 100000
-   */
-  pageNumber?: number;
-  /** The symbol found in the file */
-  symbol: string;
-  /** The location of the symbol */
-  symbolRegion: AnnotationsBoundingBox;
+    /** The description of a primitive */
+    description?: string;
+    /**
+     * The number of the page on which this annotation is located. The first page has number 1.
+     * @min 1
+     * @max 100000
+     */
+    pageNumber?: number;
+    /** The symbol found in the file */
+    symbol: string;
+    /** The location of the symbol */
+    symbolRegion: AnnotationsBoundingBox;
 }
 /**
  * Models an extracted text region in an engineering diagram
  */
 export interface AnnotationsUnhandledTextObject {
-  /** The description of a primitive */
-  description?: string;
-  /**
-   * The number of the page on which this annotation is located. The first page has number 1.
-   * @min 1
-   * @max 100000
-   */
-  pageNumber?: number;
-  /** The extracted text */
-  text: string;
-  /** The location of the text */
-  textRegion: AnnotationsBoundingBox;
+    /** The description of a primitive */
+    description?: string;
+    /**
+     * The number of the page on which this annotation is located. The first page has number 1.
+     * @min 1
+     * @max 100000
+     */
+    pageNumber?: number;
+    /** The extracted text */
+    text: string;
+    /** The location of the text */
+    textRegion: AnnotationsBoundingBox;
 }
 /**
  * Defines a DMS source (e.g. view)
  */
 export interface AnnotationsView {
-  /**
-   * External id of the view
-   * @pattern ^[a-zA-Z]([a-zA-Z0-9_]{0,253}[a-zA-Z0-9])?$
-   */
-  externalId: string;
-  /**
-   * Id of the space that the view belongs to
-   * @pattern ^[a-zA-Z][a-zA-Z0-9_-]{0,41}[a-zA-Z0-9]?$
-   */
-  space: string;
-  type: 'view';
-  /**
-   * Version of the view
-   * @pattern ^[a-zA-Z0-9]([a-zA-Z0-9_-]{0,41}[a-zA-Z0-9])?$
-   */
-  version: string;
+    /**
+     * External id of the view
+     * @pattern ^[a-zA-Z]([a-zA-Z0-9_]{0,253}[a-zA-Z0-9])?$
+     */
+    externalId: string;
+    /**
+     * Id of the space that the view belongs to
+     * @pattern ^[a-zA-Z][a-zA-Z0-9_-]{0,41}[a-zA-Z0-9]?$
+     */
+    space: string;
+    type: string;
+    /**
+     * Version of the view
+     * @pattern ^[a-zA-Z0-9]([a-zA-Z0-9_-]{0,41}[a-zA-Z0-9])?$
+     */
+    version: string;
 }
