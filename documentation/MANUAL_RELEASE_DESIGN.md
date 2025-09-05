@@ -10,7 +10,7 @@ A streamlined release process that eliminates security risks while maintaining s
 
 ## Security Issue Resolved
 
-**Problem**: The previous automated workflow used `lerna version` commands that pushed commits directly to the `master` branch, bypassing code review and branch protection rules.
+**Problem**: The previous automated workflow used `lerna version` commands that pushed commits directly to the `master` branch, trying to bypass code review and branch protection rules. It fails, due to those branch protection rules introduced by risk review.
 
 **Solution**: All version changes now go through pull request workflow with proper review and validation.
 

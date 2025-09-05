@@ -9,7 +9,7 @@
         "**/*.spec.ts",
         "**/*.test.ts"
       ],
-      "message": "chore(release): version bump [skip ci]",
+      "message": "chore(release): publish new package versions [skip ci]",
       "allowBranch": ["release/*"],
       "push": false,
       "gitTagVersion": false

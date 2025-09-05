@@ -13,13 +13,30 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Check if release PR is up-to-date
+      - name: Validate release branch base
         run: |
-          COMMITS_BEHIND=$(git rev-list --count HEAD..origin/master)
-          if [ "$COMMITS_BEHIND" -gt 0 ]; then
-            echo "❌ Release PR is $COMMITS_BEHIND commits behind master"
+          # Get the merge-base (common ancestor) of this branch and master
+          MERGE_BASE=$(git merge-base HEAD origin/master)
+          MASTER_HEAD=$(git rev-parse origin/master)
+
+          # Check if this branch was created from current master HEAD
+          if [ "$MERGE_BASE" != "$MASTER_HEAD" ]; then
+            echo "❌ Release branch was not created from current master HEAD"
+            echo "Branch base: $MERGE_BASE"
+            echo "Master HEAD: $MASTER_HEAD"
+            echo ""
+            echo "This release branch is based on outdated master."
             echo "Please close this PR and create a fresh one with 'yarn release'"
             exit 1
-          else
-            echo "✅ Release PR is up-to-date with master"
           fi
+
+          # Additional check: ensure no merge commits from master
+          MERGE_COMMITS=$(git log --merges --grep="Merge.*master" --oneline | wc -l)
+          if [ "$MERGE_COMMITS" -gt 0 ]; then
+            echo "❌ Release branch contains merge commits from master"
+            echo "This invalidates version calculations."
+            echo "Please close this PR and create a fresh one with 'yarn release'"
+            exit 1
+          fi
+
+          echo "✅ Release branch is properly based on current master"
