@@ -70,14 +70,17 @@ async function createReleasePR() {
 
     // Push branch
     execSync(`git push origin ${branchName}`);
+    console.log('✅ Release branch pushed successfully!\n');
 
-    // Create PR
-    execSync(
-      `gh pr create --title "Release: Version Bump" --body "Automated version bump for release. Merging this PR will publish packages to NPM." --base master --head ${branchName}`
+    console.log(
+      'Please use the following link to review the changes and create a release PR:'
     );
-
-    console.log('✅ Release PR created successfully!');
-    console.log('Review the PR and merge when ready to publish.');
+    const prTitle = 'Release: Version Bump';
+    const prBody =
+      'Automated version bump for release. Merging this PR will publish packages to NPM.';
+    console.log(
+      `https://github.com/cognitedata/cognite-sdk-js/compare/master...${branchName}?quick_pull=1&title=${encodeURIComponent(prTitle)}&body=${encodeURIComponent(prBody)}`
+    );
   } catch (error) {
     console.error('❌ Release failed:', error.message);
     process.exit(1);
