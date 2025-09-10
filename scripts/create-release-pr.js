@@ -66,7 +66,7 @@ async function createReleasePR() {
 
     // Commit changes
     execSync('git add .');
-    execSync('git commit -m "chore(release): version bump [skip ci]"');
+    execSync('git commit -m "chore(release): publish new package versions"');
 
     // Push branch
     execSync(`git push origin ${branchName}`);

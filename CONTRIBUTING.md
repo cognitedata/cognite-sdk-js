@@ -123,11 +123,9 @@ yarn release
 Use the same process - no exceptions. The security model ensures all releases are reviewable:
 
 ```bash
-yarn release  # Creates emergency release PR
+yarn release  # Create emergency release PR
 # Review → Merge → Auto-publish
 ```
-
-See `docs/MANUAL_RELEASE_DESIGN.md` for complete implementation details.
 
 ## Patching older major versions
 
