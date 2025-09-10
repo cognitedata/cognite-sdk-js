@@ -115,7 +115,6 @@ yarn release
 
 ### Prerequisites
 
-- Install GitHub CLI: `brew install gh`
 - Repository must have `production` environment configured for manual approval
 - `NPM_PUBLISH_TOKEN` secret must be available
 
