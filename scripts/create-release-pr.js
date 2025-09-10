@@ -4,6 +4,36 @@ const { execSync } = require('node:child_process');
 
 async function createReleasePR() {
   try {
+      // Pre-flight checks
+    console.log('Running pre-flight checks...');
+    
+    // 1. Fetch latest changes from remote
+    execSync('git fetch origin', { stdio: 'inherit' });
+    
+    // 2. Check that we're on master branch
+    const currentBranch = execSync('git rev-parse --abbrev-ref HEAD', { encoding: 'utf8' }).trim();
+    if (currentBranch !== 'master') {
+      console.error(`❌ Expected to be on 'master' branch, but currently on '${currentBranch}'. Please switch to master branch first.`);
+      process.exit(1);
+    }
+    
+    // 3. Check that we're on the latest commit of remote master
+    const localCommit = execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim();
+    const remoteCommit = execSync('git rev-parse origin/master', { encoding: 'utf8' }).trim();
+    if (localCommit !== remoteCommit) {
+      console.error('❌ Local master is not up to date with origin/master. Please pull the latest changes first.');
+      process.exit(1);
+    }
+    
+    // 4. Check that working directory is clean
+    const gitStatus = execSync('git status --porcelain', { encoding: 'utf8' }).trim();
+    if (gitStatus.length > 0) {
+      console.error(`❌ Working directory is not clean. Please commit or stash your changes first.\nUnstaged/staged files:\n${gitStatus}`);
+      process.exit(1);
+    }
+    
+    console.log('🎉 All pre-flight checks passed!\n');
+
     // Create release branch first (with timestamp for uniqueness)
     const timestamp = new Date()
       .toISOString()
