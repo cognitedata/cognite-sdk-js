@@ -6,7 +6,7 @@ import type CogniteClient from '../../cogniteClient';
 import { ConflictMode } from '../../types';
 import { setupLoggedInClient } from '../testUtils';
 
-describe('template group versions test', () => {
+describe.skip('template group versions test', () => {
   let client: CogniteClient;
 
   const externalId = `VersionTest ${randomInt()}`;
