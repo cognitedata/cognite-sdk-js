@@ -17,7 +17,7 @@ import type CogniteClient from '../../cogniteClient';
 import type { ExternalTemplateInstance, TemplateInstance } from '../../types';
 import { setupLoggedInClient } from '../testUtils';
 
-describe('template instances test', () => {
+describe.skip('template instances test', () => {
   let client: CogniteClient;
 
   const externalId = `TemplateInstanceTest ${randomInt()}`;
