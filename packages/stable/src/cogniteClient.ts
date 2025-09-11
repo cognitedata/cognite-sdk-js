@@ -32,13 +32,6 @@ import { SecurityCategoriesAPI } from './api/securityCategories/securityCategori
 import { SequencesAPI } from './api/sequences/sequencesApi';
 import { SessionsApi } from './api/sessions/sessionsApi';
 import { SpacesAPI } from './api/spaces/spacesApi';
-import {
-  TemplateGraphQlApi,
-  TemplateGroupVersionsApi,
-  TemplateGroupsApi,
-  TemplateInstancesApi,
-  ViewsApi,
-} from './api/templates';
 import { TimeSeriesAPI } from './api/timeSeries/timeSeriesApi';
 import { UnitsAPI } from './api/units/unitsApi';
 import { ProfilesAPI } from './api/userProfiles/profilesApi';
@@ -121,45 +114,6 @@ export default class CogniteClient extends BaseCogniteClient {
   }
   public get sessions() {
     return accessApi(this.sessionsApi);
-  }
-  public get templates() {
-    return {
-      groups: accessApi(this.apiFactory(TemplateGroupsApi, 'templategroups')),
-      group: (externalId: string) => {
-        const urlsafeExternalId = CogniteClient.urlEncodeExternalId(externalId);
-        const baseVersionsUrl = `templategroups/${urlsafeExternalId}/versions`;
-        return {
-          versions: accessApi(
-            this.apiFactory(TemplateGroupVersionsApi, baseVersionsUrl)
-          ),
-          version: (version: number) => {
-            const baseGroupUrl = `${baseVersionsUrl}/${version}`;
-            const graphQlApi = this.apiFactory(
-              TemplateGraphQlApi,
-              `${baseGroupUrl}/graphql`
-            );
-            return {
-              instances: accessApi(
-                this.apiFactory(
-                  TemplateInstancesApi,
-                  `${baseGroupUrl}/instances`
-                )
-              ),
-              runQuery: async <
-                TVariables extends Record<string, unknown>,
-              >(graphQlParams: {
-                query: string;
-                variables?: TVariables;
-                operationName?: string;
-              }) => graphQlApi.runQuery(graphQlParams),
-              views: accessApi(
-                this.apiFactory(ViewsApi, `${baseGroupUrl}/views`)
-              ),
-            };
-          },
-        };
-      },
-    };
   }
   public get units() {
     return accessApi(this.unitsApi);
