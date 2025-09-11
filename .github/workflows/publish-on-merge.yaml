@@ -1,0 +1,34 @@
+name: Publish on Release PR Merge
+
+on:
+  push:
+    branches: [master]
+    paths: ['packages/*/package.json']
+
+jobs:
+  publish:
+    if: contains(github.event.head_commit.message, 'chore(release): publish new package versions')
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Build packages
+        run: yarn build
+
+      - name: Configure NPM
+        run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
+
+      - name: Publish to NPM
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: lerna publish from-package --yes --no-git-reset
