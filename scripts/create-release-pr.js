@@ -46,6 +46,9 @@ async function createReleasePR() {
       process.exit(1);
     }
 
+    // 5. Pull tags from remote, otherwise version calculation might be off
+    execSync('git fetch --tags --force');
+
     console.log('🎉 All pre-flight checks passed!\n');
 
     // Create release branch first (with timestamp for uniqueness)
@@ -75,7 +78,7 @@ async function createReleasePR() {
     console.log(
       'Please use the following link to review the changes and create a release PR:'
     );
-    const prTitle = 'Release: Version Bump';
+    const prTitle = 'chore(release): publish new package versions';
     const prBody =
       'Automated version bump for release. Merging this PR will publish packages to NPM.';
     console.log(
