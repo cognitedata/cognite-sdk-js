@@ -26,7 +26,7 @@ jobs:
 
       - name: Cache node_modules
         id: cache-modules
-        uses: actions/cache@v3
+        uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4
         with:
           path: node_modules
           key: ${{ runner.OS }}-build-${{ hashFiles('package.json') }}
@@ -60,7 +60,7 @@ jobs:
 
       - name: Cache node_modules
         id: cache-modules
-        uses: actions/cache@v3
+        uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4
         with:
           path: node_modules
           key: ${{ runner.OS }}-build-${{ hashFiles('package.json') }}
@@ -89,7 +89,7 @@ jobs:
 
       - name: Cache node_modules
         id: cache-modules
-        uses: actions/cache@v3
+        uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4
         with:
           path: node_modules
           key: ${{ runner.OS }}-build-${{ hashFiles('package.json') }}
@@ -118,7 +118,7 @@ jobs:
 
       - name: Cache node_modules
         id: cache-modules
-        uses: actions/cache@v3
+        uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4
         with:
           path: node_modules
           key: ${{ runner.OS }}-build-${{ hashFiles('package.json') }}
@@ -158,7 +158,7 @@ jobs:
 
       - name: Cache node_modules
         id: cache-modules
-        uses: actions/cache@v3
+        uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4
         with:
           path: node_modules
           key: ${{ runner.OS }}-build-${{ hashFiles('package.json') }}
