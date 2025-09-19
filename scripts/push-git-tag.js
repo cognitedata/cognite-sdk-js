@@ -11,8 +11,12 @@ function pushGitTag() {
   const packageVersion = process.env.npm_package_version;
 
   if (!packageName || !packageVersion) {
-    console.error('Error: npm_package_name and npm_package_version environment variables are required');
-    console.error('This script should be run as an npm lifecycle script (postpublish)');
+    console.error(
+      'Error: npm_package_name and npm_package_version environment variables are required'
+    );
+    console.error(
+      'This script should be run as an npm lifecycle script (postpublish)'
+    );
     process.exit(1);
   }
 
