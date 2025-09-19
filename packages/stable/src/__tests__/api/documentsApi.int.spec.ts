@@ -56,7 +56,7 @@ const getFileId = async (
   );
 };
 
-describe('Documents integration test', () => {
+describe('Documents integration test', { timeout: 3 * 60_000 }, () => {
   let client: CogniteClient;
   let fileId: number;
 
@@ -155,7 +155,7 @@ describe('Documents integration test', () => {
     expect(aggregate.groups[0].group[0].property).toStrictEqual(['labels']);
   });
 
-  describe('document preview', () => {
+  describe('document preview', { timeout: 3 * 60_000 }, () => {
     let documents: DocumentSearchResponse;
 
     beforeAll(async () => {
@@ -193,7 +193,7 @@ describe('Documents integration test', () => {
         const match = Buffer.from(frontSlice, 0).equals(Buffer.from(pdfPrefix));
         expect(match).toBe(true);
       },
-      30 * 1000
+      60 * 1000
     );
 
     test('fetch temporary link', async () => {

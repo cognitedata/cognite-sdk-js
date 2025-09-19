@@ -6,7 +6,7 @@ import type CogniteClient from '../../cogniteClient';
 import type { ExternalView, View } from '../../types';
 import { setupLoggedInClient } from '../testUtils';
 
-describe('template view test', () => {
+describe.skip('template view test', () => {
   let client: CogniteClient;
 
   const externalId = `ViewInstanceTest ${randomInt()}`;

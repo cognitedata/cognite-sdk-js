@@ -51,6 +51,7 @@
     "test-snippets": "yarn allsdk test-snippets --stream",
     "test-samples": "SKIP_PREFLIGHT_CHECK=true yarn allsamples test --stream",
     "codegen": "ts-node packages/codegen/src/cli.ts",
+    "release": "node scripts/create-release-pr.js",
     "prepare": "husky"
   },
   "devDependencies": {
