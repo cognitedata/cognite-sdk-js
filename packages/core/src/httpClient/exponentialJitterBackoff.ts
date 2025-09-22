@@ -28,6 +28,12 @@ export class ExponentialJitterBackoff {
     this.randomCallback = randomCallback;
   }
 
+  /**
+   * Calculates the delay in milliseconds for the next retry attempt. Uses "exponential backoff with
+   * full jitter" algorithm.
+   * @param retryCount - The number of retry attempts made so far (i.e. 0 is the first retry attempt)
+   * @returns The delay in milliseconds for the next retry attempt.
+   */
   public calculateDelayInMs(retryCount: number) {
     const exponentialDelay = this.baseDelayMs * 2 ** (retryCount + 1);
     const cappedDelay = Math.min(exponentialDelay, this.maxDelayMs);
