@@ -19,7 +19,7 @@
     "lint": "yarn g:biome ci",
     "lint:fix": "yarn g:biome lint --fix && yarn g:biome format --fix && yarn g:biome check --fix",
     "prepublishOnly": "yarn build",
-    "postpublish": "../../scripts/push-git-tag.js",
+    "postpublish": "../../scripts/push-git-tag-and-release.js",
     "build": "yarn clean && yarn g:tsc -p ./tsconfig.json && yarn g:vite build && yarn esCheck",
     "watch": "yarn g:vite build --watch",
     "esCheck": "yarn g:es-check es6 --module './dist/index.js'",
