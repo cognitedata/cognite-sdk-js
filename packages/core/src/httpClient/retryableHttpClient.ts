@@ -38,9 +38,11 @@ import { MAX_RETRY_ATTEMPTS, type RetryValidator } from './retryValidator';
  * @see {@link HttpResponseType}
  */
 export class RetryableHttpClient extends BasicHttpClient {
+  private static readonly backoffCalculator: ExponentialJitterBackoff =
+    new ExponentialJitterBackoff();
+
   private static calculateRetryDelayInMs(retryCount: number) {
-    const backoff = new ExponentialJitterBackoff();
-    return backoff.calculateDelayInMs(retryCount);
+    return RetryableHttpClient.backoffCalculator.calculateDelayInMs(retryCount);
   }
 
   constructor(
