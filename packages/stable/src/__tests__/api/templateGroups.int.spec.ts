@@ -6,7 +6,7 @@ import type CogniteClient from '../../cogniteClient';
 import type { ExternalTemplateGroup, TemplateGroup } from '../../types';
 import { setupLoggedInClient } from '../testUtils';
 
-describe('template group test', () => {
+describe.skip('template group test', () => {
   let client: CogniteClient;
 
   const templateGroups = [

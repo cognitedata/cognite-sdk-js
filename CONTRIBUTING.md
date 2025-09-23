@@ -75,50 +75,57 @@ Once the change is pushed to the master branch, it is time for a release.
 
 ## Releases & Versioning
 
-Releases are done from the master branch, so when a pull request is merged,
-CI/CD will run tests, and if successful, do deploys.
-Documentation is built and deployed, and code snippets
-are exported to the service contract repo as a pull request.
+**We use a simple manual release process for enhanced security and control.**
 
-Updating and uploading npm packages only happens if the HEAD commit of the master branch
-contains `[release]` in its description and the PR title starts with `feat` or `fix`.
-When CI/CD sees this, it will use lerna to update
-package versions of changed packages based on commit messages, and add the
-changes to the changelogs. The changes are comitted to the master branch
-with the new versions as git tags, and the new package versions are uploaded to npm.
+### How to Release
 
-We restrict new npm releases to `[release]`-tagged commits because lerna is
-quite aggressive in its versioning. Changes to any file not ignored by lerna will
-cause a PATCH bump. Markdown files and tests are ignored, but changing anything else,
-like a comment in a source file, will trigger a new version,
-irrespective of conventional commits.
-
-This does _not_ mean you should store unfinished work on the master branch.
-Another package may be ready for release, and once a `[release]`
-commit is pushed, all changed packages are updated.
-Repository administrators should be in control of `[release]` commits.
-
-To add a release commit to a clean working tree, use the command
+Releases are initiated manually but executed automatically through pull requests:
 
 ```bash
+# 1. Pull latest master and run release command
 git checkout master
-git pull
-git commit --allow-empty -m "chore: trigger [release]"
-git push
+git pull origin master
+yarn release
+
+# 2. Review the generated PR in GitHub UI
+# 3. Merge PR → packages automatically publish to NPM
 ```
 
-If you want to push the empty commit to master via a pull request,
-use a squash merge (not rebase+ff). Otherwise GitHub will ignore the empty PR.
+### What Happens
 
-Also, keep in mind that the `[release]` commit has to be the HEAD of
-master, and Github Action only runs on the HEAD. If HEAD has changed by the time
-the versioning happens, Github Action will fail.
+1. **`yarn release`** - Calculates version bumps using conventional commits and creates a PR with:
 
-In order to perform a major release by merging a release candidate branch to master by keeping the same major version in release candidate version.
+   - Updated `package.json` versions for changed packages
+   - Generated changelog entries
+   - Automatic branch creation and push
 
-- Create a PR from release-* to master
-- Make a PR title and the message when merging to be ` chore(): details [release]`
-- The release tag is to trigger the release of the package.
+2. **PR Review** - Review the version changes and release notes in the generated PR
+
+3. **Auto-publish** - When the PR is merged to master:
+   - Packages are built and published to NPM
+   - Git tags are created automatically
+   - GitHub releases are generated
+
+### Security Features
+
+- ✅ **No direct master pushes** - All changes go through PR review
+- ✅ **Manual approval required** - Human oversight for every release
+- ✅ **Clear audit trail** - Every release documented in PR history
+- ✅ **Branch protection compatible** - Works with strict branch protection rules
+
+### Prerequisites
+
+- Repository must have `production` environment configured for manual approval
+- `NPM_PUBLISH_TOKEN` secret must be available
+
+### Emergency Releases
+
+Use the same process - no exceptions. The security model ensures all releases are reviewable:
+
+```bash
+yarn release  # Create emergency release PR
+# Review → Merge → Auto-publish
+```
 
 ## Patching older major versions
 
@@ -196,7 +203,9 @@ We have multiple utilities to easy pagination handling. The first entrypoint is 
   ```
 - autoPagingEach
   ```ts
-  for await (const asset of client.assets.list().autoPagingEach({ limit: Infinity })) {
+  for await (const asset of client.assets
+    .list()
+    .autoPagingEach({ limit: Infinity })) {
     // ...
   }
   ```
@@ -221,6 +230,7 @@ We offer users to get hold of the HTTP response status code and headers through 
 ### Cognite Clients
 
 There is a Cognite Client per SDK package:
+
 - [Core](./packages/core/src/baseCogniteClient.ts)
 - [Stable](./packages/stable/src/cogniteClient.ts)
 - [Beta](./packages/beta/src/cogniteClient.ts)
@@ -228,7 +238,6 @@ There is a Cognite Client per SDK package:
 - [Template](./packages/template/src/cogniteClient.ts)
 
 The Core one is the base, meaning the others extends from it.
-
 
 #### Authentication
 
