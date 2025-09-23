@@ -14,34 +14,36 @@ const { readFileSync } = require('node:fs');
  * @returns {string} Release notes for the version
  */
 function extractChangelogEntry(version) {
-    const changelog = readFileSync('CHANGELOG.md', 'utf8');
-    const lines = changelog.split('\n');
-    
-    // Find the start of the version entry
-    console.log(`^## \\[${version.replace(/\./g, '\\.')}\\]`);
-    const versionPattern = new RegExp(`^## \\[${version.replace(/\./g, '\\.')}\\]`);
-    const startIndex = lines.findIndex(line => versionPattern.test(line));
-    
-    if (startIndex === -1) {
-      throw new Error(`Version ${version} not found in changelog`);
+  const changelog = readFileSync('CHANGELOG.md', 'utf8');
+  const lines = changelog.split('\n');
+
+  // Find the start of the version entry
+  console.log(`^## \\[${version.replace(/\./g, '\\.')}\\]`);
+  const versionPattern = new RegExp(
+    `^## \\[${version.replace(/\./g, '\\.')}\\]`
+  );
+  const startIndex = lines.findIndex((line) => versionPattern.test(line));
+
+  if (startIndex === -1) {
+    throw new Error(`Version ${version} not found in changelog`);
+  }
+
+  // Find the end of this version entry (next ## header)
+  let endIndex = lines.length;
+  for (let i = startIndex + 1; i < lines.length; i++) {
+    if (lines[i].startsWith('## [')) {
+      endIndex = i;
+      break;
     }
-    
-    // Find the end of this version entry (next ## header)
-    let endIndex = lines.length;
-    for (let i = startIndex + 1; i < lines.length; i++) {
-      if (lines[i].startsWith('## [')) {
-        endIndex = i;
-        break;
-      }
-    }
-    
-    // Extract the changelog entry (skip the version header)
-    const releaseNotes = lines
-      .slice(startIndex + 1, endIndex)
-      .join('\n')
-      .trim();
-    
-    return releaseNotes;
+  }
+
+  // Extract the changelog entry (skip the version header)
+  const releaseNotes = lines
+    .slice(startIndex + 1, endIndex)
+    .join('\n')
+    .trim();
+
+  return releaseNotes;
 }
 
 /**
@@ -50,14 +52,14 @@ function extractChangelogEntry(version) {
  * @param {string} releaseNotes - Release notes content
  */
 async function createGitHubRelease(tagName, releaseNotes) {
-    console.log(`Creating GitHub release: ${tagName}`);
-    
-    // Create the release using GitHub CLI
-    const releaseCommand = `gh release create "${tagName}" --title "${tagName}" --notes "${releaseNotes.replace(/"/g, '\\"')}"`;
-    console.log(releaseCommand);
-    execSync(releaseCommand, { stdio: 'inherit' });
-    
-    console.log(`✅ Successfully created GitHub release: ${tagName}`);
+  console.log(`Creating GitHub release: ${tagName}`);
+
+  // Create the release using GitHub CLI
+  const releaseCommand = `gh release create "${tagName}" --title "${tagName}" --notes "${releaseNotes.replace(/"/g, '\\"')}"`;
+  console.log(releaseCommand);
+  execSync(releaseCommand, { stdio: 'inherit' });
+
+  console.log(`✅ Successfully created GitHub release: ${tagName}`);
 }
 
 async function pushGitTagAndRelease() {
@@ -82,21 +84,21 @@ async function pushGitTagAndRelease() {
     execSync(`git push origin "${tagName}"`, { stdio: 'inherit' });
 
     console.log(`✅ Successfully created and pushed tag: ${tagName}`);
-    } catch (error) {
-        console.error(`❌ Failed to create/push git tag: ${tagName}`);
-        console.error(error.message);
-        process.exit(1);
-    }
+  } catch (error) {
+    console.error(`❌ Failed to create/push git tag: ${tagName}`);
+    console.error(error.message);
+    process.exit(1);
+  }
 
-    // Create GitHub release
-    try {
-        const releaseNotes = extractChangelogEntry(packageVersion);
-        await createGitHubRelease(tagName, releaseNotes);
-    } catch (error) {
-        console.error(`❌ Failed to create GitHub release: ${tagName}`);
-        console.error(error.message);
-        process.exit(1);
-    }
+  // Create GitHub release
+  try {
+    const releaseNotes = extractChangelogEntry(packageVersion);
+    await createGitHubRelease(tagName, releaseNotes);
+  } catch (error) {
+    console.error(`❌ Failed to create GitHub release: ${tagName}`);
+    console.error(error.message);
+    process.exit(1);
+  }
 }
 
 pushGitTagAndRelease();
