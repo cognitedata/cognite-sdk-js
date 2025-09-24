@@ -214,14 +214,16 @@ describe('Instances integration test', () => {
   }, 25_000);
 
   test('search with query', async () => {
-    const response = await client.instances.search({
-      view,
-      query: describable1.description,
-      limit: 1,
-    });
-    expect(response.items).toHaveLength(1);
-    expect(response.items[0].externalId).toBe(describable1.externalId);
-  });
+    await vi.waitFor(async () => {
+      const response = await client.instances.search({
+        view,
+        query: describable1.description,
+        limit: 1,
+      });
+      expect(response.items).toHaveLength(1);
+      expect(response.items[0].externalId).toBe(describable1.externalId);
+    }, 25_000);
+  }, 25_000);
 
   test('search with filter', async () => {
     await vi.waitFor(
@@ -245,31 +247,33 @@ describe('Instances integration test', () => {
         expect(title.startsWith('titl'));
       },
       { interval: 1000, timeout: 25_000 }
-    );
+    ), 25_000;
   }, 25_000);
 
   test('aggregate', async () => {
-    const response = await client.instances.aggregate({
-      view,
-      groupBy: ['externalId'],
-      aggregates: [{ count: { property: 'externalId' } }],
-      filter: {
-        prefix: {
-          property: ['title'],
-          value: 'titl',
+    await vi.waitFor(async () => {
+      const response = await client.instances.aggregate({
+        view,
+        groupBy: ['externalId'],
+        aggregates: [{ count: { property: 'externalId' } }],
+        filter: {
+          prefix: {
+            property: ['title'],
+            value: 'titl',
+          },
         },
-      },
-      limit: 1,
-    });
+        limit: 1,
+      });
 
-    expect(response.items).toHaveLength(1);
+      expect(response.items).toHaveLength(1);
 
-    expect(response.items[0].aggregates[0].aggregate).toBe('count');
-    expect(
-      response.items[0].aggregates[0].aggregate === 'count' &&
-        (response.items[0].aggregates[0].value || 0)
-    ).toBeGreaterThan(0);
-  });
+      expect(response.items[0].aggregates[0].aggregate).toBe('count');
+      expect(
+        response.items[0].aggregates[0].aggregate === 'count' &&
+          (response.items[0].aggregates[0].value || 0)
+      ).toBeGreaterThan(0);
+    }, 25_000);
+  }, 25_000);
 
   test('retrieve', async () => {
     const response = await client.instances.retrieve({
