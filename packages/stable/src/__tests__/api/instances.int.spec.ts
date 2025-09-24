@@ -3,7 +3,7 @@
 import type { ViewReference } from 'stable/src/types';
 import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest';
 import type CogniteClient from '../../cogniteClient';
-import { setupLoggedInClient } from '../testUtils';
+import { randomInt, setupLoggedInClient } from '../testUtils';
 
 type SpaceDefinition = {
   space: string;
@@ -51,9 +51,11 @@ describe('Instances integration test', () => {
   let client: CogniteClient;
   const timestamp = Date.now();
 
+  const TEST_SPACE_EXT_ID = `Instances_integration_test_${randomInt()}`;
+
   const testSpace: SpaceDefinition = {
-    space: 'test_data_space',
-    name: 'test_data_space',
+    space: TEST_SPACE_EXT_ID,
+    name: TEST_SPACE_EXT_ID,
     description: 'Instance space used for integration tests.',
   };
   const view: ViewReference = {
