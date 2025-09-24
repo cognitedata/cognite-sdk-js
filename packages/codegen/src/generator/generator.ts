@@ -1,3 +1,5 @@
+import type { Hooks } from 'swagger-typescript-api-nextgen';
+
 export interface TypeGeneratorResult {
   typeNames: string[];
   code: string;
@@ -5,5 +7,8 @@ export interface TypeGeneratorResult {
 }
 
 export interface TypeGenerator {
-  generateTypes(openApiJson: string): Promise<TypeGeneratorResult>;
+  generateTypes(
+    openApiJson: string,
+    codeGenHooks: Partial<Hooks>
+  ): Promise<TypeGeneratorResult>;
 }
