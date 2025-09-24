@@ -18,9 +18,8 @@ function extractChangelogEntry(version) {
   const lines = changelog.split('\n');
 
   // Find the start of the version entry
-  console.log(`^## \\[${version.replace(/\./g, '\\.')}\\]`);
   const versionPattern = new RegExp(
-    `^## \\[${version.replace(/\./g, '\\.')}\\]`
+    `^##* \\[${version.replace(/\./g, '\\.')}\\]`
   );
   const startIndex = lines.findIndex((line) => versionPattern.test(line));
 
@@ -31,7 +30,7 @@ function extractChangelogEntry(version) {
   // Find the end of this version entry (next ## header)
   let endIndex = lines.length;
   for (let i = startIndex + 1; i < lines.length; i++) {
-    if (lines[i].startsWith('## [')) {
+    if (lines[i].match('##* \\[') !== null) {
       endIndex = i;
       break;
     }
