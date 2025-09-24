@@ -247,7 +247,7 @@ describe('Instances integration test', () => {
         expect(title.startsWith('titl'));
       },
       { interval: 1000, timeout: 25_000 }
-    ), 25_000;
+    );
   }, 25_000);
 
   test('aggregate', async () => {
