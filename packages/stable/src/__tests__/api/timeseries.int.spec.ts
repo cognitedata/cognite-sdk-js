@@ -110,9 +110,11 @@ describe('Timeseries integration test', () => {
     },
   ];
 
+  const TEST_SPACE_EXT_ID = `Timeseries_integration_test_${randomInt()}`;
+
   const testSpace = {
-    space: 'test_data_space',
-    name: 'test_data_space',
+    space: TEST_SPACE_EXT_ID,
+    name: TEST_SPACE_EXT_ID,
     description: 'Instance space used for integration tests.',
   };
 

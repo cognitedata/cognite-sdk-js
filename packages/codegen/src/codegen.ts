@@ -414,6 +414,7 @@ export class CodeGen {
     const docJson = JSON.stringify(doc);
     const result = await this.generator.generateTypes(docJson, CODE_GEN_HOOKS);
     result.astProcessedCode = this.astPostProcessing(result.code);
+    await this.saveGeneratedTypes(result);
 
     return result;
   };
@@ -514,7 +515,6 @@ export class CodeGen {
       (name: string) => !skipTypes.includes(name)
     );
 
-    await this.saveGeneratedTypes(generated);
     return generated.typeNames;
   };
 }

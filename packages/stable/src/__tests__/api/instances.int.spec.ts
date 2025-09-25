@@ -3,7 +3,7 @@
 import type { ViewReference } from 'stable/src/types';
 import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest';
 import type CogniteClient from '../../cogniteClient';
-import { setupLoggedInClient } from '../testUtils';
+import { randomInt, setupLoggedInClient } from '../testUtils';
 
 type SpaceDefinition = {
   space: string;
@@ -51,9 +51,11 @@ describe('Instances integration test', () => {
   let client: CogniteClient;
   const timestamp = Date.now();
 
+  const TEST_SPACE_EXT_ID = `Instances_integration_test_${randomInt()}`;
+
   const testSpace: SpaceDefinition = {
-    space: 'test_data_space',
-    name: 'test_data_space',
+    space: TEST_SPACE_EXT_ID,
+    name: TEST_SPACE_EXT_ID,
     description: 'Instance space used for integration tests.',
   };
   const view: ViewReference = {
@@ -212,14 +214,16 @@ describe('Instances integration test', () => {
   }, 25_000);
 
   test('search with query', async () => {
-    const response = await client.instances.search({
-      view,
-      query: describable1.description,
-      limit: 1,
-    });
-    expect(response.items).toHaveLength(1);
-    expect(response.items[0].externalId).toBe(describable1.externalId);
-  });
+    await vi.waitFor(async () => {
+      const response = await client.instances.search({
+        view,
+        query: describable1.description,
+        limit: 1,
+      });
+      expect(response.items).toHaveLength(1);
+      expect(response.items[0].externalId).toBe(describable1.externalId);
+    }, 25_000);
+  }, 25_000);
 
   test('search with filter', async () => {
     await vi.waitFor(
@@ -247,27 +251,29 @@ describe('Instances integration test', () => {
   }, 25_000);
 
   test('aggregate', async () => {
-    const response = await client.instances.aggregate({
-      view,
-      groupBy: ['externalId'],
-      aggregates: [{ count: { property: 'externalId' } }],
-      filter: {
-        prefix: {
-          property: ['title'],
-          value: 'titl',
+    await vi.waitFor(async () => {
+      const response = await client.instances.aggregate({
+        view,
+        groupBy: ['externalId'],
+        aggregates: [{ count: { property: 'externalId' } }],
+        filter: {
+          prefix: {
+            property: ['title'],
+            value: 'titl',
+          },
         },
-      },
-      limit: 1,
-    });
+        limit: 1,
+      });
 
-    expect(response.items).toHaveLength(1);
+      expect(response.items).toHaveLength(1);
 
-    expect(response.items[0].aggregates[0].aggregate).toBe('count');
-    expect(
-      response.items[0].aggregates[0].aggregate === 'count' &&
-        (response.items[0].aggregates[0].value || 0)
-    ).toBeGreaterThan(0);
-  });
+      expect(response.items[0].aggregates[0].aggregate).toBe('count');
+      expect(
+        response.items[0].aggregates[0].aggregate === 'count' &&
+          (response.items[0].aggregates[0].value || 0)
+      ).toBeGreaterThan(0);
+    }, 25_000);
+  }, 25_000);
 
   test('retrieve', async () => {
     const response = await client.instances.retrieve({
