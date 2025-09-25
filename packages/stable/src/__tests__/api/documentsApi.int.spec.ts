@@ -176,7 +176,8 @@ describe('Documents integration test', { timeout: 3 * 60_000 }, () => {
       await client.documents.preview.documentAsImage(document.id, 1);
     });
 
-    test(
+    // The "documentAsPdf" method currently takes more than 60s to respond, need to address this with backend team
+    test.skip(
       'fetch pdf preview',
       async () => {
         if (documents.items.length === 0) {
