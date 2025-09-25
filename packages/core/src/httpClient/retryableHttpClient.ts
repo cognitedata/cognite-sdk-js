@@ -8,6 +8,7 @@ import {
   type HttpRequestOptions,
   type HttpResponse,
 } from './basicHttpClient';
+import { ExponentialJitterBackoff } from './exponentialJitterBackoff';
 import { MAX_RETRY_ATTEMPTS, type RetryValidator } from './retryValidator';
 
 /**
@@ -37,9 +38,11 @@ import { MAX_RETRY_ATTEMPTS, type RetryValidator } from './retryValidator';
  * @see {@link HttpResponseType}
  */
 export class RetryableHttpClient extends BasicHttpClient {
+  private static readonly backoffCalculator: ExponentialJitterBackoff =
+    new ExponentialJitterBackoff();
+
   private static calculateRetryDelayInMs(retryCount: number) {
-    const INITIAL_RETRY_DELAY_IN_MS = 250;
-    return INITIAL_RETRY_DELAY_IN_MS + ((2 ** retryCount - 1) / 2) * 1000;
+    return RetryableHttpClient.backoffCalculator.calculateDelayInMs(retryCount);
   }
 
   constructor(

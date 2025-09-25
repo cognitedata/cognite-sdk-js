@@ -1,0 +1,43 @@
+/**
+ * Calculates the delay in milliseconds for the next retry attempt. Uses "exponential backoff with
+ * full jitter" algorithm.
+ *
+ * @see https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/
+ *
+ * @param retryCount - The number of retry attempts made so far.
+ * @returns The delay in milliseconds for the next retry attempt.
+ */
+export class ExponentialJitterBackoff {
+  private readonly baseDelayMs: number;
+  private readonly maxDelayMs: number;
+  private readonly randomCallback: typeof Math.random;
+
+  /**
+   * Initializes a new instance of the ExponentialJitterBackoff class.
+   * @param baseDelayMs - The base delay in milliseconds. This will be the average delay for the first retry attempt. Defaults to 250ms.
+   * @param maxDelayMs - The maximum delay in milliseconds. This will be the maximum delay for the last retry attempt. Defaults to 15000ms.
+   * @param randomCallback - The callback to use for generating a random number between 0 and 1. Used by test only.
+   */
+  constructor(
+    baseDelayMs = 250,
+    maxDelayMs = 15000,
+    randomCallback: typeof Math.random = Math.random
+  ) {
+    this.baseDelayMs = baseDelayMs;
+    this.maxDelayMs = maxDelayMs;
+    this.randomCallback = randomCallback;
+  }
+
+  /**
+   * Calculates the delay in milliseconds for the next retry attempt. Uses "exponential backoff with
+   * full jitter" algorithm.
+   * @param retryCount - The number of retry attempts made so far (i.e. 0 is the first retry attempt)
+   * @returns The delay in milliseconds for the next retry attempt.
+   */
+  public calculateDelayInMs(retryCount: number) {
+    const exponentialDelay = this.baseDelayMs * 2 ** (retryCount + 1);
+    const cappedDelay = Math.min(exponentialDelay, this.maxDelayMs);
+
+    return Math.floor(this.randomCallback() * cappedDelay);
+  }
+}
