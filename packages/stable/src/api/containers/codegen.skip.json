@@ -1,5 +1,4 @@
 {
-  "_": "Due to issue with codegen duplicating types, we skip this for now.",
   "service": "models/containers",
   "filter": {
     "serviceName": "models/containers"

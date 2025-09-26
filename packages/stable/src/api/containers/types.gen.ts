@@ -4,6 +4,8 @@
 
 import type { CursorAndAsyncIterator } from '@cognite/sdk-core';
 export interface BtreeIndex {
+  /** Whether to make the index space-specific */
+  bySpace?: boolean;
   /** Whether the index can be used for cursor-based pagination */
   cursorable?: boolean;
   /**
@@ -32,10 +34,12 @@ Currently, time series, sequence and file references are supported.
 */
 export interface CDFExternalIdReference {
   /**
-   * Specifies that the data type is a list of values.
+   * Specifies that the data type is a list of values. The ordering of values is preserved.
    *
    */
   list?: boolean;
+  /** Specifies the maximum number of values in the list */
+  maxListSize?: number;
   type: 'timeseries' | 'file' | 'sequence';
 }
 /**
@@ -65,23 +69,24 @@ export type ContainerCorePropertyDefinition = CorePropertyDefinition & {
     | TextProperty
     | PrimitiveProperty
     | CDFExternalIdReference
-    | DirectNodeRelation;
+    | DirectNodeRelation
+    | EnumProperty;
 };
 export interface ContainerCreateCollection {
   /** List of containers to create/update */
   items: ContainerCreateDefinition[];
 }
 /**
- * Container for properties you can access through views.  Container specifications give details about storage  related details. For instance, how to index the data, and what constraints should be present.     You can  define a single container to only contain nodes (```node```), only contain edges (```edge```), or to  contain both (```all```).
+ * Container for properties you can access through views.  Container specifications give details about storage related details. For instance, how to index the data, and what constraints should be present.     You can define a single container to only contain nodes (```node```), only contain edges (```edge```), or to contain both (```all```).
  */
 export interface ContainerCreateDefinition {
-  /** Set of constraints to apply to the container */
+  /** Set of constraints to apply to the container. Constraint identifiers must be between 1 and 43 characters long. */
   constraints?: Record<string, ConstraintDefinition>;
   /** Description of what the property contains, and how you intend to use it. */
   description?: string;
   /** External-id of the container. The values ```Query```, ```Mutation```, ```Subscription```, ```String```, ```Int32```, ```Int64```, ```Int```, ```Float32```, ```Float64```, ```Float```, ```Timestamp```, ```JSONObject```, ```Date```, ```Numeric```, ```Boolean```, ```PageInfo```, ```File```, ```Sequence``` and ```TimeSeries``` are reserved. */
   externalId: DMSExternalId;
-  /** Set of indexes to apply to the container. Up to 10 indexes can be added on a container. */
+  /** Set of indexes to apply to the container. Up to 10 indexes can be added on a container. Index identifiers must be between 1 and 43 characters long. */
   indexes?: Record<string, IndexDefinition>;
   /** Readable name for container meant for use in UIs */
   name?: string;
@@ -97,6 +102,34 @@ export type ContainerDefinition = ContainerCreateDefinition & {
   lastUpdatedTime?: EpochTimestamp;
   isGlobal?: boolean;
 };
+export interface ContainerInspectRequest {
+  inspectionOperations: {
+    involvedViews?: {
+      allVersions?: boolean;
+    };
+    totalInvolvedViewCount?: {
+      allVersions?: boolean;
+      includeUnavailableViews?: boolean;
+    };
+  };
+  items: {
+    space: SpaceSpecification;
+    externalId: DMSExternalId;
+  }[];
+}
+export interface ContainerInspectResponse {
+  /** List of container inspection results */
+  items: ContainerInspectResultItem[];
+}
+export interface ContainerInspectResultItem {
+  /** External ids for the requested items */
+  externalId: DMSExternalId;
+  inspectionResults: {
+    involvedViewCount?: number;
+    involvedViews?: ViewReference[];
+  };
+  space: SpaceSpecification;
+}
 /**
  * Defines a property of a container.  You can reference this property in views.
  */
@@ -112,7 +145,7 @@ export interface ContainerReference {
   type: 'container';
 }
 export interface CorePropertyDefinition {
-  /** When set to ```true```, the API will increment the property based on its highest current value  (max value).  You can only use this functionality to increment properties of type `int32` or `int64`.  If the property has a different data type, the API will return an error. */
+  /** When set to ```true```, the API will increment the property based on its highest current value (max value).  You can only use this functionality to increment properties of type `int32` or `int64`. If the property has a different data type, the API will return an error. */
   autoIncrement?: boolean;
   /**
    * Default value to use when you do not specify a value for the property.  The default value must be of the same type as what you defined for the property itself.
@@ -122,6 +155,8 @@ export interface CorePropertyDefinition {
   defaultValue?: string | number | boolean | object;
   /** Description of the content and suggested use for this property. */
   description?: string;
+  /** Should updates to this property be rejected after the initial population? */
+  immutable?: boolean;
   /** Readable property name. */
   name?: string;
   /** Does this property need to be set to a value, or not? */
@@ -137,6 +172,13 @@ export interface CursorQueryParameter {
 export interface DirectNodeRelation {
   /** The (optional) required type for the node the direct relation points to. If specified, the node must exist before the direct relation is referenced and of the specified type. If no container specification is used, the node will be auto created with the built-in ```node``` container type, and it does not explicitly have to be created before the node that references it. */
   container?: ContainerReference;
+  /**
+   * Specifies that the data type is a list of values. The ordering of values is preserved.
+   *
+   */
+  list?: boolean;
+  /** Specifies the maximum number of values in the list */
+  maxListSize?: number;
   type: 'direct';
 }
 /**
@@ -144,9 +186,43 @@ export interface DirectNodeRelation {
  */
 export type DMSExternalId = string;
 /**
+ * @pattern ^[a-zA-Z0-9]([.a-zA-Z0-9_-]{0,41}[a-zA-Z0-9])?$
+ */
+export type DMSVersion = string;
+/**
+* An enum type property.
+
+An enum property can only consist for predefined values.
+* @example {"unknownValue":"unknown","values":{"value1":{"name":"Value 1","description":"This is value 1"},"value2":{},"unknown":{"name":"Unknown","description":"Used if the client does not recognize the returned value."}}}
+*/
+export interface EnumProperty {
+  type: 'enum';
+  /**
+   * The value to use when the enum value is unknown.
+   * This can optionally be used to provide forward-compatibility, Specifying what value to use if the client does not recognize the returned value. It is not possible to ingest the unknown value, but it must be part of the allowed values.
+   */
+  unknownValue?: string;
+  /**
+   * A set of all possible values for the enum property.  The enum value identifier has to have a length of between 1 and 127 characters.  It must also match the pattern ```^[_A-Za-z][_0-9A-Za-z]{0,127}$```.
+   *
+   * Example: ```{ "value1": { "name": "Value 1", "description": "This is value 1" }, "value2": { } }```
+   */
+  values: Record<string, EnumValueProperties>;
+}
+/**
+ * Metadata of the enum value.
+ */
+export interface EnumValueProperties {
+  /** Description of the enum value. */
+  description?: string;
+  /** Name of the enum value. */
+  name?: string;
+}
+/**
  * The number of milliseconds since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
  * @format int64
  * @min 0
+ * @example 1730204346000
  */
 export type EpochTimestamp = number;
 export interface IncludeGlobalQueryParameter {
@@ -156,7 +232,7 @@ export interface IncludeGlobalQueryParameter {
 * You can optimize query performance by defining an index to apply to a container.  You can only create an index across properties belonging to the same container.
 
 
-Ordering of the properties included in the index definition list is significant.  The order should match the queries you expect.  Once we create an index, you may only change its description.  We do not currently support removal of an index.
+Ordering of the properties included in the index definition list is significant.  The order should match the queries you expect. The properties of an index cannot be updated after creation. If you need to change the index, it must be recreated.
 
 
 Indexes have different requirements for the different property data types.  As a result, the create index operation will fail if you specify an invalid combination.
@@ -202,19 +278,26 @@ export interface ListOfSpaceExternalIdsResponse {
  */
 export type NextCursorV3 = string;
 /**
+ * @pattern ^[^\\x00]{1,256}$
+ */
+export type NodeOrEdgeExternalId = string;
+/**
 * Primitive types for the property.
 
 We expect dates to be in the ISO-8601 format, while timestamps are expected to be an epoch value with
 millisecond precision. JSON values have to be valid JSON fragments. The maximum allowed size for a JSON
-object is 40960 bytes. The maximum allowed length of a key is 128, while the maximum allowed size of a value
-is 10240 bytes and you can have up to 256 key-value pairs.
+object is 40960 bytes. For list of json values, the size of the entire list must be within this limit.
+The maximum allowed length of a key is 128, while the maximum allowed size of a value is 10240 bytes
+and you can have up to 256 key-value pairs.
 */
 export interface PrimitiveProperty {
   /**
-   * Specifies that the data type is a list of values.
+   * Specifies that the data type is a list of values. The ordering of values is preserved.
    *
    */
   list?: boolean;
+  /** Specifies the maximum number of values in the list */
+  maxListSize?: number;
   type:
     | 'boolean'
     | 'float32'
@@ -224,6 +307,16 @@ export interface PrimitiveProperty {
     | 'timestamp'
     | 'date'
     | 'json';
+  /**
+   * The unit of the data stored in this property, can only be assign to type float32 or float64.
+   * ExternalId needs to match with a unit in the Cognite unit catalog.
+   *
+   * @example externalId: temperature:deg_c, sourceUnit: Celsius
+   */
+  unit?: {
+    externalId: NodeOrEdgeExternalId;
+    sourceUnit?: string;
+  };
 }
 export interface ReducedLimitQueryParameter {
   /**
@@ -239,7 +332,7 @@ export interface RequiresConstraintDefinition {
 }
 export interface SpaceQueryParameter {
   /**
-   * @pattern ^[a-zA-Z0-9][a-zA-Z0-9_-]{0,41}[a-zA-Z0-9]?$
+   * @pattern (?!^(space|cdf|dms|pg3|shared|system|node|edge)$)(^[a-zA-Z][a-zA-Z0-9_-]{0,41}[a-zA-Z0-9]?$)
    * @example timeseries
    */
   space?: string;
@@ -1039,13 +1132,17 @@ export interface TextProperty {
     | 'zu'
     | 'zu-ZA';
   /**
-   * Specifies that the data type is a list of values.
+   * Specifies that the data type is a list of values. The ordering of values is preserved.
    *
    */
   list?: boolean;
+  /** Specifies the maximum number of values in the list */
+  maxListSize?: number;
   type: 'text';
 }
 export interface UniquenessConstraintDefinition {
+  /** Whether to make the constraint space-specific */
+  bySpace?: boolean;
   constraintType?: 'uniqueness';
   /** List of properties included in the constraint. The order you list the properties in is significant. */
   properties: string[];
@@ -1061,3 +1158,15 @@ export interface UpsertConflict {
  * Should this operation apply to nodes, edges or both.
  */
 export type UsedFor = 'node' | 'edge' | 'all';
+/**
+ * Reference to a view
+ */
+export interface ViewReference {
+  /** External-id of the view */
+  externalId: DMSExternalId;
+  /** Id of the space that the view belongs to */
+  space: SpaceSpecification;
+  type: 'view';
+  /** Version of the view */
+  version: DMSVersion;
+}
