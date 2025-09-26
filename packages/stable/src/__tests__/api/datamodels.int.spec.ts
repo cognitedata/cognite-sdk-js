@@ -1,10 +1,8 @@
 // Copyright 2024 Cognite AS
 
-import type {
-  DataModelCreate,
-  ViewCreateDefinition,
-  ViewDefinition,
-} from 'stable/src/types';
+// Temporary until we have aligned duplicate types
+import type { ViewCreateDefinition } from 'stable/src/api/views/types.gen';
+import type { DataModelCreate, ViewDefinition } from 'stable/src/types';
 import { beforeAll, describe, expect, it, vi } from 'vitest';
 import type CogniteClient from '../../cogniteClient';
 import {
