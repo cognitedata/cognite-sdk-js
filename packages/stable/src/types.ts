@@ -2342,6 +2342,10 @@ export interface SyntheticQuery extends Limit {
   expression: string;
   start?: string | Timestamp;
   end?: string | Timestamp;
+  /**
+   * Default: "UTC" Which time zone to align aggregates to. Omit to use top-level value.
+   */
+  timeZone?: string;
 }
 
 /**
