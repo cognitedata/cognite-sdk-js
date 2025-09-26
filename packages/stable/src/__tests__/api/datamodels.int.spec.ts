@@ -2,7 +2,6 @@
 
 import type {
   DataModelCreate,
-  ViewCreateDefinition,
   ViewDefinition,
 } from 'stable/src/types';
 import { beforeAll, describe, expect, it, vi } from 'vitest';
@@ -13,6 +12,8 @@ import {
   runTestWithRetryWhenFailing,
   setupLoggedInClient,
 } from '../testUtils';
+// Temporary until we have aligned duplicate types
+import { ViewCreateDefinition } from 'stable/src/api/views/types.gen';
 
 describe('Data models integration test', () => {
   let client: CogniteClient;
