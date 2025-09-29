@@ -1,20 +1,20 @@
 // Copyright 2023 Cognite AS
 
-import { describe, expect, test } from 'vitest';
-import type CogniteClientAlpha from '../../cogniteClient';
-import { setupLoggedInClient } from '../testUtils';
+import { describe, expect, test } from "vitest";
+import type CogniteClientAlpha from "../../cogniteClient";
+import { setupLoggedInClient } from "../testUtils";
 import {
   fileExtensionTypes,
   modelTypes,
   stepFields,
   unitQuantities,
-} from './seed';
+} from "./seed";
 
-const SHOULD_RUN_TESTS = process.env.RUN_SDK_SIMINT_TESTS === 'true';
+const SHOULD_RUN_TESTS = process.env.RUN_SDK_SIMINT_TESTS === "true";
 
 const describeIf = SHOULD_RUN_TESTS ? describe : describe.skip;
 
-describeIf('simulator models api', () => {
+describeIf("simulator models api", () => {
   const ts = Date.now();
   const simulatorExternalId = `test_sim_${ts}_b`;
   const modelExternalId = `test_sim_model_${ts}`;
@@ -23,7 +23,7 @@ describeIf('simulator models api', () => {
   const client: CogniteClientAlpha = setupLoggedInClient();
   let simulatorId: number;
 
-  test('create simulator', async () => {
+  test("create simulator", async () => {
     const response = await client.simulators.create([
       {
         externalId: simulatorExternalId,
@@ -39,33 +39,34 @@ describeIf('simulator models api', () => {
     expect(response[0].externalId).toBe(simulatorExternalId);
   });
 
-  test('create model', async () => {
+  test("create model", async () => {
     const res = await client.simulators.createModels([
       {
         externalId: modelExternalId,
         simulatorExternalId,
-        name: 'Test Simulator Model',
-        description: 'Test Simulator Model Desc',
+        name: "Test Simulator Model",
+        description: "Test Simulator Model Desc",
         dataSetId: 97552494921583,
-        type: 'WaterWell',
+        type: "WaterWell",
       },
     ]);
     expect(res.length).toBe(1);
     expect(res[0].externalId).toBe(modelExternalId);
   });
 
-  test('aggregate models', async () => {
+  test("aggregate models", async () => {
     const aggregateResponse = await client.simulators.aggregateModels({
       filter: {
         simulatorExternalIds: [simulatorExternalId],
+        externalIdPrefix: "test",
       },
-      aggregate: 'count',
+      aggregate: "count",
     });
 
     expect(aggregateResponse[0].count).toBeGreaterThan(0);
   });
 
-  test('list models', async () => {
+  test("list models", async () => {
     const list_response = await client.simulators.listModels();
     expect(list_response.items.length).toBeGreaterThan(0);
     const modelFound = list_response.items.find(
@@ -74,7 +75,21 @@ describeIf('simulator models api', () => {
     expect(modelFound?.externalId).toBe(modelExternalId);
   });
 
-  test('retrieve model by id', async () => {
+  test("list models with externalIdPrefix", async () => {
+    const prefixSearch = "test";
+    const listResponse = await client.simulators.listModels({
+      filter: {
+        externalIdPrefix: prefixSearch,
+      },
+    });
+
+    expect(listResponse.items.length).toBeGreaterThan(0);
+    const startsWithPrefix =
+      listResponse.items[0].externalId.startsWith(prefixSearch);
+    expect(startsWithPrefix).toBe(true);
+  });
+
+  test("retrieve model by id", async () => {
     const retrieve_response = await client.simulators.retrieveModels([
       { externalId: modelExternalId },
     ]);
@@ -85,12 +100,12 @@ describeIf('simulator models api', () => {
     expect(modelFound?.externalId).toBe(modelExternalId);
   });
 
-  test('create model revision', async () => {
+  test("create model revision", async () => {
     const response = await client.simulators.createModelRevisions([
       {
         externalId: modelRevisionExternalId,
         modelExternalId,
-        description: 'test sim model revision description',
+        description: "test sim model revision description",
         fileId: 6396395402204465,
       },
     ]);
@@ -98,13 +113,13 @@ describeIf('simulator models api', () => {
     expect(response[0].externalId).toBe(modelRevisionExternalId);
   });
 
-  test('create model revision and list with versions filter', async () => {
+  test("create model revision and list with versions filter", async () => {
     const revisionExternalId = `${modelRevisionExternalId}_2`;
     const response = await client.simulators.createModelRevisions([
       {
         externalId: revisionExternalId,
         modelExternalId,
-        description: 'test sim model revision description',
+        description: "test sim model revision description",
         fileId: 6396395402204465,
       },
     ]);
@@ -124,7 +139,7 @@ describeIf('simulator models api', () => {
     expect(revisionFilter.length).toBe(2);
   });
 
-  test('retrieve model revision by id', async () => {
+  test("retrieve model revision by id", async () => {
     const retrieve_response = await client.simulators.retrieveModelRevisions([
       { externalId: modelRevisionExternalId },
     ]);
@@ -135,7 +150,7 @@ describeIf('simulator models api', () => {
     expect(modelRevisionFound?.externalId).toBe(modelRevisionExternalId);
   });
 
-  test('delete model', async () => {
+  test("delete model", async () => {
     const response = await client.simulators.deleteModels([
       { externalId: modelExternalId },
     ]);
@@ -148,7 +163,7 @@ describeIf('simulator models api', () => {
     ).toBe(0);
   });
 
-  test('delete simulator and integrationns', async () => {
+  test("delete simulator and integrationns", async () => {
     // Since we do not have a delete endpoint for integrations, if we delete the simulator, the integrations will be deleted as well
     if (simulatorId) {
       const response = await client.simulators.delete([

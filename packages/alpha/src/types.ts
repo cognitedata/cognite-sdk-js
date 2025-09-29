@@ -349,6 +349,7 @@ export interface SimulatorModelAggregateQuery {
 export interface SimulatorModelFilter {
   simulatorExternalIds?: CogniteExternalId[];
   simulatorIntegrationExternalIds?: CogniteExternalId[];
+  externalIdPrefix?: string;
 }
 
 export interface SimulatorModelFilterQuery extends FilterQuery {
