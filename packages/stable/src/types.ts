@@ -3519,9 +3519,6 @@ export type {
 export type {
   ByExternalIdsViewsRequest,
   IncludeInheritedPropertiesQueryParameter,
-  NextCursorV3,
-  SpaceSpecification,
-  UpsertConflict,
   ViewCollectionResponse,
   ViewCollectionResponseWithCursorResponse,
   ViewCreateCollection,
