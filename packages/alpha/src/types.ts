@@ -170,7 +170,7 @@ export interface SimulatorPatch {
   };
 }
 
-export interface SimulatorChange extends SimulatorPatch, InternalId { }
+export interface SimulatorChange extends SimulatorPatch, InternalId {}
 
 export type SimulationRunType = 'external' | 'manual' | 'scheduled';
 
@@ -363,7 +363,7 @@ export interface SimulatorModelPatch {
   };
 }
 
-export interface SimulatorModelChange extends SimulatorModelPatch, InternalId { }
+export interface SimulatorModelChange extends SimulatorModelPatch, InternalId {}
 
 export type SimulatorModelRevisionStatus = 'unknown' | 'success' | 'failure';
 
@@ -408,7 +408,7 @@ export interface SimulatorModelRevisionPatch {
 
 export interface SimulatorModelRevisionChange
   extends SimulatorModelRevisionPatch,
-  InternalId { }
+    InternalId {}
 
 export interface SimulatorModelRevisionFilter {
   modelExternalIds?: CogniteExternalId[];
