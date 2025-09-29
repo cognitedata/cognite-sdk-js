@@ -58,6 +58,7 @@ describeIf('simulator models api', () => {
     const aggregateResponse = await client.simulators.aggregateModels({
       filter: {
         simulatorExternalIds: [simulatorExternalId],
+        externalIdPrefix: 'test',
       },
       aggregate: 'count',
     });
@@ -72,6 +73,20 @@ describeIf('simulator models api', () => {
       (item) => item.externalId === modelExternalId
     );
     expect(modelFound?.externalId).toBe(modelExternalId);
+  });
+
+  test('list models with externalIdPrefix', async () => {
+    const prefixSearch = 'test';
+    const listResponse = await client.simulators.listModels({
+      filter: {
+        externalIdPrefix: prefixSearch,
+      },
+    });
+
+    expect(listResponse.items.length).toBeGreaterThan(0);
+    const startsWithPrefix =
+      listResponse.items[0].externalId.startsWith(prefixSearch);
+    expect(startsWithPrefix).toBe(true);
   });
 
   test('retrieve model by id', async () => {
