@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [10.2.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@10.1.4...@cognite/sdk@10.2.0) (2025-09-29)
+
+
+### Features
+
+* **stable:** implement inspect method in instances API ([#1295](https://github.com/cognitedata/cognite-sdk-js/issues/1295)) ([d27bf77](https://github.com/cognitedata/cognite-sdk-js/commit/d27bf77cf2cfdb9a9de22a9251b3892de337798f))
+* **stable:** update container API types ([#1293](https://github.com/cognitedata/cognite-sdk-js/issues/1293)) ([bc68645](https://github.com/cognitedata/cognite-sdk-js/commit/bc68645ea6db7e6e490a29102fab1d4e5e5ede36))
+* **stable:** update models API types ([#1292](https://github.com/cognitedata/cognite-sdk-js/issues/1292)) ([0a2ddfc](https://github.com/cognitedata/cognite-sdk-js/commit/0a2ddfc5201a9a47881a36482e6cbdeb637e5428))
+* **stable:** update types for instances API ([#1291](https://github.com/cognitedata/cognite-sdk-js/issues/1291)) ([469ffae](https://github.com/cognitedata/cognite-sdk-js/commit/469ffae879ae8e703a0a1d15f4bb00572844c6c0))
+* **stable:** update view API types ([#1294](https://github.com/cognitedata/cognite-sdk-js/issues/1294)) ([e74596e](https://github.com/cognitedata/cognite-sdk-js/commit/e74596eb73586d8c82a24cfb7a9eb95142aab320))
+
+
+
+
+
 ## [10.1.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@10.1.3...@cognite/sdk@10.1.4) (2025-09-25)
 
 **Note:** Version bump only for package @cognite/sdk
