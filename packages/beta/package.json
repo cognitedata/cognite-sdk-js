@@ -12,13 +12,14 @@
     "types": "./dist/index.d.ts"
   },
   "type": "module",
-  "version": "6.0.0",
+  "version": "6.0.6",
   "scripts": {
     "clean": "rm -rf dist/ docs/ codeSnippets/",
     "test": "yarn g:vitest run",
     "lint": "yarn g:biome ci",
     "lint:fix": "yarn g:biome lint --fix && yarn g:biome format --fix && yarn g:biome check --fix",
     "prepublishOnly": "yarn build",
+    "postpublish": "../../scripts/push-git-tag-and-release.js",
     "build": "yarn clean && yarn g:tsc -p ./tsconfig.json && yarn g:vite build && yarn esCheck",
     "watch": "yarn g:vite build --watch",
     "esCheck": "yarn g:es-check es6 --module './dist/index.js'",
@@ -28,8 +29,8 @@
     "test-snippets": "yarn extract-snippets && yarn g:tsc -p codeSnippets/tsconfig.build.json"
   },
   "dependencies": {
-    "@cognite/sdk": "^10.0.0",
-    "@cognite/sdk-core": "^5.0.0"
+    "@cognite/sdk": "^10.2.0",
+    "@cognite/sdk-core": "^5.1.1"
   },
   "files": [
     "dist"

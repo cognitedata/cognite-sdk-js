@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@5.1.0...@cognite/sdk-core@5.1.1) (2025-09-29)
+
+**Note:** Version bump only for package @cognite/sdk-core
+
+
+
+
+
+# [5.1.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@5.0.1...@cognite/sdk-core@5.1.0) (2025-09-25)
+
+
+### Features
+
+* replace fixed HTTP request retry delay with "exponential jitter delay" ([#1287](https://github.com/cognitedata/cognite-sdk-js/issues/1287)) ([aab7ebb](https://github.com/cognitedata/cognite-sdk-js/commit/aab7ebbe1c7a69336dc52de6a53f8e4a2953e8a8))
+
+
+
+
+
+## [5.0.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@5.0.0...@cognite/sdk-core@5.0.1) (2025-09-22)
+
+**Note:** Version bump only for package @cognite/sdk-core
+
+
+
+
+
 # [5.0.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.10.7...@cognite/sdk-core@5.0.0) (2025-02-03)
 
 

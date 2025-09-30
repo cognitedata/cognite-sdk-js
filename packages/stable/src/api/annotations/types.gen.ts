@@ -89,6 +89,8 @@ export interface AnnotationsBoundingVolume {
    * @max 1
    */
   confidence?: number;
+  /** The Data Modeling Instance this annotation is pointing to */
+  instanceRef?: AnnotationsInstanceRef;
   /** The label describing what type of object it is */
   label?: string;
   /** The region of the annotation defined by a list of geometry primitives (cylinder and box). */
@@ -525,7 +527,13 @@ export interface AnnotationsTypesImagesAssetLink {
    * @max 1
    */
   confidence?: number;
-  /** The region of the object representing the asset */
+  /**
+   *
+   *     A geometry represented by exactly *one of* ` bounding_box`, `polygon` and
+   *     `polyline` which, respectively, represents a BoundingBox, Polygon and
+   *     PolyLine.
+   *
+   */
   objectRegion?: AnnotationsTypesPrimitivesGeometry2DGeometry;
   /** The extracted text */
   text: string;
@@ -533,7 +541,7 @@ export interface AnnotationsTypesImagesAssetLink {
   textRegion: AnnotationsBoundingBox;
 }
 /**
- * Models a link to an FDM instance referenced in an image
+ * Models a link to an Data Modeling Instance referenced in an image
  */
 export interface AnnotationsTypesImagesInstanceLink {
   /**
@@ -542,11 +550,19 @@ export interface AnnotationsTypesImagesInstanceLink {
    * @max 1
    */
   confidence?: number;
-  /** The FDM instance this annotation is pointing to */
+  /** The Data Modeling Instance this annotation is pointing to */
   instanceRef: AnnotationsInstanceRef;
+  /**
+   *
+   *     A geometry represented by exactly *one of* ` bounding_box`, `polygon` and
+   *     `polyline` which, respectively, represents a BoundingBox, Polygon and
+   *     PolyLine.
+   *
+   */
+  objectRegion?: AnnotationsTypesPrimitivesGeometry2DGeometry;
   /** The extracted text */
   text: string;
-  /** The location of the text mentioning the FDM instance */
+  /** The location of the text mentioning the Data Modeling Instance */
   textRegion: AnnotationsBoundingBox;
 }
 /**

@@ -3,6 +3,57 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.37.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.36.5...@cognite/sdk-alpha@0.37.0) (2025-09-29)
+
+
+### Features
+
+* **simint:** add support for filtering models by prefix ([#1326](https://github.com/cognitedata/cognite-sdk-js/issues/1326)) ([83d282d](https://github.com/cognitedata/cognite-sdk-js/commit/83d282dfa210b5c329a8e7c18ad719973cf8e1e3))
+
+
+
+
+
+## [0.36.5](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.36.4...@cognite/sdk-alpha@0.36.5) (2025-09-25)
+
+**Note:** Version bump only for package @cognite/sdk-alpha
+
+
+
+
+
+## [0.36.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.36.3...@cognite/sdk-alpha@0.36.4) (2025-09-22)
+
+**Note:** Version bump only for package @cognite/sdk-alpha
+
+
+
+
+
+## [0.36.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.36.2...@cognite/sdk-alpha@0.36.3) (2025-09-19)
+
+**Note:** Version bump only for package @cognite/sdk-alpha
+
+
+
+
+
+## [0.36.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.36.1...@cognite/sdk-alpha@0.36.2) (2025-09-17)
+
+**Note:** Version bump only for package @cognite/sdk-alpha
+
+
+
+
+
+## [0.36.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.36.0...@cognite/sdk-alpha@0.36.1) (2025-09-11)
+
+**Note:** Version bump only for package @cognite/sdk-alpha
+
+
+
+
+
 # [0.36.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.35.2...@cognite/sdk-alpha@0.36.0) (2025-02-03)
 
 

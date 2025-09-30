@@ -1,7 +1,7 @@
 {
-  "service": "models/containers",
+  "service": "models/instances",
   "filter": {
-    "serviceName": "models/containers"
+    "serviceName": "models/instances"
   },
   "inlinedSchemas": {
     "autoNameRequest": true
