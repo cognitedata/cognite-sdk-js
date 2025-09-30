@@ -81,6 +81,8 @@ export type AclActionTimeseries = READ | WRITE;
 
 export type AclActionUsers = LIST | CREATE | DELETE;
 
+export type AclActionSessions = LIST | CREATE | DELETE;
+
 export type AclAnalytics = Acl<AclActionAnalytics, AclScopeAnalytics>;
 
 export type AclAssets = Acl<AclActionAssets, AclScopeAssets>;
@@ -190,6 +192,8 @@ export type AclScopeTimeseries =
 
 export type AclScopeUsers = AclScopeAll;
 
+export type AclScopeSessions = AclScopeAll;
+
 export type AclSecurityCategories = Acl<
   AclActionSecurityCategories,
   AclScopeSecurityCategories
@@ -200,6 +204,8 @@ export type AclSequences = Acl<AclActionSequences, AclScopeSequences>;
 export type AclTimeseries = Acl<AclActionTimeseries, AclScopeTimeseries>;
 
 export type AclUsers = Acl<AclActionUsers, AclScopeUsers>;
+
+export type AclSessions = Acl<AclActionSessions, AclScopeSessions>;
 
 export type Aggregate =
   | 'average'
@@ -2302,7 +2308,8 @@ export type SingleCogniteCapability =
   | { templateGroupsAcl: AclTemplateGroups }
   | { templateInstancesAcl: AclTemplateInstances }
   | { dataModelAcl: AclDataModel }
-  | { dataModelInstancesAcl: AclDataModelInstances };
+  | { dataModelInstancesAcl: AclDataModelInstances }
+  | { sessionsAcl: AclSessions };
 
 export type SinglePatch<T> = { set: T } | { setNull: boolean };
 export type SinglePatchRequired<T> = { set: T };
