@@ -112,6 +112,39 @@ describeIf('simulator routines api', () => {
     expect(routineFound?.externalId).toBe(routineExternalId);
   });
 
+  test('list routines with simulatorExternalIds filter', async () => {
+    const listFilterResponse = await client.simulators.listRoutines({
+      filter: { simulatorExternalIds: [simulatorExternalId] },
+    });
+    expect(listFilterResponse.items.length).toBeGreaterThan(0);
+    const routineFound = listFilterResponse.items.find(
+      (item) => item.externalId === routineExternalId
+    );
+    expect(routineFound?.externalId).toBe(routineExternalId);
+  });
+
+  test('list routines with non-existent simulatorExternalId', async () => {
+    const listFilterResponse = await client.simulators.listRoutines({
+      filter: { simulatorExternalIds: ['non-existent-simulator'] },
+    });
+    expect(listFilterResponse.items.length).toBe(0);
+  });
+
+  test('list routines with all filters combined', async () => {
+    const listFilterResponse = await client.simulators.listRoutines({
+      filter: {
+        simulatorExternalIds: [simulatorExternalId],
+        simulatorIntegrationExternalIds: [simulatorIntegrationExternalId],
+        modelExternalIds: [modelExternalId],
+      },
+    });
+    expect(listFilterResponse.items.length).toBeGreaterThan(0);
+    const routineFound = listFilterResponse.items.find(
+      (item) => item.externalId === routineExternalId
+    );
+    expect(routineFound?.externalId).toBe(routineExternalId);
+  });
+
   test('create routine revision', async () => {
     const response = await client.simulators.createRoutineRevisions([
       {
