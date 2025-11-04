@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.38.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.37.0...@cognite/sdk-alpha@0.38.0) (2025-11-04)
+
+
+### Features
+
+* **simint:** add aggregation support for routines ([#1335](https://github.com/cognitedata/cognite-sdk-js/issues/1335)) ([5daabb8](https://github.com/cognitedata/cognite-sdk-js/commit/5daabb8a8684053eddf1db0f475e2983c89bc201))
+
+
+
+
+
 # [0.37.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.36.5...@cognite/sdk-alpha@0.37.0) (2025-09-29)
 
 
