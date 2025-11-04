@@ -22,6 +22,7 @@ import type {
   SimulatorModelRevisionChange,
   SimulatorModelRevisionCreate,
   SimulatorModelRevisionFilterQuery,
+  SimulatorRoutineAggregateQuery,
   SimulatorRoutineCreate,
   SimulatorRoutineFilterQuery,
   SimulatorRoutineRevisionBase,
@@ -206,6 +207,10 @@ export class SimulatorsAPI extends BaseResourceAPI<Simulator> {
 
   public createRoutines = (items: SimulatorRoutineCreate[]) => {
     return this.routinesApi.create(items);
+  };
+
+  public aggregateRoutines = (query: SimulatorRoutineAggregateQuery) => {
+    return this.routinesApi.aggregate(query);
   };
 
   public deleteRoutines = (ids: IdEither[]) => {

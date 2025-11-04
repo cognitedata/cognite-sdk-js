@@ -127,6 +127,16 @@ describeIf('simulator routines api', () => {
     expect(routineFound?.externalId).toBe(routineExternalId);
   });
 
+  test('aggregate routines', async () => {
+    const aggregateResponse = await client.simulators.aggregateRoutines({
+      filter: {
+        simulatorExternalIds: [simulatorExternalId],
+      },
+      aggregate: 'count',
+    });
+    expect(aggregateResponse[0].count).toBeGreaterThan(0);
+  });
+
   test('create routine revision', async () => {
     const response = await client.simulators.createRoutineRevisions([
       {

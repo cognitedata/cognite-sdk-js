@@ -3,6 +3,8 @@
 import { BaseResourceAPI, type IdEither } from '@cognite/sdk-core';
 import type {
   SimulatorRoutine,
+  SimulatorRoutineAggregate,
+  SimulatorRoutineAggregateQuery,
   SimulatorRoutineCreate,
   SimulatorRoutineFilterQuery,
 } from '../../types';
@@ -17,6 +19,12 @@ export class RoutinesAPI extends BaseResourceAPI<SimulatorRoutine> {
 
   public create = (items: SimulatorRoutineCreate[]) => {
     return this.createEndpoint(items);
+  };
+
+  public aggregate = (
+    query: SimulatorRoutineAggregateQuery
+  ): Promise<SimulatorRoutineAggregate[]> => {
+    return this.aggregateEndpoint(query);
   };
 
   public list = (filter?: SimulatorRoutineFilterQuery) => {

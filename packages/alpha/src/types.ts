@@ -476,6 +476,12 @@ export interface SimulatorRoutineFilterQuery extends FilterQuery {
   sort?: SortItem[];
 }
 
+export type SimulatorRoutineAggregate = AggregateResponse;
+export interface SimulatorRoutineAggregateQuery {
+  filter?: SimulatorRoutineFilter;
+  aggregate: 'count';
+}
+
 /* Routine revisions */
 
 export interface SimulatorRoutineDataSampling {
