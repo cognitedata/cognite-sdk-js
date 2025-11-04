@@ -1,17 +1,8 @@
 import nock from 'nock';
 import { beforeEach, describe, expect, test } from 'vitest';
-import CogniteClientAlpha from '../../cogniteClient';
-
-const mockBaseUrl = 'https://example.com';
-
-function setupMockableClient() {
-  return new CogniteClientAlpha({
-    appId: 'JS SDK unit tests (alpha)',
-    project: process.env.COGNITE_PROJECT as string,
-    baseUrl: mockBaseUrl,
-    oidcTokenProvider: () => Promise.resolve('test accessToken'),
-  });
-}
+import { mockBaseUrl } from '../../../../core/src/__tests__/testUtils';
+import type CogniteClientAlpha from '../../cogniteClient';
+import { setupMockableClient } from '../testUtils';
 
 describe('Simulator Routines API unit tests', () => {
   let client: CogniteClientAlpha;
@@ -46,9 +37,7 @@ describe('Simulator Routines API unit tests', () => {
 
     nock(mockBaseUrl)
       .post(/\/api\/v1\/projects\/.*\/simulators\/routines\/list/, {
-        filter: {
-          simulatorExternalIds: ['simulator-1', 'simulator-2'],
-        },
+        filter,
       })
       .reply(200, response);
 
@@ -79,11 +68,7 @@ describe('Simulator Routines API unit tests', () => {
 
     nock(mockBaseUrl)
       .post(/\/api\/v1\/projects\/.*\/simulators\/routines\/list/, {
-        filter: {
-          simulatorExternalIds: ['simulator-1'],
-          simulatorIntegrationExternalIds: ['integration-1'],
-          modelExternalIds: ['model-1'],
-        },
+        filter,
       })
       .reply(200, response);
 
@@ -104,9 +89,7 @@ describe('Simulator Routines API unit tests', () => {
 
     nock(mockBaseUrl)
       .post(/\/api\/v1\/projects\/.*\/simulators\/routines\/list/, {
-        filter: {
-          simulatorExternalIds: ['non-existent-simulator'],
-        },
+        filter,
       })
       .reply(200, response);
 

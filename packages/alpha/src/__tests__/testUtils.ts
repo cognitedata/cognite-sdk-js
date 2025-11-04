@@ -1,5 +1,6 @@
 // Copyright 2023 Cognite AS
 
+import { mockBaseUrl } from '../../../core/src/__tests__/testUtils';
 import CogniteClientAlpha from '../cogniteClient';
 import { login } from './login';
 
@@ -12,5 +13,14 @@ export function setupLoggedInClient() {
       login().then((account) => {
         return account.access_token;
       }),
+  });
+}
+
+export function setupMockableClient() {
+  return new CogniteClientAlpha({
+    appId: 'JS SDK unit tests (alpha)',
+    project: process.env.COGNITE_PROJECT || 'unit-test',
+    baseUrl: mockBaseUrl,
+    oidcTokenProvider: () => Promise.resolve('test accessToken'),
   });
 }
