@@ -63,7 +63,7 @@ async function createReleasePR() {
     // Calculate versions without pushing (now on the release branch)
     console.log('Calculating version changes...');
     execSync(
-      'lerna version --conventional-commits --no-push --no-git-tag-version --yes',
+      'lerna version --conventional-commits --no-push --no-git-tag-version --no-private --yes',
       { stdio: 'inherit' }
     );
 
