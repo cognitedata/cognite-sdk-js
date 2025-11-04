@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [10.3.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@10.2.0...@cognite/sdk@10.3.0) (2025-11-04)
+
+
+### Features
+
+* **auth-4121:** add support for sessionAcl proto type ([#1296](https://github.com/cognitedata/cognite-sdk-js/issues/1296)) ([54ef860](https://github.com/cognitedata/cognite-sdk-js/commit/54ef8603d9895f7014a4a9802a0362beb0f3b953))
+
+
+
+
+
 # [10.2.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@10.1.4...@cognite/sdk@10.2.0) (2025-09-29)
 
 
