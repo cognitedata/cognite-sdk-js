@@ -8,7 +8,7 @@ export class StreamsAPI extends BaseResourceAPI<Stream> {
    * @hidden
    */
   protected getDateProps() {
-    return this.pickDateProps(['items'], ['createdTime', 'lastUpdatedTime']);
+    return this.pickDateProps(['items'], ['createdTime']);
   }
 
   /**

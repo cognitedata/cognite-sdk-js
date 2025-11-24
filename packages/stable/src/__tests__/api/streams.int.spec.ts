@@ -53,13 +53,11 @@ describe('streams integration test', () => {
 
     expect(immutableStream).toBeDefined();
     expect(immutableStream?.createdTime).toBeInstanceOf(Date);
-    expect(immutableStream?.lastUpdatedTime).toBeInstanceOf(Date);
     expect(immutableStream?.settings).toBeDefined();
     expect(immutableStream?.type).toBe('Immutable');
 
     expect(mutableStream).toBeDefined();
     expect(mutableStream?.createdTime).toBeInstanceOf(Date);
-    expect(mutableStream?.lastUpdatedTime).toBeInstanceOf(Date);
     expect(mutableStream?.settings).toBeDefined();
     expect(mutableStream?.type).toBe('Mutable');
   });

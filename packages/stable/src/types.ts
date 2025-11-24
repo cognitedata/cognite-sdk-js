@@ -553,6 +553,10 @@ export interface CreateRevision3D {
   metadata?: Metadata;
 }
 
+export interface CreatedTime {
+  createdTime: Date;
+}
+
 export interface CreatedAndLastUpdatedTime {
   lastUpdatedTime: Date;
   createdTime: Date;
@@ -2391,7 +2395,7 @@ export interface StreamCreateSettings {
 /**
  * A stream - target for high volume data ingestion
  */
-export interface Stream extends CreatedAndLastUpdatedTime {
+export interface Stream extends CreatedTime {
   /**
    * Stream identifier
    */
