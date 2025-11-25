@@ -1,7 +1,7 @@
 // Copyright 2025 Cognite AS
 
 import { BaseResourceAPI } from '@cognite/sdk-core';
-import type { Stream, StreamRetrieveParams, StreamWrite } from '../../types';
+import type { Stream, StreamRetrieveParams, StreamWrite } from './types';
 
 export class StreamsAPI extends BaseResourceAPI<Stream> {
   /**

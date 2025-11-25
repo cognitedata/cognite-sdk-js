@@ -14,10 +14,10 @@ describe('streams integration test', () => {
   beforeAll(async () => {
     client = setupLoggedInClient();
 
-    const existingStreams = await client.streams.list();
-    const existingIds = existingStreams.map((s) => s.externalId);
-
-    if (!existingIds.includes(immutableStreamId)) {
+    // Check if immutable stream exists, create if not
+    try {
+      await client.streams.retrieve({ externalId: immutableStreamId });
+    } catch {
       await client.streams.create({
         externalId: immutableStreamId,
         settings: {
@@ -28,7 +28,10 @@ describe('streams integration test', () => {
       });
     }
 
-    if (!existingIds.includes(mutableStreamId)) {
+    // Check if mutable stream exists, create if not
+    try {
+      await client.streams.retrieve({ externalId: mutableStreamId });
+    } catch {
       await client.streams.create({
         externalId: mutableStreamId,
         settings: {
