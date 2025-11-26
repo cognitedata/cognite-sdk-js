@@ -27,6 +27,7 @@ import { LabelsAPI } from './api/labels/labelsApi';
 import { DataModelsAPI } from './api/models/datamodelsApi';
 import { ProjectsAPI } from './api/projects/projectsApi';
 import { RawAPI } from './api/raw/rawApi';
+import { RecordsAPI } from './api/records/recordsApi';
 import { RelationshipsApi } from './api/relationships/relationshipsApi';
 import { SecurityCategoriesAPI } from './api/securityCategories/securityCategoriesApi';
 import { SequencesAPI } from './api/sequences/sequencesApi';
@@ -183,6 +184,9 @@ export default class CogniteClient extends BaseCogniteClient {
   public get streams() {
     return accessApi(this.streamsApi);
   }
+  public get records() {
+    return accessApi(this.recordsApi);
+  }
   private assetsApi?: AssetsAPI;
   private timeSeriesApi?: TimeSeriesAPI;
   protected dataPointsApi?: DataPointsAPI;
@@ -215,6 +219,7 @@ export default class CogniteClient extends BaseCogniteClient {
   private dataModelsApi?: DataModelsAPI;
   private sessionsApi?: SessionsApi;
   private streamsApi?: StreamsAPI;
+  private recordsApi?: RecordsAPI;
 
   protected get version() {
     return version;
@@ -272,6 +277,7 @@ export default class CogniteClient extends BaseCogniteClient {
     this.dataModelsApi = this.apiFactory(DataModelsAPI, 'models/datamodels');
     this.sessionsApi = this.apiFactory(SessionsApi, 'sessions');
     this.streamsApi = this.apiFactory(StreamsAPI, 'streams');
+    this.recordsApi = this.apiFactory(RecordsAPI, 'streams');
   }
 
   static urlEncodeExternalId(externalId: string): string {
