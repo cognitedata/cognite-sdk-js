@@ -39,6 +39,7 @@ export type {
 export * from './exports.gen';
 
 export * from './api/geospatial/types';
+export * from './api/streams/types';
 
 export interface Acl<ActionsType, ScopeType> {
   actions: ActionsType[];
@@ -551,6 +552,10 @@ export interface CreateRevision3D {
    */
   fileId: CogniteInternalId;
   metadata?: Metadata;
+}
+
+export interface CreatedTime {
+  createdTime: Date;
 }
 
 export interface CreatedAndLastUpdatedTime {

@@ -32,6 +32,7 @@ import { SecurityCategoriesAPI } from './api/securityCategories/securityCategori
 import { SequencesAPI } from './api/sequences/sequencesApi';
 import { SessionsApi } from './api/sessions/sessionsApi';
 import { SpacesAPI } from './api/spaces/spacesApi';
+import { StreamsAPI } from './api/streams/streamsApi';
 import {
   TemplateGraphQlApi,
   TemplateGroupVersionsApi,
@@ -179,6 +180,9 @@ export default class CogniteClient extends BaseCogniteClient {
   public get dataModels() {
     return accessApi(this.dataModelsApi);
   }
+  public get streams() {
+    return accessApi(this.streamsApi);
+  }
   private assetsApi?: AssetsAPI;
   private timeSeriesApi?: TimeSeriesAPI;
   protected dataPointsApi?: DataPointsAPI;
@@ -210,6 +214,7 @@ export default class CogniteClient extends BaseCogniteClient {
   private spacesApi?: SpacesAPI;
   private dataModelsApi?: DataModelsAPI;
   private sessionsApi?: SessionsApi;
+  private streamsApi?: StreamsAPI;
 
   protected get version() {
     return version;
@@ -266,6 +271,7 @@ export default class CogniteClient extends BaseCogniteClient {
     this.spacesApi = this.apiFactory(SpacesAPI, 'models/spaces');
     this.dataModelsApi = this.apiFactory(DataModelsAPI, 'models/datamodels');
     this.sessionsApi = this.apiFactory(SessionsApi, 'sessions');
+    this.streamsApi = this.apiFactory(StreamsAPI, 'streams');
   }
 
   static urlEncodeExternalId(externalId: string): string {
