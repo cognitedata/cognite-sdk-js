@@ -35955,7 +35955,8 @@
         "enum": [
           "node",
           "edge",
-          "all"
+          "all",
+          "record"
         ],
         "default": "node"
       },
