@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [10.4.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@10.3.0...@cognite/sdk@10.4.0) (2025-11-27)
+
+
+### Features
+
+* **streams:** add support for Streams API ([#1338](https://github.com/cognitedata/cognite-sdk-js/issues/1338)) ([683d581](https://github.com/cognitedata/cognite-sdk-js/commit/683d581f24))
+
+
+
+
+
 # [10.3.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@10.2.0...@cognite/sdk@10.3.0) (2025-11-04)
 
 
