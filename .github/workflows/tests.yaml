@@ -5,6 +5,9 @@ on:
     branches:
       - master
       - release-*
+ push:
+    branches:
+      - master
 
 jobs:
   codecov:
@@ -169,5 +172,10 @@ jobs:
       - name: Build
         run: yarn build
 
-      - name: Test
+      - name: Test (since master)
+        if: github.event_name == 'pull_request'
         run: yarn test --since origin/master
+
+      - name: Test (all)
+        if: github.event_name == 'pull_request'
+        run: yarn test
