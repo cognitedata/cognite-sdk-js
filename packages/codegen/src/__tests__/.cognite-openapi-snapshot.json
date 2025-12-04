@@ -23488,8 +23488,8 @@
       },
       "UsedFor": {
         "type": "string",
-        "description": "Should this operation apply to nodes, edges or both.",
-        "enum": ["node", "edge", "all"],
+        "description": "Should this operation apply to nodes, edges, records, or both nodes and edges.",
+        "enum": ["node", "edge", "all", "record"],
         "default": "node"
       },
       "DMSFilterProperty": {

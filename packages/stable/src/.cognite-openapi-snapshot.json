@@ -35951,11 +35951,12 @@
       },
       "UsedFor": {
         "type": "string",
-        "description": "Should this operation apply to nodes, edges or both.",
+        "description": "Should this operation apply to nodes, edges, records, or both nodes and edges.",
         "enum": [
           "node",
           "edge",
-          "all"
+          "all",
+          "record"
         ],
         "default": "node"
       },
