@@ -1,6 +1,6 @@
 // Copyright 2025 Cognite AS
 
-import { beforeAll, describe, expect, test } from 'vitest';
+import { beforeAll, describe, expect, test, vi } from 'vitest';
 import type CogniteClient from '../../cogniteClient';
 import type { ContainerCreateDefinition } from '../../types';
 import {
@@ -37,15 +37,12 @@ describe('records integration test', () => {
     }
 
     // Check if container already exists (which means space also exists)
-    let needsWait = false;
     try {
       await client.containers.retrieve([
         { space: testSpaceId, externalId: testContainerId },
       ]);
     } catch {
       // Container doesn't exist, need to create space and container
-      needsWait = true;
-
       // Create the test space if it doesn't exist (upsert is idempotent)
       await client.spaces.upsert([
         {
@@ -77,11 +74,6 @@ describe('records integration test', () => {
 
       await client.containers.upsert([containerDefinition]);
     }
-
-    // Wait for eventual consistency only when we created new resources
-    if (needsWait) {
-      await new Promise((resolve) => setTimeout(resolve, 5000));
-    }
   }, 60_000);
 
   test('ingest and filter records', async () => {
@@ -110,34 +102,36 @@ describe('records integration test', () => {
       },
     ]);
 
-    // Wait for eventual consistency (record should be available at most within 2 seconds)
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
-    // Filter records by name property
-    const result = await client.records.filter(immutableStreamId, {
-      lastUpdatedTime: {
-        gte: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(), // Last 24 hours
-      },
-      sources: [
-        {
-          source: {
-            type: 'container',
-            space: testSpaceId,
-            externalId: testContainerId,
+    // Wait for eventual consistency
+    const result = await vi.waitFor(
+      async () => {
+        const records = await client.records.filter(immutableStreamId, {
+          lastUpdatedTime: {
+            gte: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(), // Last 24 hours
           },
-          properties: ['*'],
-        },
-      ],
-      filter: {
-        equals: {
-          property: [testSpaceId, testContainerId, 'name'],
-          value: testName,
-        },
+          sources: [
+            {
+              source: {
+                type: 'container',
+                space: testSpaceId,
+                externalId: testContainerId,
+              },
+              properties: ['*'],
+            },
+          ],
+          filter: {
+            equals: {
+              property: [testSpaceId, testContainerId, 'name'],
+              value: testName,
+            },
+          },
+          limit: 10,
+        });
+        expect(records.length).toBe(1);
+        return records;
       },
-      limit: 10,
-    });
-
-    expect(result.length).toBe(1);
+      { timeout: 5_000, interval: 200 }
+    );
 
     const record = result[0];
     expect(record.space).toBe(testSpaceId);
