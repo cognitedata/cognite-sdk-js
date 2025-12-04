@@ -1,9 +1,9 @@
 // Copyright 2025 Cognite AS
 
-import { beforeAll, describe, expect, test, vi } from 'vitest';
+import { beforeAll, describe, expect, test } from 'vitest';
 import type CogniteClient from '../../cogniteClient';
 import type { ContainerCreateDefinition } from '../../types';
-import { randomInt, setupLoggedInClient } from '../testUtils';
+import { RECORDS_TEST_SPACE, randomInt, setupLoggedInClient } from '../testUtils';
 
 describe('records integration test', () => {
   let client: CogniteClient;
@@ -11,8 +11,8 @@ describe('records integration test', () => {
   // Use the existing test streams from streams.int.spec.ts
   const immutableStreamId = 'sdk_test_immutable_stream';
 
-  // Unique space and container
-  const testSpaceId = 'sdk_test_records_space';
+  // Reusable space and container
+  const testSpaceId = RECORDS_TEST_SPACE;
   const testContainerId = 'sdk_test_records_container';
 
   beforeAll(async () => {
@@ -32,52 +32,52 @@ describe('records integration test', () => {
       });
     }
 
-    // Create or upsert the test space
-    await vi.waitFor(
-      async () =>
-        client.spaces.upsert([
-          {
-            space: testSpaceId,
-            name: testSpaceId,
-            description: 'Space used for records integration tests.',
+    // Check if container already exists (which means space also exists)
+    let needsWait = false;
+    try {
+      await client.containers.retrieve([
+        { space: testSpaceId, externalId: testContainerId },
+      ]);
+    } catch {
+      // Container doesn't exist, need to create space and container
+      needsWait = true;
+
+      // Create the test space if it doesn't exist (upsert is idempotent)
+      await client.spaces.upsert([
+        {
+          space: testSpaceId,
+          name: testSpaceId,
+          description: 'Space used for records integration tests.',
+        },
+      ]);
+
+      // Create the container for records tests
+      const containerDefinition: ContainerCreateDefinition = {
+        externalId: testContainerId,
+        space: testSpaceId,
+        name: 'Test Records Container',
+        description: 'Container used for records integration tests.',
+        usedFor: 'record',
+        properties: {
+          name: {
+            type: { type: 'text' },
           },
-        ]),
-      {
-        timeout: 25 * 1000,
-        interval: 1000,
-      }
-    );
-
-    // Create or upsert a container for records integration tests
-    const containerDefinition: ContainerCreateDefinition = {
-      externalId: testContainerId,
-      space: testSpaceId,
-      name: 'Test Records Container',
-      description: 'Container used for records integration tests.',
-      usedFor: 'record',
-      properties: {
-        name: {
-          type: { type: 'text' },
+          value: {
+            type: { type: 'float64' },
+          },
+          timestamp: {
+            type: { type: 'timestamp' },
+          },
         },
-        value: {
-          type: { type: 'float64' },
-        },
-        timestamp: {
-          type: { type: 'timestamp' },
-        },
-      },
-    };
+      };
 
-    await vi.waitFor(
-      async () => client.containers.upsert([containerDefinition]),
-      {
-        timeout: 25 * 1000,
-        interval: 1000,
-      }
-    );
+      await client.containers.upsert([containerDefinition]);
+    }
 
-    // Wait for eventual consistency
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    // Wait for eventual consistency only when we created new resources
+    if (needsWait) {
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+    }
   }, 60_000);
 
   test('ingest and filter records', async () => {
