@@ -1,12 +1,54 @@
 // Copyright 2025 Cognite AS
 
-import type {
-  ContainerReference,
-  PropertyValueGroupV3,
-  RawPropertyValueV3,
-} from '../instances/types.gen';
+/**
+ * @pattern ^[a-zA-Z][a-zA-Z0-9_-]{0,41}[a-zA-Z0-9]?$
+ */
+export type RecordSpaceId = string;
 
-export type { ContainerReference, PropertyValueGroupV3, RawPropertyValueV3 };
+/**
+ * @pattern ^[^\\x00]{1,256}$
+ */
+export type RecordExternalId = string;
+
+/**
+ * A value matching the data type of the defined property
+ * */
+export type RawPropertyValueV3 =
+  | string
+  | number
+  | boolean
+  | object
+  | string[]
+  | boolean[]
+  | number[]
+  | object[];
+
+/**
+  * Group of property values indexed by a local unique identifier. The identifier has to have a length of between 1 and 255 characters.  It must also match the pattern ```^[a-zA-Z0-9][a-zA-Z0-9_-]{0,253}[a-zA-Z0-9]?$``` , and it cannot be any of the following reserved identifiers: ```space```, ```externalId```, ```createdTime```, ```lastUpdatedTime```, ```deletedTime```, and ```extensions```. The maximum number of properties depends on your subscription, and is by default 100.
+ * @example {"someStringProperty":"someStringValue","someDirectRelation":{"space":"mySpace","externalId":"someNode"},"someIntArrayProperty":[1,2,3,4]}
+ */
+export type PropertyValueGroupV3 = Record<string, RawPropertyValueV3>;
+
+/**
+ * Reference to an existing container
+ */
+export interface ContainerReference {
+  /** External-id of the container */
+  externalId: RecordExternalId;
+  /** Id of the space hosting (containing) the container */
+  space: RecordSpaceId;
+  type: 'container';
+}
+
+/**
+ * Sort direction for record queries
+ */
+export type RecordSortDirection = 'ascending' | 'descending';
+
+/**
+ * Timestamp bound for time range filters (ISO 8601 string or Unix ms since epoch)
+ */
+export type LastUpdatedTimeRangeBound = string | number;
 
 /**
  * Property values for a container source
@@ -29,11 +71,11 @@ export interface RecordWrite {
   /**
    * The space that the record belongs to
    */
-  space: string;
+  space: RecordSpaceId;
   /**
    * External ID of the record
    */
-  externalId: string;
+  externalId: RecordExternalId;
   /**
    * List of source properties to write
    */
@@ -61,19 +103,19 @@ export interface LastUpdatedTimeFilter {
   /**
    * Greater than or equal to
    */
-  gte?: string | number;
+  gte?: LastUpdatedTimeRangeBound;
   /**
    * Greater than
    */
-  gt?: string | number;
+  gt?: LastUpdatedTimeRangeBound;
   /**
    * Less than or equal to
    */
-  lte?: string | number;
+  lte?: LastUpdatedTimeRangeBound;
   /**
    * Less than
    */
-  lt?: string | number;
+  lt?: LastUpdatedTimeRangeBound;
 }
 
 /**
@@ -87,7 +129,7 @@ export interface RecordSort {
   /**
    * Sort direction
    */
-  direction?: 'ascending' | 'descending';
+  direction?: RecordSortDirection;
 }
 
 /**
@@ -123,11 +165,11 @@ export interface RecordItem {
   /**
    * The space that the record belongs to
    */
-  space: string;
+  space: RecordSpaceId;
   /**
    * External ID of the record
    */
-  externalId: string;
+  externalId: RecordExternalId;
   /**
    * When the record was created
    */
