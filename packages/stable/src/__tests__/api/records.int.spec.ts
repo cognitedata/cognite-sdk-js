@@ -3,7 +3,11 @@
 import { beforeAll, describe, expect, test } from 'vitest';
 import type CogniteClient from '../../cogniteClient';
 import type { ContainerCreateDefinition } from '../../types';
-import { RECORDS_TEST_SPACE, randomInt, setupLoggedInClient } from '../testUtils';
+import {
+  RECORDS_TEST_SPACE,
+  randomInt,
+  setupLoggedInClient,
+} from '../testUtils';
 
 describe('records integration test', () => {
   let client: CogniteClient;
