@@ -14,7 +14,14 @@ import type {
   ListOfSpaceExternalIdsResponse,
   ReducedLimitQueryParameter,
   SpaceQueryParameter,
+  UsedForQueryParameter,
 } from './types.gen';
+
+type ContainerListParams = IncludeGlobalQueryParameter &
+  CursorQueryParameter &
+  ReducedLimitQueryParameter &
+  SpaceQueryParameter &
+  UsedForQueryParameter;
 
 export class ContainersAPI extends BaseResourceAPI<ContainerDefinition> {
   /**
@@ -82,16 +89,19 @@ export class ContainersAPI extends BaseResourceAPI<ContainerDefinition> {
    *
    * ```js
    *  const response = await client.containers.list({ space: '', includeGlobal: true });
-   *
+   *  // List only record containers
+   *  const recordContainers = await client.containers.list({ usedFor: ['record'] });
+   *  // List all container types including records
+   *  const allContainers = await client.containers.list({ usedFor: ['node', 'edge', 'all', 'record'] });
    * ```
    */
   public list = (
-    params: IncludeGlobalQueryParameter &
-      CursorQueryParameter &
-      ReducedLimitQueryParameter &
-      SpaceQueryParameter = { includeGlobal: false }
+    params: ContainerListParams = { includeGlobal: false }
   ): CursorAndAsyncIterator<ContainerDefinition> => {
-    return super.listEndpoint(this.callListEndpointWithGet, params);
+    return super.listEndpoint(
+      this.callListEndpointWithRepeatedQueryParams,
+      params
+    );
   };
 
   /**

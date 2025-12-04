@@ -255,6 +255,50 @@ export abstract class BaseResourceAPI<ResponseType> {
     return response;
   };
 
+  /**
+   * Build URL with query parameters, serializing arrays as repeated query parameters.
+   * E.g., { foo: ['a', 'b'] } becomes ?foo=a&foo=b instead of ?foo=[a,b]
+   */
+  private buildUrlWithRepeatedQueryParams<QueryType extends FilterQuery>(
+    baseUrl: string,
+    params?: QueryType
+  ): string {
+    if (!params) {
+      return baseUrl;
+    }
+
+    const searchParams = new URLSearchParams();
+    for (const [key, value] of Object.entries(params)) {
+      if (value === undefined) {
+        continue;
+      }
+      if (Array.isArray(value)) {
+        for (const item of value) {
+          searchParams.append(key, String(item));
+        }
+      } else {
+        searchParams.append(key, String(value));
+      }
+    }
+
+    const queryString = searchParams.toString();
+    return queryString ? `${baseUrl}?${queryString}` : baseUrl;
+  }
+
+  /**
+   * List endpoint that serializes array query parameters as repeated parameters.
+   * Use this when the API expects ?param=a&param=b format instead of ?param=[a,b]
+   */
+  protected callListEndpointWithRepeatedQueryParams = async <
+    QueryType extends FilterQuery,
+  >(
+    scope?: QueryType
+  ): Promise<HttpResponse<CursorResponse<ResponseType[]>>> => {
+    const url = this.buildUrlWithRepeatedQueryParams(this.listGetUrl, scope);
+    const response = await this.get<CursorResponse<ResponseType[]>>(url);
+    return response;
+  };
+
   protected callListEndpointWithPost = async <QueryType extends FilterQuery>(
     scope?: QueryType
   ): Promise<HttpResponse<CursorResponse<ResponseType[]>>> => {

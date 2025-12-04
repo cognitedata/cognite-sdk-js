@@ -1239,6 +1239,9 @@
           },
           {
             "$ref": "#/components/parameters/IncludeGlobal"
+          },
+          {
+            "$ref": "#/components/parameters/UsedFor"
           }
         ],
         "x-capability": [
@@ -88964,6 +88967,21 @@
           "type": "boolean",
           "default": false
         }
+      },
+      "UsedFor": {
+        "name": "usedFor",
+        "in": "query",
+        "description": "Only include containers that have been marked as used for the specified purposes. Defaults to [node, edge, all].",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["node", "edge", "all", "record"]
+          },
+          "default": ["node", "edge", "all"]
+        },
+        "style": "form",
+        "explode": true
       },
       "StreamId": {
         "name": "streamId",
