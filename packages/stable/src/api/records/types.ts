@@ -133,6 +133,52 @@ export interface RecordSort {
 }
 
 /**
+ * Property reference for filters. Either a top-level property (1 element) or
+ * a container property [space, container, property] (3 elements).
+ */
+export type FilterProperty = [string] | [string, string, string];
+
+/**
+ * Range value for range filters
+ */
+export type RangeValue = string | number | boolean;
+
+/**
+ * Boolean filter combining other filters with and/or/not
+ */
+export type BoolFilter =
+  | { and: RecordFilter[] }
+  | { or: RecordFilter[] }
+  | { not: RecordFilter };
+
+/**
+ * Leaf filter for matching records
+ */
+export type LeafFilter =
+  | { matchAll: Record<string, never> }
+  | { exists: { property: FilterProperty } }
+  | { equals: { property: FilterProperty; value: RawPropertyValueV3 } }
+  | { hasData: ContainerReference[] }
+  | { prefix: { property: FilterProperty; value: string } }
+  | {
+      range: {
+        property: FilterProperty;
+        gte?: RangeValue;
+        gt?: RangeValue;
+        lte?: RangeValue;
+        lt?: RangeValue;
+      };
+    }
+  | { in: { property: FilterProperty; values: RawPropertyValueV3[] } }
+  | { containsAll: { property: FilterProperty; values: RawPropertyValueV3[] } }
+  | { containsAny: { property: FilterProperty; values: RawPropertyValueV3[] } };
+
+/**
+ * Filter DSL for querying records
+ */
+export type RecordFilter = BoolFilter | LeafFilter;
+
+/**
  * Filter request for retrieving records from a stream
  */
 export interface RecordFilterRequest {
@@ -147,7 +193,7 @@ export interface RecordFilterRequest {
   /**
    * Filter specification
    */
-  filter?: Record<string, unknown>;
+  filter?: RecordFilter;
   /**
    * Sorting specifications
    */
