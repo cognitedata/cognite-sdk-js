@@ -146,4 +146,75 @@ describe('records integration test', () => {
       testValue
     );
   });
+
+  test('filter with range', async () => {
+    const testName = `range_test_${randomInt()}`;
+    const testValue = 75.0;
+
+    await client.records.ingest(immutableStreamId, [
+      {
+        space: testSpaceId,
+        externalId: `range_record_${randomInt()}`,
+        sources: [
+          {
+            source: { type: 'container', space: testSpaceId, externalId: testContainerId },
+            properties: { name: testName, value: testValue, timestamp: '2025-01-01T00:00:00.000Z' },
+          },
+        ],
+      },
+    ]);
+
+    const result = await vi.waitFor(
+      async () => {
+        const records = await client.records.filter(immutableStreamId, {
+          lastUpdatedTime: { gte: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString() },
+          sources: [{ source: { type: 'container', space: testSpaceId, externalId: testContainerId }, properties: ['*'] }],
+          filter: {
+            and: [
+              { equals: { property: [testSpaceId, testContainerId, 'name'], value: testName } },
+              { range: { property: [testSpaceId, testContainerId, 'value'], gte: 50, lte: 100 } },
+            ],
+          },
+        });
+        expect(records.length).toBe(1);
+        return records;
+      },
+      { timeout: 5_000, interval: 200 }
+    );
+
+    expect(result[0].properties[testSpaceId][testContainerId].value).toBe(testValue);
+  });
+
+  test('filter with prefix', async () => {
+    const uniquePrefix = `prefix_${randomInt()}`;
+    const testName = `${uniquePrefix}_record`;
+
+    await client.records.ingest(immutableStreamId, [
+      {
+        space: testSpaceId,
+        externalId: `prefix_record_${randomInt()}`,
+        sources: [
+          {
+            source: { type: 'container', space: testSpaceId, externalId: testContainerId },
+            properties: { name: testName, value: 10, timestamp: '2025-01-01T00:00:00.000Z' },
+          },
+        ],
+      },
+    ]);
+
+    const result = await vi.waitFor(
+      async () => {
+        const records = await client.records.filter(immutableStreamId, {
+          lastUpdatedTime: { gte: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString() },
+          sources: [{ source: { type: 'container', space: testSpaceId, externalId: testContainerId }, properties: ['*'] }],
+          filter: { prefix: { property: [testSpaceId, testContainerId, 'name'], value: uniquePrefix } },
+        });
+        expect(records.length).toBe(1);
+        return records;
+      },
+      { timeout: 5_000, interval: 200 }
+    );
+
+    expect(result[0].properties[testSpaceId][testContainerId].name).toBe(testName);
+  });
 });
