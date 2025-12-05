@@ -98,7 +98,7 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
    *
    * // Auto-paginate to array
    * const allRecords = await client.records
-   *   .sync('my_stream', { initializeCursor: '1d-ago', sources: [...] })
+   *   .sync('my_stream', { initializeCursor: '1d-ago', sources: [{ source: { type: 'container', space: 'mySpace', externalId: 'myContainer' }, properties: ['*'] }] })
    *   .autoPagingToArray({ limit: 10000 });
    *
    * // Iterate with for-await
