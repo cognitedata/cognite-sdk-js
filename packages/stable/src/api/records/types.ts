@@ -249,3 +249,48 @@ export interface RecordFilterResponse {
    */
   items: RecordItem[];
 }
+
+/**
+ * Status of a synced record
+ */
+export type SyncRecordStatus = 'created' | 'updated' | 'deleted';
+
+/**
+ * A record returned from the sync endpoint
+ */
+export interface SyncRecordItem {
+  space: RecordSpaceId;
+  externalId: RecordExternalId;
+  createdTime: Date;
+  lastUpdatedTime: Date;
+  /** Properties are omitted for deleted records in mutable streams */
+  properties?: RecordProperties;
+  status: SyncRecordStatus;
+}
+
+/**
+ * Request for syncing records from a stream
+ */
+export interface RecordSyncRequest {
+  /** List of containers and their properties to return */
+  sources?: SourceSelector[];
+  /** Filter specification */
+  filter?: RecordFilter;
+  /** Cursor from a previous sync request */
+  cursor?: string;
+  /** Initialize cursor with a time offset (e.g., "2d-ago", "1h-ago") */
+  initializeCursor?: string;
+  /** Maximum number of results to return (default: 10, max: 1000) */
+  limit?: number;
+}
+
+/**
+ * Response from the sync records endpoint
+ */
+export interface RecordSyncResponse {
+  items: SyncRecordItem[];
+  /** Cursor for the next sync request */
+  nextCursor: string;
+  /** Whether there are more records to sync */
+  hasNext: boolean;
+}
