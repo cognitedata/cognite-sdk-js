@@ -1,11 +1,15 @@
 // Copyright 2025 Cognite AS
 
+import type { CursorAndAsyncIterator } from '@cognite/sdk-core';
 import { BaseResourceAPI } from '@cognite/sdk-core';
 import type {
   RecordFilterRequest,
   RecordFilterResponse,
   RecordItem,
+  RecordSyncRequest,
+  RecordSyncResponse,
   RecordWrite,
+  SyncRecordItem,
 } from './types';
 
 export class RecordsAPI extends BaseResourceAPI<RecordItem> {
@@ -78,5 +82,48 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
       data: request,
     });
     return this.addToMapAndReturn(response.data.items, response);
+  };
+
+  /**
+   * [Sync records from a stream](https://developer.cognite.com/api#tag/Records/operation/syncRecords)
+   *
+   * Sync records from a stream using a cursor-based approach. Supports auto-pagination.
+   *
+   * ```js
+   * // Get first page
+   * const response = await client.records.sync('my_stream', {
+   *   initializeCursor: '1d-ago',
+   *   sources: [{ source: { type: 'container', space: 'mySpace', externalId: 'myContainer' }, properties: ['*'] }],
+   * });
+   *
+   * // Auto-paginate to array
+   * const allRecords = await client.records
+   *   .sync('my_stream', { initializeCursor: '1d-ago', sources: [...] })
+   *   .autoPagingToArray({ limit: 10000 });
+   *
+   * // Iterate with for-await
+   * for await (const record of client.records.sync('my_stream', { initializeCursor: '1d-ago' })) {
+   *   console.log(record);
+   * }
+   * ```
+   */
+  public sync = (
+    streamExternalId: string,
+    request: RecordSyncRequest
+  ): CursorAndAsyncIterator<SyncRecordItem> => {
+    const path = this.url(`${streamExternalId}/records/sync`);
+
+    const callSyncEndpoint = async (params?: RecordSyncRequest) => {
+      const response = await this.post<RecordSyncResponse>(path, { data: params });
+      const items = this.addToMapAndReturn(response.data.items, response) as SyncRecordItem[];
+      // Map hasNext to nextCursor for the pagination mechanism
+      const nextCursor = response.data.hasNext ? response.data.nextCursor : undefined;
+      return { ...response, data: { items, nextCursor } };
+    };
+
+    return this.cursorBasedEndpoint<RecordSyncRequest, SyncRecordItem>(
+      callSyncEndpoint,
+      request
+    );
   };
 }
