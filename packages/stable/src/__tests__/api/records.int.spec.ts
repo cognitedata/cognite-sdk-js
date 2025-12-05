@@ -217,4 +217,106 @@ describe('records integration test', () => {
 
     expect(result[0].properties[testSpaceId][testContainerId].name).toBe(testName);
   });
+
+  test('sync records', async () => {
+    const testName = `sync_test_${randomInt()}`;
+
+    await client.records.ingest(immutableStreamId, [
+      {
+        space: testSpaceId,
+        externalId: `sync_record_${randomInt()}`,
+        sources: [
+          {
+            source: { type: 'container', space: testSpaceId, externalId: testContainerId },
+            properties: { name: testName, value: 99, timestamp: '2025-01-01T00:00:00.000Z' },
+          },
+        ],
+      },
+    ]);
+
+    const result = await vi.waitFor(
+      async () => {
+        const response = await client.records.sync(immutableStreamId, {
+          initializeCursor: '1d-ago',
+          sources: [{ source: { type: 'container', space: testSpaceId, externalId: testContainerId }, properties: ['*'] }],
+          filter: { equals: { property: [testSpaceId, testContainerId, 'name'], value: testName } },
+          limit: 10,
+        });
+        expect(response.items.length).toBe(1);
+        return response;
+      },
+      { timeout: 5_000, interval: 200 }
+    );
+
+    // The next() function will be defined if nextCursor is present
+    expect(typeof result.next === 'function' || result.next === undefined).toBe(true);
+    const record = result.items[0];
+    expect(record.space).toBe(testSpaceId);
+    expect(record.status).toBe('created');
+    expect(record.createdTime).toBeInstanceOf(Date);
+    expect(record.lastUpdatedTime).toBeInstanceOf(Date);
+    expect(record.properties?.[testSpaceId][testContainerId].name).toBe(testName);
+  });
+
+  test('sync records with autoPagingToArray', async () => {
+    const testName = `autopaging_test_${randomInt()}`;
+
+    // Ingest 3 records to test pagination across multiple pages
+    await client.records.ingest(immutableStreamId, [
+      {
+        space: testSpaceId,
+        externalId: `autopaging_record_1_${randomInt()}`,
+        sources: [
+          {
+            source: { type: 'container', space: testSpaceId, externalId: testContainerId },
+            properties: { name: testName, value: 1, timestamp: '2025-01-01T00:00:00.000Z' },
+          },
+        ],
+      },
+      {
+        space: testSpaceId,
+        externalId: `autopaging_record_2_${randomInt()}`,
+        sources: [
+          {
+            source: { type: 'container', space: testSpaceId, externalId: testContainerId },
+            properties: { name: testName, value: 2, timestamp: '2025-01-01T00:00:00.000Z' },
+          },
+        ],
+      },
+      {
+        space: testSpaceId,
+        externalId: `autopaging_record_3_${randomInt()}`,
+        sources: [
+          {
+            source: { type: 'container', space: testSpaceId, externalId: testContainerId },
+            properties: { name: testName, value: 3, timestamp: '2025-01-01T00:00:00.000Z' },
+          },
+        ],
+      },
+    ]);
+
+    const records = await vi.waitFor(
+      async () => {
+        // Use limit: 1 to force multiple pages and verify cursor exhaustion
+        const items = await client.records
+          .sync(immutableStreamId, {
+            initializeCursor: '1d-ago',
+            sources: [{ source: { type: 'container', space: testSpaceId, externalId: testContainerId }, properties: ['*'] }],
+            filter: { equals: { property: [testSpaceId, testContainerId, 'name'], value: testName } },
+            limit: 1,
+          })
+          .autoPagingToArray({ limit: 100 });
+        expect(items.length).toBe(3);
+        return items;
+      },
+      { timeout: 5_000, interval: 200 }
+    );
+
+    expect(records.length).toBe(3);
+    expect(records.every((r) => r.status === 'created')).toBe(true);
+    expect(records.every((r) => r.properties?.[testSpaceId][testContainerId].name === testName)).toBe(true);
+    // Verify we got all 3 different values
+    const values = records.map((r) => r.properties?.[testSpaceId][testContainerId].value).sort();
+    expect(values).toEqual([1, 2, 3]);
+  });
 });
