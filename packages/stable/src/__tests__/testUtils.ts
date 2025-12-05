@@ -42,6 +42,8 @@ function setupMockableClient() {
   });
 }
 
+const RECORDS_TEST_SPACE = 'sdk_test_records_space'; // Space reserved for records integration tests
+
 const deleteOldSpaces = async (client: CogniteClient) => {
   const fiveMinutesInMs = 5 * 60 * 1000;
   await deleteSpacesNotUpdatedSince(client, Date.now() - fiveMinutesInMs);
@@ -55,7 +57,8 @@ const deleteSpacesNotUpdatedSince = async (
     // Can max delete 100 spaces at a time thus the limit is set to 100
     const spaces = (await client.spaces.list({ limit: 100 })).items;
     const oldSpaces = spaces.filter(
-      (space) => space.lastUpdatedTime < timestamp
+      (space) =>
+        space.lastUpdatedTime < timestamp && space.space !== RECORDS_TEST_SPACE
     );
 
     const spacesList = oldSpaces.map((space) => space.space);
@@ -298,4 +301,5 @@ export {
   setupMockableClient,
   deleteOldSpaces,
   getFileCreateArgs,
+  RECORDS_TEST_SPACE,
 };

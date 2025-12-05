@@ -1157,7 +1157,7 @@ export interface UpsertConflict {
 /**
  * Should this operation apply to nodes, edges or both.
  */
-export type UsedFor = 'node' | 'edge' | 'all';
+export type UsedFor = 'node' | 'edge' | 'all' | 'record';
 /**
  * Reference to a view
  */
