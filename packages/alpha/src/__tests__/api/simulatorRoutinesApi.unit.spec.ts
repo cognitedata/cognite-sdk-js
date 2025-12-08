@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, test } from 'vitest';
 import { mockBaseUrl } from '../../../../core/src/__tests__/testUtils';
 import type CogniteClientAlpha from '../../cogniteClient';
 import { setupMockableClient } from '../testUtils';
+import { routineRevisionConfiguration } from './seed';
 
 describe('Simulator Routines API unit tests', () => {
   let client: CogniteClientAlpha;
@@ -46,6 +47,12 @@ describe('Simulator Routines API unit tests', () => {
     });
     expect(result.items).toEqual(response.items);
     expect(result.items.length).toBe(2);
+    expect(result.items[0].simulatorIntegrationExternalId).toBe(
+      'integration-1'
+    );
+    expect(result.items[1].simulatorIntegrationExternalId).toBe(
+      'integration-2'
+    );
   });
 
   test('list routines with all filters combined', async () => {
@@ -98,5 +105,54 @@ describe('Simulator Routines API unit tests', () => {
     });
     expect(result.items).toEqual([]);
     expect(result.items.length).toBe(0);
+  });
+
+  test('list simulator routines with undefined simulatorIntegrationExternalId', async () => {
+    const response = {
+      items: [
+        {
+          id: 1,
+          externalId: 'routine-1',
+          name: 'Test Routine 1',
+          modelExternalId: 'model-1',
+          simulatorIntegrationExternalId: undefined,
+        },
+      ],
+    };
+
+    nock(mockBaseUrl)
+      .post(/\/api\/v1\/projects\/.*\/simulators\/routines\/list/, {})
+      .reply(200, response);
+
+    const result = await client.simulators.listRoutines();
+    expect(result.items.length).toBe(1);
+    expect(result.items[0].simulatorIntegrationExternalId).toBeUndefined();
+  });
+
+  test('list simulator routine revisions with undefined simulatorIntegrationExternalId', async () => {
+    const response = {
+      items: [
+        {
+          id: 1,
+          externalId: 'routine-revision-1',
+          routineExternalId: 'routine-1',
+          modelExternalId: 'model-1',
+          simulatorIntegrationExternalId: undefined,
+          configuration: routineRevisionConfiguration,
+          script: [],
+        },
+      ],
+    };
+
+    nock(mockBaseUrl)
+      .post(
+        /\/api\/v1\/projects\/.*\/simulators\/routines\/revisions\/list/,
+        {}
+      )
+      .reply(200, response);
+
+    const result = await client.simulators.listRoutineRevisions();
+    expect(result.items.length).toBe(1);
+    expect(result.items[0].simulatorIntegrationExternalId).toBeUndefined();
   });
 });
