@@ -1,13 +1,9 @@
-import type {
-  SimulatorRoutine,
-  SimulatorRoutineRevision,
-} from 'alpha/src/types';
 import nock from 'nock';
 import { beforeEach, describe, expect, test } from 'vitest';
 import { mockBaseUrl } from '../../../../core/src/__tests__/testUtils';
 import type CogniteClientAlpha from '../../cogniteClient';
 import { setupMockableClient } from '../testUtils';
-import { routineRevisionConfiguration } from './seed';
+import { routineRevisionConfiguration, routineRevisionScript } from './seed';
 
 describe('Simulator Routines API unit tests', () => {
   let client: CogniteClientAlpha;
@@ -25,27 +21,27 @@ describe('Simulator Routines API unit tests', () => {
       items: [
         {
           id: 1,
-          externalId: 'routine-1',
+          externalId: 'test_sim_routine_1',
+          simulatorExternalId: 'test_sim_1',
+          modelExternalId: 'test_model_1',
+          simulatorIntegrationExternalId: 'test_sim_integration_1',
           name: 'Test Routine 1',
-          modelExternalId: 'model-1',
-          simulatorIntegrationExternalId: 'integration-1',
           dataSetId: 1,
-          createdTime: new Date(),
-          lastUpdatedTime: new Date(),
-          simulatorExternalId: 'simulator-1',
+          createdTime: 1765203279461,
+          lastUpdatedTime: 1765203279461,
         },
         {
-          id: 2,
-          externalId: 'routine-2',
+          id: 1,
+          externalId: 'test_sim_routine_2',
+          simulatorExternalId: 'test_sim_1',
+          modelExternalId: 'test_model_1',
+          simulatorIntegrationExternalId: 'test_sim_integration_1',
           name: 'Test Routine 2',
-          modelExternalId: 'model-2',
-          simulatorIntegrationExternalId: 'integration-2',
-          dataSetId: 2,
-          createdTime: new Date(),
-          lastUpdatedTime: new Date(),
-          simulatorExternalId: 'simulator-2',
+          dataSetId: 1,
+          createdTime: 1765203279461,
+          lastUpdatedTime: 1765203279461,
         },
-      ] as SimulatorRoutine[],
+      ],
     };
 
     nock(mockBaseUrl)
@@ -57,7 +53,12 @@ describe('Simulator Routines API unit tests', () => {
     const result = await client.simulators.listRoutines({
       filter,
     });
-    expect(result.items).toEqual(response.items);
+    const mockedResponse = response.items.map((item) => ({
+      ...item,
+      createdTime: new Date(item.createdTime),
+      lastUpdatedTime: new Date(item.lastUpdatedTime),
+    }));
+    expect(result.items).toEqual(mockedResponse);
     expect(result.items.length).toBe(2);
   });
 
@@ -71,11 +72,15 @@ describe('Simulator Routines API unit tests', () => {
       items: [
         {
           id: 1,
-          externalId: 'routine-1',
+          externalId: 'test_sim_routine_1',
+          simulatorExternalId: 'test_sim_1',
+          modelExternalId: 'test_model_1',
+          simulatorIntegrationExternalId: 'test_sim_integration_1',
           name: 'Test Routine 1',
-          modelExternalId: 'model-1',
-          simulatorIntegrationExternalId: 'integration-1',
-        } as SimulatorRoutine,
+          dataSetId: 1,
+          createdTime: 1765203279461,
+          lastUpdatedTime: 1765203279461,
+        },
       ],
     };
 
@@ -88,7 +93,12 @@ describe('Simulator Routines API unit tests', () => {
     const result = await client.simulators.listRoutines({
       filter,
     });
-    expect(result.items).toEqual(response.items);
+    const mockedResponse = response.items.map((item) => ({
+      ...item,
+      createdTime: new Date(item.createdTime),
+      lastUpdatedTime: new Date(item.lastUpdatedTime),
+    }));
+    expect(result.items).toEqual(mockedResponse);
     expect(result.items.length).toBe(1);
   });
 
@@ -118,16 +128,15 @@ describe('Simulator Routines API unit tests', () => {
       items: [
         {
           id: 1,
-          externalId: 'routine-1',
+          externalId: 'test_sim_routine_1',
+          simulatorExternalId: 'test_sim_1',
+          modelExternalId: 'test_model_1',
+          simulatorIntegrationExternalId: 'test_sim_integration_1',
           name: 'Test Routine 1',
-          modelExternalId: 'model-1',
-          simulatorIntegrationExternalId: undefined,
-          simulatorExternalId: 'simulator-1',
           dataSetId: 1,
-          createdByUserId: 'user-1',
-          createdTime: new Date(),
-          lastUpdatedTime: new Date(),
-        } as SimulatorRoutine,
+          createdTime: 1765203279461,
+          lastUpdatedTime: 1765203279461,
+        },
       ],
     };
 
@@ -137,7 +146,12 @@ describe('Simulator Routines API unit tests', () => {
 
     const result = await client.simulators.listRoutines();
     expect(result.items.length).toBe(1);
-    expect(result.items).toEqual(response.items);
+    const mockedResponse = response.items.map((item) => ({
+      ...item,
+      createdTime: new Date(item.createdTime),
+      lastUpdatedTime: new Date(item.lastUpdatedTime),
+    }));
+    expect(result.items).toEqual(mockedResponse);
   });
 
   test('list simulator routine revisions with undefined simulatorIntegrationExternalId', async () => {
@@ -145,18 +159,18 @@ describe('Simulator Routines API unit tests', () => {
       items: [
         {
           id: 1,
-          externalId: 'routine-revision-1',
-          routineExternalId: 'routine-1',
-          modelExternalId: 'model-1',
-          simulatorIntegrationExternalId: undefined,
+          externalId: 'test_sim_routine_revision_1',
+          routineExternalId: 'test_sim_routine_1',
+          modelExternalId: 'test_model_1',
+          simulatorIntegrationExternalId: 'test_sim_integration_1',
           configuration: routineRevisionConfiguration,
-          script: [],
+          script: routineRevisionScript,
+          simulatorExternalId: 'test_sim_1',
           dataSetId: 1,
-          createdByUserId: 'user-1',
-          createdTime: new Date(),
+          createdByUserId: 'test_user_1',
+          createdTime: 1765203279461,
           versionNumber: 1,
-          simulatorExternalId: 'simulator-1',
-        } as SimulatorRoutineRevision,
+        },
       ],
     };
 
@@ -169,6 +183,10 @@ describe('Simulator Routines API unit tests', () => {
 
     const result = await client.simulators.listRoutineRevisions();
     expect(result.items.length).toBe(1);
-    expect(result.items).toEqual(response.items);
+    const mockedResponse = response.items.map((item) => ({
+      ...item,
+      createdTime: new Date(item.createdTime),
+    }));
+    expect(result.items).toEqual(mockedResponse);
   });
 });
