@@ -17,7 +17,7 @@ describe('Simulator Routines API unit tests', () => {
     const filter = {
       simulatorExternalIds: ['simulator-1', 'simulator-2'],
     };
-    const response = {
+    const mockedResponse = {
       items: [
         {
           id: 1,
@@ -48,17 +48,17 @@ describe('Simulator Routines API unit tests', () => {
       .post(/\/api\/v1\/projects\/.*\/simulators\/routines\/list/, {
         filter,
       })
-      .reply(200, response);
+      .reply(200, mockedResponse);
 
     const result = await client.simulators.listRoutines({
       filter,
     });
-    const mockedResponse = response.items.map((item) => ({
+    const expectedResponse = mockedResponse.items.map((item) => ({
       ...item,
       createdTime: new Date(item.createdTime),
       lastUpdatedTime: new Date(item.lastUpdatedTime),
     }));
-    expect(result.items).toEqual(mockedResponse);
+    expect(result.items).toEqual(expectedResponse);
     expect(result.items.length).toBe(2);
   });
 
@@ -68,7 +68,7 @@ describe('Simulator Routines API unit tests', () => {
       simulatorIntegrationExternalIds: ['integration-1'],
       modelExternalIds: ['model-1'],
     };
-    const response = {
+    const mockedResponse = {
       items: [
         {
           id: 1,
@@ -88,17 +88,17 @@ describe('Simulator Routines API unit tests', () => {
       .post(/\/api\/v1\/projects\/.*\/simulators\/routines\/list/, {
         filter,
       })
-      .reply(200, response);
+      .reply(200, mockedResponse);
 
     const result = await client.simulators.listRoutines({
       filter,
     });
-    const mockedResponse = response.items.map((item) => ({
+    const expectedResponse = mockedResponse.items.map((item) => ({
       ...item,
       createdTime: new Date(item.createdTime),
       lastUpdatedTime: new Date(item.lastUpdatedTime),
     }));
-    expect(result.items).toEqual(mockedResponse);
+    expect(result.items).toEqual(expectedResponse);
     expect(result.items.length).toBe(1);
   });
 
@@ -124,7 +124,7 @@ describe('Simulator Routines API unit tests', () => {
   });
 
   test('list simulator routines with undefined simulatorIntegrationExternalId', async () => {
-    const response = {
+    const mockedResponse = {
       items: [
         {
           id: 1,
@@ -142,20 +142,20 @@ describe('Simulator Routines API unit tests', () => {
 
     nock(mockBaseUrl)
       .post(/\/api\/v1\/projects\/.*\/simulators\/routines\/list/, {})
-      .reply(200, response);
+      .reply(200, mockedResponse);
 
     const result = await client.simulators.listRoutines();
     expect(result.items.length).toBe(1);
-    const mockedResponse = response.items.map((item) => ({
+    const expectedResponse = mockedResponse.items.map((item) => ({
       ...item,
       createdTime: new Date(item.createdTime),
       lastUpdatedTime: new Date(item.lastUpdatedTime),
     }));
-    expect(result.items).toEqual(mockedResponse);
+    expect(result.items).toEqual(expectedResponse);
   });
 
   test('list simulator routine revisions with undefined simulatorIntegrationExternalId', async () => {
-    const response = {
+    const mockedResponse = {
       items: [
         {
           id: 1,
@@ -179,14 +179,14 @@ describe('Simulator Routines API unit tests', () => {
         /\/api\/v1\/projects\/.*\/simulators\/routines\/revisions\/list/,
         {}
       )
-      .reply(200, response);
+      .reply(200, mockedResponse);
 
     const result = await client.simulators.listRoutineRevisions();
     expect(result.items.length).toBe(1);
-    const mockedResponse = response.items.map((item) => ({
+    const expectedResponse = mockedResponse.items.map((item) => ({
       ...item,
       createdTime: new Date(item.createdTime),
     }));
-    expect(result.items).toEqual(mockedResponse);
+    expect(result.items).toEqual(expectedResponse);
   });
 });

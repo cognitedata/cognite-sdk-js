@@ -13,7 +13,7 @@ describe('Simulator Runs API unit tests', () => {
   });
 
   test('list simulation runs with undefined simulatorIntegrationExternalId', async () => {
-    const response = {
+    const mockedResponse = {
       items: [
         {
           id: 1,
@@ -39,18 +39,18 @@ describe('Simulator Runs API unit tests', () => {
 
     nock(mockBaseUrl)
       .post(/\/api\/v1\/projects\/.*\/simulators\/runs\/list/, {})
-      .reply(200, response);
+      .reply(200, mockedResponse);
 
     const result = await client.simulators.listRuns();
     expect(result.items.length).toBe(1);
-    const mockedResponse = response.items.map((item) => ({
+    const expectedResponse = mockedResponse.items.map((item) => ({
       ...item,
       createdTime: new Date(item.createdTime),
       lastUpdatedTime: new Date(item.lastUpdatedTime),
       runTime: new Date(item.runTime),
       simulationTime: new Date(item.simulationTime),
     }));
-    expect(result.items).toEqual(mockedResponse);
+    expect(result.items).toEqual(expectedResponse);
     expect(result.items[0].simulatorIntegrationExternalId).toBeUndefined();
   });
 });
