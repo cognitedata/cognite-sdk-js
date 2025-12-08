@@ -2,6 +2,7 @@ import nock from 'nock';
 import { beforeEach, describe, expect, test } from 'vitest';
 import { mockBaseUrl } from '../../../../core/src/__tests__/testUtils';
 import type CogniteClientAlpha from '../../cogniteClient';
+import type { SimulationRun } from '../../types';
 import { setupMockableClient } from '../testUtils';
 
 describe('Simulator Runs API unit tests', () => {
@@ -29,7 +30,11 @@ describe('Simulator Runs API unit tests', () => {
           dataSetId: 1,
           eventId: 1,
           runType: 'external',
-        },
+          logId: 1,
+          createdTime: new Date(),
+          lastUpdatedTime: new Date(),
+          modelRevisionExternalId: 'model-revision-1',
+        } as SimulationRun,
       ],
     };
 

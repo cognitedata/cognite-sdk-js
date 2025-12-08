@@ -1,3 +1,7 @@
+import type {
+  SimulatorRoutine,
+  SimulatorRoutineRevision,
+} from 'alpha/src/types';
 import nock from 'nock';
 import { beforeEach, describe, expect, test } from 'vitest';
 import { mockBaseUrl } from '../../../../core/src/__tests__/testUtils';
@@ -25,6 +29,10 @@ describe('Simulator Routines API unit tests', () => {
           name: 'Test Routine 1',
           modelExternalId: 'model-1',
           simulatorIntegrationExternalId: 'integration-1',
+          dataSetId: 1,
+          createdTime: new Date(),
+          lastUpdatedTime: new Date(),
+          simulatorExternalId: 'simulator-1',
         },
         {
           id: 2,
@@ -32,8 +40,12 @@ describe('Simulator Routines API unit tests', () => {
           name: 'Test Routine 2',
           modelExternalId: 'model-2',
           simulatorIntegrationExternalId: 'integration-2',
+          dataSetId: 2,
+          createdTime: new Date(),
+          lastUpdatedTime: new Date(),
+          simulatorExternalId: 'simulator-2',
         },
-      ],
+      ] as SimulatorRoutine[],
     };
 
     nock(mockBaseUrl)
@@ -47,12 +59,6 @@ describe('Simulator Routines API unit tests', () => {
     });
     expect(result.items).toEqual(response.items);
     expect(result.items.length).toBe(2);
-    expect(result.items[0].simulatorIntegrationExternalId).toBe(
-      'integration-1'
-    );
-    expect(result.items[1].simulatorIntegrationExternalId).toBe(
-      'integration-2'
-    );
   });
 
   test('list routines with all filters combined', async () => {
@@ -69,7 +75,7 @@ describe('Simulator Routines API unit tests', () => {
           name: 'Test Routine 1',
           modelExternalId: 'model-1',
           simulatorIntegrationExternalId: 'integration-1',
-        },
+        } as SimulatorRoutine,
       ],
     };
 
@@ -116,7 +122,12 @@ describe('Simulator Routines API unit tests', () => {
           name: 'Test Routine 1',
           modelExternalId: 'model-1',
           simulatorIntegrationExternalId: undefined,
-        },
+          simulatorExternalId: 'simulator-1',
+          dataSetId: 1,
+          createdByUserId: 'user-1',
+          createdTime: new Date(),
+          lastUpdatedTime: new Date(),
+        } as SimulatorRoutine,
       ],
     };
 
@@ -126,7 +137,7 @@ describe('Simulator Routines API unit tests', () => {
 
     const result = await client.simulators.listRoutines();
     expect(result.items.length).toBe(1);
-    expect(result.items[0].simulatorIntegrationExternalId).toBeUndefined();
+    expect(result.items).toEqual(response.items);
   });
 
   test('list simulator routine revisions with undefined simulatorIntegrationExternalId', async () => {
@@ -140,7 +151,12 @@ describe('Simulator Routines API unit tests', () => {
           simulatorIntegrationExternalId: undefined,
           configuration: routineRevisionConfiguration,
           script: [],
-        },
+          dataSetId: 1,
+          createdByUserId: 'user-1',
+          createdTime: new Date(),
+          versionNumber: 1,
+          simulatorExternalId: 'simulator-1',
+        } as SimulatorRoutineRevision,
       ],
     };
 
@@ -153,6 +169,6 @@ describe('Simulator Routines API unit tests', () => {
 
     const result = await client.simulators.listRoutineRevisions();
     expect(result.items.length).toBe(1);
-    expect(result.items[0].simulatorIntegrationExternalId).toBeUndefined();
+    expect(result.items).toEqual(response.items);
   });
 });
