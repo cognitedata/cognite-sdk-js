@@ -200,7 +200,7 @@ export interface SimulationRun {
   id: CogniteInternalId;
 
   simulatorExternalId: CogniteExternalId;
-  simulatorIntegrationExternalId: CogniteExternalId;
+  simulatorIntegrationExternalId?: CogniteExternalId;
   modelExternalId: CogniteExternalId;
   modelRevisionExternalId: CogniteExternalId;
   routineExternalId: CogniteExternalId;
@@ -450,7 +450,7 @@ export interface SimulatorRoutine {
   externalId: CogniteExternalId;
   simulatorExternalId: CogniteExternalId;
   modelExternalId: CogniteExternalId;
-  simulatorIntegrationExternalId: CogniteExternalId;
+  simulatorIntegrationExternalId?: CogniteExternalId;
   name: string;
   dataSetId: number;
   description?: string;
@@ -461,7 +461,7 @@ export interface SimulatorRoutine {
 export interface SimulatorRoutineCreate {
   externalId: CogniteExternalId;
   modelExternalId: CogniteExternalId;
-  simulatorIntegrationExternalId: CogniteExternalId;
+  simulatorIntegrationExternalId?: CogniteExternalId;
   name: string;
 }
 
@@ -576,7 +576,7 @@ export interface SimulatorRoutineRevisionBase {
   externalId: CogniteExternalId;
   simulatorExternalId: CogniteExternalId;
   routineExternalId: CogniteExternalId;
-  simulatorIntegrationExternalId: CogniteExternalId;
+  simulatorIntegrationExternalId?: CogniteExternalId;
   modelExternalId: CogniteExternalId;
   dataSetId: CogniteInternalId;
   createdByUserId: string;
