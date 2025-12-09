@@ -31,7 +31,7 @@ describe('Simulator Routines API unit tests', () => {
           lastUpdatedTime: 1765203279461,
         },
         {
-          id: 1,
+          id: 2,
           externalId: 'test_sim_routine_2',
           simulatorExternalId: 'test_sim_1',
           modelExternalId: 'test_model_1',
@@ -131,7 +131,7 @@ describe('Simulator Routines API unit tests', () => {
           externalId: 'test_sim_routine_1',
           simulatorExternalId: 'test_sim_1',
           modelExternalId: 'test_model_1',
-          simulatorIntegrationExternalId: 'test_sim_integration_1',
+          simulatorIntegrationExternalId: undefined,
           name: 'Test Routine 1',
           dataSetId: 1,
           createdTime: 1765203279461,
@@ -152,6 +152,7 @@ describe('Simulator Routines API unit tests', () => {
       lastUpdatedTime: new Date(item.lastUpdatedTime),
     }));
     expect(result.items).toEqual(expectedResponse);
+    expect(result.items[0].simulatorIntegrationExternalId).toBeUndefined();
   });
 
   test('list simulator routine revisions with undefined simulatorIntegrationExternalId', async () => {
@@ -162,7 +163,7 @@ describe('Simulator Routines API unit tests', () => {
           externalId: 'test_sim_routine_revision_1',
           routineExternalId: 'test_sim_routine_1',
           modelExternalId: 'test_model_1',
-          simulatorIntegrationExternalId: 'test_sim_integration_1',
+          simulatorIntegrationExternalId: undefined,
           configuration: routineRevisionConfiguration,
           script: routineRevisionScript,
           simulatorExternalId: 'test_sim_1',
@@ -188,5 +189,6 @@ describe('Simulator Routines API unit tests', () => {
       createdTime: new Date(item.createdTime),
     }));
     expect(result.items).toEqual(expectedResponse);
+    expect(result.items[0].simulatorIntegrationExternalId).toBeUndefined();
   });
 });
