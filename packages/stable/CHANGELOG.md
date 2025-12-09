@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [10.5.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@10.4.0...@cognite/sdk@10.5.0) (2025-12-09)
+
+
+### Features
+
+* **records:** add support for ingesting/filtering immutable records ([#1341](https://github.com/cognitedata/cognite-sdk-js/issues/1341)) ([c43ac5f](https://github.com/cognitedata/cognite-sdk-js/commit/c43ac5f712dd1574ea1e182fc65e3d6ecb5c59f8))
+
+
+
+
+
 ## [10.4.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@10.3.0...@cognite/sdk@10.4.0) (2025-11-27)
 
 
