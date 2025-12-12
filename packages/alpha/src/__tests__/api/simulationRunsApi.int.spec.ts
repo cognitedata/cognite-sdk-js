@@ -2,7 +2,7 @@
 
 import { describe, expect, test } from 'vitest';
 import type CogniteClientAlpha from '../../cogniteClient';
-import { setupLoggedInClient } from '../testUtils';
+import { randomInt, setupLoggedInClient } from '../testUtils';
 import {
   fileExtensionTypes,
   modelTypes,
@@ -11,12 +11,8 @@ import {
   unitQuantities,
 } from './seed';
 
-const SHOULD_RUN_TESTS = process.env.RUN_SDK_SIMINT_TESTS === 'true';
-
-const describeIf = SHOULD_RUN_TESTS ? describe : describe.skip;
-
-describeIf('simulator runs api', () => {
-  const ts = Date.now();
+describe('simulator runs api', () => {
+  const ts = randomInt();
   const simulatorExternalId = `test_sim_${ts}_c`;
   const modelExternalId = `test_sim_model_${ts}_2`;
   const modelRevisionExternalId = `test_sim_model_revision_${ts}_2_1`;

@@ -24,3 +24,7 @@ export function setupMockableClient() {
     oidcTokenProvider: () => Promise.resolve('test accessToken'),
   });
 }
+
+export function randomInt() {
+  return Math.floor(Math.random() * 10000000000);
+}
