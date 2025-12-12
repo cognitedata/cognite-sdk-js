@@ -3,7 +3,7 @@
 import { describe, expect, test } from 'vitest';
 import type CogniteClientAlpha from '../../cogniteClient';
 import type { SimulatorRoutineRevision } from '../../types';
-import { setupLoggedInClient } from '../testUtils';
+import { randomInt, setupLoggedInClient } from '../testUtils';
 import {
   fileExtensionTypes,
   modelTypes,
@@ -14,7 +14,7 @@ import {
 } from './seed';
 
 describe('simulator routines api', () => {
-  const ts = Date.now();
+  const ts = randomInt();
   const simulatorExternalId = `test_sim_${ts}_c`;
   const modelExternalId = `test_sim_model_${ts}_2`;
   const modelRevisionExternalId = `test_sim_model_revision_${ts}_2_1`;
