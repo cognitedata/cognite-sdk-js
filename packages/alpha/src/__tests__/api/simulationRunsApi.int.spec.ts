@@ -13,13 +13,13 @@ import {
 
 describe('simulator runs api', () => {
   const ts = Date.now();
-  const simulatorExternalId = `test_routine_sim_${ts}_c`;
-  const modelExternalId = `test_routine_sim_model_${ts}_2`;
-  const modelRevisionExternalId = `test_routine_sim_model_revision_${ts}_2_1`;
-  const routineExternalId = `test_routine_sim_routine_${ts}`;
-  const routineRevisionExternalId = `test_routine_sim_routine_revision_${ts}_b`;
-  const simulatorIntegrationExternalId = `test_routine_sim_integration_${ts}_2`;
-  const simulatorName = `TestRoutineSim - ${ts}`;
+  const simulatorExternalId = `test_runs_sim_${ts}_c`;
+  const modelExternalId = `test_runs_sim_model_${ts}_2`;
+  const modelRevisionExternalId = `test_runs_sim_model_revision_${ts}_2_1`;
+  const routineExternalId = `test_runs_sim_routine_${ts}`;
+  const routineRevisionExternalId = `test_runs_sim_routine_revision_${ts}_b`;
+  const simulatorIntegrationExternalId = `test_runs_sim_integration_${ts}_2`;
+  const simulatorName = `TestRunsSim - ${ts}`;
   const client: CogniteClientAlpha = setupLoggedInClient();
   let runId = 0;
   let simulatorId: number;
