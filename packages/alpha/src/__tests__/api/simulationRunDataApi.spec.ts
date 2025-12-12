@@ -4,11 +4,7 @@ import { describe, expect, test } from 'vitest';
 import type CogniteClientAlpha from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
 
-const SHOULD_RUN_TESTS = process.env.RUN_SDK_SIMINT_TESTS === 'true';
-
-const describeIf = SHOULD_RUN_TESTS ? describe : describe.skip;
-
-describeIf('simulation run data api', () => {
+describe('simulation run data api', () => {
   const client: CogniteClientAlpha = setupLoggedInClient();
 
   test('list simulation run data', async () => {

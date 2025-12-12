@@ -10,11 +10,7 @@ import {
   unitQuantities,
 } from './seed';
 
-const SHOULD_RUN_TESTS = process.env.RUN_SDK_SIMINT_TESTS === 'true';
-
-const describeIf = SHOULD_RUN_TESTS ? describe : describe.skip;
-
-describeIf('simulator integrations api', () => {
+describe('simulator integrations api', () => {
   const ts = Date.now();
   const simulatorExternalId = `test_sim_${ts}_a`;
   const simulatorIntegrationExternalId = `test_sim_integration_${ts}`;
