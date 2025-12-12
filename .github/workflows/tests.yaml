@@ -5,6 +5,9 @@ on:
     branches:
       - master
       - release-*
+ push:
+    branches:
+      - master
 
 jobs:
   codecov:
@@ -37,8 +40,8 @@ jobs:
       - name: Build
         run: yarn build
 
-      # - name: Test/Codecov
-      #   run: yarn test:codecov
+      - name: Test/Codecov
+        run: yarn test:codecov
 
       - name: Codecov
         uses: codecov/codecov-action@v3.1.6
@@ -170,4 +173,9 @@ jobs:
         run: yarn build
 
       - name: Test
-        run: yarn test --since origin/master
+        run: |
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            yarn test --since origin/master
+          else
+            yarn test
+          fi
