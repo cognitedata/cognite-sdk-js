@@ -5,6 +5,9 @@ on:
     branches:
       - master
       - release-*
+ push:
+    branches:
+      - master
 
 jobs:
   codecov:
@@ -13,6 +16,10 @@ jobs:
     env:
       COGNITE_PROJECT: cognitesdk-js
       COGNITE_CREDENTIALS: ${{secrets.COGNITE_CREDENTIALS}}
+      COGNITE_BASE_URL: https://api.cognitedata.com
+      COGNITE_CLIENT_SECRET: ${{ secrets.COGNITE_CLIENT_SECRET }}
+      COGNITE_CLIENT_ID: cb491d7a-c346-4910-9a10-1650df34fbbb
+      COGNITE_AZURE_DOMAIN: cogniteappdev.onmicrosoft.com
 
     steps:
       - uses: actions/checkout@v4
@@ -37,8 +44,8 @@ jobs:
       - name: Build
         run: yarn build
 
-      # - name: Test/Codecov
-      #   run: yarn test:codecov
+      - name: Test/Codecov
+        run: yarn test:codecov
 
       - name: Codecov
         uses: codecov/codecov-action@v3.1.6
@@ -170,4 +177,9 @@ jobs:
         run: yarn build
 
       - name: Test
-        run: yarn test --since origin/master
+        run: |
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            yarn test --since origin/master
+          else
+            yarn test
+          fi
