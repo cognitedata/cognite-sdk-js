@@ -16,6 +16,10 @@ jobs:
     env:
       COGNITE_PROJECT: cognitesdk-js
       COGNITE_CREDENTIALS: ${{secrets.COGNITE_CREDENTIALS}}
+      COGNITE_BASE_URL: https://api.cognitedata.com
+      COGNITE_CLIENT_SECRET: ${{ secrets.COGNITE_CLIENT_SECRET }}
+      COGNITE_CLIENT_ID: cb491d7a-c346-4910-9a10-1650df34fbbb
+      COGNITE_AZURE_DOMAIN: cogniteappdev.onmicrosoft.com
 
     steps:
       - uses: actions/checkout@v4
