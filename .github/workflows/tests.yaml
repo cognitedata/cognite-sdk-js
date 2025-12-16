@@ -10,48 +10,6 @@ on:
       - master
 
 jobs:
-  codecov:
-    runs-on: ubuntu-latest
-
-    env:
-      COGNITE_PROJECT: cognitesdk-js
-      COGNITE_CREDENTIALS: ${{secrets.COGNITE_CREDENTIALS}}
-      COGNITE_BASE_URL: https://api.cognitedata.com
-      COGNITE_CLIENT_SECRET: ${{ secrets.COGNITE_CLIENT_SECRET }}
-      COGNITE_CLIENT_ID: cb491d7a-c346-4910-9a10-1650df34fbbb
-      COGNITE_AZURE_DOMAIN: cogniteappdev.onmicrosoft.com
-
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Cache node_modules
-        id: cache-modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: ${{ runner.OS }}-build-${{ hashFiles('package.json') }}
-
-      - name: Install 🔧
-        run: yarn install --immutable
-
-      - name: Build
-        run: yarn build
-
-      - name: Test/Codecov
-        run: yarn test:codecov
-
-      - name: Codecov
-        uses: codecov/codecov-action@v3.1.6
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-
   snippets:
     runs-on: ubuntu-latest
 
@@ -183,3 +141,11 @@ jobs:
           else
             yarn test
           fi
+
+      - name: Test/Codecov
+        run: yarn test:codecov
+
+      - name: Codecov
+        uses: codecov/codecov-action@v3.1.6
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
