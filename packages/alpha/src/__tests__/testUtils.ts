@@ -33,18 +33,17 @@ export async function getOrCreateFile(
   client: CogniteClientAlpha,
   dataSetId: number
 ): Promise<number> {
-  const resp = await client.files.list({
-    filter: {
-      dataSetIds: [{ id: dataSetId }],
-    },
-  });
+  const fileExternalId = 'simulators-integration-test-file';
+  const files = await client.files.retrieve(
+    [{ externalId: fileExternalId }],
+    { ignoreUnknownIds: true }
+  );
 
-  if (resp.items.length === 0) {
-    const ts = randomInt();
+  if (files.length === 0) {
     const fileInfo = await client.files.upload(
       {
-        externalId: `test_file_for_model_revision_${ts}.yaml`,
-        name: `test_file_for_model_revision_${ts}.yaml`,
+        externalId: fileExternalId,
+        name: `${fileExternalId}.yaml`,
         dataSetId: dataSetId,
       },
       'This is the content of the test file'
@@ -52,13 +51,13 @@ export async function getOrCreateFile(
     return fileInfo.id;
   }
 
-  return resp.items[0].id;
+  return files[0].id;
 }
 
 export async function getOrCreateDataSet(
   client: CogniteClientAlpha
 ): Promise<number> {
-  const datasetExternalId = 'groups-integration-test-data-set';
+  const datasetExternalId = 'simulators-integration-test-data-set';
   const datasets = await client.datasets.retrieve(
     [{ externalId: datasetExternalId }],
     { ignoreUnknownIds: true }
