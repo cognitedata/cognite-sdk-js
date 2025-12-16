@@ -1,6 +1,6 @@
 // Copyright 2023 Cognite AS
 
-import { describe, expect, test } from 'vitest';
+import { beforeAll, describe, expect, test } from 'vitest';
 import type CogniteClientAlpha from '../../cogniteClient';
 import {
   getOrCreateDataSet,
@@ -16,7 +16,6 @@ import {
 
 describe('simulator integrations api', () => {
   const {
-    uniqueSuffix,
     simulatorExternalId,
     simulatorIntegrationExternalId,
     simulatorName,
@@ -24,11 +23,9 @@ describe('simulator integrations api', () => {
   const client: CogniteClientAlpha = setupLoggedInClient();
   let simulatorId: number;
   let testDataSetId: number;
-  test('create or retrieve dataset', async () => {
-    testDataSetId = await getOrCreateDataSet(client);
 
-    expect(testDataSetId).toBeGreaterThan(0);
-    expect(testDataSetId).toBeTypeOf('number');
+  beforeAll(async () => {
+    testDataSetId = await getOrCreateDataSet(client);
   });
 
   test('create simulator', async () => {
@@ -52,7 +49,7 @@ describe('simulator integrations api', () => {
       {
         externalId: simulatorIntegrationExternalId,
         simulatorExternalId: simulatorExternalId,
-        heartbeat: new Date(uniqueSuffix),
+        heartbeat: new Date(),
         dataSetId: testDataSetId,
         connectorVersion: '1.0.0',
         simulatorVersion: '1.0.0',

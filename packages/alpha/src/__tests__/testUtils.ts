@@ -47,7 +47,7 @@ export async function getOrCreateFile(
         name: `test_file_for_model_revision_${ts}.yaml`,
         dataSetId: dataSetId,
       },
-      'This is the content of the Cognite JS SDK Annotations API test file'
+      'This is the content of the test file'
     );
     return fileInfo.id;
   }
@@ -67,7 +67,7 @@ export async function getOrCreateDataSet(
     const [dataset] = await client.datasets.create([
       {
         externalId: datasetExternalId,
-        name: 'Groups integration test data set',
+        name: 'Test data set',
       },
     ]);
     return dataset.id;

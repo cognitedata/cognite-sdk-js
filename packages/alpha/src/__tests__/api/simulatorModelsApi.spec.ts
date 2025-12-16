@@ -1,6 +1,6 @@
 // Copyright 2023 Cognite AS
 
-import { describe, expect, test } from 'vitest';
+import { beforeAll, describe, expect, test } from 'vitest';
 import type CogniteClientAlpha from '../../cogniteClient';
 import {
   getOrCreateDataSet,
@@ -26,11 +26,10 @@ describe('simulator models api', () => {
   let simulatorId: number;
   let testDataSetId: number;
   let testFileId: number;
-  test('create or retrieve dataset', async () => {
-    testDataSetId = await getOrCreateDataSet(client);
 
-    expect(testDataSetId).toBeGreaterThan(0);
-    expect(testDataSetId).toBeTypeOf('number');
+  beforeAll(async () => {
+    testDataSetId = await getOrCreateDataSet(client);
+    testFileId = await getOrCreateFile(client, testDataSetId);
   });
 
   test('create simulator', async () => {
@@ -108,13 +107,6 @@ describe('simulator models api', () => {
       (item) => item.externalId === modelExternalId
     );
     expect(modelFound?.externalId).toBe(modelExternalId);
-  });
-
-  test('create or retrieve file', async () => {
-    testFileId = await getOrCreateFile(client, testDataSetId);
-
-    expect(testFileId).toBeGreaterThan(0);
-    expect(testFileId).toBeTypeOf('number');
   });
 
   test('create model revision', async () => {
