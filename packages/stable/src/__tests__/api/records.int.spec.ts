@@ -489,7 +489,7 @@ describe('records integration test', () => {
 
     await vi.waitFor(
       async () => {
-        const prop = [testSpaceId, testContainerId, 'value'] as [
+        const prop = [testSpaceId, testContainerId, 'value'] satisfies [
           string,
           string,
           string,
