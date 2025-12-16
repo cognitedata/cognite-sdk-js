@@ -2,10 +2,7 @@
 
 import { beforeAll, describe, expect, test } from 'vitest';
 import type CogniteClientAlpha from '../../cogniteClient';
-import {
-  getOrCreateDataSet,
-  setupLoggedInClient,
-} from '../testUtils';
+import { getOrCreateDataSet, setupLoggedInClient } from '../testUtils';
 import {
   createTestIdentifiers,
   fileExtensionTypes,
@@ -15,11 +12,8 @@ import {
 } from './seed';
 
 describe('simulator integrations api', () => {
-  const {
-    simulatorExternalId,
-    simulatorIntegrationExternalId,
-    simulatorName,
-  } = createTestIdentifiers();
+  const { simulatorExternalId, simulatorIntegrationExternalId, simulatorName } =
+    createTestIdentifiers();
   const client: CogniteClientAlpha = setupLoggedInClient();
   let simulatorId: number;
   let testDataSetId: number;

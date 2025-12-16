@@ -34,10 +34,9 @@ export async function getOrCreateFile(
   dataSetId: number
 ): Promise<number> {
   const fileExternalId = 'simulators-integration-test-file';
-  const files = await client.files.retrieve(
-    [{ externalId: fileExternalId }],
-    { ignoreUnknownIds: true }
-  );
+  const files = await client.files.retrieve([{ externalId: fileExternalId }], {
+    ignoreUnknownIds: true,
+  });
 
   if (files.length === 0) {
     const fileInfo = await client.files.upload(
