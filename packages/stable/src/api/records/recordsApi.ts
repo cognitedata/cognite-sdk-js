@@ -117,10 +117,7 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
       const response = await this.post<RecordSyncResponse>(path, {
         data: params,
       });
-      const items = this.addToMapAndReturn(
-        response.data.items,
-        response
-      ) as SyncRecordItem[];
+      const items = this.addToMapAndReturn(response.data.items, response);
       // Map hasNext to nextCursor for the pagination mechanism
       const nextCursor = response.data.hasNext
         ? response.data.nextCursor
