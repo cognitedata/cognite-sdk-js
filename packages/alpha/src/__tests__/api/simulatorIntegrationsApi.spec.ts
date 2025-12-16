@@ -3,8 +3,8 @@
 import { describe, expect, test } from 'vitest';
 import type CogniteClientAlpha from '../../cogniteClient';
 import {
+  createTestIdentifiers,
   getOrCreateDataSet,
-  randomInt,
   setupLoggedInClient,
 } from '../testUtils';
 import {
@@ -15,10 +15,12 @@ import {
 } from './seed';
 
 describe('simulator integrations api', () => {
-  const uniqueSuffix = randomInt();
-  const simulatorExternalId = `test_sim_${uniqueSuffix}`;
-  const simulatorIntegrationExternalId = `test_sim_integration_${uniqueSuffix}`;
-  const simulatorName = `TestSim - ${uniqueSuffix}`;
+  const {
+    uniqueSuffix,
+    simulatorExternalId,
+    simulatorIntegrationExternalId,
+    simulatorName,
+  } = createTestIdentifiers();
   const client: CogniteClientAlpha = setupLoggedInClient();
   let simulatorId: number;
   let testDataSetId: number;

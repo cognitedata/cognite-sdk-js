@@ -3,9 +3,9 @@
 import { describe, expect, test } from 'vitest';
 import type CogniteClientAlpha from '../../cogniteClient';
 import {
+  createTestIdentifiers,
   getOrCreateDataSet,
   getOrCreateFile,
-  randomInt,
   setupLoggedInClient,
 } from '../testUtils';
 import {
@@ -17,14 +17,16 @@ import {
 } from './seed';
 
 describe('simulator runs api', () => {
-  const uniqueSuffix = randomInt();
-  const simulatorExternalId = `test_sim_${uniqueSuffix}`;
-  const modelExternalId = `test_sim_model_${uniqueSuffix}`;
-  const modelRevisionExternalId = `test_sim_model_revision_${uniqueSuffix}`;
-  const routineExternalId = `test_sim_routine_${uniqueSuffix}`;
-  const routineRevisionExternalId = `test_sim_routine_revision_${uniqueSuffix}`;
-  const simulatorIntegrationExternalId = `test_sim_integration_${uniqueSuffix}`;
-  const simulatorName = `TestSim - ${uniqueSuffix}`;
+  const {
+    uniqueSuffix,
+    simulatorExternalId,
+    modelExternalId,
+    modelRevisionExternalId,
+    routineExternalId,
+    routineRevisionExternalId,
+    simulatorIntegrationExternalId,
+    simulatorName,
+  } = createTestIdentifiers();
   const client: CogniteClientAlpha = setupLoggedInClient();
   let runId = 0;
   let simulatorId: number;

@@ -329,3 +329,14 @@ export const routineRevisionScript: SimulatorRoutineScript[] = [
     ],
   },
 ];
+
+export interface TestIdentifiers {
+  uniqueSuffix: number;
+  simulatorExternalId: string;
+  modelExternalId: string;
+  modelRevisionExternalId: string;
+  routineExternalId: string;
+  routineRevisionExternalId: string;
+  simulatorIntegrationExternalId: string;
+  simulatorName: string;
+}
