@@ -11,10 +11,9 @@ import {
   unitQuantities,
 } from './seed';
 
-const ts = randomInt();
-export const simulatorExternalId = `test_sim_${ts}_c`;
-
 describe('simulator runs api', () => {
+  const ts = randomInt();
+  const simulatorExternalId = `test_sim_${ts}_c`;
   const modelExternalId = `test_sim_model_${ts}_2`;
   const modelRevisionExternalId = `test_sim_model_revision_${ts}_2_1`;
   const routineExternalId = `test_sim_routine_${ts}`;
@@ -26,7 +25,6 @@ describe('simulator runs api', () => {
   let simulatorId: number;
   let testDataSetId: number;
   let fileId: number;
-  
   test('create dataset', async () => {
     const datasetExternalId = 'groups-integration-test-data-set';
     const datasets = await client.datasets.retrieve(

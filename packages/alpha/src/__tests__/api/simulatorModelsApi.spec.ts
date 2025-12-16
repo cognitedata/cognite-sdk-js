@@ -20,7 +20,6 @@ describe('simulator models api', () => {
   let simulatorId: number;
   let testDataSetId: number;
   let fileId: number;
-  
   test('create dataset', async () => {
     const datasetExternalId = 'groups-integration-test-data-set';
     const datasets = await client.datasets.retrieve(

@@ -18,7 +18,6 @@ describe('simulator integrations api', () => {
   const client: CogniteClientAlpha = setupLoggedInClient();
   let simulatorId: number;
   let testDataSetId: number;
-  
   test('create dataset', async () => {
     const datasetExternalId = 'groups-integration-test-data-set';
     const datasets = await client.datasets.retrieve(
