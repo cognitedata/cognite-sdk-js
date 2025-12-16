@@ -310,7 +310,15 @@ export type MovingFunctionType =
   | 'MovingFunctions.linearWeightedAvg';
 
 /** Calendar interval for time histogram aggregation */
-export type CalendarInterval = '1s' | '1m' | '1h' | '1d' | '1w' | '1M' | '1q' | '1y';
+export type CalendarInterval =
+  | '1s'
+  | '1m'
+  | '1h'
+  | '1d'
+  | '1w'
+  | '1M'
+  | '1q'
+  | '1y';
 
 /** Hard bounds for histogram aggregates */
 export interface HistogramHardBounds {
@@ -320,17 +328,32 @@ export interface HistogramHardBounds {
 
 // Metric aggregates
 /** Calculates the average from the data stored by the specified property */
-export interface AvgAggregate { avg: { property: AggregateProperty } }
+export interface AvgAggregate {
+  avg: { property: AggregateProperty };
+}
 /** Counts the number of items (or non-null values when property is specified) */
-export interface CountAggregate { count: { property?: AggregateProperty } }
+export interface CountAggregate {
+  count: { property?: AggregateProperty };
+}
 /** Calculates the lowest value for the property */
-export interface MinAggregate { min: { property: AggregateProperty } }
+export interface MinAggregate {
+  min: { property: AggregateProperty };
+}
 /** Calculates the highest value for the property */
-export interface MaxAggregate { max: { property: AggregateProperty } }
+export interface MaxAggregate {
+  max: { property: AggregateProperty };
+}
 /** Calculates the sum from the values of the specified property */
-export interface SumAggregate { sum: { property: AggregateProperty } }
+export interface SumAggregate {
+  sum: { property: AggregateProperty };
+}
 
-export type MetricAggregate = AvgAggregate | CountAggregate | MinAggregate | MaxAggregate | SumAggregate;
+export type MetricAggregate =
+  | AvgAggregate
+  | CountAggregate
+  | MinAggregate
+  | MaxAggregate
+  | SumAggregate;
 
 // Bucket aggregates
 /** Groups records by unique property values */
@@ -404,7 +427,10 @@ export interface MovingFunctionAggregate {
 export type PipelineAggregate = MovingFunctionAggregate;
 
 /** All aggregate types */
-export type RecordAggregate = MetricAggregate | BucketAggregate | PipelineAggregate;
+export type RecordAggregate =
+  | MetricAggregate
+  | BucketAggregate
+  | PipelineAggregate;
 
 /** Dictionary of aggregates with client-defined identifiers (max 5 per level, max depth 5) */
 export type RecordAggregates = Record<string, RecordAggregate>;
@@ -420,12 +446,24 @@ export interface RecordAggregateRequest {
 }
 
 // Aggregate result types
-export interface AvgAggregateResult { avg: number }
-export interface CountAggregateResult { count: number }
-export interface MinAggregateResult { min: number }
-export interface MaxAggregateResult { max: number }
-export interface SumAggregateResult { sum: number }
-export interface MovingFunctionAggregateResult { fnValue: number }
+export interface AvgAggregateResult {
+  avg: number;
+}
+export interface CountAggregateResult {
+  count: number;
+}
+export interface MinAggregateResult {
+  min: number;
+}
+export interface MaxAggregateResult {
+  max: number;
+}
+export interface SumAggregateResult {
+  sum: number;
+}
+export interface MovingFunctionAggregateResult {
+  fnValue: number;
+}
 
 export type MetricAggregateResult =
   | AvgAggregateResult
@@ -484,7 +522,9 @@ export type BucketAggregateResult =
   | TimeHistogramAggregateResult
   | FiltersAggregateResult;
 
-export type RecordAggregateResult = MetricAggregateResult | BucketAggregateResult;
+export type RecordAggregateResult =
+  | MetricAggregateResult
+  | BucketAggregateResult;
 
 /** Dictionary of aggregate results with identifiers matching the request */
 export type RecordAggregateResults = Record<string, RecordAggregateResult>;
