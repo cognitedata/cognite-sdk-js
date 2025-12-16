@@ -294,3 +294,202 @@ export interface RecordSyncResponse {
   /** Whether there are more records to sync */
   hasNext: boolean;
 }
+
+/**
+ * Property reference for aggregates.
+ * Either a top-level property (1 element) or a container property [space, container, property] (3 elements).
+ */
+export type AggregateProperty = [string] | [string, string, string];
+
+/** Moving function types for pipeline aggregates */
+export type MovingFunctionType =
+  | 'MovingFunctions.max'
+  | 'MovingFunctions.min'
+  | 'MovingFunctions.sum'
+  | 'MovingFunctions.unweightedAvg'
+  | 'MovingFunctions.linearWeightedAvg';
+
+/** Calendar interval for time histogram aggregation */
+export type CalendarInterval = '1s' | '1m' | '1h' | '1d' | '1w' | '1M' | '1q' | '1y';
+
+/** Hard bounds for histogram aggregates */
+export interface HistogramHardBounds {
+  min?: number | string;
+  max?: number | string;
+}
+
+// Metric aggregates
+/** Calculates the average from the data stored by the specified property */
+export interface AvgAggregate { avg: { property: AggregateProperty } }
+/** Counts the number of items (or non-null values when property is specified) */
+export interface CountAggregate { count: { property?: AggregateProperty } }
+/** Calculates the lowest value for the property */
+export interface MinAggregate { min: { property: AggregateProperty } }
+/** Calculates the highest value for the property */
+export interface MaxAggregate { max: { property: AggregateProperty } }
+/** Calculates the sum from the values of the specified property */
+export interface SumAggregate { sum: { property: AggregateProperty } }
+
+export type MetricAggregate = AvgAggregate | CountAggregate | MinAggregate | MaxAggregate | SumAggregate;
+
+// Bucket aggregates
+/** Groups records by unique property values */
+export interface UniqueValuesAggregate {
+  uniqueValues: {
+    property: AggregateProperty;
+    /** Sub-aggregates to apply within each bucket */
+    aggregates?: RecordAggregates;
+    /** Number of top buckets to return (default: 10, max: 2000) */
+    size?: number;
+  };
+}
+
+/** Generates a histogram from numeric values with specified interval */
+export interface NumberHistogramAggregate {
+  numberHistogram: {
+    property: AggregateProperty;
+    /** The interval between each bucket */
+    interval: number;
+    /** Limit the range of buckets */
+    hardBounds?: HistogramHardBounds;
+    /** Sub-aggregates to apply within each bucket */
+    aggregates?: RecordAggregates;
+  };
+}
+
+/** Generates a histogram from timestamp values */
+export interface TimeHistogramAggregate {
+  timeHistogram: {
+    property: AggregateProperty;
+    /** Calendar interval (mutually exclusive with fixedInterval) */
+    calendarInterval?: CalendarInterval;
+    /** Fixed interval e.g. '3m', '400h', '25d' (mutually exclusive with calendarInterval) */
+    fixedInterval?: string;
+    /** Limit the range of buckets */
+    hardBounds?: HistogramHardBounds;
+    /** Sub-aggregates to apply within each bucket */
+    aggregates?: RecordAggregates;
+  };
+}
+
+/** Groups records by filter criteria into buckets */
+export interface FiltersAggregate {
+  filters: {
+    /** List of filters from which to build buckets (1-10 filters) */
+    filters: RecordFilter[];
+    /** Sub-aggregates to apply within each bucket */
+    aggregates?: RecordAggregates;
+  };
+}
+
+export type BucketAggregate =
+  | UniqueValuesAggregate
+  | NumberHistogramAggregate
+  | TimeHistogramAggregate
+  | FiltersAggregate;
+
+// Pipeline aggregates
+/** Applies a function over a sliding window in histogram buckets */
+export interface MovingFunctionAggregate {
+  movingFunction: {
+    /** Path to the metric from parent aggregate (use "_count" for bucket count) */
+    bucketsPath: string;
+    /** Size of the sliding window */
+    window: number;
+    /** Function to execute on each window */
+    function: MovingFunctionType;
+  };
+}
+
+export type PipelineAggregate = MovingFunctionAggregate;
+
+/** All aggregate types */
+export type RecordAggregate = MetricAggregate | BucketAggregate | PipelineAggregate;
+
+/** Dictionary of aggregates with client-defined identifiers (max 5 per level, max depth 5) */
+export type RecordAggregates = Record<string, RecordAggregate>;
+
+/** Request for aggregating records from a stream */
+export interface RecordAggregateRequest {
+  /** Filter on last updated time. Required for immutable streams. */
+  lastUpdatedTime?: LastUpdatedTimeFilter;
+  /** Filter specification */
+  filter?: RecordFilter;
+  /** Dictionary of aggregates with client-defined identifiers */
+  aggregates: RecordAggregates;
+}
+
+// Aggregate result types
+export interface AvgAggregateResult { avg: number }
+export interface CountAggregateResult { count: number }
+export interface MinAggregateResult { min: number }
+export interface MaxAggregateResult { max: number }
+export interface SumAggregateResult { sum: number }
+export interface MovingFunctionAggregateResult { fnValue: number }
+
+export type MetricAggregateResult =
+  | AvgAggregateResult
+  | CountAggregateResult
+  | MinAggregateResult
+  | MaxAggregateResult
+  | SumAggregateResult
+  | MovingFunctionAggregateResult;
+
+/** Bucket in a unique values aggregate result */
+export interface UniqueValueBucket {
+  count: number;
+  value: RawPropertyValueV3;
+  aggregates?: RecordAggregateResults;
+}
+
+export interface UniqueValuesAggregateResult {
+  uniqueValueBuckets: UniqueValueBucket[];
+}
+
+/** Bucket in a number histogram aggregate result */
+export interface NumberHistogramBucket {
+  count: number;
+  intervalStart: number;
+  aggregates?: RecordAggregateResults;
+}
+
+export interface NumberHistogramAggregateResult {
+  numberHistogramBuckets: NumberHistogramBucket[];
+}
+
+/** Bucket in a time histogram aggregate result */
+export interface TimeHistogramBucket {
+  count: number;
+  intervalStart: string;
+  aggregates?: RecordAggregateResults;
+}
+
+export interface TimeHistogramAggregateResult {
+  timeHistogramBuckets: TimeHistogramBucket[];
+}
+
+/** Bucket in a filters aggregate result */
+export interface FilterBucket {
+  count: number;
+  aggregates?: RecordAggregateResults;
+}
+
+export interface FiltersAggregateResult {
+  filterBuckets: FilterBucket[];
+}
+
+export type BucketAggregateResult =
+  | UniqueValuesAggregateResult
+  | NumberHistogramAggregateResult
+  | TimeHistogramAggregateResult
+  | FiltersAggregateResult;
+
+export type RecordAggregateResult = MetricAggregateResult | BucketAggregateResult;
+
+/** Dictionary of aggregate results with identifiers matching the request */
+export type RecordAggregateResults = Record<string, RecordAggregateResult>;
+
+/** Response from the aggregate records endpoint */
+export interface RecordAggregateResponse {
+  aggregates: RecordAggregateResults;
+}
