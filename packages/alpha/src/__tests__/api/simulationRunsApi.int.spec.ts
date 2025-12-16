@@ -23,6 +23,26 @@ describe('simulator runs api', () => {
   const client: CogniteClientAlpha = setupLoggedInClient();
   let runId = 0;
   let simulatorId: number;
+  let testDataSetId: number;
+  
+  test('create dataset', async () => {
+    const datasetExternalId = 'groups-integration-test-data-set';
+    const datasets = await client.datasets.retrieve(
+      [{ externalId: datasetExternalId }],
+      { ignoreUnknownIds: true }
+    );
+    if (datasets.length === 0) {
+      const [dataset] = await client.datasets.create([
+        {
+          externalId: datasetExternalId,
+          name: 'Groups integration test data set',
+        },
+      ]);
+      testDataSetId = dataset.id;
+    } else {
+      testDataSetId = datasets[0].id;
+    }
+  });
 
   test('create simulator', async () => {
     const response = await client.simulators.create([
@@ -46,7 +66,7 @@ describe('simulator runs api', () => {
         externalId: simulatorIntegrationExternalId,
         simulatorExternalId: simulatorExternalId,
         heartbeat: new Date(ts),
-        dataSetId: 97552494921583,
+        dataSetId: testDataSetId,
         connectorVersion: '1.0.0',
         simulatorVersion: '1.0.0',
         licenseStatus: 'UNKNOWN',
@@ -64,7 +84,7 @@ describe('simulator runs api', () => {
         simulatorExternalId,
         name: 'Test Simulator Model',
         description: 'Test Simulator Model Desc',
-        dataSetId: 97552494921583,
+        dataSetId: testDataSetId,
         type: 'WaterWell',
       },
     ]);
@@ -73,12 +93,34 @@ describe('simulator runs api', () => {
   });
 
   test('create model revision', async () => {
+    const resp = await client.files.list({
+      filter: {
+        directoryPrefix: '/test',
+        dataSetIds: [{ id: testDataSetId }],
+      },
+    });
+
+    let fileId: number;
+    if (resp.items.length === 0) {
+      const fileInfo = await client.files.upload(
+        {
+          externalId: `test_file_for_model_revision_${ts}.yaml`,
+          name: `test_file_for_model_revision_${ts}.yaml`,
+          dataSetId: testDataSetId,
+        },
+        'This is the content of the Cognite JS SDK Annotations API test file'
+      );
+      fileId = fileInfo.id;
+    } else {
+      fileId = resp.items[0].id;
+    }
+
     const response = await client.simulators.createModelRevisions([
       {
         externalId: modelRevisionExternalId,
         modelExternalId,
         description: 'test sim model revision description',
-        fileId: 6396395402204465,
+        fileId: fileId,
       },
     ]);
     expect(response.length).toBe(1);
@@ -153,8 +195,7 @@ describe('simulator runs api', () => {
   test('list simulation runs', async () => {
     const res = await client.simulators.listRuns({
       filter: {
-        simulatorExternalIds: ['DWSIM'],
-        status: 'success',
+        simulatorExternalIds: [simulatorExternalId],
         createdTime: {
           max: new Date(),
         },
@@ -172,8 +213,8 @@ describe('simulator runs api', () => {
 
     const item = res.items[0];
 
-    expect(item.simulatorExternalId).toBe('DWSIM');
-    expect(item.status).toBe('success');
+    expect(item.simulatorExternalId).toBe(simulatorExternalId);
+    expect(item.status).toBe('ready');
     expect(item.createdTime.valueOf()).toBeGreaterThan(0);
     expect(item.lastUpdatedTime.valueOf()).toBeGreaterThan(0);
   });
