@@ -99,7 +99,6 @@ describe('simulator routines api', () => {
   test('create file', async () => {
     const resp = await client.files.list({
       filter: {
-        directoryPrefix: '/test',
         dataSetIds: [{ id: testDataSetId }],
       },
     });
