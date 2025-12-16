@@ -581,7 +581,7 @@ describe('records integration test', () => {
       uniqueValueBuckets: Array<{
         count: number;
         value: string;
-        aggregates?: { cat_sum: { sum: number } };
+        aggregates?: { catSum: { sum: number } };
       }>;
     };
 
@@ -598,11 +598,11 @@ describe('records integration test', () => {
             },
           },
           aggregates: {
-            by_cat: {
+            byCat: {
               uniqueValues: {
                 property: [testSpaceId, testContainerId, 'name'],
                 aggregates: {
-                  cat_sum: {
+                  catSum: {
                     sum: { property: [testSpaceId, testContainerId, 'value'] },
                   },
                 },
@@ -610,14 +610,14 @@ describe('records integration test', () => {
             },
           },
         });
-        const result = aggregates.by_cat as BucketResult;
+        const result = aggregates.byCat as BucketResult;
         expect(result.uniqueValueBuckets.length).toBe(2);
         const b1 = result.uniqueValueBuckets.find((b) => b.value === cat1);
         const b2 = result.uniqueValueBuckets.find((b) => b.value === cat2);
         expect(b1?.count).toBe(2);
-        expect(b1?.aggregates?.cat_sum.sum).toBe(30);
+        expect(b1?.aggregates?.catSum.sum).toBe(30);
         expect(b2?.count).toBe(1);
-        expect(b2?.aggregates?.cat_sum.sum).toBe(30);
+        expect(b2?.aggregates?.catSum.sum).toBe(30);
       },
       { timeout: 10_000, interval: 500 }
     );
