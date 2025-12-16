@@ -47,7 +47,7 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
     streamExternalId: string,
     items: RecordWrite[]
   ): Promise<void> => {
-    const path = this.url(`${streamExternalId}/records`);
+    const path = this.url(`${encodeURIComponent(streamExternalId)}/records`);
     await this.post<object>(path, {
       data: { items },
     });
@@ -80,7 +80,7 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
     streamExternalId: string,
     request: RecordFilterRequest = {}
   ): Promise<RecordItem[]> => {
-    const path = this.url(`${streamExternalId}/records/filter`);
+    const path = this.url(`${encodeURIComponent(streamExternalId)}/records/filter`);
     const response = await this.post<RecordFilterResponse>(path, {
       data: request,
     });
@@ -114,7 +114,7 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
     streamExternalId: string,
     request: RecordSyncRequest
   ): CursorAndAsyncIterator<SyncRecordItem> => {
-    const path = this.url(`${streamExternalId}/records/sync`);
+    const path = this.url(`${encodeURIComponent(streamExternalId)}/records/sync`);
 
     const callSyncEndpoint = async (params?: RecordSyncRequest) => {
       const response = await this.post<RecordSyncResponse>(path, {
@@ -157,7 +157,7 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
     streamExternalId: string,
     request: RecordAggregateRequest
   ): Promise<RecordAggregateResults> => {
-    const path = this.url(`${streamExternalId}/records/aggregate`);
+    const path = this.url(`${encodeURIComponent(streamExternalId)}/records/aggregate`);
     const response = await this.post<RecordAggregateResponse>(path, {
       data: request,
     });
