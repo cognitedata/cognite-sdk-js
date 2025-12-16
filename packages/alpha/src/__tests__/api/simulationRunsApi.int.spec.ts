@@ -11,9 +11,10 @@ import {
   unitQuantities,
 } from './seed';
 
+const ts = randomInt();
+export const simulatorExternalId = `test_sim_${ts}_c`;
+
 describe('simulator runs api', () => {
-  const ts = randomInt();
-  const simulatorExternalId = `test_sim_${ts}_c`;
   const modelExternalId = `test_sim_model_${ts}_2`;
   const modelRevisionExternalId = `test_sim_model_revision_${ts}_2_1`;
   const routineExternalId = `test_sim_routine_${ts}`;
@@ -24,6 +25,7 @@ describe('simulator runs api', () => {
   let runId = 0;
   let simulatorId: number;
   let testDataSetId: number;
+  let fileId: number;
   
   test('create dataset', async () => {
     const datasetExternalId = 'groups-integration-test-data-set';
@@ -42,6 +44,9 @@ describe('simulator runs api', () => {
     } else {
       testDataSetId = datasets[0].id;
     }
+
+    expect(testDataSetId).toBeGreaterThan(0);
+    expect(testDataSetId).toBeTypeOf('number');
   });
 
   test('create simulator', async () => {
@@ -92,7 +97,7 @@ describe('simulator runs api', () => {
     expect(res[0].externalId).toBe(modelExternalId);
   });
 
-  test('create model revision', async () => {
+  test('create file', async () => {
     const resp = await client.files.list({
       filter: {
         directoryPrefix: '/test',
@@ -100,7 +105,6 @@ describe('simulator runs api', () => {
       },
     });
 
-    let fileId: number;
     if (resp.items.length === 0) {
       const fileInfo = await client.files.upload(
         {
@@ -115,6 +119,11 @@ describe('simulator runs api', () => {
       fileId = resp.items[0].id;
     }
 
+    expect(fileId).toBeGreaterThan(0);
+    expect(fileId).toBeTypeOf('number');
+  });
+
+  test('create model revision', async () => {
     const response = await client.simulators.createModelRevisions([
       {
         externalId: modelRevisionExternalId,
@@ -232,6 +241,30 @@ describe('simulator runs api', () => {
     expect(item.simulatorExternalId).toBe(simulatorExternalId);
     expect(['ready', 'running', 'success']).toContain(item.status);
     expect(item.id).toBe(runId);
+  });
+
+  test('list simulation run data', async () => {
+    const runs = await client.simulators.listRuns({
+      filter: {
+        simulatorExternalIds: [simulatorExternalId],
+        status: 'ready',
+      },
+    });
+
+    const runId = runs.items[0].id;
+
+    const runData = await client.simulators.listRunData([
+      {
+        runId,
+      },
+    ]);
+
+    expect(runData).toBeDefined();
+    expect(runData.length).toBeGreaterThan(0);
+
+    const item = runData[0];
+
+    expect(item.runId).toBe(runId);
   });
 
   test('delete simulator and integrations', async () => {

@@ -17,6 +17,29 @@ describe('simulator integrations api', () => {
   const simulatorName = `TestSim - ${ts}`;
   const client: CogniteClientAlpha = setupLoggedInClient();
   let simulatorId: number;
+  let testDataSetId: number;
+  
+  test('create dataset', async () => {
+    const datasetExternalId = 'groups-integration-test-data-set';
+    const datasets = await client.datasets.retrieve(
+      [{ externalId: datasetExternalId }],
+      { ignoreUnknownIds: true }
+    );
+    if (datasets.length === 0) {
+      const [dataset] = await client.datasets.create([
+        {
+          externalId: datasetExternalId,
+          name: 'Groups integration test data set',
+        },
+      ]);
+      testDataSetId = dataset.id;
+    } else {
+      testDataSetId = datasets[0].id;
+    }
+
+    expect(testDataSetId).toBeGreaterThan(0);
+    expect(testDataSetId).toBeTypeOf('number');
+  });
 
   test('create simulator', async () => {
     const response = await client.simulators.create([
@@ -40,7 +63,7 @@ describe('simulator integrations api', () => {
         externalId: simulatorIntegrationExternalId,
         simulatorExternalId: simulatorExternalId,
         heartbeat: new Date(ts),
-        dataSetId: 97552494921583,
+        dataSetId: testDataSetId,
         connectorVersion: '1.0.0',
         simulatorVersion: '1.0.0',
         licenseStatus: 'UNKNOWN',

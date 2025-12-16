@@ -11,7 +11,7 @@ describe('simulator logs api', () => {
     // get the latest failed run which should have a logId
     const filterSimulationRunsRes = await client.simulators.listRuns({
       filter: {
-        status: 'success',
+        status: 'ready',
       },
       limit: 1,
       sort: [

@@ -18,6 +18,30 @@ describe('simulator models api', () => {
   const simulatorName = `TestSim - ${ts}`;
   const client: CogniteClientAlpha = setupLoggedInClient();
   let simulatorId: number;
+  let testDataSetId: number;
+  let fileId: number;
+  
+  test('create dataset', async () => {
+    const datasetExternalId = 'groups-integration-test-data-set';
+    const datasets = await client.datasets.retrieve(
+      [{ externalId: datasetExternalId }],
+      { ignoreUnknownIds: true }
+    );
+    if (datasets.length === 0) {
+      const [dataset] = await client.datasets.create([
+        {
+          externalId: datasetExternalId,
+          name: 'Groups integration test data set',
+        },
+      ]);
+      testDataSetId = dataset.id;
+    } else {
+      testDataSetId = datasets[0].id;
+    }
+
+    expect(testDataSetId).toBeGreaterThan(0);
+    expect(testDataSetId).toBeTypeOf('number');
+  });
 
   test('create simulator', async () => {
     const response = await client.simulators.create([
@@ -42,7 +66,7 @@ describe('simulator models api', () => {
         simulatorExternalId,
         name: 'Test Simulator Model',
         description: 'Test Simulator Model Desc',
-        dataSetId: 97552494921583,
+        dataSetId: testDataSetId,
         type: 'WaterWell',
       },
     ]);
@@ -96,13 +120,39 @@ describe('simulator models api', () => {
     expect(modelFound?.externalId).toBe(modelExternalId);
   });
 
+  test('create file', async () => {
+    const resp = await client.files.list({
+      filter: {
+        directoryPrefix: '/test',
+        dataSetIds: [{ id: testDataSetId }],
+      },
+    });
+
+    if (resp.items.length === 0) {
+      const fileInfo = await client.files.upload(
+        {
+          externalId: `test_file_for_model_revision_${ts}.yaml`,
+          name: `test_file_for_model_revision_${ts}.yaml`,
+          dataSetId: testDataSetId,
+        },
+        'This is the content of the Cognite JS SDK Annotations API test file'
+      );
+      fileId = fileInfo.id;
+    } else {
+      fileId = resp.items[0].id;
+    }
+
+    expect(fileId).toBeGreaterThan(0);
+    expect(fileId).toBeTypeOf('number');
+  });
+
   test('create model revision', async () => {
     const response = await client.simulators.createModelRevisions([
       {
         externalId: modelRevisionExternalId,
         modelExternalId,
         description: 'test sim model revision description',
-        fileId: 6396395402204465,
+        fileId: fileId,
       },
     ]);
     expect(response.length).toBe(1);
@@ -116,7 +166,7 @@ describe('simulator models api', () => {
         externalId: revisionExternalId,
         modelExternalId,
         description: 'test sim model revision description',
-        fileId: 6396395402204465,
+        fileId: fileId,
       },
     ]);
     expect(response.length).toBe(1);

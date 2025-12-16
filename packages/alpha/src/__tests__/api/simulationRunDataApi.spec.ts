@@ -9,10 +9,13 @@ describe('simulation run data api', () => {
 
   test('list simulation run data', async () => {
     const runs = await client.simulators.listRuns({
-      filter: {
-        simulatorExternalIds: ['DWSIM'],
-        status: 'success',
-      },
+      limit: 1,
+      sort: [
+        {
+          property: 'createdTime',
+          order: 'desc',
+        },
+      ],
     });
 
     const runId = runs.items[0].id;
