@@ -2,7 +2,7 @@
 
 import { mockBaseUrl } from '../../../core/src/__tests__/testUtils';
 import CogniteClientAlpha from '../cogniteClient';
-import { TestIdentifiers } from './api/seed';
+import type { TestIdentifiers } from './api/seed';
 import { login } from './login';
 
 export function setupLoggedInClient() {
