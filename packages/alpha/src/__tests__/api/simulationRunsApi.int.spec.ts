@@ -2,7 +2,12 @@
 
 import { describe, expect, test } from 'vitest';
 import type CogniteClientAlpha from '../../cogniteClient';
-import { randomInt, setupLoggedInClient } from '../testUtils';
+import {
+  getOrCreateDataSet,
+  getOrCreateFile,
+  randomInt,
+  setupLoggedInClient,
+} from '../testUtils';
 import {
   fileExtensionTypes,
   modelTypes,
@@ -12,36 +17,21 @@ import {
 } from './seed';
 
 describe('simulator runs api', () => {
-  const ts = randomInt();
-  const simulatorExternalId = `test_sim_${ts}_c`;
-  const modelExternalId = `test_sim_model_${ts}_2`;
-  const modelRevisionExternalId = `test_sim_model_revision_${ts}_2_1`;
-  const routineExternalId = `test_sim_routine_${ts}`;
-  const routineRevisionExternalId = `test_sim_routine_revision_${ts}_b`;
-  const simulatorIntegrationExternalId = `test_sim_integration_${ts}_2`;
-  const simulatorName = `TestSim - ${ts}`;
+  const uniqueSuffix = randomInt();
+  const simulatorExternalId = `test_sim_${uniqueSuffix}`;
+  const modelExternalId = `test_sim_model_${uniqueSuffix}`;
+  const modelRevisionExternalId = `test_sim_model_revision_${uniqueSuffix}`;
+  const routineExternalId = `test_sim_routine_${uniqueSuffix}`;
+  const routineRevisionExternalId = `test_sim_routine_revision_${uniqueSuffix}`;
+  const simulatorIntegrationExternalId = `test_sim_integration_${uniqueSuffix}`;
+  const simulatorName = `TestSim - ${uniqueSuffix}`;
   const client: CogniteClientAlpha = setupLoggedInClient();
   let runId = 0;
   let simulatorId: number;
   let testDataSetId: number;
-  let fileId: number;
-  test('create dataset', async () => {
-    const datasetExternalId = 'groups-integration-test-data-set';
-    const datasets = await client.datasets.retrieve(
-      [{ externalId: datasetExternalId }],
-      { ignoreUnknownIds: true }
-    );
-    if (datasets.length === 0) {
-      const [dataset] = await client.datasets.create([
-        {
-          externalId: datasetExternalId,
-          name: 'Groups integration test data set',
-        },
-      ]);
-      testDataSetId = dataset.id;
-    } else {
-      testDataSetId = datasets[0].id;
-    }
+  let testFileId: number;
+  test('create or retrieve dataset', async () => {
+    testDataSetId = await getOrCreateDataSet(client);
 
     expect(testDataSetId).toBeGreaterThan(0);
     expect(testDataSetId).toBeTypeOf('number');
@@ -68,7 +58,7 @@ describe('simulator runs api', () => {
       {
         externalId: simulatorIntegrationExternalId,
         simulatorExternalId: simulatorExternalId,
-        heartbeat: new Date(ts),
+        heartbeat: new Date(uniqueSuffix),
         dataSetId: testDataSetId,
         connectorVersion: '1.0.0',
         simulatorVersion: '1.0.0',
@@ -95,29 +85,11 @@ describe('simulator runs api', () => {
     expect(res[0].externalId).toBe(modelExternalId);
   });
 
-  test('create file', async () => {
-    const resp = await client.files.list({
-      filter: {
-        dataSetIds: [{ id: testDataSetId }],
-      },
-    });
+  test('create or retrieve file', async () => {
+    testFileId = await getOrCreateFile(client, testDataSetId);
 
-    if (resp.items.length === 0) {
-      const fileInfo = await client.files.upload(
-        {
-          externalId: `test_file_for_model_revision_${ts}.yaml`,
-          name: `test_file_for_model_revision_${ts}.yaml`,
-          dataSetId: testDataSetId,
-        },
-        'This is the content of the Cognite JS SDK Annotations API test file'
-      );
-      fileId = fileInfo.id;
-    } else {
-      fileId = resp.items[0].id;
-    }
-
-    expect(fileId).toBeGreaterThan(0);
-    expect(fileId).toBeTypeOf('number');
+    expect(testFileId).toBeGreaterThan(0);
+    expect(testFileId).toBeTypeOf('number');
   });
 
   test('create model revision', async () => {
@@ -126,7 +98,7 @@ describe('simulator runs api', () => {
         externalId: modelRevisionExternalId,
         modelExternalId,
         description: 'test sim model revision description',
-        fileId: fileId,
+        fileId: testFileId,
       },
     ]);
     expect(response.length).toBe(1);
@@ -176,7 +148,7 @@ describe('simulator runs api', () => {
       {
         routineExternalId,
         runType: 'external',
-        runTime: new Date(ts),
+        runTime: new Date(uniqueSuffix),
         queue: true,
       },
     ]);
@@ -193,9 +165,9 @@ describe('simulator runs api', () => {
     expect(item.routineExternalId).toBe(routineExternalId);
     expect(['ready', 'running']).toContain(item.status);
     expect(item.runType).toBe('external');
-    expect(item.runTime?.valueOf()).toBe(ts);
-    expect(item.createdTime.valueOf()).toBeGreaterThanOrEqual(ts);
-    expect(item.lastUpdatedTime.valueOf()).toBeGreaterThanOrEqual(ts);
+    expect(item.runTime?.valueOf()).toBe(uniqueSuffix);
+    expect(item.createdTime.valueOf()).toBeGreaterThanOrEqual(uniqueSuffix);
+    expect(item.lastUpdatedTime.valueOf()).toBeGreaterThanOrEqual(uniqueSuffix);
   });
 
   test('list simulation runs', async () => {

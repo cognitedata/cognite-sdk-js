@@ -2,7 +2,11 @@
 
 import { describe, expect, test } from 'vitest';
 import type CogniteClientAlpha from '../../cogniteClient';
-import { setupLoggedInClient } from '../testUtils';
+import {
+  getOrCreateDataSet,
+  randomInt,
+  setupLoggedInClient,
+} from '../testUtils';
 import {
   fileExtensionTypes,
   modelTypes,
@@ -11,30 +15,15 @@ import {
 } from './seed';
 
 describe('simulator integrations api', () => {
-  const ts = Date.now();
-  const simulatorExternalId = `test_sim_${ts}_a`;
-  const simulatorIntegrationExternalId = `test_sim_integration_${ts}`;
-  const simulatorName = `TestSim - ${ts}`;
+  const uniqueSuffix = randomInt();
+  const simulatorExternalId = `test_sim_${uniqueSuffix}`;
+  const simulatorIntegrationExternalId = `test_sim_integration_${uniqueSuffix}`;
+  const simulatorName = `TestSim - ${uniqueSuffix}`;
   const client: CogniteClientAlpha = setupLoggedInClient();
   let simulatorId: number;
   let testDataSetId: number;
-  test('create dataset', async () => {
-    const datasetExternalId = 'groups-integration-test-data-set';
-    const datasets = await client.datasets.retrieve(
-      [{ externalId: datasetExternalId }],
-      { ignoreUnknownIds: true }
-    );
-    if (datasets.length === 0) {
-      const [dataset] = await client.datasets.create([
-        {
-          externalId: datasetExternalId,
-          name: 'Groups integration test data set',
-        },
-      ]);
-      testDataSetId = dataset.id;
-    } else {
-      testDataSetId = datasets[0].id;
-    }
+  test('create or retrieve dataset', async () => {
+    testDataSetId = await getOrCreateDataSet(client);
 
     expect(testDataSetId).toBeGreaterThan(0);
     expect(testDataSetId).toBeTypeOf('number');
@@ -61,7 +50,7 @@ describe('simulator integrations api', () => {
       {
         externalId: simulatorIntegrationExternalId,
         simulatorExternalId: simulatorExternalId,
-        heartbeat: new Date(ts),
+        heartbeat: new Date(uniqueSuffix),
         dataSetId: testDataSetId,
         connectorVersion: '1.0.0',
         simulatorVersion: '1.0.0',

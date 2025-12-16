@@ -28,3 +28,49 @@ export function setupMockableClient() {
 export function randomInt() {
   return Math.floor(Math.random() * 10000000000);
 }
+
+export async function getOrCreateFile(
+  client: CogniteClientAlpha,
+  dataSetId: number
+): Promise<number> {
+  const resp = await client.files.list({
+    filter: {
+      dataSetIds: [{ id: dataSetId }],
+    },
+  });
+
+  if (resp.items.length === 0) {
+    const ts = randomInt();
+    const fileInfo = await client.files.upload(
+      {
+        externalId: `test_file_for_model_revision_${ts}.yaml`,
+        name: `test_file_for_model_revision_${ts}.yaml`,
+        dataSetId: dataSetId,
+      },
+      'This is the content of the Cognite JS SDK Annotations API test file'
+    );
+    return fileInfo.id;
+  }
+
+  return resp.items[0].id;
+}
+
+export async function getOrCreateDataSet(
+  client: CogniteClientAlpha
+): Promise<number> {
+  const datasetExternalId = 'groups-integration-test-data-set';
+  const datasets = await client.datasets.retrieve(
+    [{ externalId: datasetExternalId }],
+    { ignoreUnknownIds: true }
+  );
+  if (datasets.length === 0) {
+    const [dataset] = await client.datasets.create([
+      {
+        externalId: datasetExternalId,
+        name: 'Groups integration test data set',
+      },
+    ]);
+    return dataset.id;
+  }
+  return datasets[0].id;
+}

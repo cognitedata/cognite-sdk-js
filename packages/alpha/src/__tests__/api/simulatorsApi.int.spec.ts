@@ -3,7 +3,7 @@
 import { describe, expect, test } from 'vitest';
 import type CogniteClientAlpha from '../../cogniteClient';
 import type { SimulatorPatch } from '../../types';
-import { setupLoggedInClient } from '../testUtils';
+import { randomInt, setupLoggedInClient } from '../testUtils';
 import {
   fileExtensionTypes,
   modelTypes,
@@ -14,9 +14,9 @@ import {
 describe('simulators api', () => {
   const client: CogniteClientAlpha = setupLoggedInClient();
 
-  const ts = Date.now();
-  const simulatorExternalId = `test_sim_${ts}_d`;
-  const simulatorName = `TestSim - ${ts}`;
+  const uniqueSuffix = randomInt();
+  const simulatorExternalId = `test_sim_${uniqueSuffix}`;
+  const simulatorName = `TestSim - ${uniqueSuffix}`;
   let simulatorId: number;
 
   test('create simulators', async () => {

@@ -2,7 +2,12 @@
 
 import { describe, expect, test } from 'vitest';
 import type CogniteClientAlpha from '../../cogniteClient';
-import { setupLoggedInClient } from '../testUtils';
+import {
+  getOrCreateDataSet,
+  getOrCreateFile,
+  randomInt,
+  setupLoggedInClient,
+} from '../testUtils';
 import {
   fileExtensionTypes,
   modelTypes,
@@ -11,32 +16,17 @@ import {
 } from './seed';
 
 describe('simulator models api', () => {
-  const ts = Date.now();
-  const simulatorExternalId = `test_sim_${ts}_b`;
-  const modelExternalId = `test_sim_model_${ts}`;
-  const modelRevisionExternalId = `test_sim_model_revision_${ts}`;
-  const simulatorName = `TestSim - ${ts}`;
+  const uniqueSuffix = randomInt();
+  const simulatorExternalId = `test_sim_${uniqueSuffix}`;
+  const modelExternalId = `test_sim_model_${uniqueSuffix}`;
+  const modelRevisionExternalId = `test_sim_model_revision_${uniqueSuffix}`;
+  const simulatorName = `TestSim - ${uniqueSuffix}`;
   const client: CogniteClientAlpha = setupLoggedInClient();
   let simulatorId: number;
   let testDataSetId: number;
-  let fileId: number;
-  test('create dataset', async () => {
-    const datasetExternalId = 'groups-integration-test-data-set';
-    const datasets = await client.datasets.retrieve(
-      [{ externalId: datasetExternalId }],
-      { ignoreUnknownIds: true }
-    );
-    if (datasets.length === 0) {
-      const [dataset] = await client.datasets.create([
-        {
-          externalId: datasetExternalId,
-          name: 'Groups integration test data set',
-        },
-      ]);
-      testDataSetId = dataset.id;
-    } else {
-      testDataSetId = datasets[0].id;
-    }
+  let testFileId: number;
+  test('create or retrieve dataset', async () => {
+    testDataSetId = await getOrCreateDataSet(client);
 
     expect(testDataSetId).toBeGreaterThan(0);
     expect(testDataSetId).toBeTypeOf('number');
@@ -119,29 +109,11 @@ describe('simulator models api', () => {
     expect(modelFound?.externalId).toBe(modelExternalId);
   });
 
-  test('create file', async () => {
-    const resp = await client.files.list({
-      filter: {
-        dataSetIds: [{ id: testDataSetId }],
-      },
-    });
+  test('create or retrieve file', async () => {
+    testFileId = await getOrCreateFile(client, testDataSetId);
 
-    if (resp.items.length === 0) {
-      const fileInfo = await client.files.upload(
-        {
-          externalId: `test_file_for_model_revision_${ts}.yaml`,
-          name: `test_file_for_model_revision_${ts}.yaml`,
-          dataSetId: testDataSetId,
-        },
-        'This is the content of the Cognite JS SDK Annotations API test file'
-      );
-      fileId = fileInfo.id;
-    } else {
-      fileId = resp.items[0].id;
-    }
-
-    expect(fileId).toBeGreaterThan(0);
-    expect(fileId).toBeTypeOf('number');
+    expect(testFileId).toBeGreaterThan(0);
+    expect(testFileId).toBeTypeOf('number');
   });
 
   test('create model revision', async () => {
@@ -150,7 +122,7 @@ describe('simulator models api', () => {
         externalId: modelRevisionExternalId,
         modelExternalId,
         description: 'test sim model revision description',
-        fileId: fileId,
+        fileId: testFileId,
       },
     ]);
     expect(response.length).toBe(1);
@@ -164,7 +136,7 @@ describe('simulator models api', () => {
         externalId: revisionExternalId,
         modelExternalId,
         description: 'test sim model revision description',
-        fileId: fileId,
+        fileId: testFileId,
       },
     ]);
     expect(response.length).toBe(1);
