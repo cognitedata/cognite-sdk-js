@@ -20,7 +20,6 @@ import {
 
 describe('simulator routines api', () => {
   const {
-    uniqueSuffix,
     simulatorExternalId,
     modelExternalId,
     modelRevisionExternalId,
