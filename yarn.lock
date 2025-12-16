@@ -264,7 +264,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@cognite/sdk-core@npm:^5.1.3, @cognite/sdk-core@workspace:*, @cognite/sdk-core@workspace:packages/core":
+"@cognite/sdk-core@npm:^5.1.3, @cognite/sdk-core@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@cognite/sdk-core@workspace:packages/core"
   dependencies:
@@ -312,12 +312,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@cognite/sdk-template@workspace:packages/template"
   dependencies:
-    "@cognite/sdk": "workspace:*"
-    "@cognite/sdk-core": "workspace:*"
+    "@cognite/sdk": "npm:^10.4.0"
+    "@cognite/sdk-core": "npm:^5.1.3"
   languageName: unknown
   linkType: soft
 
-"@cognite/sdk@npm:^10.4.0, @cognite/sdk@workspace:*, @cognite/sdk@workspace:packages/stable":
+"@cognite/sdk@npm:^10.4.0, @cognite/sdk@workspace:packages/stable":
   version: 0.0.0-use.local
   resolution: "@cognite/sdk@workspace:packages/stable"
   dependencies:
