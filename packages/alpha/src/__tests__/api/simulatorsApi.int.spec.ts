@@ -3,8 +3,9 @@
 import { describe, expect, test } from 'vitest';
 import type CogniteClientAlpha from '../../cogniteClient';
 import type { SimulatorPatch } from '../../types';
-import { createTestIdentifiers, setupLoggedInClient } from '../testUtils';
+import { setupLoggedInClient } from '../testUtils';
 import {
+  createTestIdentifiers,
   fileExtensionTypes,
   modelTypes,
   stepFields,

@@ -2,7 +2,6 @@
 
 import { mockBaseUrl } from '../../../core/src/__tests__/testUtils';
 import CogniteClientAlpha from '../cogniteClient';
-import type { TestIdentifiers } from './api/seed';
 import { login } from './login';
 
 export function setupLoggedInClient() {
@@ -28,20 +27,6 @@ export function setupMockableClient() {
 
 export function randomInt() {
   return Math.floor(Math.random() * 10000000000);
-}
-
-export function createTestIdentifiers(): TestIdentifiers {
-  const uniqueSuffix = randomInt();
-  return {
-    uniqueSuffix,
-    simulatorExternalId: `test_sim_${uniqueSuffix}`,
-    modelExternalId: `test_sim_model_${uniqueSuffix}`,
-    modelRevisionExternalId: `test_sim_model_revision_${uniqueSuffix}`,
-    routineExternalId: `test_sim_routine_${uniqueSuffix}`,
-    routineRevisionExternalId: `test_sim_routine_revision_${uniqueSuffix}`,
-    simulatorIntegrationExternalId: `test_sim_integration_${uniqueSuffix}`,
-    simulatorName: `TestSim - ${uniqueSuffix}`,
-  };
 }
 
 export async function getOrCreateFile(

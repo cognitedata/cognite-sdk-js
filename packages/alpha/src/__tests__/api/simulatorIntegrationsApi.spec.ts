@@ -3,11 +3,11 @@
 import { describe, expect, test } from 'vitest';
 import type CogniteClientAlpha from '../../cogniteClient';
 import {
-  createTestIdentifiers,
   getOrCreateDataSet,
   setupLoggedInClient,
 } from '../testUtils';
 import {
+  createTestIdentifiers,
   fileExtensionTypes,
   modelTypes,
   stepFields,
