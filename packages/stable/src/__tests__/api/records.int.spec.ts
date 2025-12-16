@@ -505,18 +505,18 @@ describe('records integration test', () => {
             },
           },
           aggregates: {
-            total_count: { count: {} },
-            total_sum: { sum: { property: prop } },
-            avg_value: { avg: { property: prop } },
-            min_value: { min: { property: prop } },
-            max_value: { max: { property: prop } },
+            totalCount: { count: {} },
+            totalSum: { sum: { property: prop } },
+            avgValue: { avg: { property: prop } },
+            minValue: { min: { property: prop } },
+            maxValue: { max: { property: prop } },
           },
         });
-        expect((aggregates.total_count as { count: number }).count).toBe(2);
-        expect((aggregates.total_sum as { sum: number }).sum).toBe(300);
-        expect((aggregates.avg_value as { avg: number }).avg).toBe(150);
-        expect((aggregates.min_value as { min: number }).min).toBe(100);
-        expect((aggregates.max_value as { max: number }).max).toBe(200);
+        expect((aggregates.totalCount as { count: number }).count).toBe(2);
+        expect((aggregates.totalSum as { sum: number }).sum).toBe(300);
+        expect((aggregates.avgValue as { avg: number }).avg).toBe(150);
+        expect((aggregates.minValue as { min: number }).min).toBe(100);
+        expect((aggregates.maxValue as { max: number }).max).toBe(200);
       },
       { timeout: 5_000, interval: 200 }
     );
