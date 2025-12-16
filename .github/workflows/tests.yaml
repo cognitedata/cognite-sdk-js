@@ -137,9 +137,9 @@ jobs:
       - name: Test
         run: |
           if [ "${{ github.event_name }}" == "pull_request" ]; then
-            yarn test --since origin/master --coverage
+            yarn test --since origin/master -- --coverage
           else
-            yarn test --coverage
+            yarn test -- --coverage
           fi
 
       - name: Codecov
