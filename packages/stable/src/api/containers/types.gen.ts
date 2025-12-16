@@ -228,6 +228,10 @@ export type EpochTimestamp = number;
 export interface IncludeGlobalQueryParameter {
   includeGlobal?: boolean;
 }
+export interface UsedForQueryParameter {
+  /** Only include containers that have been marked as used for the specified purposes. Defaults to [node, edge, all] */
+  usedFor?: UsedFor[];
+}
 /**
 * You can optimize query performance by defining an index to apply to a container.  You can only create an index across properties belonging to the same container.
 
