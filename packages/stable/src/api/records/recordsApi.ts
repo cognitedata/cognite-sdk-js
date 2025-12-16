@@ -3,6 +3,9 @@
 import type { CursorAndAsyncIterator } from '@cognite/sdk-core';
 import { BaseResourceAPI } from '@cognite/sdk-core';
 import type {
+  RecordAggregateRequest,
+  RecordAggregateResponse,
+  RecordAggregateResults,
   RecordFilterRequest,
   RecordFilterResponse,
   RecordItem,
@@ -129,5 +132,35 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
       callSyncEndpoint,
       request
     );
+  };
+
+  /**
+   * [Aggregate records from a stream](https://developer.cognite.com/api#tag/Records/operation/aggregateRecords)
+   *
+   * Aggregate data for records from a stream.
+   *
+   * ```js
+   * const response = await client.records.aggregate('my_stream', {
+   *   aggregates: {
+   *     total_count: { count: {} },
+   *     by_category: {
+   *       uniqueValues: {
+   *         property: ['mySpace', 'myContainer', 'category'],
+   *         aggregates: { total: { sum: { property: ['mySpace', 'myContainer', 'amount'] } } }
+   *       }
+   *     }
+   *   }
+   * });
+   * ```
+   */
+  public aggregate = async (
+    streamExternalId: string,
+    request: RecordAggregateRequest
+  ): Promise<RecordAggregateResults> => {
+    const path = this.url(`${streamExternalId}/records/aggregate`);
+    const response = await this.post<RecordAggregateResponse>(path, {
+      data: request,
+    });
+    return response.data.aggregates;
   };
 }
