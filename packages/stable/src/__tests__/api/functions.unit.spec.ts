@@ -115,7 +115,10 @@ describe('Functions unit test', () => {
       responseSizeMb: 1,
     };
 
-    nock(mockBaseUrl).get(/\/functions\/limits/).once().reply(200, mockLimits);
+    nock(mockBaseUrl)
+      .get(/\/functions\/limits/)
+      .once()
+      .reply(200, mockLimits);
 
     const limits = await client.functions.limits();
     expect(limits.timeoutMinutes).toBe(15);
@@ -142,4 +145,3 @@ describe('Functions unit test', () => {
     expect(response.status).toBe('activated');
   });
 });
-

@@ -31,4 +31,3 @@ describe('Functions integration test', () => {
     expect(Array.isArray(functions)).toBe(true);
   });
 });
-
