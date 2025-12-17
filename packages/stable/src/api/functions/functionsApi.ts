@@ -2,6 +2,11 @@
 
 import { BaseResourceAPI } from '@cognite/sdk-core';
 import type {
+  CogniteInternalId,
+  IdEither,
+  ItemsWrapper,
+} from '@cognite/sdk-core';
+import type {
   CogniteFunction,
   ExternalCogniteFunction,
   FunctionDeleteParams,
@@ -10,11 +15,6 @@ import type {
   FunctionsActivationResponse,
   FunctionsLimits,
 } from './types';
-import type {
-  CogniteInternalId,
-  IdEither,
-  ItemsWrapper,
-} from '@cognite/sdk-core';
 
 export class FunctionsAPI extends BaseResourceAPI<CogniteFunction> {
   /**
@@ -64,9 +64,7 @@ export class FunctionsAPI extends BaseResourceAPI<CogniteFunction> {
    * const func = await client.functions.retrieve(123);
    * ```
    */
-  public retrieve = async (
-    id: CogniteInternalId
-  ): Promise<CogniteFunction> => {
+  public retrieve = async (id: CogniteInternalId): Promise<CogniteFunction> => {
     const response = await this.get<CogniteFunction>(this.url(`${id}`));
     return this.addToMapAndReturn(response.data, response);
   };
@@ -142,4 +140,3 @@ export class FunctionsAPI extends BaseResourceAPI<CogniteFunction> {
     return this.addToMapAndReturn(response.data, response);
   };
 }
-
