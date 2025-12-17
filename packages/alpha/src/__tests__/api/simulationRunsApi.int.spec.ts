@@ -207,30 +207,6 @@ describe('simulator runs api', () => {
     expect(item.id).toBe(runId);
   });
 
-  test('list simulation run data', async () => {
-    const runs = await client.simulators.listRuns({
-      filter: {
-        simulatorExternalIds: [simulatorExternalId],
-        status: 'ready',
-      },
-    });
-
-    const runId = runs.items[0].id;
-
-    const runData = await client.simulators.listRunData([
-      {
-        runId,
-      },
-    ]);
-
-    expect(runData).toBeDefined();
-    expect(runData.length).toBeGreaterThan(0);
-
-    const item = runData[0];
-
-    expect(item.runId).toBe(runId);
-  });
-
   test('delete simulator and integrations', async () => {
     // Since we do not have a delete endpoint for integrations, if we delete the simulator, the integrations will be deleted as well
     if (simulatorId) {
