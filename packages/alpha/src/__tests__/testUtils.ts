@@ -31,9 +31,9 @@ export function randomInt() {
 
 export async function getOrCreateFile(
   client: CogniteClientAlpha,
-  dataSetId: number
+  dataSetId: number,
+  fileExternalId = 'simulators-integration-test-file'
 ): Promise<number> {
-  const fileExternalId = 'simulators-integration-test-file';
   const files = await client.files.retrieve([{ externalId: fileExternalId }], {
     ignoreUnknownIds: true,
   });
@@ -54,9 +54,9 @@ export async function getOrCreateFile(
 }
 
 export async function getOrCreateDataSet(
-  client: CogniteClientAlpha
+  client: CogniteClientAlpha,
+  datasetExternalId = 'simulators-integration-test-data-set'
 ): Promise<number> {
-  const datasetExternalId = 'simulators-integration-test-data-set';
   const datasets = await client.datasets.retrieve(
     [{ externalId: datasetExternalId }],
     { ignoreUnknownIds: true }
