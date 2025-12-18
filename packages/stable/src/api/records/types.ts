@@ -83,6 +83,20 @@ export interface RecordWrite {
 }
 
 /**
+ * Record identifier for deletion (only space + externalId needed)
+ */
+export interface RecordDelete {
+  /**
+   * The space that the record belongs to
+   */
+  space: RecordSpaceId;
+  /**
+   * External ID of the record to delete
+   */
+  externalId: RecordExternalId;
+}
+
+/**
  * Source selector for specifying which container properties to return
  */
 export interface SourceSelector {
