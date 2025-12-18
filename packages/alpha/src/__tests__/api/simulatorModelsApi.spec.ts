@@ -1,27 +1,36 @@
 // Copyright 2023 Cognite AS
 
-import { describe, expect, test } from 'vitest';
+import { beforeAll, describe, expect, test } from 'vitest';
 import type CogniteClientAlpha from '../../cogniteClient';
-import { setupLoggedInClient } from '../testUtils';
 import {
+  getOrCreateDataSet,
+  getOrCreateFile,
+  setupLoggedInClient,
+} from '../testUtils';
+import {
+  createTestIdentifiers,
   fileExtensionTypes,
   modelTypes,
   stepFields,
   unitQuantities,
 } from './seed';
 
-const SHOULD_RUN_TESTS = process.env.RUN_SDK_SIMINT_TESTS === 'true';
-
-const describeIf = SHOULD_RUN_TESTS ? describe : describe.skip;
-
-describeIf('simulator models api', () => {
-  const ts = Date.now();
-  const simulatorExternalId = `test_sim_${ts}_b`;
-  const modelExternalId = `test_sim_model_${ts}`;
-  const modelRevisionExternalId = `test_sim_model_revision_${ts}`;
-  const simulatorName = `TestSim - ${ts}`;
+describe('simulator models api', () => {
+  const {
+    simulatorExternalId,
+    modelExternalId,
+    modelRevisionExternalId,
+    simulatorName,
+  } = createTestIdentifiers();
   const client: CogniteClientAlpha = setupLoggedInClient();
   let simulatorId: number;
+  let testDataSetId: number;
+  let testFileId: number;
+
+  beforeAll(async () => {
+    testDataSetId = await getOrCreateDataSet(client);
+    testFileId = await getOrCreateFile(client, testDataSetId);
+  });
 
   test('create simulator', async () => {
     const response = await client.simulators.create([
@@ -46,7 +55,7 @@ describeIf('simulator models api', () => {
         simulatorExternalId,
         name: 'Test Simulator Model',
         description: 'Test Simulator Model Desc',
-        dataSetId: 97552494921583,
+        dataSetId: testDataSetId,
         type: 'WaterWell',
       },
     ]);
@@ -106,7 +115,7 @@ describeIf('simulator models api', () => {
         externalId: modelRevisionExternalId,
         modelExternalId,
         description: 'test sim model revision description',
-        fileId: 6396395402204465,
+        fileId: testFileId,
       },
     ]);
     expect(response.length).toBe(1);
@@ -120,7 +129,7 @@ describeIf('simulator models api', () => {
         externalId: revisionExternalId,
         modelExternalId,
         description: 'test sim model revision description',
-        fileId: 6396395402204465,
+        fileId: testFileId,
       },
     ]);
     expect(response.length).toBe(1);
