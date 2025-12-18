@@ -5,46 +5,11 @@ on:
     branches:
       - master
       - release-*
+ push:
+    branches:
+      - master
 
 jobs:
-  codecov:
-    runs-on: ubuntu-latest
-
-    env:
-      COGNITE_PROJECT: cognitesdk-js
-      COGNITE_CREDENTIALS: ${{secrets.COGNITE_CREDENTIALS}}
-
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Cache node_modules
-        id: cache-modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: ${{ runner.OS }}-build-${{ hashFiles('package.json') }}
-
-      - name: Install 🔧
-        run: yarn install --immutable
-
-      - name: Build
-        run: yarn build
-
-      # - name: Test/Codecov
-      #   run: yarn test:codecov
-
-      - name: Codecov
-        uses: codecov/codecov-action@v3.1.6
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-
   snippets:
     runs-on: ubuntu-latest
 
@@ -170,4 +135,14 @@ jobs:
         run: yarn build
 
       - name: Test
-        run: yarn test --since origin/master
+        run: |
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            yarn test --since origin/master -- --coverage
+          else
+            yarn test -- --coverage
+          fi
+
+      - name: Codecov
+        uses: codecov/codecov-action@v3.1.6
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}

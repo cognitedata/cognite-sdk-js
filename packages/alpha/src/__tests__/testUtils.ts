@@ -24,3 +24,51 @@ export function setupMockableClient() {
     oidcTokenProvider: () => Promise.resolve('test accessToken'),
   });
 }
+
+export function randomInt() {
+  return Math.floor(Math.random() * 10000000000);
+}
+
+export async function getOrCreateFile(
+  client: CogniteClientAlpha,
+  dataSetId: number,
+  fileExternalId = 'simulators-integration-test-file'
+): Promise<number> {
+  const files = await client.files.retrieve([{ externalId: fileExternalId }], {
+    ignoreUnknownIds: true,
+  });
+
+  if (files.length === 0) {
+    const fileInfo = await client.files.upload(
+      {
+        externalId: fileExternalId,
+        name: `${fileExternalId}.yaml`,
+        dataSetId: dataSetId,
+      },
+      'This is the content of the test file'
+    );
+    return fileInfo.id;
+  }
+
+  return files[0].id;
+}
+
+export async function getOrCreateDataSet(
+  client: CogniteClientAlpha,
+  datasetExternalId = 'simulators-integration-test-data-set'
+): Promise<number> {
+  const datasets = await client.datasets.retrieve(
+    [{ externalId: datasetExternalId }],
+    { ignoreUnknownIds: true }
+  );
+  if (datasets.length === 0) {
+    const [dataset] = await client.datasets.create([
+      {
+        externalId: datasetExternalId,
+        name: 'Test data set',
+      },
+    ]);
+    return dataset.id;
+  }
+  return datasets[0].id;
+}
