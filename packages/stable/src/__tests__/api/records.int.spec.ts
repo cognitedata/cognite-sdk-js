@@ -1,8 +1,8 @@
 // Copyright 2025 Cognite AS
 
-import { beforeAll, describe, expect, test, vi } from 'vitest';
+import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest';
 import type CogniteClient from '../../cogniteClient';
-import type { ContainerCreateDefinition } from '../../types';
+import type { ContainerCreateDefinition, RecordDelete } from '../../types';
 import {
   RECORDS_TEST_SPACE,
   randomInt,
@@ -622,4 +622,262 @@ describe('records integration test', () => {
       { timeout: 10_000, interval: 500 }
     );
   });
+});
+
+describe('mutable records integration test', () => {
+  let client: CogniteClient;
+
+  const mutableStreamId = 'sdk_test_mutable_stream';
+  // Reuse the same space and container from the immutable records tests
+  const testSpaceId = RECORDS_TEST_SPACE;
+  const testContainerId = 'sdk_test_records_container';
+
+  // Track records created during tests for cleanup
+  const recordsToCleanup: RecordDelete[] = [];
+
+  beforeAll(async () => {
+    client = setupLoggedInClient();
+
+    // Check if mutable stream exists, create if not
+    try {
+      await client.streams.retrieve({ externalId: mutableStreamId });
+    } catch {
+      await client.streams.create({
+        externalId: mutableStreamId,
+        settings: {
+          template: {
+            name: 'BasicLiveData',
+          },
+        },
+      });
+    }
+  }, 60_000);
+
+  afterAll(async () => {
+    // Clean up any records created during tests
+    if (recordsToCleanup.length > 0) {
+      try {
+        await client.records.delete(mutableStreamId, recordsToCleanup);
+      } catch {
+        // Ignore cleanup errors
+      }
+    }
+  });
+
+  test('upsert creates, updates, and delete removes records', async () => {
+    const testName = `upsert_lifecycle_${randomInt()}`;
+    const recordId = `lifecycle_record_${randomInt()}`;
+    const initialValue = 10.0;
+    const updatedValue = 99.9;
+
+    const source = {
+      type: 'container' as const,
+      space: testSpaceId,
+      externalId: testContainerId,
+    };
+
+    // 1. Create a new record via upsert
+    await client.records.upsert(mutableStreamId, [
+      {
+        space: testSpaceId,
+        externalId: recordId,
+        sources: [
+          {
+            source,
+            properties: {
+              name: testName,
+              value: initialValue,
+              timestamp: '2025-01-01T00:00:00.000Z',
+            },
+          },
+        ],
+      },
+    ]);
+
+    // Verify the record was created
+    const createdRecord = await vi.waitFor(
+      async () => {
+        const records = await client.records.filter(mutableStreamId, {
+          sources: [{ source, properties: ['*'] }],
+          filter: {
+            equals: {
+              property: [testSpaceId, testContainerId, 'name'],
+              value: testName,
+            },
+          },
+        });
+        expect(records.length).toBe(1);
+        return records[0];
+      },
+      { timeout: 10_000, interval: 200 }
+    );
+
+    expect(createdRecord.space).toBe(testSpaceId);
+    expect(createdRecord.externalId).toBe(recordId);
+    expect(createdRecord.properties[testSpaceId][testContainerId].value).toBe(
+      initialValue
+    );
+
+    // 2. Update the record via upsert
+    await client.records.upsert(mutableStreamId, [
+      {
+        space: testSpaceId,
+        externalId: recordId,
+        sources: [
+          {
+            source,
+            properties: {
+              name: testName,
+              value: updatedValue,
+              timestamp: '2025-01-02T00:00:00.000Z',
+            },
+          },
+        ],
+      },
+    ]);
+
+    // Verify the record was updated
+    const updatedRecord = await vi.waitFor(
+      async () => {
+        const records = await client.records.filter(mutableStreamId, {
+          sources: [{ source, properties: ['*'] }],
+          filter: {
+            equals: {
+              property: [testSpaceId, testContainerId, 'name'],
+              value: testName,
+            },
+          },
+        });
+        expect(records.length).toBe(1);
+        expect(records[0].properties[testSpaceId][testContainerId].value).toBe(
+          updatedValue
+        );
+        return records[0];
+      },
+      { timeout: 10_000, interval: 200 }
+    );
+
+    expect(updatedRecord.externalId).toBe(recordId);
+
+    // 3. Delete the record
+    await client.records.delete(mutableStreamId, [
+      { space: testSpaceId, externalId: recordId },
+    ]);
+
+    // Verify the record is no longer returned by filter
+    await vi.waitFor(
+      async () => {
+        const records = await client.records.filter(mutableStreamId, {
+          sources: [{ source, properties: ['*'] }],
+          filter: {
+            equals: {
+              property: [testSpaceId, testContainerId, 'name'],
+              value: testName,
+            },
+          },
+        });
+        expect(records.length).toBe(0);
+      },
+      { timeout: 10_000, interval: 200 }
+    );
+  }, 30_000);
+
+  test('delete is idempotent (does not error on non-existent records)', async () => {
+    const nonExistentRecordId = `non_existent_${randomInt()}`;
+
+    // Deleting a non-existent record should not throw
+    await expect(
+      client.records.delete(mutableStreamId, [
+        { space: testSpaceId, externalId: nonExistentRecordId },
+      ])
+    ).resolves.toBeUndefined();
+  });
+
+  test('sync shows deleted records with deleted status', async () => {
+    const testName = `sync_delete_${randomInt()}`;
+    const recordId = `sync_delete_record_${randomInt()}`;
+
+    const source = {
+      type: 'container' as const,
+      space: testSpaceId,
+      externalId: testContainerId,
+    };
+
+    // Create a record
+    await client.records.ingest(mutableStreamId, [
+      {
+        space: testSpaceId,
+        externalId: recordId,
+        sources: [
+          {
+            source,
+            properties: {
+              name: testName,
+              value: 50,
+              timestamp: '2025-01-01T00:00:00.000Z',
+            },
+          },
+        ],
+      },
+    ]);
+
+    // Wait for record to be visible via sync with 'created' status
+    await vi.waitFor(
+      async () => {
+        const response = await client.records.sync(mutableStreamId, {
+          initializeCursor: '1d-ago',
+          sources: [{ source, properties: ['*'] }],
+          filter: {
+            equals: {
+              property: [testSpaceId, testContainerId, 'name'],
+              value: testName,
+            },
+          },
+        });
+        expect(response.items.length).toBe(1);
+        expect(response.items[0].status).toBe('created');
+      },
+      { timeout: 10_000, interval: 200 }
+    );
+
+    // Delete the record
+    await client.records.delete(mutableStreamId, [
+      { space: testSpaceId, externalId: recordId },
+    ]);
+
+    // Verify sync shows the record with 'deleted' status (tombstone)
+    await vi.waitFor(
+      async () => {
+        // Use autoPagingToArray to get all sync items and find the deleted one
+        const items = await client.records
+          .sync(mutableStreamId, {
+            initializeCursor: '1d-ago',
+            filter: {
+              and: [
+                {
+                  equals: {
+                    property: ['space'],
+                    value: testSpaceId,
+                  },
+                },
+                {
+                  equals: {
+                    property: ['externalId'],
+                    value: recordId,
+                  },
+                },
+              ],
+            },
+          })
+          .autoPagingToArray({ limit: 100 });
+
+        // Find the deleted tombstone record
+        const deletedRecord = items.find((r) => r.status === 'deleted');
+        expect(deletedRecord).toBeDefined();
+        expect(deletedRecord?.externalId).toBe(recordId);
+        expect(deletedRecord?.space).toBe(testSpaceId);
+      },
+      { timeout: 10_000, interval: 200 }
+    );
+  }, 30_000);
 });
