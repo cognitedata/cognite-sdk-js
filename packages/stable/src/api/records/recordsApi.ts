@@ -3,6 +3,9 @@
 import type { CursorAndAsyncIterator } from '@cognite/sdk-core';
 import { BaseResourceAPI } from '@cognite/sdk-core';
 import type {
+  RecordAggregateRequest,
+  RecordAggregateResponse,
+  RecordAggregateResults,
   RecordFilterRequest,
   RecordFilterResponse,
   RecordItem,
@@ -44,7 +47,7 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
     streamExternalId: string,
     items: RecordWrite[]
   ): Promise<void> => {
-    const path = this.url(`${streamExternalId}/records`);
+    const path = this.url(`${encodeURIComponent(streamExternalId)}/records`);
     await this.post<object>(path, {
       data: { items },
     });
@@ -77,7 +80,9 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
     streamExternalId: string,
     request: RecordFilterRequest = {}
   ): Promise<RecordItem[]> => {
-    const path = this.url(`${streamExternalId}/records/filter`);
+    const path = this.url(
+      `${encodeURIComponent(streamExternalId)}/records/filter`
+    );
     const response = await this.post<RecordFilterResponse>(path, {
       data: request,
     });
@@ -111,7 +116,9 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
     streamExternalId: string,
     request: RecordSyncRequest
   ): CursorAndAsyncIterator<SyncRecordItem> => {
-    const path = this.url(`${streamExternalId}/records/sync`);
+    const path = this.url(
+      `${encodeURIComponent(streamExternalId)}/records/sync`
+    );
 
     const callSyncEndpoint = async (params?: RecordSyncRequest) => {
       const response = await this.post<RecordSyncResponse>(path, {
@@ -129,5 +136,37 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
       callSyncEndpoint,
       request
     );
+  };
+
+  /**
+   * [Aggregate records from a stream](https://developer.cognite.com/api#tag/Records/operation/aggregateRecords)
+   *
+   * Aggregate data for records from a stream.
+   *
+   * ```js
+   * const response = await client.records.aggregate('my_stream', {
+   *   aggregates: {
+   *     total_count: { count: {} },
+   *     by_category: {
+   *       uniqueValues: {
+   *         property: ['mySpace', 'myContainer', 'category'],
+   *         aggregates: { total: { sum: { property: ['mySpace', 'myContainer', 'amount'] } } }
+   *       }
+   *     }
+   *   }
+   * });
+   * ```
+   */
+  public aggregate = async (
+    streamExternalId: string,
+    request: RecordAggregateRequest
+  ): Promise<RecordAggregateResults> => {
+    const path = this.url(
+      `${encodeURIComponent(streamExternalId)}/records/aggregate`
+    );
+    const response = await this.post<RecordAggregateResponse>(path, {
+      data: request,
+    });
+    return response.data.aggregates;
   };
 }
