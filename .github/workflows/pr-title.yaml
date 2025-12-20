@@ -12,16 +12,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
 
       - name: Use Node.js 22
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 22
 
       - name: Cache node_modules
         id: cache-modules
-        uses: actions/cache@v3
+        uses: actions/cache@6f8efc29b200d32929f49075959781ed54ec270c # v3
         with:
           path: node_modules
           key: ${{ runner.OS }}-build-${{ hashFiles('package.json') }}
@@ -29,4 +29,4 @@ jobs:
       - name: Install 🔧
         run: yarn install --immutable
 
-      - uses: JulienKode/pull-request-name-linter-action@v0.5.0
+      - uses: JulienKode/pull-request-name-linter-action@8c05fb989d9f156ce61e33754f9802c9d3cffa58 # v0.5.0
