@@ -615,3 +615,19 @@ export interface SimulatorRoutineRevisionsFilterQuery extends FilterQuery {
   sort?: SortItem[];
   includeAllFields?: boolean;
 }
+
+export interface LimitsValue {
+  limitId: string;
+  value: number;
+}
+
+export interface LimitAdvanceFilter extends FilterQuery {
+  filter?: FilterObject;
+}
+
+export interface FilterObject {
+  prefix?: {
+    property: string[];
+    value: string;
+  };
+}
