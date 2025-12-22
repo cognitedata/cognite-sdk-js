@@ -622,5 +622,12 @@ export interface LimitsValue {
 }
 
 export interface LimitAdvanceFilter extends FilterQuery {
-  filter?: object;
+  filter?: FilterObject;
+}
+
+export interface FilterObject {
+  prefix?: {
+    property: string[];
+    value: string;
+  };
 }

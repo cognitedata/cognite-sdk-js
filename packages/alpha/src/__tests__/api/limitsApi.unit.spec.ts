@@ -1,5 +1,6 @@
 // Copyright 2025 Cognite AS
 
+import type { LimitAdvanceFilter } from 'alpha/src/types';
 import nock from 'nock';
 import { beforeEach, describe, expect, test } from 'vitest';
 import { mockBaseUrl } from '../../../../core/src/__tests__/testUtils';
@@ -65,9 +66,12 @@ describe('Limits API unit tests', () => {
 
   describe('retrieveByAdvancedFilter', () => {
     test('should retrieve limits with filter', async () => {
-      const filter = {
+      const filter: LimitAdvanceFilter = {
         filter: {
-          limitIds: ['streams.properties', 'events.max'],
+          prefix: {
+            property: ['limitId'],
+            value: 'streams.properties',
+          },
         },
         limit: 100,
       };
@@ -86,7 +90,13 @@ describe('Limits API unit tests', () => {
       };
 
       nock(mockBaseUrl)
-        .post(/\/api\/v1\/projects\/.*\/limits\/values\/list/, filter)
+        .post(/\/api\/v1\/projects\/.*\/limits\/values\/list/, (body) => {
+          return (
+            body.filter?.prefix?.property?.includes('limitId') &&
+            body.filter?.prefix?.value === 'streams.properties' &&
+            body.limit === 100
+          );
+        })
         .matchHeader('cdf-version', '20230101-alpha')
         .reply(200, mockedResponse);
 
@@ -118,9 +128,12 @@ describe('Limits API unit tests', () => {
     });
 
     test('should handle empty results', async () => {
-      const filter = {
+      const filter: LimitAdvanceFilter = {
         filter: {
-          limitIds: ['non-existent'],
+          prefix: {
+            property: ['limitId'],
+            value: 'unexistent',
+          },
         },
       };
       const mockedResponse = {
@@ -128,7 +141,12 @@ describe('Limits API unit tests', () => {
       };
 
       nock(mockBaseUrl)
-        .post(/\/api\/v1\/projects\/.*\/limits\/values\/list/, filter)
+        .post(/\/api\/v1\/projects\/.*\/limits\/values\/list/, (body) => {
+          return (
+            body.filter?.prefix?.property?.includes('limitId') &&
+            body.filter?.prefix?.value === 'unexistent'
+          );
+        })
         .matchHeader('cdf-version', '20230101-alpha')
         .reply(200, mockedResponse);
 
