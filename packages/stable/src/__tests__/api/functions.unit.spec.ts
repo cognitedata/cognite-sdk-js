@@ -1,15 +1,15 @@
-// Copyright 2020 Cognite AS
+// Copyright 2025 Cognite AS
 
 import matches from 'lodash/matches';
 import nock from 'nock';
 import { beforeEach, describe, expect, test } from 'vitest';
-import type { CogniteClient, ExternalCogniteFunction } from '../..';
+import type { CogniteClient, ExternalCogniteFunctionItem } from '../..';
 import { mockBaseUrl, setupMockableClient } from '../testUtils';
 
 describe('Functions unit test', () => {
   let client: CogniteClient;
 
-  const externalFunction: ExternalCogniteFunction = {
+  const externalFunction: ExternalCogniteFunctionItem = {
     name: 'My awesome function',
     fileId: 5467347282343,
     description: 'Test function',

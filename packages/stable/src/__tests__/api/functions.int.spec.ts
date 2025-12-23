@@ -1,4 +1,4 @@
-// Copyright 2020 Cognite AS
+// Copyright 2025 Cognite AS
 
 import { beforeAll, describe, expect, test } from 'vitest';
 import type CogniteClient from '../../cogniteClient';

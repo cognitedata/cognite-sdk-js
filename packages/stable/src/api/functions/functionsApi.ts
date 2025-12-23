@@ -1,21 +1,17 @@
 // Copyright 2025 Cognite AS
 
 import { BaseResourceAPI } from '@cognite/sdk-core';
+import type { IdEither, ItemsWrapper } from '@cognite/sdk-core';
+import type { IgnoreUnknownIds } from '../../types';
 import type {
-  IdEither,
-  ItemsWrapper,
-} from '@cognite/sdk-core';
-import type {
-  Function,
-  ExternalFunctionItem,
+  CogniteFunction,
   ExternalCogniteFunctionItem,
   FunctionListScope,
   FunctionsActivationResponse,
   FunctionsLimits,
 } from './types';
-import { IgnoreUnknownIds } from '../../types';
 
-export class FunctionsAPI extends BaseResourceAPI<Function> {
+export class FunctionsAPI extends BaseResourceAPI<CogniteFunction> {
   /**
    * @hidden
    */
@@ -34,8 +30,8 @@ export class FunctionsAPI extends BaseResourceAPI<Function> {
    * ```
    */
   public create = (
-    items: ExternalFunctionItem[]
-  ): Promise<Function[]> => {
+    items: ExternalCogniteFunctionItem[]
+  ): Promise<CogniteFunction[]> => {
     return super.createEndpoint(items);
   };
 
@@ -48,8 +44,8 @@ export class FunctionsAPI extends BaseResourceAPI<Function> {
    */
   public list = async (
     scope?: FunctionListScope
-  ): Promise<Function[]> => {
-    const response = await this.post<ItemsWrapper<Function[]>>(
+  ): Promise<CogniteFunction[]> => {
+    const response = await this.post<ItemsWrapper<CogniteFunction[]>>(
       this.listPostUrl,
       { data: scope || {} }
     );
@@ -63,13 +59,12 @@ export class FunctionsAPI extends BaseResourceAPI<Function> {
    * const func = await client.functions.retrieve([{id: 123}, {externalId: 'abc'}]);
    * ```
    */
-    public retrieve = (
-      ids: IdEither[],
-      params: IgnoreUnknownIds = {}
-    ): Promise<Function[]> => {
-      return super.retrieveEndpoint(ids, params);
-    };
-  
+  public retrieve = (
+    ids: IdEither[],
+    params: IgnoreUnknownIds = {}
+  ): Promise<CogniteFunction[]> => {
+    return super.retrieveEndpoint(ids, params);
+  };
 
   /**
    * [Delete functions](https://developer.cognite.com/api#tag/Functions/operation/deleteFunctions)
@@ -78,10 +73,7 @@ export class FunctionsAPI extends BaseResourceAPI<Function> {
    * await client.functions.delete([{id: 123}, {externalId: 'abc'}]);
    * ```
    */
-  public delete = (
-    ids: IdEither[],
-    params: IgnoreUnknownIds = {}
-  ) => {
+  public delete = (ids: IdEither[], params: IgnoreUnknownIds = {}) => {
     return super.deleteEndpoint(ids, params);
   };
 

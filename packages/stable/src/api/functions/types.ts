@@ -43,10 +43,10 @@ export interface FunctionBuildError {
   trace?: string;
 }
 
-interface ExternalFunction {
+interface ExternalCogniteFunction {
   /**
-     * Name of the function.
-     */
+   * Name of the function.
+   */
   name: string;
   /**
    * External ID of the function.
@@ -95,9 +95,9 @@ interface ExternalFunction {
 }
 
 /**
- * Cognite Function type.
+ * A function in Cognite Functions.
  */
-export interface Function extends ExternalFunction {
+export interface CogniteFunction extends ExternalCogniteFunction {
   /**
    * A server-generated ID for the function.
    */
@@ -123,7 +123,7 @@ export interface Function extends ExternalFunction {
 /**
  * Item type for creating a new function.
  */
-export interface ExternalFunctionItem extends ExternalFunction {
+export interface ExternalCogniteFunctionItem extends ExternalCogniteFunction {
   /**
    * Specify a different python package index.
    */
@@ -199,7 +199,7 @@ export interface FunctionsLimitsRange {
 }
 
 /**
- * Service limits for Functions.
+ * Service limits for Cognite Functions.
  */
 export interface FunctionsLimits {
   /**
@@ -225,12 +225,11 @@ export interface FunctionsLimits {
 }
 
 /**
- * Activation status response for Functions.
+ * Activation status response for Cognite Functions.
  */
 export interface FunctionsActivationResponse {
   /**
-   * Signifies whether Functions have been requested or activated for the project.
+   * Signifies whether Cognite Functions have been requested or activated for the project.
    */
   status: FunctionsActivationStatus;
 }
-
