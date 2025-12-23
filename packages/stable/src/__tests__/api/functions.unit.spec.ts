@@ -72,27 +72,9 @@ describe('Functions unit test', () => {
       .once()
       .reply(200, mockFunction);
 
-    const func = await client.functions.retrieve(123);
-    expect(func.id).toBe(mockFunction.id);
-    expect(func.name).toBe(mockFunction.name);
-  });
-
-  test('retrieve multiple', async () => {
-    nock(mockBaseUrl)
-      .post(/\/functions\/byids/, {
-        items: [{ id: 123 }, { externalId: 'my-function' }],
-      })
-      .once()
-      .reply(200, {
-        items: [mockFunction],
-      });
-
-    const functions = await client.functions.retrieveMultiple([
-      { id: 123 },
-      { externalId: 'my-function' },
-    ]);
-    expect(functions.length).toBe(1);
-    expect(functions[0].id).toBe(mockFunction.id);
+    const func = await client.functions.retrieve([{id: 123}]);
+    expect(func[0].id).toBe(mockFunction.id);
+    expect(func[0].name).toBe(mockFunction.name);
   });
 
   test('delete', async () => {
