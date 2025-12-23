@@ -143,6 +143,6 @@ jobs:
           fi
 
       - name: Codecov
-        uses: codecov/codecov-action@v3.1.6
+        uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
