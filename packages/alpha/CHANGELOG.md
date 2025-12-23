@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.39.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.38.1...@cognite/sdk-alpha@0.39.0) (2025-12-09)
+
+
+### Features
+
+* **simint:** make simulatorIntegrationExternalId optional for routines, revisions and runs ([#1346](https://github.com/cognitedata/cognite-sdk-js/issues/1346)) ([8014d6f](https://github.com/cognitedata/cognite-sdk-js/commit/8014d6f7297e084ac141046c59a2ea8408af2984))
+
+
+
+
+
 ## [0.38.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.38.0...@cognite/sdk-alpha@0.38.1) (2025-11-27)
 
 **Note:** Version bump only for package @cognite/sdk-alpha
