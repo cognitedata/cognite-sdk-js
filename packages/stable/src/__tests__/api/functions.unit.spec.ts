@@ -68,9 +68,13 @@ describe('Functions unit test', () => {
 
   test('retrieve by id', async () => {
     nock(mockBaseUrl)
-      .get(/\/functions\/123/)
+      .post(/\/functions\/byids/, {
+        items: [{ id: 123 }],
+      })
       .once()
-      .reply(200, mockFunction);
+      .reply(200, {
+        items: [mockFunction],
+      });
 
     const func = await client.functions.retrieve([{ id: 123 }]);
     expect(func[0].id).toBe(mockFunction.id);
