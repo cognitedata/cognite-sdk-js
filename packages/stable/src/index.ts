@@ -43,6 +43,7 @@ export { SequenceRowsAPI } from './api/sequences/sequenceRowsApi';
 export { SequencesAPI } from './api/sequences/sequencesApi';
 export { SyntheticTimeSeriesAPI } from './api/timeSeries/syntheticTimeSeriesApi';
 export { TimeSeriesAPI } from './api/timeSeries/timeSeriesApi';
+export { FunctionsAPI } from './api/functions/functionsApi';
 export * from './api/templates';
 
 export * from './types';

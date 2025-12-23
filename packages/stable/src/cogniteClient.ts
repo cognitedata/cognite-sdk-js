@@ -20,6 +20,7 @@ import { DocumentsAPI } from './api/documents/documentsApi';
 import { EntityMatchingApi } from './api/entityMatching/entityMatchingApi';
 import { EventsAPI } from './api/events/eventsApi';
 import { FilesAPI } from './api/files/filesApi';
+import { FunctionsAPI } from './api/functions/functionsApi';
 import { GeospatialAPI } from './api/geospatial/geospatialAPI';
 import { GroupsAPI } from './api/groups/groupsApi';
 import { InstancesAPI } from './api/instances/instancesApi';
@@ -66,6 +67,9 @@ export default class CogniteClient extends BaseCogniteClient {
   }
   public get files() {
     return accessApi(this.filesApi);
+  }
+  public get functions() {
+    return accessApi(this.functionsApi);
   }
   public get labels() {
     return accessApi(this.labelsApi);
@@ -193,6 +197,7 @@ export default class CogniteClient extends BaseCogniteClient {
   private sequencesApi?: SequencesAPI;
   private eventsApi?: EventsAPI;
   protected filesApi?: FilesAPI;
+  private functionsApi?: FunctionsAPI;
   private labelsApi?: LabelsAPI;
   private rawApi?: RawAPI;
   private projectsApi?: ProjectsAPI;
@@ -241,6 +246,7 @@ export default class CogniteClient extends BaseCogniteClient {
     this.sequencesApi = this.apiFactory(SequencesAPI, 'sequences');
     this.eventsApi = this.apiFactory(EventsAPI, 'events');
     this.filesApi = this.apiFactory(FilesAPI, 'files');
+    this.functionsApi = this.apiFactory(FunctionsAPI, 'functions');
     this.labelsApi = this.apiFactory(LabelsAPI, 'labels');
     this.datasetsApi = this.apiFactory(DataSetsAPI, 'datasets');
     this.rawApi = this.apiFactory(RawAPI, 'raw/dbs');
