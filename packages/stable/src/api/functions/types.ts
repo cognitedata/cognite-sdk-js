@@ -1,12 +1,11 @@
-// Copyright 2020 Cognite AS
+// Copyright 2025 Cognite AS
 
 import type {
   CogniteExternalId,
   CogniteInternalId,
-  IdEither,
   Limit,
 } from '@cognite/sdk-core';
-import type { DateRange, Metadata } from '../../types';
+import type { DateRange, ExternalIdPrefix, Metadata } from '../../types';
 
 /**
  * Status of the function.
@@ -23,7 +22,7 @@ export type FunctionStatus = 'Queued' | 'Deploying' | 'Ready' | 'Failed';
 export type FunctionRuntime = 'py310' | 'py311' | 'py312';
 
 /**
- * Activation status of Cognite Functions.
+ * Activation status of Functions.
  * - inactive: Functions have not been activated for the project.
  * - requested: Activation has been requested.
  * - activated: Functions have been activated and are ready to use.
@@ -44,25 +43,10 @@ export interface FunctionBuildError {
   trace?: string;
 }
 
-/**
- * A function in Cognite Functions.
- */
-export interface CogniteFunction {
+interface ExternalFunction {
   /**
-   * A server-generated ID for the function.
-   */
-  id: CogniteInternalId;
-  /**
-   * The time the function was created in CDF.
-   */
-  createdTime: Date;
-  /**
-   * Status of the function.
-   */
-  status: FunctionStatus;
-  /**
-   * Name of the function.
-   */
+     * Name of the function.
+     */
   name: string;
   /**
    * External ID of the function.
@@ -108,6 +92,24 @@ export interface CogniteFunction {
    * The runtime of the function.
    */
   runtime?: FunctionRuntime;
+}
+
+/**
+ * Cognite Function type.
+ */
+export interface Function extends ExternalFunction {
+  /**
+   * A server-generated ID for the function.
+   */
+  id: CogniteInternalId;
+  /**
+   * The time the function was created in CDF.
+   */
+  createdTime: Date;
+  /**
+   * Status of the function.
+   */
+  status: FunctionStatus;
   /**
    * The complete specification of the function runtime with major, minor and patch version numbers.
    */
@@ -119,57 +121,9 @@ export interface CogniteFunction {
 }
 
 /**
- * Create a new function.
+ * Item type for creating a new function.
  */
-export interface ExternalCogniteFunction {
-  /**
-   * Name of the function. Required.
-   */
-  name: string;
-  /**
-   * External ID of the function.
-   */
-  externalId?: CogniteExternalId;
-  /**
-   * File ID of the function source code. Required.
-   */
-  fileId: CogniteInternalId;
-  /**
-   * Owner of the function.
-   */
-  owner?: string;
-  /**
-   * Description of the function.
-   */
-  description?: string;
-  /**
-   * Custom metadata for the function.
-   */
-  metadata?: Metadata;
-  /**
-   * Secrets for the function. Keys must be lowercase characters, numbers or dashes (-) and at most 15 characters.
-   */
-  secrets?: Record<string, string>;
-  /**
-   * Relative path from the root folder to the file containing the handle function.
-   */
-  functionPath?: string;
-  /**
-   * Environment variables for the function.
-   */
-  envVars?: Record<string, string>;
-  /**
-   * Number of CPU cores per function.
-   */
-  cpu?: number;
-  /**
-   * Memory per function measured in GB.
-   */
-  memory?: number;
-  /**
-   * The runtime of the function.
-   */
-  runtime?: FunctionRuntime;
+export interface ExternalFunctionItem extends ExternalFunction {
   /**
    * Specify a different python package index.
    */
@@ -203,7 +157,7 @@ export interface FunctionFilterProps {
   /**
    * Filter by external ID prefix.
    */
-  externalIdPrefix?: CogniteExternalId;
+  externalIdPrefix?: ExternalIdPrefix;
   /**
    * Filter by created time.
    */
@@ -245,7 +199,7 @@ export interface FunctionsLimitsRange {
 }
 
 /**
- * Service limits for Cognite Functions.
+ * Service limits for Functions.
  */
 export interface FunctionsLimits {
   /**
@@ -271,26 +225,12 @@ export interface FunctionsLimits {
 }
 
 /**
- * Activation status response for Cognite Functions.
+ * Activation status response for Functions.
  */
 export interface FunctionsActivationResponse {
   /**
-   * Signifies whether Cognite Functions have been requested or activated for the project.
+   * Signifies whether Functions have been requested or activated for the project.
    */
   status: FunctionsActivationStatus;
 }
 
-/**
- * Function ID or external ID for deletion.
- */
-export type FunctionIdEither = IdEither;
-
-/**
- * Parameters for deleting functions.
- */
-export interface FunctionDeleteParams {
-  /**
-   * Ignore IDs and external IDs that are not found.
-   */
-  ignoreUnknownIds?: boolean;
-}

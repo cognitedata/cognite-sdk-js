@@ -1,22 +1,21 @@
-// Copyright 2020 Cognite AS
+// Copyright 2025 Cognite AS
 
 import { BaseResourceAPI } from '@cognite/sdk-core';
 import type {
-  CogniteInternalId,
   IdEither,
   ItemsWrapper,
 } from '@cognite/sdk-core';
 import type {
-  CogniteFunction,
-  ExternalCogniteFunction,
-  FunctionDeleteParams,
-  FunctionIdEither,
+  Function,
+  ExternalFunctionItem,
+  ExternalCogniteFunctionItem,
   FunctionListScope,
   FunctionsActivationResponse,
   FunctionsLimits,
 } from './types';
+import { IgnoreUnknownIds } from '../../types';
 
-export class FunctionsAPI extends BaseResourceAPI<CogniteFunction> {
+export class FunctionsAPI extends BaseResourceAPI<Function> {
   /**
    * @hidden
    */
@@ -35,8 +34,8 @@ export class FunctionsAPI extends BaseResourceAPI<CogniteFunction> {
    * ```
    */
   public create = (
-    items: ExternalCogniteFunction[]
-  ): Promise<CogniteFunction[]> => {
+    items: ExternalFunctionItem[]
+  ): Promise<Function[]> => {
     return super.createEndpoint(items);
   };
 
@@ -49,8 +48,8 @@ export class FunctionsAPI extends BaseResourceAPI<CogniteFunction> {
    */
   public list = async (
     scope?: FunctionListScope
-  ): Promise<CogniteFunction[]> => {
-    const response = await this.post<ItemsWrapper<CogniteFunction[]>>(
+  ): Promise<Function[]> => {
+    const response = await this.post<ItemsWrapper<Function[]>>(
       this.listPostUrl,
       { data: scope || {} }
     );
@@ -61,24 +60,16 @@ export class FunctionsAPI extends BaseResourceAPI<CogniteFunction> {
    * [Retrieve a function by its ID](https://developer.cognite.com/api#tag/Functions/operation/getFunction)
    *
    * ```js
-   * const func = await client.functions.retrieve(123);
+   * const func = await client.functions.retrieve([{id: 123}, {externalId: 'abc'}]);
    * ```
    */
-  public retrieve = async (id: CogniteInternalId): Promise<CogniteFunction> => {
-    const response = await this.get<CogniteFunction>(this.url(`${id}`));
-    return this.addToMapAndReturn(response.data, response);
-  };
-
-  /**
-   * [Retrieve functions by IDs](https://developer.cognite.com/api#tag/Functions/operation/byIdsFunctions)
-   *
-   * ```js
-   * const functions = await client.functions.retrieveMultiple([{id: 123}, {externalId: 'abc'}]);
-   * ```
-   */
-  public retrieveMultiple = (ids: IdEither[]): Promise<CogniteFunction[]> => {
-    return super.retrieveEndpoint(ids);
-  };
+    public retrieve = (
+      ids: IdEither[],
+      params: IgnoreUnknownIds = {}
+    ): Promise<Function[]> => {
+      return super.retrieveEndpoint(ids, params);
+    };
+  
 
   /**
    * [Delete functions](https://developer.cognite.com/api#tag/Functions/operation/deleteFunctions)
@@ -88,8 +79,8 @@ export class FunctionsAPI extends BaseResourceAPI<CogniteFunction> {
    * ```
    */
   public delete = (
-    ids: FunctionIdEither[],
-    params: FunctionDeleteParams = {}
+    ids: IdEither[],
+    params: IgnoreUnknownIds = {}
   ) => {
     return super.deleteEndpoint(ids, params);
   };
