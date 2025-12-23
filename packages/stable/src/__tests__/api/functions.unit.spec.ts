@@ -72,7 +72,7 @@ describe('Functions unit test', () => {
       .once()
       .reply(200, mockFunction);
 
-    const func = await client.functions.retrieve([{id: 123}]);
+    const func = await client.functions.retrieve([{ id: 123 }]);
     expect(func[0].id).toBe(mockFunction.id);
     expect(func[0].name).toBe(mockFunction.name);
   });
