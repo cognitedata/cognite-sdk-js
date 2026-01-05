@@ -4,18 +4,14 @@ import { describe, expect, test } from 'vitest';
 import type CogniteClientAlpha from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
 
-const SHOULD_RUN_TESTS = process.env.RUN_SDK_SIMINT_TESTS === 'true';
-
-const describeIf = SHOULD_RUN_TESTS ? describe : describe.skip;
-
-describeIf('simulator logs api', () => {
+describe('simulator logs api', () => {
   const client: CogniteClientAlpha = setupLoggedInClient();
 
   test('retrieve simulator log by id', async () => {
     // get the latest failed run which should have a logId
     const filterSimulationRunsRes = await client.simulators.listRuns({
       filter: {
-        status: 'success',
+        status: 'ready',
       },
       limit: 1,
       sort: [
