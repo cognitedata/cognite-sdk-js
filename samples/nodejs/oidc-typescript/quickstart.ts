@@ -3,13 +3,14 @@ import { CogniteClient } from '@cognite/sdk';
 import { ConfidentialClientApplication } from '@azure/msal-node';
 
 const project: string = process.env.COGNITE_PROJECT!;
+const cluster = process.env.COGNITE_CLUSTER!;
 const clientId: string = process.env.CLIENT_ID!;
 const clientSecret: string = process.env.CLIENT_SECRET!;
 const azureTenant = process.env.AZURE_TENANT_ID!;
 
-if (!project || !clientId || !clientSecret || !azureTenant) {
+if (!project || !cluster || !clientId || !clientSecret || !azureTenant) {
   throw Error(
-    'You must set the environment variable AZURE_TENANT_ID, COGNITE_PROJECT, CLIENT_ID and CLIENT_SECRET'
+    'You must set the environment variable AZURE_TENANT_ID, COGNITE_PROJECT, COGNITE_CLUSTER, CLIENT_ID and CLIENT_SECRET'
   );
 }
 
@@ -25,11 +26,11 @@ async function quickstart() {
   const client = new CogniteClient({
     appId: 'Cognite SDK samples',
     project,
-    baseUrl: 'https://api.cognitedata.com',
+    baseUrl: `https://${cluster}.cognitedata.com`,
     oidcTokenProvider: () =>
       pca
         .acquireTokenByClientCredential({
-          scopes: ['https://api.cognitedata.com/.default'],
+          scopes: [`https://${cluster}.cognitedata.com/.default`],
           skipCache: true,
         })
         .then((response) => response?.accessToken! as string),
