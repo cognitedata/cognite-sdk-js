@@ -1,11 +1,8 @@
 // Copyright 2020 Cognite AS
 
 import { BaseResourceAPI } from '@cognite/sdk-core';
-import type {
-  DatapointInfo,
-  SyntheticQuery,
-  SyntheticQueryResponse,
-} from '../../types';
+import type { DatapointInfo } from '../../types';
+import type { SyntheticQuery, SyntheticQueryResponse } from './types';
 
 export class SyntheticTimeSeriesAPI extends BaseResourceAPI<SyntheticQueryResponse> {
   /**
