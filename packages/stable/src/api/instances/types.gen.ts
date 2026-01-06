@@ -115,6 +115,15 @@ export interface CommonAggregationRequest {
    * @max 1000
    */
   limit?: number;
+  /**
+   * Controls how multiple search terms are combined when matching documents.
+   * - **OR** (default): A document matches if it contains *any* of the query terms
+   *   in the searchable fields. This typically returns more results but with lower precision.
+   *
+   * - **AND**: A document matches only if it contains *all* of the query terms
+   *   across the searchable fields. This typically returns fewer results but with higher relevance.
+   */
+  operator?: SearchOperator;
   /** Optional list (array) of properties you want to apply the query above to. If you do not list any properties, you search through text fields by default. */
   properties?: string[];
   /** Optional query string.  The API will parse the query string, and use it to match the text properties on elements to use for the aggregate(s). */
@@ -860,6 +869,15 @@ export type RawPropertyValueV3 =
 export interface ReferencedPropertyValueV3 {
   property: string[];
 }
+/**
+* Controls how multiple search terms are combined when matching documents.
+- **OR** (default): A document matches if it contains *any* of the query terms
+  in the searchable fields. This typically returns more results but with lower precision.
+
+- **AND**: A document matches only if it contains *all* of the query terms
+  across the searchable fields. This typically returns fewer results but with higher relevance.
+*/
+export type SearchOperator = 'AND' | 'OR';
 export type SearchRequestV3 = {
   view: ViewReference;
   query?: string;
@@ -869,6 +887,7 @@ export type SearchRequestV3 = {
   filter?: FilterDefinition;
   includeTyping?: IncludeTyping;
   sort?: SearchSort[];
+  operator?: SearchOperator;
 } & LimitWithDefault1000;
 export interface SearchResponse {
   /** List of nodes and edges */
