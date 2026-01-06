@@ -20,9 +20,26 @@ or with yarn:
 
 `yarn`
 
-## Run
+## Run 
 
-`AZURE_TENANT_ID=... COGNITE_PROJECT=... CLIENT_ID=... CLIENT_SECRET=... node build/quickstart.ts`
+### (Node versions <20.6.0)
+
+`AZURE_TENANT_ID=... COGNITE_PROJECT=... COGNITE_CLUSTER=... CLIENT_ID=... CLIENT_SECRET=... yarn start`
+
+### (Node versions =>20.6.0)
+
+1. Set the variables in a `.env` file (see `.env_example`)
+```
+AZURE_TENANT_ID=...
+COGNITE_PROJECT=...
+COGNITE_CLUSTER=...
+CLIENT_ID=...
+CLIENT_SECRET=...
+```
+2. Run in terminal
+```sh
+yarn start
+```
 
 ## How to get logged by yourself?
 
@@ -45,10 +62,11 @@ import { CogniteClient } from '@cognite/sdk';
 import { ConfidentialClientApplication } from '@azure/msal-node';
 ```
 
-3. Instantiate four consts with your project name, clientID, clientSecret and your tenantID.
+3. Instantiate four consts with your project name, cluster, clientID, clientSecret and your tenantID.
 
 ```sh
 const project: string = process.env.COGNITE_PROJECT!;
+const cluster: string = process.env.COGNITE_CLUSTER!;
 const clientId: string = process.env.CLIENT_ID!;
 const clientSecret: string = process.env.CLIENT_SECRET!;
 const azureTenant = process.env.AZURE_TENANT_ID!;
@@ -69,11 +87,11 @@ async function quickstart() {
     const client = new CogniteClient({
       appId: 'Cognite SDK samples',
       project,
-      baseUrl: 'https://api.cognitedata.com',
+      baseUrl: `https://${cluster}.cognitedata.com`,
       oidcTokenProvider: () =>
         pca
           .acquireTokenByClientCredential({
-            scopes: ['https://api.cognitedata.com/.default'],
+            scopes: [`https://${cluster}.cognitedata.com/.default`],
             skipCache: true,
           })
           .then((response) => response?.accessToken! as string),
@@ -105,14 +123,14 @@ quickstart()
 
 6. Build your project.
 
-`npm run tsc`
+```sh
+npm run tsc
+```
 
 or with yarn
 
-`yarn tsc`
-
-7. Finally, run your code with:
-
 ```sh
-AZURE_TENANT_ID=... COGNITE_PROJECT=... CLIENT_ID=... CLIENT_SECRET=... node build/quickstart.js
+yarn tsc
 ```
+
+7. Finally, run your code specified in the [Run section](#run)
