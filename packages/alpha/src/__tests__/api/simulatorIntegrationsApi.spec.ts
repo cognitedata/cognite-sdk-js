@@ -1,26 +1,26 @@
 // Copyright 2023 Cognite AS
 
-import { describe, expect, test } from 'vitest';
+import { beforeAll, describe, expect, test } from 'vitest';
 import type CogniteClientAlpha from '../../cogniteClient';
-import { setupLoggedInClient } from '../testUtils';
+import { getOrCreateDataSet, setupLoggedInClient } from '../testUtils';
 import {
+  createTestIdentifiers,
   fileExtensionTypes,
   modelTypes,
   stepFields,
   unitQuantities,
 } from './seed';
 
-const SHOULD_RUN_TESTS = process.env.RUN_SDK_SIMINT_TESTS === 'true';
-
-const describeIf = SHOULD_RUN_TESTS ? describe : describe.skip;
-
-describeIf('simulator integrations api', () => {
-  const ts = Date.now();
-  const simulatorExternalId = `test_sim_${ts}_a`;
-  const simulatorIntegrationExternalId = `test_sim_integration_${ts}`;
-  const simulatorName = `TestSim - ${ts}`;
+describe('simulator integrations api', () => {
+  const { simulatorExternalId, simulatorIntegrationExternalId, simulatorName } =
+    createTestIdentifiers();
   const client: CogniteClientAlpha = setupLoggedInClient();
   let simulatorId: number;
+  let testDataSetId: number;
+
+  beforeAll(async () => {
+    testDataSetId = await getOrCreateDataSet(client);
+  });
 
   test('create simulator', async () => {
     const response = await client.simulators.create([
@@ -43,8 +43,8 @@ describeIf('simulator integrations api', () => {
       {
         externalId: simulatorIntegrationExternalId,
         simulatorExternalId: simulatorExternalId,
-        heartbeat: new Date(ts),
-        dataSetId: 97552494921583,
+        heartbeat: new Date(),
+        dataSetId: testDataSetId,
         connectorVersion: '1.0.0',
         simulatorVersion: '1.0.0',
         licenseStatus: 'UNKNOWN',

@@ -276,24 +276,29 @@ describe('Instances integration test', () => {
   }, 25_000);
 
   test('retrieve', async () => {
-    const response = await client.instances.retrieve({
-      sources: [{ source: view }],
-      items: [
-        {
-          externalId: describable1.externalId,
-          space: testSpace.space,
-          instanceType: 'node',
-        },
-      ],
-    });
-    expect(response.items).toHaveLength(1);
-    expect(response.items[0].properties);
-    const title =
-      response.items[0].properties?.[view.space][
-        `${view.externalId}/${view.version}`
-      ].title.toString() || '';
-    expect(title.startsWith('titl'));
-  });
+    await vi.waitFor(
+      async () => {
+        const response = await client.instances.retrieve({
+          sources: [{ source: view }],
+          items: [
+            {
+              externalId: describable1.externalId,
+              space: testSpace.space,
+              instanceType: 'node',
+            },
+          ],
+        });
+        expect(response.items).toHaveLength(1);
+        expect(response.items[0].properties);
+        const title =
+          response.items[0].properties?.[view.space][
+            `${view.externalId}/${view.version}`
+          ].title.toString() || '';
+        expect(title.startsWith('titl'));
+      },
+      { interval: 1000, timeout: 25_000 }
+    );
+  }, 25_000);
 
   test('query', async () => {
     const response = await client.instances.query({
