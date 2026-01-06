@@ -3,6 +3,7 @@ import type {
   SimulatorRoutineScript,
   SimulatorUnitQuantity,
 } from '../../types';
+import { randomInt } from '../testUtils';
 
 export const unitQuantities: SimulatorUnitQuantity[] = [
   {
@@ -329,3 +330,28 @@ export const routineRevisionScript: SimulatorRoutineScript[] = [
     ],
   },
 ];
+
+export interface TestIdentifiers {
+  uniqueSuffix: number;
+  simulatorExternalId: string;
+  modelExternalId: string;
+  modelRevisionExternalId: string;
+  routineExternalId: string;
+  routineRevisionExternalId: string;
+  simulatorIntegrationExternalId: string;
+  simulatorName: string;
+}
+
+export function createTestIdentifiers(): TestIdentifiers {
+  const uniqueSuffix = randomInt();
+  return {
+    uniqueSuffix,
+    simulatorExternalId: `test_sim_${uniqueSuffix}`,
+    modelExternalId: `test_sim_model_${uniqueSuffix}`,
+    modelRevisionExternalId: `test_sim_model_revision_${uniqueSuffix}`,
+    routineExternalId: `test_sim_routine_${uniqueSuffix}`,
+    routineRevisionExternalId: `test_sim_routine_revision_${uniqueSuffix}`,
+    simulatorIntegrationExternalId: `test_sim_integration_${uniqueSuffix}`,
+    simulatorName: `TestSim - ${uniqueSuffix}`,
+  };
+}
