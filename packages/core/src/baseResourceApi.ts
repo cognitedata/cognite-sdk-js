@@ -370,13 +370,17 @@ export abstract class BaseResourceAPI<ResponseType> {
     cursorResponse: CursorResponse<Item[]>,
     query: QueryType = {} as QueryType
   ): ListResponse<Item[]> {
-    const { nextCursor } = cursorResponse;
-    const next = nextCursor
-      ? () =>
-          endpoint({ ...query, cursor: nextCursor }).then((response) =>
-            this.addNextPageFunction(endpoint, response.data, query)
-          )
-      : undefined;
+    const { nextCursor, hasNext } = cursorResponse;
+    // Use hasNext if available (takes precedence), otherwise fall back to nextCursor existence
+    const shouldContinue =
+      hasNext !== undefined ? hasNext : nextCursor !== undefined;
+    const next =
+      shouldContinue && nextCursor
+        ? () =>
+            endpoint({ ...query, cursor: nextCursor }).then((response) =>
+              this.addNextPageFunction(endpoint, response.data, query)
+            )
+        : undefined;
     return {
       ...cursorResponse,
       next,

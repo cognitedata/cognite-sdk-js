@@ -155,23 +155,37 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
   /**
    * [Sync records from a stream](https://developer.cognite.com/api#tag/Records/operation/syncRecords)
    *
-   * Sync records from a stream using a cursor-based approach. Supports auto-pagination.
+   * Sync records from a stream using a cursor-based approach. Supports both
+   * auto-pagination and manual pagination.
    *
    * ```js
-   * // Get first page
+   * // Get first page with items, nextCursor, and hasNext
    * const response = await client.records.sync('my_stream', {
    *   initializeCursor: '1d-ago',
    *   sources: [{ source: { type: 'container', space: 'mySpace', externalId: 'myContainer' }, properties: ['*'] }],
    * });
+   * console.log(response.items, response.nextCursor, response.hasNext);
    *
    * // Auto-paginate to array
    * const allRecords = await client.records
-   *   .sync('my_stream', { initializeCursor: '1d-ago', sources: [{ source: { type: 'container', space: 'mySpace', externalId: 'myContainer' }, properties: ['*'] }] })
+   *   .sync('my_stream', { initializeCursor: '1d-ago', sources: [...] })
    *   .autoPagingToArray({ limit: 10000 });
    *
    * // Iterate with for-await
    * for await (const record of client.records.sync('my_stream', { initializeCursor: '1d-ago' })) {
    *   console.log(record);
+   * }
+   *
+   * // Manual pagination (store cursor for resumption)
+   * let cursor: string | undefined;
+   * while (true) {
+   *   const response = await client.records.sync('my_stream', {
+   *     ...(cursor ? { cursor } : { initializeCursor: '2d-ago' }),
+   *     sources: [...],
+   *   });
+   *   // Process response.items...
+   *   cursor = response.nextCursor; // Always store cursor
+   *   if (!response.hasNext) break;
    * }
    * ```
    */
@@ -184,15 +198,25 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
     );
 
     const callSyncEndpoint = async (params?: RecordSyncRequest) => {
+      // When using cursor for pagination, remove initializeCursor
+      let requestData = params;
+      if (params?.cursor && params?.initializeCursor) {
+        const { initializeCursor: _, ...rest } = params;
+        requestData = rest;
+      }
       const response = await this.post<RecordSyncResponse>(path, {
-        data: params,
+        data: requestData,
       });
       const items = this.addToMapAndReturn(response.data.items, response);
-      // Map hasNext to nextCursor for the pagination mechanism
-      const nextCursor = response.data.hasNext
-        ? response.data.nextCursor
-        : undefined;
-      return { ...response, data: { items, nextCursor } };
+
+      return {
+        ...response,
+        data: {
+          items,
+          nextCursor: response.data.nextCursor,
+          hasNext: response.data.hasNext,
+        },
+      };
     };
 
     return this.cursorBasedEndpoint<RecordSyncRequest, SyncRecordItem>(
