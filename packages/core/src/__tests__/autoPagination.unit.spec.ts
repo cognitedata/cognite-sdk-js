@@ -66,4 +66,47 @@ describe('makeAutoPaginationMethods', () => {
     ).autoPagingToArray();
     expect(arr.length).toBe(25);
   });
+
+  test('stops pagination when hasNext is false even with nextCursor present', async () => {
+    // Simulates an API like records sync that always returns nextCursor but uses hasNext to indicate when to stop
+    let callCount = 0;
+    const generateResponse = async (): Promise<ListResponse<number[]>> => {
+      callCount++;
+      const isLastPage = callCount >= 3;
+      return {
+        items: [callCount * 10],
+        nextCursor: `cursor_${callCount}`, // Always present
+        hasNext: !isLastPage, // Only false on the last page
+        next: isLastPage ? undefined : async () => generateResponse(), // next is undefined when hasNext is false
+      };
+    };
+
+    const arr = await makeAutoPaginationMethods(
+      generateResponse()
+    ).autoPagingToArray({ limit: 100 });
+
+    expect(arr).toEqual([10, 20, 30]);
+    expect(callCount).toBe(3);
+  });
+
+  test('continues pagination when hasNext is true', async () => {
+    let callCount = 0;
+    const generateResponse = async (): Promise<ListResponse<number[]>> => {
+      callCount++;
+      const isLastPage = callCount >= 2;
+      return {
+        items: [callCount],
+        nextCursor: isLastPage ? undefined : `cursor_${callCount}`,
+        hasNext: !isLastPage,
+        next: isLastPage ? undefined : async () => generateResponse(),
+      };
+    };
+
+    const arr = await makeAutoPaginationMethods(
+      generateResponse()
+    ).autoPagingToArray({ limit: 100 });
+
+    expect(arr).toEqual([1, 2]);
+    expect(callCount).toBe(2);
+  });
 });
