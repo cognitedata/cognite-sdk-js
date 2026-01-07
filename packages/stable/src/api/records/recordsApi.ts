@@ -165,28 +165,6 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
    *   sources: [{ source: { type: 'container', space: 'mySpace', externalId: 'myContainer' }, properties: ['*'] }],
    * });
    * console.log(response.items, response.nextCursor, response.hasNext);
-   *
-   * // Auto-paginate to array
-   * const allRecords = await client.records
-   *   .sync('my_stream', { initializeCursor: '1d-ago', sources: [...] })
-   *   .autoPagingToArray({ limit: 10000 });
-   *
-   * // Iterate with for-await
-   * for await (const record of client.records.sync('my_stream', { initializeCursor: '1d-ago' })) {
-   *   console.log(record);
-   * }
-   *
-   * // Manual pagination (store cursor for resumption)
-   * let cursor: string | undefined;
-   * while (true) {
-   *   const response = await client.records.sync('my_stream', {
-   *     ...(cursor ? { cursor } : { initializeCursor: '2d-ago' }),
-   *     sources: [...],
-   *   });
-   *   // Process response.items...
-   *   cursor = response.nextCursor; // Always store cursor
-   *   if (!response.hasNext) break;
-   * }
    * ```
    */
   public sync = (
