@@ -17,19 +17,17 @@ describe('monitoring tasks api', () => {
   beforeAll(async () => {
     // clean up any existing test monitoring tasks
     const client: CogniteClient = setupLoggedInClient();
-    const existingMts = await client.monitoringTasks.list({
-      filter: { externalIds: ['test_mt_'] },
-    });
+    const existingMts = await client.monitoringTasks.list({ limit: 1000 });
     // chunk by 100 and delete
     const chunkSize = 100;
     for (let i = 0; i < existingMts.items.length; i += chunkSize) {
       const chunk = existingMts.items.slice(i, i + chunkSize);
       const idsToDelete = chunk.map((mt) => ({ id: mt.id }));
-      // await client.monitoringTasks.delete(idsToDelete);
       try {
         await client.monitoringTasks.delete(idsToDelete);
       } catch (error) {
         // ignore
+        console.log('Error deleting monitoring tasks during setup:', error);
       }
     }
 
@@ -44,6 +42,7 @@ describe('monitoring tasks api', () => {
       try {
         await client.alerts.deleteChannels(idsToDelete);
       } catch (error) {
+        console.log('Error deleting channels during setup:', error);
         // ignore
       }
     }

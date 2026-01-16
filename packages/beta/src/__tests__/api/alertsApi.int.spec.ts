@@ -15,15 +15,14 @@ describe('alerts api', () => {
     // clean up
     const chunkSize = 100;
     // same for channels
-    const existingChannels = await client.alerts.listChannels({
-      filter: { externalIds: ['test_channel_'] },
-    });
+    const existingChannels = await client.alerts.listChannels({ limit: 1000 });
     for (let i = 0; i < existingChannels.items.length; i += chunkSize) {
       const chunk = existingChannels.items.slice(i, i + chunkSize);
       const idsToDelete = chunk.map((ch) => ({ id: ch.id }));
       try {
         await client.alerts.deleteChannels(idsToDelete);
       } catch (error) {
+        console.log('Error deleting channels during setup:', error);
         // ignore
       }
     }
