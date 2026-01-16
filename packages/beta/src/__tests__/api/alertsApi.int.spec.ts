@@ -1,7 +1,7 @@
 // Copyright 2020 Cognite AS
 
 import type { CogniteClient, CogniteError } from '@cognite/sdk-beta';
-import { describe, expect, test, vi } from 'vitest';
+import { beforeAll, describe, expect, test, vi } from 'vitest';
 import { setupLoggedInClient } from '../testUtils';
 
 describe('alerts api', () => {
@@ -10,6 +10,24 @@ describe('alerts api', () => {
   const channelExternalId = `test_channel_${ts}`;
   const alertExternalId = `test_alert_${ts}`;
   const email = `ivan.polomanyi+${ts}@cognite.com`;
+
+  beforeAll(async () => {
+    // clean up
+    const chunkSize = 100;
+    // same for channels
+    const existingChannels = await client.alerts.listChannels({
+      filter: { externalIds: ['test_channel_'] },
+    });
+    for (let i = 0; i < existingChannels.items.length; i += chunkSize) {
+      const chunk = existingChannels.items.slice(i, i + chunkSize);
+      const idsToDelete = chunk.map((ch) => ({ id: ch.id }));
+      try {
+        await client.alerts.deleteChannels(idsToDelete);
+      } catch (error) {
+        // ignore
+      }
+    }
+  });
 
   test('create channels', async () => {
     const response = await client.alerts.createChannels([
