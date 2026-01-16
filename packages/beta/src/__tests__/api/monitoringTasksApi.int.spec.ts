@@ -19,7 +19,7 @@ describe('monitoring tasks api', () => {
     const client: CogniteClient = setupLoggedInClient();
     const existingMts = await client.monitoringTasks.list({ limit: 1000 });
     // chunk by 100 and delete
-    const chunkSize = 100;
+    const chunkSize = 1;
     for (let i = 0; i < existingMts.items.length; i += chunkSize) {
       const chunk = existingMts.items.slice(i, i + chunkSize);
       const idsToDelete = chunk

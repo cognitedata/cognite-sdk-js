@@ -13,7 +13,7 @@ describe('alerts api', () => {
 
   beforeAll(async () => {
     // clean up
-    const chunkSize = 100;
+    const chunkSize = 1;
     // same for channels
     const existingChannels = await client.alerts.listChannels({ limit: 1000 });
     for (let i = 0; i < existingChannels.items.length; i += chunkSize) {
@@ -26,6 +26,37 @@ describe('alerts api', () => {
       } catch (error) {
         console.log('Error deleting channels during setup:', error);
         // ignore
+      }
+    }
+
+    // same for subscribers
+    const existingSubscribers = await client.alerts.listSubscribers({
+      limit: 1000,
+    });
+    for (let i = 0; i < existingSubscribers.items.length; i += chunkSize) {
+      const chunk = existingSubscribers.items.slice(i, i + chunkSize);
+      const idsToDelete = chunk
+        .filter((sub) => sub.externalId)
+        .map((sub) => ({ externalId: sub.externalId || '' }));
+      try {
+        await client.alerts.deleteSubscribers(idsToDelete);
+      } catch (error) {
+        console.log('Error deleting subscribers during setup:', error);
+        // ignore
+      }
+
+      // same for subscriptions
+      for (let j = 0; j < existingSubscribers.items.length; j += chunkSize) {
+        const subChunk = existingSubscribers.items.slice(j, j + chunkSize);
+        const subIdsToDelete = subChunk
+          .filter((sub) => sub.externalId)
+          .map((sub) => ({ externalId: sub.externalId || '' }));
+        try {
+          await client.alerts.deleteSubscription(subIdsToDelete);
+        } catch (error) {
+          console.log('Error deleting subscriptions during setup:', error);
+          // ignore
+        }
       }
     }
   });
