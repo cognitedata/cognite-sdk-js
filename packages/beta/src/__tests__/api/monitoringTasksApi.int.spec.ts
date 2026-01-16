@@ -1,6 +1,6 @@
 // Copyright 2022 Cognite AS
 
-import { describe, expect, test } from 'vitest';
+import { beforeAll, describe, expect, test } from 'vitest';
 import type CogniteClient from '../../cogniteClient';
 import {
   type Channel,
@@ -14,6 +14,31 @@ type SessionsResponse = {
 };
 
 describe('monitoring tasks api', () => {
+  beforeAll(async () => {
+    // clean up any existing test monitoring tasks
+    const client: CogniteClient = setupLoggedInClient();
+    const existingMts = await client.monitoringTasks.list({
+      filter: { externalIds: ['test_mt_'] },
+    });
+    // chunk by 100 and delete
+    const chunkSize = 100;
+    for (let i = 0; i < existingMts.items.length; i += chunkSize) {
+      const chunk = existingMts.items.slice(i, i + chunkSize);
+      const idsToDelete = chunk.map((mt) => ({ id: mt.id }));
+      await client.monitoringTasks.delete(idsToDelete);
+    }
+
+    // same for channels
+    const existingChannels = await client.alerts.listChannels({
+      filter: { externalIds: ['test_channel_mt_'] },
+    });
+    for (let i = 0; i < existingChannels.items.length; i += chunkSize) {
+      const chunk = existingChannels.items.slice(i, i + chunkSize);
+      const idsToDelete = chunk.map((ch) => ({ id: ch.id }));
+      await client.alerts.deleteChannels(idsToDelete);
+    }
+  });
+
   const client: CogniteClient = setupLoggedInClient();
   const ts = Date.now();
   const monitoringTaskExternalId = `test_mt_${ts}`;
