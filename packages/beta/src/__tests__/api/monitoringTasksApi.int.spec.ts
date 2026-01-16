@@ -22,7 +22,9 @@ describe('monitoring tasks api', () => {
     const chunkSize = 100;
     for (let i = 0; i < existingMts.items.length; i += chunkSize) {
       const chunk = existingMts.items.slice(i, i + chunkSize);
-      const idsToDelete = chunk.map((mt) => ({ id: mt.id }));
+      const idsToDelete = chunk
+        .filter((ch) => ch.externalId)
+        .map((ch) => ({ externalId: ch.externalId || '' }));
       try {
         await client.monitoringTasks.delete(idsToDelete);
       } catch (error) {
@@ -37,7 +39,9 @@ describe('monitoring tasks api', () => {
     });
     for (let i = 0; i < existingChannels.items.length; i += chunkSize) {
       const chunk = existingChannels.items.slice(i, i + chunkSize);
-      const idsToDelete = chunk.map((ch) => ({ id: ch.id }));
+      const idsToDelete = chunk
+        .filter((ch) => ch.externalId)
+        .map((ch) => ({ externalId: ch.externalId || '' }));
       // await client.alerts.deleteChannels(idsToDelete);
       try {
         await client.alerts.deleteChannels(idsToDelete);
