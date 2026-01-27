@@ -7,10 +7,10 @@ import {
   type IdEitherWithInstance,
   type MetadataMap,
 } from '@cognite/sdk-core';
+import type { IdEither, IgnoreUnknownIds } from '../../types';
+import { SyntheticTimeSeriesAPI } from './syntheticTimeSeriesApi';
 import type {
   ExternalTimeseries,
-  IdEither,
-  IgnoreUnknownIds,
   SyntheticQuery,
   TimeSeriesUpdate,
   Timeseries,
@@ -18,8 +18,7 @@ import type {
   TimeseriesAggregateQuery,
   TimeseriesFilterQuery,
   TimeseriesSearchFilter,
-} from '../../types';
-import { SyntheticTimeSeriesAPI } from './syntheticTimeSeriesApi';
+} from './types';
 
 export class TimeSeriesAPI extends BaseResourceAPI<Timeseries> {
   private syntheticTimeseriesApi: SyntheticTimeSeriesAPI;
