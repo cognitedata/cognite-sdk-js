@@ -234,8 +234,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@cognite/sdk-alpha@workspace:packages/alpha"
   dependencies:
-    "@cognite/sdk": "npm:^10.4.0"
-    "@cognite/sdk-core": "npm:^5.1.3"
+    "@cognite/sdk": "npm:^10.5.0"
+    "@cognite/sdk-core": "npm:^5.1.4"
   languageName: unknown
   linkType: soft
 
@@ -243,8 +243,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@cognite/sdk-beta@workspace:packages/beta"
   dependencies:
-    "@cognite/sdk": "npm:^10.4.0"
-    "@cognite/sdk-core": "npm:^5.1.3"
+    "@cognite/sdk": "npm:^10.5.0"
+    "@cognite/sdk-core": "npm:^5.1.4"
   languageName: unknown
   linkType: soft
 
@@ -264,7 +264,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@cognite/sdk-core@npm:^5.1.3, @cognite/sdk-core@workspace:packages/core":
+"@cognite/sdk-core@npm:^5.1.3, @cognite/sdk-core@npm:^5.1.4, @cognite/sdk-core@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@cognite/sdk-core@workspace:packages/core"
   dependencies:
@@ -289,7 +289,7 @@ __metadata:
     "@types/yargs": "npm:^17.0.10"
     "@vitest/coverage-v8": "npm:^2.0.5"
     es-check: "npm:^7.2.1"
-    happy-dom: "npm:^15.0.0"
+    happy-dom: "npm:^20.0.0"
     husky: "npm:^9.1.7"
     lerna: "npm:^7.4.2"
     markdown-link-check: "npm:^3.10.3"
@@ -317,11 +317,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@cognite/sdk@npm:^10.4.0, @cognite/sdk@workspace:packages/stable":
+"@cognite/sdk@npm:^10.4.0, @cognite/sdk@npm:^10.5.0, @cognite/sdk@workspace:packages/stable":
   version: 0.0.0-use.local
   resolution: "@cognite/sdk@workspace:packages/stable"
   dependencies:
-    "@cognite/sdk-core": "npm:^5.1.3"
+    "@cognite/sdk-core": "npm:^5.1.4"
     "@types/geojson": "npm:^7946.0.14"
     geojson: "npm:^0.5.0"
     lodash: "npm:^4.17.21"
@@ -1777,6 +1777,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/node@npm:^20.0.0":
+  version: 20.19.27
+  resolution: "@types/node@npm:20.19.27"
+  dependencies:
+    undici-types: "npm:~6.21.0"
+  checksum: 10c0/7599c24d80465c1aa6e29b53581fc20ad8862ff33e6eef31d05c1c706868476ee57319c89b802ea972dd4d64ce86d18020aa5344f851fb59b730ea509a63300f
+  languageName: node
+  linkType: hard
+
 "@types/normalize-package-data@npm:^2.4.0":
   version: 2.4.4
   resolution: "@types/normalize-package-data@npm:2.4.4"
@@ -1809,6 +1818,22 @@ __metadata:
   version: 3.0.3
   resolution: "@types/unist@npm:3.0.3"
   checksum: 10c0/2b1e4adcab78388e088fcc3c0ae8700f76619dbcb4741d7d201f87e2cb346bfc29a89003cfea2d76c996e1061452e14fcd737e8b25aacf949c1f2d6b2bc3dd60
+  languageName: node
+  linkType: hard
+
+"@types/whatwg-mimetype@npm:^3.0.2":
+  version: 3.0.2
+  resolution: "@types/whatwg-mimetype@npm:3.0.2"
+  checksum: 10c0/dad39d1e4abe760a0a963c84bbdbd26b1df0eb68aff83bdf6ecbb50ad781ead777f6906d19a87007790b750f7500a12e5624d31fc6a1529d14bd19b5c3a316d1
+  languageName: node
+  linkType: hard
+
+"@types/ws@npm:^8.18.1":
+  version: 8.18.1
+  resolution: "@types/ws@npm:8.18.1"
+  dependencies:
+    "@types/node": "npm:*"
+  checksum: 10c0/61aff1129143fcc4312f083bc9e9e168aa3026b7dd6e70796276dcfb2c8211c4292603f9c4864fae702f2ed86e4abd4d38aa421831c2fd7f856c931a481afbab
   languageName: node
   linkType: hard
 
@@ -4500,14 +4525,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"happy-dom@npm:^15.0.0":
-  version: 15.11.7
-  resolution: "happy-dom@npm:15.11.7"
+"happy-dom@npm:^20.0.0":
+  version: 20.1.0
+  resolution: "happy-dom@npm:20.1.0"
   dependencies:
-    entities: "npm:^4.5.0"
-    webidl-conversions: "npm:^7.0.0"
+    "@types/node": "npm:^20.0.0"
+    "@types/whatwg-mimetype": "npm:^3.0.2"
+    "@types/ws": "npm:^8.18.1"
     whatwg-mimetype: "npm:^3.0.0"
-  checksum: 10c0/22b08cac20192b08edf2e9c857ceeda8333a3301c4b5965a9550787b00db60d6d107c726390bd45a35305cd12ab086abd656bf957a408be0fcdc9fcd389f1973
+    ws: "npm:^8.18.3"
+  checksum: 10c0/a55b5fe6de845124644bc51184c8e761e75936de50ba5f4093ff844802d2b13f700c71a5e8236cb78c2b23c1368125b98f38e3c99e472b6d6becec7ddb720c58
   languageName: node
   linkType: hard
 
@@ -9000,6 +9027,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"undici-types@npm:~6.21.0":
+  version: 6.21.0
+  resolution: "undici-types@npm:6.21.0"
+  checksum: 10c0/c01ed51829b10aa72fc3ce64b747f8e74ae9b60eafa19a7b46ef624403508a54c526ffab06a14a26b3120d055e1104d7abe7c9017e83ced038ea5cf52f8d5e04
+  languageName: node
+  linkType: hard
+
 "undici@npm:^6.19.5":
   version: 6.21.1
   resolution: "undici@npm:6.21.1"
@@ -9301,13 +9335,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webidl-conversions@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "webidl-conversions@npm:7.0.0"
-  checksum: 10c0/228d8cb6d270c23b0720cb2d95c579202db3aaf8f633b4e9dd94ec2000a04e7e6e43b76a94509cdb30479bd00ae253ab2371a2da9f81446cc313f89a4213a2c4
-  languageName: node
-  linkType: hard
-
 "whatwg-encoding@npm:^3.1.1":
   version: 3.1.1
   resolution: "whatwg-encoding@npm:3.1.1"
@@ -9515,6 +9542,21 @@ __metadata:
     type-fest: "npm:^0.4.1"
     write-json-file: "npm:^3.2.0"
   checksum: 10c0/8e20db5fa444dad04e3703c18d8e0f89679caa60accbee5da9ea3aa076430b3f32d99f50d8860d29044245775795455c62d12d16a7856d407e30df7b79f39505
+  languageName: node
+  linkType: hard
+
+"ws@npm:^8.18.3":
+  version: 8.19.0
+  resolution: "ws@npm:8.19.0"
+  peerDependencies:
+    bufferutil: ^4.0.1
+    utf-8-validate: ">=5.0.2"
+  peerDependenciesMeta:
+    bufferutil:
+      optional: true
+    utf-8-validate:
+      optional: true
+  checksum: 10c0/4741d9b9bc3f9c791880882414f96e36b8b254e34d4b503279d6400d9a4b87a033834856dbdd94ee4b637944df17ea8afc4bce0ff4a1560d2166be8855da5b04
   languageName: node
   linkType: hard
 

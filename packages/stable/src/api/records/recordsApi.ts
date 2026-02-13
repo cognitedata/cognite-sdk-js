@@ -6,6 +6,7 @@ import type {
   RecordAggregateRequest,
   RecordAggregateResponse,
   RecordAggregateResults,
+  RecordDelete,
   RecordFilterRequest,
   RecordFilterResponse,
   RecordItem,
@@ -48,6 +49,68 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
     items: RecordWrite[]
   ): Promise<void> => {
     const path = this.url(`${encodeURIComponent(streamExternalId)}/records`);
+    await this.post<object>(path, {
+      data: { items },
+    });
+  };
+
+  /**
+   * [Upsert records into a stream](https://developer.cognite.com/api#tag/Records/operation/upsertRecords)
+   *
+   * Create or update records in a mutable stream. If a record with the same
+   * space + externalId already exists, it will be fully replaced (no partial updates).
+   *
+   * **Note:** This endpoint is only available for mutable streams.
+   *
+   * ```js
+   * await client.records.upsert('my_mutable_stream', [
+   *   {
+   *     space: 'mySpace',
+   *     externalId: 'record1',
+   *     sources: [
+   *       {
+   *         source: { type: 'container', space: 'mySpace', externalId: 'myContainer' },
+   *         properties: { temperature: 30.0, timestamp: '2025-01-01T00:00:00Z' }
+   *       }
+   *     ]
+   *   }
+   * ]);
+   * ```
+   */
+  public upsert = async (
+    streamExternalId: string,
+    items: RecordWrite[]
+  ): Promise<void> => {
+    const path = this.url(
+      `${encodeURIComponent(streamExternalId)}/records/upsert`
+    );
+    await this.post<object>(path, {
+      data: { items },
+    });
+  };
+
+  /**
+   * [Delete records from a stream](https://developer.cognite.com/api#tag/Records/operation/deleteRecords)
+   *
+   * Delete records from a mutable stream. The operation is idempotent - deleting
+   * non-existent records will not cause an error.
+   *
+   * **Note:** This endpoint is only available for mutable streams.
+   *
+   * ```js
+   * await client.records.delete('my_mutable_stream', [
+   *   { space: 'mySpace', externalId: 'record1' },
+   *   { space: 'mySpace', externalId: 'record2' }
+   * ]);
+   * ```
+   */
+  public delete = async (
+    streamExternalId: string,
+    items: RecordDelete[]
+  ): Promise<void> => {
+    const path = this.url(
+      `${encodeURIComponent(streamExternalId)}/records/delete`
+    );
     await this.post<object>(path, {
       data: { items },
     });
