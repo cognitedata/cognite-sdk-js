@@ -6,6 +6,13 @@ export interface ListResponse<T> extends CursorResponse<T> {
 
 export interface CursorResponse<T> extends ItemsWrapper<T> {
   nextCursor?: string;
+  /**
+   * Indicates whether more data is immediately available.
+   * When present, this takes precedence over `nextCursor` for determining
+   * if auto-pagination should continue. When `hasNext` is `false`, pagination
+   * stops even if `nextCursor` is defined.
+   */
+  hasNext?: boolean;
 }
 
 export type ItemsResponse<T> = ItemsWrapper<T[]>;
