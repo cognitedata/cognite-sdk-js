@@ -119,6 +119,9 @@ export default class CogniteClient extends BaseCogniteClient {
   public get annotations() {
     return accessApi(this.annotationsApi);
   }
+  /**
+   * @deprecated Retirement date: 2027-02-17.
+   */
   public get vision() {
     return accessApi(this.visionApi);
   }
