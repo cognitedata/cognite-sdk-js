@@ -120,9 +120,12 @@ export default class CogniteClient extends BaseCogniteClient {
     return accessApi(this.annotationsApi);
   }
   /**
-   * @deprecated Retirement date: 2027-02-17.
+   * @deprecated Retirement date: 2027-02-17. See https://docs.cognite.com/cdf/deprecated#deprecated-and-retired-features for more details.
    */
   public get vision() {
+    console.warn(
+      'The Vision API is deprecated and will be retired on 2027-02-17. See https://docs.cognite.com/cdf/deprecated#deprecated-and-retired-features for more details.'
+    );
     return accessApi(this.visionApi);
   }
   public get profiles() {
