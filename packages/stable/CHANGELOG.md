@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [10.8.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@10.5.0...@cognite/sdk@10.8.0) (2026-02-20)
+
+
+### Features
+
+* **api:** add cognite functions ([#1352](https://github.com/cognitedata/cognite-sdk-js/issues/1352)) ([10d781d](https://github.com/cognitedata/cognite-sdk-js/commit/10d781df57464aaf500c3873082177f87446eee2))
+
+
+
+
+
 # [10.7.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@10.5.0...@cognite/sdk@10.7.0) (2026-02-20)
 
 
