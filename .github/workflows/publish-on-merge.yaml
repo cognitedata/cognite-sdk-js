@@ -37,4 +37,7 @@ jobs:
         run: yarn build
 
       - name: Publish to NPM
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: lerna publish from-package --yes --no-git-reset
