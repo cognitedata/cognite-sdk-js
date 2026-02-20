@@ -10,9 +10,7 @@
         "**/*.test.ts"
       ],
       "message": "chore(release): publish new package versions [skip ci]",
-      "allowBranch": [
-        "release/*"
-      ],
+      "allowBranch": ["release/*"],
       "push": false,
       "gitTagVersion": false
     }

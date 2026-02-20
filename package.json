@@ -40,7 +40,7 @@
     "clean": "lerna run clean && rm -rf docs/ coverage/",
     "test": "yarn allsdk test --stream",
     "test:codecov": "vitest run --coverage",
-    "lint": "yarn g:biome ci",
+    "lint": "node scripts/lint.js",
     "lint:fix": "yarn g:biome lint --fix && yarn g:biome format --fix && yarn g:biome check --fix",
     "commit": "yarn lint:fix --since master && yarn test --since master && git commit -a && git push",
     "build": "yarn allsdk build --stream",
