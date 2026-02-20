@@ -36,6 +36,27 @@ jobs:
       - name: Build packages
         run: yarn build
 
+      # ADD DEBUG STEPS HERE
+      - name: Debug OIDC environment
+        run: |
+          echo "=== Node/NPM versions ==="
+          node --version
+          npm --version
+          echo ""
+          echo "=== NPM config ==="
+          npm config list
+          echo ""
+          echo "=== .npmrc contents ==="
+          cat $NPM_CONFIG_USERCONFIG 2>/dev/null || echo "No NPM_CONFIG_USERCONFIG"
+          cat .npmrc 2>/dev/null || echo "No .npmrc in workspace"
+
+      - name: Test OIDC with single package
+        working-directory: packages/core
+        run: |
+          echo "Testing npm publish --dry-run for @cognite/sdk-core"
+          npm publish --dry-run
+      # END DEBUG STEPS
+
       - name: Publish to NPM
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
