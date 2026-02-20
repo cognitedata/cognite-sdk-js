@@ -3,6 +3,53 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [10.8.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@10.5.0...@cognite/sdk@10.8.0) (2026-02-20)
+
+
+### Features
+
+* **api:** add cognite functions ([#1352](https://github.com/cognitedata/cognite-sdk-js/issues/1352)) ([10d781d](https://github.com/cognitedata/cognite-sdk-js/commit/10d781df57464aaf500c3873082177f87446eee2))
+
+
+
+
+
+# [10.7.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@10.5.0...@cognite/sdk@10.7.0) (2026-02-20)
+
+
+### Features
+
+* **api:** add cognite functions ([#1352](https://github.com/cognitedata/cognite-sdk-js/issues/1352)) ([10d781d](https://github.com/cognitedata/cognite-sdk-js/commit/10d781df57464aaf500c3873082177f87446eee2))
+
+
+
+
+
+# [10.6.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@10.5.0...@cognite/sdk@10.6.0) (2026-02-19)
+
+
+### Features
+
+* **api:** add cognite functions ([#1352](https://github.com/cognitedata/cognite-sdk-js/issues/1352)) ([10d781d](https://github.com/cognitedata/cognite-sdk-js/commit/10d781df57464aaf500c3873082177f87446eee2))
+
+
+
+
+
+# [10.5.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@10.4.0...@cognite/sdk@10.5.0) (2026-01-06)
+
+
+### Features
+
+* **records:** add aggregate endpoint support ([#1351](https://github.com/cognitedata/cognite-sdk-js/issues/1351)) ([1e49083](https://github.com/cognitedata/cognite-sdk-js/commit/1e4908343e31864d5d0ecade68b105b5fa63e584))
+* **records:** add support for ingesting/filtering immutable records ([#1341](https://github.com/cognitedata/cognite-sdk-js/issues/1341)) ([c43ac5f](https://github.com/cognitedata/cognite-sdk-js/commit/c43ac5f712dd1574ea1e182fc65e3d6ecb5c59f8))
+* **records:** add sync endpoint and dedicated filter types ([#1344](https://github.com/cognitedata/cognite-sdk-js/issues/1344)) ([41d07d8](https://github.com/cognitedata/cognite-sdk-js/commit/41d07d8cf3cf9a27b6a2ae81fe003e1bcc007958))
+* **records:** add upsert and delete endpoints for mutable records ([#1353](https://github.com/cognitedata/cognite-sdk-js/issues/1353)) ([eb6442d](https://github.com/cognitedata/cognite-sdk-js/commit/eb6442d61597ef3afe42ebf7492d863d6f4b7417))
+
+
+
+
+
 ## [10.4.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@10.3.0...@cognite/sdk@10.4.0) (2025-11-27)
 
 

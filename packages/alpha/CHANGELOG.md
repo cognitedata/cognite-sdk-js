@@ -3,6 +3,42 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.39.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.39.0...@cognite/sdk-alpha@0.39.3) (2026-02-20)
+
+**Note:** Version bump only for package @cognite/sdk-alpha
+
+
+
+
+
+## [0.39.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.39.0...@cognite/sdk-alpha@0.39.2) (2026-02-20)
+
+**Note:** Version bump only for package @cognite/sdk-alpha
+
+
+
+
+
+## [0.39.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.39.0...@cognite/sdk-alpha@0.39.1) (2026-02-19)
+
+**Note:** Version bump only for package @cognite/sdk-alpha
+
+
+
+
+
+# [0.39.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.38.1...@cognite/sdk-alpha@0.39.0) (2026-01-06)
+
+
+### Features
+
+* **alpha:** add support for Limit-service ([#1354](https://github.com/cognitedata/cognite-sdk-js/issues/1354)) ([bd738b9](https://github.com/cognitedata/cognite-sdk-js/commit/bd738b9aad62f0d6a6aefbe6cc8a943eab392892))
+* **simint:** make simulatorIntegrationExternalId optional for routines, revisions and runs ([#1346](https://github.com/cognitedata/cognite-sdk-js/issues/1346)) ([8014d6f](https://github.com/cognitedata/cognite-sdk-js/commit/8014d6f7297e084ac141046c59a2ea8408af2984))
+
+
+
+
+
 ## [0.38.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.38.0...@cognite/sdk-alpha@0.38.1) (2025-11-27)
 
 **Note:** Version bump only for package @cognite/sdk-alpha
