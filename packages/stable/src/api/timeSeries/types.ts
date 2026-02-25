@@ -2,6 +2,7 @@
 
 import type {
   CogniteExternalId,
+  CogniteInstanceId,
   CogniteInternalId,
   ExternalId,
   FilterQuery,
@@ -10,58 +11,20 @@ import type {
   InternalId,
   Limit,
 } from '@cognite/sdk-core';
-
-/** Timestamp - either a number (ms since epoch) or a Date object */
-type Timestamp = number | Date;
-
-/** Metadata - key-value string pairs */
-type Metadata = { [key: string]: string };
-
-/** External ID prefix for filtering */
-type ExternalIdPrefix = string;
-
-/** Partition string for parallel listing */
-type Partition = string;
-
-/** Instance ID in Cognite Data Models */
-interface CogniteInstanceId {
-  space: string;
-  externalId: string;
-}
-
-/** Created and last updated timestamps */
-interface CreatedAndLastUpdatedTime {
-  createdTime: Date;
-  lastUpdatedTime: Date;
-}
-
-/** Filter for created/updated time ranges */
-interface CreatedAndLastUpdatedTimeFilter {
-  createdTime?: { min?: Timestamp; max?: Timestamp };
-  lastUpdatedTime?: { min?: Timestamp; max?: Timestamp };
-}
-
-/** Datapoint timestamp info */
-interface DatapointInfo {
-  timestamp: Date;
-}
-
-/** Aggregate response with count */
-interface AggregateResponse {
-  count: number;
-}
-
-/** Nullable patch for string fields */
-type NullableSinglePatchString = { set: string } | { setNull: true };
-
-/** Nullable patch for number fields */
-type NullableSinglePatchLong = { set: number } | { setNull: true };
-
-/** Metadata patch operations */
-type MetadataPatch = { set: Metadata } | { add?: Metadata; remove?: string[] };
-
-/** Array patch for number arrays */
-type ArrayPatchLong = { set: number[] } | { add?: number[]; remove?: number[] };
+import type {
+  AggregateResponse,
+  ArrayPatchLong,
+  CreatedAndLastUpdatedTime,
+  CreatedAndLastUpdatedTimeFilter,
+  DatapointInfo,
+  ExternalIdPrefix,
+  Metadata,
+  MetadataPatch,
+  NullableSinglePatchLong,
+  NullableSinglePatchString,
+  Partition,
+  Timestamp,
+} from '../../types/common';
 
 // =====================================================
 // Time Series type aliases

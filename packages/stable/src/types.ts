@@ -13,6 +13,25 @@ import type {
   Limit,
 } from '@cognite/sdk-core';
 import type { AnnotationData } from './api/annotations/types.gen';
+import type {
+  AggregateResponse,
+  ArrayPatchLong,
+  CreatedAndLastUpdatedTime,
+  CreatedAndLastUpdatedTimeFilter,
+  DatapointInfo,
+  DateRange,
+  ExternalIdPrefix,
+  Metadata,
+  MetadataPatch,
+  NullableSinglePatchLong,
+  ObjectPatch,
+  Partition,
+  Range,
+  Timestamp,
+} from './types/common';
+import type { TimeseriesFilter } from './api/timeSeries/types';
+
+export * from './types/common';
 
 export type {
   ListResponse,
@@ -227,10 +246,6 @@ export type ArrayPatchString =
   | { set: string[] }
   | { add?: string[]; remove?: string[] };
 
-export type ArrayPatchLong =
-  | { set: number[] }
-  | { add?: number[]; remove?: number[] };
-
 export interface Asset
   extends ExternalAsset,
     AssetInternalId,
@@ -247,13 +262,6 @@ export interface Asset
    * The parent's externalId if defined
    */
   parentExternalId?: CogniteExternalId;
-}
-
-export interface AggregateResponse {
-  /**
-   * Size of the aggregation group
-   */
-  count: number;
 }
 
 export interface UniqueValuesAggregateResponse extends AggregateResponse {
@@ -544,16 +552,6 @@ export interface CreateRevision3D {
 
 export interface CreatedTime {
   createdTime: Date;
-}
-
-export interface CreatedAndLastUpdatedTime {
-  lastUpdatedTime: Date;
-  createdTime: Date;
-}
-
-export interface CreatedAndLastUpdatedTimeFilter {
-  lastUpdatedTime?: DateRange;
-  createdTime?: DateRange;
 }
 
 export type DELETE = 'DELETE';
@@ -871,8 +869,6 @@ export interface DatapointsQueryProperties extends Limit, Cursor {
   timeZone?: string;
 }
 
-export type DateRange = Range<Timestamp>;
-
 export type DeleteAssetMapping3D = AssetMapping3DBase;
 
 export type EXECUTE = 'EXECUTE';
@@ -1051,11 +1047,6 @@ export interface ExternalFileInfo {
   geoLocation?: FileGeoLocation;
 }
 
-/**
- * Prefix filter on externalId. (case-sensitive)
- */
-export type ExternalIdPrefix = string;
-
 export interface ExternalSequence extends SequenceBase {
   /**
    * List of column definitions
@@ -1201,10 +1192,6 @@ export interface DatapointAggregate extends DatapointInfo {
   continuousVariance?: number;
   discreteVariance?: number;
   totalVariation?: number;
-}
-
-export interface DatapointInfo {
-  timestamp: Date;
 }
 
 export interface DoubleDatapoint extends DatapointInfo {
@@ -1489,14 +1476,6 @@ export interface ListSecurityCategories extends FilterQuery {
 
 export type MEMBEROF = 'MEMBEROF';
 
-/**
- * Custom, application specific metadata.
- * Maximum length of key is 32 bytes, value 512 bytes, up to 16 key-value pairs.
- */
-export interface Metadata {
-  [key: string]: string;
-}
-
 export interface Model3D {
   /**
    * The name of the model.
@@ -1566,41 +1545,7 @@ export interface Node3DProperties {
 
 export type NullableProperty<T> = T | { isNull: boolean };
 
-export type NullableSinglePatchLong = { set: number } | { setNull: true };
-
-export type NullableSinglePatchString = { set: string } | { setNull: true };
-
 export type OWNER = 'OWNER';
-
-export type ObjectPatch<T> =
-  | {
-      /**
-       * Set the key-value pairs. All existing key-value pairs will be removed.
-       */
-      set: { [key: string]: T };
-    }
-  | {
-      /**
-       * Add the key-value pairs. Values for existing keys will be overwritten.
-       */
-      add: { [key: string]: T };
-      /**
-       * Remove the key-value pairs with given keys.
-       */
-      remove: string[];
-    };
-
-export type MetadataPatch = ObjectPatch<string>;
-
-/**
- * Splits the data set into N partitions.
- * This should NOT be used for frontend applications.
- * Partitions are formatted as `n/m`, where `n` is the index of the parititon, and `m` is the total number or partitions.
- * i.e. 20 partitions would have one request with `partition: 1/20`, then another `partition: 2/20` and so on.
- * You need to use `autoPagingToArray(...)` on each partition in order to receive all the data.
- * @example 1/10
- */
-export type Partition = string;
 
 export interface ExternalDatapoint {
   timestamp: Timestamp;
@@ -1643,11 +1588,6 @@ export interface OidcConfiguration {
 }
 
 export type READ = 'READ';
-
-export interface Range<T> {
-  min?: T;
-  max?: T;
-}
 
 export interface RawDBName {
   /**
@@ -2238,12 +2178,6 @@ export const SortOrder = {
  */
 export type SortOrder = 'asc' | 'desc';
 
-/**
- * A point in time, either a number or a Date object.
- * The Date is converted to a number when api calls are made.
- */
-export type Timestamp = number | Date;
-
 export type Tuple3<T> = T[];
 
 export type Tuple2<T> = [T, T];
@@ -2711,7 +2645,7 @@ export type SequencesSource = {
 
 export type TimeSeriesSource = {
   type: 'timeSeries';
-  filter?: ObjectOrString<import('./api/timeSeries/types').TimeseriesFilter>;
+  filter?: ObjectOrString<TimeseriesFilter>;
   mappings?: { [K in string]: string };
 };
 
