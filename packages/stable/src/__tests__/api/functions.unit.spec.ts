@@ -82,6 +82,7 @@ describe('Functions unit test', () => {
     const func = await client.functions.retrieve([{ id: 123 }]);
     expect(func[0].id).toBe(mockFunction.id);
     expect(func[0].name).toBe(mockFunction.name);
+    expect(func[0].lastCalled).toBeInstanceOf(Date);
   });
 
   test('delete', async () => {
