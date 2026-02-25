@@ -4,6 +4,7 @@ import {
   BaseResourceAPI,
   type CursorAndAsyncIterator,
 } from '@cognite/sdk-core';
+import type { ContainerListParams } from './types';
 import type {
   ContainerCollectionResponse,
   ContainerCreateDefinition,
@@ -11,7 +12,6 @@ import type {
   ListOfSpaceExternalIdsRequest,
   ListOfSpaceExternalIdsResponse,
 } from './types.gen';
-import type { ContainerListParams } from './types';
 
 export class ContainersAPI extends BaseResourceAPI<ContainerDefinition> {
   /**
