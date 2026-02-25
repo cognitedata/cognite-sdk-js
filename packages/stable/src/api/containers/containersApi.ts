@@ -8,20 +8,10 @@ import type {
   ContainerCollectionResponse,
   ContainerCreateDefinition,
   ContainerDefinition,
-  CursorQueryParameter,
-  IncludeGlobalQueryParameter,
   ListOfSpaceExternalIdsRequest,
   ListOfSpaceExternalIdsResponse,
-  ReducedLimitQueryParameter,
-  SpaceQueryParameter,
-  UsedForQueryParameter,
 } from './types.gen';
-
-type ContainerListParams = IncludeGlobalQueryParameter &
-  CursorQueryParameter &
-  ReducedLimitQueryParameter &
-  SpaceQueryParameter &
-  UsedForQueryParameter;
+import type { ContainerListParams } from './types';
 
 export class ContainersAPI extends BaseResourceAPI<ContainerDefinition> {
   /**
