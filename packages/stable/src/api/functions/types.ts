@@ -118,6 +118,10 @@ export interface CogniteFunction extends ExternalCogniteFunction {
    * Error that occurred during function build.
    */
   error?: FunctionBuildError;
+  /**
+   * The last time the function was called. Not present if the function has never been called.
+   */
+  lastCalled?: Date;
 }
 
 /**
