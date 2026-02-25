@@ -25,6 +25,7 @@ export class VisionAPI extends BaseResourceAPI<VisionExtractGetResponse> {
    * ```js
    * const job = await client.vision.extract(['TextDetection', 'AssetTagDetection', 'PeopleDetection'], [{ fileId: 1234 }]);
    * ```
+   * @deprecated Retirement date: 2027-02-17. See https://docs.cognite.com/cdf/deprecated#deprecated-and-retired-features for more details.
    */
   public extract = async (
     features: VisionExtractFeature[],
@@ -58,6 +59,7 @@ export class VisionAPI extends BaseResourceAPI<VisionExtractGetResponse> {
    *  const predictions = item.predictions // do something with the predictions
    * });
    * ```
+   * @deprecated Retirement date: 2027-02-17. See https://docs.cognite.com/cdf/deprecated#deprecated-and-retired-features for more details.
    */
   public getExtractJob = async (
     jobId: JobId,
