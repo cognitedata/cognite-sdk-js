@@ -42,6 +42,7 @@ export * from './api/containers/types';
 export * from './api/geospatial/types';
 export * from './api/streams/types';
 export * from './api/records/types';
+export * from './api/functions/types';
 
 export interface Acl<ActionsType, ScopeType> {
   actions: ActionsType[];
