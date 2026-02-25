@@ -13,6 +13,7 @@ import type {
   Limit,
 } from '@cognite/sdk-core';
 import type { AnnotationData } from './api/annotations/types.gen';
+import type { TimeseriesFilter } from './api/timeSeries/types';
 import type {
   AggregateResponse,
   ArrayPatchLong,
@@ -29,7 +30,6 @@ import type {
   Range,
   Timestamp,
 } from './types/common';
-import type { TimeseriesFilter } from './api/timeSeries/types';
 
 export * from './types/common';
 
