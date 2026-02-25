@@ -157,11 +157,10 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
    * [Sync records from a stream](https://developer.cognite.com/api#tag/Records/operation/syncRecords)
    *
    * Sync records from a stream using a cursor-based approach. Supports both
-   * auto-pagination and manual pagination.
-   *
-   * The sync API always returns `nextCursor` (for resumption) and `hasNext`
-   * (to indicate whether more data is immediately available). Auto-pagination
-   * uses `hasNext` to determine when to stop.
+   * auto-pagination and manual pagination. The sync API always returns
+   * nextCursor (for resumption) and hasNext (to indicate whether more
+   * data is immediately available). Auto-pagination uses hasNext to
+   * determine when to stop.
    *
    * ```js
    * // Get first page with items, nextCursor, and hasNext
@@ -197,11 +196,10 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
       };
     };
 
-    const firstPagePromise: Promise<
-      RecordsSyncListResponse<SyncRecordItem[]>
-    > = callSyncEndpoint(request).then((syncData) =>
-      addSyncNextPageFunction(callSyncEndpoint, syncData, request)
-    );
+    const firstPagePromise: Promise<RecordsSyncListResponse<SyncRecordItem[]>> =
+      callSyncEndpoint(request).then((syncData) =>
+        addSyncNextPageFunction(callSyncEndpoint, syncData, request)
+      );
 
     const autoPaginationMethods = makeAutoPaginationMethods(firstPagePromise);
 
@@ -244,9 +242,7 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
   };
 }
 
-type SyncEndpointCaller = (
-  params?: RecordSyncRequest
-) => Promise<{
+type SyncEndpointCaller = (params?: RecordSyncRequest) => Promise<{
   items: SyncRecordItem[];
   nextCursor: string;
   hasNext: boolean;
@@ -272,4 +268,3 @@ function addSyncNextPageFunction(
     next,
   };
 }
-

@@ -339,8 +339,10 @@ export interface RecordsSyncAsyncIterator<T> extends AsyncIterableIterator<T> {
  * (with `hasNext` and `nextCursor` for manual pagination), or used with
  * auto-pagination methods like `autoPagingToArray`.
  */
-export type RecordsSyncCursorAndAsyncIterator<T> =
-  Promise<RecordsSyncListResponse<T[]>> & RecordsSyncAsyncIterator<T>;
+export type RecordsSyncCursorAndAsyncIterator<T> = Promise<
+  RecordsSyncListResponse<T[]>
+> &
+  RecordsSyncAsyncIterator<T>;
 
 /**
  * Property reference for aggregates.
