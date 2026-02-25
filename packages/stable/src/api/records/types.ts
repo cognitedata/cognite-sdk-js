@@ -1,5 +1,11 @@
 // Copyright 2025 Cognite AS
 
+import type {
+  AutoPagingEach,
+  AutoPagingToArray,
+  ListResponse,
+} from '@cognite/sdk-core';
+
 /**
  * @pattern ^[a-zA-Z][a-zA-Z0-9_-]{0,41}[a-zA-Z0-9]?$
  */
@@ -308,6 +314,33 @@ export interface RecordSyncResponse {
   /** Whether there are more records to sync */
   hasNext: boolean;
 }
+
+/**
+ * Enriched sync response that includes a `next` function for page-chaining.
+ * Unlike the generic `ListResponse`, this always includes `hasNext` and `nextCursor`
+ * since the records sync API guarantees their presence.
+ */
+export interface RecordsSyncListResponse<T> extends ListResponse<T> {
+  nextCursor: string;
+  hasNext: boolean;
+  next?: () => Promise<RecordsSyncListResponse<T>>;
+}
+
+/**
+ * Async iterator for records sync with standard auto-pagination methods.
+ */
+export interface RecordsSyncAsyncIterator<T> extends AsyncIterableIterator<T> {
+  autoPagingEach: AutoPagingEach<T>;
+  autoPagingToArray: AutoPagingToArray<T>;
+}
+
+/**
+ * Return type for `records.sync()`. Can be awaited for a single page
+ * (with `hasNext` and `nextCursor` for manual pagination), or used with
+ * auto-pagination methods like `autoPagingToArray`.
+ */
+export type RecordsSyncCursorAndAsyncIterator<T> =
+  Promise<RecordsSyncListResponse<T[]>> & RecordsSyncAsyncIterator<T>;
 
 /**
  * Property reference for aggregates.

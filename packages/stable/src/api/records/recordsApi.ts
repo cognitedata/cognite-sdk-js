@@ -1,7 +1,6 @@
 // Copyright 2025 Cognite AS
 
-import type { CursorAndAsyncIterator } from '@cognite/sdk-core';
-import { BaseResourceAPI } from '@cognite/sdk-core';
+import { BaseResourceAPI, makeAutoPaginationMethods } from '@cognite/sdk-core';
 import type {
   RecordAggregateRequest,
   RecordAggregateResponse,
@@ -13,6 +12,8 @@ import type {
   RecordSyncRequest,
   RecordSyncResponse,
   RecordWrite,
+  RecordsSyncCursorAndAsyncIterator,
+  RecordsSyncListResponse,
   SyncRecordItem,
 } from './types';
 
@@ -158,6 +159,10 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
    * Sync records from a stream using a cursor-based approach. Supports both
    * auto-pagination and manual pagination.
    *
+   * The sync API always returns `nextCursor` (for resumption) and `hasNext`
+   * (to indicate whether more data is immediately available). Auto-pagination
+   * uses `hasNext` to determine when to stop.
+   *
    * ```js
    * // Get first page with items, nextCursor, and hasNext
    * const response = await client.records.sync('my_stream', {
@@ -170,13 +175,12 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
   public sync = (
     streamExternalId: string,
     request: RecordSyncRequest
-  ): CursorAndAsyncIterator<SyncRecordItem> => {
+  ): RecordsSyncCursorAndAsyncIterator<SyncRecordItem> => {
     const path = this.url(
       `${encodeURIComponent(streamExternalId)}/records/sync`
     );
 
     const callSyncEndpoint = async (params?: RecordSyncRequest) => {
-      // When using cursor for pagination, remove initializeCursor
       let requestData = params;
       if (params?.cursor && params?.initializeCursor) {
         const { initializeCursor: _, ...rest } = params;
@@ -186,21 +190,25 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
         data: requestData,
       });
       const items = this.addToMapAndReturn(response.data.items, response);
-
       return {
-        ...response,
-        data: {
-          items,
-          nextCursor: response.data.nextCursor,
-          hasNext: response.data.hasNext,
-        },
+        items,
+        nextCursor: response.data.nextCursor,
+        hasNext: response.data.hasNext,
       };
     };
 
-    return this.cursorBasedEndpoint<RecordSyncRequest, SyncRecordItem>(
-      callSyncEndpoint,
-      request
+    const firstPagePromise: Promise<
+      RecordsSyncListResponse<SyncRecordItem[]>
+    > = callSyncEndpoint(request).then((syncData) =>
+      addSyncNextPageFunction(callSyncEndpoint, syncData, request)
     );
+
+    const autoPaginationMethods = makeAutoPaginationMethods(firstPagePromise);
+
+    return Object.assign(
+      firstPagePromise,
+      autoPaginationMethods
+    ) as RecordsSyncCursorAndAsyncIterator<SyncRecordItem>;
   };
 
   /**
@@ -235,3 +243,33 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
     return response.data.aggregates;
   };
 }
+
+type SyncEndpointCaller = (
+  params?: RecordSyncRequest
+) => Promise<{
+  items: SyncRecordItem[];
+  nextCursor: string;
+  hasNext: boolean;
+}>;
+
+function addSyncNextPageFunction(
+  endpoint: SyncEndpointCaller,
+  syncData: { items: SyncRecordItem[]; nextCursor: string; hasNext: boolean },
+  query: RecordSyncRequest
+): RecordsSyncListResponse<SyncRecordItem[]> {
+  const { nextCursor, hasNext } = syncData;
+  const next =
+    hasNext && nextCursor
+      ? () =>
+          endpoint({ ...query, cursor: nextCursor }).then((data) =>
+            addSyncNextPageFunction(endpoint, data, query)
+          )
+      : undefined;
+  return {
+    items: syncData.items,
+    nextCursor,
+    hasNext,
+    next,
+  };
+}
+
