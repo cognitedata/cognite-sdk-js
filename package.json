@@ -67,7 +67,7 @@
     "es-check": "^7.2.1",
     "happy-dom": "^20.0.0",
     "husky": "^9.1.7",
-    "lerna": "^7.4.2",
+    "lerna": "^9.0.0",
     "markdown-link-check": "^3.10.3",
     "nock": "13.5.6",
     "openapi-types": "^11.0.1",
