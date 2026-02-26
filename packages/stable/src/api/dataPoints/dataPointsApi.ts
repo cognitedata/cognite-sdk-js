@@ -3,6 +3,11 @@
 import { BaseResourceAPI } from '@cognite/sdk-core';
 import type { ItemsWrapper } from '@cognite/sdk-core';
 import type {
+  DatapointInfo,
+  IgnoreUnknownIds,
+  Timestamp,
+} from '../../types/common';
+import type {
   DatapointAggregate,
   DatapointAggregates,
   Datapoints,
@@ -12,7 +17,6 @@ import type {
   ExternalDatapointsQuery,
   LatestDataBeforeRequest,
 } from './types';
-import type { DatapointInfo, IgnoreUnknownIds, Timestamp } from '../../types/common';
 
 export class DataPointsAPI extends BaseResourceAPI<
   DatapointAggregates | Datapoints
