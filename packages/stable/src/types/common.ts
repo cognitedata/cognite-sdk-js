@@ -73,3 +73,11 @@ export type MetadataPatch = ObjectPatch<string>;
 export type ArrayPatchLong =
   | { set: number[] }
   | { add?: number[]; remove?: number[] };
+
+export interface IgnoreUnknownIds {
+  /**
+   * Ignore IDs and external IDs that are not found
+   * @default false
+   */
+  ignoreUnknownIds?: boolean;
+}
