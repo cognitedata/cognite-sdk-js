@@ -203,10 +203,7 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
 
     const autoPaginationMethods = makeAutoPaginationMethods(firstPagePromise);
 
-    return Object.assign(
-      firstPagePromise,
-      autoPaginationMethods
-    ) as RecordsSyncCursorAndAsyncIterator<SyncRecordItem>;
+    return Object.assign(firstPagePromise, autoPaginationMethods);
   };
 
   /**
