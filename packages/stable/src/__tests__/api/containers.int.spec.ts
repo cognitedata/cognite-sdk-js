@@ -107,19 +107,25 @@ describe('Containers integration test', () => {
   it('should successfully list Containers with single usedFor filter', async () => {
     const containers = await client.containers.list({
       usedFor: ['record'],
+      includeGlobal: true,
       limit: 1000,
     });
     expect(containers.items).toBeDefined();
-    expect(Array.isArray(containers.items)).toBe(true);
+    for (const container of containers.items) {
+      expect(container.usedFor).toBe('record');
+    }
   });
 
   it('should successfully list Containers with multiple usedFor filters', async () => {
     const containers = await client.containers.list({
       usedFor: ['node', 'record'],
+      includeGlobal: true,
       limit: 1000,
     });
     expect(containers.items).toBeDefined();
-    expect(Array.isArray(containers.items)).toBe(true);
+    for (const container of containers.items) {
+      expect(['node', 'record']).toContain(container.usedFor);
+    }
   });
 
   it('should successfully list Containers via cursor', async () => {
