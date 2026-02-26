@@ -46,4 +46,19 @@ export { TimeSeriesAPI } from './api/timeSeries/timeSeriesApi';
 export { FunctionsAPI } from './api/functions/functionsApi';
 export * from './api/templates';
 
+export { AnnotationsAPI } from './api/annotations/annotationsApi';
+export { ContainersAPI } from './api/containers/containersApi';
+export { DocumentsAPI } from './api/documents/documentsApi';
+export { GeospatialAPI } from './api/geospatial/geospatialAPI';
+export { InstancesAPI } from './api/instances/instancesApi';
+export { DataModelsAPI } from './api/models/datamodelsApi';
+export { RecordsAPI } from './api/records/recordsApi';
+export { SessionsApi } from './api/sessions/sessionsApi';
+export { SpacesAPI } from './api/spaces/spacesApi';
+export { StreamsAPI } from './api/streams/streamsApi';
+export { UnitsAPI } from './api/units/unitsApi';
+export { ProfilesAPI } from './api/userProfiles/profilesApi';
+export { ViewsAPI } from './api/views/viewsApi';
+export { VisionAPI } from './api/vision/visionApi';
+
 export * from './types';
