@@ -22,6 +22,13 @@ describe('DateParser', () => {
     expect(output.items[0].timestamp).toEqual(nowInUnixTimestamp);
   });
 
+  test('preserves null and undefined for date fields instead of converting to epoch', () => {
+    const input = { items: [{ createdTime: null, deletedTime: undefined }] };
+    const output = dateParser.parseToDates(input);
+    expect(output.items[0].createdTime).toBeNull();
+    expect(output.items[0].deletedTime).toBeUndefined();
+  });
+
   test('transform unix timestamp in response to Date', async () => {
     const input = {
       createdTime: nowInUnixTimestamp,

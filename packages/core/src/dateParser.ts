@@ -26,7 +26,13 @@ export default class DateParser {
    */
   parseToDates<T>(data: T): T {
     return cloneDeepWith(data, (value, key, object) => {
-      if (this.isDatePropName(key)) return new Date(value);
+      // NOTE: null/undefined are passed through unchanged so callers can
+      // distinguish "field not set" from a real timestamp. The TypeScript
+      // types for optional date fields (e.g. `deletedTime?: Date`) don't
+      // yet reflect this — they should be `Date | null` — but that is a
+      // semver-major breaking change deferred to a future release.
+      if (this.isDatePropName(key))
+        return value == null ? value : new Date(value);
       if (key !== undefined && !this.isPath(key) && !Array.isArray(object)) {
         // There is a key, but it is not in lead.
         // The key is not the index of an array.
