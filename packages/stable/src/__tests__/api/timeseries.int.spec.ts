@@ -151,6 +151,14 @@ describe('Timeseries integration test', () => {
     expect(createdTimeseries[0].metadata?.createdTime).not.toBeInstanceOf(Date);
   });
 
+  test('type field is returned on retrieve', async () => {
+    const [single] = await client.timeseries.retrieve([
+      { id: createdTimeseries[0].id },
+    ]);
+    expect(single.type).toBeDefined();
+    expect(['numeric', 'string', 'state']).toContain(single.type);
+  });
+
   test('retrieve', async () => {
     const [single] = await client.timeseries.retrieve([
       { id: createdTimeseries[0].id },
