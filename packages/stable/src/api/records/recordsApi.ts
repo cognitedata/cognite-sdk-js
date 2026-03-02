@@ -1,7 +1,6 @@
 // Copyright 2025 Cognite AS
 
-import type { CursorAndAsyncIterator } from '@cognite/sdk-core';
-import { BaseResourceAPI } from '@cognite/sdk-core';
+import { BaseResourceAPI, makeAutoPaginationMethods } from '@cognite/sdk-core';
 import type {
   RecordAggregateRequest,
   RecordAggregateResponse,
@@ -13,6 +12,8 @@ import type {
   RecordSyncRequest,
   RecordSyncResponse,
   RecordWrite,
+  RecordsSyncCursorAndAsyncIterator,
+  RecordsSyncListResponse,
   SyncRecordItem,
 } from './types';
 
@@ -155,50 +156,54 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
   /**
    * [Sync records from a stream](https://developer.cognite.com/api#tag/Records/operation/syncRecords)
    *
-   * Sync records from a stream using a cursor-based approach. Supports auto-pagination.
+   * Sync records from a stream using a cursor-based approach. Supports both
+   * auto-pagination and manual pagination. The sync API always returns
+   * nextCursor (for resumption) and hasNext (to indicate whether more
+   * data is immediately available). Auto-pagination uses hasNext to
+   * determine when to stop.
    *
    * ```js
-   * // Get first page
+   * // Get first page with items, nextCursor, and hasNext
    * const response = await client.records.sync('my_stream', {
    *   initializeCursor: '1d-ago',
    *   sources: [{ source: { type: 'container', space: 'mySpace', externalId: 'myContainer' }, properties: ['*'] }],
    * });
-   *
-   * // Auto-paginate to array
-   * const allRecords = await client.records
-   *   .sync('my_stream', { initializeCursor: '1d-ago', sources: [{ source: { type: 'container', space: 'mySpace', externalId: 'myContainer' }, properties: ['*'] }] })
-   *   .autoPagingToArray({ limit: 10000 });
-   *
-   * // Iterate with for-await
-   * for await (const record of client.records.sync('my_stream', { initializeCursor: '1d-ago' })) {
-   *   console.log(record);
-   * }
+   * console.log(response.items, response.nextCursor, response.hasNext);
    * ```
    */
   public sync = (
     streamExternalId: string,
     request: RecordSyncRequest
-  ): CursorAndAsyncIterator<SyncRecordItem> => {
+  ): RecordsSyncCursorAndAsyncIterator<SyncRecordItem> => {
     const path = this.url(
       `${encodeURIComponent(streamExternalId)}/records/sync`
     );
 
     const callSyncEndpoint = async (params?: RecordSyncRequest) => {
+      let requestData = params;
+      if (params?.cursor && params?.initializeCursor) {
+        const { initializeCursor: _, ...rest } = params;
+        requestData = rest;
+      }
       const response = await this.post<RecordSyncResponse>(path, {
-        data: params,
+        data: requestData,
       });
       const items = this.addToMapAndReturn(response.data.items, response);
-      // Map hasNext to nextCursor for the pagination mechanism
-      const nextCursor = response.data.hasNext
-        ? response.data.nextCursor
-        : undefined;
-      return { ...response, data: { items, nextCursor } };
+      return {
+        items,
+        nextCursor: response.data.nextCursor,
+        hasNext: response.data.hasNext,
+      };
     };
 
-    return this.cursorBasedEndpoint<RecordSyncRequest, SyncRecordItem>(
-      callSyncEndpoint,
-      request
-    );
+    const firstPagePromise: Promise<RecordsSyncListResponse<SyncRecordItem[]>> =
+      callSyncEndpoint(request).then((syncData) =>
+        addSyncNextPageFunction(callSyncEndpoint, syncData, request)
+      );
+
+    const autoPaginationMethods = makeAutoPaginationMethods(firstPagePromise);
+
+    return Object.assign(firstPagePromise, autoPaginationMethods);
   };
 
   /**
@@ -231,5 +236,32 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
       data: request,
     });
     return response.data.aggregates;
+  };
+}
+
+type SyncEndpointCaller = (params?: RecordSyncRequest) => Promise<{
+  items: SyncRecordItem[];
+  nextCursor: string;
+  hasNext: boolean;
+}>;
+
+function addSyncNextPageFunction(
+  endpoint: SyncEndpointCaller,
+  syncData: { items: SyncRecordItem[]; nextCursor: string; hasNext: boolean },
+  query: RecordSyncRequest
+): RecordsSyncListResponse<SyncRecordItem[]> {
+  const { nextCursor, hasNext } = syncData;
+  const next =
+    hasNext && nextCursor
+      ? () =>
+          endpoint({ ...query, cursor: nextCursor }).then((data) =>
+            addSyncNextPageFunction(endpoint, data, query)
+          )
+      : undefined;
+  return {
+    items: syncData.items,
+    nextCursor,
+    hasNext,
+    next,
   };
 }

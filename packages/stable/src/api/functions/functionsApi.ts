@@ -16,7 +16,7 @@ export class FunctionsAPI extends BaseResourceAPI<CogniteFunction> {
    * @hidden
    */
   protected getDateProps() {
-    return this.pickDateProps(['items'], ['createdTime']);
+    return this.pickDateProps(['items'], ['createdTime', 'lastCalled']);
   }
 
   /**

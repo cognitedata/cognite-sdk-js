@@ -2,7 +2,11 @@
 
 import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest';
 import type CogniteClient from '../../cogniteClient';
-import type { ContainerCreateDefinition, RecordDelete } from '../../types';
+import type {
+  ContainerCreateDefinition,
+  RecordDelete,
+  SyncRecordItem,
+} from '../../types';
 import {
   RECORDS_TEST_SPACE,
   randomInt,
@@ -303,7 +307,7 @@ describe('records integration test', () => {
     const result = await vi.waitFor(
       async () => {
         const response = await client.records.sync(immutableStreamId, {
-          initializeCursor: '1d-ago',
+          initializeCursor: '5m-ago',
           sources: [
             {
               source: {
@@ -328,7 +332,12 @@ describe('records integration test', () => {
       { timeout: 5_000, interval: 200 }
     );
 
-    // The next() function will be defined if nextCursor is present
+    // Verify nextCursor and hasNext are always available for manual pagination
+    expect(result.nextCursor).toBeDefined();
+    expect(typeof result.nextCursor).toBe('string');
+    expect(typeof result.hasNext).toBe('boolean');
+
+    // The next() function will be defined based on hasNext
     expect(typeof result.next === 'function' || result.next === undefined).toBe(
       true
     );
@@ -403,12 +412,12 @@ describe('records integration test', () => {
       },
     ]);
 
+    // Wait for records to appear and test autoPagingToArray with limit: 1 to force pagination
     const records = await vi.waitFor(
       async () => {
-        // Use limit: 1 to force multiple pages and verify cursor exhaustion
         const items = await client.records
           .sync(immutableStreamId, {
-            initializeCursor: '1d-ago',
+            initializeCursor: '5m-ago',
             sources: [
               {
                 source: {
@@ -425,7 +434,7 @@ describe('records integration test', () => {
                 value: testName,
               },
             },
-            limit: 1,
+            limit: 1, // Force pagination by using small limit
           })
           .autoPagingToArray({ limit: 100 });
         expect(items.length).toBe(3);
@@ -446,7 +455,7 @@ describe('records integration test', () => {
       .map((r) => r.properties?.[testSpaceId][testContainerId].value)
       .sort();
     expect(values).toEqual([1, 2, 3]);
-  });
+  }, 10_000);
 
   test('aggregate records with metric aggregates', async () => {
     const testName = `aggregate_metrics_${randomInt()}`;
@@ -825,7 +834,7 @@ describe('mutable records integration test', () => {
     await vi.waitFor(
       async () => {
         const response = await client.records.sync(mutableStreamId, {
-          initializeCursor: '1d-ago',
+          initializeCursor: '5m-ago',
           sources: [{ source, properties: ['*'] }],
           filter: {
             equals: {
@@ -851,7 +860,7 @@ describe('mutable records integration test', () => {
         // Use autoPagingToArray to get all sync items and find the deleted one
         const items = await client.records
           .sync(mutableStreamId, {
-            initializeCursor: '1d-ago',
+            initializeCursor: '5m-ago',
             filter: {
               and: [
                 {
@@ -880,4 +889,121 @@ describe('mutable records integration test', () => {
       { timeout: 10_000, interval: 200 }
     );
   }, 30_000);
+
+  test('sync with manual pagination using hasNext and nextCursor', async () => {
+    const testName = `manual_pagination_test_${randomInt()}`;
+
+    // Ingest 3 records to test manual pagination
+    await client.records.ingest(mutableStreamId, [
+      {
+        space: testSpaceId,
+        externalId: `manual_pagination_record_1_${randomInt()}`,
+        sources: [
+          {
+            source: {
+              type: 'container',
+              space: testSpaceId,
+              externalId: testContainerId,
+            },
+            properties: {
+              name: testName,
+              value: 10,
+              timestamp: '2025-01-01T00:00:00.000Z',
+            },
+          },
+        ],
+      },
+      {
+        space: testSpaceId,
+        externalId: `manual_pagination_record_2_${randomInt()}`,
+        sources: [
+          {
+            source: {
+              type: 'container',
+              space: testSpaceId,
+              externalId: testContainerId,
+            },
+            properties: {
+              name: testName,
+              value: 20,
+              timestamp: '2025-01-01T00:00:00.000Z',
+            },
+          },
+        ],
+      },
+      {
+        space: testSpaceId,
+        externalId: `manual_pagination_record_3_${randomInt()}`,
+        sources: [
+          {
+            source: {
+              type: 'container',
+              space: testSpaceId,
+              externalId: testContainerId,
+            },
+            properties: {
+              name: testName,
+              value: 30,
+              timestamp: '2025-01-01T00:00:00.000Z',
+            },
+          },
+        ],
+      },
+    ]);
+
+    // Wait for records to be available, then manually paginate
+    const allItems = await vi.waitFor(
+      async () => {
+        const collected: SyncRecordItem[] = [];
+        let cursor: string | undefined;
+
+        // Manual pagination loop
+        while (true) {
+          const response = await client.records.sync(mutableStreamId, {
+            ...(cursor ? { cursor } : { initializeCursor: '5m-ago' }),
+            sources: [
+              {
+                source: {
+                  type: 'container',
+                  space: testSpaceId,
+                  externalId: testContainerId,
+                },
+                properties: ['*'],
+              },
+            ],
+            filter: {
+              equals: {
+                property: [testSpaceId, testContainerId, 'name'],
+                value: testName,
+              },
+            },
+            limit: 1, // Force pagination by using small limit
+          });
+
+          // Verify response structure - nextCursor and hasNext should always be defined
+          expect(response.nextCursor).toBeDefined();
+          expect(typeof response.nextCursor).toBe('string');
+          expect(typeof response.hasNext).toBe('boolean');
+
+          collected.push(...response.items);
+          cursor = response.nextCursor; // Always store cursor for resumption
+
+          if (!response.hasNext) break;
+        }
+
+        expect(collected.length).toBe(3);
+        return collected;
+      },
+      { timeout: 10_000, interval: 200 }
+    );
+
+    expect(allItems.length).toBe(3);
+    expect(allItems.every((r) => r.status === 'created')).toBe(true);
+
+    // Verify we got all 3 different values
+    const values = allItems
+      .map((r) => r.properties?.[testSpaceId][testContainerId].value)
+      .sort((a, b) => (a as number) - (b as number));
+    expect(values).toEqual([10, 20, 30]);
+  });
 });

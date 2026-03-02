@@ -22,6 +22,7 @@ describe('Functions unit test', () => {
     description: externalFunction.description,
     status: 'Ready',
     createdTime: Date.now(),
+    lastCalled: Date.now() - 1000,
   };
 
   beforeEach(() => {
@@ -45,6 +46,7 @@ describe('Functions unit test', () => {
     const createdFunctions = await client.functions.create([externalFunction]);
     expect(createdFunctions[0].id).toBe(mockFunction.id);
     expect(createdFunctions[0].name).toBe(externalFunction.name);
+    expect(createdFunctions[0].lastCalled).toBeInstanceOf(Date);
   });
 
   test('list', async () => {
@@ -64,6 +66,7 @@ describe('Functions unit test', () => {
     });
     expect(functions.length).toBe(1);
     expect(functions[0].id).toBe(mockFunction.id);
+    expect(functions[0].lastCalled).toBeInstanceOf(Date);
   });
 
   test('retrieve by id', async () => {
@@ -79,6 +82,7 @@ describe('Functions unit test', () => {
     const func = await client.functions.retrieve([{ id: 123 }]);
     expect(func[0].id).toBe(mockFunction.id);
     expect(func[0].name).toBe(mockFunction.name);
+    expect(func[0].lastCalled).toBeInstanceOf(Date);
   });
 
   test('delete', async () => {
