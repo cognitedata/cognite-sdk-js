@@ -60,6 +60,11 @@ export type TimeseriesIdEither = InternalId | ExternalId;
 // =====================================================
 
 /**
+ * The type of time series.
+ */
+export type TimeseriesType = 'numeric' | 'string' | 'state';
+
+/**
  * A time series in Cognite Data Fusion
  */
 export interface Timeseries extends InternalId, CreatedAndLastUpdatedTime {
@@ -73,6 +78,10 @@ export interface Timeseries extends InternalId, CreatedAndLastUpdatedTime {
   instanceId?: CogniteInstanceId;
   name?: TimeseriesName;
   isString: TimeseriesIsString;
+  /**
+   * The type of the time series.
+   */
+  type?: TimeseriesType;
   /**
    * Additional metadata. String key -> String value.
    */
@@ -118,6 +127,10 @@ export interface ExternalTimeseries {
    * Whether the time series is string valued or not.
    */
   isString?: boolean;
+  /**
+   * The type of the time series. Defaults to 'string' when isString is true, 'numeric' otherwise.
+   */
+  type?: TimeseriesType;
   /**
    * Additional metadata. String key -> String value.
    */
@@ -191,6 +204,10 @@ export interface TimeseriesFilter extends CreatedAndLastUpdatedTimeFilter {
    * The physical unit of the time series (reference to unit catalog).
    */
   unitExternalId?: CogniteExternalId;
+  /**
+   * Filter on the physical quantity of the unit (e.g., 'temperature', 'pressure').
+   */
+  unitQuantity?: string;
 }
 
 /**
@@ -328,6 +345,12 @@ export interface SyntheticQuery extends Limit {
   expression: string;
   start?: string | Timestamp;
   end?: string | Timestamp;
+  /**
+   * For aggregates of granularity 'hour' and longer, which time zone to align to.
+   * @default "UTC"
+   * @example "Europe/Oslo"
+   */
+  timeZone?: string;
 }
 
 /**

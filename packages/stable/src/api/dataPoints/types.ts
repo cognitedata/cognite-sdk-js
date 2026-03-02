@@ -29,11 +29,27 @@ export type Aggregate =
   | 'stepInterpolation'
   | 'totalVariation'
   | 'continuousVariance'
-  | 'discreteVariance';
+  | 'discreteVariance'
+  | 'maxDatapoint'
+  | 'minDatapoint'
+  | 'countGood'
+  | 'countUncertain'
+  | 'countBad'
+  | 'durationGood'
+  | 'durationUncertain'
+  | 'durationBad';
 
 // =====================================================
 // Data point value types
 // =====================================================
+
+/**
+ * The timestamp and value of a min/max data point aggregate.
+ */
+export interface DatapointExtremum {
+  timestamp: Date;
+  value: number;
+}
 
 export interface DatapointAggregate extends DatapointInfo {
   average?: number;
@@ -46,6 +62,17 @@ export interface DatapointAggregate extends DatapointInfo {
   continuousVariance?: number;
   discreteVariance?: number;
   totalVariation?: number;
+  maxDatapoint?: DatapointExtremum;
+  minDatapoint?: DatapointExtremum;
+  countGood?: number;
+  countUncertain?: number;
+  countBad?: number;
+  /** Duration in milliseconds with Good status */
+  durationGood?: number;
+  /** Duration in milliseconds with Uncertain status */
+  durationUncertain?: number;
+  /** Duration in milliseconds with Bad status */
+  durationBad?: number;
 }
 
 export interface DoubleDatapoint extends DatapointInfo {
@@ -282,4 +309,14 @@ export interface LatestDataPropertyFilter {
    * Get first datapoint before this time. Format is N[timeunit]-ago where timeunit is w,d,h,m,s. Example: '2d-ago' will get everything that is up to 2 days old. Can also send time as a Date object or number of milliseconds since epoch.
    */
   before?: string | Date | number;
+  /**
+   * The unit externalId of the data points returned. If the time series does not have a
+   * unitExternalId that can be converted to the targetUnit, an error will be returned.
+   * Cannot be used with targetUnitSystem.
+   */
+  targetUnit?: string;
+  /**
+   * The unit system of the data points returned. Cannot be used with targetUnit.
+   */
+  targetUnitSystem?: string;
 }
