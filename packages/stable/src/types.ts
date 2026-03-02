@@ -13,6 +13,25 @@ import type {
   Limit,
 } from '@cognite/sdk-core';
 import type { AnnotationData } from './api/annotations/types.gen';
+import type { TimeseriesFilter } from './api/timeSeries/types';
+import type {
+  AggregateResponse,
+  ArrayPatchLong,
+  CreatedAndLastUpdatedTime,
+  CreatedAndLastUpdatedTimeFilter,
+  DatapointInfo,
+  DateRange,
+  ExternalIdPrefix,
+  Metadata,
+  MetadataPatch,
+  NullableSinglePatchLong,
+  ObjectPatch,
+  Partition,
+  Range,
+  Timestamp,
+} from './types/common';
+
+export * from './types/common';
 
 export type {
   ListResponse,
@@ -42,6 +61,8 @@ export * from './api/containers/types';
 export * from './api/geospatial/types';
 export * from './api/streams/types';
 export * from './api/records/types';
+export * from './api/sessions/types';
+export * from './api/timeSeries/types';
 export * from './api/functions/types';
 
 export interface Acl<ActionsType, ScopeType> {
@@ -227,10 +248,6 @@ export type ArrayPatchString =
   | { set: string[] }
   | { add?: string[]; remove?: string[] };
 
-export type ArrayPatchLong =
-  | { set: number[] }
-  | { add?: number[]; remove?: number[] };
-
 export interface Asset
   extends ExternalAsset,
     AssetInternalId,
@@ -247,13 +264,6 @@ export interface Asset
    * The parent's externalId if defined
    */
   parentExternalId?: CogniteExternalId;
-}
-
-export interface AggregateResponse {
-  /**
-   * Size of the aggregation group
-   */
-  count: number;
 }
 
 export interface UniqueValuesAggregateResponse extends AggregateResponse {
@@ -284,11 +294,6 @@ export type FileAggregate = AggregateResponse;
 export type SequenceAggregate = AggregateResponse;
 
 /**
- * Response from timeseries aggregate endpoint
- */
-export type TimeseriesAggregate = AggregateResponse;
-
-/**
  * Query schema for asset aggregate endpoint
  */
 export interface AssetAggregateQuery {
@@ -306,16 +311,6 @@ export interface FileAggregateQuery {
    * Filter on files with strict matching.
    */
   filter?: FileFilterProps;
-}
-
-/**
- * Query schema for timeseries aggregate endpoint
- */
-export interface TimeseriesAggregateQuery {
-  /**
-   * Filter on timeseries with strict matching.
-   */
-  filter?: TimeseriesFilter;
 }
 
 export interface AssetAggregateResult {
@@ -559,16 +554,6 @@ export interface CreateRevision3D {
 
 export interface CreatedTime {
   createdTime: Date;
-}
-
-export interface CreatedAndLastUpdatedTime {
-  lastUpdatedTime: Date;
-  createdTime: Date;
-}
-
-export interface CreatedAndLastUpdatedTimeFilter {
-  lastUpdatedTime?: DateRange;
-  createdTime?: DateRange;
 }
 
 export type DELETE = 'DELETE';
@@ -886,8 +871,6 @@ export interface DatapointsQueryProperties extends Limit, Cursor {
   timeZone?: string;
 }
 
-export type DateRange = Range<Timestamp>;
-
 export type DeleteAssetMapping3D = AssetMapping3DBase;
 
 export type EXECUTE = 'EXECUTE';
@@ -1066,11 +1049,6 @@ export interface ExternalFileInfo {
   geoLocation?: FileGeoLocation;
 }
 
-/**
- * Prefix filter on externalId. (case-sensitive)
- */
-export type ExternalIdPrefix = string;
-
 export interface ExternalSequence extends SequenceBase {
   /**
    * List of column definitions
@@ -1218,103 +1196,12 @@ export interface DatapointAggregate extends DatapointInfo {
   totalVariation?: number;
 }
 
-export interface DatapointInfo {
-  timestamp: Date;
-}
-
 export interface DoubleDatapoint extends DatapointInfo {
   value: number;
 }
 
 export interface StringDatapoint extends DatapointInfo {
   value: string;
-}
-
-export interface Timeseries extends InternalId, CreatedAndLastUpdatedTime {
-  /**
-   * Externally supplied id of the time series
-   */
-  externalId?: CogniteExternalId;
-  /**
-   * The ID of an instance in Cognite Data Models.
-   */
-  instanceId?: CogniteInstanceId;
-  name?: TimeseriesName;
-  isString: TimeseriesIsString;
-  /**
-   * Additional metadata. String key -> String value.
-   */
-  metadata?: Metadata;
-  unit?: TimeseriesUnit;
-  /**
-   * Asset that this time series belongs to.
-   */
-  assetId?: CogniteInternalId;
-  dataSetId?: CogniteInternalId;
-  isStep: TimeseriesIsStep;
-  /**
-   * Description of the time series.
-   */
-  description: string;
-  /**
-   * Security categories required in order to access this time series.
-   */
-  securityCategories?: number[];
-  /**
-   * The physical unit of the time series (reference to unit catalog).
-   */
-  unitExternalId?: CogniteExternalId;
-}
-
-export interface ExternalTimeseries {
-  /**
-   * Externally provided id for the time series (optional but recommended)
-   */
-  externalId?: CogniteExternalId;
-  /**
-   * Set a value for legacyName to allow applications using API v0.3, v04, v05, and v0.6 to access this time series. The legacy name is the human-readable name for the time series and is mapped to the name field used in API versions 0.3-0.6. The legacyName field value must be unique, and setting this value to an already existing value will return an error. We recommend that you set this field to the same value as externalId.
-   */
-  legacyName?: string;
-  /**
-   * Human readable name of time series
-   */
-  name?: string;
-  /**
-   * Whether the time series is string valued or not.
-   */
-  isString?: boolean;
-  /**
-   * Additional metadata. String key -> String value.
-   */
-  metadata?: Metadata;
-  /**
-   * The physical unit of the time series.
-   */
-  unit?: string;
-  /**
-   * Asset that this time series belongs to.
-   */
-  assetId?: CogniteInternalId;
-  /**
-   * DataSet that this time series related with.
-   */
-  dataSetId?: CogniteInternalId;
-  /**
-   * Whether the time series is a step series or not.
-   */
-  isStep?: boolean;
-  /**
-   * Description of the time series.
-   */
-  description?: string;
-  /**
-   * Security categories required in order to access this time series."
-   */
-  securityCategories?: number[];
-  /**
-   * The physical unit of the time series (reference to unit catalog).
-   */
-  unitExternalId?: CogniteExternalId;
 }
 
 export type FileGeoLocationType = 'Feature';
@@ -1591,14 +1478,6 @@ export interface ListSecurityCategories extends FilterQuery {
 
 export type MEMBEROF = 'MEMBEROF';
 
-/**
- * Custom, application specific metadata.
- * Maximum length of key is 32 bytes, value 512 bytes, up to 16 key-value pairs.
- */
-export interface Metadata {
-  [key: string]: string;
-}
-
 export interface Model3D {
   /**
    * The name of the model.
@@ -1668,41 +1547,7 @@ export interface Node3DProperties {
 
 export type NullableProperty<T> = T | { isNull: boolean };
 
-export type NullableSinglePatchLong = { set: number } | { setNull: true };
-
-export type NullableSinglePatchString = { set: string } | { setNull: true };
-
 export type OWNER = 'OWNER';
-
-export type ObjectPatch<T> =
-  | {
-      /**
-       * Set the key-value pairs. All existing key-value pairs will be removed.
-       */
-      set: { [key: string]: T };
-    }
-  | {
-      /**
-       * Add the key-value pairs. Values for existing keys will be overwritten.
-       */
-      add: { [key: string]: T };
-      /**
-       * Remove the key-value pairs with given keys.
-       */
-      remove: string[];
-    };
-
-export type MetadataPatch = ObjectPatch<string>;
-
-/**
- * Splits the data set into N partitions.
- * This should NOT be used for frontend applications.
- * Partitions are formatted as `n/m`, where `n` is the index of the parititon, and `m` is the total number or partitions.
- * i.e. 20 partitions would have one request with `partition: 1/20`, then another `partition: 2/20` and so on.
- * You need to use `autoPagingToArray(...)` on each partition in order to receive all the data.
- * @example 1/10
- */
-export type Partition = string;
 
 export interface ExternalDatapoint {
   timestamp: Timestamp;
@@ -1745,11 +1590,6 @@ export interface OidcConfiguration {
 }
 
 export type READ = 'READ';
-
-export interface Range<T> {
-  min?: T;
-  max?: T;
-}
 
 export interface RawDBName {
   /**
@@ -2339,168 +2179,6 @@ export const SortOrder = {
  * Items can be sorted in either ascending or descending order
  */
 export type SortOrder = 'asc' | 'desc';
-
-export interface SyntheticDataError extends DatapointInfo {
-  error: string;
-}
-
-export type SyntheticDatapoint = SyntheticDataValue | SyntheticDataError;
-
-export interface SyntheticDataValue extends DatapointInfo {
-  value: number;
-}
-
-/**
- * A query for a synthetic time series
- */
-export interface SyntheticQuery extends Limit {
-  expression: string;
-  start?: string | Timestamp;
-  end?: string | Timestamp;
-}
-
-/**
- * Response of a synthetic time series query
- */
-export interface SyntheticQueryResponse {
-  isString?: TimeseriesIsString;
-  datapoints: SyntheticDatapoint[];
-}
-
-export type TimeseriesUpdateCommonProperies = {
-  externalId?: NullableSinglePatchString;
-  metadata?: MetadataPatch;
-  assetId?: NullableSinglePatchLong;
-  dataSetId?: NullableSinglePatchLong;
-};
-
-export type TimeseriesUpdateAssetCentricProperies =
-  TimeseriesUpdateCommonProperies & {
-    name?: NullableSinglePatchString;
-    unit?: NullableSinglePatchString;
-    description?: NullableSinglePatchString;
-    securityCategories?: ArrayPatchLong;
-    unitExternalId?: NullableSinglePatchString;
-  };
-
-export interface TimeSeriesPatch {
-  update: TimeseriesUpdateAssetCentricProperies;
-}
-
-export interface TimeSeriesPatchByInstanceId {
-  update: TimeseriesUpdateCommonProperies;
-}
-
-export interface TimeSeriesPatchByInstanceId {
-  update: {
-    externalId?: NullableSinglePatchString;
-    metadata?: MetadataPatch;
-    assetId?: NullableSinglePatchLong;
-    dataSetId?: NullableSinglePatchLong;
-  };
-}
-
-export interface TimeseriesSearch {
-  /**
-   * Prefix and fuzzy search on name.
-   */
-  name?: string;
-  /**
-   * Prefix and fuzzy search on description.
-   */
-  description?: string;
-  /**
-   * Search on name and description using wildcard search on each of the words (separated by spaces). Retrieves results where at least one word must match. Example: '*some* *other*'
-   */
-  query?: string;
-}
-
-export interface TimeseriesSearchFilter extends Limit {
-  filter?: TimeseriesFilter;
-  search?: TimeseriesSearch;
-}
-
-export type TimeSeriesUpdate =
-  | TimeSeriesUpdateById
-  | TimeSeriesUpdateByExternalId
-  | TimeSeriesUpdateByInstanceId;
-
-export interface TimeSeriesUpdateByExternalId
-  extends TimeSeriesPatch,
-    ExternalId {}
-
-export interface TimeSeriesUpdateById extends TimeSeriesPatch, InternalId {}
-
-export interface TimeSeriesUpdateByInstanceId
-  extends TimeSeriesPatchByInstanceId,
-    InstanceId {}
-
-export interface TimeseriesFilter extends CreatedAndLastUpdatedTimeFilter {
-  name?: TimeseriesName;
-  unit?: TimeseriesUnit;
-  isString?: TimeseriesIsString;
-  isStep?: TimeseriesIsStep;
-  metadata?: Metadata;
-  /**
-   * Get time series related to these assets. Takes [ 1 .. 100 ] unique items.
-   */
-  assetIds?: CogniteInternalId[];
-  /**
-   * Asset External IDs of related equipment that this time series relates to.
-   */
-  assetExternalIds?: CogniteExternalId[];
-  /**
-   * Only include timeseries that have a related asset in a tree rooted at any of these root assetIds.
-   */
-  rootAssetIds?: CogniteInternalId[];
-  /**
-   * Only include assets that reference these specific dataSet IDs
-   */
-  dataSetIds?: IdEither[];
-  /**
-   * Only include timeseries that are related to an asset in a subtree rooted at any of these assetIds.
-   * If the total size of the given subtrees exceeds 100,000 assets, an error will be returned.
-   */
-  assetSubtreeIds?: IdEither[];
-  externalIdPrefix?: ExternalIdPrefix;
-  /**
-   * The physical unit of the time series (reference to unit catalog).
-   */
-  unitExternalId?: CogniteExternalId;
-}
-
-export interface TimeseriesFilterQuery extends FilterQuery {
-  filter?: TimeseriesFilter;
-  partition?: Partition;
-}
-
-export type TimeseriesIdEither = InternalId | ExternalId;
-
-/**
- * Whether the time series is a step series or not.
- */
-export type TimeseriesIsStep = boolean;
-
-/**
- * Whether the time series is string valued or not.
- */
-export type TimeseriesIsString = boolean;
-
-/**
- * Name of time series
- */
-export type TimeseriesName = string;
-
-/**
- * The physical unit of the time series.
- */
-export type TimeseriesUnit = string;
-
-/**
- * A point in time, either a number or a Date object.
- * The Date is converted to a number when api calls are made.
- */
-export type Timestamp = number | Date;
 
 export type Tuple3<T> = T[];
 
@@ -3538,5 +3216,3 @@ export type {
   ViewCollectionResponseWithCursorResponse,
   ViewCreateCollection,
 } from './api/views/types.gen';
-
-export * from './api/sessions/types';
