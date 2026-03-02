@@ -190,9 +190,9 @@ describe('Datapoints integration test', () => {
       (dp) => dp.timestamp.getTime() === statusTimestamp
     );
     expect(uncertainDp).toBeDefined();
-    expect(uncertainDp!.status).toBeDefined();
-    expect(uncertainDp!.status!.symbol).toBe('Uncertain');
-    expect(typeof uncertainDp!.status!.code).toBe('number');
+    expect(uncertainDp?.status).toBeDefined();
+    expect(uncertainDp?.status?.symbol).toBe('Uncertain');
+    expect(typeof uncertainDp?.status?.code).toBe('number');
   });
 
   test('retrieve with ignoreBadDataPoints and treatUncertainAsBad', async () => {
@@ -214,8 +214,8 @@ describe('Datapoints integration test', () => {
     );
     expect(withStatus.length).toBeGreaterThan(0);
     for (const dp of withStatus) {
-      expect(dp.status!.symbol).toBeDefined();
-      expect(typeof dp.status!.code).toBe('number');
+      expect(dp.status?.symbol).toBeDefined();
+      expect(typeof dp.status?.code).toBe('number');
     }
   });
 
@@ -262,11 +262,11 @@ describe('Datapoints integration test', () => {
 
     const dp = response[0].datapoints[0] as DatapointAggregate;
     expect(dp.maxDatapoint).toBeDefined();
-    expect(dp.maxDatapoint!.timestamp).toBeInstanceOf(Date);
-    expect(typeof dp.maxDatapoint!.value).toBe('number');
+    expect(dp.maxDatapoint?.timestamp).toBeInstanceOf(Date);
+    expect(typeof dp.maxDatapoint?.value).toBe('number');
     expect(dp.minDatapoint).toBeDefined();
-    expect(dp.minDatapoint!.timestamp).toBeInstanceOf(Date);
-    expect(typeof dp.minDatapoint!.value).toBe('number');
+    expect(dp.minDatapoint?.timestamp).toBeInstanceOf(Date);
+    expect(typeof dp.minDatapoint?.value).toBe('number');
     expect(typeof dp.countGood).toBe('number');
     expect(typeof dp.countUncertain).toBe('number');
     expect(typeof dp.countBad).toBe('number');

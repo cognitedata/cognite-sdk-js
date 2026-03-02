@@ -181,10 +181,7 @@ describe('Timeseries integration test', () => {
     expect(numericTs.type).toBe('numeric');
     expect(numericTs.isString).toBe(false);
 
-    await client.timeseries.delete([
-      { id: stringTs.id },
-      { id: numericTs.id },
-    ]);
+    await client.timeseries.delete([{ id: stringTs.id }, { id: numericTs.id }]);
   });
 
   test('retrieve', async () => {
