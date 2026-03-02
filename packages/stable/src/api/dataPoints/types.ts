@@ -50,9 +50,9 @@ export type Aggregate =
  */
 export interface DatapointStatus {
   /** Numeric status code (e.g. 0 for Good, 2147483648 for Bad) */
-  code?: number;
+  code: number;
   /** Status symbol name (e.g. 'Good', 'Uncertain', 'Bad') */
-  symbol?: string;
+  symbol: string;
 }
 
 // =====================================================
