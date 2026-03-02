@@ -1,20 +1,22 @@
 // Copyright 2020 Cognite AS
 
 import { BaseResourceAPI } from '@cognite/sdk-core';
+import type { ItemsWrapper } from '@cognite/sdk-core';
+import type {
+  DatapointInfo,
+  IgnoreUnknownIds,
+  Timestamp,
+} from '../../types/common';
 import type {
   DatapointAggregate,
   DatapointAggregates,
-  DatapointInfo,
   Datapoints,
   DatapointsDeleteRequest,
   DatapointsMonthlyGranularityMultiQuery,
   DatapointsMultiQuery,
   ExternalDatapointsQuery,
-  IgnoreUnknownIds,
-  ItemsWrapper,
   LatestDataBeforeRequest,
-  Timestamp,
-} from '../../types';
+} from './types';
 
 export class DataPointsAPI extends BaseResourceAPI<
   DatapointAggregates | Datapoints
