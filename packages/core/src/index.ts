@@ -6,6 +6,7 @@ export * from './types';
 
 export { MetadataMap } from './metadata';
 export { BaseResourceAPI } from './baseResourceApi';
+export { makeAutoPaginationMethods } from './autoPagination';
 export { default as BaseCogniteClient } from './baseCogniteClient';
 export { default as DateParser } from './dateParser';
 export * from './baseCogniteClient';
