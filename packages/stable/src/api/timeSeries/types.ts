@@ -128,10 +128,6 @@ export interface ExternalTimeseries {
    */
   isString?: boolean;
   /**
-   * The type of the time series. Defaults to 'string' when isString is true, 'numeric' otherwise.
-   */
-  type?: TimeseriesType;
-  /**
    * Additional metadata. String key -> String value.
    */
   metadata?: Metadata;
