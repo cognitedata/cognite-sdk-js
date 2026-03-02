@@ -4,16 +4,13 @@ import {
   BaseResourceAPI,
   type CursorAndAsyncIterator,
 } from '@cognite/sdk-core';
+import type { ContainerListParams } from './types';
 import type {
   ContainerCollectionResponse,
   ContainerCreateDefinition,
   ContainerDefinition,
-  CursorQueryParameter,
-  IncludeGlobalQueryParameter,
   ListOfSpaceExternalIdsRequest,
   ListOfSpaceExternalIdsResponse,
-  ReducedLimitQueryParameter,
-  SpaceQueryParameter,
 } from './types.gen';
 
 export class ContainersAPI extends BaseResourceAPI<ContainerDefinition> {
@@ -82,16 +79,19 @@ export class ContainersAPI extends BaseResourceAPI<ContainerDefinition> {
    *
    * ```js
    *  const response = await client.containers.list({ space: '', includeGlobal: true });
-   *
+   *  // List only record containers
+   *  const recordContainers = await client.containers.list({ usedFor: ['record'] });
+   *  // List all container types including records
+   *  const allContainers = await client.containers.list({ usedFor: ['node', 'edge', 'all', 'record'] });
    * ```
    */
   public list = (
-    params: IncludeGlobalQueryParameter &
-      CursorQueryParameter &
-      ReducedLimitQueryParameter &
-      SpaceQueryParameter = { includeGlobal: false }
+    params: ContainerListParams = { includeGlobal: false }
   ): CursorAndAsyncIterator<ContainerDefinition> => {
-    return super.listEndpoint(this.callListEndpointWithGet, params);
+    return super.listEndpoint(
+      this.callListGetEndpointWithRepeatedQueryParams,
+      params
+    );
   };
 
   /**
