@@ -2,7 +2,12 @@
 
 import { afterAll, beforeAll, describe, expect, test } from 'vitest';
 import type CogniteClient from '../../cogniteClient';
-import type { DatapointAggregate, NodeWrite, Timeseries } from '../../types';
+import type {
+  DatapointAggregate,
+  DoubleDatapoint,
+  NodeWrite,
+  Timeseries,
+} from '../../types';
 import { randomInt, setupLoggedInClient } from '../testUtils';
 
 describe('Datapoints integration test', () => {
@@ -154,6 +159,81 @@ describe('Datapoints integration test', () => {
 
     expect(nextResponse[0].datapoints.length).toBe(1);
     expect(nextResponse[0].datapoints).not.toEqual(response);
+  });
+
+  test('insert with status code and retrieve with includeStatus', async () => {
+    const statusTimestamp = Date.now() - 10000;
+    const statusDatapoints = [
+      {
+        timestamp: statusTimestamp,
+        value: 42,
+        status: { symbol: 'Uncertain' },
+      },
+    ];
+    await client.datapoints.insert([
+      { id: timeserie.id, datapoints: statusDatapoints },
+    ]);
+    const response = await client.datapoints.retrieve({
+      items: [
+        {
+          id: timeserie.id,
+          includeStatus: true,
+          ignoreBadDataPoints: false,
+          treatUncertainAsBad: false,
+        },
+      ],
+      start: '1d-ago',
+      end: new Date(),
+    });
+    expect(response[0].datapoints.length).toBeGreaterThan(0);
+    const uncertainDp = (response[0].datapoints as DoubleDatapoint[]).find(
+      (dp) => dp.timestamp.getTime() === statusTimestamp
+    );
+    expect(uncertainDp).toBeDefined();
+    expect(uncertainDp!.status).toBeDefined();
+    expect(uncertainDp!.status!.symbol).toBe('Uncertain');
+    expect(typeof uncertainDp!.status!.code).toBe('number');
+  });
+
+  test('retrieve with ignoreBadDataPoints and treatUncertainAsBad', async () => {
+    const response = await client.datapoints.retrieve({
+      items: [
+        {
+          id: timeserie.id,
+          includeStatus: true,
+          ignoreBadDataPoints: false,
+          treatUncertainAsBad: false,
+        },
+      ],
+      start: '1d-ago',
+      end: new Date(),
+    });
+    expect(response[0].datapoints.length).toBeGreaterThan(0);
+    const withStatus = (response[0].datapoints as DoubleDatapoint[]).filter(
+      (dp) => dp.status !== undefined
+    );
+    expect(withStatus.length).toBeGreaterThan(0);
+    for (const dp of withStatus) {
+      expect(dp.status!.symbol).toBeDefined();
+      expect(typeof dp.status!.code).toBe('number');
+    }
+  });
+
+  test('retrieveLatest with includeStatus', async () => {
+    const response = await client.datapoints.retrieveLatest([
+      {
+        id: timeserie.id,
+        includeStatus: true,
+        ignoreBadDataPoints: false,
+        treatUncertainAsBad: false,
+      },
+    ]);
+    expect(response[0].datapoints.length).toBeGreaterThan(0);
+    const dp = response[0].datapoints[0] as DoubleDatapoint;
+    if (dp.status) {
+      expect(dp.status.symbol).toBeDefined();
+      expect(typeof dp.status.code).toBe('number');
+    }
   });
 
   test('retrieve with new aggregate types', async () => {

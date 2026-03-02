@@ -40,6 +40,22 @@ export type Aggregate =
   | 'durationBad';
 
 // =====================================================
+// Data point status types
+// =====================================================
+
+/**
+ * Status code for a data point, following OPC UA conventions.
+ * Either `code` or `symbol` is required; if both are set they must be consistent.
+ * @see https://docs.cognite.com/dev/concepts/reference/status_codes
+ */
+export interface DatapointStatus {
+  /** Numeric status code (e.g. 0 for Good, 2147483648 for Bad) */
+  code?: number;
+  /** Status symbol name (e.g. 'Good', 'Uncertain', 'Bad') */
+  symbol?: string;
+}
+
+// =====================================================
 // Data point value types
 // =====================================================
 
@@ -77,15 +93,18 @@ export interface DatapointAggregate extends DatapointInfo {
 
 export interface DoubleDatapoint extends DatapointInfo {
   value: number;
+  status?: DatapointStatus;
 }
 
 export interface StringDatapoint extends DatapointInfo {
   value: string;
+  status?: DatapointStatus;
 }
 
 export interface ExternalDatapoint {
   timestamp: Timestamp;
   value: number | string;
+  status?: DatapointStatus;
 }
 
 // =====================================================
@@ -293,6 +312,22 @@ export interface DatapointsQueryProperties extends Limit, Cursor {
    * Default: "UTC" Which time zone to align aggregates to. Omit to use top-level value.
    */
   timeZone?: string;
+  /**
+   * Include status codes in the response. Good (code 0) status codes are always omitted.
+   * @default false
+   */
+  includeStatus?: boolean;
+  /**
+   * Treat data points with Bad status codes as if they do not exist.
+   * Set to false to include bad data points.
+   * @default true
+   */
+  ignoreBadDataPoints?: boolean;
+  /**
+   * Treat data points with Uncertain status codes as Bad.
+   * @default true
+   */
+  treatUncertainAsBad?: boolean;
 }
 
 // =====================================================
@@ -319,4 +354,20 @@ export interface LatestDataPropertyFilter {
    * The unit system of the data points returned. Cannot be used with targetUnit.
    */
   targetUnitSystem?: string;
+  /**
+   * Include status codes in the response. Good (code 0) status codes are always omitted.
+   * @default false
+   */
+  includeStatus?: boolean;
+  /**
+   * Treat data points with Bad status codes as if they do not exist.
+   * Set to false to include bad data points.
+   * @default true
+   */
+  ignoreBadDataPoints?: boolean;
+  /**
+   * Treat data points with Uncertain status codes as Bad.
+   * @default true
+   */
+  treatUncertainAsBad?: boolean;
 }
