@@ -151,12 +151,40 @@ describe('Timeseries integration test', () => {
     expect(createdTimeseries[0].metadata?.createdTime).not.toBeInstanceOf(Date);
   });
 
-  test('type field is returned on retrieve', async () => {
-    const [single] = await client.timeseries.retrieve([
+  test('type field defaults to numeric for non-string timeseries', async () => {
+    const [numeric] = await client.timeseries.retrieve([
       { id: createdTimeseries[0].id },
     ]);
-    expect(single.type).toBeDefined();
-    expect(['numeric', 'string', 'state']).toContain(single.type);
+    expect(numeric.type).toBe('numeric');
+
+    const [stringTs] = await client.timeseries.retrieve([
+      { id: createdTimeseries[1].id },
+    ]);
+    expect(stringTs.type).toBe('string');
+  });
+
+  test('type field is consistent with isString on create', async () => {
+    const [stringTs] = await client.timeseries.create([
+      {
+        name: `ts_string_type_${randomInt()}`,
+        isString: true,
+      },
+    ]);
+    expect(stringTs.type).toBe('string');
+    expect(stringTs.isString).toBe(true);
+
+    const [numericTs] = await client.timeseries.create([
+      {
+        name: `ts_numeric_type_${randomInt()}`,
+      },
+    ]);
+    expect(numericTs.type).toBe('numeric');
+    expect(numericTs.isString).toBe(false);
+
+    await client.timeseries.delete([
+      { id: stringTs.id },
+      { id: numericTs.id },
+    ]);
   });
 
   test('retrieve', async () => {

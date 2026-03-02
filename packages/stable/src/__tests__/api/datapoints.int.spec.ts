@@ -156,12 +156,64 @@ describe('Datapoints integration test', () => {
     expect(nextResponse[0].datapoints).not.toEqual(response);
   });
 
+  test('retrieve with new aggregate types', async () => {
+    const response = await client.datapoints.retrieve({
+      items: [
+        {
+          id: timeserie.id,
+          aggregates: [
+            'maxDatapoint',
+            'minDatapoint',
+            'countGood',
+            'countUncertain',
+            'countBad',
+            'durationGood',
+            'durationUncertain',
+            'durationBad',
+          ],
+          granularity: '2d',
+        },
+      ],
+      start: '3d-ago',
+      end: new Date(),
+    });
+    expect(response.length).toBe(1);
+    expect(response[0].datapoints.length).toBeGreaterThan(0);
+
+    const dp = response[0].datapoints[0] as DatapointAggregate;
+    expect(dp.maxDatapoint).toBeDefined();
+    expect(dp.maxDatapoint!.timestamp).toBeInstanceOf(Date);
+    expect(typeof dp.maxDatapoint!.value).toBe('number');
+    expect(dp.minDatapoint).toBeDefined();
+    expect(dp.minDatapoint!.timestamp).toBeInstanceOf(Date);
+    expect(typeof dp.minDatapoint!.value).toBe('number');
+    expect(typeof dp.countGood).toBe('number');
+    expect(typeof dp.countUncertain).toBe('number');
+    expect(typeof dp.countBad).toBe('number');
+    expect(typeof dp.durationGood).toBe('number');
+    expect(typeof dp.durationUncertain).toBe('number');
+    expect(typeof dp.durationBad).toBe('number');
+  });
+
   test('synthetic query', async () => {
     const result = await client.timeseries.syntheticQuery([
       {
         expression: `24 * TS{id=${timeserie.id}}`,
         start: '48h-ago',
         limit: 1,
+      },
+    ]);
+    expect(result.length).toBe(1);
+    expect(result[0].datapoints[0].timestamp).toBeInstanceOf(Date);
+  });
+
+  test('synthetic query with timeZone', async () => {
+    const result = await client.timeseries.syntheticQuery([
+      {
+        expression: `24 * TS{id=${timeserie.id}}`,
+        start: '48h-ago',
+        limit: 1,
+        timeZone: 'Europe/Oslo',
       },
     ]);
     expect(result.length).toBe(1);
