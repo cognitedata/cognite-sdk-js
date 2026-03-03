@@ -93,7 +93,7 @@ export class TimeSeriesAPI extends BaseResourceAPI<TimeSeries> {
    */
   public retrieve = (
     ids: IdEitherWithInstance[],
-    params: TimeseriesRetrieveParams = {}
+    params: IgnoreUnknownIds = {}
   ) => {
     return super.retrieveEndpoint(ids, params);
   };
@@ -164,6 +164,3 @@ export class TimeSeriesAPI extends BaseResourceAPI<TimeSeries> {
     return this.syntheticTimeseriesApi.query(items);
   };
 }
-
-/** @deprecated Use IgnoreUnknownIds directly. Will be removed in next major release. */
-export type TimeseriesRetrieveParams = IgnoreUnknownIds;

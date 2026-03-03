@@ -87,7 +87,7 @@ export class DataPointsAPI extends BaseResourceAPI<
    */
   public retrieveLatest = (
     items: LatestDataBeforeRequest[],
-    params: LatestDataParams = {}
+    params: IgnoreUnknownIds = {}
   ): Promise<Datapoints[]> => {
     return this.retrieveLatestEndpoint(items, params);
   };
@@ -123,7 +123,7 @@ export class DataPointsAPI extends BaseResourceAPI<
 
   private async retrieveLatestEndpoint(
     items: LatestDataBeforeRequest[],
-    params: LatestDataParams
+    params: IgnoreUnknownIds
   ): Promise<Datapoints[]> {
     const path = this.url('latest');
     return this.callEndpointWithMergeAndTransform(items, (request) =>
@@ -145,6 +145,3 @@ export class DataPointsAPI extends BaseResourceAPI<
     return {};
   }
 }
-
-/** @deprecated Use IgnoreUnknownIds directly. Will be removed in next major release. */
-export type LatestDataParams = IgnoreUnknownIds;
