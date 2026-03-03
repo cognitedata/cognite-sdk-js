@@ -27,42 +27,40 @@ import type {
 } from '../../types/common';
 
 // =====================================================
-// Time Series type aliases
+// Deprecated primitive type aliases
 // =====================================================
 
-/**
- * Whether the time series is a step series or not.
- */
+/** @deprecated Use `boolean` directly. Will be removed in next major release. */
 export type TimeseriesIsStep = boolean;
 
-/**
- * Whether the time series is string valued or not.
- */
+/** @deprecated Use `boolean` directly. Will be removed in next major release. */
 export type TimeseriesIsString = boolean;
 
-/**
- * Name of time series
- */
+/** @deprecated Use `string` directly. Will be removed in next major release. */
 export type TimeseriesName = string;
 
-/**
- * The physical unit of the time series.
- */
+/** @deprecated Use `string` directly. Will be removed in next major release. */
 export type TimeseriesUnit = string;
 
-/**
- * Time series identifier - either internal ID or external ID
- */
-export type TimeseriesIdEither = InternalId | ExternalId;
+// =====================================================
+// Time Series identifier type
+// =====================================================
+
+export type TimeSeriesIdEither = InternalId | ExternalId;
+
+/** @deprecated Use TimeSeriesIdEither instead. Will be removed in next major release. */
+export type TimeseriesIdEither = TimeSeriesIdEither;
 
 // =====================================================
 // Time Series main types
 // =====================================================
 
-/**
- * A time series in Cognite Data Fusion
- */
-export interface Timeseries extends InternalId, CreatedAndLastUpdatedTime {
+export type TimeSeriesType = 'numeric' | 'string' | 'state';
+
+/** @deprecated Use TimeSeriesType instead. Will be removed in next major release. */
+export type TimeseriesType = TimeSeriesType;
+
+export interface TimeSeries extends InternalId, CreatedAndLastUpdatedTime {
   /**
    * Externally supplied id of the time series
    */
@@ -71,22 +69,22 @@ export interface Timeseries extends InternalId, CreatedAndLastUpdatedTime {
    * The ID of an instance in Cognite Data Models.
    */
   instanceId?: CogniteInstanceId;
-  name?: TimeseriesName;
-  isString: TimeseriesIsString;
+  name?: string;
+  isString: boolean;
+  // TODO(next-major): Make required per API spec (GetTimeSeriesMetadataDTO)
+  type?: TimeSeriesType;
   /**
    * Additional metadata. String key -> String value.
    */
   metadata?: Metadata;
-  unit?: TimeseriesUnit;
+  unit?: string;
   /**
    * Asset that this time series belongs to.
    */
   assetId?: CogniteInternalId;
   dataSetId?: CogniteInternalId;
-  isStep: TimeseriesIsStep;
-  /**
-   * Description of the time series.
-   */
+  isStep: boolean;
+  // TODO(next-major): Make optional per API spec (not in required array)
   description: string;
   /**
    * Security categories required in order to access this time series.
@@ -98,16 +96,16 @@ export interface Timeseries extends InternalId, CreatedAndLastUpdatedTime {
   unitExternalId?: CogniteExternalId;
 }
 
-/**
- * Input type for creating a time series
- */
-export interface ExternalTimeseries {
+/** @deprecated Use TimeSeries instead. Will be removed in next major release. */
+export type Timeseries = TimeSeries;
+
+export interface TimeSeriesCreate {
   /**
    * Externally provided id for the time series (optional but recommended)
    */
   externalId?: CogniteExternalId;
   /**
-   * Set a value for legacyName to allow applications using API v0.3, v04, v05, and v0.6 to access this time series. The legacy name is the human-readable name for the time series and is mapped to the name field used in API versions 0.3-0.6. The legacyName field value must be unique, and setting this value to an already existing value will return an error. We recommend that you set this field to the same value as externalId.
+   * @deprecated This field is deprecated and ignored by the API.
    */
   legacyName?: string;
   /**
@@ -143,7 +141,7 @@ export interface ExternalTimeseries {
    */
   description?: string;
   /**
-   * Security categories required in order to access this time series."
+   * Security categories required in order to access this time series.
    */
   securityCategories?: number[];
   /**
@@ -152,18 +150,18 @@ export interface ExternalTimeseries {
   unitExternalId?: CogniteExternalId;
 }
 
+/** @deprecated Use TimeSeriesCreate instead. Will be removed in next major release. */
+export type ExternalTimeseries = TimeSeriesCreate;
+
 // =====================================================
 // Time Series filter types
 // =====================================================
 
-/**
- * Filter for listing time series
- */
-export interface TimeseriesFilter extends CreatedAndLastUpdatedTimeFilter {
-  name?: TimeseriesName;
-  unit?: TimeseriesUnit;
-  isString?: TimeseriesIsString;
-  isStep?: TimeseriesIsStep;
+export interface TimeSeriesFilter extends CreatedAndLastUpdatedTimeFilter {
+  name?: string;
+  unit?: string;
+  isString?: boolean;
+  isStep?: boolean;
   metadata?: Metadata;
   /**
    * Get time series related to these assets. Takes [ 1 .. 100 ] unique items.
@@ -191,24 +189,28 @@ export interface TimeseriesFilter extends CreatedAndLastUpdatedTimeFilter {
    * The physical unit of the time series (reference to unit catalog).
    */
   unitExternalId?: CogniteExternalId;
+  /**
+   * Filter on the physical quantity of the unit (e.g., 'temperature', 'pressure').
+   */
+  unitQuantity?: string;
 }
 
-/**
- * Query parameters for listing time series
- */
-export interface TimeseriesFilterQuery extends FilterQuery {
-  filter?: TimeseriesFilter;
+/** @deprecated Use TimeSeriesFilter instead. Will be removed in next major release. */
+export type TimeseriesFilter = TimeSeriesFilter;
+
+export interface TimeSeriesFilterQuery extends FilterQuery {
+  filter?: TimeSeriesFilter;
   partition?: Partition;
 }
+
+/** @deprecated Use TimeSeriesFilterQuery instead. Will be removed in next major release. */
+export type TimeseriesFilterQuery = TimeSeriesFilterQuery;
 
 // =====================================================
 // Time Series search types
 // =====================================================
 
-/**
- * Search parameters for time series
- */
-export interface TimeseriesSearch {
+export interface TimeSeriesSearch {
   /**
    * Prefix and fuzzy search on name.
    */
@@ -223,33 +225,33 @@ export interface TimeseriesSearch {
   query?: string;
 }
 
-/**
- * Filter for searching time series
- */
-export interface TimeseriesSearchFilter extends Limit {
-  filter?: TimeseriesFilter;
-  search?: TimeseriesSearch;
+/** @deprecated Use TimeSeriesSearch instead. Will be removed in next major release. */
+export type TimeseriesSearch = TimeSeriesSearch;
+
+export interface TimeSeriesSearchFilter extends Limit {
+  filter?: TimeSeriesFilter;
+  search?: TimeSeriesSearch;
 }
+
+/** @deprecated Use TimeSeriesSearchFilter instead. Will be removed in next major release. */
+export type TimeseriesSearchFilter = TimeSeriesSearchFilter;
 
 // =====================================================
 // Time Series update types
 // =====================================================
 
-/**
- * Common update properties for time series (used for all update types)
- */
-export type TimeseriesUpdateCommonProperies = {
+export type TimeSeriesUpdateCommonProperties = {
   externalId?: NullableSinglePatchString;
   metadata?: MetadataPatch;
   assetId?: NullableSinglePatchLong;
   dataSetId?: NullableSinglePatchLong;
 };
 
-/**
- * Update properties for asset-centric time series
- */
-export type TimeseriesUpdateAssetCentricProperies =
-  TimeseriesUpdateCommonProperies & {
+/** @deprecated Use TimeSeriesUpdateCommonProperties instead. Will be removed in next major release. */
+export type TimeseriesUpdateCommonProperies = TimeSeriesUpdateCommonProperties;
+
+export type TimeSeriesUpdateAssetCentricProperties =
+  TimeSeriesUpdateCommonProperties & {
     name?: NullableSinglePatchString;
     unit?: NullableSinglePatchString;
     description?: NullableSinglePatchString;
@@ -257,42 +259,28 @@ export type TimeseriesUpdateAssetCentricProperies =
     unitExternalId?: NullableSinglePatchString;
   };
 
-/**
- * Time series patch for standard updates
- */
+/** @deprecated Use TimeSeriesUpdateAssetCentricProperties instead. Will be removed in next major release. */
+export type TimeseriesUpdateAssetCentricProperies =
+  TimeSeriesUpdateAssetCentricProperties;
+
 export interface TimeSeriesPatch {
-  update: TimeseriesUpdateAssetCentricProperies;
+  update: TimeSeriesUpdateAssetCentricProperties;
 }
 
-/**
- * Time series patch for updates by instance ID
- */
 export interface TimeSeriesPatchByInstanceId {
-  update: TimeseriesUpdateCommonProperies;
+  update: TimeSeriesUpdateCommonProperties;
 }
 
-/**
- * Update time series by external ID
- */
 export interface TimeSeriesUpdateByExternalId
   extends TimeSeriesPatch,
     ExternalId {}
 
-/**
- * Update time series by internal ID
- */
 export interface TimeSeriesUpdateById extends TimeSeriesPatch, InternalId {}
 
-/**
- * Update time series by instance ID
- */
 export interface TimeSeriesUpdateByInstanceId
   extends TimeSeriesPatchByInstanceId,
     InstanceId {}
 
-/**
- * Union type for all time series update variants
- */
 export type TimeSeriesUpdate =
   | TimeSeriesUpdateById
   | TimeSeriesUpdateByExternalId
@@ -302,57 +290,48 @@ export type TimeSeriesUpdate =
 // Time Series aggregate types
 // =====================================================
 
-/**
- * Response from timeseries aggregate endpoint
- */
-export type TimeseriesAggregate = AggregateResponse;
+export type TimeSeriesAggregate = AggregateResponse;
 
-/**
- * Query schema for timeseries aggregate endpoint
- */
-export interface TimeseriesAggregateQuery {
+/** @deprecated Use TimeSeriesAggregate instead. Will be removed in next major release. */
+export type TimeseriesAggregate = TimeSeriesAggregate;
+
+export interface TimeSeriesAggregateQuery {
   /**
    * Filter on timeseries with strict matching.
    */
-  filter?: TimeseriesFilter;
+  filter?: TimeSeriesFilter;
 }
+
+/** @deprecated Use TimeSeriesAggregateQuery instead. Will be removed in next major release. */
+export type TimeseriesAggregateQuery = TimeSeriesAggregateQuery;
 
 // =====================================================
 // Synthetic Time Series types
 // =====================================================
 
-/**
- * A query for a synthetic time series
- */
 export interface SyntheticQuery extends Limit {
   expression: string;
   start?: string | Timestamp;
   end?: string | Timestamp;
+  /**
+   * For aggregates of granularity 'hour' and longer, which time zone to align to.
+   * @default "UTC"
+   * @example "Europe/Oslo"
+   */
+  timeZone?: string;
 }
 
-/**
- * A single synthetic data point value
- */
 export interface SyntheticDataValue extends DatapointInfo {
   value: number;
 }
 
-/**
- * A synthetic data point error
- */
 export interface SyntheticDataError extends DatapointInfo {
   error: string;
 }
 
-/**
- * A synthetic data point - either a value or an error
- */
 export type SyntheticDatapoint = SyntheticDataValue | SyntheticDataError;
 
-/**
- * Response of a synthetic time series query
- */
 export interface SyntheticQueryResponse {
-  isString?: TimeseriesIsString;
+  isString?: boolean;
   datapoints: SyntheticDatapoint[];
 }

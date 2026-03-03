@@ -10,17 +10,17 @@ import {
 import type { IdEither, IgnoreUnknownIds } from '../../types';
 import { SyntheticTimeSeriesAPI } from './syntheticTimeSeriesApi';
 import type {
-  ExternalTimeseries,
   SyntheticQuery,
+  TimeSeries,
+  TimeSeriesAggregate,
+  TimeSeriesAggregateQuery,
+  TimeSeriesCreate,
+  TimeSeriesFilterQuery,
+  TimeSeriesSearchFilter,
   TimeSeriesUpdate,
-  Timeseries,
-  TimeseriesAggregate,
-  TimeseriesAggregateQuery,
-  TimeseriesFilterQuery,
-  TimeseriesSearchFilter,
 } from './types';
 
-export class TimeSeriesAPI extends BaseResourceAPI<Timeseries> {
+export class TimeSeriesAPI extends BaseResourceAPI<TimeSeries> {
   private syntheticTimeseriesApi: SyntheticTimeSeriesAPI;
 
   /** @hidden */
@@ -50,7 +50,7 @@ export class TimeSeriesAPI extends BaseResourceAPI<Timeseries> {
    * const createdTimeseries = await client.timeseries.create(timeseries);
    * ```
    */
-  public create = (items: ExternalTimeseries[]): Promise<Timeseries[]> => {
+  public create = (items: TimeSeriesCreate[]): Promise<TimeSeries[]> => {
     return super.createEndpoint(items);
   };
 
@@ -62,8 +62,8 @@ export class TimeSeriesAPI extends BaseResourceAPI<Timeseries> {
    * ```
    */
   public list = (
-    scope?: TimeseriesFilterQuery
-  ): CursorAndAsyncIterator<Timeseries> => {
+    scope?: TimeSeriesFilterQuery
+  ): CursorAndAsyncIterator<TimeSeries> => {
     return super.listEndpoint(this.callListEndpointWithPost, scope);
   };
 
@@ -76,8 +76,8 @@ export class TimeSeriesAPI extends BaseResourceAPI<Timeseries> {
    * ```
    */
   public aggregate = (
-    query: TimeseriesAggregateQuery
-  ): Promise<TimeseriesAggregate[]> => {
+    query: TimeSeriesAggregateQuery
+  ): Promise<TimeSeriesAggregate[]> => {
     return super.aggregateEndpoint(query);
   };
 
@@ -93,7 +93,7 @@ export class TimeSeriesAPI extends BaseResourceAPI<Timeseries> {
    */
   public retrieve = (
     ids: IdEitherWithInstance[],
-    params: TimeseriesRetrieveParams = {}
+    params: IgnoreUnknownIds = {}
   ) => {
     return super.retrieveEndpoint(ids, params);
   };
@@ -128,7 +128,7 @@ export class TimeSeriesAPI extends BaseResourceAPI<Timeseries> {
    * });
    * ```
    */
-  public search = (query: TimeseriesSearchFilter) => {
+  public search = (query: TimeSeriesSearchFilter) => {
     return super.searchEndpoint(query);
   };
 
@@ -164,5 +164,3 @@ export class TimeSeriesAPI extends BaseResourceAPI<Timeseries> {
     return this.syntheticTimeseriesApi.query(items);
   };
 }
-
-export type TimeseriesRetrieveParams = IgnoreUnknownIds;

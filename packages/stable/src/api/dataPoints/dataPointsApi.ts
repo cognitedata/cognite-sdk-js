@@ -2,19 +2,14 @@
 
 import { BaseResourceAPI } from '@cognite/sdk-core';
 import type { ItemsWrapper } from '@cognite/sdk-core';
+import type { DatapointInfo, IgnoreUnknownIds } from '../../types/common';
 import type {
-  DatapointInfo,
-  IgnoreUnknownIds,
-  Timestamp,
-} from '../../types/common';
-import type {
-  DatapointAggregate,
   DatapointAggregates,
   Datapoints,
   DatapointsDeleteRequest,
+  DatapointsInsertItem,
   DatapointsMonthlyGranularityMultiQuery,
   DatapointsMultiQuery,
-  ExternalDatapointsQuery,
   LatestDataBeforeRequest,
 } from './types';
 
@@ -26,7 +21,7 @@ export class DataPointsAPI extends BaseResourceAPI<
    */
   protected getDateProps() {
     return this.pickDateProps<DatapointInfo>(
-      ['items', 'datapoints'],
+      ['items', 'datapoints', 'maxDatapoint', 'minDatapoint'],
       ['timestamp']
     );
   }
@@ -38,7 +33,7 @@ export class DataPointsAPI extends BaseResourceAPI<
    * await client.datapoints.insert([{ id: 123, datapoints: [{timestamp: 1557320284000, value: -2}] }]);
    * ```
    */
-  public insert = (items: ExternalDatapointsQuery[]): Promise<object> => {
+  public insert = (items: DatapointsInsertItem[]): Promise<object> => {
     return this.insertEndpoint(items);
   };
 
@@ -56,78 +51,22 @@ export class DataPointsAPI extends BaseResourceAPI<
   };
 
   /**
+   * @deprecated Use `retrieve()` with `granularity: '1mo'` instead. Will be removed in next major release.
    *
    * ```js
-   * const monthlyAggregatesData = await client.datapoints.retrieveDatapointMonthlyAggregates({ items: [{ id: 123 }] });
+   * const monthlyAggregatesData = await client.datapoints.retrieve({ items: [{ id: 123 }], granularity: '1mo', aggregates: ['average'] });
    * ```
    */
   public retrieveDatapointMonthlyAggregates = async (
     query: DatapointsMonthlyGranularityMultiQuery
   ): Promise<DatapointAggregates[]> => {
-    // Find the start and end dates from the query
-    const startDate = query.start;
-    const endDate = query.end;
-
-    if (startDate && endDate) {
-      // Get the months between the start and end dates
-      const months = this.getMonthsBetweenDates(startDate, endDate);
-
-      // Create a array of promises for each month
-      const promises = months.map((month) => {
-        // Create a new query for each month
-        const newQuery = {
-          ...query,
-          start: month.startDate,
-          end: month.endDate,
-          granularity: `${month.numberOfDays}d`,
-        };
-
-        // Return a promise for each month
-        return this.retrieveDatapointsEndpoint(newQuery);
-      });
-
-      // Call the API for each month in parallel and save it in a variable
-      const results = await Promise.all(promises);
-
-      // Merge the datapoints into a single item per time series
-      const mergedDatapoints: {
-        [id: number]: DatapointAggregate[];
-      } = {};
-      const mergedTimeseries: {
-        [id: number]: DatapointAggregates;
-      } = {};
-
-      for (const result of results) {
-        // There can be multiple time series in a response, so we need to loop through each item
-        for (const item of result) {
-          if (!mergedTimeseries[item.id]) {
-            mergedTimeseries[item.id] = item as DatapointAggregates;
-          }
-          if (item?.datapoints?.length) {
-            if (!mergedDatapoints[item.id]) {
-              mergedDatapoints[item.id] = item.datapoints;
-            } else {
-              mergedDatapoints[item.id].push(...item.datapoints);
-            }
-          }
-        }
-      }
-      const resultSet: DatapointAggregates[] = [];
-
-      for (const key in mergedTimeseries) {
-        const item = mergedTimeseries[key];
-        if (key in mergedDatapoints) {
-          item.datapoints = mergedDatapoints[key];
-        } else {
-          item.datapoints = [];
-        }
-        resultSet.push(item as DatapointAggregates);
-      }
-
-      return resultSet;
-    }
-
-    return this.retrieveDatapointsEndpoint<DatapointAggregates[]>(query);
+    console.warn(
+      'retrieveDatapointMonthlyAggregates is deprecated. Use retrieve() with granularity "1mo" instead. This method will be removed in the next major release.'
+    );
+    return this.retrieveDatapointsEndpoint<DatapointAggregates[]>({
+      ...query,
+      granularity: '1mo',
+    });
   };
 
   /**
@@ -148,7 +87,7 @@ export class DataPointsAPI extends BaseResourceAPI<
    */
   public retrieveLatest = (
     items: LatestDataBeforeRequest[],
-    params: LatestDataParams = {}
+    params: IgnoreUnknownIds = {}
   ): Promise<Datapoints[]> => {
     return this.retrieveLatestEndpoint(items, params);
   };
@@ -164,7 +103,7 @@ export class DataPointsAPI extends BaseResourceAPI<
     return this.deleteDatapointsEndpoint(items);
   };
 
-  private async insertEndpoint(items: ExternalDatapointsQuery[]) {
+  private async insertEndpoint(items: DatapointsInsertItem[]) {
     const path = this.url();
     await this.postInParallelWithAutomaticChunking({ path, items });
     return {};
@@ -184,7 +123,7 @@ export class DataPointsAPI extends BaseResourceAPI<
 
   private async retrieveLatestEndpoint(
     items: LatestDataBeforeRequest[],
-    params: LatestDataParams
+    params: IgnoreUnknownIds
   ): Promise<Datapoints[]> {
     const path = this.url('latest');
     return this.callEndpointWithMergeAndTransform(items, (request) =>
@@ -205,40 +144,4 @@ export class DataPointsAPI extends BaseResourceAPI<
     });
     return {};
   }
-
-  protected getMonthsBetweenDates = (
-    startDate: Timestamp | string,
-    endDate: Timestamp | string
-  ): MonthInfo[] => {
-    const result: MonthInfo[] = [];
-
-    const currentMonth = new Date(startDate);
-
-    while (currentMonth <= new Date(endDate)) {
-      const firstDay = new Date(
-        Date.UTC(currentMonth.getFullYear(), currentMonth.getMonth(), 1, 0)
-      );
-      const lastDay = new Date(
-        Date.UTC(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1, 0)
-      );
-
-      result.push({
-        startDate: firstDay.getTime(),
-        endDate: lastDay.getTime(),
-        numberOfDays:
-          (lastDay.getTime() - firstDay.getTime()) / (24 * 3600 * 1000),
-      });
-      // Move to the next month
-      currentMonth.setMonth(currentMonth.getMonth() + 1);
-    }
-    return result;
-  };
 }
-
-interface MonthInfo {
-  startDate: Timestamp;
-  endDate: Timestamp;
-  numberOfDays: number;
-}
-
-export type LatestDataParams = IgnoreUnknownIds;
