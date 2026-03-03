@@ -7,9 +7,9 @@ import type {
   DatapointAggregates,
   Datapoints,
   DatapointsDeleteRequest,
+  DatapointsInsertItem,
   DatapointsMonthlyGranularityMultiQuery,
   DatapointsMultiQuery,
-  ExternalDatapointsQuery,
   LatestDataBeforeRequest,
 } from './types';
 
@@ -33,7 +33,7 @@ export class DataPointsAPI extends BaseResourceAPI<
    * await client.datapoints.insert([{ id: 123, datapoints: [{timestamp: 1557320284000, value: -2}] }]);
    * ```
    */
-  public insert = (items: ExternalDatapointsQuery[]): Promise<object> => {
+  public insert = (items: DatapointsInsertItem[]): Promise<object> => {
     return this.insertEndpoint(items);
   };
 
@@ -51,14 +51,18 @@ export class DataPointsAPI extends BaseResourceAPI<
   };
 
   /**
+   * @deprecated Use `retrieve()` with `granularity: '1mo'` instead. Will be removed in next major release.
    *
    * ```js
-   * const monthlyAggregatesData = await client.datapoints.retrieveDatapointMonthlyAggregates({ items: [{ id: 123 }] });
+   * const monthlyAggregatesData = await client.datapoints.retrieve({ items: [{ id: 123 }], granularity: '1mo', aggregates: ['average'] });
    * ```
    */
   public retrieveDatapointMonthlyAggregates = async (
     query: DatapointsMonthlyGranularityMultiQuery
   ): Promise<DatapointAggregates[]> => {
+    console.warn(
+      'retrieveDatapointMonthlyAggregates is deprecated. Use retrieve() with granularity "1mo" instead. This method will be removed in the next major release.'
+    );
     return this.retrieveDatapointsEndpoint<DatapointAggregates[]>({
       ...query,
       granularity: '1mo',
@@ -99,7 +103,7 @@ export class DataPointsAPI extends BaseResourceAPI<
     return this.deleteDatapointsEndpoint(items);
   };
 
-  private async insertEndpoint(items: ExternalDatapointsQuery[]) {
+  private async insertEndpoint(items: DatapointsInsertItem[]) {
     const path = this.url();
     await this.postInParallelWithAutomaticChunking({ path, items });
     return {};
@@ -142,4 +146,5 @@ export class DataPointsAPI extends BaseResourceAPI<
   }
 }
 
+/** @deprecated Use IgnoreUnknownIds directly. Will be removed in next major release. */
 export type LatestDataParams = IgnoreUnknownIds;
