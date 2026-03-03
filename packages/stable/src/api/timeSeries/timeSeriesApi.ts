@@ -12,8 +12,8 @@ import { SyntheticTimeSeriesAPI } from './syntheticTimeSeriesApi';
 import type {
   SyntheticQuery,
   TimeSeries,
-  TimeSeriesAggregateQuery,
   TimeSeriesAggregate,
+  TimeSeriesAggregateQuery,
   TimeSeriesCreate,
   TimeSeriesFilterQuery,
   TimeSeriesSearchFilter,
