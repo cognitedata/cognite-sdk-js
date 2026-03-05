@@ -3,7 +3,7 @@
 export * from '@cognite/sdk';
 export { default as CogniteClient } from './cogniteClient';
 export * from './types';
-export {
+export type {
   Aggregate,
   DatapointAggregate,
   DatapointAggregates,
