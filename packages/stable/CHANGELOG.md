@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [10.10.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@10.9.0...@cognite/sdk@10.10.0) (2026-03-05)
+
+
+### Bug Fixes
+
+* **docs:** restore documentation deployment and add missing API exports ([#1362](https://github.com/cognitedata/cognite-sdk-js/issues/1362)) ([5cb0f3d](https://github.com/cognitedata/cognite-sdk-js/commit/5cb0f3d95683a7a0bda371895e78039aefaa01af))
+
+
+### Features
+
+* **containers:** add usedFor filter parameter to containers list ([#1345](https://github.com/cognitedata/cognite-sdk-js/issues/1345)) ([dc8b235](https://github.com/cognitedata/cognite-sdk-js/commit/dc8b235203979f676ef36f4b922207c02b8f15fc))
+* **FUN-462:** add lastCalled field to CogniteFunction type ([#1378](https://github.com/cognitedata/cognite-sdk-js/issues/1378)) ([c455574](https://github.com/cognitedata/cognite-sdk-js/commit/c45557468963e804c5e4de9961f704c4277fdffc))
+* **records:** add hasNext support for manual pagination in sync endpoint ([#1361](https://github.com/cognitedata/cognite-sdk-js/issues/1361)) ([7f57d1b](https://github.com/cognitedata/cognite-sdk-js/commit/7f57d1bd26c3057e93fb552e34e2934982785206))
+
+
+
+
+
 # [10.9.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@10.5.0...@cognite/sdk@10.9.0) (2026-02-23)
 
 

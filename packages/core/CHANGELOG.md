@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.2.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@5.1.8...@cognite/sdk-core@5.2.0) (2026-03-05)
+
+
+### Features
+
+* **containers:** add usedFor filter parameter to containers list ([#1345](https://github.com/cognitedata/cognite-sdk-js/issues/1345)) ([dc8b235](https://github.com/cognitedata/cognite-sdk-js/commit/dc8b235203979f676ef36f4b922207c02b8f15fc))
+* **records:** add hasNext support for manual pagination in sync endpoint ([#1361](https://github.com/cognitedata/cognite-sdk-js/issues/1361)) ([7f57d1b](https://github.com/cognitedata/cognite-sdk-js/commit/7f57d1bd26c3057e93fb552e34e2934982785206))
+
+
+
+
+
 ## [5.1.8](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@5.1.4...@cognite/sdk-core@5.1.8) (2026-02-23)
 
 **Note:** Version bump only for package @cognite/sdk-core
