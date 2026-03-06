@@ -3,7 +3,7 @@
 import { afterAll, beforeAll, describe, expect, test } from 'vitest';
 import type CogniteClient from '../../cogniteClient';
 import type { Timeseries } from '../../index';
-import type { Datapoints } from '../../types';
+import type { Datapoints } from '@cognite/sdk';
 import { setupLoggedInClient } from '../testUtils';
 
 const Status = {
