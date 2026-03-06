@@ -110,6 +110,42 @@ describe('Timeseries integration test', () => {
     expect((res[0].datapoints[0] as DoubleDatapoint).value).toBe(373.15);
   });
 
+  test('retrieveLatest with targetUnit', async () => {
+    const res = await client.datapoints.retrieveLatest([
+      {
+        id: createdTimeseries.id,
+        targetUnit: 'temperature:deg_f',
+      },
+    ]);
+    expect(res.length).toBe(1);
+    expect(res[0].datapoints.length).toBeGreaterThan(0);
+    expect((res[0].datapoints[0] as DoubleDatapoint).value).toBe(212);
+  });
+
+  test('retrieveLatest with targetUnitSystem', async () => {
+    const res = await client.datapoints.retrieveLatest([
+      {
+        id: createdTimeseries.id,
+        targetUnitSystem: 'SI',
+      },
+    ]);
+    expect(res.length).toBe(1);
+    expect(res[0].datapoints.length).toBeGreaterThan(0);
+    expect((res[0].datapoints[0] as DoubleDatapoint).value).toBe(373.15);
+  });
+
+  test('list with unitQuantity filter', async () => {
+    await runTestWithRetryWhenFailing(async () => {
+      const { items } = await client.timeseries.list({
+        filter: {
+          unitQuantity: 'Temperature',
+        },
+      });
+      expect(items.length).toBeGreaterThan(0);
+      expect(items[0].unitExternalId).toBeDefined();
+    });
+  });
+
   test('delete', async () => {
     await client.timeseries.delete([{ id: createdTimeseries.id }]);
   });
