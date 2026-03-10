@@ -231,10 +231,9 @@ describe('Datapoints integration test', () => {
     ]);
     expect(response[0].datapoints.length).toBeGreaterThan(0);
     const dp = response[0].datapoints[0] as DoubleDatapoint;
-    if (dp.status) {
-      expect(dp.status.symbol).toBeDefined();
-      expect(typeof dp.status.code).toBe('number');
-    }
+    expect(dp.status).toBeDefined();
+    expect(dp.status?.symbol).toBeDefined();
+    expect(typeof dp.status?.code).toBe('number');
   });
 
   test('retrieve with new aggregate types', async () => {
