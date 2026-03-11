@@ -2,7 +2,12 @@
 
 import { afterAll, beforeAll, describe, expect, test } from 'vitest';
 import type CogniteClient from '../../cogniteClient';
-import type { DatapointAggregate, NodeWrite, Timeseries } from '../../types';
+import type {
+  DatapointAggregate,
+  DoubleDatapoint,
+  NodeWrite,
+  Timeseries,
+} from '../../types';
 import { randomInt, setupLoggedInClient } from '../testUtils';
 
 describe('Datapoints integration test', () => {
@@ -156,12 +161,138 @@ describe('Datapoints integration test', () => {
     expect(nextResponse[0].datapoints).not.toEqual(response);
   });
 
+  test('insert with status code and retrieve with includeStatus', async () => {
+    const statusTimestamp = Date.now() - 10000;
+    const statusDatapoints = [
+      {
+        timestamp: statusTimestamp,
+        value: 42,
+        status: { code: 1073741824, symbol: 'Uncertain' },
+      },
+    ];
+    await client.datapoints.insert([
+      { id: timeserie.id, datapoints: statusDatapoints },
+    ]);
+    const response = await client.datapoints.retrieve({
+      items: [
+        {
+          id: timeserie.id,
+          includeStatus: true,
+          ignoreBadDataPoints: false,
+          treatUncertainAsBad: false,
+        },
+      ],
+      start: '1d-ago',
+      end: new Date(),
+    });
+    expect(response[0].datapoints.length).toBeGreaterThan(0);
+    const uncertainDp = (response[0].datapoints as DoubleDatapoint[]).find(
+      (dp) => dp.timestamp.getTime() === statusTimestamp
+    );
+    expect(uncertainDp).toBeDefined();
+    expect(uncertainDp?.status).toBeDefined();
+    expect(uncertainDp?.status?.symbol).toBe('Uncertain');
+    expect(typeof uncertainDp?.status?.code).toBe('number');
+  });
+
+  test('retrieve with ignoreBadDataPoints and treatUncertainAsBad', async () => {
+    const response = await client.datapoints.retrieve({
+      items: [
+        {
+          id: timeserie.id,
+          includeStatus: true,
+          ignoreBadDataPoints: false,
+          treatUncertainAsBad: false,
+        },
+      ],
+      start: '1d-ago',
+      end: new Date(),
+    });
+    expect(response[0].datapoints.length).toBeGreaterThan(0);
+    const withStatus = (response[0].datapoints as DoubleDatapoint[]).filter(
+      (dp) => dp.status !== undefined
+    );
+    expect(withStatus.length).toBeGreaterThan(0);
+    for (const dp of withStatus) {
+      expect(dp.status?.symbol).toBeDefined();
+      expect(typeof dp.status?.code).toBe('number');
+    }
+  });
+
+  test('retrieveLatest with includeStatus', async () => {
+    const response = await client.datapoints.retrieveLatest([
+      {
+        id: timeserie.id,
+        includeStatus: true,
+        ignoreBadDataPoints: false,
+        treatUncertainAsBad: false,
+      },
+    ]);
+    expect(response[0].datapoints.length).toBeGreaterThan(0);
+    const dp = response[0].datapoints[0] as DoubleDatapoint;
+    expect(dp.status).toBeDefined();
+    expect(dp.status?.symbol).toBeDefined();
+    expect(typeof dp.status?.code).toBe('number');
+  });
+
+  test('retrieve with new aggregate types', async () => {
+    const response = await client.datapoints.retrieve({
+      items: [
+        {
+          id: timeserie.id,
+          aggregates: [
+            'maxDatapoint',
+            'minDatapoint',
+            'countGood',
+            'countUncertain',
+            'countBad',
+            'durationGood',
+            'durationUncertain',
+            'durationBad',
+          ],
+          granularity: '2d',
+        },
+      ],
+      start: '3d-ago',
+      end: new Date(),
+    });
+    expect(response.length).toBe(1);
+    expect(response[0].datapoints.length).toBeGreaterThan(0);
+
+    const dp = response[0].datapoints[0] as DatapointAggregate;
+    expect(dp.maxDatapoint).toBeDefined();
+    expect(dp.maxDatapoint?.timestamp).toBeInstanceOf(Date);
+    expect(typeof dp.maxDatapoint?.value).toBe('number');
+    expect(dp.minDatapoint).toBeDefined();
+    expect(dp.minDatapoint?.timestamp).toBeInstanceOf(Date);
+    expect(typeof dp.minDatapoint?.value).toBe('number');
+    expect(typeof dp.countGood).toBe('number');
+    expect(typeof dp.countUncertain).toBe('number');
+    expect(typeof dp.countBad).toBe('number');
+    expect(typeof dp.durationGood).toBe('number');
+    expect(typeof dp.durationUncertain).toBe('number');
+    expect(typeof dp.durationBad).toBe('number');
+  });
+
   test('synthetic query', async () => {
     const result = await client.timeseries.syntheticQuery([
       {
         expression: `24 * TS{id=${timeserie.id}}`,
         start: '48h-ago',
         limit: 1,
+      },
+    ]);
+    expect(result.length).toBe(1);
+    expect(result[0].datapoints[0].timestamp).toBeInstanceOf(Date);
+  });
+
+  test('synthetic query with timeZone', async () => {
+    const result = await client.timeseries.syntheticQuery([
+      {
+        expression: `24 * TS{id=${timeserie.id}}`,
+        start: '48h-ago',
+        limit: 1,
+        timeZone: 'Europe/Oslo',
       },
     ]);
     expect(result.length).toBe(1);

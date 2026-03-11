@@ -26,7 +26,7 @@ export class DataPointsAPI extends BaseResourceAPI<
    */
   protected getDateProps() {
     return this.pickDateProps<DatapointInfo>(
-      ['items', 'datapoints'],
+      ['items', 'datapoints', 'maxDatapoint', 'minDatapoint'],
       ['timestamp']
     );
   }
