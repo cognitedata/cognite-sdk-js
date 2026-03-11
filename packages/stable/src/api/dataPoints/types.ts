@@ -101,11 +101,14 @@ export interface StringDatapoint extends DatapointInfo {
   status?: DatapointStatus;
 }
 
-export interface ExternalDatapoint {
+export interface DatapointWrite {
   timestamp: Timestamp;
   value: number | string;
   status?: DatapointStatus;
 }
+
+/** @deprecated Use DatapointWrite instead. Will be removed in next major release. */
+export type ExternalDatapoint = DatapointWrite;
 
 // =====================================================
 // Data points delete types
@@ -196,27 +199,44 @@ export interface StringDatapoints extends DatapointsMetadata, NextCursor {
 }
 
 // =====================================================
-// External data points (insert) types
+// Data points insert types
 // =====================================================
 
-export interface ExternalDatapoints {
-  datapoints: ExternalDatapoint[];
+export interface DatapointsInsertProperties {
+  datapoints: DatapointWrite[];
 }
 
-export type ExternalDatapointsQuery =
-  | ExternalDatapointId
-  | ExternalDatapointExternalId
-  | ExternalDatapointInstanceId;
+/** @deprecated Use DatapointsInsertProperties instead. Will be removed in next major release. */
+export type ExternalDatapoints = DatapointsInsertProperties;
 
-export interface ExternalDatapointExternalId
-  extends ExternalDatapoints,
+export interface DatapointsInsertByExternalId
+  extends DatapointsInsertProperties,
     ExternalId {}
 
-export interface ExternalDatapointInstanceId
-  extends ExternalDatapoints,
+/** @deprecated Use DatapointsInsertByExternalId instead. Will be removed in next major release. */
+export type ExternalDatapointExternalId = DatapointsInsertByExternalId;
+
+export interface DatapointsInsertByInstanceId
+  extends DatapointsInsertProperties,
     InstanceId {}
 
-export interface ExternalDatapointId extends ExternalDatapoints, InternalId {}
+/** @deprecated Use DatapointsInsertByInstanceId instead. Will be removed in next major release. */
+export type ExternalDatapointInstanceId = DatapointsInsertByInstanceId;
+
+export interface DatapointsInsertById
+  extends DatapointsInsertProperties,
+    InternalId {}
+
+/** @deprecated Use DatapointsInsertById instead. Will be removed in next major release. */
+export type ExternalDatapointId = DatapointsInsertById;
+
+export type DatapointsInsertItem =
+  | DatapointsInsertById
+  | DatapointsInsertByExternalId
+  | DatapointsInsertByInstanceId;
+
+/** @deprecated Use DatapointsInsertItem instead. Will be removed in next major release. */
+export type ExternalDatapointsQuery = DatapointsInsertItem;
 
 // =====================================================
 // Data points query types
@@ -226,6 +246,9 @@ export interface DatapointsMultiQuery extends DatapointsMultiQueryBase {
   items: DatapointsQuery[];
 }
 
+/**
+ * @deprecated Use DatapointsMultiQuery with `granularity: '1mo'` instead. Will be removed in next major release.
+ */
 export interface DatapointsMonthlyGranularityMultiQuery
   extends Omit<DatapointsMultiQueryBase, 'granularity'> {
   items: DatapointsQuery[];
@@ -371,3 +394,10 @@ export interface LatestDataPropertyFilter {
    */
   treatUncertainAsBad?: boolean;
 }
+
+// =====================================================
+// Deprecated re-exports from other modules
+// =====================================================
+
+/** @deprecated Use IgnoreUnknownIds directly. Will be removed in next major release. */
+export type LatestDataParams = IgnoreUnknownIds;
