@@ -776,4 +776,76 @@ describe('Datapoints integration test for quality indicators', () => {
     expect(response[0].datapoints[8].status).toBeUndefined();
     expect(response[0].datapoints[9].status).toEqual(Status.uncertain);
   });
+
+  test('ignoreBadDataPoints filters out bad-status datapoints', async () => {
+    const allDatapoints = (await client.datapoints.retrieve({
+      items: [
+        {
+          id: timeserie.id,
+          start: new Date('2022-10-01T00:00:00Z'),
+          end: new Date('2023-04-01T00:00:00Z'),
+          includeStatus: true,
+          ignoreBadDataPoints: false,
+          treatUncertainAsBad: false,
+        },
+      ],
+    })) as Datapoints[];
+
+    const filteredDatapoints = (await client.datapoints.retrieve({
+      items: [
+        {
+          id: timeserie.id,
+          start: new Date('2022-10-01T00:00:00Z'),
+          end: new Date('2023-04-01T00:00:00Z'),
+          includeStatus: true,
+          ignoreBadDataPoints: true,
+          treatUncertainAsBad: false,
+        },
+      ],
+    })) as Datapoints[];
+
+    expect(allDatapoints[0].datapoints.length).toBe(10);
+    expect(filteredDatapoints[0].datapoints.length).toBe(7);
+
+    const filteredStatuses = (
+      filteredDatapoints[0].datapoints as DoubleDatapoint[]
+    ).filter((dp) => dp.status?.symbol === 'Bad');
+    expect(filteredStatuses.length).toBe(0);
+  });
+
+  test('treatUncertainAsBad excludes uncertain datapoints when combined with ignoreBadDataPoints', async () => {
+    const withUncertain = (await client.datapoints.retrieve({
+      items: [
+        {
+          id: timeserie.id,
+          start: new Date('2022-10-01T00:00:00Z'),
+          end: new Date('2023-04-01T00:00:00Z'),
+          includeStatus: true,
+          ignoreBadDataPoints: true,
+          treatUncertainAsBad: false,
+        },
+      ],
+    })) as Datapoints[];
+
+    const withoutUncertain = (await client.datapoints.retrieve({
+      items: [
+        {
+          id: timeserie.id,
+          start: new Date('2022-10-01T00:00:00Z'),
+          end: new Date('2023-04-01T00:00:00Z'),
+          includeStatus: true,
+          ignoreBadDataPoints: true,
+          treatUncertainAsBad: true,
+        },
+      ],
+    })) as Datapoints[];
+
+    expect(withUncertain[0].datapoints.length).toBe(7);
+    expect(withoutUncertain[0].datapoints.length).toBe(4);
+
+    const uncertainInFiltered = (
+      withoutUncertain[0].datapoints as DoubleDatapoint[]
+    ).filter((dp) => dp.status?.symbol === 'Uncertain');
+    expect(uncertainInFiltered.length).toBe(0);
+  });
 });
