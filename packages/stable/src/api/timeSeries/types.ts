@@ -18,6 +18,7 @@ import type {
   CreatedAndLastUpdatedTimeFilter,
   DatapointInfo,
   ExternalIdPrefix,
+  IgnoreUnknownIds,
   Metadata,
   MetadataPatch,
   NullableSinglePatchLong,
@@ -335,3 +336,10 @@ export interface SyntheticQueryResponse {
   isString?: boolean;
   datapoints: SyntheticDatapoint[];
 }
+
+// =====================================================
+// Deprecated re-exports from other modules
+// =====================================================
+
+/** @deprecated Use IgnoreUnknownIds directly. Will be removed in next major release. */
+export type TimeseriesRetrieveParams = IgnoreUnknownIds;

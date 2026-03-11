@@ -394,3 +394,10 @@ export interface LatestDataPropertyFilter {
    */
   treatUncertainAsBad?: boolean;
 }
+
+// =====================================================
+// Deprecated re-exports from other modules
+// =====================================================
+
+/** @deprecated Use IgnoreUnknownIds directly. Will be removed in next major release. */
+export type LatestDataParams = IgnoreUnknownIds;
