@@ -41,7 +41,7 @@ while true; do
 
   echo "=========================================="
   echo "Picking task #$TASK_ID"
-  kanban-md move "$TASK_ID" in-progress
+  kanban-md move "$TASK_ID" in-progress --claim claude-execute
 
   TASK_DETAILS=$(kanban-md show "$TASK_ID")
 
