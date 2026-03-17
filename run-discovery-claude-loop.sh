@@ -20,6 +20,7 @@ RULES:
 - First run: kanban-md board --compact and kanban-md list --compact to see existing tasks.
 - Do not duplicate tasks. If a finding is already on the board, skip it.
 - When done, you may conclude that the discovery is complete and the kanban todo list is sufficient.
+- You MAY update AGENTS.md with knowledge you learned (e.g. codebase structure, patterns, conventions) so future sessions have better context.
 
 TASK: Explore the codebase and identify bad coding practices / improvement areas in these 4 focus areas:
 

@@ -33,6 +33,7 @@ The `run-discovery-claude-loop.sh` script explores these 4 areas:
 
 ## Conventions
 
+- You may update this file with knowledge you learn (e.g. codebase structure, patterns, conventions) so future sessions have better context.
 - Always set `--due YYYY-MM-DD` for tasks with a real deadline.
 - Use tags to filter by context: `kanban-md list --compact --tag discovery`
 - Priorities: `low`, `medium`, `high`, `critical`
