@@ -5,7 +5,7 @@ import type { HttpResponse } from './httpClient/basicHttpClient';
 
 /** @hidden */
 export interface MultiErrorRawSummary<RequestType, ResponseType> {
-  succeded: RequestType[][];
+  succeeded: RequestType[][];
   responses: HttpResponse<ResponseType>[];
   failed: RequestType[][];
   errors: (Error | CogniteError)[];
@@ -23,7 +23,12 @@ function serialiseErrors(errors: (Error | CogniteError)[]) {
 
 export class CogniteMultiError<RequestType, ResponseType> extends Error {
   public failed: RequestType[];
-  public succeded: RequestType[];
+  public succeeded: RequestType[];
+
+  /** @deprecated Use `succeeded` instead. */
+  public get succeded(): RequestType[] {
+    return this.succeeded;
+  }
 
   public status?: number;
   public requestId?: string;
@@ -35,7 +40,7 @@ export class CogniteMultiError<RequestType, ResponseType> extends Error {
   public errors: (Error | CogniteError)[];
 
   constructor({
-    succeded,
+    succeeded,
     responses,
     failed,
     errors,
@@ -43,7 +48,7 @@ export class CogniteMultiError<RequestType, ResponseType> extends Error {
     super(
       `The API Failed to process some items\n${JSON.stringify(
         {
-          succeded,
+          succeeded,
           responses,
           failed,
           errors: serialiseErrors(errors),
@@ -56,7 +61,7 @@ export class CogniteMultiError<RequestType, ResponseType> extends Error {
 
     this.responses = responses.map((response) => response.data);
     this.errors = errors;
-    this.succeded = succeded.reduce((all, current) => all.concat(current), []);
+    this.succeeded = succeeded.reduce((all, current) => all.concat(current), []);
     this.failed = failed.reduce((all, current) => all.concat(current), []);
     const firstError = errors[0];
     if (firstError instanceof CogniteError) {

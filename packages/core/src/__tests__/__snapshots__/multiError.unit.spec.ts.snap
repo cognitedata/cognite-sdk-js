@@ -3,7 +3,7 @@
 exports[`Cognite multi error > create with 2 fails and 1 success 1`] = `
 "The API Failed to process some items
 {
-  "succeded": [
+  "succeeded": [
     [
       2
     ]

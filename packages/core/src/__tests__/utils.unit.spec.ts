@@ -75,7 +75,7 @@ describe('utils', () => {
         )
       ).rejects.toEqual({
         failed: ['x'],
-        succeded: ['a', 'b', 'c'],
+        succeeded: ['a', 'b', 'c'],
         errors: ['xx'],
         responses: ['ar', 'br', 'cr'],
       });
@@ -88,7 +88,7 @@ describe('utils', () => {
         });
       await expect(promiseAllAtOnce(['x'], fail)).rejects.toEqual({
         failed: ['x'],
-        succeded: [],
+        succeeded: [],
         errors: [new Error('y')],
         responses: [],
       });
@@ -159,7 +159,7 @@ describe('utils', () => {
         promiseEachInSequence([1, 2], () => Promise.reject('reject'))
       ).rejects.toEqual({
         failed: [1, 2],
-        succeded: [],
+        succeeded: [],
         errors: ['reject'],
         responses: [],
       });
@@ -170,7 +170,7 @@ describe('utils', () => {
         )
       ).rejects.toEqual({
         failed: [0, 2, 3],
-        succeded: [1],
+        succeeded: [1],
         errors: ['x'],
         responses: [1],
       });
@@ -181,7 +181,7 @@ describe('utils', () => {
         )
       ).rejects.toEqual({
         failed: [0, 3, 0],
-        succeded: [1, 2],
+        succeeded: [1, 2],
         errors: ['x'],
         responses: ['1r', '2r'],
       });
@@ -206,7 +206,7 @@ describe('utils', () => {
         )
       ).rejects.toEqual({
         failed: [0, 0],
-        succeded: [1, 2, 3],
+        succeeded: [1, 2, 3],
         errors: ['x', 'x'],
         responses: ['1r', '2r', '3r'],
       });
@@ -220,7 +220,7 @@ describe('utils', () => {
         )
       ).rejects.toEqual({
         failed: [0, 0, 0],
-        succeded: [],
+        succeeded: [],
         errors: ['err', 'err', 'err'],
         responses: [],
       });

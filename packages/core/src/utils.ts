@@ -97,12 +97,12 @@ export async function promiseAllAtOnce<RequestType, ResponseType>(
   concurrency: number = DEFAULT_CONCURRENCY
 ) {
   const failed: RequestType[] = [];
-  const succeded: RequestType[] = [];
+  const succeeded: RequestType[] = [];
   const responses: ResponseType[] = [];
   const errors: (Error | CogniteError)[] = [];
 
   type SingleResult = {
-    succeded?: RequestType;
+    succeeded?: RequestType;
     response?: ResponseType;
     failed?: RequestType;
     error?: Error | CogniteError;
@@ -116,7 +116,7 @@ export async function promiseAllAtOnce<RequestType, ResponseType>(
       const index = nextIndex++;
       try {
         const result = await promiser(inputs[index]);
-        results[index] = { succeded: inputs[index], response: result };
+        results[index] = { succeeded: inputs[index], response: result };
       } catch (error) {
         results[index] = {
           failed: inputs[index],
@@ -134,13 +134,13 @@ export async function promiseAllAtOnce<RequestType, ResponseType>(
 
   for (const res of results) {
     failed.push(...(res.failed ? [res.failed] : []));
-    succeded.push(...(res.succeded ? [res.succeded] : []));
+    succeeded.push(...(res.succeeded ? [res.succeeded] : []));
     responses.push(...(res.response ? [res.response] : []));
     errors.push(...(res.error ? [res.error] : []));
   }
   if (failed.length) {
     throw {
-      succeded,
+      succeeded,
       responses,
       failed,
       errors,
@@ -189,7 +189,7 @@ export async function promiseEachInSequence<RequestType, ResponseType>(
         throw {
           errors: [err],
           failed: inputs.slice(index),
-          succeded: inputs.slice(0, index),
+          succeeded: inputs.slice(0, index),
           responses: prevResult,
         };
       }
@@ -199,12 +199,12 @@ export async function promiseEachInSequence<RequestType, ResponseType>(
   const responses: ResponseType[] = [];
   const errors: unknown[] = [];
   const failed: RequestType[] = [];
-  const succeded: RequestType[] = [];
+  const succeeded: RequestType[] = [];
 
   for (const input of inputs) {
     try {
       responses.push(await promiser(input));
-      succeded.push(input);
+      succeeded.push(input);
     } catch (err) {
       errors.push(err);
       failed.push(input);
@@ -212,7 +212,7 @@ export async function promiseEachInSequence<RequestType, ResponseType>(
   }
 
   if (errors.length > 0) {
-    throw { errors, failed, succeded, responses };
+    throw { errors, failed, succeeded, responses };
   }
 
   return responses;
