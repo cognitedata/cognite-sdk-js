@@ -9,6 +9,7 @@ export class CogniteError extends Error {
   public requestId?: string;
   public missing?: object[];
   public duplicated?: unknown[];
+  public forbidden?: object[];
   public extra?: unknown;
   public errorCode?: number;
   public isAutoRetryable?: boolean;
@@ -20,6 +21,7 @@ export class CogniteError extends Error {
     otherFields: {
       missing?: object[];
       duplicated?: unknown[];
+      forbidden?: object[];
       extra?: unknown;
       errorCode?: number;
       isAutoRetryable?: boolean;
@@ -29,9 +31,9 @@ export class CogniteError extends Error {
     if (requestId) {
       message += ` | X-Request-ID: ${requestId}`;
     }
-    const { missing, duplicated, extra, errorCode, isAutoRetryable } =
+    const { missing, duplicated, forbidden, extra, errorCode, isAutoRetryable } =
       otherFields;
-    if (missing || duplicated) {
+    if (missing || duplicated || forbidden) {
       message += `\n${JSON.stringify(otherFields, null, 2)}`;
     }
     super(message);
@@ -41,6 +43,7 @@ export class CogniteError extends Error {
     this.requestId = requestId;
     this.missing = missing;
     this.duplicated = duplicated;
+    this.forbidden = forbidden;
     this.extra = extra;
     this.errorCode = errorCode;
     this.isAutoRetryable = isAutoRetryable;
@@ -65,6 +68,9 @@ export class CogniteError extends Error {
     if (this.duplicated) {
       jsonObject.duplicated = this.duplicated;
     }
+    if (this.forbidden) {
+      jsonObject.forbidden = this.forbidden;
+    }
     if (this.extra) {
       jsonObject.extra = this.extra;
     }
@@ -84,6 +90,7 @@ export function handleErrorResponse(err: HttpError) {
   let duplicated: object[] | undefined;
   let errorCode: number | undefined;
   let extra: unknown;
+  let forbidden: object[] | undefined;
   let isAutoRetryable: boolean | undefined;
   let message: string;
   let missing: object[] | undefined;
@@ -95,6 +102,7 @@ export function handleErrorResponse(err: HttpError) {
     errorCode = data.error.code;
     message = data.error.message;
     missing = data.error.missing;
+    forbidden = data.error.forbidden;
     extra = data.error.extra;
     isAutoRetryable = data.error.isAutoRetryable;
     requestId = getHeaderField(err.headers || {}, X_REQUEST_ID);
@@ -105,6 +113,7 @@ export function handleErrorResponse(err: HttpError) {
     duplicated,
     errorCode,
     extra,
+    forbidden,
     isAutoRetryable,
     missing,
   });
