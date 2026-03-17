@@ -10,6 +10,7 @@ export class CogniteError extends Error {
   public missing?: object[];
   public duplicated?: unknown[];
   public extra?: unknown;
+  public errorCode?: number;
   /** @hidden */
   constructor(
     errorMessage: string,
@@ -19,13 +20,14 @@ export class CogniteError extends Error {
       missing?: object[];
       duplicated?: unknown[];
       extra?: unknown;
+      errorCode?: number;
     } = {}
   ) {
     let message = `${errorMessage} | code: ${status}`;
     if (requestId) {
       message += ` | X-Request-ID: ${requestId}`;
     }
-    const { missing, duplicated, extra } = otherFields;
+    const { missing, duplicated, extra, errorCode } = otherFields;
     if (missing || duplicated) {
       message += `\n${JSON.stringify(otherFields, null, 2)}`;
     }
@@ -37,6 +39,7 @@ export class CogniteError extends Error {
     this.missing = missing;
     this.duplicated = duplicated;
     this.extra = extra;
+    this.errorCode = errorCode;
     if (Error.captureStackTrace) {
       Error.captureStackTrace(this, this.constructor);
     } else {
@@ -61,6 +64,9 @@ export class CogniteError extends Error {
     if (this.extra) {
       jsonObject.extra = this.extra;
     }
+    if (this.errorCode !== undefined) {
+      jsonObject.errorCode = this.errorCode;
+    }
     return jsonObject;
   }
 }
@@ -69,6 +75,7 @@ export class CogniteError extends Error {
 export function handleErrorResponse(err: HttpError) {
   let code: number;
   let duplicated: object[] | undefined;
+  let errorCode: number | undefined;
   let extra: unknown;
   let message: string;
   let missing: object[] | undefined;
@@ -77,6 +84,7 @@ export function handleErrorResponse(err: HttpError) {
     code = err.status;
     const data = err.data;
     duplicated = data.error.duplicated;
+    errorCode = data.error.code;
     message = data.error.message;
     missing = data.error.missing;
     extra = data.error.extra;
@@ -86,6 +94,7 @@ export function handleErrorResponse(err: HttpError) {
   }
   throw new CogniteError(message, code, requestId, {
     duplicated,
+    errorCode,
     extra,
     missing,
   });

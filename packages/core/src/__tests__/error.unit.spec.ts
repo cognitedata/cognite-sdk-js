@@ -108,4 +108,30 @@ describe('handleErrorResponse', () => {
       expect(e.missing).toEqual([internalIdObject, externalIdObject]);
     }
   });
+
+  test('preserves API error code distinct from HTTP status', () => {
+    const httpStatus = 400;
+    const apiErrorCode = 499;
+    const httpError = new HttpError(
+      httpStatus,
+      {
+        error: {
+          code: apiErrorCode,
+          message: 'Some specific error',
+        },
+      },
+      {}
+    );
+    expect.assertions(3);
+    try {
+      handleErrorResponse(httpError);
+    } catch (e) {
+      if (!(e instanceof CogniteError)) {
+        throw e;
+      }
+      expect(e.status).toBe(httpStatus);
+      expect(e.errorCode).toBe(apiErrorCode);
+      expect(e.toJSON().errorCode).toBe(apiErrorCode);
+    }
+  });
 });
