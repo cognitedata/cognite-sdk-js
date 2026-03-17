@@ -186,6 +186,45 @@ describe('utils', () => {
         responses: ['1r', '2r'],
       });
     });
+
+    test('promiseEachInSequence with continueOnError', async () => {
+      // all succeed - same behavior
+      expect(
+        await promiseEachInSequence(
+          [1, 2, 3],
+          (input) => Promise.resolve(input),
+          true
+        )
+      ).toEqual([1, 2, 3]);
+
+      // continues past failures and collects all errors
+      await expect(
+        promiseEachInSequence(
+          [1, 0, 2, 3, 0],
+          (input) => (input ? Promise.resolve(`${input}r`) : Promise.reject('x')),
+          true
+        )
+      ).rejects.toEqual({
+        failed: [0, 0],
+        succeded: [1, 2, 3],
+        errors: ['x', 'x'],
+        responses: ['1r', '2r', '3r'],
+      });
+
+      // all fail
+      await expect(
+        promiseEachInSequence(
+          [0, 0, 0],
+          (input) => (input ? Promise.resolve(input) : Promise.reject('err')),
+          true
+        )
+      ).rejects.toEqual({
+        failed: [0, 0, 0],
+        succeded: [],
+        errors: ['err', 'err', 'err'],
+        responses: [],
+      });
+    });
   });
 
   test('should isJson returns false in case of ArrayBuffer', () => {

@@ -155,11 +155,12 @@ export async function promiseAllWithData<RequestType, ResponseType>(
   inputs: RequestType[],
   promiser: (input: RequestType) => Promise<ResponseType>,
   runSequentially: boolean,
-  concurrency?: number
+  concurrency?: number,
+  continueOnError?: boolean
 ) {
   try {
     if (runSequentially) {
-      return await promiseEachInSequence(inputs, promiser);
+      return await promiseEachInSequence(inputs, promiser, continueOnError);
     }
     return await promiseAllAtOnce(inputs, promiser, concurrency);
   } catch (err) {
@@ -176,21 +177,45 @@ export async function promiseAllWithData<RequestType, ResponseType>(
  */
 export async function promiseEachInSequence<RequestType, ResponseType>(
   inputs: RequestType[],
-  promiser: (input: RequestType) => Promise<ResponseType>
+  promiser: (input: RequestType) => Promise<ResponseType>,
+  continueOnError?: boolean
 ) {
-  return inputs.reduce(async (previousPromise, input, index) => {
-    const prevResult = await previousPromise;
+  if (!continueOnError) {
+    return inputs.reduce(async (previousPromise, input, index) => {
+      const prevResult = await previousPromise;
+      try {
+        return prevResult.concat(await promiser(input));
+      } catch (err) {
+        throw {
+          errors: [err],
+          failed: inputs.slice(index),
+          succeded: inputs.slice(0, index),
+          responses: prevResult,
+        };
+      }
+    }, Promise.resolve(new Array<ResponseType>()));
+  }
+
+  const responses: ResponseType[] = [];
+  const errors: unknown[] = [];
+  const failed: RequestType[] = [];
+  const succeded: RequestType[] = [];
+
+  for (const input of inputs) {
     try {
-      return prevResult.concat(await promiser(input));
+      responses.push(await promiser(input));
+      succeded.push(input);
     } catch (err) {
-      throw {
-        errors: [err],
-        failed: inputs.slice(index),
-        succeded: inputs.slice(0, index),
-        responses: prevResult,
-      };
+      errors.push(err);
+      failed.push(input);
     }
-  }, Promise.resolve(new Array<ResponseType>()));
+  }
+
+  if (errors.length > 0) {
+    throw { errors, failed, succeded, responses };
+  }
+
+  return responses;
 }
 
 /** @hidden */

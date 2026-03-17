@@ -432,6 +432,8 @@ export abstract class BaseResourceAPI<ResponseType> {
           data: { items: singleChunk },
           params,
         }),
+      true,
+      undefined,
       true
     );
   }
