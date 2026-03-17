@@ -31,6 +31,21 @@ The `run-discovery-claude-loop.sh` script explores these 4 areas:
 3. **Deduplication** — HTTP client layer, API wrappers (request-level dedup)
 4. **Batching + chunking** — `packages/core/src/baseResourceApi.ts`, `packages/core/src/utils.ts`, API implementations in `packages/stable/src/api/`
 
+## Codebase architecture (HTTP client layer)
+
+The HTTP client uses a layered class hierarchy:
+
+1. **BasicHttpClient** (`packages/core/src/httpClient/basicHttpClient.ts`) — thin wrapper over `cross-fetch`. Handles serialization (`JSON.stringify(data, null, 2)`), query params, response type dispatch.
+2. **RetryableHttpClient** (extends BasicHttpClient) — adds retry loop with `ExponentialJitterBackoff` (AWS full-jitter algorithm: `random(0,1) * min(baseDelay * 2^(n+1), maxDelay)`, defaults 250ms–15s). Uses pluggable `retryValidator`.
+3. **CDFHttpClient** (extends RetryableHttpClient) — adds CDF auth tokens, 401 refresh, one-time headers, cross-origin token filtering.
+
+Key patterns:
+- **Chunking**: `BaseResourceAPI.chunk()` splits items into groups of 1000. Parallel ops use `promiseAllAtOnce()` (Promise.all, no concurrency limit). Sequential ops use `promiseEachInSequence()`.
+- **Create/upsert** always run sequentially; **retrieve/update/delete** run in parallel.
+- **Error aggregation**: `CogniteMultiError` collects successes + failures from chunked operations.
+- **Retry validator**: Allowlist of safe POST endpoints lives in `packages/stable/src/retryValidator.ts`. Idempotent methods (GET/HEAD/OPTIONS/DELETE/PUT) retry automatically on 429/5xx.
+- **`promiseCache()`** in `packages/core/src/utils.ts` — dedup utility that memoizes an in-flight promise. Exists but is **unused in production** (only tests).
+
 ## Conventions
 
 - You may update this file with knowledge you learn (e.g. codebase structure, patterns, conventions) so future sessions have better context.

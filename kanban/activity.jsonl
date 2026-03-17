@@ -1,0 +1,11 @@
+{"timestamp":"2026-03-17T14:09:12.171032+01:00","action":"create","task_id":1,"detail":"Retry: Honor Retry-After header on 429 responses"}
+{"timestamp":"2026-03-17T14:09:16.728683+01:00","action":"create","task_id":2,"detail":"Retry: POST endpoint list is stale and incomplete"}
+{"timestamp":"2026-03-17T14:09:18.182704+01:00","action":"create","task_id":3,"detail":"Retry: 1xx status codes incorrectly marked as retryable"}
+{"timestamp":"2026-03-17T14:09:24.87873+01:00","action":"create","task_id":4,"detail":"Error: API error code dropped in CogniteError"}
+{"timestamp":"2026-03-17T14:09:29.043344+01:00","action":"create","task_id":5,"detail":"Error: CogniteMultiError unsafe cast on first error"}
+{"timestamp":"2026-03-17T14:09:30.612715+01:00","action":"create","task_id":6,"detail":"Error: forbidden field from API errors not preserved"}
+{"timestamp":"2026-03-17T14:09:33.833016+01:00","action":"create","task_id":7,"detail":"Error: Typo 'succeded' in public API (MultiError, utils)"}
+{"timestamp":"2026-03-17T14:09:40.854413+01:00","action":"create","task_id":8,"detail":"Dedup: No request-level deduplication in HTTP client"}
+{"timestamp":"2026-03-17T14:09:44.003492+01:00","action":"create","task_id":9,"detail":"Batching: No concurrency limit for parallel chunked requests"}
+{"timestamp":"2026-03-17T14:09:47.538958+01:00","action":"create","task_id":10,"detail":"Batching: Sequential create applied to all resource types"}
+{"timestamp":"2026-03-17T14:09:49.85721+01:00","action":"create","task_id":11,"detail":"Batching: Pretty-printed JSON in all request bodies"}
