@@ -1,10 +1,12 @@
 ---
 id: 19
 title: 'Alignment: backoff base delay JS=250ms vs Python=500ms'
-status: todo
+status: done
 priority: low
 created: 2026-03-17T15:27:42.158921+01:00
-updated: 2026-03-17T15:27:42.158921+01:00
+updated: 2026-03-17T15:34:14.155391+01:00
+started: 2026-03-17T15:34:14.155391+01:00
+completed: 2026-03-17T15:34:14.155391+01:00
 tags:
     - discovery
     - retry

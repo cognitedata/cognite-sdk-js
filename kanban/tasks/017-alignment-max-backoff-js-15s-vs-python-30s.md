@@ -1,10 +1,12 @@
 ---
 id: 17
 title: 'Alignment: max_backoff JS=15s vs Python=30s'
-status: todo
+status: done
 priority: medium
 created: 2026-03-17T15:27:31.46703+01:00
-updated: 2026-03-17T15:27:31.46703+01:00
+updated: 2026-03-17T15:30:15.761413+01:00
+started: 2026-03-17T15:30:15.761412+01:00
+completed: 2026-03-17T15:30:15.761412+01:00
 tags:
     - discovery
     - retry

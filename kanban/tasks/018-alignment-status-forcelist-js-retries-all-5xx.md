@@ -1,10 +1,12 @@
 ---
 id: 18
 title: 'Alignment: status_forcelist JS retries all 5xx, Python only 502-504'
-status: todo
+status: done
 priority: low
 created: 2026-03-17T15:27:35.34302+01:00
-updated: 2026-03-17T15:27:35.34302+01:00
+updated: 2026-03-17T15:38:04.658888+01:00
+started: 2026-03-17T15:38:04.658888+01:00
+completed: 2026-03-17T15:38:04.658888+01:00
 tags:
     - discovery
     - retry

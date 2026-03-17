@@ -77,3 +77,19 @@
 {"timestamp":"2026-03-17T15:27:31.467592+01:00","action":"create","task_id":17,"detail":"Alignment: max_backoff JS=15s vs Python=30s"}
 {"timestamp":"2026-03-17T15:27:35.343678+01:00","action":"create","task_id":18,"detail":"Alignment: status_forcelist JS retries all 5xx, Python only 502-504"}
 {"timestamp":"2026-03-17T15:27:42.159302+01:00","action":"create","task_id":19,"detail":"Alignment: backoff base delay JS=250ms vs Python=500ms"}
+{"timestamp":"2026-03-17T15:29:18.09621+01:00","action":"move","task_id":17,"detail":"todo -\u003e in-progress"}
+{"timestamp":"2026-03-17T15:30:15.737168+01:00","action":"edit","task_id":17,"detail":"Alignment: max_backoff JS=15s vs Python=30s"}
+{"timestamp":"2026-03-17T15:30:15.737459+01:00","action":"release","task_id":17,"detail":"claude-execute"}
+{"timestamp":"2026-03-17T15:30:15.761589+01:00","action":"move","task_id":17,"detail":"in-progress -\u003e done"}
+{"timestamp":"2026-03-17T15:30:21.57528+01:00","action":"move","task_id":16,"detail":"todo -\u003e in-progress"}
+{"timestamp":"2026-03-17T15:31:39.341355+01:00","action":"edit","task_id":16,"detail":"Alignment: max_retries JS=5 vs Python=10"}
+{"timestamp":"2026-03-17T15:31:39.341614+01:00","action":"release","task_id":16,"detail":"claude-execute"}
+{"timestamp":"2026-03-17T15:31:39.36552+01:00","action":"move","task_id":16,"detail":"in-progress -\u003e done"}
+{"timestamp":"2026-03-17T15:31:46.42033+01:00","action":"move","task_id":19,"detail":"todo -\u003e in-progress"}
+{"timestamp":"2026-03-17T15:34:14.122481+01:00","action":"edit","task_id":19,"detail":"Alignment: backoff base delay JS=250ms vs Python=500ms"}
+{"timestamp":"2026-03-17T15:34:14.122778+01:00","action":"release","task_id":19,"detail":"claude-execute"}
+{"timestamp":"2026-03-17T15:34:14.155541+01:00","action":"move","task_id":19,"detail":"in-progress -\u003e done"}
+{"timestamp":"2026-03-17T15:34:19.981174+01:00","action":"move","task_id":18,"detail":"todo -\u003e in-progress"}
+{"timestamp":"2026-03-17T15:38:04.624782+01:00","action":"edit","task_id":18,"detail":"Alignment: status_forcelist JS retries all 5xx, Python only 502-504"}
+{"timestamp":"2026-03-17T15:38:04.625531+01:00","action":"release","task_id":18,"detail":"claude-execute"}
+{"timestamp":"2026-03-17T15:38:04.659058+01:00","action":"move","task_id":18,"detail":"in-progress -\u003e done"}

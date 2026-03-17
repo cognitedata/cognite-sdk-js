@@ -1,10 +1,12 @@
 ---
 id: 16
 title: 'Alignment: max_retries JS=5 vs Python=10'
-status: todo
+status: done
 priority: medium
 created: 2026-03-17T15:27:27.785854+01:00
-updated: 2026-03-17T15:27:27.785854+01:00
+updated: 2026-03-17T15:31:39.365374+01:00
+started: 2026-03-17T15:31:39.365374+01:00
+completed: 2026-03-17T15:31:39.365374+01:00
 tags:
     - discovery
     - retry
