@@ -54,13 +54,22 @@ The HTTP client uses a layered class hierarchy:
 3. **CDFHttpClient** (extends RetryableHttpClient) — adds CDF auth tokens, 401 refresh, one-time headers, cross-origin token filtering.
 
 Key patterns:
-- **Chunking**: `BaseResourceAPI.chunk()` splits items into groups of 1000 (returns `[[]]` for empty input — not `[]`). Parallel ops use `promiseAllAtOnce()` (Promise.all, no concurrency limit). Sequential ops use `promiseEachInSequence()` (fail-fast: first chunk error skips all remaining).
+- **Chunking**: `BaseResourceAPI.chunk()` splits items into groups of 1000 (returns `[[]]` for empty input — not `[]`). Parallel ops use `promiseAllAtOnce()` with default concurrency of 5. Sequential ops use `promiseEachInSequence()` (with optional `continueOnError` mode).
 - **Chunk sizes vary by API**: default 1000, but DataPoints latest=100, DataPoints delete=10000, SyntheticTimeSeries=10, SequenceRows=10000, RawRows=5000.
 - **Create/upsert** always run sequentially; **retrieve/update/delete** run in parallel.
-- **Error aggregation**: `CogniteMultiError` collects successes + failures from chunked operations. Takes `status`/`requestId` from first error via unsafe cast.
-- **Error parsing**: `handleErrorResponse()` in `error.ts` converts `HttpError` → `CogniteError`. Uses broad try/catch; drops `forbidden` and `isAutoRetryable` fields from API response.
-- **Retry validator**: Allowlist of safe POST endpoints lives in `packages/stable/src/retryValidator.ts`. Idempotent methods (GET/HEAD/OPTIONS/DELETE/PUT) retry automatically on 429/5xx. Path matching uses loose `indexOf` substring match (no path-boundary check). Client hardcodes `MAX_RETRY_ATTEMPTS=5` in addition to validator's own `maxRetries` check.
+- **Error aggregation**: `CogniteMultiError` collects successes + failures from chunked operations. Takes `status`/`requestId` from first error.
+- **Error parsing**: `handleErrorResponse()` in `error.ts` converts `HttpError` → `CogniteError`. Extracts: `errorCode`, `message`, `missing`, `duplicated`, `forbidden`, `extra`, `isAutoRetryable`.
+- **Retry validator**: Allowlist of safe POST endpoints (suffix-based) lives in `packages/stable/src/retryValidator.ts`. Idempotent methods (GET/HEAD/OPTIONS/DELETE/PUT) retry automatically on 429/5xx. Path matching checks path boundaries (`/`, `?`, end). Validator is sole authority for max retries (default `MAX_RETRY_ATTEMPTS=5`). Honors `Retry-After` header on 429.
 - **`promiseCache()`** in `packages/core/src/utils.ts` — dedup utility that memoizes an in-flight promise. Exists but is **unused in production** (only tests).
+
+### Remaining alignment gaps (JS vs Python tunable parameters)
+
+| Parameter | JS SDK current | Python SDK target | Tasks |
+|-----------|---------------|-------------------|-------|
+| max_retries | 5 | 10 | #16 |
+| max_backoff | 15s | 30s | #17 |
+| status_forcelist | 429 + all 5xx | {429, 502, 503, 504} | #18 |
+| backoff base delay | 250ms | 500ms | #19 |
 
 ## Conventions
 

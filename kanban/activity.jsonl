@@ -73,3 +73,7 @@
 {"timestamp":"2026-03-17T15:07:18.233496+01:00","action":"edit","task_id":6,"detail":"Error: forbidden field from API errors not preserved"}
 {"timestamp":"2026-03-17T15:07:18.234222+01:00","action":"release","task_id":6,"detail":"claude-execute"}
 {"timestamp":"2026-03-17T15:07:18.265655+01:00","action":"move","task_id":6,"detail":"in-progress -\u003e done"}
+{"timestamp":"2026-03-17T15:27:27.786356+01:00","action":"create","task_id":16,"detail":"Alignment: max_retries JS=5 vs Python=10"}
+{"timestamp":"2026-03-17T15:27:31.467592+01:00","action":"create","task_id":17,"detail":"Alignment: max_backoff JS=15s vs Python=30s"}
+{"timestamp":"2026-03-17T15:27:35.343678+01:00","action":"create","task_id":18,"detail":"Alignment: status_forcelist JS retries all 5xx, Python only 502-504"}
+{"timestamp":"2026-03-17T15:27:42.159302+01:00","action":"create","task_id":19,"detail":"Alignment: backoff base delay JS=250ms vs Python=500ms"}
