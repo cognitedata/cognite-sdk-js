@@ -9,7 +9,7 @@ import {
   type HttpResponse,
 } from './basicHttpClient';
 import { ExponentialJitterBackoff } from './exponentialJitterBackoff';
-import { MAX_RETRY_ATTEMPTS, type RetryValidator } from './retryValidator';
+import { type RetryValidator } from './retryValidator';
 
 /**
  * The `RetryableHttpClient` class extends the functionality of a basic HTTP client
@@ -130,7 +130,6 @@ export class RetryableHttpClient extends BasicHttpClient {
         : this.retryValidator;
 
       const shouldRetry =
-        retryCount < MAX_RETRY_ATTEMPTS &&
         request.retryValidator !== false &&
         retryValidator(request, response, retryCount);
       if (!shouldRetry) {
