@@ -39,7 +39,7 @@ The `run-discovery-claude-loop.sh` script explores these 4 areas:
 
 The HTTP client uses a layered class hierarchy:
 
-1. **BasicHttpClient** (`packages/core/src/httpClient/basicHttpClient.ts`) — thin wrapper over `cross-fetch`. Handles serialization (`JSON.stringify(data, null, 2)`), query params, response type dispatch.
+1. **BasicHttpClient** (`packages/core/src/httpClient/basicHttpClient.ts`) — thin wrapper over `cross-fetch`. Handles serialization (`JSON.stringify(data)`), query params, response type dispatch.
 2. **RetryableHttpClient** (extends BasicHttpClient) — adds retry loop with `ExponentialJitterBackoff` (AWS full-jitter algorithm: `random(0,1) * min(baseDelay * 2^(n+1), maxDelay)`, defaults 250ms–15s). Uses pluggable `retryValidator`.
 3. **CDFHttpClient** (extends RetryableHttpClient) — adds CDF auth tokens, 401 refresh, one-time headers, cross-origin token filtering.
 

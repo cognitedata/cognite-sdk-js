@@ -89,7 +89,7 @@ export class BasicHttpClient {
   private static transformRequestBody(data: unknown) {
     const isJSONStringifyable = isJson(data);
     if (isJSONStringifyable) {
-      return JSON.stringify(data, null, 2);
+      return JSON.stringify(data);
     }
     return data;
   }
