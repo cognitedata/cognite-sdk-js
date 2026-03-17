@@ -42,6 +42,10 @@ describe('cdfRetryValidator', () => {
     ...baseResponse,
     status: 500,
   };
+  const response502: HttpResponse<unknown> = {
+    ...baseResponse,
+    status: 502,
+  };
 
   const endpointList = {
     [HttpMethod.Post]: ['/assets/list'],
@@ -61,23 +65,27 @@ describe('cdfRetryValidator', () => {
   });
 
   test('only retry reasonable times', () => {
-    expect(retryValidator(getRequest, response500, 10)).toBeFalsy();
+    expect(retryValidator(getRequest, response502, 10)).toBeFalsy();
   });
 
-  test('retry GET 500', () => {
-    expect(retryValidator(getRequest, response500, 0)).toBeTruthy();
+  test('retry GET 502', () => {
+    expect(retryValidator(getRequest, response502, 0)).toBeTruthy();
+  });
+
+  test("don't retry GET 500 (not in status forcelist)", () => {
+    expect(retryValidator(getRequest, response500, 0)).toBeFalsy();
   });
 
   test('retry GET 429', () => {
     expect(retryValidator(getRequest, response429, 0)).toBeTruthy();
   });
 
-  test("don't retry generic POST 500", () => {
-    expect(retryValidator(postRequest, response500, 0)).toBeFalsy();
+  test("don't retry generic POST 502", () => {
+    expect(retryValidator(postRequest, response502, 0)).toBeFalsy();
   });
 
-  test('retry POST 500 to retryable endpoint', () => {
-    expect(retryValidator(postRetryRequest, response500, 0)).toBeTruthy();
+  test('retry POST 502 to retryable endpoint', () => {
+    expect(retryValidator(postRetryRequest, response502, 0)).toBeTruthy();
   });
 
   test("don't retry POST 4xx (except 429) to retryable endpoint", () => {
@@ -94,7 +102,7 @@ describe('cdfRetryValidator', () => {
       method: HttpMethod.Post,
       path: '/api/v1/projects/abc/assets/listing',
     };
-    expect(retryValidator(request, response500, 0)).toBeFalsy();
+    expect(retryValidator(request, response502, 0)).toBeFalsy();
   });
 
   test('retry POST when endpoint matches at path boundary with query string', () => {
@@ -103,7 +111,7 @@ describe('cdfRetryValidator', () => {
       method: HttpMethod.Post,
       path: '/api/v1/projects/abc/assets/list?limit=10',
     };
-    expect(retryValidator(request, response500, 0)).toBeTruthy();
+    expect(retryValidator(request, response502, 0)).toBeTruthy();
   });
 
   test('retry POST when endpoint matches followed by sub-path', () => {
@@ -116,7 +124,20 @@ describe('cdfRetryValidator', () => {
       method: HttpMethod.Post,
       path: '/api/v1/projects/abc/timeseries/data/list',
     };
-    expect(dataRetryValidator(request, response500, 0)).toBeTruthy();
+    expect(dataRetryValidator(request, response502, 0)).toBeTruthy();
+  });
+
+  test('only retries 429, 502, 503, 504 status codes', () => {
+    const statuses = [429, 500, 501, 502, 503, 504, 505, 599];
+    const expected = [true, false, false, true, true, true, false, false];
+    const results = statuses.map((status) =>
+      retryValidator(
+        getRequest,
+        { ...baseResponse, status },
+        0
+      )
+    );
+    expect(results).toEqual(expected);
   });
 });
 
@@ -194,7 +215,7 @@ describe('suffix-based POST retry (opt-in by path suffix)', () => {
   const validator = createRetryValidator(suffixEndpoints, 5);
 
   const baseResponse = { data: null, headers: {} };
-  const response500: HttpResponse<unknown> = { ...baseResponse, status: 500 };
+  const response502: HttpResponse<unknown> = { ...baseResponse, status: 502 };
 
   const post = (path: string): HttpRequest => ({
     path,
@@ -217,7 +238,7 @@ describe('suffix-based POST retry (opt-in by path suffix)', () => {
   ];
 
   test.each(legacyPaths)('retries previously-listed %s', (path) => {
-    expect(validator(post(path), response500, 0)).toBe(true);
+    expect(validator(post(path), response502, 0)).toBe(true);
   });
 
   // New endpoints automatically covered
@@ -233,7 +254,7 @@ describe('suffix-based POST retry (opt-in by path suffix)', () => {
   ];
 
   test.each(newPaths)('retries newly-covered %s', (path) => {
-    expect(validator(post(path), response500, 0)).toBe(true);
+    expect(validator(post(path), response502, 0)).toBe(true);
   });
 
   // Mutating endpoints are NOT retried
@@ -245,12 +266,12 @@ describe('suffix-based POST retry (opt-in by path suffix)', () => {
   ];
 
   test.each(unsafePaths)('does NOT retry mutating %s', (path) => {
-    expect(validator(post(path), response500, 0)).toBe(false);
+    expect(validator(post(path), response502, 0)).toBe(false);
   });
 
   test('suffix must match at path boundary', () => {
     expect(
-      validator(post('/api/v1/projects/x/assets/listing'), response500, 0)
+      validator(post('/api/v1/projects/x/assets/listing'), response502, 0)
     ).toBe(false);
   });
 });

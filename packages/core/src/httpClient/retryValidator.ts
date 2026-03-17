@@ -1,6 +1,5 @@
 // Copyright 2020 Cognite AS
 
-import inRange from 'lodash/inRange';
 import some from 'lodash/some';
 
 import type { HttpMethod, HttpResponse } from './basicHttpClient';
@@ -32,12 +31,12 @@ export const createRetryValidator = (
     if (retryCount >= maxRetries) {
       return false;
     }
-    if (!isValidRetryStatusCode(response.status)) {
-      return false;
-    }
     // Honor server-side isAutoRetryable hint from the API response
     if (getIsAutoRetryable(response) === true) {
       return true;
+    }
+    if (!isValidRetryStatusCode(response.status)) {
+      return false;
     }
     if (universalRetryValidator(request, response, retryCount)) {
       return true;
@@ -74,11 +73,11 @@ export const createUniversalRetryValidator =
     return isValidRetryStatusCode(response.status);
   };
 
+// Matches Python SDK status_forcelist: {429, 502, 503, 504}
+const RETRYABLE_STATUS_CODES = new Set([429, 502, 503, 504]);
+
 function isValidRetryStatusCode(status: number) {
-  return (
-    inRange(status, 429, 430) ||
-    inRange(status, 500, 600)
-  );
+  return RETRYABLE_STATUS_CODES.has(status);
 }
 
 function matchPathWithEndpoints(path: string, endpoints: string[]) {
