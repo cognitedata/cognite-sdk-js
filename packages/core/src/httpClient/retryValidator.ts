@@ -4,6 +4,7 @@ import inRange from 'lodash/inRange';
 import some from 'lodash/some';
 
 import type { HttpMethod, HttpResponse } from './basicHttpClient';
+import type { HttpErrorData } from './httpError';
 import type { RetryableHttpRequest } from './retryableHttpClient';
 
 /** @hidden */
@@ -34,6 +35,10 @@ export const createRetryValidator = (
     if (!isValidRetryStatusCode(response.status)) {
       return false;
     }
+    // Honor server-side isAutoRetryable hint from the API response
+    if (getIsAutoRetryable(response) === true) {
+      return true;
+    }
     if (universalRetryValidator(request, response, retryCount)) {
       return true;
     }
@@ -55,6 +60,10 @@ export const createUniversalRetryValidator =
     if (response.status === 429) {
       return true;
     }
+    // Honor server-side isAutoRetryable hint from the API response
+    if (getIsAutoRetryable(response) === true) {
+      return true;
+    }
     // By default, retry requests with HTTP verbs that are meant to be idempotent
     const httpMethodsToRetry = ['GET', 'HEAD', 'OPTIONS', 'DELETE', 'PUT'];
     const isRetryableHttpMethod =
@@ -74,6 +83,16 @@ function isValidRetryStatusCode(status: number) {
 
 function matchPathWithEndpoints(path: string, endpoints: string[]) {
   return some(endpoints, (endpoint) => matchPathWithEndpoint(path, endpoint));
+}
+
+function getIsAutoRetryable(
+  response: HttpResponse<unknown>
+): boolean | undefined {
+  try {
+    return (response.data as HttpErrorData)?.error?.isAutoRetryable;
+  } catch {
+    return undefined;
+  }
 }
 
 function matchPathWithEndpoint(path: string, endpoint: string) {

@@ -120,6 +120,56 @@ describe('cdfRetryValidator', () => {
   });
 });
 
+describe('isAutoRetryable server hint', () => {
+  const endpointList = {
+    [HttpMethod.Post]: ['/assets/list'],
+  };
+  const retryValidator = createRetryValidator(endpointList, 5);
+
+  const postRequest: HttpRequest = {
+    path: '/api/v1/projects/abc/assets/create',
+    method: HttpMethod.Post,
+  };
+  const baseResponse = { headers: {} };
+
+  test('retry non-retryable POST when server says isAutoRetryable', () => {
+    const response: HttpResponse<unknown> = {
+      ...baseResponse,
+      status: 500,
+      data: { error: { code: 500, message: 'err', isAutoRetryable: true } },
+    };
+    expect(retryValidator(postRequest, response, 0)).toBe(true);
+  });
+
+  test('do not retry when isAutoRetryable is false', () => {
+    const response: HttpResponse<unknown> = {
+      ...baseResponse,
+      status: 500,
+      data: { error: { code: 500, message: 'err', isAutoRetryable: false } },
+    };
+    // POST to non-retryable endpoint with isAutoRetryable=false should not retry
+    expect(retryValidator(postRequest, response, 0)).toBe(false);
+  });
+
+  test('do not retry when isAutoRetryable is absent', () => {
+    const response: HttpResponse<unknown> = {
+      ...baseResponse,
+      status: 500,
+      data: { error: { code: 500, message: 'err' } },
+    };
+    expect(retryValidator(postRequest, response, 0)).toBe(false);
+  });
+
+  test('still respect maxRetries even with isAutoRetryable', () => {
+    const response: HttpResponse<unknown> = {
+      ...baseResponse,
+      status: 500,
+      data: { error: { code: 500, message: 'err', isAutoRetryable: true } },
+    };
+    expect(retryValidator(postRequest, response, 10)).toBe(false);
+  });
+});
+
 describe('suffix-based POST retry (opt-in by path suffix)', () => {
   // Mirrors the pattern used in packages/stable/src/retryValidator.ts where
   // short suffixes like "/list" match any resource (e.g. "/instances/list").

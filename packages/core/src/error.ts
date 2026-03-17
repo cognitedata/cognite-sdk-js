@@ -11,6 +11,7 @@ export class CogniteError extends Error {
   public duplicated?: unknown[];
   public extra?: unknown;
   public errorCode?: number;
+  public isAutoRetryable?: boolean;
   /** @hidden */
   constructor(
     errorMessage: string,
@@ -21,13 +22,15 @@ export class CogniteError extends Error {
       duplicated?: unknown[];
       extra?: unknown;
       errorCode?: number;
+      isAutoRetryable?: boolean;
     } = {}
   ) {
     let message = `${errorMessage} | code: ${status}`;
     if (requestId) {
       message += ` | X-Request-ID: ${requestId}`;
     }
-    const { missing, duplicated, extra, errorCode } = otherFields;
+    const { missing, duplicated, extra, errorCode, isAutoRetryable } =
+      otherFields;
     if (missing || duplicated) {
       message += `\n${JSON.stringify(otherFields, null, 2)}`;
     }
@@ -40,6 +43,7 @@ export class CogniteError extends Error {
     this.duplicated = duplicated;
     this.extra = extra;
     this.errorCode = errorCode;
+    this.isAutoRetryable = isAutoRetryable;
     if (Error.captureStackTrace) {
       Error.captureStackTrace(this, this.constructor);
     } else {
@@ -67,6 +71,9 @@ export class CogniteError extends Error {
     if (this.errorCode !== undefined) {
       jsonObject.errorCode = this.errorCode;
     }
+    if (this.isAutoRetryable !== undefined) {
+      jsonObject.isAutoRetryable = this.isAutoRetryable;
+    }
     return jsonObject;
   }
 }
@@ -77,6 +84,7 @@ export function handleErrorResponse(err: HttpError) {
   let duplicated: object[] | undefined;
   let errorCode: number | undefined;
   let extra: unknown;
+  let isAutoRetryable: boolean | undefined;
   let message: string;
   let missing: object[] | undefined;
   let requestId: string | undefined;
@@ -88,6 +96,7 @@ export function handleErrorResponse(err: HttpError) {
     message = data.error.message;
     missing = data.error.missing;
     extra = data.error.extra;
+    isAutoRetryable = data.error.isAutoRetryable;
     requestId = getHeaderField(err.headers || {}, X_REQUEST_ID);
   } catch (_) {
     throw err;
@@ -96,6 +105,7 @@ export function handleErrorResponse(err: HttpError) {
     duplicated,
     errorCode,
     extra,
+    isAutoRetryable,
     missing,
   });
 }
