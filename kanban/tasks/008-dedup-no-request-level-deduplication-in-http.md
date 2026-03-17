@@ -1,10 +1,12 @@
 ---
 id: 8
 title: 'Dedup: No request-level deduplication in HTTP client'
-status: backlog
+status: done
 priority: medium
 created: 2026-03-17T14:09:40.853998+01:00
-updated: 2026-03-17T14:09:40.853998+01:00
+updated: 2026-03-17T14:45:50.480427+01:00
+started: 2026-03-17T14:43:06.69294+01:00
+completed: 2026-03-17T14:45:50.480426+01:00
 tags:
     - discovery
     - dedup

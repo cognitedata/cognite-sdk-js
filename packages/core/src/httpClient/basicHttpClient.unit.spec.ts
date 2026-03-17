@@ -186,6 +186,76 @@ describe('BasicHttpClient', () => {
     });
   });
 
+  describe('dedupable requests', () => {
+    test('should coalesce identical in-flight GET requests', async () => {
+      const scope = nock(baseUrl).get('/resource').reply(200, { id: 1 });
+      const [r1, r2] = await Promise.all([
+        client.get('/resource', { dedupable: true }),
+        client.get('/resource', { dedupable: true }),
+      ]);
+      expect(r1.data).toEqual({ id: 1 });
+      expect(r2.data).toEqual({ id: 1 });
+      // nock set up only one reply — if two fetches fired, the second would fail
+      expect(scope.isDone()).toBe(true);
+    });
+
+    test('should coalesce identical in-flight POST requests', async () => {
+      const scope = nock(baseUrl)
+        .post('/list', { limit: 10 })
+        .reply(200, { items: [] });
+      const opts = { data: { limit: 10 }, dedupable: true } as const;
+      const [r1, r2] = await Promise.all([
+        client.post('/list', opts),
+        client.post('/list', opts),
+      ]);
+      expect(r1.data).toEqual({ items: [] });
+      expect(r2.data).toEqual({ items: [] });
+      expect(scope.isDone()).toBe(true);
+    });
+
+    test('should not coalesce requests with different bodies', async () => {
+      nock(baseUrl).post('/list', { limit: 10 }).reply(200, { items: [1] });
+      nock(baseUrl).post('/list', { limit: 20 }).reply(200, { items: [2] });
+      const [r1, r2] = await Promise.all([
+        client.post('/list', { data: { limit: 10 }, dedupable: true }),
+        client.post('/list', { data: { limit: 20 }, dedupable: true }),
+      ]);
+      expect(r1.data).toEqual({ items: [1] });
+      expect(r2.data).toEqual({ items: [2] });
+    });
+
+    test('should not dedup when dedupable is not set', async () => {
+      nock(baseUrl).get('/resource').reply(200, { call: 1 });
+      nock(baseUrl).get('/resource').reply(200, { call: 2 });
+      const [r1, r2] = await Promise.all([
+        client.get('/resource'),
+        client.get('/resource'),
+      ]);
+      expect(r1.data).toEqual({ call: 1 });
+      expect(r2.data).toEqual({ call: 2 });
+    });
+
+    test('should remove entry from cache after resolution', async () => {
+      nock(baseUrl).get('/resource').reply(200, { first: true });
+      await client.get('/resource', { dedupable: true });
+      // Second request after the first completes should make a new fetch
+      nock(baseUrl).get('/resource').reply(200, { second: true });
+      const r2 = await client.get('/resource', { dedupable: true });
+      expect(r2.data).toEqual({ second: true });
+    });
+
+    test('should remove entry from cache after rejection', async () => {
+      nock(baseUrl).get('/fail').reply(500, { error: 'fail' });
+      await expect(
+        client.get('/fail', { dedupable: true })
+      ).rejects.toThrow();
+      // After failure, next request should go through
+      nock(baseUrl).get('/fail').reply(200, { ok: true });
+      const r = await client.get('/fail', { dedupable: true });
+      expect(r.data).toEqual({ ok: true });
+    });
+  });
+
   describe('resolveUrl', () => {
     test('should remove path trailing slashes', async () => {
       // @ts-ignore

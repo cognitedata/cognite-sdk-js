@@ -21,3 +21,23 @@
 {"timestamp":"2026-03-17T14:35:52.168868+01:00","action":"edit","task_id":9,"detail":"Batching: No concurrency limit for parallel chunked requests"}
 {"timestamp":"2026-03-17T14:35:52.170838+01:00","action":"release","task_id":9,"detail":"claude-execute"}
 {"timestamp":"2026-03-17T14:35:52.196808+01:00","action":"move","task_id":9,"detail":"in-progress -\u003e done"}
+{"timestamp":"2026-03-17T14:36:11.650699+01:00","action":"move","task_id":4,"detail":"backlog -\u003e in-progress"}
+{"timestamp":"2026-03-17T14:37:59.407771+01:00","action":"edit","task_id":4,"detail":"Error: API error code dropped in CogniteError"}
+{"timestamp":"2026-03-17T14:37:59.407917+01:00","action":"release","task_id":4,"detail":"claude-execute"}
+{"timestamp":"2026-03-17T14:37:59.43812+01:00","action":"move","task_id":4,"detail":"in-progress -\u003e done"}
+{"timestamp":"2026-03-17T14:38:05.261196+01:00","action":"move","task_id":1,"detail":"backlog -\u003e in-progress"}
+{"timestamp":"2026-03-17T14:39:57.701282+01:00","action":"edit","task_id":1,"detail":"Retry: Honor Retry-After header on 429 responses"}
+{"timestamp":"2026-03-17T14:39:57.702044+01:00","action":"release","task_id":1,"detail":"claude-execute"}
+{"timestamp":"2026-03-17T14:39:57.736178+01:00","action":"move","task_id":1,"detail":"in-progress -\u003e done"}
+{"timestamp":"2026-03-17T14:40:06.163504+01:00","action":"move","task_id":14,"detail":"backlog -\u003e in-progress"}
+{"timestamp":"2026-03-17T14:41:46.790251+01:00","action":"edit","task_id":14,"detail":"Batching: Sequential chunked ops fail-fast skips remaining chunks"}
+{"timestamp":"2026-03-17T14:41:46.791022+01:00","action":"release","task_id":14,"detail":"claude-execute"}
+{"timestamp":"2026-03-17T14:41:46.815286+01:00","action":"move","task_id":14,"detail":"in-progress -\u003e done"}
+{"timestamp":"2026-03-17T14:41:54.572191+01:00","action":"move","task_id":13,"detail":"backlog -\u003e in-progress"}
+{"timestamp":"2026-03-17T14:42:58.243525+01:00","action":"edit","task_id":13,"detail":"Retry: Client hardcodes max retries, ignoring validator config"}
+{"timestamp":"2026-03-17T14:42:58.2438+01:00","action":"release","task_id":13,"detail":"claude-execute"}
+{"timestamp":"2026-03-17T14:42:58.271333+01:00","action":"move","task_id":13,"detail":"in-progress -\u003e done"}
+{"timestamp":"2026-03-17T14:43:06.693316+01:00","action":"move","task_id":8,"detail":"backlog -\u003e in-progress"}
+{"timestamp":"2026-03-17T14:45:50.453764+01:00","action":"edit","task_id":8,"detail":"Dedup: No request-level deduplication in HTTP client"}
+{"timestamp":"2026-03-17T14:45:50.454116+01:00","action":"release","task_id":8,"detail":"claude-execute"}
+{"timestamp":"2026-03-17T14:45:50.48058+01:00","action":"move","task_id":8,"detail":"in-progress -\u003e done"}
