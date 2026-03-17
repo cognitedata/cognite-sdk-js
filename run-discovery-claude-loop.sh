@@ -47,7 +47,10 @@ Description: what's wrong and what the improvement would be\"
 - Use appropriate priority: low, medium, high, critical
 - Add a tag matching the area: retry, error-parsing, dedup, or batching
 
+Look at existing tasks and review architecture and identify patterns. You can update tasks.
+
 Do not overdo it. It is fine to land on \"the todo list in kanban is now complete\" when you have reviewed all 4 areas and either created tasks or confirmed existing tasks cover the findings."
+
 
 echo "Running Claude discovery (may take 1-2 min for first response)..."
 claude -p \

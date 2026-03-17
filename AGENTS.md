@@ -12,6 +12,10 @@ Tasks are managed with [kanban-md](https://github.com/jmhobbs/kanban-md) in the 
 
 Run `./run-discovery-claude-loop.sh` to have Claude Code explore the codebase and create kanban tasks for improvement opportunities. The script forbids git/gh; it only reads code and manages the board.
 
+## Execute loop
+
+Run `./run-execute-claude-loop.sh` to have Claude Code implement tasks one by one. Picks from todo (then backlog), moves to in-progress, runs Claude to solve, Claude moves to done when complete. Git/gh allowed.
+
 ## Tag scheme
 
 | Tag | Use |
@@ -40,10 +44,12 @@ The HTTP client uses a layered class hierarchy:
 3. **CDFHttpClient** (extends RetryableHttpClient) — adds CDF auth tokens, 401 refresh, one-time headers, cross-origin token filtering.
 
 Key patterns:
-- **Chunking**: `BaseResourceAPI.chunk()` splits items into groups of 1000. Parallel ops use `promiseAllAtOnce()` (Promise.all, no concurrency limit). Sequential ops use `promiseEachInSequence()`.
+- **Chunking**: `BaseResourceAPI.chunk()` splits items into groups of 1000 (returns `[[]]` for empty input — not `[]`). Parallel ops use `promiseAllAtOnce()` (Promise.all, no concurrency limit). Sequential ops use `promiseEachInSequence()` (fail-fast: first chunk error skips all remaining).
+- **Chunk sizes vary by API**: default 1000, but DataPoints latest=100, DataPoints delete=10000, SyntheticTimeSeries=10, SequenceRows=10000, RawRows=5000.
 - **Create/upsert** always run sequentially; **retrieve/update/delete** run in parallel.
-- **Error aggregation**: `CogniteMultiError` collects successes + failures from chunked operations.
-- **Retry validator**: Allowlist of safe POST endpoints lives in `packages/stable/src/retryValidator.ts`. Idempotent methods (GET/HEAD/OPTIONS/DELETE/PUT) retry automatically on 429/5xx.
+- **Error aggregation**: `CogniteMultiError` collects successes + failures from chunked operations. Takes `status`/`requestId` from first error via unsafe cast.
+- **Error parsing**: `handleErrorResponse()` in `error.ts` converts `HttpError` → `CogniteError`. Uses broad try/catch; drops `forbidden` and `isAutoRetryable` fields from API response.
+- **Retry validator**: Allowlist of safe POST endpoints lives in `packages/stable/src/retryValidator.ts`. Idempotent methods (GET/HEAD/OPTIONS/DELETE/PUT) retry automatically on 429/5xx. Path matching uses loose `indexOf` substring match (no path-boundary check). Client hardcodes `MAX_RETRY_ATTEMPTS=5` in addition to validator's own `maxRetries` check.
 - **`promiseCache()`** in `packages/core/src/utils.ts` — dedup utility that memoizes an in-flight promise. Exists but is **unused in production** (only tests).
 
 ## Conventions

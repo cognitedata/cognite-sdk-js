@@ -9,3 +9,7 @@
 {"timestamp":"2026-03-17T14:09:44.003492+01:00","action":"create","task_id":9,"detail":"Batching: No concurrency limit for parallel chunked requests"}
 {"timestamp":"2026-03-17T14:09:47.538958+01:00","action":"create","task_id":10,"detail":"Batching: Sequential create applied to all resource types"}
 {"timestamp":"2026-03-17T14:09:49.85721+01:00","action":"create","task_id":11,"detail":"Batching: Pretty-printed JSON in all request bodies"}
+{"timestamp":"2026-03-17T14:19:50.615008+01:00","action":"create","task_id":12,"detail":"Retry: Path matching uses loose substring — could match wrong endpoints"}
+{"timestamp":"2026-03-17T14:19:53.900704+01:00","action":"create","task_id":13,"detail":"Retry: Client hardcodes max retries, ignoring validator config"}
+{"timestamp":"2026-03-17T14:19:57.960496+01:00","action":"create","task_id":14,"detail":"Batching: Sequential chunked ops fail-fast skips remaining chunks"}
+{"timestamp":"2026-03-17T14:20:01.688607+01:00","action":"create","task_id":15,"detail":"Error: isAutoRetryable field from API response silently dropped"}
