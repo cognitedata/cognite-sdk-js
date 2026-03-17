@@ -58,8 +58,11 @@ export class CogniteMultiError<RequestType, ResponseType> extends Error {
     this.errors = errors;
     this.succeded = succeded.reduce((all, current) => all.concat(current), []);
     this.failed = failed.reduce((all, current) => all.concat(current), []);
-    this.status = (errors[0] as CogniteError).status;
-    this.requestId = (errors[0] as CogniteError).requestId;
+    const firstError = errors[0];
+    if (firstError instanceof CogniteError) {
+      this.status = firstError.status;
+      this.requestId = firstError.requestId;
+    }
 
     for (const err of errors) {
       if (err instanceof CogniteError) {
