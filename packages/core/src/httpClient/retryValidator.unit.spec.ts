@@ -119,3 +119,88 @@ describe('cdfRetryValidator', () => {
     expect(dataRetryValidator(request, response500, 0)).toBeTruthy();
   });
 });
+
+describe('suffix-based POST retry (opt-in by path suffix)', () => {
+  // Mirrors the pattern used in packages/stable/src/retryValidator.ts where
+  // short suffixes like "/list" match any resource (e.g. "/instances/list").
+  const suffixEndpoints = {
+    [HttpMethod.Post]: [
+      '/list',
+      '/byids',
+      '/search',
+      '/aggregate',
+      '/query',
+      '/filter',
+      '/sync',
+      '/inspect',
+      '/reverselookup',
+      '/downloadlink',
+      '/initupload',
+      '/data',
+      '/latest',
+      '/delete',
+    ],
+  };
+  const validator = createRetryValidator(suffixEndpoints, 5);
+
+  const baseResponse = { data: null, headers: {} };
+  const response500: HttpResponse<unknown> = { ...baseResponse, status: 500 };
+
+  const post = (path: string): HttpRequest => ({
+    path,
+    method: HttpMethod.Post,
+  });
+
+  // All previously hard-coded endpoints are still retried
+  const legacyPaths = [
+    '/api/v1/projects/x/assets/list',
+    '/api/v1/projects/x/assets/byids',
+    '/api/v1/projects/x/assets/search',
+    '/api/v1/projects/x/events/list',
+    '/api/v1/projects/x/files/initupload',
+    '/api/v1/projects/x/files/downloadlink',
+    '/api/v1/projects/x/timeseries/data',
+    '/api/v1/projects/x/timeseries/data/list',
+    '/api/v1/projects/x/timeseries/data/latest',
+    '/api/v1/projects/x/timeseries/data/delete',
+    '/api/v1/projects/x/timeseries/synthetic/query',
+  ];
+
+  test.each(legacyPaths)('retries previously-listed %s', (path) => {
+    expect(validator(post(path), response500, 0)).toBe(true);
+  });
+
+  // New endpoints automatically covered
+  const newPaths = [
+    '/api/v1/projects/x/instances/list',
+    '/api/v1/projects/x/instances/query',
+    '/api/v1/projects/x/instances/sync',
+    '/api/v1/projects/x/instances/aggregate',
+    '/api/v1/projects/x/documents/search',
+    '/api/v1/projects/x/containers/delete',
+    '/api/v1/projects/x/annotations/reverselookup',
+    '/api/v1/projects/x/records/streams/s/records/filter',
+  ];
+
+  test.each(newPaths)('retries newly-covered %s', (path) => {
+    expect(validator(post(path), response500, 0)).toBe(true);
+  });
+
+  // Mutating endpoints are NOT retried
+  const unsafePaths = [
+    '/api/v1/projects/x/assets',
+    '/api/v1/projects/x/assets/update',
+    '/api/v1/projects/x/entitymatching/predict',
+    '/api/v1/projects/x/sessions/revoke',
+  ];
+
+  test.each(unsafePaths)('does NOT retry mutating %s', (path) => {
+    expect(validator(post(path), response500, 0)).toBe(false);
+  });
+
+  test('suffix must match at path boundary', () => {
+    expect(
+      validator(post('/api/v1/projects/x/assets/listing'), response500, 0)
+    ).toBe(false);
+  });
+});
