@@ -17,7 +17,7 @@ export type RetryValidator = (
 /** @hidden */
 export type EndpointList = { [key in HttpMethod]?: string[] };
 
-export const MAX_RETRY_ATTEMPTS = 5;
+export const MAX_RETRY_ATTEMPTS = 10;
 
 export const createRetryValidator = (
   endpointsToRetry: EndpointList,
