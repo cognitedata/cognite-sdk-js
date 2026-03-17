@@ -69,7 +69,7 @@ Key patterns:
 | max_retries | 5 | 10 | #16 |
 | max_backoff | 15s | 30s | #17 |
 | status_forcelist | 429 + all 5xx | {429, 502, 503, 504} | #18 |
-| backoff base delay | 250ms | 500ms | #19 |
+| backoff base delay | 500ms | 500ms | #19 (done) |
 
 ## Conventions
 
