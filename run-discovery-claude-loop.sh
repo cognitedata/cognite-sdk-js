@@ -26,6 +26,8 @@ RULES:
 - When done, you may conclude that the discovery is complete and the kanban todo list is sufficient.
 - You MAY update AGENTS.md with knowledge you learned (e.g. codebase structure, patterns, conventions) so future sessions have better context.
 
+ALIGNMENT: The Python SDK is cloned at cognite-sdk-python/ and serves as the reference for concrete values. Flag misalignments in tunable parameters only: backoff_factor, max_backoff, max_retries, status_forcelist, error fields (code, isAutoRetryable). Do NOT flag architectural differences (sequential vs parallel, concurrency limits, fail-fast behavior). Python SDK key files: cognite/client/_http_client.py, cognite/client/exceptions.py, cognite/client/_api_client.py, cognite/client/config.py.
+
 TASK: Explore the codebase and identify bad coding practices / improvement areas in these 4 focus areas:
 
 1) Retry with exponential backoff and jitter
@@ -45,7 +47,7 @@ For each finding:
 
 Description: what's wrong and what the improvement would be\"
 - Use appropriate priority: low, medium, high, critical
-- Add a tag matching the area: retry, error-parsing, dedup, or batching
+- Add tags: discovery, plus the area (retry, error-parsing, dedup, or batching). For alignment findings, add alignment too (e.g. --tags discovery,retry,alignment)
 
 Look at existing tasks and review architecture and identify patterns. You can update tasks.
 

@@ -10,7 +10,7 @@ Tasks are managed with [kanban-md](https://github.com/jmhobbs/kanban-md) in the 
 
 ## Discovery loop
 
-Run `./run-discovery-claude-loop.sh` to have Claude Code explore the codebase and create kanban tasks for improvement opportunities. The script forbids git/gh; it only reads code and manages the board.
+Run `./run-discovery-claude-loop.sh` to have Claude Code explore the codebase and create kanban tasks for improvement opportunities. Discovery compares the JS SDK against the Python SDK (cognite-sdk-python/) for alignment. The script forbids git/gh; it only reads code and manages the board.
 
 ## Execute loop
 
@@ -21,6 +21,7 @@ Run `./run-execute-claude-loop.sh` to have Claude Code implement tasks one by on
 | Tag | Use |
 |-----|-----|
 | `discovery` | Findings from run-discovery-claude-loop.sh |
+| `alignment` | JS vs Python SDK alignment (tunable values: backoff, retries, error fields) |
 | `retry` | Retry / exponential backoff / jitter improvements |
 | `error-parsing` | Structured error types, error codes, messages |
 | `dedup` | Deduplication of duplicate calls |
@@ -34,6 +35,15 @@ The `run-discovery-claude-loop.sh` script explores these 4 areas:
 2. **Error parsing** — `packages/core/src/error.ts`, `httpClient/httpError.ts`, `multiError.ts`
 3. **Deduplication** — HTTP client layer, API wrappers (request-level dedup)
 4. **Batching + chunking** — `packages/core/src/baseResourceApi.ts`, `packages/core/src/utils.ts`, API implementations in `packages/stable/src/api/`
+
+## Python SDK reference (alignment target)
+
+The Python SDK is cloned at `cognite-sdk-python/` and serves as the reference for **concrete tunable values** only. Flag misalignments in these; do NOT flag architectural differences (sequential vs parallel, concurrency limits, fail-fast behavior).
+
+| Area | Python SDK (align on these values) | Key files |
+|------|------------------------------------|-----------|
+| **Retry** | backoff_factor=0.5s, max_backoff=30s, max_retries=10, status_forcelist={429,502,503,504}, full jitter, uses isAutoRetryable from API | `cognite/client/_http_client.py`, `_api_client.py`, `config.py` |
+| **Errors** | CogniteAPIError with code, message, missing, duplicated, extra; preserves API error.code | `cognite/client/exceptions.py`, `_api_client.py` (_raise_api_error) |
 
 ## Codebase architecture (HTTP client layer)
 
