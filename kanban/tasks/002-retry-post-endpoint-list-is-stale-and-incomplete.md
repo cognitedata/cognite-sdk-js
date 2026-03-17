@@ -1,10 +1,12 @@
 ---
 id: 2
 title: 'Retry: POST endpoint list is stale and incomplete'
-status: backlog
+status: done
 priority: medium
 created: 2026-03-17T14:09:16.72831+01:00
-updated: 2026-03-17T14:09:16.72831+01:00
+updated: 2026-03-17T14:55:01.407948+01:00
+started: 2026-03-17T14:49:21.336665+01:00
+completed: 2026-03-17T14:55:01.407947+01:00
 tags:
     - discovery
     - retry

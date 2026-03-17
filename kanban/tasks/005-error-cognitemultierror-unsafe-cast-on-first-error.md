@@ -1,10 +1,12 @@
 ---
 id: 5
 title: 'Error: CogniteMultiError unsafe cast on first error'
-status: backlog
+status: done
 priority: medium
 created: 2026-03-17T14:09:29.04298+01:00
-updated: 2026-03-17T14:09:29.04298+01:00
+updated: 2026-03-17T14:47:24.315925+01:00
+started: 2026-03-17T14:46:15.565121+01:00
+completed: 2026-03-17T14:47:24.315925+01:00
 tags:
     - discovery
     - error-parsing

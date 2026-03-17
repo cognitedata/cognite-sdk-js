@@ -1,10 +1,12 @@
 ---
 id: 4
 title: 'Error: API error code dropped in CogniteError'
-status: backlog
+status: done
 priority: high
 created: 2026-03-17T14:09:24.878353+01:00
-updated: 2026-03-17T14:09:24.878353+01:00
+updated: 2026-03-17T14:37:59.43796+01:00
+started: 2026-03-17T14:36:11.650491+01:00
+completed: 2026-03-17T14:37:59.43796+01:00
 tags:
     - discovery
     - error-parsing

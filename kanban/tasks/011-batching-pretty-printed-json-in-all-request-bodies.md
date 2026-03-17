@@ -1,10 +1,12 @@
 ---
 id: 11
 title: 'Batching: Pretty-printed JSON in all request bodies'
-status: backlog
+status: done
 priority: low
 created: 2026-03-17T14:09:49.856785+01:00
-updated: 2026-03-17T14:09:49.856785+01:00
+updated: 2026-03-17T14:59:56.280001+01:00
+started: 2026-03-17T14:58:57.886287+01:00
+completed: 2026-03-17T14:59:56.280001+01:00
 tags:
     - discovery
     - batching

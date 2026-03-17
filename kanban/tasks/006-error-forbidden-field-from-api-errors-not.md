@@ -1,10 +1,12 @@
 ---
 id: 6
 title: 'Error: forbidden field from API errors not preserved'
-status: backlog
+status: done
 priority: low
 created: 2026-03-17T14:09:30.612221+01:00
-updated: 2026-03-17T14:09:30.612221+01:00
+updated: 2026-03-17T15:07:18.265485+01:00
+started: 2026-03-17T15:05:40.894078+01:00
+completed: 2026-03-17T15:07:18.265485+01:00
 tags:
     - discovery
     - error-parsing

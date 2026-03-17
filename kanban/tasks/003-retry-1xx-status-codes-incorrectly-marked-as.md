@@ -1,10 +1,12 @@
 ---
 id: 3
 title: 'Retry: 1xx status codes incorrectly marked as retryable'
-status: backlog
+status: done
 priority: medium
 created: 2026-03-17T14:09:18.182184+01:00
-updated: 2026-03-17T14:09:18.182184+01:00
+updated: 2026-03-17T14:49:14.553597+01:00
+started: 2026-03-17T14:47:33.076133+01:00
+completed: 2026-03-17T14:49:14.553597+01:00
 tags:
     - discovery
     - retry

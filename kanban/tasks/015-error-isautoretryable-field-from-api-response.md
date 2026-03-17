@@ -1,10 +1,12 @@
 ---
 id: 15
 title: 'Error: isAutoRetryable field from API response silently dropped'
-status: backlog
+status: done
 priority: low
 created: 2026-03-17T14:20:01.688174+01:00
-updated: 2026-03-17T14:20:01.688174+01:00
+updated: 2026-03-17T14:58:47.763876+01:00
+started: 2026-03-17T14:55:11.205138+01:00
+completed: 2026-03-17T14:58:47.763876+01:00
 tags:
     - discovery
     - error-parsing

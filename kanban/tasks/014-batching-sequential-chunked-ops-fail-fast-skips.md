@@ -1,10 +1,12 @@
 ---
 id: 14
 title: 'Batching: Sequential chunked ops fail-fast skips remaining chunks'
-status: backlog
+status: done
 priority: medium
 created: 2026-03-17T14:19:57.959968+01:00
-updated: 2026-03-17T14:19:57.959968+01:00
+updated: 2026-03-17T14:41:46.815151+01:00
+started: 2026-03-17T14:40:06.163159+01:00
+completed: 2026-03-17T14:41:46.815151+01:00
 tags:
     - discovery
     - batching

@@ -1,10 +1,12 @@
 ---
 id: 10
 title: 'Batching: Sequential create applied to all resource types'
-status: backlog
+status: done
 priority: low
 created: 2026-03-17T14:09:47.538585+01:00
-updated: 2026-03-17T14:09:47.538585+01:00
+updated: 2026-03-17T15:01:56.720615+01:00
+started: 2026-03-17T15:00:03.863943+01:00
+completed: 2026-03-17T15:01:56.720615+01:00
 tags:
     - discovery
     - batching

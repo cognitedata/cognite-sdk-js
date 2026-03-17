@@ -1,10 +1,12 @@
 ---
 id: 13
 title: 'Retry: Client hardcodes max retries, ignoring validator config'
-status: backlog
+status: done
 priority: medium
 created: 2026-03-17T14:19:53.900343+01:00
-updated: 2026-03-17T14:19:53.900343+01:00
+updated: 2026-03-17T14:42:58.271185+01:00
+started: 2026-03-17T14:41:54.571971+01:00
+completed: 2026-03-17T14:42:58.271185+01:00
 tags:
     - discovery
     - retry

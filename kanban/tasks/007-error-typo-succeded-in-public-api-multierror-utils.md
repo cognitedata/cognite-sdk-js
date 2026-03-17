@@ -1,10 +1,12 @@
 ---
 id: 7
 title: 'Error: Typo ''succeded'' in public API (MultiError, utils)'
-status: backlog
+status: done
 priority: low
 created: 2026-03-17T14:09:33.832582+01:00
-updated: 2026-03-17T14:09:33.832582+01:00
+updated: 2026-03-17T15:05:32.589522+01:00
+started: 2026-03-17T15:02:14.410964+01:00
+completed: 2026-03-17T15:05:32.589522+01:00
 tags:
     - discovery
     - error-parsing

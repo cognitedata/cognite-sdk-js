@@ -1,10 +1,12 @@
 ---
 id: 1
 title: 'Retry: Honor Retry-After header on 429 responses'
-status: backlog
+status: done
 priority: high
 created: 2026-03-17T14:09:12.170629+01:00
-updated: 2026-03-17T14:09:12.170629+01:00
+updated: 2026-03-17T14:39:57.736062+01:00
+started: 2026-03-17T14:38:05.261013+01:00
+completed: 2026-03-17T14:39:57.736062+01:00
 tags:
     - discovery
     - retry

@@ -41,3 +41,35 @@
 {"timestamp":"2026-03-17T14:45:50.453764+01:00","action":"edit","task_id":8,"detail":"Dedup: No request-level deduplication in HTTP client"}
 {"timestamp":"2026-03-17T14:45:50.454116+01:00","action":"release","task_id":8,"detail":"claude-execute"}
 {"timestamp":"2026-03-17T14:45:50.48058+01:00","action":"move","task_id":8,"detail":"in-progress -\u003e done"}
+{"timestamp":"2026-03-17T14:46:15.565513+01:00","action":"move","task_id":5,"detail":"backlog -\u003e in-progress"}
+{"timestamp":"2026-03-17T14:47:24.285354+01:00","action":"edit","task_id":5,"detail":"Error: CogniteMultiError unsafe cast on first error"}
+{"timestamp":"2026-03-17T14:47:24.286098+01:00","action":"release","task_id":5,"detail":"claude-execute"}
+{"timestamp":"2026-03-17T14:47:24.316223+01:00","action":"move","task_id":5,"detail":"in-progress -\u003e done"}
+{"timestamp":"2026-03-17T14:47:33.076282+01:00","action":"move","task_id":3,"detail":"backlog -\u003e in-progress"}
+{"timestamp":"2026-03-17T14:49:14.509217+01:00","action":"edit","task_id":3,"detail":"Retry: 1xx status codes incorrectly marked as retryable"}
+{"timestamp":"2026-03-17T14:49:14.515325+01:00","action":"release","task_id":3,"detail":"claude-execute"}
+{"timestamp":"2026-03-17T14:49:14.553743+01:00","action":"move","task_id":3,"detail":"in-progress -\u003e done"}
+{"timestamp":"2026-03-17T14:49:21.336936+01:00","action":"move","task_id":2,"detail":"backlog -\u003e in-progress"}
+{"timestamp":"2026-03-17T14:55:01.373709+01:00","action":"edit","task_id":2,"detail":"Retry: POST endpoint list is stale and incomplete"}
+{"timestamp":"2026-03-17T14:55:01.373989+01:00","action":"release","task_id":2,"detail":"claude-execute"}
+{"timestamp":"2026-03-17T14:55:01.408131+01:00","action":"move","task_id":2,"detail":"in-progress -\u003e done"}
+{"timestamp":"2026-03-17T14:55:11.205273+01:00","action":"move","task_id":15,"detail":"backlog -\u003e in-progress"}
+{"timestamp":"2026-03-17T14:58:47.735721+01:00","action":"edit","task_id":15,"detail":"Error: isAutoRetryable field from API response silently dropped"}
+{"timestamp":"2026-03-17T14:58:47.735951+01:00","action":"release","task_id":15,"detail":"claude-execute"}
+{"timestamp":"2026-03-17T14:58:47.764021+01:00","action":"move","task_id":15,"detail":"in-progress -\u003e done"}
+{"timestamp":"2026-03-17T14:58:57.888826+01:00","action":"move","task_id":11,"detail":"backlog -\u003e in-progress"}
+{"timestamp":"2026-03-17T14:59:56.246129+01:00","action":"edit","task_id":11,"detail":"Batching: Pretty-printed JSON in all request bodies"}
+{"timestamp":"2026-03-17T14:59:56.246378+01:00","action":"release","task_id":11,"detail":"claude-execute"}
+{"timestamp":"2026-03-17T14:59:56.280137+01:00","action":"move","task_id":11,"detail":"in-progress -\u003e done"}
+{"timestamp":"2026-03-17T15:00:03.864274+01:00","action":"move","task_id":10,"detail":"backlog -\u003e in-progress"}
+{"timestamp":"2026-03-17T15:01:56.687143+01:00","action":"edit","task_id":10,"detail":"Batching: Sequential create applied to all resource types"}
+{"timestamp":"2026-03-17T15:01:56.687274+01:00","action":"release","task_id":10,"detail":"claude-execute"}
+{"timestamp":"2026-03-17T15:01:56.720787+01:00","action":"move","task_id":10,"detail":"in-progress -\u003e done"}
+{"timestamp":"2026-03-17T15:02:14.411401+01:00","action":"move","task_id":7,"detail":"backlog -\u003e in-progress"}
+{"timestamp":"2026-03-17T15:05:32.562789+01:00","action":"edit","task_id":7,"detail":"Error: Typo 'succeded' in public API (MultiError, utils)"}
+{"timestamp":"2026-03-17T15:05:32.563185+01:00","action":"release","task_id":7,"detail":"claude-execute"}
+{"timestamp":"2026-03-17T15:05:32.589685+01:00","action":"move","task_id":7,"detail":"in-progress -\u003e done"}
+{"timestamp":"2026-03-17T15:05:40.894403+01:00","action":"move","task_id":6,"detail":"backlog -\u003e in-progress"}
+{"timestamp":"2026-03-17T15:07:18.233496+01:00","action":"edit","task_id":6,"detail":"Error: forbidden field from API errors not preserved"}
+{"timestamp":"2026-03-17T15:07:18.234222+01:00","action":"release","task_id":6,"detail":"claude-execute"}
+{"timestamp":"2026-03-17T15:07:18.265655+01:00","action":"move","task_id":6,"detail":"in-progress -\u003e done"}
