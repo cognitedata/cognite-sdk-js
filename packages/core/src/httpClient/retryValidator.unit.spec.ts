@@ -79,4 +79,35 @@ describe('cdfRetryValidator', () => {
   test("don't retry GET 4xx (except 429)", () => {
     expect(retryValidator(getRequest, response415, 0)).toBeFalsy();
   });
+
+  test("don't retry POST to path with endpoint as substring prefix", () => {
+    const request: HttpRequest = {
+      ...baseRequest,
+      method: HttpMethod.Post,
+      path: '/api/v1/projects/abc/assets/listing',
+    };
+    expect(retryValidator(request, response500, 0)).toBeFalsy();
+  });
+
+  test('retry POST when endpoint matches at path boundary with query string', () => {
+    const request: HttpRequest = {
+      ...baseRequest,
+      method: HttpMethod.Post,
+      path: '/api/v1/projects/abc/assets/list?limit=10',
+    };
+    expect(retryValidator(request, response500, 0)).toBeTruthy();
+  });
+
+  test('retry POST when endpoint matches followed by sub-path', () => {
+    const dataEndpointList = {
+      [HttpMethod.Post]: ['/timeseries/data'],
+    };
+    const dataRetryValidator = createRetryValidator(dataEndpointList, 5);
+    const request: HttpRequest = {
+      ...baseRequest,
+      method: HttpMethod.Post,
+      path: '/api/v1/projects/abc/timeseries/data/list',
+    };
+    expect(dataRetryValidator(request, response500, 0)).toBeTruthy();
+  });
 });

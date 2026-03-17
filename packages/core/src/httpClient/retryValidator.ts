@@ -78,5 +78,16 @@ function matchPathWithEndpoints(path: string, endpoints: string[]) {
 }
 
 function matchPathWithEndpoint(path: string, endpoint: string) {
-  return path.toUpperCase().indexOf(endpoint.toUpperCase()) !== -1;
+  const upperPath = path.toUpperCase();
+  const upperEndpoint = endpoint.toUpperCase();
+  const index = upperPath.indexOf(upperEndpoint);
+  if (index === -1) {
+    return false;
+  }
+  const endPos = index + upperEndpoint.length;
+  return (
+    endPos === upperPath.length ||
+    upperPath[endPos] === '/' ||
+    upperPath[endPos] === '?'
+  );
 }
