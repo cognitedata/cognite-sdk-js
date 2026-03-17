@@ -1,7 +1,7 @@
 // Copyright 2020 Cognite AS
 
 import nock from 'nock';
-import { beforeEach, describe, expect, test } from 'vitest';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { HttpError } from './httpError';
 import { RetryableHttpClient } from './retryableHttpClient';
 
@@ -70,5 +70,27 @@ describe('RetryableHttpClient', () => {
       expect(err.status).toBe(401);
     }
     expect(scope.isDone()).toBe(true);
+  });
+
+  test('should honor Retry-After header on 429 responses', async () => {
+    const sleepSpy = vi
+      .spyOn(await import('../utils'), 'sleepPromise')
+      .mockResolvedValue(undefined);
+
+    const retryAfterClient = new RetryableHttpClient(
+      baseUrl,
+      (_, response) => response.status === 429
+    );
+
+    nock(baseUrl)
+      .get('/')
+      .reply(429, {}, { 'retry-after': '2' });
+    nock(baseUrl).get('/').reply(200, { ok: true });
+
+    const res = await retryAfterClient.get('/');
+    expect(res.status).toBe(200);
+    expect(sleepSpy).toHaveBeenCalledWith(2000);
+
+    sleepSpy.mockRestore();
   });
 });

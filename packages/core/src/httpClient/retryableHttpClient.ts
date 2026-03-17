@@ -45,6 +45,23 @@ export class RetryableHttpClient extends BasicHttpClient {
     return RetryableHttpClient.backoffCalculator.calculateDelayInMs(retryCount);
   }
 
+  private static parseRetryAfterMs(
+    response: HttpResponse<unknown>
+  ): number | undefined {
+    if (response.status !== 429) {
+      return undefined;
+    }
+    const retryAfter = response.headers['retry-after'];
+    if (!retryAfter) {
+      return undefined;
+    }
+    const seconds = Number(retryAfter);
+    if (!Number.isNaN(seconds) && seconds >= 0) {
+      return seconds * 1000;
+    }
+    return undefined;
+  }
+
   constructor(
     baseUrl: string,
     private retryValidator: RetryValidator
@@ -119,7 +136,10 @@ export class RetryableHttpClient extends BasicHttpClient {
       if (!shouldRetry) {
         return response;
       }
-      const delayInMs = RetryableHttpClient.calculateRetryDelayInMs(retryCount);
+      const retryAfterDelay = RetryableHttpClient.parseRetryAfterMs(response);
+      const delayInMs =
+        retryAfterDelay ??
+        RetryableHttpClient.calculateRetryDelayInMs(retryCount);
       await sleepPromise(delayInMs);
       retryCount++;
     }
