@@ -67,7 +67,6 @@ export const createUniversalRetryValidator =
 
 function isValidRetryStatusCode(status: number) {
   return (
-    inRange(status, 100, 200) ||
     inRange(status, 429, 430) ||
     inRange(status, 500, 600)
   );

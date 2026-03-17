@@ -48,6 +48,14 @@ describe('cdfRetryValidator', () => {
   };
   const retryValidator = createRetryValidator(endpointList, 5);
 
+  test("don't retry 1xx", () => {
+    const response100: HttpResponse<unknown> = {
+      ...baseResponse,
+      status: 100,
+    };
+    expect(retryValidator(getRequest, response100, 0)).toBeFalsy();
+  });
+
   test("don't retry 2xx", () => {
     expect(retryValidator(getRequest, response200, 0)).toBeFalsy();
   });
