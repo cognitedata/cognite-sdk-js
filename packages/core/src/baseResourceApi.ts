@@ -62,6 +62,8 @@ export abstract class BaseResourceAPI<ResponseType> {
     return chunk(items, chunkSize);
   }
 
+  protected readonly sequentialCreate: boolean = false;
+
   protected readonly dateParser: DateParser;
 
   /** @hidden */
@@ -410,19 +412,24 @@ export abstract class BaseResourceAPI<ResponseType> {
     items: RequestType[],
     path: string
   ) {
-    return this.postInSequenceWithAutomaticChunking<RequestType>(path, items);
+    return this.postWithAutomaticChunking<RequestType>(
+      path,
+      items,
+      this.sequentialCreate
+    );
   }
 
   private async callUpsertEndpoint<RequestType>(
     items: RequestType[],
     path: string = this.upsertUrl
   ) {
-    return this.postInSequenceWithAutomaticChunking<RequestType>(path, items);
+    return this.postWithAutomaticChunking<RequestType>(path, items, true);
   }
 
-  private postInSequenceWithAutomaticChunking<RequestType>(
+  private postWithAutomaticChunking<RequestType>(
     path: string,
     items: RequestType[],
+    sequential: boolean,
     params?: HttpQueryParams
   ) {
     return promiseAllWithData(
@@ -432,7 +439,7 @@ export abstract class BaseResourceAPI<ResponseType> {
           data: { items: singleChunk },
           params,
         }),
-      true,
+      sequential,
       undefined,
       true
     );

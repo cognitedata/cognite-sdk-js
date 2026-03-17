@@ -20,6 +20,8 @@ import type {
 import { sortAssetCreateItems } from './assetUtils';
 
 export class AssetsAPI extends BaseResourceAPI<Asset> {
+  protected override readonly sequentialCreate = true;
+
   /**
    * @hidden
    */
