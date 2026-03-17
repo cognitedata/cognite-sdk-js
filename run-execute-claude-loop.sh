@@ -62,7 +62,7 @@ Complete this task, then stop. Do not pick additional tasks."
   echo "Running Claude on task #$TASK_ID (may take a few minutes)..."
   claude -p \
     --dangerously-skip-permissions \
-    --disallowedTools "Bash(git*push*)" \
+    --disallowedTools "Bash(git push*)" "Bash(git*push*)" \
     --max-turns 50 \
     "$PROMPT"
 done
