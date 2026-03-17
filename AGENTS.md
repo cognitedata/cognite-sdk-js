@@ -1,0 +1,39 @@
+# Task Tracking
+
+Tasks are managed with [kanban-md](https://github.com/jmhobbs/kanban-md) in the `kanban/` directory.
+
+## Setup (first time)
+
+1. Install kanban-md: `brew install jmhobbs/tap/kanban-md` (or see the kanban-md docs for other install methods)
+2. Initialize the board: `kanban-md init` inside this directory
+3. Install the AI skill: `kanban-md skill install` — choose Claude Code
+
+## Discovery loop
+
+Run `./run-discovery-claude-loop.sh` to have Claude Code explore the codebase and create kanban tasks for improvement opportunities. The script forbids git/gh; it only reads code and manages the board.
+
+## Tag scheme
+
+| Tag | Use |
+|-----|-----|
+| `discovery` | Findings from run-discovery-claude-loop.sh |
+| `retry` | Retry / exponential backoff / jitter improvements |
+| `error-parsing` | Structured error types, error codes, messages |
+| `dedup` | Deduplication of duplicate calls |
+| `batching` | Batching + chunking improvements |
+
+## Discovery focus areas
+
+The `run-discovery-claude-loop.sh` script explores these 4 areas:
+
+1. **Retry with exponential backoff and jitter** — `packages/core/src/httpClient/retryableHttpClient.ts`, `retryValidator.ts`, `exponentialJitterBackoff.ts`, `packages/stable/src/retryValidator.ts`
+2. **Error parsing** — `packages/core/src/error.ts`, `httpClient/httpError.ts`, `multiError.ts`
+3. **Deduplication** — HTTP client layer, API wrappers (request-level dedup)
+4. **Batching + chunking** — `packages/core/src/baseResourceApi.ts`, `packages/core/src/utils.ts`, API implementations in `packages/stable/src/api/`
+
+## Conventions
+
+- Always set `--due YYYY-MM-DD` for tasks with a real deadline.
+- Use tags to filter by context: `kanban-md list --compact --tag discovery`
+- Priorities: `low`, `medium`, `high`, `critical`
+- When creating tasks, default status is `backlog`; move to `todo` when ready to act on.
