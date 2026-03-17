@@ -110,6 +110,36 @@ describe('utils', () => {
       await expect(promiseAllAtOnce(data, promiser)).resolves.toEqual(data);
     });
 
+    test('promiseAllAtOnce: respects concurrency limit', async () => {
+      let activeConcurrency = 0;
+      let maxObservedConcurrency = 0;
+      const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+      const promiser = async (input: number) => {
+        activeConcurrency++;
+        maxObservedConcurrency = Math.max(
+          maxObservedConcurrency,
+          activeConcurrency
+        );
+        await sleepPromise(10);
+        activeConcurrency--;
+        return input;
+      };
+      const result = await promiseAllAtOnce(data, promiser, 3);
+      expect(result).toEqual(data);
+      expect(maxObservedConcurrency).toBeLessThanOrEqual(3);
+      expect(maxObservedConcurrency).toBeGreaterThan(1);
+    });
+
+    test('promiseAllAtOnce: concurrency higher than input count', async () => {
+      const data = [1, 2];
+      const result = await promiseAllAtOnce(
+        data,
+        (input) => Promise.resolve(input * 2),
+        100
+      );
+      expect(result).toEqual([2, 4]);
+    });
+
     test('promiseEachInSequence', async () => {
       expect(
         await promiseEachInSequence([], (input) => Promise.resolve(input))

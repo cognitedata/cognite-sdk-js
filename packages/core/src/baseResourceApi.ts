@@ -392,6 +392,7 @@ export abstract class BaseResourceAPI<ResponseType> {
     params,
     queryParams,
     chunkSize = 1000,
+    concurrency,
   }: PostInParallelWithAutomaticChunkingParams<RequestType, ParamsType>) {
     return promiseAllWithData(
       BaseResourceAPI.chunk(items, chunkSize),
@@ -400,7 +401,8 @@ export abstract class BaseResourceAPI<ResponseType> {
           data: { ...params, items: singleChunk },
           params: queryParams,
         }),
-      false
+      false,
+      concurrency
     );
   }
 
@@ -445,6 +447,7 @@ interface PostInParallelWithAutomaticChunkingParams<RequestType, ParamsType> {
   params?: ParamsType;
   queryParams?: ParamsType;
   chunkSize?: number;
+  concurrency?: number;
 }
 
 type KeysOfType<T, U> = { [P in keyof T]: T[P] extends U ? P : never }[keyof T];

@@ -1,10 +1,12 @@
 ---
 id: 9
 title: 'Batching: No concurrency limit for parallel chunked requests'
-status: backlog
+status: done
 priority: high
 created: 2026-03-17T14:09:44.003129+01:00
-updated: 2026-03-17T14:09:44.003129+01:00
+updated: 2026-03-17T14:35:52.196657+01:00
+started: 2026-03-17T14:33:33.833988+01:00
+completed: 2026-03-17T14:35:52.196657+01:00
 tags:
     - discovery
     - batching

@@ -89,16 +89,17 @@ export function promiseCache<ReturnValue>(
  * Resolves all Promises at once, even if some of them fail
  */
 /** @hidden */
+export const DEFAULT_CONCURRENCY = 5;
+
 export async function promiseAllAtOnce<RequestType, ResponseType>(
   inputs: RequestType[],
-  promiser: (input: RequestType) => Promise<ResponseType>
+  promiser: (input: RequestType) => Promise<ResponseType>,
+  concurrency: number = DEFAULT_CONCURRENCY
 ) {
   const failed: RequestType[] = [];
   const succeded: RequestType[] = [];
   const responses: ResponseType[] = [];
   const errors: (Error | CogniteError)[] = [];
-
-  const promises = inputs.map(promiser);
 
   type SingleResult = {
     succeded?: RequestType;
@@ -107,20 +108,30 @@ export async function promiseAllAtOnce<RequestType, ResponseType>(
     error?: Error | CogniteError;
   };
 
-  const wrappedPromises: Promise<SingleResult>[] = promises.map(
-    (promise, index) =>
-      new Promise<SingleResult>((resolve) => {
-        promise
-          .then((result) => {
-            resolve({ succeded: inputs[index], response: result });
-          })
-          .catch((error) => {
-            resolve({ failed: inputs[index], error });
-          });
-      })
-  );
+  const results: SingleResult[] = new Array(inputs.length);
+  let nextIndex = 0;
 
-  const results = await Promise.all(wrappedPromises);
+  async function worker() {
+    while (nextIndex < inputs.length) {
+      const index = nextIndex++;
+      try {
+        const result = await promiser(inputs[index]);
+        results[index] = { succeded: inputs[index], response: result };
+      } catch (error) {
+        results[index] = {
+          failed: inputs[index],
+          error: error as Error | CogniteError,
+        };
+      }
+    }
+  }
+
+  const workers = Array.from(
+    { length: Math.min(concurrency, inputs.length) },
+    () => worker()
+  );
+  await Promise.all(workers);
+
   for (const res of results) {
     failed.push(...(res.failed ? [res.failed] : []));
     succeded.push(...(res.succeded ? [res.succeded] : []));
@@ -143,13 +154,14 @@ export async function promiseAllAtOnce<RequestType, ResponseType>(
 export async function promiseAllWithData<RequestType, ResponseType>(
   inputs: RequestType[],
   promiser: (input: RequestType) => Promise<ResponseType>,
-  runSequentially: boolean
+  runSequentially: boolean,
+  concurrency?: number
 ) {
   try {
     if (runSequentially) {
       return await promiseEachInSequence(inputs, promiser);
     }
-    return await promiseAllAtOnce(inputs, promiser);
+    return await promiseAllAtOnce(inputs, promiser, concurrency);
   } catch (err) {
     throw new CogniteMultiError(
       err as MultiErrorRawSummary<RequestType, ResponseType>

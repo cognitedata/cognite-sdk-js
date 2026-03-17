@@ -13,3 +13,11 @@
 {"timestamp":"2026-03-17T14:19:53.900704+01:00","action":"create","task_id":13,"detail":"Retry: Client hardcodes max retries, ignoring validator config"}
 {"timestamp":"2026-03-17T14:19:57.960496+01:00","action":"create","task_id":14,"detail":"Batching: Sequential chunked ops fail-fast skips remaining chunks"}
 {"timestamp":"2026-03-17T14:20:01.688607+01:00","action":"create","task_id":15,"detail":"Error: isAutoRetryable field from API response silently dropped"}
+{"timestamp":"2026-03-17T14:30:48.124389+01:00","action":"move","task_id":12,"detail":"backlog -\u003e in-progress"}
+{"timestamp":"2026-03-17T14:33:25.271968+01:00","action":"edit","task_id":12,"detail":"Retry: Path matching uses loose substring — could match wrong endpoints"}
+{"timestamp":"2026-03-17T14:33:25.272669+01:00","action":"release","task_id":12,"detail":"claude-execute"}
+{"timestamp":"2026-03-17T14:33:25.307199+01:00","action":"move","task_id":12,"detail":"in-progress -\u003e done"}
+{"timestamp":"2026-03-17T14:33:33.834163+01:00","action":"move","task_id":9,"detail":"backlog -\u003e in-progress"}
+{"timestamp":"2026-03-17T14:35:52.168868+01:00","action":"edit","task_id":9,"detail":"Batching: No concurrency limit for parallel chunked requests"}
+{"timestamp":"2026-03-17T14:35:52.170838+01:00","action":"release","task_id":9,"detail":"claude-execute"}
+{"timestamp":"2026-03-17T14:35:52.196808+01:00","action":"move","task_id":9,"detail":"in-progress -\u003e done"}
