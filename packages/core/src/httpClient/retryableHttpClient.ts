@@ -148,6 +148,5 @@ function hasAutoRetryableError(data: unknown): boolean {
 
   const { error } = data;
   if (typeof error !== 'object' || error === null) return false;
-  
   return 'isAutoRetryable' in error && error.isAutoRetryable === true;
 }

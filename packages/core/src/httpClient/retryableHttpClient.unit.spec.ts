@@ -75,7 +75,9 @@ describe('RetryableHttpClient', () => {
   test('should retry non-retryable status when isAutoRetryable is true', async () => {
     const scope = nock(baseUrl)
       .get('/')
-      .reply(400, { error: { code: 400, message: 'Bad request', isAutoRetryable: true } });
+      .reply(400, {
+        error: { code: 400, message: 'Bad request', isAutoRetryable: true },
+      });
     nock(baseUrl).get('/').reply(200, { a: 42 });
     const res = await client.get('/');
     expect(scope.isDone()).toBeTruthy();
@@ -87,7 +89,9 @@ describe('RetryableHttpClient', () => {
     nock(baseUrl)
       .get('/')
       .times(6)
-      .reply(400, { error: { code: 400, message: 'Bad request', isAutoRetryable: true } });
+      .reply(400, {
+        error: { code: 400, message: 'Bad request', isAutoRetryable: true },
+      });
     await expect(client.get('/')).rejects.toThrow(
       'Request failed | status code: 400'
     );
@@ -96,7 +100,9 @@ describe('RetryableHttpClient', () => {
   test('should fall through to normal retry validation when isAutoRetryable is false', async () => {
     nock(baseUrl)
       .get('/')
-      .reply(400, { error: { code: 400, message: 'Bad request', isAutoRetryable: false } });
+      .reply(400, {
+        error: { code: 400, message: 'Bad request', isAutoRetryable: false },
+      });
     await expect(client.get('/')).rejects.toThrow(
       'Request failed | status code: 400'
     );
@@ -115,7 +121,9 @@ describe('RetryableHttpClient', () => {
     const scope = nock(baseUrl)
       .get('/')
       .times(1)
-      .reply(400, { error: { code: 400, message: 'Bad request', isAutoRetryable: true } });
+      .reply(400, {
+        error: { code: 400, message: 'Bad request', isAutoRetryable: true },
+      });
     expect.assertions(2);
     try {
       await client.get('/', { retryValidator: false });
