@@ -9,6 +9,7 @@ import {
   type HttpResponse,
 } from './basicHttpClient';
 import { ExponentialJitterBackoff } from './exponentialJitterBackoff';
+import { isConnectionError, isReadTimeout } from './fetchError';
 import { DEFAULT_RETRY_CONFIG, RetryTracker } from './retryTracker';
 import type { RetryValidator } from './retryValidator';
 
@@ -107,7 +108,29 @@ export class RetryableHttpClient extends BasicHttpClient {
   ): Promise<HttpResponse<ResponseType>> {
     const tracker = new RetryTracker(DEFAULT_RETRY_CONFIG);
     while (true) {
-      const response = await super.rawRequest<ResponseType>(request);
+      let response: HttpResponse<ResponseType>;
+      try {
+        response = await super.rawRequest<ResponseType>(request);
+      } catch (error) {
+        if (isReadTimeout(error)) {
+          tracker.read++;
+          if (tracker.shouldRetry(null, true)) {
+            await sleepPromise(
+              RetryableHttpClient.calculateRetryDelayInMs(tracker.total)
+            );
+            continue;
+          }
+        } else if (isConnectionError(error)) {
+          tracker.connect++;
+          if (tracker.shouldRetry(null, true)) {
+            await sleepPromise(
+              RetryableHttpClient.calculateRetryDelayInMs(tracker.total)
+            );
+            continue;
+          }
+        }
+        throw error;
+      }
 
       const retryValidator = isFunction(request.retryValidator)
         ? request.retryValidator
