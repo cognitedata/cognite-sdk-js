@@ -1,9 +1,14 @@
 // Copyright 2020 Cognite AS
 
 import nock from 'nock';
-import { beforeEach, describe, expect, test } from 'vitest';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { HttpError } from './httpError';
 import { RetryableHttpClient } from './retryableHttpClient';
+
+vi.mock('../utils', async (importOriginal) => {
+  const mod = await importOriginal<typeof import('../utils')>();
+  return { ...mod, sleepPromise: vi.fn().mockResolvedValue(undefined) };
+});
 
 describe('RetryableHttpClient', () => {
   const baseUrl = 'https://example.com';
@@ -42,7 +47,7 @@ describe('RetryableHttpClient', () => {
   });
 
   test('respect when a boolean is passed as retryValidator', async () => {
-    const scope = nock(baseUrl).get('/').times(1).reply(401);
+    const scope = nock(baseUrl).get('/').times(1).reply(429);
     expect.assertions(2);
     try {
       const promise = client.get('/', { retryValidator: false });
@@ -51,13 +56,13 @@ describe('RetryableHttpClient', () => {
       if (!(err instanceof HttpError)) {
         throw err;
       }
-      expect(err.status).toBe(401);
+      expect(err.status).toBe(429);
     }
     expect(scope.isDone()).toBe(true);
   });
 
   test('respect when a function is passed as retryValidator', async () => {
-    const scope = nock(baseUrl).get('/').times(2).reply(401);
+    const scope = nock(baseUrl).get('/').times(2).reply(429);
     expect.assertions(2);
     try {
       await client.get('/', {
@@ -67,19 +72,21 @@ describe('RetryableHttpClient', () => {
       if (!(err instanceof HttpError)) {
         throw err;
       }
-      expect(err.status).toBe(401);
+      expect(err.status).toBe(429);
     }
     expect(scope.isDone()).toBe(true);
   });
 
-  test('should retry non-retryable status when isAutoRetryable is true', async () => {
+  test('should retry non-retryable status when isAutoRetryable is true and retryValidator is true', async () => {
     const scope = nock(baseUrl)
       .get('/')
       .reply(400, {
         error: { code: 400, message: 'Bad request', isAutoRetryable: true },
       });
     nock(baseUrl).get('/').reply(200, { a: 42 });
-    const res = await client.get('/');
+    const res = await client.get('/', {
+      retryValidator: () => true,
+    });
     expect(scope.isDone()).toBeTruthy();
     expect(res.status).toBe(200);
     expect(res.data).toEqual({ a: 42 });
@@ -88,14 +95,14 @@ describe('RetryableHttpClient', () => {
   test('should respect MAX_RETRY_ATTEMPTS even when isAutoRetryable is true', async () => {
     nock(baseUrl)
       .get('/')
-      .times(6)
-      .reply(400, {
-        error: { code: 400, message: 'Bad request', isAutoRetryable: true },
+      .times(11)
+      .reply(429, {
+        error: { code: 429, message: 'Bad request', isAutoRetryable: true },
       });
     await expect(client.get('/')).rejects.toThrow(
-      'Request failed | status code: 400'
+      'Request failed | status code: 429'
     );
-  }, 30_000);
+  });
 
   test('should fall through to normal retry validation when isAutoRetryable is false', async () => {
     nock(baseUrl)
