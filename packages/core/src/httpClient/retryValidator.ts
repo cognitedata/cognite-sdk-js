@@ -56,7 +56,7 @@ export const createUniversalRetryValidator =
       return true;
     }
     // By default, retry requests with HTTP verbs that are meant to be idempotent
-    const httpMethodsToRetry = ['GET', 'HEAD', 'OPTIONS', 'PUT'];
+    const httpMethodsToRetry = ['GET', 'HEAD', 'OPTIONS', 'PUT', 'PATCH'];
     const isRetryableHttpMethod =
       httpMethodsToRetry.indexOf(request.method.toUpperCase()) !== -1;
     if (!isRetryableHttpMethod) {

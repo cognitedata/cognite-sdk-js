@@ -80,6 +80,26 @@ describe('cdfRetryValidator', () => {
     expect(retryValidator(getRequest, response415, 0)).toBeFalsy();
   });
 
+  describe('PATCH method retry behavior', () => {
+    const patchRequest: HttpRequest = {
+      ...baseRequest,
+      method: HttpMethod.Patch,
+    };
+    const response502: HttpResponse<unknown> = { ...baseResponse, status: 502 };
+
+    test('retry PATCH 502', () => {
+      expect(retryValidator(patchRequest, response502, 0)).toBeTruthy();
+    });
+
+    test("don't retry PATCH 4xx (except 429)", () => {
+      expect(retryValidator(patchRequest, response415, 0)).toBeFalsy();
+    });
+
+    test('retry PATCH 429', () => {
+      expect(retryValidator(patchRequest, response429, 0)).toBeTruthy();
+    });
+  });
+
   describe('DELETE method retry behavior', () => {
     const deleteRequest: HttpRequest = {
       ...baseRequest,
