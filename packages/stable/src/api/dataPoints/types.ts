@@ -29,11 +29,43 @@ export type Aggregate =
   | 'stepInterpolation'
   | 'totalVariation'
   | 'continuousVariance'
-  | 'discreteVariance';
+  | 'discreteVariance'
+  | 'maxDatapoint'
+  | 'minDatapoint'
+  | 'countGood'
+  | 'countUncertain'
+  | 'countBad'
+  | 'durationGood'
+  | 'durationUncertain'
+  | 'durationBad';
+
+// =====================================================
+// Data point status types
+// =====================================================
+
+/**
+ * Status code for a data point, following OPC UA conventions.
+ * Either `code` or `symbol` is required; if both are set they must be consistent.
+ * @see https://docs.cognite.com/dev/concepts/reference/status_codes
+ */
+export interface DatapointStatus {
+  /** Numeric status code (e.g. 0 for Good, 2147483648 for Bad) */
+  code: number;
+  /** Status symbol name (e.g. 'Good', 'Uncertain', 'Bad') */
+  symbol: string;
+}
 
 // =====================================================
 // Data point value types
 // =====================================================
+
+/**
+ * The timestamp and value of a min/max data point aggregate.
+ */
+export interface DatapointExtremum {
+  timestamp: Date;
+  value: number;
+}
 
 export interface DatapointAggregate extends DatapointInfo {
   average?: number;
@@ -46,19 +78,33 @@ export interface DatapointAggregate extends DatapointInfo {
   continuousVariance?: number;
   discreteVariance?: number;
   totalVariation?: number;
+  maxDatapoint?: DatapointExtremum;
+  minDatapoint?: DatapointExtremum;
+  countGood?: number;
+  countUncertain?: number;
+  countBad?: number;
+  /** Duration in milliseconds with Good status */
+  durationGood?: number;
+  /** Duration in milliseconds with Uncertain status */
+  durationUncertain?: number;
+  /** Duration in milliseconds with Bad status */
+  durationBad?: number;
 }
 
 export interface DoubleDatapoint extends DatapointInfo {
   value: number;
+  status?: DatapointStatus;
 }
 
 export interface StringDatapoint extends DatapointInfo {
   value: string;
+  status?: DatapointStatus;
 }
 
 export interface ExternalDatapoint {
   timestamp: Timestamp;
   value: number | string;
+  status?: DatapointStatus;
 }
 
 // =====================================================
@@ -266,6 +312,22 @@ export interface DatapointsQueryProperties extends Limit, Cursor {
    * Default: "UTC" Which time zone to align aggregates to. Omit to use top-level value.
    */
   timeZone?: string;
+  /**
+   * Include status codes in the response. Good (code 0) status codes are always omitted.
+   * @default false
+   */
+  includeStatus?: boolean;
+  /**
+   * Treat data points with Bad status codes as if they do not exist.
+   * Set to false to include bad data points.
+   * @default true
+   */
+  ignoreBadDataPoints?: boolean;
+  /**
+   * Treat data points with Uncertain status codes as Bad.
+   * @default true
+   */
+  treatUncertainAsBad?: boolean;
 }
 
 // =====================================================
@@ -282,4 +344,30 @@ export interface LatestDataPropertyFilter {
    * Get first datapoint before this time. Format is N[timeunit]-ago where timeunit is w,d,h,m,s. Example: '2d-ago' will get everything that is up to 2 days old. Can also send time as a Date object or number of milliseconds since epoch.
    */
   before?: string | Date | number;
+  /**
+   * The unit externalId of the data points returned. If the time series does not have a
+   * unitExternalId that can be converted to the targetUnit, an error will be returned.
+   * Cannot be used with targetUnitSystem.
+   */
+  targetUnit?: string;
+  /**
+   * The unit system of the data points returned. Cannot be used with targetUnit.
+   */
+  targetUnitSystem?: string;
+  /**
+   * Include status codes in the response. Good (code 0) status codes are always omitted.
+   * @default false
+   */
+  includeStatus?: boolean;
+  /**
+   * Treat data points with Bad status codes as if they do not exist.
+   * Set to false to include bad data points.
+   * @default true
+   */
+  ignoreBadDataPoints?: boolean;
+  /**
+   * Treat data points with Uncertain status codes as Bad.
+   * @default true
+   */
+  treatUncertainAsBad?: boolean;
 }

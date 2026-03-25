@@ -30,3 +30,14 @@ jobs:
         run: yarn install --immutable
 
       - uses: JulienKode/pull-request-name-linter-action@v0.5.0
+
+      - name: Reject Jira ticket IDs in PR title
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          if echo "$PR_TITLE" | grep -qE '\b[A-Z]{2,}-[0-9]+\b'; then
+            echo "❌ PR title contains a Jira ticket ID: \"$PR_TITLE\""
+            echo "Describe the change so that it's suitable for the release notes on https://github.com/cognitedata/cognite-sdk-js/releases."
+            echo "E.g.: feat(containers): add usedFor filter parameter to containers"
+            exit 1
+          fi

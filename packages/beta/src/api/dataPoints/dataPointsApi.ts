@@ -1,15 +1,12 @@
 import {
   DataPointsAPI as DataPointsAPIStable,
+  type DatapointAggregate,
+  type DatapointAggregates,
+  type Datapoints,
+  type DatapointsMonthlyGranularityMultiQuery,
+  type DatapointsMultiQuery,
   type ItemsWrapper,
 } from '@cognite/sdk';
-
-import type {
-  DatapointAggregate,
-  DatapointAggregates,
-  Datapoints,
-  DatapointsMonthlyGranularityMultiQuery,
-  DatapointsMultiQuery,
-} from '../../types';
 
 export class DataPointsAPI extends DataPointsAPIStable {
   public retrieve = (
