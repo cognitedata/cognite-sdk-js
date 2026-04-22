@@ -631,3 +631,41 @@ export interface FilterObject {
     value: string;
   };
 }
+
+export interface Datapoint {
+  timestamp: Date;
+  value: number;
+}
+
+export interface MeterReading {
+  meterId: string;
+  datapoints: Datapoint[];
+}
+
+/** Epoch ms range + averaged bucket count (see Metering API). */
+export interface MeterConsumptionRangeParams {
+  start?: number;
+  end?: number;
+  numberOfDatapoints?: number;
+}
+
+/** GET /metering/meters — cursor, limit, and optional historical range. */
+export type MeterConsumptionListParams = FilterQuery &
+  MeterConsumptionRangeParams;
+
+/** POST /metering/meters/list — prefix filter on `meterId` only. */
+export interface MeterConsumptionAdvancedFilter
+  extends FilterQuery,
+    MeterConsumptionRangeParams {
+  filter?: FilterObject;
+}
+
+/** POST /metering/meters/byids request body. */
+export interface MeterConsumptionByIdsRequest
+  extends MeterConsumptionRangeParams {
+  items: { meterId: string }[];
+}
+
+export interface MeterConsumptionByIdsResponse {
+  items: MeterReading[];
+}
