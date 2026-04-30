@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.1.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@6.0.14...@cognite/sdk-beta@6.1.0) (2026-04-30)
+
+
+### Features
+
+* **timeseries,datapoints:** align types with latest API spec ([#1386](https://github.com/cognitedata/cognite-sdk-js/issues/1386)) ([f5bc4d8](https://github.com/cognitedata/cognite-sdk-js/commit/f5bc4d8a255251f13743ee8be348c230ccf6efb4))
+
+
+
+
+
 ## [6.0.14](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@6.0.13...@cognite/sdk-beta@6.0.14) (2026-03-05)
 
 
