@@ -26,7 +26,7 @@ export default class CogniteClientAlpha extends CogniteClientStable {
   protected initAPIs() {
     super.initAPIs();
 
-    this.httpClient.setDefaultHeader('cdf-version', 'alpha');
+    this.httpClient.setDefaultHeader('cdf-version', '20230101-alpha');
 
     this.simulatorsApi = this.apiFactory(SimulatorsAPI, 'simulators');
     this.limitsApi = this.apiFactory(LimitsAPI, 'limits');

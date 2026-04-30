@@ -1,8 +1,4 @@
-import {
-  BaseResourceAPI,
-  type CursorResponse,
-  type FilterQuery,
-} from '@cognite/sdk-core';
+import { BaseResourceAPI, type FilterQuery } from '@cognite/sdk-core';
 import type {
   CursorAndAsyncIterator,
   LimitAdvanceFilter,
@@ -10,9 +6,13 @@ import type {
 } from '../../types';
 
 export class LimitsAPI extends BaseResourceAPI<LimitsValue> {
-  private header = {
-    'cdf-version': '20230101-alpha',
-  };
+  protected get listGetUrl() {
+    return this.url('values');
+  }
+
+  protected get listPostUrl() {
+    return this.url('values/list');
+  }
 
   /**
    * [Retrieve a single limit by ID](https://api-docs.cognite.com/20230101-alpha/tag/Limits/operation/fetchLimitById)
@@ -22,9 +22,7 @@ export class LimitsAPI extends BaseResourceAPI<LimitsValue> {
    */
   public retrieveByLimitId = async (limitId: string): Promise<LimitsValue> => {
     const path = this.url(`values/${encodeURIComponent(limitId)}`);
-    const response = await this.get<LimitsValue>(path, {
-      headers: this.header,
-    });
+    const response = await this.get<LimitsValue>(path);
     return this.addToMapAndReturn(response.data, response);
   };
 
@@ -37,52 +35,18 @@ export class LimitsAPI extends BaseResourceAPI<LimitsValue> {
   public retrieveByAdvancedFilter = (
     filter?: LimitAdvanceFilter
   ): CursorAndAsyncIterator<LimitsValue> => {
-    const path = this.url('values/list');
-
-    const endpointCaller = async (query?: LimitAdvanceFilter) => {
-      const requestBody = query || filter || {};
-      const response = await this.post<CursorResponse<LimitsValue[]>>(path, {
-        data: requestBody,
-        headers: this.header,
-      });
-      return {
-        ...response,
-        data: {
-          items: response.data.items || [],
-          nextCursor: response.data?.nextCursor,
-        },
-      };
-    };
-
-    return this.listEndpoint(endpointCaller, filter);
+    return this.listEndpoint(this.callListEndpointWithPost, filter);
   };
 
   /**
    * [Retrieve a list of all limits](https://api-docs.cognite.com/20230101-alpha/tag/Limits/operation/listLimits)
    *
-   * @param queryparams - The query parameters to apply to the limits.
+   * @param query - The query parameters to apply to the limits.
    * @returns The list of limits.
    */
   public getAllLimits = (
-    queryparams?: FilterQuery
+    query?: FilterQuery
   ): CursorAndAsyncIterator<LimitsValue> => {
-    const path = this.url('values');
-
-    const endpointCaller = async (query?: FilterQuery) => {
-      const queryParams = query || queryparams || {};
-      const response = await this.get<CursorResponse<LimitsValue[]>>(path, {
-        params: queryParams,
-        headers: this.header,
-      });
-      return {
-        ...response,
-        data: {
-          items: response.data.items || [],
-          nextCursor: response.data?.nextCursor,
-        },
-      };
-    };
-
-    return this.listEndpoint(endpointCaller, queryparams);
+    return this.listEndpoint(this.callListEndpointWithGet, query);
   };
 }

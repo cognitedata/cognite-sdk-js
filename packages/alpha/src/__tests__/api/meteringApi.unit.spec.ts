@@ -1,6 +1,6 @@
 // Copyright 2026 Cognite AS
 
-import type { MeterConsumptionAdvancedFilter } from 'alpha/src/types';
+import type { MeterConsumptionFilterQuery } from 'alpha/src/types';
 import nock from 'nock';
 import { beforeEach, describe, expect, test } from 'vitest';
 import { mockBaseUrl } from '../../../../core/src/__tests__/testUtils';
@@ -17,7 +17,7 @@ describe('Metering API unit tests', () => {
     client = setupMockableClient();
   });
 
-  describe('retrieveByMeterId', () => {
+  describe('retrieveConsumptionData', () => {
     test('should retrieve consumption data for a single meter', async () => {
       const meterId = 'atlas.monthly_ai_tokens';
       const mockedResponse = {
@@ -32,7 +32,7 @@ describe('Metering API unit tests', () => {
         .matchHeader('cdf-version', '20230101-alpha')
         .reply(200, mockedResponse);
 
-      const result = await client.metering.retrieveByMeterId(meterId);
+      const result = await client.metering.retrieveConsumptionData(meterId);
       expect(result.meterId).toEqual(mockedResponse.meterId);
       expect(result.datapoints).toEqual([]);
     });
@@ -49,7 +49,7 @@ describe('Metering API unit tests', () => {
         .matchHeader('cdf-version', '20230101-alpha')
         .reply(200, mockedResponse);
 
-      const result = await client.metering.retrieveByMeterId(meterId);
+      const result = await client.metering.retrieveConsumptionData(meterId);
       expect(result.datapoints).toHaveLength(1);
       expect(result.datapoints[0].value).toBe(42.5);
       expect(result.datapoints[0].timestamp).toEqual(new Date(epochMs));
@@ -75,7 +75,10 @@ describe('Metering API unit tests', () => {
         .matchHeader('cdf-version', '20230101-alpha')
         .reply(200, mockedResponse);
 
-      const result = await client.metering.retrieveByMeterId(meterId, query);
+      const result = await client.metering.retrieveConsumptionData(
+        meterId,
+        query
+      );
       expect(result.datapoints[0].timestamp).toEqual(new Date(epochMs));
     });
 
@@ -91,7 +94,7 @@ describe('Metering API unit tests', () => {
         .matchHeader('cdf-version', '20230101-alpha')
         .reply(200, mockedResponse);
 
-      const result = await client.metering.retrieveByMeterId(meterId);
+      const result = await client.metering.retrieveConsumptionData(meterId);
       expect(result.meterId).toEqual(mockedResponse.meterId);
     });
 
@@ -104,14 +107,14 @@ describe('Metering API unit tests', () => {
         .reply(404, { error: { message: 'Meter not found', code: 404 } });
 
       await expect(
-        client.metering.retrieveByMeterId(meterId)
+        client.metering.retrieveConsumptionData(meterId)
       ).rejects.toThrow();
     });
   });
 
   describe('filterMeters', () => {
     test('should filter meters with prefix on meterId', async () => {
-      const filter: MeterConsumptionAdvancedFilter = {
+      const filter: MeterConsumptionFilterQuery = {
         filter: {
           prefix: {
             property: ['meterId'],
@@ -173,7 +176,7 @@ describe('Metering API unit tests', () => {
     });
 
     test('should handle empty filter results', async () => {
-      const filter: MeterConsumptionAdvancedFilter = {
+      const filter: MeterConsumptionFilterQuery = {
         filter: {
           prefix: {
             property: ['meterId'],
@@ -298,14 +301,8 @@ describe('Metering API unit tests', () => {
     });
   });
 
-  describe('retrieveByMeterIds', () => {
+  describe('retrieveConsumptionDataByIds', () => {
     test('should retrieve multiple meters and parse datapoint timestamps', async () => {
-      const request = {
-        items: [
-          { meterId: 'atlas.monthly_ai_tokens' },
-          { meterId: 'files.storage_bytes' },
-        ],
-      };
       const mockedResponse = {
         items: [
           {
@@ -320,11 +317,19 @@ describe('Metering API unit tests', () => {
       };
 
       nock(mockBaseUrl)
-        .post(/\/api\/v1\/projects\/.*\/metering\/meters\/byids$/, request)
+        .post(/\/api\/v1\/projects\/.*\/metering\/meters\/byids$/, {
+          items: [
+            { meterId: 'atlas.monthly_ai_tokens' },
+            { meterId: 'files.storage_bytes' },
+          ],
+        })
         .matchHeader('cdf-version', '20230101-alpha')
         .reply(200, mockedResponse);
 
-      const result = await client.metering.retrieveByMeterIds(request);
+      const result = await client.metering.retrieveConsumptionDataByIds([
+        'atlas.monthly_ai_tokens',
+        'files.storage_bytes',
+      ]);
       expect(result.items).toHaveLength(2);
       expect(result.items[0].datapoints[0].timestamp).toEqual(
         new Date(epochMs)
@@ -334,6 +339,25 @@ describe('Metering API unit tests', () => {
       );
       expect(result.items[0].datapoints[0].value).toBe(10);
       expect(result.items[1].datapoints[0].value).toBe(20);
+    });
+
+    test('should merge optional historical params into the request body', async () => {
+      const mockedResponse = { items: [] };
+
+      nock(mockBaseUrl)
+        .post(/\/api\/v1\/projects\/.*\/metering\/meters\/byids$/, {
+          items: [{ meterId: 'a' }],
+          start: 1000,
+          end: 2000,
+          numberOfDatapoints: 10,
+        })
+        .reply(200, mockedResponse);
+
+      await client.metering.retrieveConsumptionDataByIds(['a'], {
+        start: 1000,
+        end: 2000,
+        numberOfDatapoints: 10,
+      });
     });
   });
 
@@ -352,7 +376,7 @@ describe('Metering API unit tests', () => {
         .matchHeader('cdf-version', '20230101-alpha')
         .reply(200, mockedResponse);
 
-      await client.metering.retrieveByMeterId(meterId);
+      await client.metering.retrieveConsumptionData(meterId);
     });
   });
 });

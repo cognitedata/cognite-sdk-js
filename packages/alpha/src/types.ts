@@ -621,25 +621,25 @@ export interface LimitsValue {
   value: number;
 }
 
-export interface LimitAdvanceFilter extends FilterQuery {
-  filter?: FilterObject;
-}
-
-export interface FilterObject {
+export interface MeteringLimitsPrefixFilter {
   prefix?: {
     property: string[];
     value: string;
   };
 }
 
-export interface Datapoint {
+export interface LimitAdvanceFilter extends FilterQuery {
+  filter?: MeteringLimitsPrefixFilter;
+}
+
+export interface MeteringDatapoint {
   timestamp: Date;
   value: number;
 }
 
 export interface MeterReading {
   meterId: string;
-  datapoints: Datapoint[];
+  datapoints: MeteringDatapoint[];
 }
 
 /** Epoch ms range + averaged bucket count (see Metering API). */
@@ -653,19 +653,9 @@ export interface MeterConsumptionRangeParams {
 export type MeterConsumptionListParams = FilterQuery &
   MeterConsumptionRangeParams;
 
-/** POST /metering/meters/list — prefix filter on `meterId` only. */
-export interface MeterConsumptionAdvancedFilter
+/** POST /metering/meters/list — cursor, limit, optional range, and prefix filter on `meterId`. */
+export interface MeterConsumptionFilterQuery
   extends FilterQuery,
     MeterConsumptionRangeParams {
-  filter?: FilterObject;
-}
-
-/** POST /metering/meters/byids request body. */
-export interface MeterConsumptionByIdsRequest
-  extends MeterConsumptionRangeParams {
-  items: { meterId: string }[];
-}
-
-export interface MeterConsumptionByIdsResponse {
-  items: MeterReading[];
+  filter?: MeteringLimitsPrefixFilter;
 }
