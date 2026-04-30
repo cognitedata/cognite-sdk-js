@@ -187,7 +187,12 @@ export interface SimulationRunCreate {
   queue?: boolean;
 }
 
-export type SimulationRunStatus = 'queued' | 'ready' | 'running' | 'success' | 'failure';
+export type SimulationRunStatus =
+  | 'queued'
+  | 'ready'
+  | 'running'
+  | 'success'
+  | 'failure';
 
 export const SimulationRunStatus = {
   queued: 'queued' as SimulationRunStatus,
