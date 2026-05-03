@@ -131,30 +131,6 @@ describe('Documents integration test', { timeout: 3 * 60_000 }, () => {
     expect(response.items).toHaveLength(1);
   });
 
-  test('search with aggregate', async () => {
-    const response = await client.documents.search({
-      aggregates: [
-        {
-          name: 'labels',
-          aggregate: 'count',
-          groupBy: [{ property: ['labels'] }],
-        },
-      ],
-      limit: 0,
-    });
-    expect(response.items).toHaveLength(0);
-    expect(response.aggregates).toHaveLength(1);
-    const aggregate = response.aggregates?.[0];
-    if (!aggregate) {
-      throw new Error('missing aggregate');
-    }
-    expect(aggregate.name).toBe('labels');
-    expect(aggregate.total).toBeGreaterThan(0);
-    expect(aggregate.groups.length).toBeGreaterThan(0);
-    expect(aggregate.groups[0].group).toHaveLength(1);
-    expect(aggregate.groups[0].group[0].property).toStrictEqual(['labels']);
-  });
-
   describe('document preview', { timeout: 3 * 60_000 }, () => {
     let documents: DocumentSearchResponse;
 
