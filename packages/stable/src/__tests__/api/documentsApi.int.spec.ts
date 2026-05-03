@@ -132,7 +132,7 @@ describe('Documents integration test', { timeout: 3 * 60_000 }, () => {
   });
 
   describe('document preview', { timeout: 3 * 60_000 }, () => {
-    let documents: DocumentSearchResponse;
+    let documents: Awaited<DocumentSearchResponse>;
 
     beforeAll(async () => {
       documents = await client.documents.search({
