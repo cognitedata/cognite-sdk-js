@@ -1,5 +1,7 @@
 // Copyright 2022 Cognite AS
-export type { EpochTimestamp } from './types.gen';
+export type {
+  EpochTimestamp
+} from './types.gen';
 export type {
   AnnotationData,
   AnnotationsAssetRef,
@@ -34,7 +36,7 @@ export type {
   AnnotationsTypesPrimitivesGeometry3DGeometry,
   AnnotationsUnhandledSymbolObject,
   AnnotationsUnhandledTextObject,
-  AnnotationsView,
+  AnnotationsView
 } from './api/annotations/types.gen';
 export type {
   CogniteExternalId,
@@ -90,12 +92,6 @@ export type {
   DocumentPassagesSearchRequest,
   DocumentPassagesSearchResponse,
   DocumentSearch,
-  DocumentSearchAggregate,
-  DocumentSearchAggregateGroup,
-  DocumentSearchAggregateGroupIdentifier,
-  DocumentSearchAggregates,
-  DocumentSearchCountAggregate,
-  DocumentSearchCountAggregatesGroup,
   DocumentSearchFilter,
   DocumentSearchHighlight,
   DocumentSearchInAggregate,
@@ -133,7 +129,7 @@ export type {
   Label,
   LabelList,
   PassageDocument,
-  PassageSourceFile,
+  PassageSourceFile
 } from './api/documents/types.gen';
 export type {
   CursorQueryParameter,
@@ -148,7 +144,7 @@ export type {
   SpaceCreateDefinition,
   SpaceDefinition,
   SpaceSpecification,
-  UpsertConflict,
+  UpsertConflict
 } from './api/spaces/types.gen';
 export type {
   IdentityType,
@@ -161,7 +157,7 @@ export type {
   UserProfilesListResponse,
   UserProfilesNotFoundResponse,
   UserProfilesSearchRequest,
-  UserProfilesSearchResponse,
+  UserProfilesSearchResponse
 } from './api/userProfiles/types.gen';
 export type {
   AssetTagDetection,
@@ -206,5 +202,5 @@ export type {
   VisionExtractPredictions,
   VisionFileExternalId,
   VisionFileId,
-  VisionInstanceId,
+  VisionInstanceId
 } from './api/vision/types.gen';
