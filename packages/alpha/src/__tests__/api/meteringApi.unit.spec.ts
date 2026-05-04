@@ -17,102 +17,7 @@ describe('Metering API unit tests', () => {
     client = setupMockableClient();
   });
 
-  describe('retrieveConsumptionData', () => {
-    test('should retrieve consumption data for a single meter', async () => {
-      const meterId = 'atlas.monthly_ai_tokens';
-      const mockedResponse = {
-        meterId: 'atlas.monthly_ai_tokens',
-        datapoints: [],
-      };
-
-      nock(mockBaseUrl)
-        .get(
-          /\/api\/v1\/projects\/.*\/metering\/meters\/atlas\.monthly_ai_tokens$/
-        )
-        .matchHeader('cdf-version', '20230101-alpha')
-        .reply(200, mockedResponse);
-
-      const result = await client.metering.retrieveConsumptionData(meterId);
-      expect(result.meterId).toEqual(mockedResponse.meterId);
-      expect(result.datapoints).toEqual([]);
-    });
-
-    test('should convert datapoint timestamps from epoch ms to Date', async () => {
-      const meterId = 'files.storage_bytes';
-      const mockedResponse = {
-        meterId: 'files.storage_bytes',
-        datapoints: [{ timestamp: epochMs, value: 42.5 }],
-      };
-
-      nock(mockBaseUrl)
-        .get(/\/api\/v1\/projects\/.*\/metering\/meters\/files\.storage_bytes$/)
-        .matchHeader('cdf-version', '20230101-alpha')
-        .reply(200, mockedResponse);
-
-      const result = await client.metering.retrieveConsumptionData(meterId);
-      expect(result.datapoints).toHaveLength(1);
-      expect(result.datapoints[0].value).toBe(42.5);
-      expect(result.datapoints[0].timestamp).toEqual(new Date(epochMs));
-    });
-
-    test('should pass optional range query params', async () => {
-      const meterId = 'atlas.monthly_ai_tokens';
-      const query = {
-        start: 1000,
-        end: 2000,
-        numberOfDatapoints: 3,
-      };
-      const mockedResponse = {
-        meterId,
-        datapoints: [{ timestamp: epochMs, value: 1 }],
-      };
-
-      nock(mockBaseUrl)
-        .get(
-          /\/api\/v1\/projects\/.*\/metering\/meters\/atlas\.monthly_ai_tokens$/
-        )
-        .query(query)
-        .matchHeader('cdf-version', '20230101-alpha')
-        .reply(200, mockedResponse);
-
-      const result = await client.metering.retrieveConsumptionData(
-        meterId,
-        query
-      );
-      expect(result.datapoints[0].timestamp).toEqual(new Date(epochMs));
-    });
-
-    test('should URL-encode special characters in meterId', async () => {
-      const meterId = 'service/meter_name';
-      const mockedResponse = {
-        meterId: 'service/meter_name',
-        datapoints: [],
-      };
-
-      nock(mockBaseUrl)
-        .get(/\/api\/v1\/projects\/.*\/metering\/meters\/service%2Fmeter_name$/)
-        .matchHeader('cdf-version', '20230101-alpha')
-        .reply(200, mockedResponse);
-
-      const result = await client.metering.retrieveConsumptionData(meterId);
-      expect(result.meterId).toEqual(mockedResponse.meterId);
-    });
-
-    test('should reject when meter is not found', async () => {
-      const meterId = 'non.existent_meter';
-
-      nock(mockBaseUrl)
-        .get(/\/api\/v1\/projects\/.*\/metering\/meters\/non\.existent_meter$/)
-        .matchHeader('cdf-version', '20230101-alpha')
-        .reply(404, { error: { message: 'Meter not found', code: 404 } });
-
-      await expect(
-        client.metering.retrieveConsumptionData(meterId)
-      ).rejects.toThrow();
-    });
-  });
-
-  describe('filterMeters', () => {
+  describe('retrieveMeters', () => {
     test('should filter meters with prefix on meterId', async () => {
       const filter: MeterConsumptionFilterQuery = {
         filter: {
@@ -148,7 +53,7 @@ describe('Metering API unit tests', () => {
         .matchHeader('cdf-version', '20230101-alpha')
         .reply(200, mockedResponse);
 
-      const result = await client.metering.filterMeters(filter);
+      const result = await client.metering.retrieveMeters(filter);
       expect(result.items).toEqual(mockedResponse.items);
       expect(result.nextCursor).toBe('cursor-123');
       expect(result.items.length).toBe(2);
@@ -170,12 +75,12 @@ describe('Metering API unit tests', () => {
         .matchHeader('cdf-version', '20230101-alpha')
         .reply(200, mockedResponse);
 
-      const result = await client.metering.filterMeters(filter);
+      const result = await client.metering.retrieveMeters(filter);
       expect(result.items).toEqual(mockedResponse.items);
       expect(result.items.length).toBe(1);
     });
 
-    test('should handle empty filter results', async () => {
+    test('should handle empty filter results in retrieve all Meters', async () => {
       const filter: MeterConsumptionFilterQuery = {
         filter: {
           prefix: {
@@ -198,9 +103,56 @@ describe('Metering API unit tests', () => {
         .matchHeader('cdf-version', '20230101-alpha')
         .reply(200, mockedResponse);
 
-      const result = await client.metering.filterMeters(filter);
+      const result = await client.metering.retrieveMeters(filter);
       expect(result.items).toEqual([]);
       expect(result.items.length).toBe(0);
+    });
+
+    test('should return historical datapoints for meters', async () => {
+      const filter: MeterConsumptionFilterQuery = {
+        filter: {
+          prefix: {
+            property: ['meterId'],
+            value: 'atlas.',
+          },
+        },
+        start: epochMs,
+        end: epochMs + 2000,
+        numberOfDatapoints: 10,
+      };
+
+      const mockedResponse = {
+        items: [
+          {
+            meterId: 'atlas.monthly_ai_tokens',
+            datapoints: [
+              { timestamp: epochMs, value: 10 },
+              { timestamp: epochMs + 1000, value: 20 },
+            ],
+          },
+        ],
+      };
+
+      nock(mockBaseUrl)
+        .post(/\/api\/v1\/projects\/.*\/metering\/meters\/list/, (body) => {
+          return (
+            body.filter?.prefix?.property?.includes('meterId') &&
+            body.filter?.prefix?.value === 'atlas.'
+          );
+        })
+        .matchHeader('cdf-version', '20230101-alpha')
+        .reply(200, mockedResponse);
+
+      const result = await client.metering.retrieveMeters(filter);
+      expect(result.items[0].meterId).toBe('atlas.monthly_ai_tokens');
+      expect(result.items[0].datapoints[0].timestamp).toEqual(
+        new Date(epochMs)
+      );
+      expect(result.items[0].datapoints[1].timestamp).toEqual(
+        new Date(epochMs + 1000)
+      );
+      expect(result.items[0].datapoints[0].value).toBe(10);
+      expect(result.items[0].datapoints[1].value).toBe(20);
     });
 
     test('should handle pagination with cursor', async () => {
@@ -224,7 +176,7 @@ describe('Metering API unit tests', () => {
         .matchHeader('cdf-version', '20230101-alpha')
         .reply(200, mockedResponse);
 
-      const result = await client.metering.filterMeters(filter);
+      const result = await client.metering.retrieveMeters(filter);
       expect(result.items[0].meterId).toBe('functions.concurrent_executions');
       expect(result.items[0].datapoints[0].timestamp).toEqual(
         new Date(epochMs)
@@ -233,81 +185,47 @@ describe('Metering API unit tests', () => {
     });
   });
 
-  describe('listMeters', () => {
-    test('should list meters without query params', async () => {
-      const mockedResponse = {
-        items: [
-          { meterId: 'atlas.monthly_ai_tokens', datapoints: [] },
-          { meterId: 'files.storage_bytes', datapoints: [] },
-        ],
-      };
-
-      nock(mockBaseUrl)
-        .get(/\/api\/v1\/projects\/.*\/metering\/meters$/)
-        .matchHeader('cdf-version', '20230101-alpha')
-        .reply(200, mockedResponse);
-
-      const result = await client.metering.listMeters({});
-      expect(result.items).toEqual(mockedResponse.items);
-      expect(result.items.length).toBe(2);
-    });
-
-    test('should list meters with query params', async () => {
-      const queryParams = {
-        limit: 100,
-        cursor: 'initial-cursor',
-        start: 1,
-        end: 2,
-        numberOfDatapoints: 5,
-      };
-      const mockedResponse = {
-        items: [{ meterId: 'atlas.monthly_ai_tokens', datapoints: [] }],
-        nextCursor: 'next-cursor',
-      };
-
-      nock(mockBaseUrl)
-        .get(/\/api\/v1\/projects\/.*\/metering\/meters$/)
-        .query(queryParams)
-        .matchHeader('cdf-version', '20230101-alpha')
-        .reply(200, mockedResponse);
-
-      const result = await client.metering.listMeters(queryParams);
-      expect(result.items).toEqual(mockedResponse.items);
-      expect(result.nextCursor).toBe('next-cursor');
-    });
-
-    test('should handle empty list', async () => {
-      const mockedResponse = {
-        items: [],
-      };
-
-      nock(mockBaseUrl)
-        .get(/\/api\/v1\/projects\/.*\/metering\/meters$/)
-        .matchHeader('cdf-version', '20230101-alpha')
-        .reply(200, mockedResponse);
-
-      const result = await client.metering.listMeters({});
-      expect(result.items).toEqual([]);
-      expect(result.items.length).toBe(0);
-    });
-
-    test('should propagate error responses', async () => {
-      nock(mockBaseUrl)
-        .get(/\/api\/v1\/projects\/.*\/metering\/meters$/)
-        .matchHeader('cdf-version', '20230101-alpha')
-        .reply(500, { error: { message: 'Internal server error', code: 500 } });
-
-      await expect(client.metering.listMeters({})).rejects.toThrow();
-    });
-  });
-
-  describe('retrieveConsumptionDataByIds', () => {
-    test('should retrieve multiple meters and parse datapoint timestamps', async () => {
+  describe('retrieveConsumptionData', () => {
+    test('should retrieve single meter and parse datapoint timestamps', async () => {
       const mockedResponse = {
         items: [
           {
             meterId: 'atlas.monthly_ai_tokens',
             datapoints: [{ timestamp: epochMs, value: 10 }],
+          },
+        ],
+      };
+
+      nock(mockBaseUrl)
+        .post(/\/api\/v1\/projects\/.*\/metering\/meters\/byids$/, (body) => {
+          return (
+            Array.isArray(body.items) &&
+            body.items.length === 1 &&
+            body.items[0].meterId === 'atlas.monthly_ai_tokens'
+          );
+        })
+        .matchHeader('cdf-version', '20230101-alpha')
+        .reply(200, mockedResponse);
+
+      const result = await client.metering.retrieveConsumptionData([
+        'atlas.monthly_ai_tokens',
+      ]);
+      expect(result.items).toHaveLength(1);
+      expect(result.items[0].datapoints[0].timestamp).toEqual(
+        new Date(epochMs)
+      );
+      expect(result.items[0].datapoints[0].value).toBe(10);
+    });
+
+    test('should retrieve multiple meters and parse datapoint timestamps', async () => {
+      const mockedResponse = {
+        items: [
+          {
+            meterId: 'atlas.monthly_ai_tokens',
+            datapoints: [
+              { timestamp: epochMs, value: 10 },
+              { timestamp: epochMs + 1000, value: 20 },
+            ],
           },
           {
             meterId: 'files.storage_bytes',
@@ -317,22 +235,27 @@ describe('Metering API unit tests', () => {
       };
 
       nock(mockBaseUrl)
-        .post(/\/api\/v1\/projects\/.*\/metering\/meters\/byids$/, {
-          items: [
-            { meterId: 'atlas.monthly_ai_tokens' },
-            { meterId: 'files.storage_bytes' },
-          ],
+        .post(/\/api\/v1\/projects\/.*\/metering\/meters\/byids$/, (body) => {
+          return (
+            Array.isArray(body.items) &&
+            body.items.length === 2 &&
+            body.items[0].meterId === 'atlas.monthly_ai_tokens' &&
+            body.items[1].meterId === 'files.storage_bytes'
+          );
         })
         .matchHeader('cdf-version', '20230101-alpha')
         .reply(200, mockedResponse);
 
-      const result = await client.metering.retrieveConsumptionDataByIds([
+      const result = await client.metering.retrieveConsumptionData([
         'atlas.monthly_ai_tokens',
         'files.storage_bytes',
       ]);
       expect(result.items).toHaveLength(2);
       expect(result.items[0].datapoints[0].timestamp).toEqual(
         new Date(epochMs)
+      );
+      expect(result.items[0].datapoints[1].timestamp).toEqual(
+        new Date(epochMs + 1000)
       );
       expect(result.items[1].datapoints[0].timestamp).toEqual(
         new Date(epochMs + 1000)
@@ -345,15 +268,19 @@ describe('Metering API unit tests', () => {
       const mockedResponse = { items: [] };
 
       nock(mockBaseUrl)
-        .post(/\/api\/v1\/projects\/.*\/metering\/meters\/byids$/, {
-          items: [{ meterId: 'a' }],
-          start: 1000,
-          end: 2000,
-          numberOfDatapoints: 10,
+        .post(/\/api\/v1\/projects\/.*\/metering\/meters\/byids$/, (body) => {
+          return (
+            body.items?.length === 1 &&
+            body.items[0].meterId === 'a' &&
+            body.start === 1000 &&
+            body.end === 2000 &&
+            body.numberOfDatapoints === 10
+          );
         })
+        .matchHeader('cdf-version', '20230101-alpha')
         .reply(200, mockedResponse);
 
-      await client.metering.retrieveConsumptionDataByIds(['a'], {
+      await client.metering.retrieveConsumptionData(['a'], {
         start: 1000,
         end: 2000,
         numberOfDatapoints: 10,
@@ -365,18 +292,17 @@ describe('Metering API unit tests', () => {
     test('should send cdf-version 20230101-alpha on metering requests', async () => {
       const meterId = 'atlas.monthly_ai_tokens';
       const mockedResponse = {
-        meterId,
-        datapoints: [],
+        items: [{ meterId, datapoints: [] }],
       };
 
       nock(mockBaseUrl)
-        .get(
-          /\/api\/v1\/projects\/.*\/metering\/meters\/atlas\.monthly_ai_tokens$/
-        )
+        .post(/\/api\/v1\/projects\/.*\/metering\/meters\/byids$/, (body) => {
+          return body.items?.length === 1 && body.items[0].meterId === meterId;
+        })
         .matchHeader('cdf-version', '20230101-alpha')
         .reply(200, mockedResponse);
 
-      await client.metering.retrieveConsumptionData(meterId);
+      await client.metering.retrieveConsumptionData([meterId]);
     });
   });
 });

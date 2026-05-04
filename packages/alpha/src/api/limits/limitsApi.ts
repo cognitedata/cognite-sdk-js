@@ -1,7 +1,7 @@
 import { BaseResourceAPI, type FilterQuery } from '@cognite/sdk-core';
 import type {
   CursorAndAsyncIterator,
-  LimitAdvanceFilter,
+  LimitsFilterQuery,
   LimitsValue,
 } from '../../types';
 
@@ -33,7 +33,7 @@ export class LimitsAPI extends BaseResourceAPI<LimitsValue> {
    * @returns The list of limits.
    */
   public retrieveByAdvancedFilter = (
-    filter?: LimitAdvanceFilter
+    filter?: LimitsFilterQuery
   ): CursorAndAsyncIterator<LimitsValue> => {
     return this.listEndpoint(this.callListEndpointWithPost, filter);
   };

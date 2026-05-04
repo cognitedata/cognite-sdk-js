@@ -628,7 +628,7 @@ export interface MeteringLimitsPrefixFilter {
   };
 }
 
-export interface LimitAdvanceFilter extends FilterQuery {
+export interface LimitsFilterQuery extends FilterQuery {
   filter?: MeteringLimitsPrefixFilter;
 }
 
@@ -648,10 +648,6 @@ export interface MeterConsumptionRangeParams {
   end?: number;
   numberOfDatapoints?: number;
 }
-
-/** GET /metering/meters — cursor, limit, and optional historical range. */
-export type MeterConsumptionListParams = FilterQuery &
-  MeterConsumptionRangeParams;
 
 /** POST /metering/meters/list — cursor, limit, optional range, and prefix filter on `meterId`. */
 export interface MeterConsumptionFilterQuery
