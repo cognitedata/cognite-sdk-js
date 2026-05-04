@@ -22,6 +22,7 @@ describe('records integration test', () => {
   // Reusable space and container
   const testSpaceId = RECORDS_TEST_SPACE;
   const testContainerId = 'sdk_test_records_container';
+  const unitsContainerId = 'sdk_test_records_units_container';
 
   beforeAll(async () => {
     client = setupLoggedInClient();
@@ -41,12 +42,12 @@ describe('records integration test', () => {
     }
 
     // Check if container already exists (which means space also exists)
-    try {
-      await client.containers.retrieve([
-        { space: testSpaceId, externalId: testContainerId },
-      ]);
-    } catch {
-      // Container doesn't exist, need to create space and container
+    const baseContainerLookup = await client.containers.retrieve([
+      { space: testSpaceId, externalId: testContainerId },
+    ]);
+    if (
+      !baseContainerLookup.items.some((c) => c.externalId === testContainerId)
+    ) {
       // Create the test space if it doesn't exist (upsert is idempotent)
       await client.spaces.upsert([
         {
@@ -77,6 +78,50 @@ describe('records integration test', () => {
       };
 
       await client.containers.upsert([containerDefinition]);
+    }
+
+    const unitsContainerLookup = await client.containers.retrieve([
+      { space: testSpaceId, externalId: unitsContainerId },
+    ]);
+    if (
+      !unitsContainerLookup.items.some((c) => c.externalId === unitsContainerId)
+    ) {
+      await client.spaces.upsert([
+        {
+          space: testSpaceId,
+          name: testSpaceId,
+          description: 'Space used for records integration tests.',
+        },
+      ]);
+      const unitsContainerDef: ContainerCreateDefinition = {
+        externalId: unitsContainerId,
+        space: testSpaceId,
+        name: 'Records units test container',
+        description:
+          'Container with unit-aware floats for Records conversion tests.',
+        usedFor: 'record',
+        properties: {
+          label: {
+            nullable: true,
+            type: { type: 'text' },
+          },
+          maxPressure: {
+            nullable: true,
+            type: {
+              type: 'float64',
+              unit: { externalId: 'pressure:bar' },
+            },
+          },
+          maxTemperature: {
+            nullable: true,
+            type: {
+              type: 'float64',
+              unit: { externalId: 'temperature:deg_c' },
+            },
+          },
+        },
+      };
+      await client.containers.upsert([unitsContainerDef]);
     }
   }, 60_000);
 
@@ -109,28 +154,31 @@ describe('records integration test', () => {
     // Wait for eventual consistency
     const result = await vi.waitFor(
       async () => {
-        const records = await client.records.filter(immutableStreamId, {
-          lastUpdatedTime: {
-            gte: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(), // Last 24 hours
-          },
-          sources: [
-            {
-              source: {
-                type: 'container',
-                space: testSpaceId,
-                externalId: testContainerId,
+        const { items: records } = await client.records.filter(
+          immutableStreamId,
+          {
+            lastUpdatedTime: {
+              gte: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(), // Last 24 hours
+            },
+            sources: [
+              {
+                source: {
+                  type: 'container',
+                  space: testSpaceId,
+                  externalId: testContainerId,
+                },
+                properties: ['*'],
               },
-              properties: ['*'],
+            ],
+            filter: {
+              equals: {
+                property: [testSpaceId, testContainerId, 'name'],
+                value: testName,
+              },
             },
-          ],
-          filter: {
-            equals: {
-              property: [testSpaceId, testContainerId, 'name'],
-              value: testName,
-            },
-          },
-          limit: 10,
-        });
+            limit: 10,
+          }
+        );
         expect(records.length).toBe(1);
         return records;
       },
@@ -178,38 +226,41 @@ describe('records integration test', () => {
 
     const result = await vi.waitFor(
       async () => {
-        const records = await client.records.filter(immutableStreamId, {
-          lastUpdatedTime: {
-            gte: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
-          },
-          sources: [
-            {
-              source: {
-                type: 'container',
-                space: testSpaceId,
-                externalId: testContainerId,
-              },
-              properties: ['*'],
+        const { items: records } = await client.records.filter(
+          immutableStreamId,
+          {
+            lastUpdatedTime: {
+              gte: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
             },
-          ],
-          filter: {
-            and: [
+            sources: [
               {
-                equals: {
-                  property: [testSpaceId, testContainerId, 'name'],
-                  value: testName,
+                source: {
+                  type: 'container',
+                  space: testSpaceId,
+                  externalId: testContainerId,
                 },
-              },
-              {
-                range: {
-                  property: [testSpaceId, testContainerId, 'value'],
-                  gte: 50,
-                  lte: 100,
-                },
+                properties: ['*'],
               },
             ],
-          },
-        });
+            filter: {
+              and: [
+                {
+                  equals: {
+                    property: [testSpaceId, testContainerId, 'name'],
+                    value: testName,
+                  },
+                },
+                {
+                  range: {
+                    property: [testSpaceId, testContainerId, 'value'],
+                    gte: 50,
+                    lte: 100,
+                  },
+                },
+              ],
+            },
+          }
+        );
         expect(records.length).toBe(1);
         return records;
       },
@@ -248,27 +299,30 @@ describe('records integration test', () => {
 
     const result = await vi.waitFor(
       async () => {
-        const records = await client.records.filter(immutableStreamId, {
-          lastUpdatedTime: {
-            gte: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
-          },
-          sources: [
-            {
-              source: {
-                type: 'container',
-                space: testSpaceId,
-                externalId: testContainerId,
+        const { items: records } = await client.records.filter(
+          immutableStreamId,
+          {
+            lastUpdatedTime: {
+              gte: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
+            },
+            sources: [
+              {
+                source: {
+                  type: 'container',
+                  space: testSpaceId,
+                  externalId: testContainerId,
+                },
+                properties: ['*'],
               },
-              properties: ['*'],
+            ],
+            filter: {
+              prefix: {
+                property: [testSpaceId, testContainerId, 'name'],
+                value: uniquePrefix,
+              },
             },
-          ],
-          filter: {
-            prefix: {
-              property: [testSpaceId, testContainerId, 'name'],
-              value: uniquePrefix,
-            },
-          },
-        });
+          }
+        );
         expect(records.length).toBe(1);
         return records;
       },
@@ -503,24 +557,27 @@ describe('records integration test', () => {
           string,
           string,
         ];
-        const aggregates = await client.records.aggregate(immutableStreamId, {
-          lastUpdatedTime: {
-            gte: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
-          },
-          filter: {
-            equals: {
-              property: [testSpaceId, testContainerId, 'name'],
-              value: testName,
+        const { aggregates } = await client.records.aggregate(
+          immutableStreamId,
+          {
+            lastUpdatedTime: {
+              gte: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
             },
-          },
-          aggregates: {
-            totalCount: { count: {} },
-            totalSum: { sum: { property: prop } },
-            avgValue: { avg: { property: prop } },
-            minValue: { min: { property: prop } },
-            maxValue: { max: { property: prop } },
-          },
-        });
+            filter: {
+              equals: {
+                property: [testSpaceId, testContainerId, 'name'],
+                value: testName,
+              },
+            },
+            aggregates: {
+              totalCount: { count: {} },
+              totalSum: { sum: { property: prop } },
+              avgValue: { avg: { property: prop } },
+              minValue: { min: { property: prop } },
+              maxValue: { max: { property: prop } },
+            },
+          }
+        );
         expect((aggregates.totalCount as { count: number }).count).toBe(2);
         expect((aggregates.totalSum as { sum: number }).sum).toBe(300);
         expect((aggregates.avgValue as { avg: number }).avg).toBe(150);
@@ -596,29 +653,34 @@ describe('records integration test', () => {
 
     await vi.waitFor(
       async () => {
-        const aggregates = await client.records.aggregate(immutableStreamId, {
-          lastUpdatedTime: {
-            gte: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
-          },
-          filter: {
-            prefix: {
-              property: [testSpaceId, testContainerId, 'name'],
-              value: testPrefix,
+        const { aggregates } = await client.records.aggregate(
+          immutableStreamId,
+          {
+            lastUpdatedTime: {
+              gte: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
             },
-          },
-          aggregates: {
-            byCat: {
-              uniqueValues: {
+            filter: {
+              prefix: {
                 property: [testSpaceId, testContainerId, 'name'],
-                aggregates: {
-                  catSum: {
-                    sum: { property: [testSpaceId, testContainerId, 'value'] },
+                value: testPrefix,
+              },
+            },
+            aggregates: {
+              byCat: {
+                uniqueValues: {
+                  property: [testSpaceId, testContainerId, 'name'],
+                  aggregates: {
+                    catSum: {
+                      sum: {
+                        property: [testSpaceId, testContainerId, 'value'],
+                      },
+                    },
                   },
                 },
               },
             },
-          },
-        });
+          }
+        );
         const result = aggregates.byCat as BucketResult;
         expect(result.uniqueValueBuckets.length).toBe(2);
         const b1 = result.uniqueValueBuckets.find((b) => b.value === cat1);
@@ -631,6 +693,159 @@ describe('records integration test', () => {
       { timeout: 10_000, interval: 500 }
     );
   });
+
+  test('filter, aggregate, and sync with targetUnits and includeTyping', async () => {
+    const label = `units_${randomInt()}`;
+    const pressureBar = 35.2;
+    const pressurePa = 3_520_000;
+    const tempC = 25;
+
+    await client.records.ingest(immutableStreamId, [
+      {
+        space: testSpaceId,
+        externalId: `units_rec_${randomInt()}`,
+        sources: [
+          {
+            source: {
+              type: 'container',
+              space: testSpaceId,
+              externalId: unitsContainerId,
+            },
+            properties: {
+              label,
+              maxPressure: pressureBar,
+              maxTemperature: tempC,
+            },
+          },
+        ],
+      },
+    ]);
+
+    const pressureProp: [string, string, string] = [
+      testSpaceId,
+      unitsContainerId,
+      'maxPressure',
+    ];
+
+    await vi.waitFor(
+      async () => {
+        const { items, typing } = await client.records.filter(
+          immutableStreamId,
+          {
+            lastUpdatedTime: {
+              gte: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
+            },
+            sources: [
+              {
+                source: {
+                  type: 'container',
+                  space: testSpaceId,
+                  externalId: unitsContainerId,
+                },
+                properties: ['*'],
+              },
+            ],
+            filter: {
+              equals: {
+                property: [testSpaceId, unitsContainerId, 'label'],
+                value: label,
+              },
+            },
+            targetUnits: {
+              properties: [
+                {
+                  property: pressureProp,
+                  unit: { externalId: 'pressure:pa' },
+                },
+              ],
+            },
+            includeTyping: true,
+            limit: 10,
+          }
+        );
+        expect(items.length).toBe(1);
+        const props = items[0].properties[testSpaceId][unitsContainerId];
+        expect(props.maxPressure).toBeCloseTo(pressurePa, -2);
+
+        expect(typing).toBeDefined();
+        const mpType =
+          typing?.[testSpaceId]?.[unitsContainerId]?.maxPressure?.type;
+        expect(mpType).toBeDefined();
+        expect(mpType?.type === 'float64').toBe(true);
+        if (mpType?.type === 'float64') {
+          expect(mpType.unit?.externalId).toBe('pressure:pa');
+        }
+      },
+      { timeout: 15_000, interval: 300 }
+    );
+
+    await vi.waitFor(
+      async () => {
+        const { aggregates, typing } = await client.records.aggregate(
+          immutableStreamId,
+          {
+            lastUpdatedTime: {
+              gte: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
+            },
+            filter: {
+              equals: {
+                property: [testSpaceId, unitsContainerId, 'label'],
+                value: label,
+              },
+            },
+            aggregates: {
+              avgPressure: { avg: { property: pressureProp } },
+            },
+            targetUnits: {
+              properties: [
+                {
+                  property: pressureProp,
+                  unit: { externalId: 'pressure:pa' },
+                },
+              ],
+            },
+            includeTyping: true,
+          }
+        );
+        const avg = (aggregates.avgPressure as { avg: number }).avg;
+        expect(avg).toBeCloseTo(pressurePa, -2);
+        expect(
+          typing?.[testSpaceId]?.[unitsContainerId]?.maxPressure?.type
+        ).toBeDefined();
+      },
+      { timeout: 15_000, interval: 300 }
+    );
+
+    await vi.waitFor(
+      async () => {
+        const syncPage = await client.records.sync(immutableStreamId, {
+          initializeCursor: '1h-ago',
+          sources: [
+            {
+              source: {
+                type: 'container',
+                space: testSpaceId,
+                externalId: unitsContainerId,
+              },
+              properties: ['*'],
+            },
+          ],
+          filter: {
+            equals: {
+              property: [testSpaceId, unitsContainerId, 'label'],
+              value: label,
+            },
+          },
+          includeTyping: true,
+          limit: 10,
+        });
+        const page = await syncPage;
+        expect(page.items.length).toBeGreaterThanOrEqual(1);
+        expect(page.typing).toBeDefined();
+      },
+      { timeout: 15_000, interval: 300 }
+    );
+  }, 60_000);
 });
 
 describe('mutable records integration test', () => {
@@ -706,15 +921,18 @@ describe('mutable records integration test', () => {
     // Verify the record was created
     const createdRecord = await vi.waitFor(
       async () => {
-        const records = await client.records.filter(mutableStreamId, {
-          sources: [{ source, properties: ['*'] }],
-          filter: {
-            equals: {
-              property: [testSpaceId, testContainerId, 'name'],
-              value: testName,
+        const { items: records } = await client.records.filter(
+          mutableStreamId,
+          {
+            sources: [{ source, properties: ['*'] }],
+            filter: {
+              equals: {
+                property: [testSpaceId, testContainerId, 'name'],
+                value: testName,
+              },
             },
-          },
-        });
+          }
+        );
         expect(records.length).toBe(1);
         return records[0];
       },
@@ -748,15 +966,18 @@ describe('mutable records integration test', () => {
     // Verify the record was updated
     const updatedRecord = await vi.waitFor(
       async () => {
-        const records = await client.records.filter(mutableStreamId, {
-          sources: [{ source, properties: ['*'] }],
-          filter: {
-            equals: {
-              property: [testSpaceId, testContainerId, 'name'],
-              value: testName,
+        const { items: records } = await client.records.filter(
+          mutableStreamId,
+          {
+            sources: [{ source, properties: ['*'] }],
+            filter: {
+              equals: {
+                property: [testSpaceId, testContainerId, 'name'],
+                value: testName,
+              },
             },
-          },
-        });
+          }
+        );
         expect(records.length).toBe(1);
         expect(records[0].properties[testSpaceId][testContainerId].value).toBe(
           updatedValue
@@ -776,15 +997,18 @@ describe('mutable records integration test', () => {
     // Verify the record is no longer returned by filter
     await vi.waitFor(
       async () => {
-        const records = await client.records.filter(mutableStreamId, {
-          sources: [{ source, properties: ['*'] }],
-          filter: {
-            equals: {
-              property: [testSpaceId, testContainerId, 'name'],
-              value: testName,
+        const { items: records } = await client.records.filter(
+          mutableStreamId,
+          {
+            sources: [{ source, properties: ['*'] }],
+            filter: {
+              equals: {
+                property: [testSpaceId, testContainerId, 'name'],
+                value: testName,
+              },
             },
-          },
-        });
+          }
+        );
         expect(records.length).toBe(0);
       },
       { timeout: 10_000, interval: 200 }
