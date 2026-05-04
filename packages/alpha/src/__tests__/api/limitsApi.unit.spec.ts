@@ -1,6 +1,6 @@
 // Copyright 2025 Cognite AS
 
-import type { LimitAdvanceFilter } from 'alpha/src/types';
+import type { LimitsFilterQuery } from 'alpha/src/types';
 import nock from 'nock';
 import { beforeEach, describe, expect, test } from 'vitest';
 import { mockBaseUrl } from '../../../../core/src/__tests__/testUtils';
@@ -66,7 +66,7 @@ describe('Limits API unit tests', () => {
 
   describe('retrieveByAdvancedFilter', () => {
     test('should retrieve limits with filter', async () => {
-      const filter: LimitAdvanceFilter = {
+      const filter: LimitsFilterQuery = {
         filter: {
           prefix: {
             property: ['limitId'],
@@ -128,7 +128,7 @@ describe('Limits API unit tests', () => {
     });
 
     test('should handle empty results', async () => {
-      const filter: LimitAdvanceFilter = {
+      const filter: LimitsFilterQuery = {
         filter: {
           prefix: {
             property: ['limitId'],

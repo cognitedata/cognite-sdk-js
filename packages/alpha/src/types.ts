@@ -187,9 +187,15 @@ export interface SimulationRunCreate {
   queue?: boolean;
 }
 
-export type SimulationRunStatus = 'ready' | 'running' | 'success' | 'failure';
+export type SimulationRunStatus =
+  | 'queued'
+  | 'ready'
+  | 'running'
+  | 'success'
+  | 'failure';
 
 export const SimulationRunStatus = {
+  queued: 'queued' as SimulationRunStatus,
   ready: 'ready' as SimulationRunStatus,
   running: 'running' as SimulationRunStatus,
   success: 'success' as SimulationRunStatus,
@@ -621,13 +627,37 @@ export interface LimitsValue {
   value: number;
 }
 
-export interface LimitAdvanceFilter extends FilterQuery {
-  filter?: FilterObject;
-}
-
-export interface FilterObject {
+export interface MeteringLimitsFilter {
   prefix?: {
     property: string[];
     value: string;
   };
+}
+
+export interface LimitsFilterQuery extends FilterQuery {
+  filter?: MeteringLimitsFilter;
+}
+
+export interface MeteringDatapoint {
+  timestamp: Date;
+  value: number;
+}
+
+export interface MeterReading {
+  meterId: string;
+  datapoints: MeteringDatapoint[];
+}
+
+/** Epoch ms range + averaged bucket count (see Metering API). */
+export interface MeterConsumptionRangeParams {
+  start?: number;
+  end?: number;
+  numberOfDatapoints?: number;
+}
+
+/** POST /metering/meters/list — cursor, limit, optional range, and prefix filter on `meterId`. */
+export interface MeterConsumptionFilterQuery
+  extends FilterQuery,
+    MeterConsumptionRangeParams {
+  filter?: MeteringLimitsFilter;
 }
