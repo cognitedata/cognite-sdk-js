@@ -4,7 +4,6 @@ import { BaseResourceAPI, makeAutoPaginationMethods } from '@cognite/sdk-core';
 import type {
   RecordAggregateRequest,
   RecordAggregateResponse,
-  RecordAggregateResults,
   RecordDelete,
   RecordFilterRequest,
   RecordFilterResponse,
@@ -123,7 +122,7 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
    * Retrieve records from a stream using filters.
    *
    * ```js
-   * const response = await client.records.filter('my_stream', {
+   * const { items, typing } = await client.records.filter('my_stream', {
    *   sources: [
    *     {
    *       source: { type: 'container', space: 'mySpace', externalId: 'myContainer' },
@@ -143,14 +142,18 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
   public filter = async (
     streamExternalId: string,
     request: RecordFilterRequest = {}
-  ): Promise<RecordItem[]> => {
+  ): Promise<RecordFilterResponse> => {
     const path = this.url(
       `${encodeURIComponent(streamExternalId)}/records/filter`
     );
     const response = await this.post<RecordFilterResponse>(path, {
       data: request,
     });
-    return this.addToMapAndReturn(response.data.items, response);
+    const items = this.addToMapAndReturn(response.data.items, response);
+    return {
+      items,
+      typing: response.data.typing,
+    };
   };
 
   /**
@@ -163,12 +166,11 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
    * determine when to stop.
    *
    * ```js
-   * // Get first page with items, nextCursor, and hasNext
    * const response = await client.records.sync('my_stream', {
    *   initializeCursor: '1d-ago',
    *   sources: [{ source: { type: 'container', space: 'mySpace', externalId: 'myContainer' }, properties: ['*'] }],
    * });
-   * console.log(response.items, response.nextCursor, response.hasNext);
+   * console.log(response.items, response.nextCursor, response.hasNext, response.typing);
    * ```
    */
   public sync = (
@@ -193,6 +195,7 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
         items,
         nextCursor: response.data.nextCursor,
         hasNext: response.data.hasNext,
+        typing: response.data.typing,
       };
     };
 
@@ -212,7 +215,7 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
    * Aggregate data for records from a stream.
    *
    * ```js
-   * const response = await client.records.aggregate('my_stream', {
+   * const { aggregates, typing } = await client.records.aggregate('my_stream', {
    *   aggregates: {
    *     total_count: { count: {} },
    *     by_category: {
@@ -228,14 +231,17 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
   public aggregate = async (
     streamExternalId: string,
     request: RecordAggregateRequest
-  ): Promise<RecordAggregateResults> => {
+  ): Promise<RecordAggregateResponse> => {
     const path = this.url(
       `${encodeURIComponent(streamExternalId)}/records/aggregate`
     );
     const response = await this.post<RecordAggregateResponse>(path, {
       data: request,
     });
-    return response.data.aggregates;
+    return {
+      aggregates: response.data.aggregates,
+      typing: response.data.typing,
+    };
   };
 }
 
@@ -243,11 +249,17 @@ type SyncEndpointCaller = (params?: RecordSyncRequest) => Promise<{
   items: SyncRecordItem[];
   nextCursor: string;
   hasNext: boolean;
+  typing?: RecordSyncResponse['typing'];
 }>;
 
 function addSyncNextPageFunction(
   endpoint: SyncEndpointCaller,
-  syncData: { items: SyncRecordItem[]; nextCursor: string; hasNext: boolean },
+  syncData: {
+    items: SyncRecordItem[];
+    nextCursor: string;
+    hasNext: boolean;
+    typing?: RecordSyncResponse['typing'];
+  },
   query: RecordSyncRequest
 ): RecordsSyncListResponse<SyncRecordItem[]> {
   const { nextCursor, hasNext } = syncData;
@@ -262,6 +274,7 @@ function addSyncNextPageFunction(
     items: syncData.items,
     nextCursor,
     hasNext,
+    typing: syncData.typing,
     next,
   };
 }
