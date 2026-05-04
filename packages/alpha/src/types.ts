@@ -621,7 +621,7 @@ export interface LimitsValue {
   value: number;
 }
 
-export interface MeteringLimitsPrefixFilter {
+export interface MeteringLimitsFilter {
   prefix?: {
     property: string[];
     value: string;
@@ -629,7 +629,7 @@ export interface MeteringLimitsPrefixFilter {
 }
 
 export interface LimitsFilterQuery extends FilterQuery {
-  filter?: MeteringLimitsPrefixFilter;
+  filter?: MeteringLimitsFilter;
 }
 
 export interface MeteringDatapoint {
@@ -653,5 +653,5 @@ export interface MeterConsumptionRangeParams {
 export interface MeterConsumptionFilterQuery
   extends FilterQuery,
     MeterConsumptionRangeParams {
-  filter?: MeteringLimitsPrefixFilter;
+  filter?: MeteringLimitsFilter;
 }

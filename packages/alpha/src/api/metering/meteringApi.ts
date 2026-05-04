@@ -31,11 +31,10 @@ export class MeteringAPI extends BaseResourceAPI<MeterReading> {
   /**
    * [Filter meters](https://api-docs.cognite.com/20230101-alpha/tag/Metering/operation/listConsumptionDataAdvanced)
    *
-   * Only the `prefix` filter operator is supported (e.g. on `meterId`).
-   * This method would be used to list all meters or filter meters by prefix.
-   * @param query - Filter, cursor, limit, and optional historical range.
+   * List meters matching the filter
+   * @param query - Filter, cursor, limit, and optional time range.
    */
-  public retrieveMeters = (
+  public listMeters = (
     query?: MeterConsumptionFilterQuery
   ): CursorAndAsyncIterator<MeterReading> => {
     return this.listEndpoint(this.callListEndpointWithPost, query);
@@ -45,7 +44,6 @@ export class MeteringAPI extends BaseResourceAPI<MeterReading> {
    * [Retrieve consumption data for multiple meters](https://api-docs.cognite.com/20230101-alpha/tag/Metering/operation/fetchConsumptionDataByIds)
    *
    * Response shape matches the API: `{ items: MeterReading[] }`.
-   * This method would be used to retrieve consumption data for single or multiple meters.
    * @param meterIds - Meter ids to fetch.
    * @param params - Optional time range and bucket count (epoch ms).
    */

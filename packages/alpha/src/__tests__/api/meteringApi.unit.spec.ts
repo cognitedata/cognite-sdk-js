@@ -17,7 +17,7 @@ describe('Metering API unit tests', () => {
     client = setupMockableClient();
   });
 
-  describe('retrieveMeters', () => {
+  describe('listMeters', () => {
     test('should filter meters with prefix on meterId', async () => {
       const filter: MeterConsumptionFilterQuery = {
         filter: {
@@ -53,7 +53,7 @@ describe('Metering API unit tests', () => {
         .matchHeader('cdf-version', '20230101-alpha')
         .reply(200, mockedResponse);
 
-      const result = await client.metering.retrieveMeters(filter);
+      const result = await client.metering.listMeters(filter);
       expect(result.items).toEqual(mockedResponse.items);
       expect(result.nextCursor).toBe('cursor-123');
       expect(result.items.length).toBe(2);
@@ -75,7 +75,7 @@ describe('Metering API unit tests', () => {
         .matchHeader('cdf-version', '20230101-alpha')
         .reply(200, mockedResponse);
 
-      const result = await client.metering.retrieveMeters(filter);
+      const result = await client.metering.listMeters(filter);
       expect(result.items).toEqual(mockedResponse.items);
       expect(result.items.length).toBe(1);
     });
@@ -103,7 +103,7 @@ describe('Metering API unit tests', () => {
         .matchHeader('cdf-version', '20230101-alpha')
         .reply(200, mockedResponse);
 
-      const result = await client.metering.retrieveMeters(filter);
+      const result = await client.metering.listMeters(filter);
       expect(result.items).toEqual([]);
       expect(result.items.length).toBe(0);
     });
@@ -143,7 +143,7 @@ describe('Metering API unit tests', () => {
         .matchHeader('cdf-version', '20230101-alpha')
         .reply(200, mockedResponse);
 
-      const result = await client.metering.retrieveMeters(filter);
+      const result = await client.metering.listMeters(filter);
       expect(result.items[0].meterId).toBe('atlas.monthly_ai_tokens');
       expect(result.items[0].datapoints[0].timestamp).toEqual(
         new Date(epochMs)
@@ -176,7 +176,7 @@ describe('Metering API unit tests', () => {
         .matchHeader('cdf-version', '20230101-alpha')
         .reply(200, mockedResponse);
 
-      const result = await client.metering.retrieveMeters(filter);
+      const result = await client.metering.listMeters(filter);
       expect(result.items[0].meterId).toBe('functions.concurrent_executions');
       expect(result.items[0].datapoints[0].timestamp).toEqual(
         new Date(epochMs)
