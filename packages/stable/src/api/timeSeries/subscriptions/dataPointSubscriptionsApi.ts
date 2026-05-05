@@ -1,14 +1,11 @@
 // Copyright 2026 Cognite AS
 
-import {
-  BaseResourceAPI,
-  type CDFHttpClient,
-  type MetadataMap,
-} from '@cognite/sdk-core';
+import { BaseResourceAPI } from '@cognite/sdk-core';
 import cloneDeepWith from 'lodash/cloneDeepWith';
 import type {
   DataPointSubscription,
   DataPointSubscriptionByIdsQuery,
+  DataPointSubscriptionCreate,
   DataPointSubscriptionListDataQuery,
   DataPointSubscriptionListDataResponse,
   DataPointSubscriptionListQuery,
@@ -17,7 +14,6 @@ import type {
   DataPointSubscriptionMembersListResponse,
   DataPointSubscriptionUpdate,
   DataPointSubscriptionsDeleteQuery,
-  DataPointSubscriptionCreate,
 } from './types';
 
 function parseSubscriptionListDataDates(
@@ -36,11 +32,6 @@ function parseSubscriptionListDataDates(
 }
 
 export class DataPointSubscriptionsAPI extends BaseResourceAPI<DataPointSubscription> {
-  /** @hidden */
-  constructor(...args: [string, CDFHttpClient, MetadataMap]) {
-    super(...args);
-  }
-
   /**
    * @hidden
    */
@@ -50,6 +41,12 @@ export class DataPointSubscriptionsAPI extends BaseResourceAPI<DataPointSubscrip
 
   /**
    * [Create data point subscriptions](https://docs.cognite.com/api/v1/#operation/postSubscriptions)
+   *
+   * ```js
+   * const subscriptions = await client.timeseries.subscriptions.create([
+   *   { externalId: 'my_subscription', partitionCount: 1, timeSeriesIds: ['ts_external_id'] },
+   * ]);
+   * ```
    */
   public create = async (
     items: DataPointSubscriptionCreate[]
@@ -68,6 +65,10 @@ export class DataPointSubscriptionsAPI extends BaseResourceAPI<DataPointSubscrip
 
   /**
    * [List data point subscriptions](https://docs.cognite.com/api/v1/#operation/listSubscriptions)
+   *
+   * ```js
+   * const subscriptions = await client.timeseries.subscriptions.list({ limit: 100 });
+   * ```
    */
   public list = async (
     query?: DataPointSubscriptionListQuery
@@ -81,6 +82,12 @@ export class DataPointSubscriptionsAPI extends BaseResourceAPI<DataPointSubscrip
 
   /**
    * [Retrieve data point subscriptions](https://docs.cognite.com/api/v1/#operation/getSubscriptionsByIds)
+   *
+   * ```js
+   * const subscriptions = await client.timeseries.subscriptions.retrieve({
+   *   items: [{ externalId: 'my_subscription' }],
+   * });
+   * ```
    */
   public retrieve = async (
     query: DataPointSubscriptionByIdsQuery
@@ -100,6 +107,12 @@ export class DataPointSubscriptionsAPI extends BaseResourceAPI<DataPointSubscrip
 
   /**
    * [Update data point subscriptions](https://docs.cognite.com/api/v1/#operation/updateSubscriptions)
+   *
+   * ```js
+   * const updated = await client.timeseries.subscriptions.update([
+   *   { externalId: 'my_subscription', update: { name: { set: 'new name' } } },
+   * ]);
+   * ```
    */
   public update = async (
     items: DataPointSubscriptionUpdate[]
@@ -118,6 +131,12 @@ export class DataPointSubscriptionsAPI extends BaseResourceAPI<DataPointSubscrip
 
   /**
    * [Delete data point subscriptions](https://docs.cognite.com/api/v1/#operation/deleteSubscriptions)
+   *
+   * ```js
+   * await client.timeseries.subscriptions.delete({
+   *   items: [{ externalId: 'my_subscription' }],
+   * });
+   * ```
    */
   public delete = async (
     query: DataPointSubscriptionsDeleteQuery
@@ -134,20 +153,35 @@ export class DataPointSubscriptionsAPI extends BaseResourceAPI<DataPointSubscrip
 
   /**
    * [List data point subscription members](https://docs.cognite.com/api/v1/#operation/listSubscriptionMembers)
+   *
+   * ```js
+   * const members = await client.timeseries.subscriptions.listMembers({
+   *   externalId: 'my_subscription',
+   *   limit: 100,
+   * });
+   * ```
    */
   public listMembers = async (
     query: DataPointSubscriptionMembersListQuery
   ): Promise<DataPointSubscriptionMembersListResponse> => {
-    const response =
-      await this.get<DataPointSubscriptionMembersListResponse>(
-        this.url('members'),
-        { params: query }
-      );
+    const response = await this.get<DataPointSubscriptionMembersListResponse>(
+      this.url('members'),
+      { params: query }
+    );
     return this.addToMapAndReturn(response.data, response);
   };
 
   /**
    * [List data point subscription data](https://docs.cognite.com/api/v1/#operation/listSubscriptionData)
+   *
+   * ```js
+   * const data = await client.timeseries.subscriptions.listData({
+   *   externalId: 'my_subscription',
+   *   partitions: [{ index: 0 }],
+   *   limit: 100,
+   *   initializeCursors: 'now',
+   * });
+   * ```
    */
   public listData = async (
     query: DataPointSubscriptionListDataQuery

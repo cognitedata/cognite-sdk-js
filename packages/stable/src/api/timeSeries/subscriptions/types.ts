@@ -7,15 +7,15 @@ import type {
   Cursor,
 } from '@cognite/sdk-core';
 import type {
-  DatapointsDeleteRange,
-  DoubleDatapoint,
-  StringDatapoint,
-} from '../../dataPoints/types';
-import type {
   IgnoreUnknownIds,
   NullableSinglePatchLong,
   NullableSinglePatchString,
 } from '../../../types/common';
+import type {
+  DatapointsDeleteRange,
+  DoubleDatapoint,
+  StringDatapoint,
+} from '../../dataPoints/types';
 import type { TimeSeriesType } from '../types';
 
 // =====================================================
