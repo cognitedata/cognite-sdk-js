@@ -4,7 +4,6 @@ import { CogniteClient as CogniteClientStable } from '@cognite/sdk';
 import { accessApi } from '@cognite/sdk-core';
 import { version } from '../package.json';
 import { AlertsAPI } from './api/alerts/alertsApi';
-import { DataPointsAPI } from './api/dataPoints/dataPointsApi';
 import { MonitoringTasksAPI } from './api/monitoringTasks/monitoringTasksApi';
 
 class CogniteClientCleaned extends CogniteClientStable {
@@ -43,12 +42,6 @@ export default class CogniteClient extends CogniteClientCleaned {
     return accessApi(this.monitoringTasksApi);
   }
 
-  public get datapoints() {
-    return accessApi(this.dataPointsApi);
-  }
-
-  protected dataPointsApi?: DataPointsAPI;
-
   protected get version() {
     return `${version}-beta`;
   }
@@ -63,6 +56,5 @@ export default class CogniteClient extends CogniteClientCleaned {
       MonitoringTasksAPI,
       'monitoringtasks'
     );
-    this.dataPointsApi = this.apiFactory(DataPointsAPI, 'timeseries/data');
   }
 }
