@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.40.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.39.5...@cognite/sdk-alpha@0.40.0) (2026-05-05)
+
+
+### Features
+
+* **alpha:** add 'queued' status to simulation runs ([#1417](https://github.com/cognitedata/cognite-sdk-js/issues/1417)) ([8760e8a](https://github.com/cognitedata/cognite-sdk-js/commit/8760e8ac54547b18ff6d6f0ea85311fd98785f91))
+* **alpha:** add support for metering-service ([#1415](https://github.com/cognitedata/cognite-sdk-js/issues/1415)) ([872a303](https://github.com/cognitedata/cognite-sdk-js/commit/872a3038ec39892e6f6c96e83e88efc21ae11a53))
+
+
+
+
+
 ## [0.39.5](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.39.4...@cognite/sdk-alpha@0.39.5) (2026-03-05)
 
 **Note:** Version bump only for package @cognite/sdk-alpha

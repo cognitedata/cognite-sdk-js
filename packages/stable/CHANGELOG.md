@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [10.11.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@10.10.0...@cognite/sdk@10.11.0) (2026-05-05)
+
+
+### Features
+
+* **datapoints:** simplify monthly aggregates and promote beta to stable ([#1387](https://github.com/cognitedata/cognite-sdk-js/issues/1387)) ([d784ca6](https://github.com/cognitedata/cognite-sdk-js/commit/d784ca6ca4dc22ce305b4cc3d02b6e7efdd87bd5)), closes [#1386](https://github.com/cognitedata/cognite-sdk-js/issues/1386)
+* **timeseries,datapoints:** align types with latest API spec ([#1386](https://github.com/cognitedata/cognite-sdk-js/issues/1386)) ([f5bc4d8](https://github.com/cognitedata/cognite-sdk-js/commit/f5bc4d8a255251f13743ee8be348c230ccf6efb4))
+
+
+
+
+
 # [10.10.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@10.9.0...@cognite/sdk@10.10.0) (2026-03-05)
 
 

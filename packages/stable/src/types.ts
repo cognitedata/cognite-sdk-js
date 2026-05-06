@@ -13,7 +13,7 @@ import type {
   Limit,
 } from '@cognite/sdk-core';
 import type { AnnotationData } from './api/annotations/types.gen';
-import type { TimeseriesFilter } from './api/timeSeries/types';
+import type { TimeSeriesFilter } from './api/timeSeries/types';
 import type {
   AggregateResponse,
   ArrayPatchLong,
@@ -2399,7 +2399,7 @@ export type SequencesSource = {
 
 export type TimeSeriesSource = {
   type: 'timeSeries';
-  filter?: ObjectOrString<TimeseriesFilter>;
+  filter?: ObjectOrString<TimeSeriesFilter>;
   mappings?: { [K in string]: string };
 };
 
