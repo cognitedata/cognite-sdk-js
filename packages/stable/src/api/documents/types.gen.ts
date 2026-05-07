@@ -716,55 +716,6 @@ export interface DocumentSearch {
     highlight?: boolean;
   };
 }
-export interface DocumentSearchAggregate {
-  groups: DocumentSearchAggregateGroup[];
-  /** User defined name for this aggregate */
-  name: string;
-  /**
-   * Total number of results for this aggregate
-   * @format int32
-   */
-  total: number;
-}
-export interface DocumentSearchAggregateGroup {
-  /**
-   * The number of documents in this group.
-   * @format int32
-   */
-  count: number;
-  group: DocumentSearchAggregateGroupIdentifier[];
-}
-export interface DocumentSearchAggregateGroupIdentifier {
-  /** The property that is being aggregated on. */
-  property: DocumentFilterProperty;
-  /** The value of the property for this group. */
-  value: DocumentFilterValue;
-}
-export interface DocumentSearchAggregates {
-  /** @example [{"name":"countOfTypes","aggregate":"count","groupBy":[{"property":["type"]}]}] */
-  aggregates?: DocumentSearchCountAggregate[];
-}
-/**
- * @example {"name":"countOfTypes","aggregate":"count","groupBy":[{"property":["type"]}]}
- */
-export interface DocumentSearchCountAggregate {
-  /**
-   * count
-   * @example count
-   */
-  aggregate: 'count';
-  /** List of properties to group the count by. It's currently only possible to group by 0 or 1 properties. If grouping by 0 properties, the aggregate value is the total count of all documents. */
-  groupBy?: DocumentSearchCountAggregatesGroup[];
-  /** User defined name for this aggregate */
-  name: string;
-}
-export interface DocumentSearchCountAggregatesGroup {
-  /**
-   * A property to group by.
-   * @example ["type"]
-   */
-  property: DocumentFilterProperty;
-}
 /**
  * Filter with exact match
  */
@@ -801,17 +752,12 @@ export interface DocumentSearchLimit {
 }
 export type DocumentSearchRequest = DocumentSearch &
   DocumentSearchFilter &
-  DocumentSearchAggregates &
   DocumentSort &
   DocumentSearchLimit &
   DocumentCursor &
   DocumentSearchHighlight;
-export interface DocumentSearchResponse {
-  aggregates?: DocumentSearchAggregate[];
-  items: DocumentSearchItem[];
-  /** The cursor to get the next page of results (if available). The search endpoint only gives a limited number of results. A missing nextCursor does not imply there are no more results for the provided search. */
-  nextCursor?: string;
-}
+export interface DocumentSearchResponse
+  extends CursorAndAsyncIterator<DocumentSearchItem> {}
 export interface DocumentSort {
   /** List of properties to sort by. Currently only supports 1 property. */
   sort?: DocumentSortItem[];
