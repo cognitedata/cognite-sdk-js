@@ -2,7 +2,10 @@
 
 import type { Datapoints, DoubleDatapoint } from '@cognite/sdk';
 import { describe, expect, test } from 'vitest';
-import { randomInt } from '../../../../core/src/__tests__/testUtils';
+import {
+  randomInt,
+  runTestWithRetryWhenFailing,
+} from '../../../../core/src/__tests__/testUtils';
 import type CogniteClient from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
 
@@ -32,22 +35,24 @@ describe.skipIf(!process.env.COGNITE_PROJECT || !process.env.COGNITE_BASE_URL)(
           },
         ]);
 
-        const res = (await client.datapoints.retrieve({
-          items: [
-            {
-              id: tsId,
-              start: new Date(timestamp - 60_000),
-              end: new Date(timestamp + 60_000),
-            },
-          ],
-        })) as Datapoints[];
+        await runTestWithRetryWhenFailing(async () => {
+          const res = (await client.datapoints.retrieve({
+            items: [
+              {
+                id: tsId,
+                start: new Date(timestamp - 60_000),
+                end: new Date(timestamp + 60_000),
+              },
+            ],
+          })) as Datapoints[];
 
-        expect(res.length).toBe(1);
-        expect(res[0].datapoints.length).toBeGreaterThan(0);
-        expect((res[0].datapoints[0] as DoubleDatapoint).value).toBeCloseTo(
-          100,
-          5
-        );
+          expect(res.length).toBe(1);
+          expect(res[0].datapoints.length).toBeGreaterThan(0);
+          expect((res[0].datapoints[0] as DoubleDatapoint).value).toBeCloseTo(
+            100,
+            5
+          );
+        });
       } finally {
         await client.timeseries.delete([{ id: tsId }]);
       }
