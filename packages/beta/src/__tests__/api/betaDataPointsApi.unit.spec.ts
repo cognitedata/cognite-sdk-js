@@ -39,6 +39,11 @@ describe('convertBetweenUnitConversions', () => {
     const c = { multiplier: 1, offset: 0 };
     expect(convertBetweenUnitConversions(3.5, c, c)).toBe(3.5);
   });
+
+  it('returns same value for non-trivial same unit (early return)', () => {
+    const degF = { multiplier: 5 / 9, offset: 459.67 };
+    expect(convertBetweenUnitConversions(72, degF, degF)).toBe(72);
+  });
 });
 
 describe('BetaDataPointsAPI.insertWithUnitConversion', () => {
@@ -289,6 +294,44 @@ describe('BetaDataPointsAPI.insertWithUnitConversion', () => {
         },
       ])
     ).rejects.toThrow(/string datapoint/);
+  });
+
+  it('passes through values unchanged when sourceUnit equals stored unit', async () => {
+    const retrieve = vi.fn().mockResolvedValue([
+      {
+        id: 1,
+        isString: false,
+        unitExternalId: 'q:unit',
+      } satisfies Partial<TimeSeries> as TimeSeries,
+    ]);
+    const unitsRetrieve = vi.fn().mockResolvedValue([
+      baseUnit({
+        externalId: 'q:unit',
+        quantity: 'Q',
+        conversion: { multiplier: 2, offset: 3 },
+      }),
+    ]);
+
+    const api = makeApi({
+      timeSeries: { retrieve },
+      units: { retrieve: unitsRetrieve },
+    });
+    const insertSpy = vi.spyOn(api, 'insert').mockResolvedValue({});
+
+    await api.insertWithUnitConversion([
+      {
+        id: 1,
+        sourceUnit: 'q:unit',
+        datapoints: [{ timestamp: 1, value: 42 }],
+      },
+    ]);
+
+    expect(insertSpy).toHaveBeenCalledWith([
+      {
+        id: 1,
+        datapoints: [{ timestamp: 1, value: 42 }],
+      },
+    ]);
   });
 
   it('throws when source unit is missing from catalog response', async () => {
