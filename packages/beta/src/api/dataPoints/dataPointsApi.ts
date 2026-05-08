@@ -23,10 +23,7 @@ const CONVERSION_SIG_DIGITS = 12;
 
 function roundToSigDigits(value: number, digits: number): number {
   if (value === 0) return 0;
-  const factor = Math.pow(
-    10,
-    digits - Math.floor(Math.log10(Math.abs(value))) - 1
-  );
+  const factor = 10 ** (digits - Math.floor(Math.log10(Math.abs(value))) - 1);
   return Math.round(value * factor) / factor;
 }
 
@@ -176,9 +173,9 @@ export class BetaDataPointsAPI extends DataPointsAPI {
     const result: DatapointsInsertItem[] = [];
     for (const item of items) {
       const key = insertItemLookupKey(item);
-      const targetUnitExternalId = unitByTsKey.get(key)!;
-      const srcUnit = unitByExternalId.get(item.sourceUnit)!;
-      const dstUnit = unitByExternalId.get(targetUnitExternalId)!;
+      const targetUnitExternalId = unitByTsKey.get(key) as CogniteExternalId;
+      const srcUnit = unitByExternalId.get(item.sourceUnit) as Unit;
+      const dstUnit = unitByExternalId.get(targetUnitExternalId) as Unit;
 
       if (srcUnit.quantity !== dstUnit.quantity) {
         throw new CogniteError(
