@@ -28,8 +28,8 @@ export function convertBetweenUnitConversions(
   if (src.multiplier === dst.multiplier && src.offset === dst.offset) {
     return value;
   }
-  const base = value * src.multiplier + src.offset;
-  return (base - dst.offset) / dst.multiplier;
+  const base = (value + src.offset) * src.multiplier;
+  return base / dst.multiplier - dst.offset;
 }
 
 function timeSeriesLookupKeys(ts: TimeSeries): string[] {
@@ -101,7 +101,7 @@ export class BetaDataPointsAPI extends DataPointsAPI {
   /**
    * Insert datapoints after converting numeric values from `sourceUnit` to each time
    * series' stored `unitExternalId` (resolved via {@link TimeSeriesAPI.retrieve}).
-   * Fetches unit definitions with {@link UnitsAPI.retrieve} (deduped, batched by the SDK).
+   * Fetches unit definitions with {@link UnitsAPI.retrieve}.
    * String datapoint values are not supported.
    */
   public insertWithUnitConversion = async (

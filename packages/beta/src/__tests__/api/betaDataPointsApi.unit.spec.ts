@@ -22,11 +22,17 @@ const baseUnit = (overrides: Partial<Unit>): Unit => ({
 });
 
 describe('convertBetweenUnitConversions', () => {
-  it('converts via shared base representation', () => {
-    const src = { multiplier: 2, offset: 10 };
-    const dst = { multiplier: 4, offset: 0 };
-    // base = 5*2+10 = 20, dst = (20-0)/4 = 5
-    expect(convertBetweenUnitConversions(5, src, dst)).toBe(5);
+  it('converts °F to °C', () => {
+    const fahrenheit = { multiplier: 5 / 9, offset: 459.67 };
+    const celsius = { multiplier: 1, offset: 273.15 };
+    expect(convertBetweenUnitConversions(212, fahrenheit, celsius)).toBeCloseTo(
+      100,
+      9
+    );
+    expect(convertBetweenUnitConversions(32, fahrenheit, celsius)).toBeCloseTo(
+      0,
+      9
+    );
   });
 
   it('returns same value when factors match', () => {
