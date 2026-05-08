@@ -1,6 +1,6 @@
 // Copyright 2026 Cognite AS
 
-import type { Datapoints, DoubleDatapoint } from '@cognite/sdk';
+import type { DoubleDatapoint, DoubleDatapoints } from '@cognite/sdk';
 import { describe, expect, test } from 'vitest';
 import {
   randomInt,
@@ -44,7 +44,7 @@ describe.skipIf(!process.env.COGNITE_PROJECT || !process.env.COGNITE_BASE_URL)(
                 end: new Date(timestamp + 60_000),
               },
             ],
-          })) as Datapoints[];
+          })) as DoubleDatapoints[];
 
           expect(res.length).toBe(1);
           expect(res[0].datapoints.length).toBeGreaterThan(0);
@@ -66,7 +66,7 @@ describe.skipIf(!process.env.COGNITE_PROJECT || !process.env.COGNITE_BASE_URL)(
                 targetUnit: 'temperature:deg_f',
               },
             ],
-          })) as Datapoints[];
+          })) as DoubleDatapoints[];
 
           expect(res.length).toBe(1);
           expect(res[0].unitExternalId).toBe('temperature:deg_f');
