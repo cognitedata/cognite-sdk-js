@@ -19,6 +19,17 @@ import type {
 import { CogniteError } from '@cognite/sdk-core';
 import type { DatapointsInsertWithUnitItem } from './types';
 
+const CONVERSION_SIG_DIGITS = 12;
+
+function roundToSigDigits(value: number, digits: number): number {
+  if (value === 0) return 0;
+  const factor = Math.pow(
+    10,
+    digits - Math.floor(Math.log10(Math.abs(value))) - 1
+  );
+  return Math.round(value * factor) / factor;
+}
+
 /** @hidden */
 export function convertBetweenUnitConversions(
   value: number,
@@ -29,7 +40,10 @@ export function convertBetweenUnitConversions(
     return value;
   }
   const base = (value + src.offset) * src.multiplier;
-  return base / dst.multiplier - dst.offset;
+  return roundToSigDigits(
+    base / dst.multiplier - dst.offset,
+    CONVERSION_SIG_DIGITS
+  );
 }
 
 function timeSeriesLookupKeys(ts: TimeSeries): string[] {
@@ -68,20 +82,10 @@ function toRetrieveId(
   return { instanceId: item.instanceId };
 }
 
-function idsEqual(a: IdEitherWithInstance, b: IdEitherWithInstance): boolean {
-  if ('id' in a && 'id' in b) {
-    return a.id === b.id;
-  }
-  if ('externalId' in a && 'externalId' in b) {
-    return a.externalId === b.externalId;
-  }
-  if ('instanceId' in a && 'instanceId' in b) {
-    return (
-      a.instanceId.space === b.instanceId.space &&
-      a.instanceId.externalId === b.instanceId.externalId
-    );
-  }
-  return false;
+function retrieveIdKey(id: IdEitherWithInstance): string {
+  if ('id' in id) return `id:${id.id}`;
+  if ('externalId' in id) return `ext:${id.externalId}`;
+  return `inst:${id.instanceId.space}:${id.instanceId.externalId}`;
 }
 
 /**
@@ -172,21 +176,9 @@ export class BetaDataPointsAPI extends DataPointsAPI {
     const result: DatapointsInsertItem[] = [];
     for (const item of items) {
       const key = insertItemLookupKey(item);
-      const targetUnitExternalId = unitByTsKey.get(key);
-      if (targetUnitExternalId == null) {
-        throw new CogniteError(
-          `Time series unit not resolved for insert item (key=${key})`,
-          400
-        );
-      }
-      const srcUnit = unitByExternalId.get(item.sourceUnit);
-      const dstUnit = unitByExternalId.get(targetUnitExternalId);
-      if (srcUnit == null || dstUnit == null) {
-        throw new CogniteError(
-          'Internal error: unit missing after catalog validation',
-          500
-        );
-      }
+      const targetUnitExternalId = unitByTsKey.get(key)!;
+      const srcUnit = unitByExternalId.get(item.sourceUnit)!;
+      const dstUnit = unitByExternalId.get(targetUnitExternalId)!;
 
       if (srcUnit.quantity !== dstUnit.quantity) {
         throw new CogniteError(
@@ -226,11 +218,10 @@ export class BetaDataPointsAPI extends DataPointsAPI {
 function dedupeRetrieveIds(
   ids: IdEitherWithInstance[]
 ): IdEitherWithInstance[] {
-  const out: IdEitherWithInstance[] = [];
+  const seen = new Map<string, IdEitherWithInstance>();
   for (const id of ids) {
-    if (!out.some((existing) => idsEqual(existing, id))) {
-      out.push(id);
-    }
+    const key = retrieveIdKey(id);
+    if (!seen.has(key)) seen.set(key, id);
   }
-  return out;
+  return [...seen.values()];
 }
