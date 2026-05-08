@@ -55,6 +55,29 @@ describe.skipIf(!process.env.COGNITE_PROJECT || !process.env.COGNITE_BASE_URL)(
               5
             );
           });
+
+          // Round-trip: server-side conversion back to °F should yield the
+          // original input value within float tolerance.
+          await runTestWithRetryWhenFailing(async () => {
+            const res = (await client.datapoints.retrieve({
+              items: [
+                {
+                  id: tsId,
+                  start: new Date(timestamp - 60_000),
+                  end: new Date(timestamp + 60_000),
+                  targetUnit: 'temperature:deg_f',
+                },
+              ],
+            })) as Datapoints[];
+
+            expect(res.length).toBe(1);
+            expect(res[0].unitExternalId).toBe('temperature:deg_f');
+            expect(res[0].datapoints.length).toBeGreaterThan(0);
+            expect((res[0].datapoints[0] as DoubleDatapoint).value).toBeCloseTo(
+              212,
+              5
+            );
+          });
         } finally {
           await client.timeseries.delete([{ id: tsId }]);
         }
