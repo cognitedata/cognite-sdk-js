@@ -44,9 +44,6 @@ export class WorkflowsAPI extends BaseResourceAPI<Workflow> {
   /**
    * [Create or update workflows](https://developer.cognite.com/api#tag/Workflows/operation/CreateOrUpdateWorkflows)
    *
-   * The endpoint is an upsert: existing workflows (matched by `externalId`)
-   * are updated, new ones are created.
-   *
    * ```js
    * const items = await client.workflows.upsert([
    *   { externalId: 'my-workflow-2', description: 'Does things too', maxConcurrentExecutions: 20, dataSetId: 42 },
