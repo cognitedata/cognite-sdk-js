@@ -45,12 +45,14 @@ export class WorkflowsAPI extends BaseResourceAPI<Workflow> {
    * [Create or update workflows](https://developer.cognite.com/api#tag/Workflows/operation/CreateOrUpdateWorkflows)
    *
    * ```js
-   * const items = await client.workflows.upsert([
+   * const response = await client.workflows.upsert([
    *   { externalId: 'my-workflow-2', description: 'Does things too', maxConcurrentExecutions: 20, dataSetId: 42 },
    * ]);
    * ```
    */
-  public upsert = async (items: WorkflowUpsert[]): Promise<ItemsWrapper<Workflow[]>> => {
+  public upsert = async (
+    items: WorkflowUpsert[]
+  ): Promise<ItemsWrapper<Workflow[]>> => {
     const response = await this.post<ItemsWrapper<Workflow[]>>(this.url(''), {
       data: { items },
     });
