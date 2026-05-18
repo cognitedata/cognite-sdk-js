@@ -76,11 +76,11 @@ describe('Workflows unit test', () => {
         ],
       });
 
-    const items = await client.workflows.upsert([upsertBody]);
+    const response = await client.workflows.upsert([upsertBody]);
 
-    expect(items).toHaveLength(1);
-    expect(items[0].externalId).toEqual('wf-1');
-    expect(items[0].maxConcurrentExecutions).toEqual(5);
+    expect(response.items).toHaveLength(1);
+    expect(response.items[0].externalId).toEqual('wf-1');
+    expect(response.items[0].maxConcurrentExecutions).toEqual(5);
   });
 
   test('delete', async () => {

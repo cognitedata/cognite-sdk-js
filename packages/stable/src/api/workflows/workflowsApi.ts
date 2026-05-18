@@ -50,11 +50,11 @@ export class WorkflowsAPI extends BaseResourceAPI<Workflow> {
    * ]);
    * ```
    */
-  public upsert = async (items: WorkflowUpsert[]): Promise<Workflow[]> => {
+  public upsert = async (items: WorkflowUpsert[]): Promise<ItemsWrapper<Workflow[]>> => {
     const response = await this.post<ItemsWrapper<Workflow[]>>(this.url(''), {
       data: { items },
     });
-    return this.addToMapAndReturn(response.data.items, response);
+    return this.addToMapAndReturn(response.data, response);
   };
 
   /**
