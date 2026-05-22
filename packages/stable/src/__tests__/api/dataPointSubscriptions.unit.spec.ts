@@ -28,7 +28,8 @@ function mockChunkedPost(
 ) {
   const match =
     matchBody ??
-    ((length: number) => (body: { items: unknown[] }) => body.items.length === length);
+    ((length: number) => (body: { items: unknown[] }) =>
+      body.items.length === length);
   return [
     nock(mockBaseUrl)
       .post(path, match(CHUNK_SIZE))
@@ -97,20 +98,20 @@ describe('Data point subscriptions unit test', () => {
           ignoreUnknownIds: true,
         }),
       reply: () => ({}),
-      matchBody: (length: number) => (body: { items: unknown[]; ignoreUnknownIds?: boolean }) =>
-        body.items.length === length && body.ignoreUnknownIds === true,
+      matchBody:
+        (length: number) =>
+        (body: { items: unknown[]; ignoreUnknownIds?: boolean }) =>
+          body.items.length === length && body.ignoreUnknownIds === true,
     },
-  ])('$label sends two chunked requests (1000 + 500 items)', async ({
-    path,
-    run,
-    reply,
-    matchBody,
-  }) => {
-    const scopes = mockChunkedPost(path, reply, matchBody);
-    const result = await run();
-    expect(scopes.every((scope) => scope.isDone())).toBe(true);
-    if (result) {
-      expect(result).toHaveLength(ITEM_COUNT);
+  ])(
+    '$label sends two chunked requests (1000 + 500 items)',
+    async ({ path, run, reply, matchBody }) => {
+      const scopes = mockChunkedPost(path, reply, matchBody);
+      const result = await run();
+      expect(scopes.every((scope) => scope.isDone())).toBe(true);
+      if (result) {
+        expect(result).toHaveLength(ITEM_COUNT);
+      }
     }
-  });
+  );
 });

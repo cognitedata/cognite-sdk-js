@@ -102,7 +102,11 @@ export class DataPointSubscriptionsAPI extends BaseResourceAPI<DataPointSubscrip
     query: DataPointSubscriptionsDeleteQuery
   ): Promise<void> => {
     const { items, ignoreUnknownIds } = query;
-    await this.callDeleteEndpoint(items, { ignoreUnknownIds }, this.url('delete'));
+    await this.callDeleteEndpoint(
+      items,
+      { ignoreUnknownIds },
+      this.url('delete')
+    );
   };
 
   /**
