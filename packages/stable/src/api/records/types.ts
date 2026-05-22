@@ -336,6 +336,15 @@ export interface RecordFilterRequest {
   includeTyping?: boolean;
 }
 
+export type RecordFilterRequestWithTyping = RecordFilterRequest & {
+  includeTyping: true;
+};
+
+export type RecordFilterRequestWithoutTyping = Omit<
+  RecordFilterRequest,
+  'includeTyping'
+> & { includeTyping?: false };
+
 /**
  * A record retrieved from a stream
  */
@@ -619,6 +628,15 @@ export interface RecordAggregateRequest {
   /** When true, include property type information (and resolved units when combined with `targetUnits`). */
   includeTyping?: boolean;
 }
+
+export type RecordAggregateRequestWithTyping = RecordAggregateRequest & {
+  includeTyping: true;
+};
+
+export type RecordAggregateRequestWithoutTyping = Omit<
+  RecordAggregateRequest,
+  'includeTyping'
+> & { includeTyping?: false };
 
 // Aggregate result types
 export interface AvgAggregateResult {

@@ -154,7 +154,7 @@ describe('records integration test', () => {
     // Wait for eventual consistency
     const result = await vi.waitFor(
       async () => {
-        const { items: records } = await client.records.filter(
+        const records = await client.records.filter(
           immutableStreamId,
           {
             lastUpdatedTime: {
@@ -226,7 +226,7 @@ describe('records integration test', () => {
 
     const result = await vi.waitFor(
       async () => {
-        const { items: records } = await client.records.filter(
+        const records = await client.records.filter(
           immutableStreamId,
           {
             lastUpdatedTime: {
@@ -299,7 +299,7 @@ describe('records integration test', () => {
 
     const result = await vi.waitFor(
       async () => {
-        const { items: records } = await client.records.filter(
+        const records = await client.records.filter(
           immutableStreamId,
           {
             lastUpdatedTime: {
@@ -557,7 +557,7 @@ describe('records integration test', () => {
           string,
           string,
         ];
-        const { aggregates } = await client.records.aggregate(
+        const aggregates = await client.records.aggregate(
           immutableStreamId,
           {
             lastUpdatedTime: {
@@ -653,7 +653,7 @@ describe('records integration test', () => {
 
     await vi.waitFor(
       async () => {
-        const { aggregates } = await client.records.aggregate(
+        const aggregates = await client.records.aggregate(
           immutableStreamId,
           {
             lastUpdatedTime: {
@@ -921,7 +921,7 @@ describe('mutable records integration test', () => {
     // Verify the record was created
     const createdRecord = await vi.waitFor(
       async () => {
-        const { items: records } = await client.records.filter(
+        const records = await client.records.filter(
           mutableStreamId,
           {
             sources: [{ source, properties: ['*'] }],
@@ -966,7 +966,7 @@ describe('mutable records integration test', () => {
     // Verify the record was updated
     const updatedRecord = await vi.waitFor(
       async () => {
-        const { items: records } = await client.records.filter(
+        const records = await client.records.filter(
           mutableStreamId,
           {
             sources: [{ source, properties: ['*'] }],
@@ -997,7 +997,7 @@ describe('mutable records integration test', () => {
     // Verify the record is no longer returned by filter
     await vi.waitFor(
       async () => {
-        const { items: records } = await client.records.filter(
+        const records = await client.records.filter(
           mutableStreamId,
           {
             sources: [{ source, properties: ['*'] }],

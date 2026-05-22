@@ -3,9 +3,14 @@
 import { BaseResourceAPI, makeAutoPaginationMethods } from '@cognite/sdk-core';
 import type {
   RecordAggregateRequest,
+  RecordAggregateRequestWithoutTyping,
+  RecordAggregateRequestWithTyping,
   RecordAggregateResponse,
+  RecordAggregateResults,
   RecordDelete,
   RecordFilterRequest,
+  RecordFilterRequestWithoutTyping,
+  RecordFilterRequestWithTyping,
   RecordFilterResponse,
   RecordItem,
   RecordSyncRequest,
@@ -122,7 +127,7 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
    * Retrieve records from a stream using filters.
    *
    * ```js
-   * const { items, typing } = await client.records.filter('my_stream', {
+   * const records = await client.records.filter('my_stream', {
    *   sources: [
    *     {
    *       source: { type: 'container', space: 'mySpace', externalId: 'myContainer' },
@@ -138,11 +143,26 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
    *   limit: 100
    * });
    * ```
+   *
+   * With `includeTyping: true`, returns `{ items, typing }` instead of a bare array:
+   *
+   * ```js
+   * const { items, typing } = await client.records.filter('my_stream', {
+   *   includeTyping: true,
+   *   sources: [
+   *     {
+   *       source: { type: 'container', space: 'mySpace', externalId: 'myContainer' },
+   *       properties: ['*']
+   *     }
+   *   ],
+   *   limit: 100
+   * });
+   * ```
    */
-  public filter = async (
+  public filter = (async (
     streamExternalId: string,
     request: RecordFilterRequest = {}
-  ): Promise<RecordFilterResponse> => {
+  ): Promise<RecordItem[] | RecordFilterResponse> => {
     const path = this.url(
       `${encodeURIComponent(streamExternalId)}/records/filter`
     );
@@ -150,10 +170,22 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
       data: request,
     });
     const items = this.addToMapAndReturn(response.data.items, response);
-    return {
-      items,
-      typing: response.data.typing,
-    };
+    if (request.includeTyping === true) {
+      return {
+        items,
+        typing: response.data.typing,
+      };
+    }
+    return items;
+  }) as {
+    (
+      streamExternalId: string,
+      request: RecordFilterRequestWithTyping
+    ): Promise<RecordFilterResponse>;
+    (
+      streamExternalId: string,
+      request?: RecordFilterRequestWithoutTyping
+    ): Promise<RecordItem[]>;
   };
 
   /**
@@ -215,7 +247,7 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
    * Aggregate data for records from a stream.
    *
    * ```js
-   * const { aggregates, typing } = await client.records.aggregate('my_stream', {
+   * const aggregates = await client.records.aggregate('my_stream', {
    *   aggregates: {
    *     total_count: { count: {} },
    *     by_category: {
@@ -227,21 +259,44 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
    *   }
    * });
    * ```
+   *
+   * With `includeTyping: true`, returns `{ aggregates, typing }` instead of bare results:
+   *
+   * ```js
+   * const { aggregates, typing } = await client.records.aggregate('my_stream', {
+   *   includeTyping: true,
+   *   aggregates: {
+   *     total_count: { count: {} }
+   *   }
+   * });
+   * ```
    */
-  public aggregate = async (
+  public aggregate = (async (
     streamExternalId: string,
     request: RecordAggregateRequest
-  ): Promise<RecordAggregateResponse> => {
+  ): Promise<RecordAggregateResults | RecordAggregateResponse> => {
     const path = this.url(
       `${encodeURIComponent(streamExternalId)}/records/aggregate`
     );
     const response = await this.post<RecordAggregateResponse>(path, {
       data: request,
     });
-    return {
-      aggregates: response.data.aggregates,
-      typing: response.data.typing,
-    };
+    if (request.includeTyping === true) {
+      return {
+        aggregates: response.data.aggregates,
+        typing: response.data.typing,
+      };
+    }
+    return response.data.aggregates;
+  }) as {
+    (
+      streamExternalId: string,
+      request: RecordAggregateRequestWithTyping
+    ): Promise<RecordAggregateResponse>;
+    (
+      streamExternalId: string,
+      request: RecordAggregateRequestWithoutTyping
+    ): Promise<RecordAggregateResults>;
   };
 }
 
