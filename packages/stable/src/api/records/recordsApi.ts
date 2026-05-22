@@ -3,14 +3,14 @@
 import { BaseResourceAPI, makeAutoPaginationMethods } from '@cognite/sdk-core';
 import type {
   RecordAggregateRequest,
-  RecordAggregateRequestWithoutTyping,
   RecordAggregateRequestWithTyping,
+  RecordAggregateRequestWithoutTyping,
   RecordAggregateResponse,
   RecordAggregateResults,
   RecordDelete,
   RecordFilterRequest,
-  RecordFilterRequestWithoutTyping,
   RecordFilterRequestWithTyping,
+  RecordFilterRequestWithoutTyping,
   RecordFilterResponse,
   RecordItem,
   RecordSyncRequest,
