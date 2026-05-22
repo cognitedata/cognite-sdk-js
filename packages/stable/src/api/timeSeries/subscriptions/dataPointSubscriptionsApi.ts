@@ -16,21 +16,6 @@ import type {
   DataPointSubscriptionsDeleteQuery,
 } from './types';
 
-function parseSubscriptionListDataDates(
-  data: DataPointSubscriptionListDataResponse
-): DataPointSubscriptionListDataResponse {
-  return cloneDeepWith(data, (value, key) => {
-    if (
-      (key === 'timestamp' ||
-        key === 'inclusiveBegin' ||
-        key === 'exclusiveEnd') &&
-      (typeof value === 'number' || typeof value === 'string')
-    ) {
-      return new Date(value);
-    }
-  });
-}
-
 export class DataPointSubscriptionsAPI extends BaseResourceAPI<DataPointSubscription> {
   /**
    * @hidden
@@ -48,19 +33,10 @@ export class DataPointSubscriptionsAPI extends BaseResourceAPI<DataPointSubscrip
    * ]);
    * ```
    */
-  public create = async (
+  public create = (
     items: DataPointSubscriptionCreate[]
   ): Promise<DataPointSubscription[]> => {
-    const responses = await Promise.all(
-      items.map((item) =>
-        this.post<{ items: DataPointSubscription[] }>(this.url(), {
-          data: { items: [item] },
-        })
-      )
-    );
-    return responses.flatMap((response) =>
-      this.addToMapAndReturn(response.data.items, response)
-    );
+    return this.createEndpoint(items, this.url());
   };
 
   /**
@@ -89,19 +65,12 @@ export class DataPointSubscriptionsAPI extends BaseResourceAPI<DataPointSubscrip
    * });
    * ```
    */
-  public retrieve = async (
+  public retrieve = (
     query: DataPointSubscriptionByIdsQuery
   ): Promise<DataPointSubscription[]> => {
-    const { items, ...rest } = query;
-    const responses = await Promise.all(
-      items.map((item) =>
-        this.post<{ items: DataPointSubscription[] }>(this.url('byids'), {
-          data: { items: [item], ...rest },
-        })
-      )
-    );
-    return responses.flatMap((response) =>
-      this.addToMapAndReturn(response.data.items, response)
+    const { items, ...params } = query;
+    return this.callEndpointWithMergeAndTransform(items, (request) =>
+      this.callRetrieveEndpoint(request, this.url('byids'), params)
     );
   };
 
@@ -114,19 +83,10 @@ export class DataPointSubscriptionsAPI extends BaseResourceAPI<DataPointSubscrip
    * ]);
    * ```
    */
-  public update = async (
+  public update = (
     items: DataPointSubscriptionUpdate[]
   ): Promise<DataPointSubscription[]> => {
-    const responses = await Promise.all(
-      items.map((item) =>
-        this.post<{ items: DataPointSubscription[] }>(this.url('update'), {
-          data: { items: [item] },
-        })
-      )
-    );
-    return responses.flatMap((response) =>
-      this.addToMapAndReturn(response.data.items, response)
-    );
+    return this.updateEndpoint(items, this.url('update'));
   };
 
   /**
@@ -142,13 +102,7 @@ export class DataPointSubscriptionsAPI extends BaseResourceAPI<DataPointSubscrip
     query: DataPointSubscriptionsDeleteQuery
   ): Promise<void> => {
     const { items, ignoreUnknownIds } = query;
-    await Promise.all(
-      items.map((item) =>
-        this.post(this.url('delete'), {
-          data: { items: [item], ignoreUnknownIds },
-        })
-      )
-    );
+    await this.callDeleteEndpoint(items, { ignoreUnknownIds }, this.url('delete'));
   };
 
   /**
@@ -195,4 +149,19 @@ export class DataPointSubscriptionsAPI extends BaseResourceAPI<DataPointSubscrip
     const parsed = parseSubscriptionListDataDates(response.data);
     return this.addToMapAndReturn(parsed, response);
   };
+}
+
+function parseSubscriptionListDataDates(
+  data: DataPointSubscriptionListDataResponse
+): DataPointSubscriptionListDataResponse {
+  return cloneDeepWith(data, (value, key) => {
+    if (
+      (key === 'timestamp' ||
+        key === 'inclusiveBegin' ||
+        key === 'exclusiveEnd') &&
+      (typeof value === 'number' || typeof value === 'string')
+    ) {
+      return new Date(value);
+    }
+  });
 }
