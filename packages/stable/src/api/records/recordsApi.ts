@@ -124,7 +124,8 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
   /**
    * [Filter records from a stream](https://developer.cognite.com/api#tag/Records/operation/filterRecords)
    *
-   * Retrieve records from a stream using filters.
+   * Retrieve records from a stream using filters. Pass includeTyping: true to
+   * receive an object with items and typing instead of a bare array.
    *
    * ```js
    * const records = await client.records.filter('my_stream', {
@@ -140,21 +141,6 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
    *       value: 'active'
    *     }
    *   },
-   *   limit: 100
-   * });
-   * ```
-   *
-   * With `includeTyping: true`, returns `{ items, typing }` instead of a bare array:
-   *
-   * ```js
-   * const { items, typing } = await client.records.filter('my_stream', {
-   *   includeTyping: true,
-   *   sources: [
-   *     {
-   *       source: { type: 'container', space: 'mySpace', externalId: 'myContainer' },
-   *       properties: ['*']
-   *     }
-   *   ],
    *   limit: 100
    * });
    * ```
@@ -244,7 +230,8 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
   /**
    * [Aggregate records from a stream](https://developer.cognite.com/api#tag/Records/operation/aggregateRecords)
    *
-   * Aggregate data for records from a stream.
+   * Aggregate data for records from a stream. Pass includeTyping: true to
+   * receive an object with aggregates and typing instead of bare results.
    *
    * ```js
    * const aggregates = await client.records.aggregate('my_stream', {
@@ -256,17 +243,6 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
    *         aggregates: { total: { sum: { property: ['mySpace', 'myContainer', 'amount'] } } }
    *       }
    *     }
-   *   }
-   * });
-   * ```
-   *
-   * With `includeTyping: true`, returns `{ aggregates, typing }` instead of bare results:
-   *
-   * ```js
-   * const { aggregates, typing } = await client.records.aggregate('my_stream', {
-   *   includeTyping: true,
-   *   aggregates: {
-   *     total_count: { count: {} }
    *   }
    * });
    * ```
