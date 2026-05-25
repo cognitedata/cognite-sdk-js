@@ -131,7 +131,7 @@ export type TaskDefinition = {
   type: TaskTypeEnum | string;
   name?: string;
   description?: string;
-  parameters: TaskParameters;
+  parameters?: TaskParameters;
   retries?: number;
   timeout?: number;
   dependsOn?: TaskDependency[];
