@@ -165,7 +165,7 @@ export type WorkflowDefinitionCreate = Pick<
   'description' | 'tasks'
 >;
 
-export type VersionCreate = {
+export type VersionUpsert = {
   workflowExternalId: CogniteExternalId;
   version: string;
   workflowDefinition: WorkflowDefinitionCreate;

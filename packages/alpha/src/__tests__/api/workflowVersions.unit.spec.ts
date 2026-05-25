@@ -82,7 +82,7 @@ describe('Workflow versions unit test', () => {
     expect(response.version).toEqual('2');
   });
 
-  test('create', async () => {
+  test('upsert', async () => {
     nock(mockBaseUrl)
       .post(/\/workflows\/versions$/, matches({ items: [versionCreateBody] }))
       .once()
@@ -90,7 +90,7 @@ describe('Workflow versions unit test', () => {
         items: [mockVersion],
       });
 
-    const items = await client.workflowVersions.create([versionCreateBody]);
+    const items = await client.workflowVersions.upsert([versionCreateBody]);
 
     expect(items).toHaveLength(1);
     expect(items[0].workflowExternalId).toEqual('wf-1');

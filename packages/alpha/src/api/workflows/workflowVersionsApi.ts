@@ -7,8 +7,8 @@ import type {
 } from '@cognite/sdk-core';
 import type {
   Version,
-  VersionCreate,
   VersionDelete,
+  VersionUpsert,
   WorkflowVersionFilterQuery,
 } from './types';
 
@@ -47,7 +47,7 @@ export class WorkflowVersionsAPI extends BaseResourceAPI<Version> {
    * [Create or update a workflow version](https://api-docs.cognite.com/20230101-alpha/tag/Workflow-versions/operation/CreateOrUpdateWorkflowVersion)
    *
    * ```js
-   * const versions = await client.workflowVersions.create([
+   * const versions = await client.workflowVersions.upsert([
    *   {
    *     workflowExternalId: 'my-workflow',
    *     version: '1',
@@ -56,7 +56,7 @@ export class WorkflowVersionsAPI extends BaseResourceAPI<Version> {
    * ]);
    * ```
    */
-  public create = (items: VersionCreate[]): Promise<Version[]> => {
+  public upsert = (items: VersionUpsert[]): Promise<Version[]> => {
     return this.createEndpoint(items, this.url());
   };
 

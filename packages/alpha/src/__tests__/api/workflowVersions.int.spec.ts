@@ -24,7 +24,7 @@ describe('Workflow versions integration test', () => {
     ]);
     createdWorkflow = workflowItems[0];
 
-    const versionItems = await client.workflowVersions.create([
+    const versionItems = await client.workflowVersions.upsert([
       {
         workflowExternalId,
         version: versionExternalId,
@@ -88,8 +88,8 @@ describe('Workflow versions integration test', () => {
     expect(version.version).toBe(versionExternalId);
   });
 
-  test('create updates existing workflow version', async () => {
-    const items = await client.workflowVersions.create([
+  test('upsert updates existing workflow version', async () => {
+    const items = await client.workflowVersions.upsert([
       {
         workflowExternalId,
         version: versionExternalId,
@@ -109,7 +109,7 @@ describe('Workflow versions integration test', () => {
   test('delete', async () => {
     const deleteVersionId = `delete-${randomInt()}`;
 
-    const items = await client.workflowVersions.create([
+    const items = await client.workflowVersions.upsert([
       {
         workflowExternalId,
         version: deleteVersionId,
