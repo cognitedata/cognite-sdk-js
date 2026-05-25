@@ -5,6 +5,7 @@ import { version } from '../package.json';
 import { LimitsAPI } from './api/limits/limitsApi';
 import { MeteringAPI } from './api/metering/meteringApi';
 import { SimulatorsAPI } from './api/simulators/simulatorsApi';
+import { WorkflowVersionsAPI } from './api/workflows/workflowVersionsApi';
 import { WorkflowsAPI } from './api/workflows/workflowsApi';
 
 export default class CogniteClientAlpha extends CogniteClientStable {
@@ -12,6 +13,7 @@ export default class CogniteClientAlpha extends CogniteClientStable {
   private limitsApi?: LimitsAPI;
   private meteringApi?: MeteringAPI;
   private workflowsApi?: WorkflowsAPI;
+  private workflowVersionsApi?: WorkflowVersionsAPI;
 
   public get limits() {
     return accessApi(this.limitsApi);
@@ -29,6 +31,10 @@ export default class CogniteClientAlpha extends CogniteClientStable {
     return accessApi(this.workflowsApi);
   }
 
+  public get workflowVersions() {
+    return accessApi(this.workflowVersionsApi);
+  }
+
   protected initAPIs() {
     super.initAPIs();
 
@@ -38,6 +44,10 @@ export default class CogniteClientAlpha extends CogniteClientStable {
     this.limitsApi = this.apiFactory(LimitsAPI, 'limits');
     this.meteringApi = this.apiFactory(MeteringAPI, 'metering');
     this.workflowsApi = this.apiFactory(WorkflowsAPI, 'workflows');
+    this.workflowVersionsApi = this.apiFactory(
+      WorkflowVersionsAPI,
+      'workflows/versions'
+    );
   }
 
   protected get version() {
