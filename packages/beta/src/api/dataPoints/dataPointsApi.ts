@@ -19,6 +19,82 @@ import type {
 import { CogniteError } from '@cognite/sdk-core';
 import type { DatapointsInsertWithUnitItem } from './types';
 
+type Identifier =
+  | { kind: 'id'; id: number }
+  | { kind: 'ext'; externalId: string }
+  | { kind: 'inst'; space: string; externalId: string };
+
+function identifierKey(i: Identifier): string {
+  switch (i.kind) {
+    case 'id':
+      return `id:${i.id}`;
+    case 'ext':
+      return `ext:${i.externalId}`;
+    case 'inst':
+      return `inst:${i.space}:${i.externalId}`;
+  }
+}
+
+function identifierToRetrieveId(i: Identifier): IdEitherWithInstance {
+  switch (i.kind) {
+    case 'id':
+      return { id: i.id };
+    case 'ext':
+      return { externalId: i.externalId };
+    case 'inst':
+      return { instanceId: { space: i.space, externalId: i.externalId } };
+  }
+}
+
+function toIdentifier(id: IdEitherWithInstance): Identifier {
+  if ('id' in id) return { kind: 'id', id: id.id };
+  if ('externalId' in id) return { kind: 'ext', externalId: id.externalId };
+  return {
+    kind: 'inst',
+    space: id.instanceId.space,
+    externalId: id.instanceId.externalId,
+  };
+}
+
+function itemIdentifier(item: DatapointsInsertWithUnitItem): Identifier {
+  if ('id' in item) return { kind: 'id', id: item.id };
+  if ('externalId' in item) return { kind: 'ext', externalId: item.externalId };
+  return {
+    kind: 'inst',
+    space: item.instanceId.space,
+    externalId: item.instanceId.externalId,
+  };
+}
+
+function* timeSeriesIdentifiers(ts: TimeSeries): Iterable<Identifier> {
+  if (ts.id != null) yield { kind: 'id', id: ts.id };
+  if (ts.externalId != null && ts.externalId !== '') {
+    yield { kind: 'ext', externalId: ts.externalId };
+  }
+  if (ts.instanceId != null) {
+    yield {
+      kind: 'inst',
+      space: ts.instanceId.space,
+      externalId: ts.instanceId.externalId,
+    };
+  }
+}
+
+function dedupeRetrieveIds(
+  ids: IdEitherWithInstance[]
+): IdEitherWithInstance[] {
+  const seen = new Map<string, IdEitherWithInstance>();
+  for (const id of ids) {
+    const key = identifierKey(toIdentifier(id));
+    if (!seen.has(key)) seen.set(key, id);
+  }
+  return [...seen.values()];
+}
+
+function fail(message: string): never {
+  throw new CogniteError(message, 400);
+}
+
 function convertBetweenUnitConversions(
   value: number,
   src: UnitConversion,
@@ -28,57 +104,14 @@ function convertBetweenUnitConversions(
   return base / dst.multiplier - dst.offset;
 }
 
-function timeSeriesLookupKeys(ts: TimeSeries): string[] {
-  const keys: string[] = [];
-  if (ts.id != null) {
-    keys.push(`id:${ts.id}`);
-  }
-  if (ts.externalId != null && ts.externalId !== '') {
-    keys.push(`ext:${ts.externalId}`);
-  }
-  if (ts.instanceId != null) {
-    keys.push(`inst:${ts.instanceId.space}:${ts.instanceId.externalId}`);
-  }
-  return keys;
-}
-
-function insertItemLookupKey(item: DatapointsInsertWithUnitItem): string {
-  if ('id' in item) {
-    return `id:${item.id}`;
-  }
-  if ('externalId' in item) {
-    return `ext:${item.externalId}`;
-  }
-  return `inst:${item.instanceId.space}:${item.instanceId.externalId}`;
-}
-
-function toRetrieveId(
-  item: DatapointsInsertWithUnitItem
-): IdEitherWithInstance {
-  if ('id' in item) {
-    return { id: item.id };
-  }
-  if ('externalId' in item) {
-    return { externalId: item.externalId };
-  }
-  return { instanceId: item.instanceId };
-}
-
-function retrieveIdKey(id: IdEitherWithInstance): string {
-  if ('id' in id) return `id:${id.id}`;
-  if ('externalId' in id) return `ext:${id.externalId}`;
-  return `inst:${id.instanceId.space}:${id.instanceId.externalId}`;
-}
-
-function dedupeRetrieveIds(
-  ids: IdEitherWithInstance[]
-): IdEitherWithInstance[] {
-  const seen = new Map<string, IdEitherWithInstance>();
-  for (const id of ids) {
-    const key = retrieveIdKey(id);
-    if (!seen.has(key)) seen.set(key, id);
-  }
-  return [...seen.values()];
+function convertDatapoint(
+  dp: DatapointWrite,
+  sameUnit: boolean,
+  src: UnitConversion,
+  dst: UnitConversion
+): DatapointWrite {
+  if (typeof dp.value === 'string' || sameUnit) return dp;
+  return { ...dp, value: convertBetweenUnitConversions(dp.value, src, dst) };
 }
 
 /** Beta extension of {@link DataPointsAPI} with unit-aware insert. */
@@ -110,7 +143,19 @@ export class BetaDataPointsAPI extends DataPointsAPI {
   private async convertInsertItemsWithUnit(
     items: DatapointsInsertWithUnitItem[]
   ): Promise<DatapointsInsertItem[]> {
-    const retrieveIds = dedupeRetrieveIds(items.map(toRetrieveId));
+    const unitByTsKey = await this.resolveTargetUnits(items);
+    const unitByExternalId = await this.loadUnitCatalog(items, unitByTsKey);
+    return items.map((item) =>
+      this.convertItem(item, unitByTsKey, unitByExternalId)
+    );
+  }
+
+  private async resolveTargetUnits(
+    items: DatapointsInsertWithUnitItem[]
+  ): Promise<Map<string, CogniteExternalId>> {
+    const retrieveIds = dedupeRetrieveIds(
+      items.map((item) => identifierToRetrieveId(itemIdentifier(item)))
+    );
     const timeSeriesList = await this.timeSeriesApi.retrieve(retrieveIds, {
       ignoreUnknownIds: false,
     });
@@ -118,31 +163,34 @@ export class BetaDataPointsAPI extends DataPointsAPI {
     const unitByTsKey = new Map<string, CogniteExternalId>();
     for (const ts of timeSeriesList) {
       if (ts.type !== 'numeric') {
-        throw new CogniteError(
-          `insertWithUnitConversion only supports numeric time series (type=${ts.type ?? 'unknown'}). Time series id=${ts.id}, externalId=${ts.externalId ?? 'n/a'}`,
-          400
+        fail(
+          `insertWithUnitConversion only supports numeric time series (type=${ts.type ?? 'unknown'}). Time series id=${ts.id}, externalId=${ts.externalId ?? 'n/a'}`
         );
       }
       const unitExternalId = ts.unitExternalId;
       if (unitExternalId == null || unitExternalId === '') {
-        throw new CogniteError(
-          `Time series is missing unitExternalId (required for insertWithUnitConversion). Time series id=${ts.id}, externalId=${ts.externalId ?? 'n/a'}`,
-          400
+        fail(
+          `Time series is missing unitExternalId (required for insertWithUnitConversion). Time series id=${ts.id}, externalId=${ts.externalId ?? 'n/a'}`
         );
       }
-      for (const key of timeSeriesLookupKeys(ts)) {
-        unitByTsKey.set(key, unitExternalId);
+      for (const id of timeSeriesIdentifiers(ts)) {
+        unitByTsKey.set(identifierKey(id), unitExternalId);
       }
     }
+    return unitByTsKey;
+  }
 
+  private async loadUnitCatalog(
+    items: DatapointsInsertWithUnitItem[],
+    unitByTsKey: Map<string, CogniteExternalId>
+  ): Promise<Map<string, Unit>> {
     const unitExternalIdsToLoad = new Set<string>();
     for (const item of items) {
-      const key = insertItemLookupKey(item);
+      const key = identifierKey(itemIdentifier(item));
       const targetUnit = unitByTsKey.get(key);
       if (targetUnit == null) {
-        throw new CogniteError(
-          `Time series not found in retrieve response for insert item (key=${key})`,
-          400
+        fail(
+          `Time series not found in retrieve response for insert item (key=${key})`
         );
       }
       unitExternalIdsToLoad.add(item.unit.externalId);
@@ -156,46 +204,35 @@ export class BetaDataPointsAPI extends DataPointsAPI {
     for (const u of unitsList) {
       unitByExternalId.set(u.externalId, u);
     }
+    return unitByExternalId;
+  }
 
-    const result: DatapointsInsertItem[] = [];
-    for (const item of items) {
-      const key = insertItemLookupKey(item);
-      const targetUnitExternalId = unitByTsKey.get(key) as CogniteExternalId;
-      const sourceUnitExternalId = item.unit.externalId;
-      const sameUnit = sourceUnitExternalId === targetUnitExternalId;
-      const srcUnit = unitByExternalId.get(sourceUnitExternalId) as Unit;
-      const dstUnit = unitByExternalId.get(targetUnitExternalId) as Unit;
+  private convertItem(
+    item: DatapointsInsertWithUnitItem,
+    unitByTsKey: Map<string, CogniteExternalId>,
+    unitByExternalId: Map<string, Unit>
+  ): DatapointsInsertItem {
+    const key = identifierKey(itemIdentifier(item));
+    const targetUnitExternalId = unitByTsKey.get(key) as CogniteExternalId;
+    const sourceUnitExternalId = item.unit.externalId;
+    const sameUnit = sourceUnitExternalId === targetUnitExternalId;
+    const srcUnit = unitByExternalId.get(sourceUnitExternalId) as Unit;
+    const dstUnit = unitByExternalId.get(targetUnitExternalId) as Unit;
 
-      if (srcUnit.quantity !== dstUnit.quantity) {
-        throw new CogniteError(
-          `Incompatible units for conversion: unit.externalId=${sourceUnitExternalId} (quantity=${srcUnit.quantity}) vs time series unit=${targetUnitExternalId} (quantity=${dstUnit.quantity})`,
-          400
-        );
-      }
-
-      const convertedDatapoints: DatapointWrite[] = item.datapoints.map(
-        (dp: DatapointWrite) => {
-          if (typeof dp.value === 'string' || sameUnit) {
-            return dp;
-          }
-          return {
-            ...dp,
-            value: convertBetweenUnitConversions(
-              dp.value,
-              srcUnit.conversion,
-              dstUnit.conversion
-            ),
-          };
-        }
+    if (srcUnit.quantity !== dstUnit.quantity) {
+      fail(
+        `Incompatible units for conversion: unit.externalId=${sourceUnitExternalId} (quantity=${srcUnit.quantity}) vs time series unit=${targetUnitExternalId} (quantity=${dstUnit.quantity})`
       );
-
-      const { unit: _ignored, ...rest } = item;
-      result.push({
-        ...rest,
-        datapoints: convertedDatapoints,
-      } as DatapointsInsertItem);
     }
 
-    return result;
+    const convertedDatapoints = item.datapoints.map((dp) =>
+      convertDatapoint(dp, sameUnit, srcUnit.conversion, dstUnit.conversion)
+    );
+
+    const { unit: _ignored, ...rest } = item;
+    return {
+      ...rest,
+      datapoints: convertedDatapoints,
+    } as DatapointsInsertItem;
   }
 }
