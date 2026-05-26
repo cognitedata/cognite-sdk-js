@@ -8,8 +8,7 @@ import type {
 import type { CogniteExternalId } from '@cognite/sdk-core';
 
 /**
- * Unit catalog reference for supplied datapoint values (same shape as unit references
- * elsewhere in CDF APIs, e.g. `RecordUnitReference`). Stripped before the insert request is sent.
+ * Unit catalog reference for supplied datapoint values
  */
 export interface WithInsertUnit {
   unit: {
