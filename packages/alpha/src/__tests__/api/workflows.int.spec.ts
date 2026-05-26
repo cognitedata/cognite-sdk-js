@@ -26,11 +26,7 @@ describe('Workflows integration test', () => {
     if (!createdWorkflow) {
       return;
     }
-    await client.workflows
-      .delete([{ externalId: workflowExternalId }])
-      .catch(() => {
-        return undefined;
-      });
+    await client.workflows.delete([{ externalId: workflowExternalId }]).catch();
   });
 
   test('list', async () => {
