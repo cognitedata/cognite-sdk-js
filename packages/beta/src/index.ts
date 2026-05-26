@@ -6,9 +6,6 @@ export * from './types';
 
 export type {
   DatapointsInsertWithUnitItem,
-  WithSourceUnit,
+  WithInsertUnit,
 } from './api/dataPoints/types';
-export {
-  BetaDataPointsAPI,
-  convertBetweenUnitConversions,
-} from './api/dataPoints/dataPointsApi';
+export { BetaDataPointsAPI } from './api/dataPoints/dataPointsApi';

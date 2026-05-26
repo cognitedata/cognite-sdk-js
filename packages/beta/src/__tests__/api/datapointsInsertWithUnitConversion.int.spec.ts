@@ -30,7 +30,7 @@ describe.skipIf(!process.env.COGNITE_PROJECT || !process.env.COGNITE_BASE_URL)(
         await client.datapoints.insertWithUnitConversion([
           {
             id: tsId,
-            sourceUnit: 'temperature:deg_f',
+            unit: { externalId: 'temperature:deg_f' },
             datapoints: [{ timestamp, value: 212 }],
           },
         ]);

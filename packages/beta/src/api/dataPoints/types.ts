@@ -8,19 +8,21 @@ import type {
 import type { CogniteExternalId } from '@cognite/sdk-core';
 
 /**
- * Unit catalog externalId of the supplied datapoint values (e.g. `"temperature:deg_f"`).
- * Must belong to the same quantity as the time series' stored `unitExternalId`.
+ * Unit catalog reference for supplied datapoint values (same shape as unit references
+ * elsewhere in CDF APIs, e.g. `RecordUnitReference`). Stripped before the insert request is sent.
  */
-export interface WithSourceUnit {
-  sourceUnit: CogniteExternalId;
+export interface WithInsertUnit {
+  unit: {
+    externalId: CogniteExternalId;
+  };
 }
 
 /**
  * Insert payload for {@link BetaDataPointsAPI.insertWithUnitConversion}: same shape as
- * stable insert items, with a required `sourceUnit` for client-side conversion to the
+ * stable insert items, with a required `unit.externalId` for client-side conversion to the
  * time series' stored unit before posting.
  */
 export type DatapointsInsertWithUnitItem =
-  | (DatapointsInsertById & WithSourceUnit)
-  | (DatapointsInsertByExternalId & WithSourceUnit)
-  | (DatapointsInsertByInstanceId & WithSourceUnit);
+  | (DatapointsInsertById & WithInsertUnit)
+  | (DatapointsInsertByExternalId & WithInsertUnit)
+  | (DatapointsInsertByInstanceId & WithInsertUnit);
