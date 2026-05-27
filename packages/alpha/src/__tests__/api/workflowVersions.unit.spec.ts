@@ -67,21 +67,6 @@ describe('Workflow versions unit test', () => {
     expect(response.nextCursor).toBe('next');
   });
 
-  test('retrieve by workflow external id and version', async () => {
-    nock(mockBaseUrl)
-      .get(/\/workflows\/wf-2\/versions\/2$/)
-      .once()
-      .reply(200, {
-        ...mockVersion,
-        workflowExternalId: 'wf-2',
-        version: '2',
-      });
-
-    const response = await client.workflowVersions.retrieve('wf-2', '2');
-    expect(response.workflowExternalId).toEqual('wf-2');
-    expect(response.version).toEqual('2');
-  });
-
   test('upsert', async () => {
     nock(mockBaseUrl)
       .post(/\/workflows\/versions$/, matches({ items: [versionCreateBody] }))

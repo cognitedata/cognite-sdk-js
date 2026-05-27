@@ -84,16 +84,6 @@ describe('Workflow versions integration test', () => {
     ).toBe(true);
   });
 
-  test('retrieve by workflow external id and version', async () => {
-    const version = await client.workflowVersions.retrieve(
-      workflowExternalId,
-      versionExternalId
-    );
-
-    expect(version.workflowExternalId).toBe(workflowExternalId);
-    expect(version.version).toBe(versionExternalId);
-  });
-
   test('upsert updates existing workflow version', async () => {
     const items = await client.workflowVersions.upsert([
       {

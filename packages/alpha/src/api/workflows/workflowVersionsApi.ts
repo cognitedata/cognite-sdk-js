@@ -1,10 +1,7 @@
 // Copyright 2026 Cognite AS
 
 import { BaseResourceAPI } from '@cognite/sdk-core';
-import type {
-  CogniteExternalId,
-  CursorAndAsyncIterator,
-} from '@cognite/sdk-core';
+import type { CursorAndAsyncIterator } from '@cognite/sdk-core';
 import type {
   Version,
   VersionDelete,
@@ -24,23 +21,6 @@ export class WorkflowVersionsAPI extends BaseResourceAPI<Version> {
     query?: WorkflowVersionFilterQuery
   ): CursorAndAsyncIterator<Version> => {
     return this.listEndpoint(this.callListEndpointWithPost, query);
-  };
-
-  /**
-   * [Retrieve a workflow version](https://api-docs.cognite.com/20230101-alpha/tag/Workflow-versions/operation/GetSpecificVersion)
-   *
-   * ```js
-   * const version = await client.workflowVersions.retrieve('my-workflow', '1');
-   * ```
-   */
-  public retrieve = async (
-    workflowExternalId: CogniteExternalId,
-    version: string
-  ): Promise<Version> => {
-    const response = await this.get<Version>(
-      `workflows/${workflowExternalId}/versions/${version}`
-    );
-    return this.addToMapAndReturn(response.data, response);
   };
 
   /**
