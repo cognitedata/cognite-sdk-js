@@ -15,6 +15,7 @@ import type {
 } from '@cognite/sdk-core';
 
 export * from '@cognite/sdk';
+export * from './api/workflows/types';
 
 // This file is here mostly to allow apis to import { ... } from '../../types';
 // Overriding types should probably be done in their respective API endpoint files, where possible
