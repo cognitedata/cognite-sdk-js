@@ -51,7 +51,15 @@ export class WorkflowVersionsAPI extends BaseResourceAPI<Version> {
    *   {
    *     workflowExternalId: 'my-workflow',
    *     version: '1',
-   *     workflowDefinition: { tasks: [] },
+   *     workflowDefinition: {
+   *       tasks: [
+   *         {
+   *           externalId: 'task-1',
+   *           type: 'function',
+   *           parameters: { function: { externalId: 'my-function' } },
+   *         },
+   *       ],
+   *     },
    *   },
    * ]);
    * ```

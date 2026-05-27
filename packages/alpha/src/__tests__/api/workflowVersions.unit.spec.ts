@@ -95,6 +95,7 @@ describe('Workflow versions unit test', () => {
     expect(items).toHaveLength(1);
     expect(items[0].workflowExternalId).toEqual('wf-1');
     expect(items[0].version).toEqual('1');
+    expect(items[0].workflowDefinition.hash).toEqual('abc123');
   });
 
   test('delete', async () => {
