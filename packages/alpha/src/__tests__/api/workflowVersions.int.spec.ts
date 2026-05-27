@@ -46,17 +46,13 @@ describe('Workflow versions integration test', () => {
             version: versionExternalId,
           },
         ])
-        .catch(() => {
-          return undefined;
-        });
+        .catch();
     }
 
     if (createdWorkflow) {
       await client.workflows
         .delete([{ externalId: workflowExternalId }])
-        .catch(() => {
-          return undefined;
-        });
+        .catch();
     }
   });
 
