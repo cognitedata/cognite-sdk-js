@@ -147,7 +147,7 @@ export type WorkflowDefinition = {
 };
 
 export type Version = {
-  workflowExternalId: CogniteInternalId;
+  workflowExternalId: CogniteExternalId;
   version: string;
   description?: string;
   createdTime?: number;
@@ -156,7 +156,7 @@ export type Version = {
 };
 
 export type VersionDelete = {
-  workflowExternalId: string;
+  workflowExternalId: CogniteExternalId;
   version: string;
 };
 
