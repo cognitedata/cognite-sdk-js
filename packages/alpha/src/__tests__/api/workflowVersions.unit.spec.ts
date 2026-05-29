@@ -33,8 +33,8 @@ describe('Workflow versions unit test', () => {
       ...versionCreateBody.workflowDefinition,
       hash: 'abc123',
     },
-    createdTime: Date.now(),
-    lastUpdatedTime: Date.now() + 1000,
+    createdTime: 1716900000000,
+    lastUpdatedTime: 1716900001000,
   };
 
   beforeEach(() => {

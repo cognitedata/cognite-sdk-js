@@ -5,15 +5,13 @@ import type CogniteClientAlpha from '../../cogniteClient';
 import type { TaskDefinition, Version, Workflow } from '../../types';
 import { randomInt, setupLoggedInClient } from '../testUtils';
 
-const workflowTasks: TaskDefinition[] = [
-  {
-    externalId: 'int-task-1',
-    type: 'function',
-    parameters: {
-      function: { externalId: 'int-fn-external-id' },
-    },
+const workflowTasks: TaskDefinition = {
+  externalId: 'int-task-1',
+  type: 'function',
+  parameters: {
+    function: { externalId: 'int-fn-external-id' },
   },
-];
+};
 
 describe('Workflow versions integration test', () => {
   let client: CogniteClientAlpha;
@@ -40,7 +38,7 @@ describe('Workflow versions integration test', () => {
         version: versionExternalId,
         workflowDefinition: {
           description: 'integration test workflow version',
-          tasks: [...workflowTasks],
+          tasks: [workflowTasks],
         },
       },
     ]);
@@ -91,7 +89,7 @@ describe('Workflow versions integration test', () => {
         version: versionExternalId,
         workflowDefinition: {
           description: 'integration test workflow version - updated',
-          tasks: [...workflowTasks],
+          tasks: [workflowTasks],
         },
       },
     ]);
@@ -111,7 +109,7 @@ describe('Workflow versions integration test', () => {
         version: deleteVersionId,
         workflowDefinition: {
           description: 'workflow version to delete',
-          tasks: [...workflowTasks],
+          tasks: [workflowTasks],
         },
       },
     ]);

@@ -141,8 +141,6 @@ export type TaskDefinition = {
 export type WorkflowDefinition = {
   hash: string;
   description?: string;
-  createdTime?: string;
-  lastUpdatedTime?: string;
   tasks: TaskDefinition[];
 };
 
