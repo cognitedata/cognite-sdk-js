@@ -60,7 +60,7 @@ describe.skip('Asset integration test', () => {
 
   test('create empty asset array', async () => {
     const err = new CogniteMultiError({
-      succeded: [],
+      succeeded: [],
       failed: [[]],
       errors: [
         new CogniteError(
@@ -73,7 +73,7 @@ describe.skip('Asset integration test', () => {
     await client.assets.create([]).catch((e) => {
       expect(e.missing).toEqual(err.missing);
       expect(e.failed).toEqual(err.failed);
-      expect(e.succeded).toEqual(err.succeded);
+      expect(e.succeeded).toEqual(err.succeeded);
       expect(e.status).toEqual(err.status);
       expect(e.errors[0]).toEqual(err.errors[0]);
       expect(e.responses).toEqual(err.responses);
@@ -102,7 +102,7 @@ describe.skip('Asset integration test', () => {
       if (e instanceof CogniteMultiError) {
         expect(e.status).toEqual(400);
         expect(e.failed).toEqual([corruptedChild]);
-        expect(e.succeded).toEqual([newRootAsset, ...childArr]);
+        expect(e.succeeded).toEqual([newRootAsset, ...childArr]);
         expect(e.responses[0].items.length).toBe(1000);
         expect((e.errors[0] as CogniteError).status).toBe(400);
         expect(e.errors.length).toBe(1);

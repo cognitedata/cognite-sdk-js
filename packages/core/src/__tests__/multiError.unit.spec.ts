@@ -21,13 +21,13 @@ describe('Cognite multi error', () => {
       duplicated: ['this one'],
     });
     const err = new CogniteMultiError({
-      succeded: [[2]],
+      succeeded: [[2]],
       failed: [[0, 1]],
       errors: [nestedErr, nestedErr2],
       responses: [],
     });
 
-    expect(err.succeded).toEqual([2]);
+    expect(err.succeeded).toEqual([2]);
     expect(err.failed).toEqual([0, 1]);
     expect(err.statuses).toEqual([400, 500]);
     expect(err.status).toEqual(400);
@@ -45,10 +45,29 @@ describe('Cognite multi error', () => {
     const err = new CogniteMultiError({
       failed: [],
       errors: [unknownError],
-      succeded: [],
+      succeeded: [],
       responses: [],
     });
 
     expect(err.message).toContain(`"message": "${unknownError.message}"`);
+    expect(err.status).toBeUndefined();
+    expect(err.requestId).toBeUndefined();
+  });
+
+  test('multierror with mixed error types takes status from first CogniteError', () => {
+    const plainError = new Error('network failure');
+    const cogniteError = new CogniteError('bad request', 400, 'r1', {});
+
+    const err = new CogniteMultiError({
+      failed: [[1], [2]],
+      errors: [plainError, cogniteError],
+      succeeded: [],
+      responses: [],
+    });
+
+    expect(err.status).toBeUndefined();
+    expect(err.requestId).toBeUndefined();
+    expect(err.statuses).toEqual([400]);
+    expect(err.requestIds).toEqual(['r1']);
   });
 });

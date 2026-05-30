@@ -1,9 +1,9 @@
 // Copyright 2020 Cognite AS
 
-import inRange from 'lodash/inRange';
 import some from 'lodash/some';
 
 import type { HttpMethod, HttpResponse } from './basicHttpClient';
+import type { HttpErrorData } from './httpError';
 import type { RetryableHttpRequest } from './retryableHttpClient';
 
 /** @hidden */
@@ -16,7 +16,7 @@ export type RetryValidator = (
 /** @hidden */
 export type EndpointList = { [key in HttpMethod]?: string[] };
 
-export const MAX_RETRY_ATTEMPTS = 5;
+export const MAX_RETRY_ATTEMPTS = 10;
 
 export const createRetryValidator = (
   endpointsToRetry: EndpointList,
@@ -30,6 +30,10 @@ export const createRetryValidator = (
   ) => {
     if (retryCount >= maxRetries) {
       return false;
+    }
+    // Honor server-side isAutoRetryable hint from the API response
+    if (getIsAutoRetryable(response) === true) {
+      return true;
     }
     if (!isValidRetryStatusCode(response.status)) {
       return false;
@@ -55,6 +59,10 @@ export const createUniversalRetryValidator =
     if (response.status === 429) {
       return true;
     }
+    // Honor server-side isAutoRetryable hint from the API response
+    if (getIsAutoRetryable(response) === true) {
+      return true;
+    }
     // By default, retry requests with HTTP verbs that are meant to be idempotent
     const httpMethodsToRetry = ['GET', 'HEAD', 'OPTIONS', 'DELETE', 'PUT'];
     const isRetryableHttpMethod =
@@ -65,18 +73,38 @@ export const createUniversalRetryValidator =
     return isValidRetryStatusCode(response.status);
   };
 
+// Matches Python SDK status_forcelist: {429, 502, 503, 504}
+const RETRYABLE_STATUS_CODES = new Set([429, 502, 503, 504]);
+
 function isValidRetryStatusCode(status: number) {
-  return (
-    inRange(status, 100, 200) ||
-    inRange(status, 429, 430) ||
-    inRange(status, 500, 600)
-  );
+  return RETRYABLE_STATUS_CODES.has(status);
 }
 
 function matchPathWithEndpoints(path: string, endpoints: string[]) {
   return some(endpoints, (endpoint) => matchPathWithEndpoint(path, endpoint));
 }
 
+function getIsAutoRetryable(
+  response: HttpResponse<unknown>
+): boolean | undefined {
+  try {
+    return (response.data as HttpErrorData)?.error?.isAutoRetryable;
+  } catch {
+    return undefined;
+  }
+}
+
 function matchPathWithEndpoint(path: string, endpoint: string) {
-  return path.toUpperCase().indexOf(endpoint.toUpperCase()) !== -1;
+  const upperPath = path.toUpperCase();
+  const upperEndpoint = endpoint.toUpperCase();
+  const index = upperPath.indexOf(upperEndpoint);
+  if (index === -1) {
+    return false;
+  }
+  const endPos = index + upperEndpoint.length;
+  return (
+    endPos === upperPath.length ||
+    upperPath[endPos] === '/' ||
+    upperPath[endPos] === '?'
+  );
 }

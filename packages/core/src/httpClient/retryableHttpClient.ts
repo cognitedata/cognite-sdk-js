@@ -9,7 +9,7 @@ import {
   type HttpResponse,
 } from './basicHttpClient';
 import { ExponentialJitterBackoff } from './exponentialJitterBackoff';
-import { MAX_RETRY_ATTEMPTS, type RetryValidator } from './retryValidator';
+import { type RetryValidator } from './retryValidator';
 
 /**
  * The `RetryableHttpClient` class extends the functionality of a basic HTTP client
@@ -43,6 +43,23 @@ export class RetryableHttpClient extends BasicHttpClient {
 
   private static calculateRetryDelayInMs(retryCount: number) {
     return RetryableHttpClient.backoffCalculator.calculateDelayInMs(retryCount);
+  }
+
+  private static parseRetryAfterMs(
+    response: HttpResponse<unknown>
+  ): number | undefined {
+    if (response.status !== 429) {
+      return undefined;
+    }
+    const retryAfter = response.headers['retry-after'];
+    if (!retryAfter) {
+      return undefined;
+    }
+    const seconds = Number(retryAfter);
+    if (!Number.isNaN(seconds) && seconds >= 0) {
+      return seconds * 1000;
+    }
+    return undefined;
   }
 
   constructor(
@@ -113,13 +130,15 @@ export class RetryableHttpClient extends BasicHttpClient {
         : this.retryValidator;
 
       const shouldRetry =
-        retryCount < MAX_RETRY_ATTEMPTS &&
         request.retryValidator !== false &&
         retryValidator(request, response, retryCount);
       if (!shouldRetry) {
         return response;
       }
-      const delayInMs = RetryableHttpClient.calculateRetryDelayInMs(retryCount);
+      const retryAfterDelay = RetryableHttpClient.parseRetryAfterMs(response);
+      const delayInMs =
+        retryAfterDelay ??
+        RetryableHttpClient.calculateRetryDelayInMs(retryCount);
       await sleepPromise(delayInMs);
       retryCount++;
     }

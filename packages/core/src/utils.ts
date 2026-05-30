@@ -89,47 +89,58 @@ export function promiseCache<ReturnValue>(
  * Resolves all Promises at once, even if some of them fail
  */
 /** @hidden */
+export const DEFAULT_CONCURRENCY = 5;
+
 export async function promiseAllAtOnce<RequestType, ResponseType>(
   inputs: RequestType[],
-  promiser: (input: RequestType) => Promise<ResponseType>
+  promiser: (input: RequestType) => Promise<ResponseType>,
+  concurrency: number = DEFAULT_CONCURRENCY
 ) {
   const failed: RequestType[] = [];
-  const succeded: RequestType[] = [];
+  const succeeded: RequestType[] = [];
   const responses: ResponseType[] = [];
   const errors: (Error | CogniteError)[] = [];
 
-  const promises = inputs.map(promiser);
-
   type SingleResult = {
-    succeded?: RequestType;
+    succeeded?: RequestType;
     response?: ResponseType;
     failed?: RequestType;
     error?: Error | CogniteError;
   };
 
-  const wrappedPromises: Promise<SingleResult>[] = promises.map(
-    (promise, index) =>
-      new Promise<SingleResult>((resolve) => {
-        promise
-          .then((result) => {
-            resolve({ succeded: inputs[index], response: result });
-          })
-          .catch((error) => {
-            resolve({ failed: inputs[index], error });
-          });
-      })
-  );
+  const results: SingleResult[] = new Array(inputs.length);
+  let nextIndex = 0;
 
-  const results = await Promise.all(wrappedPromises);
+  async function worker() {
+    while (nextIndex < inputs.length) {
+      const index = nextIndex++;
+      try {
+        const result = await promiser(inputs[index]);
+        results[index] = { succeeded: inputs[index], response: result };
+      } catch (error) {
+        results[index] = {
+          failed: inputs[index],
+          error: error as Error | CogniteError,
+        };
+      }
+    }
+  }
+
+  const workers = Array.from(
+    { length: Math.min(concurrency, inputs.length) },
+    () => worker()
+  );
+  await Promise.all(workers);
+
   for (const res of results) {
     failed.push(...(res.failed ? [res.failed] : []));
-    succeded.push(...(res.succeded ? [res.succeded] : []));
+    succeeded.push(...(res.succeeded ? [res.succeeded] : []));
     responses.push(...(res.response ? [res.response] : []));
     errors.push(...(res.error ? [res.error] : []));
   }
   if (failed.length) {
     throw {
-      succeded,
+      succeeded,
       responses,
       failed,
       errors,
@@ -143,13 +154,15 @@ export async function promiseAllAtOnce<RequestType, ResponseType>(
 export async function promiseAllWithData<RequestType, ResponseType>(
   inputs: RequestType[],
   promiser: (input: RequestType) => Promise<ResponseType>,
-  runSequentially: boolean
+  runSequentially: boolean,
+  concurrency?: number,
+  continueOnError?: boolean
 ) {
   try {
     if (runSequentially) {
-      return await promiseEachInSequence(inputs, promiser);
+      return await promiseEachInSequence(inputs, promiser, continueOnError);
     }
-    return await promiseAllAtOnce(inputs, promiser);
+    return await promiseAllAtOnce(inputs, promiser, concurrency);
   } catch (err) {
     throw new CogniteMultiError(
       err as MultiErrorRawSummary<RequestType, ResponseType>
@@ -164,21 +177,45 @@ export async function promiseAllWithData<RequestType, ResponseType>(
  */
 export async function promiseEachInSequence<RequestType, ResponseType>(
   inputs: RequestType[],
-  promiser: (input: RequestType) => Promise<ResponseType>
+  promiser: (input: RequestType) => Promise<ResponseType>,
+  continueOnError?: boolean
 ) {
-  return inputs.reduce(async (previousPromise, input, index) => {
-    const prevResult = await previousPromise;
+  if (!continueOnError) {
+    return inputs.reduce(async (previousPromise, input, index) => {
+      const prevResult = await previousPromise;
+      try {
+        return prevResult.concat(await promiser(input));
+      } catch (err) {
+        throw {
+          errors: [err],
+          failed: inputs.slice(index),
+          succeeded: inputs.slice(0, index),
+          responses: prevResult,
+        };
+      }
+    }, Promise.resolve(new Array<ResponseType>()));
+  }
+
+  const responses: ResponseType[] = [];
+  const errors: unknown[] = [];
+  const failed: RequestType[] = [];
+  const succeeded: RequestType[] = [];
+
+  for (const input of inputs) {
     try {
-      return prevResult.concat(await promiser(input));
+      responses.push(await promiser(input));
+      succeeded.push(input);
     } catch (err) {
-      throw {
-        errors: [err],
-        failed: inputs.slice(index),
-        succeded: inputs.slice(0, index),
-        responses: prevResult,
-      };
+      errors.push(err);
+      failed.push(input);
     }
-  }, Promise.resolve(new Array<ResponseType>()));
+  }
+
+  if (errors.length > 0) {
+    throw { errors, failed, succeeded, responses };
+  }
+
+  return responses;
 }
 
 /** @hidden */

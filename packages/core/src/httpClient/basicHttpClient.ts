@@ -89,7 +89,7 @@ export class BasicHttpClient {
   private static transformRequestBody(data: unknown) {
     const isJSONStringifyable = isJson(data);
     if (isJSONStringifyable) {
-      return JSON.stringify(data, null, 2);
+      return JSON.stringify(data);
     }
     return data;
   }
@@ -101,6 +101,7 @@ export class BasicHttpClient {
   }
 
   private defaultHeaders: HttpHeaders = {};
+  private inFlightRequests = new Map<string, Promise<HttpResponse<any>>>();
 
   /**
    * A basic http client with the option of adding default headers,
@@ -243,9 +244,36 @@ export class BasicHttpClient {
   }
 
   protected async request<ResponseType>(request: HttpRequest) {
+    if (!request.dedupable) {
+      return this.executeRequest<ResponseType>(request);
+    }
+
+    const cacheKey = BasicHttpClient.buildDedupKey(request);
+    const inFlight = this.inFlightRequests.get(cacheKey);
+    if (inFlight) {
+      return inFlight as Promise<HttpResponse<ResponseType>>;
+    }
+
+    const promise = this.executeRequest<ResponseType>(request).finally(() => {
+      this.inFlightRequests.delete(cacheKey);
+    });
+    this.inFlightRequests.set(cacheKey, promise);
+    return promise;
+  }
+
+  private async executeRequest<ResponseType>(request: HttpRequest) {
     const mutatedRequest = await this.preRequest(request);
     const rawResponse = await this.rawRequest<ResponseType>(mutatedRequest);
     return this.postRequest(rawResponse, request, mutatedRequest);
+  }
+
+  private static buildDedupKey(request: HttpRequest): string {
+    return JSON.stringify({
+      m: request.method,
+      p: request.path,
+      q: request.params,
+      d: request.data,
+    });
   }
 
   private constructUrl<T extends object>(path: string, params?: T) {
@@ -327,6 +355,12 @@ export interface HttpRequestOptions {
    * Set this to 'true' if you want to send credentials (access token) with the request to other domains than the specified base url.
    */
   withCredentials?: boolean;
+  /**
+   * When true, identical in-flight requests (same method, path, params, and body)
+   * are coalesced into a single fetch. Useful for GET-like POST endpoints
+   * such as /list, /byids, and /search.
+   */
+  dedupable?: boolean;
 }
 
 export interface HttpResponse<T> {

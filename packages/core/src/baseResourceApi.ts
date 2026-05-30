@@ -62,6 +62,8 @@ export abstract class BaseResourceAPI<ResponseType> {
     return chunk(items, chunkSize);
   }
 
+  protected readonly sequentialCreate: boolean = false;
+
   protected readonly dateParser: DateParser;
 
   /** @hidden */
@@ -436,6 +438,7 @@ export abstract class BaseResourceAPI<ResponseType> {
     params,
     queryParams,
     chunkSize = 1000,
+    concurrency,
   }: PostInParallelWithAutomaticChunkingParams<RequestType, ParamsType>) {
     return promiseAllWithData(
       BaseResourceAPI.chunk(items, chunkSize),
@@ -444,7 +447,8 @@ export abstract class BaseResourceAPI<ResponseType> {
           data: { ...params, items: singleChunk },
           params: queryParams,
         }),
-      false
+      false,
+      concurrency
     );
   }
 
@@ -452,19 +456,24 @@ export abstract class BaseResourceAPI<ResponseType> {
     items: RequestType[],
     path: string
   ) {
-    return this.postInSequenceWithAutomaticChunking<RequestType>(path, items);
+    return this.postWithAutomaticChunking<RequestType>(
+      path,
+      items,
+      this.sequentialCreate
+    );
   }
 
   private async callUpsertEndpoint<RequestType>(
     items: RequestType[],
     path: string = this.upsertUrl
   ) {
-    return this.postInSequenceWithAutomaticChunking<RequestType>(path, items);
+    return this.postWithAutomaticChunking<RequestType>(path, items, true);
   }
 
-  private postInSequenceWithAutomaticChunking<RequestType>(
+  private postWithAutomaticChunking<RequestType>(
     path: string,
     items: RequestType[],
+    sequential: boolean,
     params?: HttpQueryParams
   ) {
     return promiseAllWithData(
@@ -474,6 +483,8 @@ export abstract class BaseResourceAPI<ResponseType> {
           data: { items: singleChunk },
           params,
         }),
+      sequential,
+      undefined,
       true
     );
   }
@@ -489,6 +500,7 @@ interface PostInParallelWithAutomaticChunkingParams<RequestType, ParamsType> {
   params?: ParamsType;
   queryParams?: ParamsType;
   chunkSize?: number;
+  concurrency?: number;
 }
 
 type KeysOfType<T, U> = { [P in keyof T]: T[P] extends U ? P : never }[keyof T];

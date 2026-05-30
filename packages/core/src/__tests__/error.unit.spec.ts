@@ -108,4 +108,72 @@ describe('handleErrorResponse', () => {
       expect(e.missing).toEqual([internalIdObject, externalIdObject]);
     }
   });
+
+  test('extracts isAutoRetryable from API response', () => {
+    const httpError = new HttpError(
+      429,
+      {
+        error: {
+          code: 429,
+          message: 'Too many requests',
+          isAutoRetryable: true,
+        },
+      },
+      {}
+    );
+    expect.assertions(3);
+    try {
+      handleErrorResponse(httpError);
+    } catch (e) {
+      if (!(e instanceof CogniteError)) {
+        throw e;
+      }
+      expect(e.isAutoRetryable).toBe(true);
+      expect(e.toJSON().isAutoRetryable).toBe(true);
+      expect(e.status).toBe(429);
+    }
+  });
+
+  test('omits isAutoRetryable when not present in API response', () => {
+    const httpError = new HttpError(
+      500,
+      createErrorResponse(500, 'Internal error'),
+      {}
+    );
+    expect.assertions(1);
+    try {
+      handleErrorResponse(httpError);
+    } catch (e) {
+      if (!(e instanceof CogniteError)) {
+        throw e;
+      }
+      expect(e.isAutoRetryable).toBeUndefined();
+    }
+  });
+
+  test('preserves API error code distinct from HTTP status', () => {
+    const httpStatus = 400;
+    const apiErrorCode = 499;
+    const httpError = new HttpError(
+      httpStatus,
+      {
+        error: {
+          code: apiErrorCode,
+          message: 'Some specific error',
+        },
+      },
+      {}
+    );
+    expect.assertions(3);
+    try {
+      handleErrorResponse(httpError);
+    } catch (e) {
+      if (!(e instanceof CogniteError)) {
+        throw e;
+      }
+      expect(e.status).toBe(httpStatus);
+      expect(e.errorCode).toBe(apiErrorCode);
+      expect(e.toJSON().errorCode).toBe(apiErrorCode);
+    }
+  });
 });

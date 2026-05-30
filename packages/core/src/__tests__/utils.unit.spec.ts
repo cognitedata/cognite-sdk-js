@@ -75,7 +75,7 @@ describe('utils', () => {
         )
       ).rejects.toEqual({
         failed: ['x'],
-        succeded: ['a', 'b', 'c'],
+        succeeded: ['a', 'b', 'c'],
         errors: ['xx'],
         responses: ['ar', 'br', 'cr'],
       });
@@ -88,7 +88,7 @@ describe('utils', () => {
         });
       await expect(promiseAllAtOnce(['x'], fail)).rejects.toEqual({
         failed: ['x'],
-        succeded: [],
+        succeeded: [],
         errors: [new Error('y')],
         responses: [],
       });
@@ -110,6 +110,36 @@ describe('utils', () => {
       await expect(promiseAllAtOnce(data, promiser)).resolves.toEqual(data);
     });
 
+    test('promiseAllAtOnce: respects concurrency limit', async () => {
+      let activeConcurrency = 0;
+      let maxObservedConcurrency = 0;
+      const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+      const promiser = async (input: number) => {
+        activeConcurrency++;
+        maxObservedConcurrency = Math.max(
+          maxObservedConcurrency,
+          activeConcurrency
+        );
+        await sleepPromise(10);
+        activeConcurrency--;
+        return input;
+      };
+      const result = await promiseAllAtOnce(data, promiser, 3);
+      expect(result).toEqual(data);
+      expect(maxObservedConcurrency).toBeLessThanOrEqual(3);
+      expect(maxObservedConcurrency).toBeGreaterThan(1);
+    });
+
+    test('promiseAllAtOnce: concurrency higher than input count', async () => {
+      const data = [1, 2];
+      const result = await promiseAllAtOnce(
+        data,
+        (input) => Promise.resolve(input * 2),
+        100
+      );
+      expect(result).toEqual([2, 4]);
+    });
+
     test('promiseEachInSequence', async () => {
       expect(
         await promiseEachInSequence([], (input) => Promise.resolve(input))
@@ -129,7 +159,7 @@ describe('utils', () => {
         promiseEachInSequence([1, 2], () => Promise.reject('reject'))
       ).rejects.toEqual({
         failed: [1, 2],
-        succeded: [],
+        succeeded: [],
         errors: ['reject'],
         responses: [],
       });
@@ -140,7 +170,7 @@ describe('utils', () => {
         )
       ).rejects.toEqual({
         failed: [0, 2, 3],
-        succeded: [1],
+        succeeded: [1],
         errors: ['x'],
         responses: [1],
       });
@@ -151,9 +181,48 @@ describe('utils', () => {
         )
       ).rejects.toEqual({
         failed: [0, 3, 0],
-        succeded: [1, 2],
+        succeeded: [1, 2],
         errors: ['x'],
         responses: ['1r', '2r'],
+      });
+    });
+
+    test('promiseEachInSequence with continueOnError', async () => {
+      // all succeed - same behavior
+      expect(
+        await promiseEachInSequence(
+          [1, 2, 3],
+          (input) => Promise.resolve(input),
+          true
+        )
+      ).toEqual([1, 2, 3]);
+
+      // continues past failures and collects all errors
+      await expect(
+        promiseEachInSequence(
+          [1, 0, 2, 3, 0],
+          (input) => (input ? Promise.resolve(`${input}r`) : Promise.reject('x')),
+          true
+        )
+      ).rejects.toEqual({
+        failed: [0, 0],
+        succeeded: [1, 2, 3],
+        errors: ['x', 'x'],
+        responses: ['1r', '2r', '3r'],
+      });
+
+      // all fail
+      await expect(
+        promiseEachInSequence(
+          [0, 0, 0],
+          (input) => (input ? Promise.resolve(input) : Promise.reject('err')),
+          true
+        )
+      ).rejects.toEqual({
+        failed: [0, 0, 0],
+        succeeded: [],
+        errors: ['err', 'err', 'err'],
+        responses: [],
       });
     });
   });

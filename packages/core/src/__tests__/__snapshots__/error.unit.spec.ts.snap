@@ -36,6 +36,7 @@ exports[`handleErrorResponse > extra fields 1`] = `
       "source": "string"
     }
   ],
+  "errorCode": 500,
   "extra": {
     "extraErrorInformation": "test"
   },

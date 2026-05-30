@@ -9,7 +9,10 @@ export class CogniteError extends Error {
   public requestId?: string;
   public missing?: object[];
   public duplicated?: unknown[];
+  public forbidden?: object[];
   public extra?: unknown;
+  public errorCode?: number;
+  public isAutoRetryable?: boolean;
   /** @hidden */
   constructor(
     errorMessage: string,
@@ -18,15 +21,19 @@ export class CogniteError extends Error {
     otherFields: {
       missing?: object[];
       duplicated?: unknown[];
+      forbidden?: object[];
       extra?: unknown;
+      errorCode?: number;
+      isAutoRetryable?: boolean;
     } = {}
   ) {
     let message = `${errorMessage} | code: ${status}`;
     if (requestId) {
       message += ` | X-Request-ID: ${requestId}`;
     }
-    const { missing, duplicated, extra } = otherFields;
-    if (missing || duplicated) {
+    const { missing, duplicated, forbidden, extra, errorCode, isAutoRetryable } =
+      otherFields;
+    if (missing || duplicated || forbidden) {
       message += `\n${JSON.stringify(otherFields, null, 2)}`;
     }
     super(message);
@@ -36,7 +43,10 @@ export class CogniteError extends Error {
     this.requestId = requestId;
     this.missing = missing;
     this.duplicated = duplicated;
+    this.forbidden = forbidden;
     this.extra = extra;
+    this.errorCode = errorCode;
+    this.isAutoRetryable = isAutoRetryable;
     if (Error.captureStackTrace) {
       Error.captureStackTrace(this, this.constructor);
     } else {
@@ -58,8 +68,17 @@ export class CogniteError extends Error {
     if (this.duplicated) {
       jsonObject.duplicated = this.duplicated;
     }
+    if (this.forbidden) {
+      jsonObject.forbidden = this.forbidden;
+    }
     if (this.extra) {
       jsonObject.extra = this.extra;
+    }
+    if (this.errorCode !== undefined) {
+      jsonObject.errorCode = this.errorCode;
+    }
+    if (this.isAutoRetryable !== undefined) {
+      jsonObject.isAutoRetryable = this.isAutoRetryable;
     }
     return jsonObject;
   }
@@ -69,7 +88,10 @@ export class CogniteError extends Error {
 export function handleErrorResponse(err: HttpError) {
   let code: number;
   let duplicated: object[] | undefined;
+  let errorCode: number | undefined;
   let extra: unknown;
+  let forbidden: object[] | undefined;
+  let isAutoRetryable: boolean | undefined;
   let message: string;
   let missing: object[] | undefined;
   let requestId: string | undefined;
@@ -77,16 +99,22 @@ export function handleErrorResponse(err: HttpError) {
     code = err.status;
     const data = err.data;
     duplicated = data.error.duplicated;
+    errorCode = data.error.code;
     message = data.error.message;
     missing = data.error.missing;
+    forbidden = data.error.forbidden;
     extra = data.error.extra;
+    isAutoRetryable = data.error.isAutoRetryable;
     requestId = getHeaderField(err.headers || {}, X_REQUEST_ID);
   } catch (_) {
     throw err;
   }
   throw new CogniteError(message, code, requestId, {
     duplicated,
+    errorCode,
     extra,
+    forbidden,
+    isAutoRetryable,
     missing,
   });
 }

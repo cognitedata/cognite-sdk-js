@@ -34,6 +34,7 @@ export { RevertableArraySorter } from './revertableArraySorter';
 export {
   sleepPromise,
   apiUrl,
+  DEFAULT_CONCURRENCY,
   promiseAllAtOnce,
   promiseAllWithData,
   promiseEachInSequence,

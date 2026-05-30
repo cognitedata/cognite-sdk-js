@@ -116,7 +116,7 @@ describe('Assets unit test', () => {
         )
       ).rejects.toEqual({
         failed: ['x'],
-        succeded: ['a', 'b', 'c'],
+        succeeded: ['a', 'b', 'c'],
         errors: ['xx'],
         responses: ['ar', 'br', 'cr'],
       });
@@ -129,7 +129,7 @@ describe('Assets unit test', () => {
         });
       await expect(promiseAllAtOnce(['x'], fail)).rejects.toEqual({
         failed: ['x'],
-        succeded: [],
+        succeeded: [],
         errors: [new Error('y')],
         responses: [],
       });
@@ -161,7 +161,7 @@ describe('Assets unit test', () => {
         promiseEachInSequence([1, 2], () => Promise.reject('reject'))
       ).rejects.toEqual({
         failed: [1, 2],
-        succeded: [],
+        succeeded: [],
         errors: ['reject'],
         responses: [],
       });
@@ -172,7 +172,7 @@ describe('Assets unit test', () => {
         )
       ).rejects.toEqual({
         failed: [0, 2, 3],
-        succeded: [1],
+        succeeded: [1],
         errors: ['x'],
         responses: [1],
       });
@@ -183,7 +183,7 @@ describe('Assets unit test', () => {
         )
       ).rejects.toEqual({
         failed: [0, 3, 0],
-        succeded: [1, 2],
+        succeeded: [1, 2],
         errors: ['x'],
         responses: ['1r', '2r'],
       });
