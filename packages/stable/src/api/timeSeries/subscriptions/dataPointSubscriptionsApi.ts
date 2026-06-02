@@ -1,6 +1,10 @@
 // Copyright 2026 Cognite AS
 
-import { BaseResourceAPI } from '@cognite/sdk-core';
+import {
+  BaseResourceAPI,
+  type CursorAndAsyncIterator,
+  type CursorResponse,
+} from '@cognite/sdk-core';
 import cloneDeepWith from 'lodash/cloneDeepWith';
 import type {
   DataPointSubscription,
@@ -9,9 +13,8 @@ import type {
   DataPointSubscriptionListDataQuery,
   DataPointSubscriptionListDataResponse,
   DataPointSubscriptionListQuery,
-  DataPointSubscriptionListResponse,
+  DataPointSubscriptionMember,
   DataPointSubscriptionMembersListQuery,
-  DataPointSubscriptionMembersListResponse,
   DataPointSubscriptionUpdate,
   DataPointSubscriptionsDeleteQuery,
 } from './types';
@@ -46,14 +49,10 @@ export class DataPointSubscriptionsAPI extends BaseResourceAPI<DataPointSubscrip
    * const subscriptions = await client.timeseries.subscriptions.list({ limit: 100 });
    * ```
    */
-  public list = async (
+  public list = (
     query?: DataPointSubscriptionListQuery
-  ): Promise<DataPointSubscriptionListResponse> => {
-    const response = await this.get<DataPointSubscriptionListResponse>(
-      this.url(),
-      { params: query }
-    );
-    return this.addToMapAndReturn(response.data, response);
+  ): CursorAndAsyncIterator<DataPointSubscription> => {
+    return super.listEndpoint(this.callListEndpointWithGet, query);
   };
 
   /**
@@ -119,14 +118,19 @@ export class DataPointSubscriptionsAPI extends BaseResourceAPI<DataPointSubscrip
    * });
    * ```
    */
-  public listMembers = async (
-    query: DataPointSubscriptionMembersListQuery
-  ): Promise<DataPointSubscriptionMembersListResponse> => {
-    const response = await this.get<DataPointSubscriptionMembersListResponse>(
+  private callListMembersEndpointWithGet = async (
+    scope?: DataPointSubscriptionMembersListQuery
+  ) => {
+    return this.get<CursorResponse<DataPointSubscriptionMember[]>>(
       this.url('members'),
-      { params: query }
+      { params: scope }
     );
-    return this.addToMapAndReturn(response.data, response);
+  };
+
+  public listMembers = (
+    query: DataPointSubscriptionMembersListQuery
+  ): CursorAndAsyncIterator<DataPointSubscriptionMember> => {
+    return this.cursorBasedEndpoint(this.callListMembersEndpointWithGet, query);
   };
 
   /**
