@@ -44,6 +44,8 @@ export enum TaskTypeEnum {
   SIMULATION = 'simulation',
 }
 
+export type TaskTypes = `${TaskTypeEnum}` | string;
+
 export enum ConcurrencyPolicyTypeEnum {
   FAIL = 'fail',
   WAIT_FOR_CURRENT = 'waitForCurrent',
@@ -128,7 +130,7 @@ export type TaskDependency = {
 };
 export type TaskDefinition = {
   externalId: string;
-  type: TaskTypeEnum | string;
+  type: TaskTypes;
   name?: string;
   description?: string;
   parameters?: TaskParameters;
