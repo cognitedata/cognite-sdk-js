@@ -52,17 +52,23 @@ export enum ConcurrencyPolicyTypeEnum {
   RESTART_AFTER_CURRENT = 'restartAfterCurrent',
 }
 
+export type ConcurrencyPolicyType = `${ConcurrencyPolicyTypeEnum}`;
+
 export enum CdfRequestMethodTypesEnum {
   GET = 'GET',
   POST = 'POST',
   PUT = 'PUT',
 }
 
+export type CdfRequestMethodTypes = `${CdfRequestMethodTypesEnum}` | string;
+
 export enum CdfVersionHeaderEnum {
   NONE = '',
   ALPHA = 'alpha',
   BETA = 'beta',
 }
+
+export type CdfVersionHeader = `${CdfVersionHeaderEnum}`;
 
 export type FunctionTaskParameters = {
   function?: {
@@ -75,7 +81,7 @@ export type FunctionTaskParameters = {
 export type TransformationTaskParameters = {
   transformation?: {
     externalId?: string;
-    concurrencyPolicy?: ConcurrencyPolicyTypeEnum;
+    concurrencyPolicy?: ConcurrencyPolicyType;
     useTransformationCredentials?: boolean;
   };
 };
@@ -90,10 +96,10 @@ export type CdfRequestTaskParameters = {
   cdfRequest?: {
     resourcePath?: string;
     queryParameters?: JsonValue;
-    method?: CdfRequestMethodTypesEnum | string;
+    method?: CdfRequestMethodTypes;
     body?: JsonValue;
     requestTimeoutInMillis?: number;
-    cdfVersionHeader?: CdfVersionHeaderEnum | string;
+    cdfVersionHeader?: CdfVersionHeader | string;
   };
 };
 
@@ -125,6 +131,9 @@ export enum OnFailureTypeEnum {
   ABORT_WORKFLOW = 'abortWorkflow',
   SKIP_TASK = 'skipTask',
 }
+
+export type OnFailureType = `${OnFailureTypeEnum}`;
+
 export type TaskDependency = {
   externalId: string;
 };
@@ -137,7 +146,7 @@ export type TaskDefinition = {
   retries?: number;
   timeout?: number;
   dependsOn?: TaskDependency[];
-  onFailure?: OnFailureTypeEnum;
+  onFailure?: OnFailureType;
 };
 
 export type WorkflowDefinition = {
