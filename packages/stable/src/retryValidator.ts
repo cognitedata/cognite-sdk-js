@@ -23,6 +23,11 @@ const ENDPOINTS_TO_RETRY: EndpointList = {
     '/timeseries/data/latest',
     '/timeseries/data/delete',
     '/timeseries/synthetic/query',
+    '/records/filter',
+    '/records/sync',
+    '/records/aggregate',
+    '/records/upsert',
+    '/records/delete',
   ],
 };
 
