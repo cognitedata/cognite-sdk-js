@@ -145,10 +145,18 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
    * });
    * ```
    */
-  public filter = (async (
+  public filter(
+    streamExternalId: string,
+    request: RecordFilterRequestWithTyping
+  ): Promise<RecordFilterResponse>;
+  public filter(
+    streamExternalId: string,
+    request?: RecordFilterRequestWithoutTyping
+  ): Promise<RecordItem[]>;
+  public async filter(
     streamExternalId: string,
     request: RecordFilterRequest = {}
-  ): Promise<RecordItem[] | RecordFilterResponse> => {
+  ): Promise<RecordItem[] | RecordFilterResponse> {
     const path = this.url(
       `${encodeURIComponent(streamExternalId)}/records/filter`
     );
@@ -163,16 +171,7 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
       };
     }
     return items;
-  }) as {
-    (
-      streamExternalId: string,
-      request: RecordFilterRequestWithTyping
-    ): Promise<RecordFilterResponse>;
-    (
-      streamExternalId: string,
-      request?: RecordFilterRequestWithoutTyping
-    ): Promise<RecordItem[]>;
-  };
+  }
 
   /**
    * [Sync records from a stream](https://developer.cognite.com/api#tag/Records/operation/syncRecords)
@@ -247,10 +246,18 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
    * });
    * ```
    */
-  public aggregate = (async (
+  public aggregate(
+    streamExternalId: string,
+    request: RecordAggregateRequestWithTyping
+  ): Promise<RecordAggregateResponse>;
+  public aggregate(
+    streamExternalId: string,
+    request: RecordAggregateRequestWithoutTyping
+  ): Promise<RecordAggregateResults>;
+  public async aggregate(
     streamExternalId: string,
     request: RecordAggregateRequest
-  ): Promise<RecordAggregateResults | RecordAggregateResponse> => {
+  ): Promise<RecordAggregateResults | RecordAggregateResponse> {
     const path = this.url(
       `${encodeURIComponent(streamExternalId)}/records/aggregate`
     );
@@ -264,16 +271,7 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
       };
     }
     return response.data.aggregates;
-  }) as {
-    (
-      streamExternalId: string,
-      request: RecordAggregateRequestWithTyping
-    ): Promise<RecordAggregateResponse>;
-    (
-      streamExternalId: string,
-      request: RecordAggregateRequestWithoutTyping
-    ): Promise<RecordAggregateResults>;
-  };
+  }
 }
 
 type SyncEndpointCaller = (params?: RecordSyncRequest) => Promise<{
