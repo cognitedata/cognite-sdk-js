@@ -2,11 +2,7 @@
 
 import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest';
 import type CogniteClient from '../../cogniteClient';
-import type {
-  ContainerCreateDefinition,
-  RecordDelete,
-  SyncRecordItem,
-} from '../../types';
+import type { RecordDelete, SyncRecordItem } from '../../types';
 import {
   RECORDS_TEST_SPACE,
   randomInt,
@@ -41,24 +37,16 @@ describe('records integration test', () => {
       });
     }
 
-    // Check if container already exists (which means space also exists)
-    const baseContainerLookup = await client.containers.retrieve([
-      { space: testSpaceId, externalId: testContainerId },
+    await client.spaces.upsert([
+      {
+        space: testSpaceId,
+        name: testSpaceId,
+        description: 'Space used for records integration tests.',
+      },
     ]);
-    if (
-      !baseContainerLookup.items.some((c) => c.externalId === testContainerId)
-    ) {
-      // Create the test space if it doesn't exist (upsert is idempotent)
-      await client.spaces.upsert([
-        {
-          space: testSpaceId,
-          name: testSpaceId,
-          description: 'Space used for records integration tests.',
-        },
-      ]);
 
-      // Create the container for records tests
-      const containerDefinition: ContainerCreateDefinition = {
+    await client.containers.upsert([
+      {
         externalId: testContainerId,
         space: testSpaceId,
         name: 'Test Records Container',
@@ -75,25 +63,8 @@ describe('records integration test', () => {
             type: { type: 'timestamp' },
           },
         },
-      };
-
-      await client.containers.upsert([containerDefinition]);
-    }
-
-    const unitsContainerLookup = await client.containers.retrieve([
-      { space: testSpaceId, externalId: unitsContainerId },
-    ]);
-    if (
-      !unitsContainerLookup.items.some((c) => c.externalId === unitsContainerId)
-    ) {
-      await client.spaces.upsert([
-        {
-          space: testSpaceId,
-          name: testSpaceId,
-          description: 'Space used for records integration tests.',
-        },
-      ]);
-      const unitsContainerDef: ContainerCreateDefinition = {
+      },
+      {
         externalId: unitsContainerId,
         space: testSpaceId,
         name: 'Records units test container',
@@ -120,9 +91,8 @@ describe('records integration test', () => {
             },
           },
         },
-      };
-      await client.containers.upsert([unitsContainerDef]);
-    }
+      },
+    ]);
   }, 60_000);
 
   test('ingest and filter records', async () => {
