@@ -153,6 +153,110 @@ export interface RecordSort {
 }
 
 /**
+ * Reference to a unit from the CDF unit catalog (e.g. `temperature:deg_c`).
+ */
+export interface RecordUnitReference {
+  externalId: string;
+}
+
+/**
+ * Container property path for unit conversion (exactly three segments: space, container, property).
+ */
+export type TargetUnitProperty = [string, string, string];
+
+export type TargetUnitOrUnitSystem =
+  | { unitSystemName: string }
+  | RecordUnitReference;
+
+/**
+ * Per-property target unit or unit system for {@link RecordTargetUnits}.
+ */
+export interface PropertySpecificTargetUnit {
+  property: TargetUnitProperty;
+  unit: TargetUnitOrUnitSystem;
+}
+
+/**
+ * Request-time unit conversion for filter, sync, and aggregate.
+ * Applies to both response values and filter thresholds on listed properties.
+ */
+export type RecordTargetUnits =
+  | { unitSystemName: string }
+  | { properties: PropertySpecificTargetUnit[] };
+
+/** Metadata for a single enum value in typing responses */
+export interface RecordEnumValue {
+  name?: string;
+  description?: string;
+}
+
+export interface RecordTextPropertyType {
+  type: 'text';
+  list: boolean;
+  maxListSize?: number;
+  maxTextSize?: number;
+}
+
+export interface RecordDirectRelationPropertyType {
+  type: 'direct';
+  list: boolean;
+  maxListSize?: number;
+  container?: ContainerReference;
+}
+
+export interface RecordPrimitivePropertyType {
+  type:
+    | 'boolean'
+    | 'float32'
+    | 'float64'
+    | 'int32'
+    | 'int64'
+    | 'timestamp'
+    | 'date'
+    | 'json';
+  list: boolean;
+  maxListSize?: number;
+  unit?: RecordUnitReference;
+}
+
+export interface RecordEnumPropertyType {
+  type: 'enum';
+  list: boolean;
+  maxListSize?: number;
+  values: Record<string, RecordEnumValue>;
+  unknownValue?: string;
+}
+
+export type RecordPropertyTypeDefinition =
+  | RecordTextPropertyType
+  | RecordDirectRelationPropertyType
+  | RecordPrimitivePropertyType
+  | RecordEnumPropertyType;
+
+/**
+ * Property schema entry returned when `includeTyping` is true.
+ */
+export interface RecordContainerPropertyDefinition {
+  nullable: boolean;
+  defaultValue: string | number | boolean | object | null;
+  description?: string;
+  name?: string;
+  type: RecordPropertyTypeDefinition;
+}
+
+/**
+ * Nested typing map: space → container → property → definition.
+ * Present when `includeTyping` is true in the request.
+ */
+export type RecordTypeInformation = {
+  [space: string]: {
+    [containerExternalId: string]: {
+      [property: string]: RecordContainerPropertyDefinition;
+    };
+  };
+};
+
+/**
  * Property reference for filters. Either a top-level property (1 element) or
  * a container property [space, container, property] (3 elements).
  */
@@ -222,7 +326,24 @@ export interface RecordFilterRequest {
    * Maximum number of results to return (default: 10, max: 1000)
    */
   limit?: number;
+  /**
+   * Convert float properties to another unit or unit system (response and filter values).
+   */
+  targetUnits?: RecordTargetUnits;
+  /**
+   * When true, include property type information (and resolved units when combined with `targetUnits`).
+   */
+  includeTyping?: boolean;
 }
+
+export type RecordFilterRequestWithTyping = RecordFilterRequest & {
+  includeTyping: true;
+};
+
+export type RecordFilterRequestWithoutTyping = Omit<
+  RecordFilterRequest,
+  'includeTyping'
+> & { includeTyping?: false };
 
 /**
  * A record retrieved from a stream
@@ -268,6 +389,8 @@ export interface RecordFilterResponse {
    * List of records matching the filter
    */
   items: RecordItem[];
+  /** Present when `includeTyping` was requested */
+  typing?: RecordTypeInformation;
 }
 
 /**
@@ -302,6 +425,10 @@ export interface RecordSyncRequest {
   initializeCursor?: string;
   /** Maximum number of results to return (default: 10, max: 1000) */
   limit?: number;
+  /** Convert float properties to another unit or unit system (response and filter values). */
+  targetUnits?: RecordTargetUnits;
+  /** When true, include property type information (and resolved units when combined with `targetUnits`). */
+  includeTyping?: boolean;
 }
 
 /**
@@ -313,6 +440,8 @@ export interface RecordSyncResponse {
   nextCursor: string;
   /** Whether there are more records to sync */
   hasNext: boolean;
+  /** Present when `includeTyping` was requested */
+  typing?: RecordTypeInformation;
 }
 
 /**
@@ -324,6 +453,8 @@ export interface RecordsSyncListResponse<T> extends ListResponse<T> {
   nextCursor: string;
   hasNext: boolean;
   next?: () => Promise<RecordsSyncListResponse<T>>;
+  /** Present when `includeTyping` was requested */
+  typing?: RecordTypeInformation;
 }
 
 /**
@@ -492,7 +623,20 @@ export interface RecordAggregateRequest {
   filter?: RecordFilter;
   /** Dictionary of aggregates with client-defined identifiers */
   aggregates: RecordAggregates;
+  /** Convert float properties to another unit or unit system (response and filter values). */
+  targetUnits?: RecordTargetUnits;
+  /** When true, include property type information (and resolved units when combined with `targetUnits`). */
+  includeTyping?: boolean;
 }
+
+export type RecordAggregateRequestWithTyping = RecordAggregateRequest & {
+  includeTyping: true;
+};
+
+export type RecordAggregateRequestWithoutTyping = Omit<
+  RecordAggregateRequest,
+  'includeTyping'
+> & { includeTyping?: false };
 
 // Aggregate result types
 export interface AvgAggregateResult {
@@ -581,4 +725,6 @@ export type RecordAggregateResults = Record<string, RecordAggregateResult>;
 /** Response from the aggregate records endpoint */
 export interface RecordAggregateResponse {
   aggregates: RecordAggregateResults;
+  /** Present when `includeTyping` was requested */
+  typing?: RecordTypeInformation;
 }
