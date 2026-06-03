@@ -2,11 +2,7 @@
 
 import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest';
 import type CogniteClient from '../../cogniteClient';
-import type {
-  ContainerCreateDefinition,
-  RecordDelete,
-  SyncRecordItem,
-} from '../../types';
+import type { RecordDelete, SyncRecordItem } from '../../types';
 import {
   RECORDS_TEST_SPACE,
   randomInt,
@@ -22,6 +18,7 @@ describe('records integration test', () => {
   // Reusable space and container
   const testSpaceId = RECORDS_TEST_SPACE;
   const testContainerId = 'sdk_test_records_container';
+  const unitsContainerId = 'sdk_test_records_units_container';
 
   beforeAll(async () => {
     client = setupLoggedInClient();
@@ -40,24 +37,16 @@ describe('records integration test', () => {
       });
     }
 
-    // Check if container already exists (which means space also exists)
-    try {
-      await client.containers.retrieve([
-        { space: testSpaceId, externalId: testContainerId },
-      ]);
-    } catch {
-      // Container doesn't exist, need to create space and container
-      // Create the test space if it doesn't exist (upsert is idempotent)
-      await client.spaces.upsert([
-        {
-          space: testSpaceId,
-          name: testSpaceId,
-          description: 'Space used for records integration tests.',
-        },
-      ]);
+    await client.spaces.upsert([
+      {
+        space: testSpaceId,
+        name: testSpaceId,
+        description: 'Space used for records integration tests.',
+      },
+    ]);
 
-      // Create the container for records tests
-      const containerDefinition: ContainerCreateDefinition = {
+    await client.containers.upsert([
+      {
         externalId: testContainerId,
         space: testSpaceId,
         name: 'Test Records Container',
@@ -74,10 +63,36 @@ describe('records integration test', () => {
             type: { type: 'timestamp' },
           },
         },
-      };
-
-      await client.containers.upsert([containerDefinition]);
-    }
+      },
+      {
+        externalId: unitsContainerId,
+        space: testSpaceId,
+        name: 'Records units test container',
+        description:
+          'Container with unit-aware floats for Records conversion tests.',
+        usedFor: 'record',
+        properties: {
+          label: {
+            nullable: true,
+            type: { type: 'text' },
+          },
+          maxPressure: {
+            nullable: true,
+            type: {
+              type: 'float64',
+              unit: { externalId: 'pressure:bar' },
+            },
+          },
+          maxTemperature: {
+            nullable: true,
+            type: {
+              type: 'float64',
+              unit: { externalId: 'temperature:deg_c' },
+            },
+          },
+        },
+      },
+    ]);
   }, 60_000);
 
   test('ingest and filter records', async () => {
@@ -612,7 +627,9 @@ describe('records integration test', () => {
                 property: [testSpaceId, testContainerId, 'name'],
                 aggregates: {
                   catSum: {
-                    sum: { property: [testSpaceId, testContainerId, 'value'] },
+                    sum: {
+                      property: [testSpaceId, testContainerId, 'value'],
+                    },
                   },
                 },
               },
@@ -631,6 +648,159 @@ describe('records integration test', () => {
       { timeout: 10_000, interval: 500 }
     );
   });
+
+  test('filter, aggregate, and sync with targetUnits and includeTyping', async () => {
+    const label = `units_${randomInt()}`;
+    const pressureBar = 35.2;
+    const pressurePa = 3_520_000;
+    const tempC = 25;
+
+    await client.records.ingest(immutableStreamId, [
+      {
+        space: testSpaceId,
+        externalId: `units_rec_${randomInt()}`,
+        sources: [
+          {
+            source: {
+              type: 'container',
+              space: testSpaceId,
+              externalId: unitsContainerId,
+            },
+            properties: {
+              label,
+              maxPressure: pressureBar,
+              maxTemperature: tempC,
+            },
+          },
+        ],
+      },
+    ]);
+
+    const pressureProp: [string, string, string] = [
+      testSpaceId,
+      unitsContainerId,
+      'maxPressure',
+    ];
+
+    await vi.waitFor(
+      async () => {
+        const { items, typing } = await client.records.filter(
+          immutableStreamId,
+          {
+            lastUpdatedTime: {
+              gte: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
+            },
+            sources: [
+              {
+                source: {
+                  type: 'container',
+                  space: testSpaceId,
+                  externalId: unitsContainerId,
+                },
+                properties: ['*'],
+              },
+            ],
+            filter: {
+              equals: {
+                property: [testSpaceId, unitsContainerId, 'label'],
+                value: label,
+              },
+            },
+            targetUnits: {
+              properties: [
+                {
+                  property: pressureProp,
+                  unit: { externalId: 'pressure:pa' },
+                },
+              ],
+            },
+            includeTyping: true,
+            limit: 10,
+          }
+        );
+        expect(items.length).toBe(1);
+        const props = items[0].properties[testSpaceId][unitsContainerId];
+        expect(props.maxPressure).toBeCloseTo(pressurePa, -2);
+
+        expect(typing).toBeDefined();
+        const mpType =
+          typing?.[testSpaceId]?.[unitsContainerId]?.maxPressure?.type;
+        expect(mpType).toBeDefined();
+        expect(mpType?.type === 'float64').toBe(true);
+        if (mpType?.type === 'float64') {
+          expect(mpType.unit?.externalId).toBe('pressure:pa');
+        }
+      },
+      { timeout: 15_000, interval: 300 }
+    );
+
+    await vi.waitFor(
+      async () => {
+        const { aggregates, typing } = await client.records.aggregate(
+          immutableStreamId,
+          {
+            lastUpdatedTime: {
+              gte: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
+            },
+            filter: {
+              equals: {
+                property: [testSpaceId, unitsContainerId, 'label'],
+                value: label,
+              },
+            },
+            aggregates: {
+              avgPressure: { avg: { property: pressureProp } },
+            },
+            targetUnits: {
+              properties: [
+                {
+                  property: pressureProp,
+                  unit: { externalId: 'pressure:pa' },
+                },
+              ],
+            },
+            includeTyping: true,
+          }
+        );
+        const avg = (aggregates.avgPressure as { avg: number }).avg;
+        expect(avg).toBeCloseTo(pressurePa, -2);
+        expect(
+          typing?.[testSpaceId]?.[unitsContainerId]?.maxPressure?.type
+        ).toBeDefined();
+      },
+      { timeout: 15_000, interval: 300 }
+    );
+
+    await vi.waitFor(
+      async () => {
+        const syncPage = await client.records.sync(immutableStreamId, {
+          initializeCursor: '1h-ago',
+          sources: [
+            {
+              source: {
+                type: 'container',
+                space: testSpaceId,
+                externalId: unitsContainerId,
+              },
+              properties: ['*'],
+            },
+          ],
+          filter: {
+            equals: {
+              property: [testSpaceId, unitsContainerId, 'label'],
+              value: label,
+            },
+          },
+          includeTyping: true,
+          limit: 10,
+        });
+        const page = await syncPage;
+        expect(page.items.length).toBeGreaterThanOrEqual(1);
+        expect(page.typing).toBeDefined();
+      },
+      { timeout: 15_000, interval: 300 }
+    );
+  }, 60_000);
 });
 
 describe('mutable records integration test', () => {
