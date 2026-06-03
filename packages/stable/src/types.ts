@@ -63,6 +63,7 @@ export * from './api/streams/types';
 export * from './api/records/types';
 export * from './api/sessions/types';
 export * from './api/timeSeries/types';
+export * from './api/timeSeries/subscriptions/types';
 export * from './api/dataPoints/types';
 export * from './api/functions/types';
 
