@@ -58,9 +58,9 @@ describe('Workflow versions integration test', () => {
     }
 
     if (createdWorkflow) {
-      await client.workflows
-        .delete([{ externalId: workflowExternalId }])
-        .catch();
+    await client.workflows
+      .delete([{ externalId: workflowExternalId }])
+      .catch();
     }
   });
 
@@ -73,6 +73,7 @@ describe('Workflow versions integration test', () => {
     });
 
     expect(Array.isArray(response.items)).toBe(true);
+    expect(response.items.length).toBeGreaterThan(0);
     expect(
       response.items.some(
         (item) =>
@@ -115,15 +116,22 @@ describe('Workflow versions integration test', () => {
     ]);
     const versionToDelete = items[0];
 
-    expect(versionToDelete.version).toBe(deleteVersionId);
+    await client.workflowVersions.delete([
+      {
+        workflowExternalId,
+        version: versionToDelete.version,
+      },
+    ]);
 
-    await expect(
-      client.workflowVersions.delete([
-        {
-          workflowExternalId,
-          version: versionToDelete.version,
-        },
-      ])
-    ).resolves.toBeDefined();
+    const listAfterDelete = await client.workflowVersions.list({
+      filter: {
+        workflowFilters: [
+          { externalId: workflowExternalId, version: deleteVersionId },
+        ],
+      },
+    });
+    expect(
+      listAfterDelete.items.some((item) => item.version === deleteVersionId)
+    ).toBe(false);
   });
 });
