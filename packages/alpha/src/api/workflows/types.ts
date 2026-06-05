@@ -1,6 +1,10 @@
 // Copyright 2026 Cognite AS
 
-import type { CogniteExternalId, CogniteInternalId } from '@cognite/sdk-core';
+import type {
+  CogniteExternalId,
+  CogniteInternalId,
+  FilterQuery,
+} from '@cognite/sdk-core';
 
 export interface Workflow {
   externalId: CogniteExternalId;
@@ -20,4 +24,171 @@ export interface WorkflowUpsert {
 
 export interface WorkflowExternalId {
   externalId: CogniteExternalId;
+}
+
+/** JSON-serializable values used in workflow task parameters. */
+export type JsonValue =
+  | string
+  | number
+  | boolean
+  | null
+  | JsonValue[]
+  | { readonly [key: string]: JsonValue };
+
+export enum TaskTypeEnum {
+  FUNCTION = 'function',
+  TRANSFORMATION = 'transformation',
+  CDF = 'cdf',
+  DYNAMIC = 'dynamic',
+  SUBWORKFLOW = 'subworkflow',
+  SIMULATION = 'simulation',
+}
+
+export type TaskTypes = `${TaskTypeEnum}` | string;
+
+export enum ConcurrencyPolicyTypeEnum {
+  FAIL = 'fail',
+  WAIT_FOR_CURRENT = 'waitForCurrent',
+  RESTART_AFTER_CURRENT = 'restartAfterCurrent',
+}
+
+export type ConcurrencyPolicyType = `${ConcurrencyPolicyTypeEnum}`;
+
+export enum CdfRequestMethodTypesEnum {
+  GET = 'GET',
+  POST = 'POST',
+  PUT = 'PUT',
+}
+
+export type CdfRequestMethodTypes = `${CdfRequestMethodTypesEnum}` | string;
+
+export enum CdfVersionHeaderEnum {
+  NONE = '',
+  ALPHA = 'alpha',
+  BETA = 'beta',
+}
+
+export type CdfVersionHeader = `${CdfVersionHeaderEnum}`;
+
+export type FunctionTaskParameters = {
+  function?: {
+    externalId?: string;
+    data?: JsonValue;
+  };
+  isAsyncComplete?: boolean;
+};
+
+export type TransformationTaskParameters = {
+  transformation?: {
+    externalId?: string;
+    concurrencyPolicy?: ConcurrencyPolicyType;
+    useTransformationCredentials?: boolean;
+  };
+};
+
+export type DynamicTaskParameters = {
+  dynamic?: {
+    tasks?: string;
+  };
+};
+
+export type CdfRequestTaskParameters = {
+  cdfRequest?: {
+    resourcePath?: string;
+    queryParameters?: JsonValue;
+    method?: CdfRequestMethodTypes;
+    body?: JsonValue;
+    requestTimeoutInMillis?: number;
+    cdfVersionHeader?: CdfVersionHeader | string;
+  };
+};
+
+export type SimulationTaskParameters = {
+  simulation?: {
+    routineExternalId?: string;
+    runTime?: number;
+    inputs?: JsonValue[];
+  };
+};
+
+export type SubworkflowTaskParameters = {
+  subworkflow: {
+    tasks?: TaskDefinition[];
+    workflowExternalId?: string;
+    version?: string;
+  };
+};
+export type TaskParameters =
+  | FunctionTaskParameters
+  | TransformationTaskParameters
+  | DynamicTaskParameters
+  | SubworkflowTaskParameters
+  | CdfRequestTaskParameters
+  | SimulationTaskParameters
+  | Record<string, unknown>;
+
+export enum OnFailureTypeEnum {
+  ABORT_WORKFLOW = 'abortWorkflow',
+  SKIP_TASK = 'skipTask',
+}
+
+export type OnFailureType = `${OnFailureTypeEnum}`;
+
+export type TaskDependency = {
+  externalId: string;
+};
+export type TaskDefinition = {
+  externalId: string;
+  type: TaskTypes;
+  name?: string;
+  description?: string;
+  parameters?: TaskParameters;
+  retries?: number;
+  timeout?: number;
+  dependsOn?: TaskDependency[];
+  onFailure?: OnFailureType;
+};
+
+export type WorkflowDefinition = {
+  hash: string;
+  description?: string;
+  tasks: TaskDefinition[];
+};
+
+export type Version = {
+  workflowExternalId: CogniteExternalId;
+  version: string;
+  description?: string;
+  createdTime?: number;
+  lastUpdatedTime?: number;
+  workflowDefinition: WorkflowDefinition;
+};
+
+export type VersionDelete = {
+  workflowExternalId: CogniteExternalId;
+  version: string;
+};
+
+export type WorkflowDefinitionCreate = Pick<
+  WorkflowDefinition,
+  'description' | 'tasks'
+>;
+
+export type VersionUpsert = {
+  workflowExternalId: CogniteExternalId;
+  version: string;
+  workflowDefinition: WorkflowDefinitionCreate;
+};
+
+export interface WorkflowVersionWorkflowFilter {
+  externalId: CogniteExternalId;
+  version?: string;
+}
+
+export interface WorkflowVersionFilter {
+  workflowFilters?: WorkflowVersionWorkflowFilter[];
+}
+
+export interface WorkflowVersionFilterQuery extends FilterQuery {
+  filter?: WorkflowVersionFilter;
 }
