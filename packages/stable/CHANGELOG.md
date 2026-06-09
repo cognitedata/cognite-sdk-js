@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [10.12.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@10.11.0...@cognite/sdk@10.12.0) (2026-06-05)
+
+
+### Features
+
+* **records:** add support for unit conversion ([#1420](https://github.com/cognitedata/cognite-sdk-js/issues/1420)) ([0699cb0](https://github.com/cognitedata/cognite-sdk-js/commit/0699cb040116d52b67141043d2cfbd4c0f342741))
+* **timeseries:** add support for data point subscriptions ([#1425](https://github.com/cognitedata/cognite-sdk-js/issues/1425)) ([7a5577c](https://github.com/cognitedata/cognite-sdk-js/commit/7a5577c6845a731fa724605b62d0bf00b67de107))
+
+
+
+
+
 # [10.11.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@10.10.0...@cognite/sdk@10.11.0) (2026-05-05)
 
 
