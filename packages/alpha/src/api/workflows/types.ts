@@ -192,3 +192,87 @@ export interface WorkflowVersionFilter {
 export interface WorkflowVersionFilterQuery extends FilterQuery {
   filter?: WorkflowVersionFilter;
 }
+
+export type WorkflowExecutionStatus =
+  | 'RUNNING'
+  | 'COMPLETED'
+  | 'FAILED'
+  | 'TIMED_OUT'
+  | 'TERMINATED';
+
+export type WorkflowTaskExecutionStatus =
+  | 'IN_PROGRESS'
+  | 'CANCELED'
+  | 'FAILED'
+  | 'FAILED_WITH_TERMINAL_ERROR'
+  | 'COMPLETED'
+  | 'COMPLETED_WITH_ERRORS'
+  | 'SCHEDULED'
+  | 'TIMED_OUT'
+  | 'SKIPPED';
+
+export interface WorkflowExecution {
+  id: string;
+  workflowExternalId: CogniteExternalId;
+  status: WorkflowExecutionStatus;
+  engineExecutionId: string;
+  createdTime: number;
+  metadata: Record<string, string>;
+  version?: string;
+  startTime?: number;
+  endTime?: number;
+  reasonForIncompletion?: string;
+}
+
+export interface WorkflowTaskExecution {
+  id: string;
+  externalId: string;
+  status: WorkflowTaskExecutionStatus;
+  taskType: TaskTypes;
+  input: TaskParameters;
+  output: Record<string, unknown>;
+  parentTaskExternalId?: string | null;
+  startTime?: number;
+  endTime?: number;
+  reasonForIncompletion?: string;
+}
+
+export interface WorkflowExecutionDetails extends WorkflowExecution {
+  workflowDefinition: WorkflowDefinition;
+  executedTasks: WorkflowTaskExecution[];
+  input?: Record<string, JsonValue>;
+}
+
+export interface WorkflowExecutionWorkflowFilter {
+  externalId: CogniteExternalId;
+  version?: string;
+}
+
+export interface WorkflowExecutionFilter {
+  workflowFilters?: WorkflowExecutionWorkflowFilter[];
+  createdTimeStart?: number;
+  createdTimeEnd?: number;
+  status?: WorkflowExecutionStatus[];
+}
+
+export interface WorkflowExecutionFilterQuery extends FilterQuery {
+  filter?: WorkflowExecutionFilter;
+}
+
+export interface WorkflowExecutionAuthentication {
+  nonce: string;
+}
+
+export interface WorkflowExecutionRunRequest {
+  authentication: WorkflowExecutionAuthentication;
+  input?: Record<string, JsonValue>;
+  metadata?: Record<string, string>;
+}
+
+export interface WorkflowExecutionRetryRequest {
+  authentication: WorkflowExecutionAuthentication;
+}
+
+export interface WorkflowExecutionCancelRequest {
+  reason?: string;
+}
