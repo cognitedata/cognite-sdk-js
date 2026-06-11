@@ -37,7 +37,7 @@ export class DataPointsAPI extends BaseResourceAPI<
    * ```
    *
    * @remarks
-   * State time series (private beta) require the beta client (`cdf-version: beta` header):
+   * State time series (beta) require the beta client (`cdf-version: beta` header):
    *
    * ```js
    * await client.datapoints.insert([{
@@ -60,7 +60,7 @@ export class DataPointsAPI extends BaseResourceAPI<
    * ```
    *
    * @remarks
-   * State time series (private beta) require the beta client (`cdf-version: beta` header):
+   * State time series (beta) require the beta client (`cdf-version: beta` header):
    *
    * ```js
    * const stateData = await client.datapoints.retrieve({
