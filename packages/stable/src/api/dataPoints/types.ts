@@ -51,7 +51,7 @@ export type StateAggregateName =
   | 'stateTransitions';
 
 /** All aggregate functions accepted by data point queries */
-export type AggregateName = NumericAggregateName | StateAggregateName;
+export type Aggregate = NumericAggregateName | StateAggregateName;
 
 // =====================================================
 // Data point status types
@@ -273,7 +273,7 @@ export interface DatapointsMultiQueryBase extends Limit, IgnoreUnknownIds {
   /**
    * The aggregates to be returned. This value overrides top-level default aggregates list when set. Specify all aggregates to be retrieved here. Specify empty array if this sub-query needs to return datapoints without aggregation.
    */
-  aggregates?: AggregateName[];
+  aggregates?: Aggregate[];
   /**
    * The time granularity size and unit to aggregate over.
    */
@@ -318,7 +318,7 @@ export interface DatapointsQueryProperties extends Limit, Cursor {
   /**
    * The aggregates to be returned.  Use default if null. An empty string must be sent to get raw data if the default is a set of aggregates.
    */
-  aggregates?: AggregateName[];
+  aggregates?: Aggregate[];
   /**
    * The granularity size and granularity of the aggregates (2h)
    */
@@ -497,9 +497,6 @@ export type LatestDataParams = IgnoreUnknownIds;
 
 /** @deprecated Use NumericDatapointAggregate instead. Will be removed in next major release. */
 export type DatapointAggregate = NumericDatapointAggregate;
-
-/** @deprecated Use NumericAggregateName instead. Will be removed in next major release. */
-export type Aggregate = NumericAggregateName;
 
 /** @deprecated Use NumericDatapoint instead. Will be removed in next major release. */
 export type DoubleDatapoint = NumericDatapoint;
