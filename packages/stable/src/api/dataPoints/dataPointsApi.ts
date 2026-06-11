@@ -165,7 +165,9 @@ export class DataPointsAPI extends BaseResourceAPI<
     params: IgnoreUnknownIds
   ): Promise<Datapoints[]> {
     const path = this.url('latest');
-    return this.callEndpointWithMergeAndTransform(items, (request) =>
+    return this.callEndpointWithMergeAndTransform(
+      items,
+      (request) =>
         this.postInParallelWithAutomaticChunking({
           items: request,
           params,
