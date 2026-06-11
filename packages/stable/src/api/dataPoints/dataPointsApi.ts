@@ -4,17 +4,20 @@ import { BaseResourceAPI } from '@cognite/sdk-core';
 import type { ItemsWrapper } from '@cognite/sdk-core';
 import type { DatapointInfo, IgnoreUnknownIds } from '../../types/common';
 import type {
-  DatapointAggregates,
   Datapoints,
   DatapointsDeleteRequest,
   DatapointsInsertItem,
   DatapointsMonthlyGranularityMultiQuery,
   DatapointsMultiQuery,
   LatestDataBeforeRequest,
+  NumericDatapointAggregates,
+  StateDatapointAggregates,
+  StateDatapointWrite,
+  StateDatapointsInsertItem,
 } from './types';
 
 export class DataPointsAPI extends BaseResourceAPI<
-  DatapointAggregates | Datapoints
+  NumericDatapointAggregates | StateDatapointAggregates | Datapoints
 > {
   /**
    * @hidden
@@ -32,9 +35,21 @@ export class DataPointsAPI extends BaseResourceAPI<
    * ```js
    * await client.datapoints.insert([{ id: 123, datapoints: [{timestamp: 1557320284000, value: -2}] }]);
    * ```
+   *
+   * @remarks
+   * State time series (private beta) require the beta client (`cdf-version: beta` header):
+   *
+   * ```js
+   * await client.datapoints.insert([{
+   *   externalId: 'pump-state',
+   *   datapoints: [{ timestamp: Date.now(), numericValue: 1, stringValue: 'RUNNING' }],
+   * }]);
+   * ```
    */
-  public insert = (items: DatapointsInsertItem[]): Promise<object> => {
-    return this.insertEndpoint(items);
+  public insert = (
+    items: (DatapointsInsertItem | StateDatapointsInsertItem)[]
+  ): Promise<object> => {
+    return this.insertEndpoint(items.map(normalizeStateInsertItem));
   };
 
   /**
@@ -43,10 +58,23 @@ export class DataPointsAPI extends BaseResourceAPI<
    * ```js
    * const data = await client.datapoints.retrieve({ items: [{ id: 123 }] });
    * ```
+   *
+   * @remarks
+   * State time series (private beta) require the beta client (`cdf-version: beta` header):
+   *
+   * ```js
+   * const stateData = await client.datapoints.retrieve({
+   *   items: [{ externalId: 'pump-state' }],
+   *   aggregates: ['stateCount'],
+   *   granularity: '1h',
+   * });
+   * ```
    */
   public retrieve = (
     query: DatapointsMultiQuery
-  ): Promise<DatapointAggregates[] | Datapoints[]> => {
+  ): Promise<
+    Datapoints[] | NumericDatapointAggregates[] | StateDatapointAggregates[]
+  > => {
     return this.retrieveDatapointsEndpoint(query);
   };
 
@@ -59,11 +87,13 @@ export class DataPointsAPI extends BaseResourceAPI<
    */
   public retrieveDatapointMonthlyAggregates = async (
     query: DatapointsMonthlyGranularityMultiQuery
-  ): Promise<DatapointAggregates[]> => {
+  ): Promise<NumericDatapointAggregates[] | StateDatapointAggregates[]> => {
     console.warn(
       'retrieveDatapointMonthlyAggregates is deprecated. Use retrieve() with granularity "1mo" instead. This method will be removed in the next major release.'
     );
-    return this.retrieveDatapointsEndpoint<DatapointAggregates[]>({
+    return this.retrieveDatapointsEndpoint<
+      NumericDatapointAggregates[] | StateDatapointAggregates[]
+    >({
       ...query,
       granularity: '1mo',
     });
@@ -103,21 +133,30 @@ export class DataPointsAPI extends BaseResourceAPI<
     return this.deleteDatapointsEndpoint(items);
   };
 
-  private async insertEndpoint(items: DatapointsInsertItem[]) {
+  private async insertEndpoint(
+    items: (DatapointsInsertItem | StateDatapointsInsertItem)[]
+  ) {
     const path = this.url();
     await this.postInParallelWithAutomaticChunking({ path, items });
     return {};
   }
 
   protected async retrieveDatapointsEndpoint<
-    T extends DatapointAggregates[] | Datapoints[] =
-      | DatapointAggregates[]
+    T extends
+      | NumericDatapointAggregates[]
+      | StateDatapointAggregates[]
+      | Datapoints[] =
+      | NumericDatapointAggregates[]
+      | StateDatapointAggregates[]
       | Datapoints[],
   >(query: DatapointsMultiQuery) {
     const path = this.listPostUrl;
     const response = await this.post<ItemsWrapper<T>>(path, {
       data: query,
     });
+    for (const item of response.data.items) {
+      mirrorStateValueAlias(item.datapoints);
+    }
     return this.addToMapAndReturn(response.data.items, response);
   }
 
@@ -126,13 +165,22 @@ export class DataPointsAPI extends BaseResourceAPI<
     params: IgnoreUnknownIds
   ): Promise<Datapoints[]> {
     const path = this.url('latest');
-    return this.callEndpointWithMergeAndTransform(items, (request) =>
-      this.postInParallelWithAutomaticChunking({
-        items: request,
-        params,
-        path,
-        chunkSize: 100,
-      })
+    return this.callEndpointWithMergeAndTransform(
+      items,
+      (request) =>
+        this.postInParallelWithAutomaticChunking({
+          items: request,
+          params,
+          path,
+          chunkSize: 100,
+        }),
+      undefined,
+      (responseItems) => {
+        for (const item of responseItems) {
+          mirrorStateValueAlias(item.datapoints);
+        }
+        return responseItems;
+      }
     ) as Promise<Datapoints[]>;
   }
 
@@ -143,5 +191,51 @@ export class DataPointsAPI extends BaseResourceAPI<
       path: this.deleteUrl,
     });
     return {};
+  }
+}
+
+/**
+ * Folds the deprecated `value` alias into `numericValue` for state items
+ * (those with any data point carrying `numericValue` or `stringValue`).
+ */
+function normalizeStateInsertItem(
+  item: DatapointsInsertItem | StateDatapointsInsertItem
+): DatapointsInsertItem | StateDatapointsInsertItem {
+  const isStateItem = item.datapoints.some(
+    (datapoint) => 'numericValue' in datapoint || 'stringValue' in datapoint
+  );
+  if (!isStateItem) {
+    return item;
+  }
+  return {
+    ...item,
+    datapoints: (item.datapoints as StateDatapointWrite[]).map(
+      ({ value, ...datapoint }) =>
+        value === undefined
+          ? datapoint
+          : { ...datapoint, numericValue: datapoint.numericValue ?? value }
+    ),
+  };
+}
+
+/**
+ * Mirrors `numericValue` into the deprecated `value` alias on state data points.
+ * @hidden
+ */
+export function mirrorStateValueAlias(
+  datapoints: (
+    | Datapoints
+    | NumericDatapointAggregates
+    | StateDatapointAggregates
+  )['datapoints'][number][]
+): void {
+  for (const datapoint of datapoints) {
+    if (
+      'numericValue' in datapoint &&
+      datapoint.numericValue !== undefined &&
+      datapoint.value === undefined
+    ) {
+      datapoint.value = datapoint.numericValue;
+    }
   }
 }
