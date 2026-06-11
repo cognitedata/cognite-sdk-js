@@ -165,9 +165,7 @@ export class DataPointsAPI extends BaseResourceAPI<
     params: IgnoreUnknownIds
   ): Promise<Datapoints[]> {
     const path = this.url('latest');
-    return this.callEndpointWithMergeAndTransform(
-      items,
-      (request) =>
+    return this.callEndpointWithMergeAndTransform(items, (request) =>
         this.postInParallelWithAutomaticChunking({
           items: request,
           params,
@@ -194,10 +192,7 @@ export class DataPointsAPI extends BaseResourceAPI<
   }
 }
 
-/**
- * Folds the deprecated `value` alias into `numericValue` for state items
- * (those with any data point carrying `numericValue` or `stringValue`).
- */
+/* Folds `value` alias into `numericValue` for state items */
 function normalizeStateInsertItem(
   item: DatapointsInsertItem | StateDatapointsInsertItem
 ): DatapointsInsertItem | StateDatapointsInsertItem {
@@ -219,7 +214,7 @@ function normalizeStateInsertItem(
 }
 
 /**
- * Mirrors `numericValue` into the deprecated `value` alias on state data points.
+ * Mirrors `numericValue` into `value` alias on state data points.
  * @hidden
  */
 export function mirrorStateValueAlias(
