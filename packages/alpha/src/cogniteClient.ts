@@ -7,6 +7,7 @@ import { MeteringAPI } from './api/metering/meteringApi';
 import { SimulatorsAPI } from './api/simulators/simulatorsApi';
 import { WorkflowVersionsAPI } from './api/workflows/workflowVersionsApi';
 import { WorkflowsAPI } from './api/workflows/workflowsApi';
+import { DataProductsAPI } from './api/dataProducts/dataProductsApi';
 
 export default class CogniteClientAlpha extends CogniteClientStable {
   private simulatorsApi?: SimulatorsAPI;
@@ -14,6 +15,7 @@ export default class CogniteClientAlpha extends CogniteClientStable {
   private meteringApi?: MeteringAPI;
   private workflowsApi?: WorkflowsAPI;
   private workflowVersionsApi?: WorkflowVersionsAPI;
+  private dataProductsApi?: DataProductsAPI;
 
   public get limits() {
     return accessApi(this.limitsApi);
@@ -35,6 +37,10 @@ export default class CogniteClientAlpha extends CogniteClientStable {
     return accessApi(this.workflowVersionsApi);
   }
 
+  public get dataProducts() {
+    return accessApi(this.dataProductsApi);
+  }
+
   protected initAPIs() {
     super.initAPIs();
 
@@ -48,6 +54,7 @@ export default class CogniteClientAlpha extends CogniteClientStable {
       WorkflowVersionsAPI,
       'workflows/versions'
     );
+    this.dataProductsApi = this.apiFactory(DataProductsAPI, 'dataproducts');
   }
 
   protected get version() {
