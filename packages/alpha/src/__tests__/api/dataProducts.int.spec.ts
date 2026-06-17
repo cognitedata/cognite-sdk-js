@@ -56,9 +56,7 @@ describe('Data products integration test', () => {
     const response = await client.dataProducts.list({ limit: 10 });
     expect(response.items.length).toBeGreaterThan(0);
     expect(
-      response.items.some(
-        (item) => item.externalId === dataProductExternalId
-      )
+      response.items.some((item) => item.externalId === dataProductExternalId)
     ).toBe(true);
   });
 

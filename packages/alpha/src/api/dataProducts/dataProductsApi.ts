@@ -91,7 +91,7 @@ export class DataProductsAPI extends BaseResourceAPI<DataProduct> {
    * await client.dataProducts.delete([{ externalId: 'my-data-product' }]);
    * ```
    */
-  public delete = (ids: DataProductDelete[]): Promise<{}> => {
+  public delete = (ids: DataProductDelete[]): Promise<object> => {
     return this.deleteEndpoint(ids);
   };
 }
