@@ -2,6 +2,7 @@
  * Copyright 2024 Cognite AS
  */
 
+import { describe, test } from 'vitest';
 import { QueryRequest } from 'stable/src/types';
 import CogniteClient from '../../../cogniteClient';
 
@@ -93,8 +94,8 @@ describe('queryNodesEdges type tests', () => {
     type QueryResult = Awaited<ReturnType<typeof CogniteClient.prototype.instances.query<QueryRequest>>>;
 
     type TestType = QueryResult extends {
-      items: Record<string, any>;
-      nextCursors?: Record<string, any>;
+      items: Record<string, unknown>;
+      nextCursors?: Record<string, unknown>;
     }
       ? true
       : false;
