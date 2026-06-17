@@ -62,7 +62,10 @@ describe('Data products unit test', () => {
         nextCursor: 'next',
       });
 
-    const response = await client.dataProducts.list({ limit: 10, cursor: 'abc' });
+    const response = await client.dataProducts.list({
+      limit: 10,
+      cursor: 'abc',
+    });
     expect(response.items).toHaveLength(1);
     expect(response.items[0].externalId).toBe(mockDataProduct.externalId);
     expect(response.nextCursor).toBe('next');

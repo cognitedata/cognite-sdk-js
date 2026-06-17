@@ -57,7 +57,9 @@ describe('Data products integration test', () => {
   });
 
   test('retrieve by external id', async () => {
-    const dataProduct = await client.dataProducts.retrieve(dataProductExternalId);
+    const dataProduct = await client.dataProducts.retrieve(
+      dataProductExternalId
+    );
     expect(dataProduct.externalId).toBe(dataProductExternalId);
   });
 
@@ -74,7 +76,9 @@ describe('Data products integration test', () => {
     ]);
     const updatedDataProduct = items[0];
 
-    expect(updatedDataProduct.description).toBe('integration updated description');
+    expect(updatedDataProduct.description).toBe(
+      'integration updated description'
+    );
     expect(updatedDataProduct.isGoverned).toBe(false);
   });
 
@@ -91,7 +95,9 @@ describe('Data products integration test', () => {
     expect(dataProductToDelete.externalId).toBe(externalId);
 
     await expect(
-      client.dataProducts.delete([{ externalId: dataProductToDelete.externalId }])
+      client.dataProducts.delete([
+        { externalId: dataProductToDelete.externalId },
+      ])
     ).resolves.toBeDefined();
   });
 });

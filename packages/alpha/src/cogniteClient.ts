@@ -2,12 +2,12 @@
 import { CogniteClient as CogniteClientStable } from '@cognite/sdk';
 import { accessApi } from '@cognite/sdk-core';
 import { version } from '../package.json';
+import { DataProductsAPI } from './api/dataProducts/dataProductsApi';
 import { LimitsAPI } from './api/limits/limitsApi';
 import { MeteringAPI } from './api/metering/meteringApi';
 import { SimulatorsAPI } from './api/simulators/simulatorsApi';
 import { WorkflowVersionsAPI } from './api/workflows/workflowVersionsApi';
 import { WorkflowsAPI } from './api/workflows/workflowsApi';
-import { DataProductsAPI } from './api/dataProducts/dataProductsApi';
 
 export default class CogniteClientAlpha extends CogniteClientStable {
   private simulatorsApi?: SimulatorsAPI;
