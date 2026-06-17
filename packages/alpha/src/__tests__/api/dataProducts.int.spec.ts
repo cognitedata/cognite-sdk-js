@@ -5,12 +5,16 @@ import type CogniteClientAlpha from '../../cogniteClient';
 import type { DataProduct } from '../../types';
 import { randomInt, setupLoggedInClient } from '../testUtils';
 
-const RESERVED_SCHEMA_SPACE = 'sdk_js_alpha_dataproducts_int_space';
+function uniqueSchemaSpace(prefix: string): string {
+  return `${prefix}_${randomInt()}`;
+}
 
 describe('Data products integration test', () => {
   let client: CogniteClientAlpha;
   const dataProductRandom = randomInt();
   const dataProductExternalId = `int-dataproduct-${dataProductRandom}`;
+  const setupSchemaSpace = uniqueSchemaSpace('sdk_js_alpha_dp_int_setup');
+  const schemaSpacesToDelete: string[] = [setupSchemaSpace];
   let createdDataProduct: DataProduct | undefined;
 
   beforeAll(async () => {
@@ -18,8 +22,8 @@ describe('Data products integration test', () => {
 
     await client.spaces.upsert([
       {
-        space: RESERVED_SCHEMA_SPACE,
-        name: RESERVED_SCHEMA_SPACE,
+        space: setupSchemaSpace,
+        name: setupSchemaSpace,
         description: 'Space for Data Products integration tests',
       },
     ]);
@@ -28,7 +32,7 @@ describe('Data products integration test', () => {
       {
         externalId: dataProductExternalId,
         name: `integration test data product ${dataProductRandom}`,
-        schemaSpace: RESERVED_SCHEMA_SPACE,
+        schemaSpace: setupSchemaSpace,
         isGoverned: true,
         tags: ['integration'],
       },
@@ -37,21 +41,32 @@ describe('Data products integration test', () => {
   });
 
   afterAll(async () => {
-    if (!createdDataProduct) {
-      return;
+    if (createdDataProduct) {
+      await client.dataProducts
+        .delete([{ externalId: dataProductExternalId }])
+        .catch();
     }
-    await client.dataProducts
-      .delete([{ externalId: dataProductExternalId }])
-      .catch();
+
+    await client.spaces.delete(schemaSpacesToDelete).catch();
   });
 
   test('create', async () => {
     const externalId = `int-dataproduct-create-${randomInt()}`;
+    const schemaSpace = uniqueSchemaSpace('sdk_js_alpha_dp_int_create');
+    schemaSpacesToDelete.push(schemaSpace);
+    await client.spaces.upsert([
+      {
+        space: schemaSpace,
+        name: schemaSpace,
+        description: 'Space for Data Products create integration test',
+      },
+    ]);
+
     const items = await client.dataProducts.create([
       {
         externalId,
         name: 'data product create test',
-        schemaSpace: RESERVED_SCHEMA_SPACE,
+        schemaSpace,
         isGoverned: true,
         tags: ['create'],
       },
@@ -101,11 +116,21 @@ describe('Data products integration test', () => {
 
   test('delete', async () => {
     const externalId = `int-dataproduct-delete-${randomInt()}`;
+    const schemaSpace = uniqueSchemaSpace('sdk_js_alpha_dp_int_delete');
+    schemaSpacesToDelete.push(schemaSpace);
+    await client.spaces.upsert([
+      {
+        space: schemaSpace,
+        name: schemaSpace,
+        description: 'Space for Data Products delete integration test',
+      },
+    ]);
+
     const items = await client.dataProducts.create([
       {
         externalId,
         name: 'data product to delete',
-        schemaSpace: RESERVED_SCHEMA_SPACE,
+        schemaSpace,
       },
     ]);
     const dataProductToDelete = items[0];
