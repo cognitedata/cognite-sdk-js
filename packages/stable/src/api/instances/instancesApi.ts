@@ -1,6 +1,7 @@
 // Copyright 2023 Cognite AS
 
 import { BaseResourceAPI } from '@cognite/sdk-core';
+import type { QueryResult, SelectSourceWithParams } from './query.types';
 import type {
   AggregationRequest,
   AggregationResponse,
@@ -19,7 +20,6 @@ import type {
   SlimNodeAndEdgeCollectionResponse,
   SyncRequest,
 } from './types.gen';
-import { QueryResult, SelectSourceWithParams } from './query.types';
 
 export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
   /**
@@ -240,7 +240,7 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    */
   public query = async <
     TQueryRequest extends QueryRequest,
-    TypedSelectSources extends SelectSourceWithParams = SelectSourceWithParams
+    TypedSelectSources extends SelectSourceWithParams = SelectSourceWithParams,
   >(
     params: TQueryRequest
   ): Promise<QueryResult<TQueryRequest, TypedSelectSources>> => {

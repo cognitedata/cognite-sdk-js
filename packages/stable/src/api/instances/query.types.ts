@@ -1,4 +1,4 @@
-import {
+import type {
   EdgeDefinition,
   NodeDefinition,
   NodeOrEdge,
@@ -20,18 +20,19 @@ type ALLPROPERTIES = '*';
 
 type InstanceType<
   TQueryRequest extends QueryRequest,
-  SelectKey extends keyof TQueryRequest[SELECT]
+  SelectKey extends keyof TQueryRequest[SELECT],
 > = Exclude<keyof TQueryRequest[WITH][SelectKey], LIMIT> extends NODES
   ? Omit<NodeDefinition, PROPERTIES>
   : Exclude<keyof TQueryRequest[WITH][SelectKey], LIMIT> extends EDGES
-  ? Omit<EdgeDefinition, PROPERTIES>
-  : Omit<NodeOrEdge, PROPERTIES>;
+    ? Omit<EdgeDefinition, PROPERTIES>
+    : Omit<NodeOrEdge, PROPERTIES>;
 
 type TypedSourceProperty<
   SelectSource extends NonNullable<
     QueryRequest[SELECT][keyof QueryRequest[SELECT]][SOURCES]
   >[number],
-  TypedSelectSourcePropertyMap extends SelectSourceWithParams = SelectSourceWithParams
+  TypedSelectSourcePropertyMap extends
+    SelectSourceWithParams = SelectSourceWithParams,
 > = Extract<
   TypedSelectSourcePropertyMap[number],
   Pick<SelectSource, SOURCE>
@@ -49,7 +50,8 @@ export type SelectSourceWithParams = Array<{
 
 export type QueryResult<
   TQueryRequest extends QueryRequest,
-  TSelectSourceWithParams extends SelectSourceWithParams = SelectSourceWithParams
+  TSelectSourceWithParams extends
+    SelectSourceWithParams = SelectSourceWithParams,
 > = {
   items: {
     [SELECT_KEY in keyof TQueryRequest[SELECT]]: Array<
