@@ -7,7 +7,8 @@ import { randomInt, setupLoggedInClient } from '../testUtils';
 
 describe('Data products integration test', () => {
   let client: CogniteClientAlpha;
-  const dataProductExternalId = `int-dataproduct-${randomInt()}`;
+  const dataProductRandom = randomInt();
+  const dataProductExternalId = `int-dataproduct-${dataProductRandom}`;
   let createdDataProduct: DataProduct | undefined;
 
   beforeAll(async () => {
@@ -15,7 +16,7 @@ describe('Data products integration test', () => {
     const items = await client.dataProducts.create([
       {
         externalId: dataProductExternalId,
-        name: 'integration test data product',
+        name: `integration test data product ${dataProductRandom}`,
         isGoverned: true,
         tags: ['integration'],
       },
@@ -53,7 +54,12 @@ describe('Data products integration test', () => {
 
   test('list', async () => {
     const response = await client.dataProducts.list({ limit: 10 });
-    expect(Array.isArray(response.items)).toBe(true);
+    expect(response.items.length).toBeGreaterThan(0);
+    expect(
+      response.items.some(
+        (item) => item.externalId === dataProductExternalId
+      )
+    ).toBe(true);
   });
 
   test('retrieve by external id', async () => {

@@ -34,7 +34,7 @@ export class DataProductsAPI extends BaseResourceAPI<DataProduct> {
    * ```
    */
   public create = (items: DataProductCreate[]): Promise<DataProduct[]> => {
-    return this.createEndpoint(items, this.url());
+    return this.createEndpoint(items);
   };
 
   /**
@@ -91,7 +91,7 @@ export class DataProductsAPI extends BaseResourceAPI<DataProduct> {
    * await client.dataProducts.delete([{ externalId: 'my-data-product' }]);
    * ```
    */
-  public delete = (ids: DataProductDelete[]) => {
+  public delete = (ids: DataProductDelete[]): Promise<{}> => {
     return this.deleteEndpoint(ids);
   };
 }
