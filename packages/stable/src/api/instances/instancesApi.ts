@@ -246,24 +246,20 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
   };
 
   /**
-   * [Query instances](https://developer.cognite.com/api#tag/Instances/operation/queryContent) with inferred return types.
-   *
-   * When `params` is declared `as const satisfies QueryRequest`, TypeScript infers the exact
-   * select keys, spaces and property names from the query, giving you fully typed results.
-   * Optionally pass `TypedSelectSources` to override property value types per source.
+   * [Query instances](https://developer.cognite.com/api#tag/Instances/operation/queryContent) with inferred return types. Pass `params as const satisfies QueryRequest` to get fully typed results per select key, space and property name.
    *
    * ```js
    *  const query = {
    *    with: { myNodes: { nodes: {} } },
    *    select: {
    *      myNodes: {
-   *        sources: [{ source: { type: 'view', space: 'mySpace', externalId: 'MyView', version: 'v1' }, properties: ['name', 'age'] }]
-   *      }
-   *    }
+   *        sources: [{ source: { type: 'view', space: 'mySpace', externalId: 'MyView', version: 'v1' }, properties: ['name', 'age'] }],
+   *      },
+   *    },
    *  } as const satisfies QueryRequest;
    *
    *  const result = await client.instances.queryTyped(query);
-   *  // result.items.myNodes[0].properties.mySpace['MyView/v1'].name  ← fully typed
+   *  // result.items.myNodes[0].properties.mySpace['MyView/v1'].name  — fully typed
    * ```
    */
   public queryTyped = async <
