@@ -100,7 +100,10 @@ describe('queryNodesEdges type tests', () => {
     >['items']['resultExpressionA'][number]['properties']['spaceA']['externalIdA/v1'];
 
     true satisfies Expect<
-      Equal<TypedResultProperties, SourceExternalIdAPropertyTypes[0]['properties']>
+      Equal<
+        TypedResultProperties,
+        SourceExternalIdAPropertyTypes[0]['properties']
+      >
     >;
   });
 
