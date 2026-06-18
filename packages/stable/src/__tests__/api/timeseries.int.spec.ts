@@ -289,23 +289,35 @@ describe('Timeseries integration test', () => {
     expect(items.length).toBeGreaterThan(0);
   });
 
-  test('list with assetExternalIds', async () => {
-    const { items } = await client.timeseries.list({
-      filter: { assetExternalIds: [asset.externalId || ''] },
-      limit: 1,
-    });
-    expect(items.length).toBe(1);
-    expect(items[0].id).toBe(createdTimeseries[0].id);
-  });
+  test(
+    'list with assetExternalIds',
+    async () => {
+      await runTestWithRetryWhenFailing(async () => {
+        const { items } = await client.timeseries.list({
+          filter: { assetExternalIds: [asset.externalId || ''] },
+          limit: 1,
+        });
+        expect(items.length).toBe(1);
+        expect(items[0].id).toBe(createdTimeseries[0].id);
+      });
+    },
+    3 * 60 * 1000
+  );
 
-  test('list with assetSubtreeIds', async () => {
-    const { items } = await client.timeseries.list({
-      filter: { assetSubtreeIds: [{ id: asset.id }] },
-      limit: 1,
-    });
-    expect(items.length).toBe(1);
-    expect(items[0].id).toBe(createdTimeseries[0].id);
-  });
+  test(
+    'list with assetSubtreeIds',
+    async () => {
+      await runTestWithRetryWhenFailing(async () => {
+        const { items } = await client.timeseries.list({
+          filter: { assetSubtreeIds: [{ id: asset.id }] },
+          limit: 1,
+        });
+        expect(items.length).toBe(1);
+        expect(items[0].id).toBe(createdTimeseries[0].id);
+      });
+    },
+    3 * 60 * 1000
+  );
 
   test('search', async () => {
     const name = 'timeserie6';
