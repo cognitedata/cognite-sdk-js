@@ -27,9 +27,9 @@ describe('Files integration test', () => {
   let label: LabelDefinition;
 
   const testSpace = {
-    space: 'test_data_space',
-    name: 'test_data_space',
-    description: 'Instance space used for integration tests.',
+    space: `test_file_space_${randomInt()}`,
+    name: 'test_file_space',
+    description: 'Instance space used for file integration tests.',
   };
 
   const fileCdmInstance: NodeWrite = {
@@ -84,6 +84,7 @@ describe('Files integration test', () => {
         space: fileCdmInstance.space,
       },
     ]);
+    await client.spaces.delete([testSpace.space]);
   });
 
   const geoLocation: FileGeoLocation = {

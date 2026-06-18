@@ -204,15 +204,19 @@ describe('data sets integration test', () => {
 
       expect(timeseries.dataSetId).toEqual(dataSetId);
     });
-    test('list', async () => {
-      await runTestWithRetryWhenFailing(async () => {
-        const filteredTimeseries = await client.timeseries
-          .list(dataSetFilter(dataSetId))
-          .autoPagingToArray();
+    test(
+      'list',
+      async () => {
+        await runTestWithRetryWhenFailing(async () => {
+          const filteredTimeseries = await client.timeseries
+            .list(dataSetFilter(dataSetId))
+            .autoPagingToArray();
 
-        expect(filteredTimeseries.length).toBeTruthy();
-      });
-    });
+          expect(filteredTimeseries.length).toBeTruthy();
+        });
+      },
+      3 * 60 * 1000
+    );
     test('update', async () => {
       const [updatedTimeseries] = await client.timeseries.update([
         { id: timeseries.id, ...updateDataSetObject },
@@ -239,16 +243,20 @@ describe('data sets integration test', () => {
 
       expect(sequence.dataSetId).toEqual(dataSetId);
     });
-    test('list', async () => {
-      await runTestWithRetryWhenFailing(async () => {
-        const sequences = await client.sequences
-          .list(dataSetFilter(dataSetId))
-          .autoPagingToArray();
+    test(
+      'list',
+      async () => {
+        await runTestWithRetryWhenFailing(async () => {
+          const sequences = await client.sequences
+            .list(dataSetFilter(dataSetId))
+            .autoPagingToArray();
 
-        expect(sequences.length).toBeTruthy();
-        expect(sequences[0].dataSetId).toEqual(dataSetId);
-      });
-    });
+          expect(sequences.length).toBeTruthy();
+          expect(sequences[0].dataSetId).toEqual(dataSetId);
+        });
+      },
+      3 * 60 * 1000
+    );
     test('update', async () => {
       const [updatedSequence] = await client.sequences.update([
         { id: sequence.id, ...updateDataSetObject },
