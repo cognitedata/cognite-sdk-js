@@ -1,6 +1,7 @@
 // Copyright 2023 Cognite AS
 
 import { BaseResourceAPI } from '@cognite/sdk-core';
+import type { QueryResult, SelectSourceWithParams } from './query.types';
 import type {
   AggregationRequest,
   AggregationResponse,
@@ -241,6 +242,39 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
     const response = await this.post<QueryResponse>(this.url('query'), {
       data: params,
     });
+    return response.data;
+  };
+
+  /**
+   * [Query instances](https://developer.cognite.com/api#tag/Instances/operation/queryContent) with inferred return types.
+   *
+   * When `params` is declared `as const satisfies QueryRequest`, TypeScript infers the exact
+   * select keys, spaces and property names from the query, giving you fully typed results.
+   * Optionally pass `TypedSelectSources` to override property value types per source.
+   *
+   * ```js
+   *  const query = {
+   *    with: { myNodes: { nodes: {} } },
+   *    select: {
+   *      myNodes: {
+   *        sources: [{ source: { type: 'view', space: 'mySpace', externalId: 'MyView', version: 'v1' }, properties: ['name', 'age'] }]
+   *      }
+   *    }
+   *  } as const satisfies QueryRequest;
+   *
+   *  const result = await client.instances.queryTyped(query);
+   *  // result.items.myNodes[0].properties.mySpace['MyView/v1'].name  ← fully typed
+   * ```
+   */
+  public queryTyped = async <
+    TQueryRequest extends QueryRequest,
+    TypedSelectSources extends SelectSourceWithParams = SelectSourceWithParams,
+  >(
+    params: TQueryRequest
+  ): Promise<QueryResult<TQueryRequest, TypedSelectSources>> => {
+    const response = await this.post<
+      QueryResult<TQueryRequest, TypedSelectSources>
+    >(this.url('query'), { data: params });
     return response.data;
   };
 

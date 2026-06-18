@@ -134,39 +134,51 @@ describe('Files integration test', () => {
     expect(retrievedFile.directory).toEqual('/test/testing');
   });
 
-  test('retrieve by instance id', async () => {
-    // Syncing from instance to files API is eventually consistant
-    await runTestWithRetryWhenFailing(async () => {
-      const [retrievedFile] = await client.files.retrieve([
-        { instanceId: fileCdmInstanceId },
-      ]);
-      expect(retrievedFile.instanceId).toEqual(fileCdmInstanceId);
-    });
-  });
+  test(
+    'retrieve by instance id',
+    async () => {
+      // Syncing from instance to files API is eventually consistant
+      await runTestWithRetryWhenFailing(async () => {
+        const [retrievedFile] = await client.files.retrieve([
+          { instanceId: fileCdmInstanceId },
+        ]);
+        expect(retrievedFile.instanceId).toEqual(fileCdmInstanceId);
+      });
+    },
+    3 * 60 * 1000
+  );
 
-  test('update by instance id', async () => {
-    // Syncing from instance to files API is eventually consistant
-    await runTestWithRetryWhenFailing(async () => {
-      const testMetadata = { testKey: 'testVal' };
-      const [retrievedFile] = await client.files.update([
-        {
-          instanceId: fileCdmInstanceId,
-          update: { metadata: { set: testMetadata } },
-        },
-      ]);
-      expect(retrievedFile.instanceId).toEqual(fileCdmInstanceId);
-      expect(retrievedFile.metadata).toEqual(testMetadata);
-    });
-  });
+  test(
+    'update by instance id',
+    async () => {
+      // Syncing from instance to files API is eventually consistant
+      await runTestWithRetryWhenFailing(async () => {
+        const testMetadata = { testKey: 'testVal' };
+        const [retrievedFile] = await client.files.update([
+          {
+            instanceId: fileCdmInstanceId,
+            update: { metadata: { set: testMetadata } },
+          },
+        ]);
+        expect(retrievedFile.instanceId).toEqual(fileCdmInstanceId);
+        expect(retrievedFile.metadata).toEqual(testMetadata);
+      });
+    },
+    3 * 60 * 1000
+  );
 
-  test('download by instance id', async () => {
-    // Syncing from instance to files API is eventually consistant
-    await runTestWithRetryWhenFailing(async () => {
-      expect(
-        client.files.getDownloadUrls([{ instanceId: fileCdmInstanceId }])
-      ).rejects.toThrow(/Files not uploaded/);
-    });
-  });
+  test(
+    'download by instance id',
+    async () => {
+      // Syncing from instance to files API is eventually consistant
+      await runTestWithRetryWhenFailing(async () => {
+        expect(
+          client.files.getDownloadUrls([{ instanceId: fileCdmInstanceId }])
+        ).rejects.toThrow(/Files not uploaded/);
+      });
+    },
+    3 * 60 * 1000
+  );
 
   test.skip('retrieve with non-existent id', async () => {
     const res = await client.files.retrieve([{ id: 1 }], {
