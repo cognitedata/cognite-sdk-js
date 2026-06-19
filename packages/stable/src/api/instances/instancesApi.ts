@@ -1,6 +1,7 @@
 // Copyright 2023 Cognite AS
 
 import { BaseResourceAPI } from '@cognite/sdk-core';
+import type { QueryResult, SelectSourceWithParams } from './query.types';
 import type {
   AggregationRequest,
   AggregationResponse,
@@ -237,8 +238,21 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    *   });
    * ```
    */
-  public query = async (params: QueryRequest): Promise<QueryResponse> => {
-    const response = await this.post<QueryResponse>(this.url('query'), {
+  public query = async <
+    TQueryRequest extends QueryRequest = QueryRequest,
+    TypedSelectSources extends SelectSourceWithParams = SelectSourceWithParams,
+  >(
+    params: TQueryRequest
+  ): Promise<
+    QueryRequest extends TQueryRequest
+      ? QueryResponse
+      : QueryResult<TQueryRequest, TypedSelectSources>
+  > => {
+    const response = await this.post<
+      QueryRequest extends TQueryRequest
+        ? QueryResponse
+        : QueryResult<TQueryRequest, TypedSelectSources>
+    >(this.url('query'), {
       data: params,
     });
     return response.data;
