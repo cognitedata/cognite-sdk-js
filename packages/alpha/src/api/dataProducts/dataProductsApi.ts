@@ -11,6 +11,7 @@ import type {
   DataProductCreate,
   DataProductDelete,
   DataProductListQuery,
+  SingleItem,
 } from './types';
 
 export class DataProductsAPI extends BaseResourceAPI<DataProduct> {
@@ -33,7 +34,7 @@ export class DataProductsAPI extends BaseResourceAPI<DataProduct> {
    * ]);
    * ```
    */
-  public create = (items: DataProductCreate[]): Promise<DataProduct[]> => {
+  public create = (items: SingleItem<DataProductCreate>): Promise<DataProduct[]> => {
     return this.createEndpoint(items);
   };
 
@@ -80,7 +81,7 @@ export class DataProductsAPI extends BaseResourceAPI<DataProduct> {
    * ]);
    * ```
    */
-  public update = (items: DataProductChange[]): Promise<DataProduct[]> => {
+  public update = (items: SingleItem<DataProductChange>): Promise<DataProduct[]> => {
     return this.updateEndpoint(items, this.url('update'));
   };
 
@@ -91,7 +92,7 @@ export class DataProductsAPI extends BaseResourceAPI<DataProduct> {
    * await client.dataProducts.delete([{ externalId: 'my-data-product' }]);
    * ```
    */
-  public delete = (ids: DataProductDelete[]): Promise<object> => {
+  public delete = (ids: SingleItem<DataProductDelete>): Promise<object> => {
     return this.deleteEndpoint(ids);
   };
 }

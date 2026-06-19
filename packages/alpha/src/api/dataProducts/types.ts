@@ -7,6 +7,7 @@ import type {
 } from '@cognite/sdk-core';
 
 export type DataProductExternalId = CogniteExternalId;
+export type SingleItem<T> = [T];
 
 export interface DataProduct {
   externalId: DataProductExternalId;
