@@ -32,6 +32,7 @@ export type JsonValue =
   | number
   | boolean
   | null
+  | undefined
   | JsonValue[]
   | { readonly [key: string]: JsonValue };
 
@@ -137,17 +138,6 @@ export type OnFailureType = `${OnFailureTypeEnum}`;
 export type TaskDependency = {
   externalId: string;
 };
-export type TaskDefinition = {
-  externalId: string;
-  type: TaskTypes;
-  name?: string;
-  description?: string;
-  parameters?: TaskParameters;
-  retries?: number;
-  timeout?: number;
-  dependsOn?: TaskDependency[];
-  onFailure?: OnFailureType;
-};
 
 export type WorkflowDefinition = {
   hash: string;
@@ -193,6 +183,86 @@ export interface WorkflowVersionFilterQuery extends FilterQuery {
   filter?: WorkflowVersionFilter;
 }
 
+type SdkTaskDefinition = {
+  externalId: string;
+  type: TaskTypes;
+  name?: string;
+  description?: string;
+  parameters?: TaskParameters;
+  retries?: number;
+  timeout?: number;
+  dependsOn?: TaskDependency[];
+  onFailure?: OnFailureType;
+};
+
+export type LineageAnnotationOption = {
+  label: string;
+  value: string;
+};
+
+export type LineageAnnotationItem = Partial<
+  Record<LineageAnnotationOption['value'], string>
+>;
+
+export type LineageAnnotation = {
+  sources?: LineageAnnotationItem[];
+  targets?: LineageAnnotationItem[];
+};
+
+export type TaskDefinition = Omit<SdkTaskDefinition, 'type' | 'parameters'> & {
+  type: TaskTypes;
+  parameters?: TaskParameters;
+  lineageAnnotation?: LineageAnnotation;
+};
+
+export type InputType = DynamicTaskInput | object;
+
+type DynamicTaskInputTasks =
+  | TaskDefinition[] // Array of task definitions that are dynamically generated
+  | string // Bad or non-resolved reference during runtime
+  | null; // Error whilst resolving the tasks
+
+type DynamicTaskInput = {
+  dynamic: {
+    tasks: DynamicTaskInputTasks;
+  };
+};
+
+export type FunctionOutput = {
+  callId: number;
+  functionId: number;
+  response: object;
+};
+
+export type TransformationOutput = {
+  jobId: number;
+};
+
+export type SimulationOutput = {
+  runId: number;
+  logId: number;
+};
+
+type CdfResponseOutput = {
+  response: string | object;
+  statusCode: number;
+};
+
+type DynamicTaskOutput = {
+  dynamicTasks: TaskDefinition[];
+};
+
+type EmptyTaskOutput = Record<string, never>; // Represents an empty output type for tasks that do not produce any output
+
+export type OutputType =
+  | FunctionOutput
+  | TransformationOutput
+  | CdfResponseOutput
+  | DynamicTaskOutput
+  | SimulationOutput
+  | EmptyTaskOutput;
+
+
 export type WorkflowExecutionStatus =
   | 'RUNNING'
   | 'COMPLETED'
@@ -216,9 +286,9 @@ export interface WorkflowExecution {
   workflowExternalId: CogniteExternalId;
   status: WorkflowExecutionStatus;
   engineExecutionId: string;
-  createdTime: number;
-  metadata: Record<string, string>;
-  version?: string;
+  createdTime?: number;
+  metadata: object;
+  version: string;
   startTime?: number;
   endTime?: number;
   reasonForIncompletion?: string;
@@ -226,14 +296,15 @@ export interface WorkflowExecution {
 
 export interface WorkflowTaskExecution {
   id: string;
-  externalId: string;
+  externalId?: string;
   status: WorkflowTaskExecutionStatus;
   taskType: TaskTypes;
-  input: TaskParameters;
-  output: Record<string, unknown>;
+  input: InputType;
+  output: OutputType;
   parentTaskExternalId?: string | null;
   startTime?: number;
   endTime?: number;
+  eventTime?: number;
   reasonForIncompletion?: string;
 }
 

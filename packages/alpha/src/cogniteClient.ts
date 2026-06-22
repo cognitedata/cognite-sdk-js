@@ -54,9 +54,11 @@ export default class CogniteClientAlpha extends CogniteClientStable {
       WorkflowVersionsAPI,
       'workflows/versions'
     );
-    this.workflowExecutionsApi = this.apiFactory(
-      WorkflowExecutionsAPI,
-      'workflows/executions'
+    this.workflowExecutionsApi = new WorkflowExecutionsAPI(
+      `${this.projectUrl}/workflows/executions`,
+      `${this.projectUrl}/workflows`,
+      this.httpClient,
+      this.metadataMap
     );
   }
 

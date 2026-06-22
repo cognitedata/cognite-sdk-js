@@ -2,8 +2,10 @@
 
 import { BaseResourceAPI } from '@cognite/sdk-core';
 import type {
+  CDFHttpClient,
   CogniteExternalId,
   CursorAndAsyncIterator,
+  MetadataMap,
 } from '@cognite/sdk-core';
 import type {
   WorkflowExecution,
@@ -15,6 +17,18 @@ import type {
 } from './types';
 
 export class WorkflowExecutionsAPI extends BaseResourceAPI<WorkflowExecution> {
+  private readonly workflowsPath: string;
+
+  constructor(
+    executionsPath: string,
+    workflowsPath: string,
+    httpClient: CDFHttpClient,
+    map: MetadataMap
+  ) {
+    super(executionsPath, httpClient, map);
+    this.workflowsPath = workflowsPath;
+  }
+
   /**
    * [List workflow executions](https://api-docs.cognite.com/20230101-alpha/tag/Workflow-executions/operation/FilterWorkflowExecutions)
    *
@@ -58,7 +72,7 @@ export class WorkflowExecutionsAPI extends BaseResourceAPI<WorkflowExecution> {
     version: string,
     request: WorkflowExecutionRunRequest
   ): Promise<WorkflowExecution> => {
-    const path = `${this.workflowsBasePath()}/${encodeURIComponent(workflowExternalId)}/versions/${encodeURIComponent(version)}/run`;
+    const path = `${this.workflowsPath}/${encodeURIComponent(workflowExternalId)}/versions/${encodeURIComponent(version)}/run`;
     return this.createExecutionEndpoint(request, path);
   };
 
@@ -97,10 +111,6 @@ export class WorkflowExecutionsAPI extends BaseResourceAPI<WorkflowExecution> {
       this.url(`${encodeURIComponent(executionId)}/cancel`)
     );
   };
-
-  private workflowsBasePath(): string {
-    return this.url('').replace(/\/executions\/?$/, '');
-  }
 
   private createExecutionEndpoint<RequestType>(
     request: RequestType,
