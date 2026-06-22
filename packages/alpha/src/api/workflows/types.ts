@@ -139,6 +139,18 @@ export type TaskDependency = {
   externalId: string;
 };
 
+export type TaskDefinition = {
+  externalId: string;
+  type: TaskTypes;
+  name?: string;
+  description?: string;
+  parameters?: TaskParameters;
+  retries?: number;
+  timeout?: number;
+  dependsOn?: TaskDependency[];
+  onFailure?: OnFailureType;
+};
+
 export type WorkflowDefinition = {
   hash: string;
   description?: string;
@@ -183,50 +195,6 @@ export interface WorkflowVersionFilterQuery extends FilterQuery {
   filter?: WorkflowVersionFilter;
 }
 
-type SdkTaskDefinition = {
-  externalId: string;
-  type: TaskTypes;
-  name?: string;
-  description?: string;
-  parameters?: TaskParameters;
-  retries?: number;
-  timeout?: number;
-  dependsOn?: TaskDependency[];
-  onFailure?: OnFailureType;
-};
-
-export type LineageAnnotationOption = {
-  label: string;
-  value: string;
-};
-
-export type LineageAnnotationItem = Partial<
-  Record<LineageAnnotationOption['value'], string>
->;
-
-export type LineageAnnotation = {
-  sources?: LineageAnnotationItem[];
-  targets?: LineageAnnotationItem[];
-};
-
-export type TaskDefinition = Omit<SdkTaskDefinition, 'type' | 'parameters'> & {
-  type: TaskTypes;
-  parameters?: TaskParameters;
-  lineageAnnotation?: LineageAnnotation;
-};
-
-export type InputType = DynamicTaskInput | object;
-
-type DynamicTaskInputTasks =
-  | TaskDefinition[] // Array of task definitions that are dynamically generated
-  | string // Bad or non-resolved reference during runtime
-  | null; // Error whilst resolving the tasks
-
-type DynamicTaskInput = {
-  dynamic: {
-    tasks: DynamicTaskInputTasks;
-  };
-};
 
 export type FunctionOutput = {
   callId: number;
@@ -299,7 +267,7 @@ export interface WorkflowTaskExecution {
   externalId?: string;
   status: WorkflowTaskExecutionStatus;
   taskType: TaskTypes;
-  input: InputType;
+  input: TaskParameters;
   output: OutputType;
   parentTaskExternalId?: string | null;
   startTime?: number;
