@@ -33,9 +33,7 @@ export class DataProductsAPI extends BaseResourceAPI<DataProduct> {
    * ]);
    * ```
    */
-  public create = (
-    items: [DataProductCreate]
-  ): Promise<DataProduct[]> => {
+  public create = (items: [DataProductCreate]): Promise<DataProduct[]> => {
     return this.createEndpoint(items);
   };
 
@@ -82,9 +80,7 @@ export class DataProductsAPI extends BaseResourceAPI<DataProduct> {
    * ]);
    * ```
    */
-  public update = (
-    items: [DataProductChange]
-  ): Promise<DataProduct[]> => {
+  public update = (items: [DataProductChange]): Promise<DataProduct[]> => {
     return this.updateEndpoint(items, this.url('update'));
   };
 
