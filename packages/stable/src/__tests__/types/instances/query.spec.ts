@@ -2,9 +2,13 @@
  * Copyright 2024 Cognite AS
  */
 
-import type { QueryRequest } from 'stable/src/types';
 import { describe, expectTypeOf, test } from 'vitest';
 import type { InstancesAPI } from '../../../api/instances/instancesApi';
+import type {
+  QueryRequest,
+  QueryResponse,
+  RawPropertyValueV3,
+} from '../../../types';
 
 describe('queryNodesEdges type tests', () => {
   test('query result keys should match const query select keys', () => {
@@ -89,12 +93,7 @@ describe('queryNodesEdges type tests', () => {
       ReturnType<typeof InstancesAPI.prototype.queryTyped<QueryRequest>>
     >;
 
-    type TestType = QueryResult extends {
-      items: Record<string, unknown>;
-      nextCursors?: Record<string, unknown>;
-    }
-      ? true
-      : false;
+    type TestType = QueryResult extends QueryResponse ? true : false;
 
     expectTypeOf<TestType>().toEqualTypeOf<true>();
   });
@@ -104,7 +103,9 @@ describe('queryNodesEdges type tests', () => {
       ReturnType<typeof InstancesAPI.prototype.queryTyped<typeof testQuery>>
     >['items']['resultExpressionB'][number]['properties']['spaceD']['externalIdD/v1'];
 
-    expectTypeOf<ResultSourceSpaces>().toEqualTypeOf<Record<string, unknown>>();
+    expectTypeOf<ResultSourceSpaces>().toEqualTypeOf<
+      Record<string, RawPropertyValueV3>
+    >();
   });
 });
 

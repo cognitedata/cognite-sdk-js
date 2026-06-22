@@ -3,12 +3,14 @@ import type {
   NodeDefinition,
   NodeOrEdge,
   QueryRequest,
+  RawPropertyValueV3,
+  TypeInformationOuter,
   ViewReference,
 } from './types.gen';
 
 export type SelectSourceWithParams = Array<{
   source: ViewReference;
-  properties: Record<string, unknown>;
+  properties: Record<string, RawPropertyValueV3>;
 }>;
 
 type SELECT = 'select';
@@ -24,14 +26,54 @@ type EXTERNALID = 'externalId';
 type VERSION = 'version';
 type ALLPROPERTIES = '*';
 
-type InstanceType<
+export type QueryResult<
+  TQueryRequest extends QueryRequest,
+  TSelectSourceWithParams extends
+    SelectSourceWithParams = SelectSourceWithParams,
+> = {
+  items: {
+    [SelectKey in keyof TQueryRequest[SELECT]]: Array<
+      Prettify<
+        DmsInstanceType<TQueryRequest, SelectKey> & {
+          properties: {
+            [SelectSource in NonNullable<
+              NonNullable<TQueryRequest[SELECT][SelectKey]>[SOURCES]
+            >[number] as SelectSource[SOURCE][SPACE]]: {
+              [SelectSourceVar in SelectSource as `${SelectSourceVar[SOURCE][EXTERNALID]}/${SelectSourceVar[SOURCE][VERSION]}`]: SelectSourceVar[PROPERTIES][0] extends ALLPROPERTIES
+                ? Record<string, RawPropertyValueV3>
+                : {
+                    [SELECT_SOURCE_PROPERTY in SelectSourceVar[PROPERTIES][number]]: TypedSourceProperty<
+                      SelectSourceVar,
+                      TSelectSourceWithParams
+                    >[SELECT_SOURCE_PROPERTY] extends never
+                      ? RawPropertyValueV3
+                      : TypedSourceProperty<
+                          SelectSourceVar,
+                          TSelectSourceWithParams
+                        >[SELECT_SOURCE_PROPERTY];
+                  };
+            };
+          };
+        }
+      >
+    >;
+  };
+  nextCursor: Prettify<
+    ConcreteValues<{
+      [SelectKey in keyof TQueryRequest[SELECT]]?: string;
+    }>
+  >;
+  typing?: Record<string, TypeInformationOuter>;
+};
+
+type DmsInstanceType<
   TQueryRequest extends QueryRequest,
   SelectKey extends keyof TQueryRequest[SELECT],
 > = Exclude<keyof TQueryRequest[WITH][SelectKey], LIMIT> extends NODES
   ? Omit<NodeDefinition, PROPERTIES>
   : Exclude<keyof TQueryRequest[WITH][SelectKey], LIMIT> extends EDGES
     ? Omit<EdgeDefinition, PROPERTIES>
-    : Omit<NodeOrEdge, PROPERTIES>;
+  : Omit<NodeOrEdge, PROPERTIES>;
 
 type TypedSourceProperty<
   SelectSource extends NonNullable<
@@ -44,37 +86,10 @@ type TypedSourceProperty<
   Pick<SelectSource, SOURCE>
 >[PROPERTIES];
 
-export type QueryResult<
-  TQueryRequest extends QueryRequest,
-  TSelectSourceWithParams extends
-    SelectSourceWithParams = SelectSourceWithParams,
-> = {
-  items: {
-    [SELECT_KEY in keyof TQueryRequest[SELECT]]: Array<
-      InstanceType<TQueryRequest, SELECT_KEY> & {
-        properties: {
-          [SELECT_SOURCE in NonNullable<
-            NonNullable<TQueryRequest[SELECT][SELECT_KEY]>[SOURCES]
-          >[number] as SELECT_SOURCE[SOURCE][SPACE]]: {
-            [SELECT_SOURCE_VAR in SELECT_SOURCE as `${SELECT_SOURCE_VAR[SOURCE][EXTERNALID]}/${SELECT_SOURCE_VAR[SOURCE][VERSION]}`]: SELECT_SOURCE_VAR[PROPERTIES][0] extends ALLPROPERTIES
-              ? Record<string, unknown>
-              : {
-                  [SELECT_SOURCE_PROPERTY in SELECT_SOURCE_VAR[PROPERTIES][number]]: TypedSourceProperty<
-                    SELECT_SOURCE_VAR,
-                    TSelectSourceWithParams
-                  >[SELECT_SOURCE_PROPERTY] extends never
-                    ? unknown
-                    : TypedSourceProperty<
-                        SELECT_SOURCE_VAR,
-                        TSelectSourceWithParams
-                      >[SELECT_SOURCE_PROPERTY];
-                };
-          };
-        };
-      }
-    >;
-  };
-  nextCursor?: Partial<{
-    [SELECT_SOURCE_KEY in keyof TQueryRequest[SELECT]]: string;
-  }>;
+type ConcreteValues<T> = {
+  [K in keyof T]: NonNullable<T[K]>;
 };
+
+type Prettify<T> = {
+  [K in keyof T]: T[K];
+} & {};
