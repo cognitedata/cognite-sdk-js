@@ -138,7 +138,6 @@ export type OnFailureType = `${OnFailureTypeEnum}`;
 export type TaskDependency = {
   externalId: string;
 };
-
 export type TaskDefinition = {
   externalId: string;
   type: TaskTypes;
@@ -195,7 +194,6 @@ export interface WorkflowVersionFilterQuery extends FilterQuery {
   filter?: WorkflowVersionFilter;
 }
 
-
 export type FunctionOutput = {
   callId: number;
   functionId: number;
@@ -229,7 +227,6 @@ export type OutputType =
   | DynamicTaskOutput
   | SimulationOutput
   | EmptyTaskOutput;
-
 
 export type WorkflowExecutionStatus =
   | 'RUNNING'
