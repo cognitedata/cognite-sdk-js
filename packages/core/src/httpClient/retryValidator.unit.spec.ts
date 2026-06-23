@@ -79,4 +79,30 @@ describe('cdfRetryValidator', () => {
   test("don't retry GET 4xx (except 429)", () => {
     expect(retryValidator(getRequest, response415, 0)).toBeFalsy();
   });
+
+  describe('DELETE method retry behavior', () => {
+    const deleteRequest: HttpRequest = {
+      ...baseRequest,
+      method: HttpMethod.Delete,
+    };
+    const response502: HttpResponse<unknown> = { ...baseResponse, status: 502 };
+    const response503: HttpResponse<unknown> = { ...baseResponse, status: 503 };
+    const response504: HttpResponse<unknown> = { ...baseResponse, status: 504 };
+
+    test("don't retry DELETE on 502", () => {
+      expect(retryValidator(deleteRequest, response502, 0)).toBeFalsy();
+    });
+
+    test("don't retry DELETE on 503", () => {
+      expect(retryValidator(deleteRequest, response503, 0)).toBeFalsy();
+    });
+
+    test("don't retry DELETE on 504", () => {
+      expect(retryValidator(deleteRequest, response504, 0)).toBeFalsy();
+    });
+
+    test('retry DELETE on 429', () => {
+      expect(retryValidator(deleteRequest, response429, 0)).toBeTruthy();
+    });
+  });
 });
