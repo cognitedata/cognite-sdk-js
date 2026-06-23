@@ -47,3 +47,62 @@ export interface DataProductChange extends DataProductDelete {
 export interface DataProductListQuery extends FilterQuery {}
 
 export type DataProductListResponse = ListResponse<DataProduct[]>;
+
+export type DataProductVersionStatus =
+  | 'draft'
+  | 'published'
+  | 'deprecated';
+
+export interface DataProductViewReference {
+  space: string;
+  externalId: string;
+  version: string;
+}
+
+export interface DataProductVersionTerms {
+  usage?: string;
+  limitations?: string;
+}
+
+export interface DataProductVersion {
+  version: string;
+  views: DataProductViewReference[];
+  status: DataProductVersionStatus;
+  description?: string;
+  terms: DataProductVersionTerms;
+  createdTime: Date;
+  lastUpdatedTime: Date;
+}
+
+export interface DataProductVersionCreate {
+  version: string;
+  views: DataProductViewReference[];
+  status?: DataProductVersionStatus;
+  description?: string;
+  terms?: DataProductVersionTerms;
+}
+
+export interface DataProductVersionDelete {
+  version: string;
+}
+
+export interface DataProductVersionTermsPatch {
+  modify?: {
+    usage?: { set: string };
+    limitations?: { set: string };
+  };
+}
+
+export interface DataProductVersionPatch {
+  status?: { set: DataProductVersionStatus };
+  description?: { set: string } | { setNull: boolean };
+  terms?: DataProductVersionTermsPatch;
+  views?: { add: DataProductViewReference[] };
+}
+
+export interface DataProductVersionChange {
+  version: string;
+  update: DataProductVersionPatch;
+}
+
+export interface DataProductVersionListQuery extends FilterQuery {}
