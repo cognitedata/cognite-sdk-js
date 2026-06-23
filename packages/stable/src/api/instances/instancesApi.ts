@@ -249,7 +249,8 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    * [Query instances](https://developer.cognite.com/api#tag/Instances/operation/queryContent) with inferred return types. Declare params as const satisfies QueryRequest for fully typed results per select key, space and property name.
    *
    * ```js
-   *  const typedResponse = await client.instances.queryTyped({
+   * 
+   *  const query = {
    *    with: {
    *      result_set_1: {
    *        nodes: {},
@@ -260,7 +261,8 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    *        sources: [{ source: { type: 'view', space: 'mySpace', externalId: 'MyView', version: 'v1' }, properties: ['name', 'age'] }],
    *      },
    *    },
-   *  });
+   *  } as const satisfies QueryRequest
+   *  const typedResponse = await client.instances.queryTyped(query);
    *  // For fully typed results, declare the query variable as:
    *  // const query = { ... } as const satisfies QueryRequest;
    *  // then: typedResponse.items.result_set_1[0].properties.mySpace['MyView/v1'].name
