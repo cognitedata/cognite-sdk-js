@@ -2,8 +2,8 @@
 import { CogniteClient as CogniteClientStable } from '@cognite/sdk';
 import { accessApi } from '@cognite/sdk-core';
 import { version } from '../package.json';
-import { DataProductsAPI } from './api/dataProducts/dataProductsApi';
 import { DataProductVersionsAPI } from './api/dataProducts/dataProductVersionsApi';
+import { DataProductsAPI } from './api/dataProducts/dataProductsApi';
 import { LimitsAPI } from './api/limits/limitsApi';
 import { MeteringAPI } from './api/metering/meteringApi';
 import { SimulatorsAPI } from './api/simulators/simulatorsApi';

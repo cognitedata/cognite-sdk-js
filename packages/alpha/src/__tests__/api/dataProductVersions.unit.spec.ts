@@ -41,9 +41,10 @@ describe('Data product versions unit test', () => {
         items: [mockVersion],
       });
 
-    const items = await client.dataProductVersions.create(dataProductExternalId, [
-      versionCreateBody,
-    ]);
+    const items = await client.dataProductVersions.create(
+      dataProductExternalId,
+      [versionCreateBody]
+    );
     expect(items).toHaveLength(1);
     expect(items[0].version).toEqual('1.0.0');
   });
@@ -58,10 +59,13 @@ describe('Data product versions unit test', () => {
         nextCursor: 'next',
       });
 
-    const response = await client.dataProductVersions.list(dataProductExternalId, {
-      limit: 10,
-      cursor: 'abc',
-    });
+    const response = await client.dataProductVersions.list(
+      dataProductExternalId,
+      {
+        limit: 10,
+        cursor: 'abc',
+      }
+    );
     expect(response.items).toHaveLength(1);
     expect(response.items[0].version).toBe('1.0.0');
     expect(response.nextCursor).toBe('next');

@@ -109,28 +109,42 @@ describe('Data product versions integration test', () => {
         .catch();
     }
 
+    await client.views
+      .delete([
+        {
+          space: schemaSpace,
+          externalId: viewExternalId,
+          version: '1',
+        },
+      ])
+      .catch();
+
     await client.containers
       .delete([{ externalId: containerExternalId, space: schemaSpace }])
       .catch();
+
     await client.spaces.delete([schemaSpace]).catch();
   });
 
   test('create', async () => {
     const createVersion = '2.0.0';
 
-    const items = await client.dataProductVersions.create(dataProductExternalId, [
-      {
-        version: createVersion,
-        views: [
-          {
-            space: schemaSpace,
-            externalId: viewExternalId,
-            version: '1',
-          },
-        ],
-        description: 'create test version',
-      },
-    ]);
+    const items = await client.dataProductVersions.create(
+      dataProductExternalId,
+      [
+        {
+          version: createVersion,
+          views: [
+            {
+              space: schemaSpace,
+              externalId: viewExternalId,
+              version: '1',
+            },
+          ],
+          description: 'create test version',
+        },
+      ]
+    );
     const created = items[0];
 
     expect(created.version).toBe(createVersion);
@@ -148,9 +162,9 @@ describe('Data product versions integration test', () => {
     );
 
     expect(response.items.length).toBeGreaterThan(0);
-    expect(
-      response.items.some((item) => item.version === versionNumber)
-    ).toBe(true);
+    expect(response.items.some((item) => item.version === versionNumber)).toBe(
+      true
+    );
   });
 
   test('retrieve by version', async () => {
@@ -162,20 +176,23 @@ describe('Data product versions integration test', () => {
   });
 
   test('update existing data product version', async () => {
-    const items = await client.dataProductVersions.update(dataProductExternalId, [
-      {
-        version: versionNumber,
-        update: {
-          description: { set: 'integration updated description' },
-          status: { set: 'published' },
-          terms: {
-            modify: {
-              usage: { set: 'updated usage terms' },
+    const items = await client.dataProductVersions.update(
+      dataProductExternalId,
+      [
+        {
+          version: versionNumber,
+          update: {
+            description: { set: 'integration updated description' },
+            status: { set: 'published' },
+            terms: {
+              modify: {
+                usage: { set: 'updated usage terms' },
+              },
             },
           },
         },
-      },
-    ]);
+      ]
+    );
     const updatedVersion = items[0];
 
     expect(updatedVersion.description).toBe('integration updated description');
@@ -184,20 +201,23 @@ describe('Data product versions integration test', () => {
   });
 
   test('delete', async () => {
-    const deleteVersion = `3.${dataProductRandom}.0`;
+    const deleteVersion = '3.0.0';
 
-    const items = await client.dataProductVersions.create(dataProductExternalId, [
-      {
-        version: deleteVersion,
-        views: [
-          {
-            space: schemaSpace,
-            externalId: viewExternalId,
-            version: '1',
-          },
-        ],
-      },
-    ]);
+    const items = await client.dataProductVersions.create(
+      dataProductExternalId,
+      [
+        {
+          version: deleteVersion,
+          views: [
+            {
+              space: schemaSpace,
+              externalId: viewExternalId,
+              version: '1',
+            },
+          ],
+        },
+      ]
+    );
     const versionToDelete = items[0];
 
     await expect(

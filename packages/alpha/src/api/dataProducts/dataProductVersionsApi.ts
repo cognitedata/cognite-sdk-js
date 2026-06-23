@@ -60,10 +60,7 @@ export class DataProductVersionsAPI extends BaseResourceAPI<DataProductVersion> 
     query?: DataProductVersionListQuery
   ): CursorAndAsyncIterator<DataProductVersion> => {
     const path = this.versionsPath(dataProductExternalId);
-    return this.listEndpoint(
-      (params) => this.get(path, { params }),
-      query
-    );
+    return this.listEndpoint((params) => this.get(path, { params }), query);
   };
 
   /**

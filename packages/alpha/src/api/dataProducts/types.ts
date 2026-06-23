@@ -48,10 +48,7 @@ export interface DataProductListQuery extends FilterQuery {}
 
 export type DataProductListResponse = ListResponse<DataProduct[]>;
 
-export type DataProductVersionStatus =
-  | 'draft'
-  | 'published'
-  | 'deprecated';
+export type DataProductVersionStatus = 'draft' | 'published' | 'deprecated';
 
 export interface DataProductViewReference {
   space: string;
