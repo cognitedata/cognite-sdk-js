@@ -21,6 +21,8 @@ import type {
 } from './types.gen';
 
 export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
+  private searchOperatorChangeWarningDisplayed = false;
+
   /**
    * [Search instances](https://developer.cognite.com/api#tag/Instances/operation/searchInstances)
    *
@@ -46,6 +48,17 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
   public search = async (
     params: NodeOrEdgeSearchRequest
   ): Promise<ByIdsResponse> => {
+    if (
+      params.operator === undefined &&
+      !this.searchOperatorChangeWarningDisplayed
+    ) {
+      console.warn(
+        "The default operator for instance search will change from 'OR' to 'AND' sometime in Q1 2027. In the " +
+          "next major version release (v11), the default will be changed to 'AND', which is the recommended " +
+          'setting for most use cases. Please explicitly pass the operator to avoid this warning.'
+      );
+      this.searchOperatorChangeWarningDisplayed = true;
+    }
     const response = await this.post<ByIdsResponse>(this.searchUrl, {
       data: params,
     });
