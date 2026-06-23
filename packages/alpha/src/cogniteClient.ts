@@ -42,7 +42,7 @@ export default class CogniteClientAlpha extends CogniteClientStable {
   public get workflowExecutions() {
     return accessApi(this.workflowExecutionsApi);
   }
-  
+
   public get dataProducts() {
     return accessApi(this.dataProductsApi);
   }
