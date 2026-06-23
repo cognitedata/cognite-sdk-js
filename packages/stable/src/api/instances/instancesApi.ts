@@ -249,7 +249,7 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    * [Query instances](https://developer.cognite.com/api#tag/Instances/operation/queryContent) with inferred return types. Declare params as const satisfies QueryRequest for fully typed results per select key, space and property name.
    *
    * ```js
-   * 
+   *
    *  const query = {
    *    with: {
    *      result_set_1: {
