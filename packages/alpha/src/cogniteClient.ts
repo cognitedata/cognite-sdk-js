@@ -6,6 +6,7 @@ import { DataProductsAPI } from './api/dataProducts/dataProductsApi';
 import { LimitsAPI } from './api/limits/limitsApi';
 import { MeteringAPI } from './api/metering/meteringApi';
 import { SimulatorsAPI } from './api/simulators/simulatorsApi';
+import { WorkflowExecutionsAPI } from './api/workflows/workflowExecutionsApi';
 import { WorkflowVersionsAPI } from './api/workflows/workflowVersionsApi';
 import { WorkflowsAPI } from './api/workflows/workflowsApi';
 
@@ -15,6 +16,7 @@ export default class CogniteClientAlpha extends CogniteClientStable {
   private meteringApi?: MeteringAPI;
   private workflowsApi?: WorkflowsAPI;
   private workflowVersionsApi?: WorkflowVersionsAPI;
+  private workflowExecutionsApi?: WorkflowExecutionsAPI;
   private dataProductsApi?: DataProductsAPI;
 
   public get limits() {
@@ -37,6 +39,10 @@ export default class CogniteClientAlpha extends CogniteClientStable {
     return accessApi(this.workflowVersionsApi);
   }
 
+  public get workflowExecutions() {
+    return accessApi(this.workflowExecutionsApi);
+  }
+  
   public get dataProducts() {
     return accessApi(this.dataProductsApi);
   }
@@ -55,6 +61,12 @@ export default class CogniteClientAlpha extends CogniteClientStable {
       'workflows/versions'
     );
     this.dataProductsApi = this.apiFactory(DataProductsAPI, 'dataproducts');
+    this.workflowExecutionsApi = new WorkflowExecutionsAPI(
+      `${this.projectUrl}/workflows/executions`,
+      `${this.projectUrl}/workflows`,
+      this.httpClient,
+      this.metadataMap
+    );
   }
 
   protected get version() {
