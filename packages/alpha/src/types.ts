@@ -642,7 +642,7 @@ export interface LimitsFilterQuery extends FilterQuery {
 
 export interface MeteringDatapoint {
   timestamp: Date;
-  value: number;
+  average: number;
 }
 
 export interface MeterReading {
