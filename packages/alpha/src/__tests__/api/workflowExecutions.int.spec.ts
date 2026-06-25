@@ -158,6 +158,5 @@ describe('Workflow executions integration test', () => {
 
     expect(execution.id).toBe(createdExecution.id);
     expect(execution.status).toBe('TERMINATED');
-    createdExecution = undefined;
   });
 });
