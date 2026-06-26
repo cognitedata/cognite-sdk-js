@@ -77,23 +77,20 @@ describe('Data product versions integration test', () => {
         tags: ['integration'],
       },
     ]);
-    await client.dataProductVersions.create(
-      dataProductExternalId,
-      [
-        {
-          version: versionNumber,
-          views: [
-            {
-              space: schemaSpace,
-              externalId: viewExternalId,
-              version: '1',
-            },
-          ],
-          description: 'integration test data product version',
-          terms: { usage: 'integration test' },
-        },
-      ]
-    );
+    await client.dataProductVersions.create(dataProductExternalId, [
+      {
+        version: versionNumber,
+        views: [
+          {
+            space: schemaSpace,
+            externalId: viewExternalId,
+            version: '1',
+          },
+        ],
+        description: 'integration test data product version',
+        terms: { usage: 'integration test' },
+      },
+    ]);
   });
 
   afterAll(async () => {
