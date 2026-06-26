@@ -52,29 +52,39 @@ describe('Workflow executions integration test', () => {
   });
 
   afterAll(async () => {
-    if (createdExecution) {
-      await client.workflowExecutions
-        .cancel(createdExecution.id, {
-          reason: 'cleanup after integration test',
-        })
-        .catch();
-    }
+    try {
+      if (createdExecution) {
+        const current = await client.workflowExecutions.retrieve(
+          createdExecution.id
+        );
+        if (current.status === 'RUNNING') {
+          await client.workflowExecutions.cancel(createdExecution.id, {
+            reason: 'cleanup after integration test',
+          });
+        }
+      }
 
-    if (createdVersion) {
-      await client.workflowVersions
-        .delete([
-          {
-            workflowExternalId,
-            version: versionExternalId,
-          },
-        ])
-        .catch();
-    }
+      if (createdVersion) {
+        await client.workflowVersions
+          .delete([
+            {
+              workflowExternalId,
+              version: versionExternalId,
+            },
+          ])
+          .catch();
+      }
 
-    if (createdWorkflow) {
-      await client.workflows
-        .delete([{ externalId: workflowExternalId }])
-        .catch();
+      if (createdWorkflow) {
+        await client.workflows
+          .delete([{ externalId: workflowExternalId }])
+          .catch();
+      }
+    } catch (error) {
+      console.error(
+        'Workflow executions integration test cleanup failed:',
+        error
+      );
     }
   });
 
@@ -158,6 +168,6 @@ describe('Workflow executions integration test', () => {
 
     expect(execution.id).toBe(createdExecution.id);
     expect(execution.status).toBe('TERMINATED');
-    createdExecution = undefined;
+    createdExecution = execution;
   });
 });
