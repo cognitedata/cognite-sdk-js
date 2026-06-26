@@ -43,6 +43,7 @@ function setupMockableClient() {
 }
 
 const RECORDS_TEST_SPACE = 'sdk_test_records_space'; // Space reserved for records integration tests
+const DATA_PRODUCT_TEST_SPACE_PREFIX = 'sdk_js_alpha_dp';
 
 const deleteOldSpaces = async (client: CogniteClient) => {
   const fiveMinutesInMs = 5 * 60 * 1000;
@@ -58,7 +59,9 @@ const deleteSpacesNotUpdatedSince = async (
     const spaces = (await client.spaces.list({ limit: 100 })).items;
     const oldSpaces = spaces.filter(
       (space) =>
-        space.lastUpdatedTime < timestamp && space.space !== RECORDS_TEST_SPACE
+        space.lastUpdatedTime < timestamp &&
+        space.space !== RECORDS_TEST_SPACE &&
+        !space.space.startsWith(DATA_PRODUCT_TEST_SPACE_PREFIX)
     );
 
     const spacesList = oldSpaces.map((space) => space.space);
