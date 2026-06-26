@@ -84,6 +84,8 @@ export type AclActionDataSets = READ | WRITE | OWNER;
 
 export type AclActionDataModelInstances = READ | WRITE | WRITE_PROPERTIES;
 
+export type AclActionDataProducts = CREATE | DELETE | READ | UPDATE;
+
 export type AclActionDataModel = READ | WRITE;
 
 export type AclActionEvents = READ | WRITE;
@@ -122,6 +124,8 @@ export type AclDataModelInstances = Acl<
   AclActionDataModelInstances,
   AclScopeDataModelInstances
 >;
+
+export type AclDataProducts = Acl<AclActionDataProducts, AclScopeDataProducts>;
 
 export type AclEvents = Acl<AclActionEvents, AclScopeEvents>;
 
@@ -186,6 +190,14 @@ export interface AclScopeDatasetsIds {
 export type AclScopeDataModel = AclScopeAll | AclScopeSpaceIds;
 
 export type AclScopeDataModelInstances = AclScopeAll | AclScopeSpaceIds;
+
+export interface AclScopeDataProductExternalIds {
+  dataProductScope: {
+    externalIds: CogniteExternalId[];
+  };
+}
+
+export type AclScopeDataProducts = AclScopeAll | AclScopeDataProductExternalIds;
 
 export type AclScopeEvents = AclScopeAll | AclScopeDatasetsIds;
 
@@ -1910,6 +1922,7 @@ export type SingleCogniteCapability =
   | { templateInstancesAcl: AclTemplateInstances }
   | { dataModelAcl: AclDataModel }
   | { dataModelInstancesAcl: AclDataModelInstances }
+  | { dataProductsAcl: AclDataProducts }
   | { sessionsAcl: AclSessions };
 
 export type SinglePatch<T> = { set: T } | { setNull: boolean };
