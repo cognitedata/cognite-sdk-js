@@ -2,8 +2,12 @@
 
 import { afterAll, beforeAll, describe, expect, test } from 'vitest';
 import type CogniteClientAlpha from '../../cogniteClient';
-import type { DataProduct, DataProductVersion } from '../../types';
-import { randomInt, setupLoggedInClient } from '../testUtils';
+import {
+  cleanupDataProductSchemaSpaces,
+  cleanupOrphanedDataProductTestResources,
+  randomInt,
+  setupLoggedInClient,
+} from '../testUtils';
 
 function uniqueSchemaSpace(prefix: string): string {
   return `${prefix}_${randomInt()}`;
@@ -17,11 +21,10 @@ describe('Data product versions integration test', () => {
   const containerExternalId = `int_dpv_container_${dataProductRandom}`;
   const viewExternalId = `int_dpv_view_${dataProductRandom}`;
   const versionNumber = '1.0.0';
-  let createdDataProduct: DataProduct | undefined;
-  let createdVersion: DataProductVersion | undefined;
 
   beforeAll(async () => {
     client = setupLoggedInClient();
+    await cleanupOrphanedDataProductTestResources(client);
 
     await client.spaces.upsert([
       {
@@ -65,7 +68,7 @@ describe('Data product versions integration test', () => {
       },
     ]);
 
-    const items = await client.dataProducts.create([
+    await client.dataProducts.create([
       {
         externalId: dataProductExternalId,
         name: `integration test data product ${dataProductRandom}`,
@@ -74,9 +77,7 @@ describe('Data product versions integration test', () => {
         tags: ['integration'],
       },
     ]);
-    createdDataProduct = items[0];
-
-    const versionItems = await client.dataProductVersions.create(
+    await client.dataProductVersions.create(
       dataProductExternalId,
       [
         {
@@ -93,37 +94,10 @@ describe('Data product versions integration test', () => {
         },
       ]
     );
-    createdVersion = versionItems[0];
   });
 
   afterAll(async () => {
-    if (createdVersion) {
-      await client.dataProductVersions
-        .delete(dataProductExternalId, [{ version: versionNumber }])
-        .catch();
-    }
-
-    if (createdDataProduct) {
-      await client.dataProducts
-        .delete([{ externalId: dataProductExternalId }])
-        .catch();
-    }
-
-    await client.views
-      .delete([
-        {
-          space: schemaSpace,
-          externalId: viewExternalId,
-          version: '1',
-        },
-      ])
-      .catch();
-
-    await client.containers
-      .delete([{ externalId: containerExternalId, space: schemaSpace }])
-      .catch();
-
-    await client.spaces.delete([schemaSpace]).catch();
+    await cleanupDataProductSchemaSpaces(client, [schemaSpace]);
   });
 
   test('create', async () => {
