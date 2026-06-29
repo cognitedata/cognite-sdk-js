@@ -26,7 +26,8 @@
     "docs": "yarn g:typedoc --options ./typedoc.cjs --tsconfig tsconfig.build.json src/index.ts",
     "docs:bundle": "yarn docs && mkdir -p ../../docs && cp -r docs/* ../../docs/",
     "extract-snippets": "rm -rf codeSnippets/ && yarn docs --json codeSnippets/docs.json && node ../../scripts/extractCodeSnippets.js",
-    "test-snippets": "yarn extract-snippets && yarn g:tsc -p codeSnippets/tsconfig.build.json"
+    "test-snippets": "yarn extract-snippets && yarn g:tsc -p codeSnippets/tsconfig.build.json",
+    "generate:proto": "node ../../scripts/generate-proto.mjs"
   },
   "dependencies": {
     "@cognite/sdk-core": "^5.2.3",
@@ -34,10 +35,22 @@
     "geojson": "^0.5.0",
     "lodash": "^4.17.21"
   },
+  "peerDependencies": {
+    "protobufjs": "^7.4.0 || ^8.0.0"
+  },
+  "peerDependenciesMeta": {
+    "protobufjs": {
+      "optional": true
+    }
+  },
   "files": [
     "dist"
   ],
   "publishConfig": {
     "access": "public"
+  },
+  "devDependencies": {
+    "protobufjs": "^8.0.3",
+    "protobufjs-cli": "^2.0.3"
   }
 }

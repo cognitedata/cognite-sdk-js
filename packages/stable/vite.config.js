@@ -1,6 +1,7 @@
 import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
+import { configDefaults } from 'vitest/config';
 
 const externals = ['@cognite/sdk-core', 'geojson', 'lodash'];
 
@@ -28,6 +29,14 @@ export default defineConfig({
       // make sure to externalize deps that shouldn't be bundled
       // into your library
       external: externals,
+    },
+  },
+  test: {
+    coverage: {
+      exclude: [
+        ...(configDefaults.coverage?.exclude || []),
+        'src/api/dataPoints/proto/generated/**',
+      ],
     },
   },
 });
