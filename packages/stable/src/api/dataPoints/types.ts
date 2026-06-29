@@ -16,10 +16,13 @@ import type {
 } from '../../types/common';
 
 // =====================================================
-// Aggregate function type
+// Aggregate name types
 // =====================================================
 
-export type Aggregate =
+/**
+ * Aggregate functions available for numeric time series
+ */
+export type NumericAggregateName =
   | 'average'
   | 'max'
   | 'min'
@@ -38,6 +41,17 @@ export type Aggregate =
   | 'durationGood'
   | 'durationUncertain'
   | 'durationBad';
+
+/**
+ * Aggregate functions available for state time series
+ */
+export type StateAggregateName =
+  | 'stateCount'
+  | 'stateDuration'
+  | 'stateTransitions';
+
+/** All aggregate functions accepted by data point queries */
+export type Aggregate = NumericAggregateName | StateAggregateName;
 
 // =====================================================
 // Data point status types
@@ -65,21 +79,16 @@ export interface DatapointStatus {
 export interface DatapointExtremum {
   timestamp: Date;
   value: number;
+  status?: DatapointStatus;
 }
 
-export interface DatapointAggregate extends DatapointInfo {
-  average?: number;
-  max?: number;
-  min?: number;
+/**
+ * Aggregate fields common to all aggregate responses
+ * (data point counts and status-code durations).
+ */
+export interface CommonDatapointAggregate {
+  /** Number of data points in the aggregate period. */
   count?: number;
-  sum?: number;
-  interpolation?: number;
-  stepInterpolation?: number;
-  continuousVariance?: number;
-  discreteVariance?: number;
-  totalVariation?: number;
-  maxDatapoint?: DatapointExtremum;
-  minDatapoint?: DatapointExtremum;
   countGood?: number;
   countUncertain?: number;
   countBad?: number;
@@ -91,7 +100,23 @@ export interface DatapointAggregate extends DatapointInfo {
   durationBad?: number;
 }
 
-export interface DoubleDatapoint extends DatapointInfo {
+export interface NumericDatapointAggregate
+  extends DatapointInfo,
+    CommonDatapointAggregate {
+  average?: number;
+  max?: number;
+  min?: number;
+  sum?: number;
+  interpolation?: number;
+  stepInterpolation?: number;
+  continuousVariance?: number;
+  discreteVariance?: number;
+  totalVariation?: number;
+  maxDatapoint?: DatapointExtremum;
+  minDatapoint?: DatapointExtremum;
+}
+
+export interface NumericDatapoint extends DatapointInfo {
   value: number;
   status?: DatapointStatus;
 }
@@ -106,9 +131,6 @@ export interface DatapointWrite {
   value: number | string;
   status?: DatapointStatus;
 }
-
-/** @deprecated Use DatapointWrite instead. Will be removed in next major release. */
-export type ExternalDatapoint = DatapointWrite;
 
 // =====================================================
 // Data points delete types
@@ -159,23 +181,29 @@ export interface DatapointsMetadata extends InternalId {
   unit?: string;
 }
 
-export interface DatapointAggregates extends DatapointsMetadata, NextCursor {
+export interface NumericDatapointAggregates
+  extends DatapointsMetadata,
+    NextCursor {
   isString: false;
+  // TODO(next-major): Make required per API spec (DatapointsGetAggregateDatapoint)
+  type?: 'numeric';
   /**
    * Whether the timeseries is a step series or not
    */
   isStep: boolean;
-  datapoints: DatapointAggregate[];
+  datapoints: NumericDatapointAggregate[];
   /**
    * The physical unit of the time series (reference to unit catalog). Replaced with target unit if data points were converted.
    */
   unitExternalId?: CogniteExternalId;
 }
 
-export type Datapoints = StringDatapoints | DoubleDatapoints;
+export type Datapoints = NumericDatapoints | StringDatapoints | StateDatapoints;
 
-export interface DoubleDatapoints extends DatapointsMetadata, NextCursor {
+export interface NumericDatapoints extends DatapointsMetadata, NextCursor {
   isString: false;
+  // TODO(next-major): Make required per API spec (DatapointsGetDoubleDatapoint)
+  type?: 'numeric';
   /**
    * Whether the timeseries is a step series or not
    */
@@ -183,7 +211,7 @@ export interface DoubleDatapoints extends DatapointsMetadata, NextCursor {
   /**
    * The list of datapoints
    */
-  datapoints: DoubleDatapoint[];
+  datapoints: NumericDatapoint[];
   /**
    * The physical unit of the time series (reference to unit catalog). Replaced with target unit if data points were converted.
    */
@@ -192,6 +220,8 @@ export interface DoubleDatapoints extends DatapointsMetadata, NextCursor {
 
 export interface StringDatapoints extends DatapointsMetadata, NextCursor {
   isString: true;
+  // TODO(next-major): Make required per API spec (DatapointsGetStringDatapoint)
+  type?: 'string';
   /**
    * The list of datapoints
    */
@@ -206,51 +236,28 @@ export interface DatapointsInsertProperties {
   datapoints: DatapointWrite[];
 }
 
-/** @deprecated Use DatapointsInsertProperties instead. Will be removed in next major release. */
-export type ExternalDatapoints = DatapointsInsertProperties;
-
 export interface DatapointsInsertByExternalId
   extends DatapointsInsertProperties,
     ExternalId {}
-
-/** @deprecated Use DatapointsInsertByExternalId instead. Will be removed in next major release. */
-export type ExternalDatapointExternalId = DatapointsInsertByExternalId;
 
 export interface DatapointsInsertByInstanceId
   extends DatapointsInsertProperties,
     InstanceId {}
 
-/** @deprecated Use DatapointsInsertByInstanceId instead. Will be removed in next major release. */
-export type ExternalDatapointInstanceId = DatapointsInsertByInstanceId;
-
 export interface DatapointsInsertById
   extends DatapointsInsertProperties,
     InternalId {}
-
-/** @deprecated Use DatapointsInsertById instead. Will be removed in next major release. */
-export type ExternalDatapointId = DatapointsInsertById;
 
 export type DatapointsInsertItem =
   | DatapointsInsertById
   | DatapointsInsertByExternalId
   | DatapointsInsertByInstanceId;
 
-/** @deprecated Use DatapointsInsertItem instead. Will be removed in next major release. */
-export type ExternalDatapointsQuery = DatapointsInsertItem;
-
 // =====================================================
 // Data points query types
 // =====================================================
 
 export interface DatapointsMultiQuery extends DatapointsMultiQueryBase {
-  items: DatapointsQuery[];
-}
-
-/**
- * @deprecated Use DatapointsMultiQuery with `granularity: '1mo'` instead. Will be removed in next major release.
- */
-export interface DatapointsMonthlyGranularityMultiQuery
-  extends Omit<DatapointsMultiQueryBase, 'granularity'> {
   items: DatapointsQuery[];
 }
 
@@ -396,8 +403,132 @@ export interface LatestDataPropertyFilter {
 }
 
 // =====================================================
-// Deprecated re-exports from other modules
+// State data point types
+// =====================================================
+
+/**
+ * A state data point to insert. At least one of `value`, `numericValue` or
+ * `stringValue` must be provided unless the status is bad.
+ */
+export interface StateDatapointWrite {
+  timestamp: Timestamp;
+  /**
+   * Alias for `numericValue`: the SDK sends it to the API as `numericValue`
+   * (ignored if `numericValue` is also set).
+   * @deprecated Use numericValue instead. Will be removed in next major release.
+   */
+  value?: number;
+  numericValue?: number;
+  stringValue?: string;
+  status?: DatapointStatus;
+}
+
+export interface StateDatapointsInsertProperties {
+  datapoints: StateDatapointWrite[];
+}
+
+export type StateDatapointsInsertItem =
+  | (InternalId & StateDatapointsInsertProperties)
+  | (ExternalId & StateDatapointsInsertProperties)
+  | (InstanceId & StateDatapointsInsertProperties);
+
+export interface StateDatapoint extends DatapointInfo {
+  /**
+   * Numeric representation of the state, mirrored by the SDK from
+   * `numericValue`. May be missing if status is bad.
+   * @deprecated Use numericValue instead. Will be removed in next major release.
+   */
+  value?: number;
+  /** Numeric representation of the state. May be missing if status is bad. */
+  numericValue?: number;
+  /** String representation of the state. May be missing if the state no longer exists in the state set or if status is bad. */
+  stringValue?: string;
+  status?: DatapointStatus;
+}
+
+export interface StateDatapoints extends DatapointsMetadata, NextCursor {
+  isString: false;
+  type: 'state';
+  isStep?: boolean;
+  datapoints: StateDatapoint[];
+}
+
+export interface StateAggregateValue {
+  numericValue: number;
+  /** String representation of the state. May be omitted if the state no longer exists in the state set. */
+  stringValue?: string;
+  /** Number of data points in the aggregate period with this state value. */
+  stateCount?: number;
+  /**
+   * Number of times the state changed to this value in the aggregate period,
+   * counting the very first data point and transitions from bad data points.
+   */
+  stateTransitions?: number;
+  /**
+   * Duration in milliseconds the time series was in this state. Carries over
+   * from the previous aggregate period, so it may be non-zero even if the
+   * state does not occur in the current period.
+   */
+  stateDuration?: number;
+}
+
+export interface StateDatapointAggregate
+  extends DatapointInfo,
+    CommonDatapointAggregate {
+  stateAggregates?: StateAggregateValue[];
+}
+
+export interface StateDatapointAggregates
+  extends DatapointsMetadata,
+    NextCursor {
+  isString: false;
+  type: 'state';
+  isStep: boolean;
+  datapoints: StateDatapointAggregate[];
+  unitExternalId?: CogniteExternalId;
+}
+
+// =====================================================
+// Deprecated exports
 // =====================================================
 
 /** @deprecated Use IgnoreUnknownIds directly. Will be removed in next major release. */
 export type LatestDataParams = IgnoreUnknownIds;
+
+/** @deprecated Use NumericDatapointAggregate instead. Will be removed in next major release. */
+export type DatapointAggregate = NumericDatapointAggregate;
+
+/** @deprecated Use NumericDatapoint instead. Will be removed in next major release. */
+export type DoubleDatapoint = NumericDatapoint;
+
+/** @deprecated Use DatapointWrite instead. Will be removed in next major release. */
+export type ExternalDatapoint = DatapointWrite;
+
+/** @deprecated Use NumericDatapointAggregates instead. Will be removed in next major release. */
+export type DatapointAggregates = NumericDatapointAggregates;
+
+/** @deprecated Use NumericDatapoints instead. Will be removed in next major release. */
+export type DoubleDatapoints = NumericDatapoints;
+
+/** @deprecated Use DatapointsInsertProperties instead. Will be removed in next major release. */
+export type ExternalDatapoints = DatapointsInsertProperties;
+
+/** @deprecated Use DatapointsInsertByExternalId instead. Will be removed in next major release. */
+export type ExternalDatapointExternalId = DatapointsInsertByExternalId;
+
+/** @deprecated Use DatapointsInsertByInstanceId instead. Will be removed in next major release. */
+export type ExternalDatapointInstanceId = DatapointsInsertByInstanceId;
+
+/** @deprecated Use DatapointsInsertById instead. Will be removed in next major release. */
+export type ExternalDatapointId = DatapointsInsertById;
+
+/** @deprecated Use DatapointsInsertItem instead. Will be removed in next major release. */
+export type ExternalDatapointsQuery = DatapointsInsertItem;
+
+/**
+ * @deprecated Use DatapointsMultiQuery with `granularity: '1mo'` instead. Will be removed in next major release.
+ */
+export interface DatapointsMonthlyGranularityMultiQuery
+  extends Omit<DatapointsMultiQueryBase, 'granularity'> {
+  items: DatapointsQuery[];
+}

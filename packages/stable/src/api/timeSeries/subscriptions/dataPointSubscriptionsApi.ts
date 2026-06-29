@@ -6,6 +6,7 @@ import {
   type CursorResponse,
 } from '@cognite/sdk-core';
 import cloneDeepWith from 'lodash/cloneDeepWith';
+import { mirrorStateValueAlias } from '../../dataPoints/dataPointsApi';
 import type {
   DataPointSubscription,
   DataPointSubscriptionByIdsQuery,
@@ -155,6 +156,9 @@ export class DataPointSubscriptionsAPI extends BaseResourceAPI<DataPointSubscrip
       }
     );
     const parsed = parseSubscriptionListDataDates(response.data);
+    for (const update of parsed.updates) {
+      mirrorStateValueAlias(update.upserts ?? []);
+    }
     return this.addToMapAndReturn(parsed, response);
   };
 }
