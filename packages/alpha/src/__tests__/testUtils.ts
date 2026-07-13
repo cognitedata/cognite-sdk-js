@@ -35,7 +35,9 @@ export async function cleanupDataProductSchemaSpaces(
   client: CogniteClientAlpha,
   spaces: string[]
 ) {
-  const dataProducts = (await client.dataProducts.list({ limit: 100 })).items;
+  const dataProducts = await client.dataProducts
+    .list({ limit: 100 })
+    .autoPagingToArray({ limit: Number.POSITIVE_INFINITY });
 
   for (const space of spaces) {
     const productsInSpace = dataProducts.filter(
@@ -45,7 +47,7 @@ export async function cleanupDataProductSchemaSpaces(
     for (const product of productsInSpace) {
       const versions = await client.dataProductVersions
         .list(product.externalId, { limit: 10 })
-        .autoPagingToArray();
+        .autoPagingToArray({ limit: Number.POSITIVE_INFINITY });
 
       if (versions.length > 0) {
         await client.dataProductVersions
@@ -63,7 +65,7 @@ export async function cleanupDataProductSchemaSpaces(
 
     const views = await client.views
       .list({ limit: 1000, space, allVersions: true })
-      .autoPagingToArray();
+      .autoPagingToArray({ limit: Number.POSITIVE_INFINITY });
 
     if (views.length > 0) {
       await client.views
@@ -77,8 +79,9 @@ export async function cleanupDataProductSchemaSpaces(
         .catch(() => {});
     }
 
-    const containers = (await client.containers.list({ limit: 100, space }))
-      .items;
+    const containers = await client.containers
+      .list({ limit: 100, space })
+      .autoPagingToArray({ limit: Number.POSITIVE_INFINITY });
 
     if (containers.length > 0) {
       await client.containers
@@ -98,7 +101,11 @@ export async function cleanupDataProductSchemaSpaces(
 export async function cleanupOrphanedDataProductTestResources(
   client: CogniteClientAlpha
 ) {
-  const spaces = (await client.spaces.list({ limit: 100 })).items
+  const spaces = (
+    await client.spaces
+      .list({ limit: 1000 })
+      .autoPagingToArray({ limit: Number.POSITIVE_INFINITY })
+  )
     .filter((space) => space.space.startsWith(DATA_PRODUCT_TEST_SPACE_PREFIX))
     .map((space) => space.space);
 

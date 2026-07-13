@@ -21,10 +21,6 @@ export class DataProductVersionsAPI extends BaseResourceAPI<DataProductVersion> 
     return this.pickDateProps(['items'], ['createdTime', 'lastUpdatedTime']);
   }
 
-  private versionsPath(dataProductExternalId: CogniteExternalId) {
-    return this.url(`${encodeURIComponent(dataProductExternalId)}/versions`);
-  }
-
   /**
    * [Create a data product version](https://api-docs.cognite.com/20230101/tag/Data-products/operation/createDataProductVersion)
    *
@@ -126,4 +122,8 @@ export class DataProductVersionsAPI extends BaseResourceAPI<DataProductVersion> 
       `${this.versionsPath(dataProductExternalId)}/delete`
     );
   };
+
+  private versionsPath(dataProductExternalId: CogniteExternalId) {
+    return this.url(`${encodeURIComponent(dataProductExternalId)}/versions`);
+  }
 }
