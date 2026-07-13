@@ -85,8 +85,8 @@ export interface DataProductVersionDelete {
 
 export interface DataProductVersionTermsPatch {
   modify?: {
-    usage?: { set: string };
-    limitations?: { set: string };
+    usage?: { set: string } | { setNull: boolean };
+    limitations?: { set: string } | { setNull: boolean };
   };
 }
 
