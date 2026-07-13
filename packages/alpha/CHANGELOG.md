@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.42.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.41.0...@cognite/sdk-alpha@0.42.0) (2026-06-23)
+
+
+### Features
+
+* **alpha:** add support for workflows execution ([#1438](https://github.com/cognitedata/cognite-sdk-js/issues/1438)) ([0316a01](https://github.com/cognitedata/cognite-sdk-js/commit/0316a01041fe0599ccd08adfea794195af9d9410))
+
+
+
+
+
 # [0.41.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.40.0...@cognite/sdk-alpha@0.41.0) (2026-06-05)
 
 
