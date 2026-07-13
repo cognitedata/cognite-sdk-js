@@ -92,23 +92,23 @@ describe('Data product versions unit test', () => {
         terms: {
           modify: {
             usage: {
-              setNull: true
+              setNull: true,
             },
             limitations: {
-              setNull: true
-            }
-          }
+              setNull: true,
+            },
+          },
         },
         status: { set: 'published' as const },
         views: {
           add: [
             {
-              space: "test-space",
-              externalId: "testExternalId",
-              version: "v1"
-            }
-          ]
-        }
+              space: 'test-space',
+              externalId: 'testExternalId',
+              version: 'v1',
+            },
+          ],
+        },
       },
     };
 
@@ -130,11 +130,11 @@ describe('Data product versions unit test', () => {
             status: 'published',
             views: [
               {
-                space: "test-space",
-                externalId: "testExternalId",
-                version: "v1"
-              }
-            ]
+                space: 'test-space',
+                externalId: 'testExternalId',
+                version: 'v1',
+              },
+            ],
           },
         ],
       });
@@ -147,7 +147,6 @@ describe('Data product versions unit test', () => {
     expect(items[0].description).toEqual('updated description');
     expect(items[0].status).toEqual('published');
   });
-  
 
   test('delete', async () => {
     nock(mockBaseUrl)
