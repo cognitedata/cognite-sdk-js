@@ -326,7 +326,7 @@ describe('Instances integration test', () => {
         result_set_1: {},
       },
     });
-    expect(response.items.resuslt_set_1).toHaveLength(1);
+    expect(response.items.result_set_1).toHaveLength(1);
   }, 10_000);
 
   test('queryTyped', async () => {
