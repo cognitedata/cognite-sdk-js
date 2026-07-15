@@ -2,8 +2,12 @@
 
 import { afterAll, beforeAll, describe, expect, test } from 'vitest';
 import type CogniteClientAlpha from '../../cogniteClient';
-import type { DataProduct } from '../../types';
-import { randomInt, setupLoggedInClient } from '../testUtils';
+import {
+  cleanupDataProductSchemaSpaces,
+  cleanupOrphanedDataProductTestResources,
+  randomInt,
+  setupLoggedInClient,
+} from '../testUtils';
 
 function uniqueSchemaSpace(prefix: string): string {
   return `${prefix}_${randomInt()}`;
@@ -15,10 +19,10 @@ describe('Data products integration test', () => {
   const dataProductExternalId = `int-dataproduct-${dataProductRandom}`;
   const setupSchemaSpace = uniqueSchemaSpace('sdk_js_alpha_dp_int_setup');
   const schemaSpacesToDelete: string[] = [setupSchemaSpace];
-  let createdDataProduct: DataProduct | undefined;
 
   beforeAll(async () => {
     client = setupLoggedInClient();
+    await cleanupOrphanedDataProductTestResources(client);
 
     await client.spaces.upsert([
       {
@@ -28,7 +32,7 @@ describe('Data products integration test', () => {
       },
     ]);
 
-    const items = await client.dataProducts.create([
+    await client.dataProducts.create([
       {
         externalId: dataProductExternalId,
         name: `integration test data product ${dataProductRandom}`,
@@ -37,17 +41,10 @@ describe('Data products integration test', () => {
         tags: ['integration'],
       },
     ]);
-    createdDataProduct = items[0];
   });
 
   afterAll(async () => {
-    if (createdDataProduct) {
-      await client.dataProducts
-        .delete([{ externalId: dataProductExternalId }])
-        .catch();
-    }
-
-    await client.spaces.delete(schemaSpacesToDelete).catch();
+    await cleanupDataProductSchemaSpaces(client, schemaSpacesToDelete);
   });
 
   test('create', async () => {
