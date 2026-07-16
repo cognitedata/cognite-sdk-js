@@ -10,7 +10,7 @@ import { setupMockableClient } from '../testUtils';
 describe('Workflow triggers unit test', () => {
   let client: CogniteClientAlpha;
 
-  const triggerUpsertBody = {
+  const triggerBase = {
     externalId: 'trigger-1',
     triggerRule: {
       triggerType: 'schedule' as const,
@@ -19,16 +19,17 @@ describe('Workflow triggers unit test', () => {
     },
     workflowExternalId: 'wf-1',
     workflowVersion: '1',
-    authentication: { nonce: 'session-nonce' },
     input: { key: 'value' },
     metadata: { source: 'sdk-test' },
   };
 
-  const { authentication: _authentication, ...triggerResponseBody } =
-    triggerUpsertBody;
+  const triggerUpsertBody = {
+    ...triggerBase,
+    authentication: { nonce: 'session-nonce' },
+  };
 
   const mockTrigger = {
-    ...triggerResponseBody,
+    ...triggerBase,
     createdTime: 1716900000000,
     lastUpdatedTime: 1716900001000,
     isPaused: false,
