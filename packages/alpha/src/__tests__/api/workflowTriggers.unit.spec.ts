@@ -24,13 +24,11 @@ describe('Workflow triggers unit test', () => {
     metadata: { source: 'sdk-test' },
   };
 
+  const { authentication: _authentication, ...triggerResponseBody } =
+    triggerUpsertBody;
+
   const mockTrigger = {
-    externalId: triggerUpsertBody.externalId,
-    triggerRule: triggerUpsertBody.triggerRule,
-    workflowExternalId: triggerUpsertBody.workflowExternalId,
-    workflowVersion: triggerUpsertBody.workflowVersion,
-    input: triggerUpsertBody.input,
-    metadata: triggerUpsertBody.metadata,
+    ...triggerResponseBody,
     createdTime: 1716900000000,
     lastUpdatedTime: 1716900001000,
     isPaused: false,
