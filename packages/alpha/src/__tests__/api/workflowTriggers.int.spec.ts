@@ -26,7 +26,18 @@ describe('Workflow triggers integration test', () => {
   let createdWorkflow: Workflow | undefined;
   let createdVersion: Version | undefined;
   let createdTrigger: WorkflowTrigger | undefined;
-  let sessionNonce: string;
+
+  const createSessionNonce = async () => {
+    const clientSecret = process.env.COGNITE_CLIENT_SECRET || '';
+    const clientId = process.env.COGNITE_CLIENT_ID || '';
+    const [session] = await client.sessions.create([
+      {
+        clientId,
+        clientSecret,
+      },
+    ]);
+    return session.nonce;
+  };
 
   beforeAll(async () => {
     client = setupLoggedInClient();
@@ -52,16 +63,6 @@ describe('Workflow triggers integration test', () => {
     ]);
     createdVersion = versionItems[0];
 
-    const clientSecret = process.env.COGNITE_CLIENT_SECRET || '';
-    const clientId = process.env.COGNITE_CLIENT_ID || '';
-    const [session] = await client.sessions.create([
-      {
-        clientId,
-        clientSecret,
-      },
-    ]);
-    sessionNonce = session.nonce;
-
     const [trigger] = await client.workflowTriggers.upsert([
       {
         externalId: triggerExternalId,
@@ -72,7 +73,7 @@ describe('Workflow triggers integration test', () => {
         },
         workflowExternalId,
         workflowVersion: versionExternalId,
-        authentication: { nonce: sessionNonce },
+        authentication: { nonce: await createSessionNonce() },
         metadata: { source: 'sdk-int-test' },
       },
     ]);
@@ -128,7 +129,7 @@ describe('Workflow triggers integration test', () => {
         },
         workflowExternalId,
         workflowVersion: versionExternalId,
-        authentication: { nonce: sessionNonce },
+        authentication: { nonce: await createSessionNonce() },
         metadata: { source: 'sdk-int-test-updated' },
       },
     ]);
@@ -169,7 +170,7 @@ describe('Workflow triggers integration test', () => {
         },
         workflowExternalId,
         workflowVersion: versionExternalId,
-        authentication: { nonce: sessionNonce },
+        authentication: { nonce: await createSessionNonce() },
       },
     ]);
 
