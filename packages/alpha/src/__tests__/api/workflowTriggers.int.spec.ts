@@ -113,9 +113,18 @@ describe('Workflow triggers integration test', () => {
   });
 
   test('list', async () => {
-    const response = await client.workflowTriggers.list({ limit: 10 });
+    const items = await client.workflowTriggers
+      .list({ limit: 100 })
+      .autoPagingToArray({ limit: 100 });
 
-    expect(Array.isArray(response.items)).toBe(true);
+    expect(Array.isArray(items)).toBe(true);
+    expect(items).toContainEqual(
+      expect.objectContaining({
+        externalId: triggerExternalId,
+        workflowExternalId,
+        workflowVersion: versionExternalId,
+      })
+    );
   });
 
   test('upsert updates existing trigger', async () => {

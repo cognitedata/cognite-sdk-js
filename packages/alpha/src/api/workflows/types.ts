@@ -295,18 +295,18 @@ export interface WorkflowExecutionFilterQuery extends FilterQuery {
   filter?: WorkflowExecutionFilter;
 }
 
-export interface WorkflowExecutionAuthentication {
+export interface WorkflowAuthentication {
   nonce: string;
 }
 
 export interface WorkflowExecutionRunRequest {
-  authentication: WorkflowExecutionAuthentication;
+  authentication: WorkflowAuthentication;
   input?: Record<string, JsonValue>;
   metadata?: Record<string, string>;
 }
 
 export interface WorkflowExecutionRetryRequest {
-  authentication: WorkflowExecutionAuthentication;
+  authentication: WorkflowAuthentication;
 }
 
 export interface WorkflowExecutionCancelRequest {
@@ -315,10 +315,6 @@ export interface WorkflowExecutionCancelRequest {
 
 export interface WorkflowTriggerExternalId {
   externalId: CogniteExternalId;
-}
-
-export interface WorkflowTriggerAuthentication {
-  nonce: string;
 }
 
 export interface ManualWorkflowTriggerRule {
@@ -367,7 +363,7 @@ interface WorkflowTriggerRequestBase<Rule extends WorkflowTriggerRule> {
   triggerRule: Rule;
   workflowExternalId: CogniteExternalId;
   workflowVersion: string;
-  authentication: WorkflowTriggerAuthentication;
+  authentication: WorkflowAuthentication;
   input?: Record<string, JsonValue>;
   metadata?: Record<string, string>;
 }
