@@ -295,20 +295,120 @@ export interface WorkflowExecutionFilterQuery extends FilterQuery {
   filter?: WorkflowExecutionFilter;
 }
 
-export interface WorkflowExecutionAuthentication {
+export interface WorkflowAuthentication {
   nonce: string;
 }
 
 export interface WorkflowExecutionRunRequest {
-  authentication: WorkflowExecutionAuthentication;
+  authentication: WorkflowAuthentication;
   input?: Record<string, JsonValue>;
   metadata?: Record<string, string>;
 }
 
 export interface WorkflowExecutionRetryRequest {
-  authentication: WorkflowExecutionAuthentication;
+  authentication: WorkflowAuthentication;
 }
 
 export interface WorkflowExecutionCancelRequest {
   reason?: string;
+}
+
+export interface WorkflowTriggerExternalId {
+  externalId: CogniteExternalId;
+}
+
+export interface ManualWorkflowTriggerRule {
+  triggerType: 'manual';
+}
+
+export interface ScheduleWorkflowTriggerRule {
+  triggerType: 'schedule';
+  cronExpression: string;
+  timezone?: string;
+}
+
+export interface DataModelingWorkflowTriggerRule {
+  triggerType: 'dataModeling';
+  dataModelingQuery: {
+    with: Record<string, unknown>;
+    select: Record<string, unknown>;
+  };
+  batchSize: number;
+  batchTimeout: number;
+}
+
+export interface RecordStreamWorkflowTriggerRule {
+  triggerType: 'recordStream';
+  streamExternalId: string;
+  batchSize: number;
+  batchTimeout: number;
+  filter?: JsonValue;
+  sources?: JsonValue;
+  initializeCursor?: string | null;
+}
+
+export type WorkflowTriggerRule =
+  | ManualWorkflowTriggerRule
+  | ScheduleWorkflowTriggerRule
+  | DataModelingWorkflowTriggerRule
+  | RecordStreamWorkflowTriggerRule;
+
+export type WorkflowTriggerUpsertRule = Exclude<
+  WorkflowTriggerRule,
+  ManualWorkflowTriggerRule
+>;
+
+interface WorkflowTriggerRequestBase<Rule extends WorkflowTriggerRule> {
+  externalId: CogniteExternalId;
+  triggerRule: Rule;
+  workflowExternalId: CogniteExternalId;
+  workflowVersion: string;
+  authentication: WorkflowAuthentication;
+  input?: Record<string, JsonValue>;
+  metadata?: Record<string, string>;
+}
+
+interface WorkflowTriggerBase<Rule extends WorkflowTriggerRule> {
+  externalId: CogniteExternalId;
+  triggerRule: Rule;
+  workflowExternalId: CogniteExternalId;
+  workflowVersion: string;
+  input?: Record<string, JsonValue>;
+  metadata?: Record<string, string>;
+  createdTime?: number;
+  lastUpdatedTime?: number;
+  isPaused?: boolean;
+}
+
+export type ManualWorkflowTrigger =
+  WorkflowTriggerBase<ManualWorkflowTriggerRule>;
+
+export type ScheduleWorkflowTrigger =
+  WorkflowTriggerBase<ScheduleWorkflowTriggerRule>;
+
+export type DataModelingWorkflowTrigger =
+  WorkflowTriggerBase<DataModelingWorkflowTriggerRule>;
+
+export type RecordStreamWorkflowTrigger =
+  WorkflowTriggerBase<RecordStreamWorkflowTriggerRule>;
+
+export type WorkflowTrigger =
+  | ManualWorkflowTrigger
+  | ScheduleWorkflowTrigger
+  | DataModelingWorkflowTrigger
+  | RecordStreamWorkflowTrigger;
+
+export type WorkflowTriggerUpsert =
+  WorkflowTriggerRequestBase<WorkflowTriggerUpsertRule>;
+
+export type WorkflowTriggerRunStatus = 'success' | 'failed';
+
+export interface WorkflowTriggerRun {
+  fireTime: number;
+  externalId: CogniteExternalId;
+  workflowExternalId: CogniteExternalId;
+  workflowVersion: string;
+  status: WorkflowTriggerRunStatus;
+  workflowExecutionId?: string | null;
+  reasonForFailure?: string | null;
 }
