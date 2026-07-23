@@ -2,11 +2,13 @@
 import { CogniteClient as CogniteClientStable } from '@cognite/sdk';
 import { accessApi } from '@cognite/sdk-core';
 import { version } from '../package.json';
+import { DataProductVersionsAPI } from './api/dataProducts/dataProductVersionsApi';
 import { DataProductsAPI } from './api/dataProducts/dataProductsApi';
 import { LimitsAPI } from './api/limits/limitsApi';
 import { MeteringAPI } from './api/metering/meteringApi';
 import { SimulatorsAPI } from './api/simulators/simulatorsApi';
 import { WorkflowExecutionsAPI } from './api/workflows/workflowExecutionsApi';
+import { WorkflowTriggersAPI } from './api/workflows/workflowTriggersApi';
 import { WorkflowVersionsAPI } from './api/workflows/workflowVersionsApi';
 import { WorkflowsAPI } from './api/workflows/workflowsApi';
 
@@ -17,7 +19,9 @@ export default class CogniteClientAlpha extends CogniteClientStable {
   private workflowsApi?: WorkflowsAPI;
   private workflowVersionsApi?: WorkflowVersionsAPI;
   private workflowExecutionsApi?: WorkflowExecutionsAPI;
+  private workflowTriggersApi?: WorkflowTriggersAPI;
   private dataProductsApi?: DataProductsAPI;
+  private dataProductVersionsApi?: DataProductVersionsAPI;
 
   public get limits() {
     return accessApi(this.limitsApi);
@@ -43,8 +47,16 @@ export default class CogniteClientAlpha extends CogniteClientStable {
     return accessApi(this.workflowExecutionsApi);
   }
 
+  public get workflowTriggers() {
+    return accessApi(this.workflowTriggersApi);
+  }
+
   public get dataProducts() {
     return accessApi(this.dataProductsApi);
+  }
+
+  public get dataProductVersions() {
+    return accessApi(this.dataProductVersionsApi);
   }
 
   protected initAPIs() {
@@ -60,7 +72,15 @@ export default class CogniteClientAlpha extends CogniteClientStable {
       WorkflowVersionsAPI,
       'workflows/versions'
     );
+    this.workflowTriggersApi = this.apiFactory(
+      WorkflowTriggersAPI,
+      'workflows/triggers'
+    );
     this.dataProductsApi = this.apiFactory(DataProductsAPI, 'dataproducts');
+    this.dataProductVersionsApi = this.apiFactory(
+      DataProductVersionsAPI,
+      'dataproducts'
+    );
     this.workflowExecutionsApi = new WorkflowExecutionsAPI(
       `${this.projectUrl}/workflows/executions`,
       `${this.projectUrl}/workflows`,

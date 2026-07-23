@@ -52,6 +52,13 @@ export class CDFHttpClient extends RetryableHttpClient {
     return filteredHeaders;
   }
 
+  private static hasHeader(headers: HttpHeaders | undefined, name: string) {
+    const lowerCaseName = name.toLowerCase();
+    return Object.keys(headers ?? {}).some(
+      (headerName) => headerName.toLowerCase() === lowerCaseName
+    );
+  }
+
   private oneTimeHeaders: HttpHeaders = {};
 
   public addOneTimeHeader(name: string, value: string) {
@@ -102,7 +109,11 @@ export class CDFHttpClient extends RetryableHttpClient {
       if (!(err instanceof HttpError)) {
         throw err;
       }
-      if (err.status === 401 && !this.isTokenInspect(request.path)) {
+      if (
+        err.status === 401 &&
+        !this.isTokenInspect(request.path) &&
+        !CDFHttpClient.hasHeader(request.headers, AUTHORIZATION_HEADER)
+      ) {
         return new Promise((resolvePromise, rejectPromise) => {
           const retry = () => resolvePromise(this.request(request));
           const reject = () => rejectPromise(err);
