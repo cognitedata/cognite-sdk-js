@@ -365,7 +365,7 @@ describe('Instances integration test', () => {
     expect(response.items.result_set_1).toHaveLength(1);
 
     const resultProperties =
-      response.items.result_set_1[0].properties.cdf_core['Describable/v1'];
+      response.items.result_set_1[0].properties!.cdf_core['Describable/v1'];
 
     expectTypeOf(resultProperties.title).toEqualTypeOf<string>();
     expectTypeOf(resultProperties.description).toEqualTypeOf<string>();
