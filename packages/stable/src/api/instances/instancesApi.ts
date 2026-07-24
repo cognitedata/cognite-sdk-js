@@ -218,7 +218,14 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
   /**
    * [Query instances](https://developer.cognite.com/api#tag/Instances/operation/queryContent)
    *
+   * When called with a plain `QueryRequest` the return type is `QueryResponse`
+   * (fully backward-compatible). When the query is declared with
+   * `as const satisfies QueryRequest` the return type is automatically narrowed
+   * to `QueryResult<typeof query>`, giving full TypeScript inference for result
+   * keys, source spaces, view identifiers and individual property names.
+   *
    * ```js
+   *  // Untyped – same as before
    *  const response = await client.instances.query({
    *     with: {
    *       result_set_1: {
@@ -236,37 +243,46 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    *       result_set_1: {},
    *     },
    *   });
-   * ```
-   */
-  public query = async (params: QueryRequest): Promise<QueryResponse> => {
-    const response = await this.post<QueryResponse>(this.url('query'), {
-      data: params,
-    });
-    return response.data;
-  };
-
-  /**
-   * [Query instances](https://developer.cognite.com/api#tag/Instances/operation/queryContent) with inferred return types. Declare params as const satisfies QueryRequest for fully typed results per select key, space and property name.
    *
-   * ```js
-   *
+   *  // Typed – declare the query as const satisfies QueryRequest
    *  const query = {
    *    with: {
-   *      result_set_1: {
-   *        nodes: {},
-   *      },
+   *      result_set_1: { nodes: {} },
    *    },
    *    select: {
    *      result_set_1: {
    *        sources: [{ source: { type: 'view', space: 'mySpace', externalId: 'MyView', version: 'v1' }, properties: ['name', 'age'] }],
    *      },
    *    },
-   *  } as const satisfies QueryRequest
-   *  const typedResponse = await client.instances.queryTyped(query);
-   *  // For fully typed results, declare the query variable as:
-   *  // const query = { ... } as const satisfies QueryRequest;
-   *  // then: typedResponse.items.result_set_1[0].properties.mySpace['MyView/v1'].name
+   *  } as const satisfies QueryRequest;
+   *  const typedResponse = await client.instances.query(query);
+   *  // typedResponse.items.result_set_1[0].properties.mySpace['MyView/v1'].name
    * ```
+   */
+  public query = async <
+    TQueryRequest extends QueryRequest = QueryRequest,
+    TypedSelectSources extends SelectSourceWithParams = SelectSourceWithParams,
+  >(
+    params: TQueryRequest
+  ): Promise<
+    QueryRequest extends TQueryRequest
+      ? QueryResponse
+      : QueryResult<TQueryRequest, TypedSelectSources>
+  > => {
+    const response = await this.post<
+      QueryRequest extends TQueryRequest
+        ? QueryResponse
+        : QueryResult<TQueryRequest, TypedSelectSources>
+    >(this.url('query'), { data: params });
+    return response.data;
+  };
+
+  /**
+   * @deprecated Use `query` instead. When the query is declared as
+   * `as const satisfies QueryRequest`, `query` automatically returns a fully
+   * typed `QueryResult` — no separate method needed.
+   *
+   * [Query instances](https://developer.cognite.com/api#tag/Instances/operation/queryContent) with inferred return types.
    */
   public queryTyped = async <
     TQueryRequest extends QueryRequest,
@@ -274,10 +290,9 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
   >(
     params: TQueryRequest
   ): Promise<QueryResult<TQueryRequest, TypedSelectSources>> => {
-    const response = await this.post<
+    return this.query<TQueryRequest, TypedSelectSources>(params) as Promise<
       QueryResult<TQueryRequest, TypedSelectSources>
-    >(this.url('query'), { data: params });
-    return response.data;
+    >;
   };
 
   /**
