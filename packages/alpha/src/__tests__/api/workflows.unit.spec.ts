@@ -57,12 +57,13 @@ describe('Workflows unit test', () => {
     expect(response.externalId).toEqual('wf-2');
   });
 
-  test('upsert forwards maxConcurrentExecutions and dataSetId', async () => {
+  test('upsert forwards maxConcurrentExecutions, dataSetId, and dataDomainExternalId', async () => {
     const upsertBody = {
       externalId: 'wf-1',
       description: 'd',
       dataSetId: 42,
       maxConcurrentExecutions: 5,
+      dataDomainExternalId: 'my-data-domain',
     };
     nock(mockBaseUrl)
       .post(/\/workflows$/, matches({ items: [upsertBody] }))
@@ -73,6 +74,7 @@ describe('Workflows unit test', () => {
             ...mockWorkflow,
             externalId: upsertBody.externalId,
             maxConcurrentExecutions: upsertBody.maxConcurrentExecutions,
+            dataDomainExternalId: upsertBody.dataDomainExternalId,
           },
         ],
       });
@@ -82,6 +84,7 @@ describe('Workflows unit test', () => {
     expect(items).toHaveLength(1);
     expect(items[0].externalId).toEqual('wf-1');
     expect(items[0].maxConcurrentExecutions).toEqual(5);
+    expect(items[0].dataDomainExternalId).toEqual('my-data-domain');
   });
 
   test('delete', async () => {
