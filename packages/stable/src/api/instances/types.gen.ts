@@ -581,6 +581,8 @@ export type NodeOrEdgeListRequestV3 = {
   includeTyping?: IncludeTyping;
   sources?: SourceSelectorWithoutPropertiesV3;
   instanceType?: InstanceType;
+  /** Return query debug notices. */
+  debug?: DebugParameters;
 } & Cursor &
   LimitWithDefault1000 &
   SortV3 & {
@@ -765,12 +767,16 @@ export interface QueryRequest {
   /** Select properties for each result set. */
   select: Record<string, QuerySelectV3>;
   with: Record<string, QueryTableExpressionV3>;
+  /** Return query debug notices. */
+  debug?: DebugParameters;
 }
 export interface QueryResponse {
   items: Record<string, NodeOrEdge[]>;
   nextCursor: Record<string, NextCursorV3>;
   /** Property type information for selected result expressions. */
   typing?: Record<string, TypeInformationOuter>;
+  /** Debug notices if debug flag is set in the request. */
+  debug?: DebugResponse;
 }
 /**
  * Define which view to return properties for, and the properties to return. Up to 10 views can be specified per query.
@@ -1018,6 +1024,8 @@ export interface SyncRequest {
   parameters?: Record<string, RawPropertyValueV3>;
   select: Record<string, SyncSelectV3>;
   with: Record<string, SyncTableExpressionV3>;
+  /** Return query debug notices. */
+  debug?: DebugParameters;
 }
 /**
  * Specify the container or view to return properties for. Also specify the properties for those containers/views to return. Up to 10 views can be specified.
@@ -2051,4 +2059,186 @@ export interface ViewReference {
   type: 'view';
   /** Version of the view */
   version: DMSVersion;
+}
+/** Parameters to control query debug output. */
+export interface DebugParameters {
+  /**
+   * Include the query result in the response.
+   * emitResults=false is required for advanced query analysis features.
+   * @default true
+   */
+  emitResults?: boolean;
+  /**
+   * Query timeout in milliseconds. Can be used to override the default timeout when analysing queries.
+   * Requires emitResults=false.
+   */
+  timeout?: number;
+  /**
+   * Most thorough level of query analysis. Requires emitResults=false.
+   * @default false
+   */
+  profile?: boolean;
+}
+/** Contains debug notices if debug flag is set in the query. */
+export interface DebugResponse {
+  /**
+   * A list of notices that provide insights into the query's execution.
+   * These can highlight potential performance issues, offer optimization suggestions,
+   * or explain aspects of the query processing. Each notice falls into a category,
+   * such as indexing, sorting, filtering, or cursoring.
+   */
+  notices?: DebugNotice[];
+}
+export type DebugNotice =
+  | InvalidDebugOptionsNotice
+  | SortingNotice
+  | IndexingNotice
+  | FilteringNotice
+  | CursoringNotice;
+export type InvalidDebugOptionsNotice =
+  | ExcessiveTimeoutNotice
+  | NoTimeoutWithResultsNotice;
+export interface ExcessiveTimeoutNotice {
+  code: 'excessiveTimeout';
+  category: 'invalidDebugOptions';
+  level: 'warning';
+  hint: string;
+  timeout: number;
+}
+export interface NoTimeoutWithResultsNotice {
+  code: 'noTimeoutWithResults';
+  category: 'invalidDebugOptions';
+  level: 'warning';
+  hint: string;
+}
+export type SortingNotice =
+  | SortNotBackedByIndexNotice
+  | FilterMatchesCursorableSortNotice
+  | FilterMatchesBrokenCursorableIndexNotice;
+export interface SortNotBackedByIndexNotice {
+  code: 'sortNotBackedByIndex';
+  category: 'sorting';
+  level: 'warning';
+  hint: string;
+  grade: 'C';
+  sort: PropertySortV3[];
+  /** Identifier for the result set expression that the notice applies to. */
+  resultExpression: string;
+}
+export interface FilterMatchesCursorableSortNotice {
+  code: 'filterMatchesCursorableSort';
+  category: 'sorting';
+  level: 'info';
+  hint: string;
+  grade: 'A' | 'B';
+  sort?: PropertySortV3[];
+  /** Identifier for the result set expression that the notice applies to. */
+  resultExpression: string;
+}
+/** Identifies a sub-object (e.g. a broken index) within a container. */
+export interface ContainerSubObjectIdentifier {
+  space: SpaceSpecification;
+  containerExternalId: DMSExternalId;
+  identifier: string;
+}
+export interface FilterMatchesBrokenCursorableIndexNotice {
+  code: 'filterMatchesBrokenCursorableIndex';
+  category: 'sorting';
+  level: 'warning';
+  hint: string;
+  grade: 'D';
+  sort?: PropertySortV3[];
+  /** Identifier for the broken index. */
+  index?: ContainerSubObjectIdentifier;
+  /** Identifier for the result set expression that the notice applies to. */
+  resultExpression: string;
+}
+export type IndexingNotice =
+  | UnindexedThroughNotice
+  | ContainersWithoutIndexesInvolvedNotice;
+export interface UnindexedThroughNotice {
+  code: 'unindexedThrough';
+  category: 'indexing';
+  level: 'warning';
+  hint: string;
+  grade: 'E';
+  /** Reference to the property that the notice applies to. */
+  property: string[];
+  /** Identifier for the result set expression that the notice applies to. */
+  resultExpression: string;
+}
+export interface ContainersWithoutIndexesInvolvedNotice {
+  code: 'containersWithoutIndexesInvolved';
+  category: 'indexing';
+  level: 'warning';
+  hint: string;
+  grade: 'C';
+  /** List of containers that the notice applies to. */
+  containers: ContainerReference[];
+  /** Identifier for the result set expression that the notice applies to. */
+  resultExpression: string;
+}
+export type FilteringNotice =
+  | SelectiveExternalIDFilterNotice
+  | SignificantPostFilteringNotice
+  | SignificantHasDataFiltersNotice;
+export interface SelectiveExternalIDFilterNotice {
+  code: 'selectiveExternalIDFilter';
+  category: 'filtering';
+  level: 'info';
+  hint: string;
+  grade: 'A';
+  /** Identifier for a result set. Indicates that the notice is inherited from this result expression. */
+  viaFrom?: string;
+  /** Identifier for the result set expression that the notice applies to. */
+  resultExpression: string;
+}
+export interface SignificantPostFilteringNotice {
+  code: 'significantPostFiltering';
+  category: 'filtering';
+  level: 'warning';
+  hint: string;
+  grade: 'C';
+  /** The specified limit for the result expression. */
+  limit: number;
+  /** Number of rows of data that is internally processed. */
+  maxInvolvedRows: number;
+  /** Identifier for the result set expression that the notice applies to. */
+  resultExpression: string;
+}
+export interface SignificantHasDataFiltersNotice {
+  code: 'significantHasDataFiltering';
+  category: 'filtering';
+  level: 'warning';
+  hint: string;
+  grade: 'C';
+  /** List of containers that the notice applies to. */
+  containers: ContainerReference[];
+  /** Identifier for the result set expression that the notice applies to. */
+  resultExpression: string;
+}
+export type CursoringNotice =
+  | IntractableDirectRelationsCursorNotice
+  | IntractableCursorWithNestedFilterNotice;
+export interface IntractableDirectRelationsCursorNotice {
+  code: 'intractableDirectRelationsCursor';
+  category: 'cursoring';
+  level: 'warning';
+  grade: 'D';
+  hint: string;
+  resultExpression: string;
+}
+/**
+ * Emitted when a query supplies both a cursor and a nested filter on the same result set expression.
+ * Nested filters require a join that invalidates cursor positions, making pagination results unreliable.
+ */
+export interface IntractableCursorWithNestedFilterNotice {
+  code: 'intractableCursorWithNestedFilter';
+  category: 'cursoring';
+  level: 'warning';
+  grade: 'D';
+  /** A user-friendly message explaining why cursoring is intractable with a nested filter. */
+  hint: string;
+  /** Identifier for the result set expression that the notice applies to. */
+  resultExpression: string;
 }
