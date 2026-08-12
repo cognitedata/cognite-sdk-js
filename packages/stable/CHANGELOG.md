@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [10.13.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@10.12.1...@cognite/sdk@10.13.0) (2026-08-04)
+
+
+### Features
+
+* **alpha:** add data product versions API support ([#1451](https://github.com/cognitedata/cognite-sdk-js/issues/1451)) ([9876b28](https://github.com/cognitedata/cognite-sdk-js/commit/9876b2882375a3a2b11777d78cc3a4842bf80adb))
+
+
+
+
+
 ## [10.12.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@10.12.0...@cognite/sdk@10.12.1) (2026-06-23)
 
 **Note:** Version bump only for package @cognite/sdk

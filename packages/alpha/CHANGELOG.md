@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.43.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.42.0...@cognite/sdk-alpha@0.43.0) (2026-08-04)
+
+
+### Bug Fixes
+
+* **alpha:** fix flaky test in workflows execution ([#1453](https://github.com/cognitedata/cognite-sdk-js/issues/1453)) ([21508b7](https://github.com/cognitedata/cognite-sdk-js/commit/21508b73d2e9e07d2d9a89bee41ecf96ea99f106))
+
+
+### Features
+
+* **alpha:** add data product versions API support ([#1451](https://github.com/cognitedata/cognite-sdk-js/issues/1451)) ([9876b28](https://github.com/cognitedata/cognite-sdk-js/commit/9876b2882375a3a2b11777d78cc3a4842bf80adb))
+* **alpha:** add data products API support ([#1441](https://github.com/cognitedata/cognite-sdk-js/issues/1441)) ([e595525](https://github.com/cognitedata/cognite-sdk-js/commit/e595525a0f927b7c17436bc7083019aeece8e786))
+* **alpha:** add support for workflows triggers ([#1457](https://github.com/cognitedata/cognite-sdk-js/issues/1457)) ([d1ae578](https://github.com/cognitedata/cognite-sdk-js/commit/d1ae578c335b88af9db03a4de166bb52c3df00f8))
+* **workflows:** add dataDomainExternalId to Workflow and WorkflowUpsert types ([#1460](https://github.com/cognitedata/cognite-sdk-js/issues/1460)) ([5748f01](https://github.com/cognitedata/cognite-sdk-js/commit/5748f01270656296dae1a26e1d331917d68d1c35))
+
+
+
+
+
 # [0.42.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.41.0...@cognite/sdk-alpha@0.42.0) (2026-06-23)
 
 

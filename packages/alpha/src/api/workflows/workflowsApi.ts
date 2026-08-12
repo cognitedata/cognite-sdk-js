@@ -41,7 +41,12 @@ export class WorkflowsAPI extends BaseResourceAPI<Workflow> {
    *
    * ```js
    * const workflows = await client.workflows.upsert([
-   *   { externalId: 'my-workflow', description: 'Demo', maxConcurrentExecutions: 2 },
+   *   {
+   *     externalId: 'my-workflow',
+   *     description: 'Demo',
+   *     maxConcurrentExecutions: 2,
+   *     dataDomainExternalId: 'my-data-domain',
+   *   },
    * ]);
    * ```
    */
