@@ -4,6 +4,7 @@ import { accessApi } from '@cognite/sdk-core';
 import { version } from '../package.json';
 import { DataProductVersionsAPI } from './api/dataProducts/dataProductVersionsApi';
 import { DataProductsAPI } from './api/dataProducts/dataProductsApi';
+import { InstancesAlphaAPI } from './api/instances/instancesApi';
 import { LimitsAPI } from './api/limits/limitsApi';
 import { MeteringAPI } from './api/metering/meteringApi';
 import { SimulatorsAPI } from './api/simulators/simulatorsApi';
@@ -22,6 +23,7 @@ export default class CogniteClientAlpha extends CogniteClientStable {
   private workflowTriggersApi?: WorkflowTriggersAPI;
   private dataProductsApi?: DataProductsAPI;
   private dataProductVersionsApi?: DataProductVersionsAPI;
+  private instancesAlphaApi?: InstancesAlphaAPI;
 
   public get limits() {
     return accessApi(this.limitsApi);
@@ -29,6 +31,10 @@ export default class CogniteClientAlpha extends CogniteClientStable {
 
   public get metering() {
     return accessApi(this.meteringApi);
+  }
+
+  public get instances() {
+    return accessApi(this.instancesAlphaApi);
   }
 
   public get simulators() {
@@ -80,6 +86,10 @@ export default class CogniteClientAlpha extends CogniteClientStable {
     this.dataProductVersionsApi = this.apiFactory(
       DataProductVersionsAPI,
       'dataproducts'
+    );
+    this.instancesAlphaApi = this.apiFactory(
+      InstancesAlphaAPI,
+      'models/instances'
     );
     this.workflowExecutionsApi = new WorkflowExecutionsAPI(
       `${this.projectUrl}/workflows/executions`,

@@ -2,3 +2,7 @@
 export * from '@cognite/sdk';
 export { default as CogniteClientAlpha } from './cogniteClient';
 export * from './types';
+export type {
+  InstanceDebugQueryRequest,
+  InstanceDebugQueryResponse,
+} from './api/instances/instancesApi';
