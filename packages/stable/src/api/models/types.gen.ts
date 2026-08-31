@@ -1345,9 +1345,11 @@ export interface UpsertConflict {
   };
 }
 /**
- * Should this operation apply to nodes, edges or both.
+ * Should this operation apply to nodes, edges, records, or both nodes and edges.
+ * The `record` value refers to Streams & Records-backed storage. NB: `all` applies
+ * to nodes and edges, but not records.
  */
-export type UsedFor = 'node' | 'edge' | 'all';
+export type UsedFor = 'node' | 'edge' | 'record' | 'all';
 export interface VersionReferencesCollectionResponse {
   items: {
     externalId: DMSExternalId;
@@ -1383,6 +1385,13 @@ export type ViewCorePropertyDefinition = CorePropertyDefinition & {
 };
 export type ViewCreateDefinition = {
   externalId: DMSExternalId;
+  /**
+   * External ids of the record streams this view targets. Only present on record
+   * views (`usedFor: 'record'`), and required when creating one. Must contain
+   * exactly one stream external id in v1; multi-stream record views are reserved
+   * for future use.
+   */
+  streamId?: string[];
 } & ViewCommon & {
     properties?: Record<string, ViewCreateDefinitionProperty>;
   };
@@ -1403,6 +1412,13 @@ export type ViewCreateDefinitionProperty =
   | ConnectionDefinition;
 export type ViewDefinition = {
   externalId: DMSExternalId;
+  /**
+   * External ids of the record streams this view targets. Only present on record
+   * views (`usedFor: 'record'`), and required when creating one. Must contain
+   * exactly one stream external id in v1; multi-stream record views are reserved
+   * for future use.
+   */
+  streamId?: string[];
 } & ViewCommon & {
     createdTime: EpochTimestamp;
     lastUpdatedTime: EpochTimestamp;

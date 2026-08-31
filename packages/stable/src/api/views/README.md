@@ -9,3 +9,7 @@ Until this is resolved, follow the following process to generate new types:
 4. Resolve any new duplicate types by deleting them from the newly added export lines.
 5. Delete the newly generated exports in `types.gen.ts`
 6. Rename `codegen.json` to `codegen.skip.json`
+
+Note: the record view fields (`streamId`, `usedFor: 'record'`, the `usedFor` list
+parameter) are hand-added ahead of the OpenAPI snapshot. Regenerating views against
+the current snapshot will erase them.
