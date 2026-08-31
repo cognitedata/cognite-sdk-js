@@ -64,7 +64,12 @@ export async function cleanupDataProductSchemaSpaces(
     }
 
     const views = await client.views
-      .list({ limit: 1000, space, allVersions: true })
+      .list({
+        limit: 1000,
+        space,
+        allVersions: true,
+        usedFor: ['node', 'edge', 'all', 'record'],
+      })
       .autoPagingToArray({ limit: Number.POSITIVE_INFINITY });
 
     if (views.length > 0) {
