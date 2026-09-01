@@ -13,6 +13,7 @@ import type {
   NodeWrite,
 } from '../../types';
 import {
+  TEST_DATA_SPACE,
   getFileCreateArgs,
   randomInt,
   runTestWithRetryWhenFailing,
@@ -27,8 +28,8 @@ describe('Files integration test', () => {
   let label: LabelDefinition;
 
   const testSpace = {
-    space: 'test_data_space',
-    name: 'test_data_space',
+    space: TEST_DATA_SPACE,
+    name: TEST_DATA_SPACE,
     description: 'Instance space used for integration tests.',
   };
 
@@ -162,7 +163,7 @@ describe('Files integration test', () => {
   test('download by instance id', async () => {
     // Syncing from instance to files API is eventually consistant
     await runTestWithRetryWhenFailing(async () => {
-      expect(
+      await expect(
         client.files.getDownloadUrls([{ instanceId: fileCdmInstanceId }])
       ).rejects.toThrow(/Files not uploaded/);
     });
