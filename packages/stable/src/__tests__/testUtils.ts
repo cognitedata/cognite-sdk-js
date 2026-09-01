@@ -95,8 +95,13 @@ const deleteAllContainersInSpace = async (
   client: CogniteClient,
   space: string
 ) => {
-  const containers = (await client.containers.list({ limit: 100, space }))
-    .items;
+  const containers = (
+    await client.containers.list({
+      limit: 100,
+      space,
+      usedFor: ['node', 'edge', 'all', 'record'],
+    })
+  ).items;
 
   if (containers.length) {
     await client.containers.delete(
@@ -148,7 +153,12 @@ const deleteAllInstancesInSpace = async (
 
 const deleteAllViewsInSpace = async (client: CogniteClient, space: string) => {
   const views = await client.views
-    .list({ limit: 1000, space, allVersions: true })
+    .list({
+      limit: 1000,
+      space,
+      allVersions: true,
+      usedFor: ['node', 'edge', 'all', 'record'],
+    })
     .autoPagingToArray();
 
   if (views.length) {
