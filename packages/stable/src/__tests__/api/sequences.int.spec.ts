@@ -15,12 +15,15 @@ import {
   setupLoggedInClient,
 } from '../testUtils';
 
+const SLOW_INDEX_TEST_TIMEOUT_MS = 3 * 60 * 1000;
+const RETRY_SLEEP_BUDGET_MS = SLOW_INDEX_TEST_TIMEOUT_MS - 30 * 1000;
+
 describe('Sequences integration test', () => {
   let client: CogniteClient;
   let sequences: Sequence[];
   const testValues = [1, 1.5, 'two'];
   const testExternalId = `sequence${randomInt()}`;
-  let sequenceToCreate: ExternalSequence = {
+  const sequenceToCreate: ExternalSequence = {
     name: 'sequence1',
     description: 'description',
     columns: [
@@ -61,10 +64,10 @@ describe('Sequences integration test', () => {
         name: `asset_${randomInt()}`,
       },
     ]);
-    sequenceToCreate = {
-      ...sequenceToCreate,
-      assetId: asset.id,
-    };
+    // Mutate in place: sequencesToCreate[0] references this object, so a
+    // reassignment would leave the created sequence without the assetId the
+    // filter tests depend on.
+    sequenceToCreate.assetId = asset.id;
   });
 
   test('create', async () => {
@@ -87,35 +90,49 @@ describe('Sequences integration test', () => {
       expect(sequence.name).toBe(sequences[0].name);
     });
 
-    test('filter on assetIds', async () => {
-      runTestWithRetryWhenFailing(async () => {
-        const { items } = await client.sequences.list({
-          filter: { assetIds: [asset.id] },
-          limit: 1,
-        });
-        expect(items[0].name).toBe(sequences[0].name);
-      });
-    });
+    // The asset filter and search indexes lag far behind sequence creation,
+    // so these tests get a 3 minute budget instead of the default.
+    test(
+      'filter on assetIds',
+      async () => {
+        await runTestWithRetryWhenFailing(async () => {
+          const { items } = await client.sequences.list({
+            filter: { assetIds: [asset.id] },
+            limit: 1,
+          });
+          expect(items[0].name).toBe(sequences[0].name);
+        }, RETRY_SLEEP_BUDGET_MS);
+      },
+      SLOW_INDEX_TEST_TIMEOUT_MS
+    );
 
-    test('filter on rootAssetIds', async () => {
-      runTestWithRetryWhenFailing(async () => {
-        const { items } = await client.sequences.list({
-          filter: { rootAssetIds: [asset.id] },
-          limit: 1,
-        });
-        expect(items[0].name).toBe(sequences[0].name);
-      });
-    });
+    test(
+      'filter on rootAssetIds',
+      async () => {
+        await runTestWithRetryWhenFailing(async () => {
+          const { items } = await client.sequences.list({
+            filter: { rootAssetIds: [asset.id] },
+            limit: 1,
+          });
+          expect(items[0].name).toBe(sequences[0].name);
+        }, RETRY_SLEEP_BUDGET_MS);
+      },
+      SLOW_INDEX_TEST_TIMEOUT_MS
+    );
 
-    test('filter on assetSubtreeIds', async () => {
-      runTestWithRetryWhenFailing(async () => {
-        const { items } = await client.sequences.list({
-          filter: { assetSubtreeIds: [{ id: asset.id }] },
-          limit: 1,
-        });
-        expect(items[0].name).toBe(sequences[0].name);
-      });
-    });
+    test(
+      'filter on assetSubtreeIds',
+      async () => {
+        await runTestWithRetryWhenFailing(async () => {
+          const { items } = await client.sequences.list({
+            filter: { assetSubtreeIds: [{ id: asset.id }] },
+            limit: 1,
+          });
+          expect(items[0].name).toBe(sequences[0].name);
+        }, RETRY_SLEEP_BUDGET_MS);
+      },
+      SLOW_INDEX_TEST_TIMEOUT_MS
+    );
   });
 
   test('retrieve', async () => {
@@ -159,16 +176,22 @@ describe('Sequences integration test', () => {
     expect(updated.description).toBe('hey');
   });
 
-  test('search', async () => {
-    runTestWithRetryWhenFailing(async () => {
-      const result = await client.sequences.search({
-        search: {
-          query: 'n*m* des*tion',
-        },
-      });
-      expect(result.length).toBeGreaterThan(0);
-    });
-  });
+  test(
+    'search',
+    async () => {
+      await runTestWithRetryWhenFailing(async () => {
+        // The search endpoint matches whole words: wildcard patterns like
+        // 'des*tion' never match anything.
+        const result = await client.sequences.search({
+          search: {
+            query: 'description',
+          },
+        });
+        expect(result.some((s) => s.id === sequences[0].id)).toBe(true);
+      }, RETRY_SLEEP_BUDGET_MS);
+    },
+    SLOW_INDEX_TEST_TIMEOUT_MS
+  );
 
   describe('rows', () => {
     test('insert', async () => {
