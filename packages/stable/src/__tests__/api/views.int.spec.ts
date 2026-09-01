@@ -140,10 +140,8 @@ describe('Views integration test', () => {
         },
       },
     ]);
-    // Raised from 25s: this hook also provisions a stream and a record container.
   }, 60_000);
   afterAll(async () => {
-    // The record view must go before the container it maps.
     await client.views
       .delete([
         {
