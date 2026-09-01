@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.44.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.43.0...@cognite/sdk-alpha@0.44.0) (2026-09-01)
+
+
+### Bug Fixes
+
+* **alpha:** align MeteringDatapoint with API ([#1452](https://github.com/cognitedata/cognite-sdk-js/issues/1452)) ([e52838e](https://github.com/cognitedata/cognite-sdk-js/commit/e52838e92ea067f68a58ca514f0fae960b098e55))
+
+
+### Features
+
+* **dms:** add support for record views ([#1464](https://github.com/cognitedata/cognite-sdk-js/issues/1464)) ([939f2bc](https://github.com/cognitedata/cognite-sdk-js/commit/939f2bcc75507a26424e865ec538f698651f61cd)), closes [#1345](https://github.com/cognitedata/cognite-sdk-js/issues/1345)
+
+
+
+
+
 # [0.43.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.42.0...@cognite/sdk-alpha@0.43.0) (2026-08-04)
 
 
