@@ -44,6 +44,10 @@ function setupMockableClient() {
 
 const RECORDS_TEST_SPACE = 'sdk_test_records_space'; // Space reserved for records integration tests
 const DATA_PRODUCT_TEST_SPACE_PREFIX = 'sdk_js_alpha_dp';
+// Shared fixture space for the files and datapoints integration tests. Their
+// suites run in parallel with the suites that call deleteOldSpaces, so it must
+// never be garbage-collected mid-run.
+const TEST_DATA_SPACE = 'test_data_space';
 
 const deleteOldSpaces = async (client: CogniteClient) => {
   const fiveMinutesInMs = 5 * 60 * 1000;
@@ -61,6 +65,7 @@ const deleteSpacesNotUpdatedSince = async (
       (space) =>
         space.lastUpdatedTime < timestamp &&
         space.space !== RECORDS_TEST_SPACE &&
+        space.space !== TEST_DATA_SPACE &&
         !space.space.startsWith(DATA_PRODUCT_TEST_SPACE_PREFIX)
     );
 
@@ -315,4 +320,5 @@ export {
   deleteOldSpaces,
   getFileCreateArgs,
   RECORDS_TEST_SPACE,
+  TEST_DATA_SPACE,
 };
