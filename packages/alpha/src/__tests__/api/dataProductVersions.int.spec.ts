@@ -123,7 +123,7 @@ describe('Data product versions integration test', () => {
 
     await client.dataProductVersions
       .delete(dataProductExternalId, [{ version: createVersion }])
-      .catch();
+      .catch(() => {});
   });
 
   test('list', async () => {
