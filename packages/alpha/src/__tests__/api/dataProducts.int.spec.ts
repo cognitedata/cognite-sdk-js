@@ -81,7 +81,7 @@ describe('Data products integration test', () => {
     // Page through everything: concurrent runs and not-yet-cleaned orphans can
     // push this run's fixture off the first page.
     const items = await client.dataProducts
-      .list({ limit: 10 })
+      .list({ limit: 100 })
       .autoPagingToArray({ limit: Number.POSITIVE_INFINITY });
     expect(items.length).toBeGreaterThan(0);
     expect(
