@@ -1,4 +1,4 @@
-// Copyright 2020 Cognite AS
+// Copyright 2020-2026 Cognite AS
 
 import {
   BaseResourceAPI,
@@ -8,6 +8,7 @@ import {
   type MetadataMap,
 } from '@cognite/sdk-core';
 import type { IdEither, IgnoreUnknownIds } from '../../types';
+import { DataPointSubscriptionsAPI } from './subscriptions/dataPointSubscriptionsApi';
 import { SyntheticTimeSeriesAPI } from './syntheticTimeSeriesApi';
 import type {
   SyntheticQuery,
@@ -22,6 +23,7 @@ import type {
 
 export class TimeSeriesAPI extends BaseResourceAPI<TimeSeries> {
   private syntheticTimeseriesApi: SyntheticTimeSeriesAPI;
+  private readonly dataPointSubscriptionsApi: DataPointSubscriptionsAPI;
 
   /** @hidden */
   constructor(resourcePath: string, ...args: [CDFHttpClient, MetadataMap]) {
@@ -30,6 +32,17 @@ export class TimeSeriesAPI extends BaseResourceAPI<TimeSeries> {
       this.url('synthetic'),
       ...args
     );
+    this.dataPointSubscriptionsApi = new DataPointSubscriptionsAPI(
+      this.url('subscriptions'),
+      ...args
+    );
+  }
+
+  /**
+   * [Data point subscriptions](https://docs.cognite.com/api/v1/#tag/Data-point-subscriptions)
+   */
+  public get subscriptions() {
+    return this.dataPointSubscriptionsApi;
   }
 
   /**

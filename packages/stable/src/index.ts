@@ -1,4 +1,4 @@
-// Copyright 2020 Cognite AS
+// Copyright 2020-2026 Cognite AS
 
 export {
   HttpError,
@@ -42,6 +42,7 @@ export { SecurityCategoriesAPI } from './api/securityCategories/securityCategori
 export { SequenceRowsAPI } from './api/sequences/sequenceRowsApi';
 export { SequencesAPI } from './api/sequences/sequencesApi';
 export { SyntheticTimeSeriesAPI } from './api/timeSeries/syntheticTimeSeriesApi';
+export { DataPointSubscriptionsAPI } from './api/timeSeries/subscriptions/dataPointSubscriptionsApi';
 export { TimeSeriesAPI } from './api/timeSeries/timeSeriesApi';
 export { FunctionsAPI } from './api/functions/functionsApi';
 export * from './api/templates';

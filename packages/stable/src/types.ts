@@ -58,11 +58,13 @@ export type {
 export * from './exports.gen';
 
 export * from './api/containers/types';
+export * from './api/views/types';
 export * from './api/geospatial/types';
 export * from './api/streams/types';
 export * from './api/records/types';
 export * from './api/sessions/types';
 export * from './api/timeSeries/types';
+export * from './api/timeSeries/subscriptions/types';
 export * from './api/dataPoints/types';
 export * from './api/functions/types';
 
@@ -82,6 +84,8 @@ export type AclActionAssets = READ | WRITE;
 export type AclActionDataSets = READ | WRITE | OWNER;
 
 export type AclActionDataModelInstances = READ | WRITE | WRITE_PROPERTIES;
+
+export type AclActionDataProducts = CREATE | DELETE | READ | UPDATE;
 
 export type AclActionDataModel = READ | WRITE;
 
@@ -121,6 +125,8 @@ export type AclDataModelInstances = Acl<
   AclActionDataModelInstances,
   AclScopeDataModelInstances
 >;
+
+export type AclDataProducts = Acl<AclActionDataProducts, AclScopeDataProducts>;
 
 export type AclEvents = Acl<AclActionEvents, AclScopeEvents>;
 
@@ -185,6 +191,14 @@ export interface AclScopeDatasetsIds {
 export type AclScopeDataModel = AclScopeAll | AclScopeSpaceIds;
 
 export type AclScopeDataModelInstances = AclScopeAll | AclScopeSpaceIds;
+
+export interface AclScopeDataProductExternalIds {
+  dataProductScope: {
+    externalIds: CogniteExternalId[];
+  };
+}
+
+export type AclScopeDataProducts = AclScopeAll | AclScopeDataProductExternalIds;
 
 export type AclScopeEvents = AclScopeAll | AclScopeDatasetsIds;
 
@@ -1909,6 +1923,7 @@ export type SingleCogniteCapability =
   | { templateInstancesAcl: AclTemplateInstances }
   | { dataModelAcl: AclDataModel }
   | { dataModelInstancesAcl: AclDataModelInstances }
+  | { dataProductsAcl: AclDataProducts }
   | { sessionsAcl: AclSessions };
 
 export type SinglePatch<T> = { set: T } | { setNull: boolean };

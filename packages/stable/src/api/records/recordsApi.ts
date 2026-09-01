@@ -3,10 +3,14 @@
 import { BaseResourceAPI, makeAutoPaginationMethods } from '@cognite/sdk-core';
 import type {
   RecordAggregateRequest,
+  RecordAggregateRequestWithTyping,
+  RecordAggregateRequestWithoutTyping,
   RecordAggregateResponse,
   RecordAggregateResults,
   RecordDelete,
   RecordFilterRequest,
+  RecordFilterRequestWithTyping,
+  RecordFilterRequestWithoutTyping,
   RecordFilterResponse,
   RecordItem,
   RecordSyncRequest,
@@ -120,10 +124,11 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
   /**
    * [Filter records from a stream](https://developer.cognite.com/api#tag/Records/operation/filterRecords)
    *
-   * Retrieve records from a stream using filters.
+   * Retrieve records from a stream using filters. Pass includeTyping: true to
+   * receive an object with items and typing instead of a bare array.
    *
    * ```js
-   * const response = await client.records.filter('my_stream', {
+   * const records = await client.records.filter('my_stream', {
    *   sources: [
    *     {
    *       source: { type: 'container', space: 'mySpace', externalId: 'myContainer' },
@@ -140,18 +145,33 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
    * });
    * ```
    */
-  public filter = async (
+  public filter(
+    streamExternalId: string,
+    request: RecordFilterRequestWithTyping
+  ): Promise<RecordFilterResponse>;
+  public filter(
+    streamExternalId: string,
+    request?: RecordFilterRequestWithoutTyping
+  ): Promise<RecordItem[]>;
+  public async filter(
     streamExternalId: string,
     request: RecordFilterRequest = {}
-  ): Promise<RecordItem[]> => {
+  ): Promise<RecordItem[] | RecordFilterResponse> {
     const path = this.url(
       `${encodeURIComponent(streamExternalId)}/records/filter`
     );
     const response = await this.post<RecordFilterResponse>(path, {
       data: request,
     });
-    return this.addToMapAndReturn(response.data.items, response);
-  };
+    const items = this.addToMapAndReturn(response.data.items, response);
+    if (request.includeTyping === true) {
+      return {
+        items,
+        typing: response.data.typing,
+      };
+    }
+    return items;
+  }
 
   /**
    * [Sync records from a stream](https://developer.cognite.com/api#tag/Records/operation/syncRecords)
@@ -163,12 +183,11 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
    * determine when to stop.
    *
    * ```js
-   * // Get first page with items, nextCursor, and hasNext
    * const response = await client.records.sync('my_stream', {
    *   initializeCursor: '1d-ago',
    *   sources: [{ source: { type: 'container', space: 'mySpace', externalId: 'myContainer' }, properties: ['*'] }],
    * });
-   * console.log(response.items, response.nextCursor, response.hasNext);
+   * console.log(response.items, response.nextCursor, response.hasNext, response.typing);
    * ```
    */
   public sync = (
@@ -193,6 +212,7 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
         items,
         nextCursor: response.data.nextCursor,
         hasNext: response.data.hasNext,
+        typing: response.data.typing,
       };
     };
 
@@ -209,10 +229,11 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
   /**
    * [Aggregate records from a stream](https://developer.cognite.com/api#tag/Records/operation/aggregateRecords)
    *
-   * Aggregate data for records from a stream.
+   * Aggregate data for records from a stream. Pass includeTyping: true to
+   * receive an object with aggregates and typing instead of bare results.
    *
    * ```js
-   * const response = await client.records.aggregate('my_stream', {
+   * const aggregates = await client.records.aggregate('my_stream', {
    *   aggregates: {
    *     total_count: { count: {} },
    *     by_category: {
@@ -225,29 +246,49 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
    * });
    * ```
    */
-  public aggregate = async (
+  public aggregate(
+    streamExternalId: string,
+    request: RecordAggregateRequestWithTyping
+  ): Promise<RecordAggregateResponse>;
+  public aggregate(
+    streamExternalId: string,
+    request: RecordAggregateRequestWithoutTyping
+  ): Promise<RecordAggregateResults>;
+  public async aggregate(
     streamExternalId: string,
     request: RecordAggregateRequest
-  ): Promise<RecordAggregateResults> => {
+  ): Promise<RecordAggregateResults | RecordAggregateResponse> {
     const path = this.url(
       `${encodeURIComponent(streamExternalId)}/records/aggregate`
     );
     const response = await this.post<RecordAggregateResponse>(path, {
       data: request,
     });
+    if (request.includeTyping === true) {
+      return {
+        aggregates: response.data.aggregates,
+        typing: response.data.typing,
+      };
+    }
     return response.data.aggregates;
-  };
+  }
 }
 
 type SyncEndpointCaller = (params?: RecordSyncRequest) => Promise<{
   items: SyncRecordItem[];
   nextCursor: string;
   hasNext: boolean;
+  typing?: RecordSyncResponse['typing'];
 }>;
 
 function addSyncNextPageFunction(
   endpoint: SyncEndpointCaller,
-  syncData: { items: SyncRecordItem[]; nextCursor: string; hasNext: boolean },
+  syncData: {
+    items: SyncRecordItem[];
+    nextCursor: string;
+    hasNext: boolean;
+    typing?: RecordSyncResponse['typing'];
+  },
   query: RecordSyncRequest
 ): RecordsSyncListResponse<SyncRecordItem[]> {
   const { nextCursor, hasNext } = syncData;
@@ -262,6 +303,7 @@ function addSyncNextPageFunction(
     items: syncData.items,
     nextCursor,
     hasNext,
+    typing: syncData.typing,
     next,
   };
 }
