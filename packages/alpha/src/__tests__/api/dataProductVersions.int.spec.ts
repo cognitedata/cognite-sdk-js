@@ -123,19 +123,18 @@ describe('Data product versions integration test', () => {
 
     await client.dataProductVersions
       .delete(dataProductExternalId, [{ version: createVersion }])
-      .catch();
+      .catch(() => {});
   });
 
   test('list', async () => {
-    const response = await client.dataProductVersions.list(
-      dataProductExternalId,
-      { limit: 10 }
-    );
+    // Page through everything: concurrent runs can push this run's fixture off
+    // the first page.
+    const items = await client.dataProductVersions
+      .list(dataProductExternalId, { limit: 10 })
+      .autoPagingToArray({ limit: Number.POSITIVE_INFINITY });
 
-    expect(response.items.length).toBeGreaterThan(0);
-    expect(response.items.some((item) => item.version === versionNumber)).toBe(
-      true
-    );
+    expect(items.length).toBeGreaterThan(0);
+    expect(items.some((item) => item.version === versionNumber)).toBe(true);
   });
 
   test('retrieve by version', async () => {

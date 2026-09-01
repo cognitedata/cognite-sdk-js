@@ -45,17 +45,22 @@ export async function cleanupDataProductSchemaSpaces(
     );
 
     for (const product of productsInSpace) {
-      const versions = await client.dataProductVersions
-        .list(product.externalId, { limit: 10 })
-        .autoPagingToArray({ limit: Number.POSITIVE_INFINITY });
+      // The product may already be gone: deleted by the test itself or by a
+      // concurrent run, while still present in the (eventually consistent)
+      // listing above. Cleanup must tolerate that rather than fail the suite.
+      try {
+        const versions = await client.dataProductVersions
+          .list(product.externalId, { limit: 10 })
+          .autoPagingToArray({ limit: Number.POSITIVE_INFINITY });
 
-      if (versions.length > 0) {
-        await client.dataProductVersions
-          .delete(
+        if (versions.length > 0) {
+          await client.dataProductVersions.delete(
             product.externalId,
             versions.map((version) => ({ version: version.version }))
-          )
-          .catch(() => {});
+          );
+        }
+      } catch {
+        // ignore - fall through to the product delete, which is also tolerant
       }
 
       await client.dataProducts
@@ -64,7 +69,12 @@ export async function cleanupDataProductSchemaSpaces(
     }
 
     const views = await client.views
-      .list({ limit: 1000, space, allVersions: true })
+      .list({
+        limit: 1000,
+        space,
+        allVersions: true,
+        usedFor: ['node', 'edge', 'all', 'record'],
+      })
       .autoPagingToArray({ limit: Number.POSITIVE_INFINITY });
 
     if (views.length > 0) {
@@ -98,15 +108,31 @@ export async function cleanupDataProductSchemaSpaces(
   }
 }
 
+/**
+ * Only clean up test spaces that have been idle for at least this long.
+ * Both suites in this package (and the same suites in the parallel CI matrix
+ * job) run concurrently against the same project, and all of them create
+ * spaces under DATA_PRODUCT_TEST_SPACE_PREFIX. Deleting a space that another
+ * live run just created pulls its data products out from under it mid-test,
+ * so only spaces old enough to be orphans from a crashed run are removed.
+ * Mirrors deleteSpacesNotUpdatedSince in the stable package's testUtils.
+ */
+const ORPHAN_AGE_THRESHOLD_MS = 15 * 60 * 1000;
+
 export async function cleanupOrphanedDataProductTestResources(
   client: CogniteClientAlpha
 ) {
+  const cutoff = Date.now() - ORPHAN_AGE_THRESHOLD_MS;
   const spaces = (
     await client.spaces
       .list({ limit: 1000 })
       .autoPagingToArray({ limit: Number.POSITIVE_INFINITY })
   )
-    .filter((space) => space.space.startsWith(DATA_PRODUCT_TEST_SPACE_PREFIX))
+    .filter(
+      (space) =>
+        space.space.startsWith(DATA_PRODUCT_TEST_SPACE_PREFIX) &&
+        space.lastUpdatedTime < cutoff
+    )
     .map((space) => space.space);
 
   if (spaces.length > 0) {

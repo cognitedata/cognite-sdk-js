@@ -4,15 +4,11 @@ import {
   BaseResourceAPI,
   type CursorAndAsyncIterator,
 } from '@cognite/sdk-core';
+import type { ViewListParams } from './types';
 import type {
-  AllVersionsQueryParameter,
-  CursorQueryParameter,
-  IncludeGlobalQueryParameter,
   IncludeInheritedPropertiesQueryParameter,
   ListOfAllVersionsReferences,
   ListOfVersionReferences,
-  ReducedLimitQueryParameter,
-  SpaceQueryParameter,
   ViewCollectionResponse,
   ViewCreateDefinition,
   ViewDefinition,
@@ -45,6 +41,28 @@ export class ViewsAPI extends BaseResourceAPI<ViewDefinition> {
    *
    *  const response = await client.views.upsert([
    *   viewDefinition
+   *  ]);
+   *
+   *  // Record views target a stream (usedFor: 'record') and require streamId
+   *  const recordViewDefinition = {
+   *    "externalId": "my_record_view",
+   *    "space": "my_space",
+   *    "version": "1",
+   *    "streamId": ["my_stream"],
+   *    "properties": {
+   *      "temperature": {
+   *        "container": {
+   *          "type": "container",
+   *          "externalId": "my_record_container",
+   *          "space": "my_space"
+   *        },
+   *        "containerPropertyIdentifier": "temperature"
+   *      }
+   *    }
+   *  };
+   *
+   *  const recordResponse = await client.views.upsert([
+   *   recordViewDefinition
    *  ]);
    * ```
    */
@@ -84,17 +102,23 @@ export class ViewsAPI extends BaseResourceAPI<ViewDefinition> {
    * ```js
    *  const response = await client.views.list();
    *
+   *  // Record views are excluded by default; opt in with `usedFor`
+   *  const recordViews = await client.views.list({ usedFor: ['record'] });
+   *
+   *  // List every kind of view
+   *  const allViews = await client.views.list({
+   *    usedFor: ['node', 'edge', 'all', 'record'],
+   *  });
+   *
    * ```
    */
   public list = (
-    params: IncludeGlobalQueryParameter &
-      CursorQueryParameter &
-      ReducedLimitQueryParameter &
-      SpaceQueryParameter &
-      IncludeInheritedPropertiesQueryParameter &
-      AllVersionsQueryParameter = { includeGlobal: false }
+    params: ViewListParams = { includeGlobal: false }
   ): CursorAndAsyncIterator<ViewDefinition> => {
-    return super.listEndpoint(this.callListEndpointWithGet, params);
+    return super.listEndpoint(
+      this.callListGetEndpointWithRepeatedQueryParams,
+      params
+    );
   };
 
   /**
