@@ -2943,6 +2943,11 @@ export type {
 } from './api/instances/types.gen';
 
 export type {
+  QueryResult,
+  SelectSourceWithParams,
+} from './api/instances/query.types';
+
+export type {
   AllVersionsQueryParameter,
   ByExternalIdsDataModelsRequest,
   ConnectionDefinition,
