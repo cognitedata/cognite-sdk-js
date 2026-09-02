@@ -47,6 +47,31 @@ export interface ContainerReference {
 }
 
 /**
+ * Reference to a record view.
+ *
+ * A view can be used as a record source when its `usedFor` is `'record'` and its
+ * `streamId` targets the stream being read from or written to. View properties map
+ * (and may rename) container properties, and a view may embed a filter which is
+ * applied (in addition to the request filter) on every read through the view.
+ * Record views are managed with the Data Modeling views API (`client.views`).
+ */
+export interface ViewReference {
+  /** External-id of the view */
+  externalId: RecordExternalId;
+  /** Id of the space that the view belongs to */
+  space: RecordSpaceId;
+  type: 'view';
+  /** Version of the view */
+  version: string;
+}
+
+/**
+ * Reference to the source of record data: either a view or a container,
+ * distinguished by the `type` attribute.
+ */
+export type SourceReference = ViewReference | ContainerReference;
+
+/**
  * Sort direction for record queries
  */
 export type RecordSortDirection = 'ascending' | 'descending';
@@ -57,15 +82,17 @@ export type RecordSortDirection = 'ascending' | 'descending';
 export type LastUpdatedTimeRangeBound = string | number;
 
 /**
- * Property values for a container source
+ * Property values for the identified view or container
  */
 export interface RecordData {
   /**
-   * Reference to the container
+   * Reference to the view or container
    */
-  source: ContainerReference;
+  source: SourceReference;
   /**
-   * Property values for the container
+   * Property values for the view or container. When writing through a view,
+   * the values are keyed by the view's property names, and a single view
+   * source writes to all containers mapped by the view.
    */
   properties: PropertyValueGroupV3;
 }
@@ -103,15 +130,21 @@ export interface RecordDelete {
 }
 
 /**
- * Source selector for specifying which container properties to return
+ * Source selector for specifying which view or container properties to return.
+ *
+ * Selecting through a view restricts the result to records that have data in
+ * all of the containers mapped by the view, and the view's embedded filter
+ * (if any) is applied in addition to the request filter.
+ * Container and view sources cannot be mixed in a single request.
  */
 export interface SourceSelector {
   /**
-   * Reference to the container
+   * Reference to the view or container
    */
-  source: ContainerReference;
+  source: SourceReference;
   /**
-   * Properties to return for the specified container
+   * Properties to return for the specified view or container.
+   * Use `'*'` to return all properties.
    */
   properties: string[];
 }
@@ -143,7 +176,9 @@ export interface LastUpdatedTimeFilter {
  */
 export interface RecordSort {
   /**
-   * Property to sort by
+   * Property to sort by. Sorting supports container property references only.
+   * To sort on a property exposed by a view, reference the underlying
+   * container property instead.
    */
   property: string[];
   /**
@@ -160,7 +195,10 @@ export interface RecordUnitReference {
 }
 
 /**
- * Container property path for unit conversion (exactly three segments: space, container, property).
+ * Property path for unit conversion (exactly three segments). The first segment
+ * is the space, the second is either the container external id or the view
+ * external id and version joined by a slash (`'viewExternalId/version'`), and
+ * the third is the property id. Top-level properties are not supported.
  */
 export type TargetUnitProperty = [string, string, string];
 
@@ -245,12 +283,14 @@ export interface RecordContainerPropertyDefinition {
 }
 
 /**
- * Nested typing map: space → container → property → definition.
+ * Nested typing map: space → view or container → property → definition.
  * Present when `includeTyping` is true in the request.
+ * For data selected through a view, the second-level key has the format
+ * `viewExternalId/version` and the property names are the view's.
  */
 export type RecordTypeInformation = {
   [space: string]: {
-    [containerExternalId: string]: {
+    [viewOrContainerExternalId: string]: {
       [property: string]: RecordContainerPropertyDefinition;
     };
   };
@@ -258,7 +298,9 @@ export type RecordTypeInformation = {
 
 /**
  * Property reference for filters. Either a top-level property (1 element) or
- * a container property [space, container, property] (3 elements).
+ * a view/container property (3 elements). For the 3-element form, the second
+ * segment is either the container external id, or the view external id and
+ * version joined by a slash, e.g. `['mySpace', 'myView/v1', 'myViewProperty']`.
  */
 export type FilterProperty = [string] | [string, string, string];
 
@@ -282,7 +324,12 @@ export type LeafFilter =
   | { matchAll: Record<string, never> }
   | { exists: { property: FilterProperty } }
   | { equals: { property: FilterProperty; value: RawPropertyValueV3 } }
-  | { hasData: ContainerReference[] }
+  /**
+   * Matches records where data is present in the referenced views or containers.
+   * A view reference matches records that have data in all of the containers
+   * mapped by the view and that match the view's embedded filter (if any).
+   */
+  | { hasData: SourceReference[] }
   | { prefix: { property: FilterProperty; value: string } }
   | {
       range: {
@@ -311,7 +358,7 @@ export interface RecordFilterRequest {
    */
   lastUpdatedTime?: LastUpdatedTimeFilter;
   /**
-   * List of containers and their properties to return
+   * List of views/containers and their properties to return
    */
   sources?: SourceSelector[];
   /**
@@ -366,18 +413,20 @@ export interface RecordItem {
    */
   lastUpdatedTime: Date;
   /**
-   * Properties organized by space -> container -> property
+   * Properties organized by space -> view or container -> property
    */
   properties: RecordProperties;
 }
 
 /**
  * Properties structure returned from the API
- * Organized as: { [spaceId]: { [containerId]: { [propertyId]: value } } }
+ * Organized as: { [spaceId]: { [viewOrContainerId]: { [propertyId]: value } } }
+ * For data selected through a view, the second-level key has the format
+ * `viewExternalId/version` and the property names are the view's.
  */
 export type RecordProperties = {
   [space: string]: {
-    [container: string]: PropertyValueGroupV3;
+    [viewOrContainer: string]: PropertyValueGroupV3;
   };
 };
 
@@ -415,7 +464,7 @@ export interface SyncRecordItem {
  * Request for syncing records from a stream
  */
 export interface RecordSyncRequest {
-  /** List of containers and their properties to return */
+  /** List of views/containers and their properties to return */
   sources?: SourceSelector[];
   /** Filter specification */
   filter?: RecordFilter;
@@ -477,7 +526,10 @@ export type RecordsSyncCursorAndAsyncIterator<T> = Promise<
 
 /**
  * Property reference for aggregates.
- * Either a top-level property (1 element) or a container property [space, container, property] (3 elements).
+ * Either a top-level property (1 element) or a view/container property (3 elements).
+ * For the 3-element form, the second segment is either the container external id,
+ * or the view external id and version joined by a slash, e.g.
+ * `['mySpace', 'myView/v1', 'myViewProperty']`.
  */
 export type AggregateProperty = [string] | [string, string, string];
 
