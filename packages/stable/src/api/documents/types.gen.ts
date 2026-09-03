@@ -12,8 +12,8 @@ export type CogniteExternalId = string;
  * The ID of an [instance in Cognite Data Models](https://docs.cognite.com/cdf/dm/dm_concepts/dm_spaces_instances#instance).
  */
 export interface CogniteInstanceId {
-  externalId: string;
-  space: string;
+  externalId: InstanceExternalId;
+  space: Space;
 }
 /**
  * A server-generated ID for the object.
@@ -840,6 +840,10 @@ export interface DocumentsPreviewTemporaryLinkResponse {
  */
 export type EpochTimestamp = number;
 /**
+ * @pattern ^[a-zA-Z]([a-zA-Z0-9_]{0,253}[a-zA-Z0-9])?$
+ */
+export type InstanceExternalId = string;
+/**
  * A label assigned to a resource.
  */
 export interface Label {
@@ -884,3 +888,7 @@ export interface PassageSourceFile {
    */
   name: string;
 }
+/**
+ * @pattern ^[a-zA-Z][a-zA-Z0-9_-]{0,41}[a-zA-Z0-9]?$
+ */
+export type Space = string;
