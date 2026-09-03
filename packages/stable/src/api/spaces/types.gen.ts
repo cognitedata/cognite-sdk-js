@@ -84,5 +84,6 @@ export interface UpsertConflict {
   error: {
     code: number;
     message: string;
+    isAutoRetryable?: boolean;
   };
 }
