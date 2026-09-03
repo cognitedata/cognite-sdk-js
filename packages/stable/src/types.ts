@@ -4,6 +4,7 @@ import type {
   CogniteExternalId,
   CogniteInstanceId,
   CogniteInternalId,
+  CreatedAndLastUpdatedTime,
   Cursor,
   ExternalId,
   FilterQuery,
@@ -17,7 +18,6 @@ import type { TimeSeriesFilter } from './api/timeSeries/types';
 import type {
   AggregateResponse,
   ArrayPatchLong,
-  CreatedAndLastUpdatedTime,
   CreatedAndLastUpdatedTimeFilter,
   DateRange,
   ExternalIdPrefix,
@@ -53,6 +53,9 @@ export type {
   AutoPagingEach,
   AutoPagingToArrayOptions,
   AutoPagingToArray,
+  CreatedTime,
+  LastUpdatedTime,
+  CreatedAndLastUpdatedTime,
 } from '@cognite/sdk-core';
 
 export * from './exports.gen';
@@ -553,10 +556,6 @@ export interface CreateRevision3D {
    */
   fileId: CogniteInternalId;
   metadata?: Metadata;
-}
-
-export interface CreatedTime {
-  createdTime: Date;
 }
 
 export type DELETE = 'DELETE';
