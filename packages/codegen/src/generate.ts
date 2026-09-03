@@ -57,6 +57,7 @@ async function generateServiceTypes(
   const gen = new CodeGen(new AcacodeOpenApiGenerator(), {
     autoNameInlinedRequest: configFile.inlinedSchemas.autoNameRequest,
     outputDir: directory,
+    dateProps: configFile.dateProps,
     filter: {
       path: predicate,
     },

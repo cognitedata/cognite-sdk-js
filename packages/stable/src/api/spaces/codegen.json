@@ -1,5 +1,6 @@
 {
   "service": "models/spaces",
+  "dateProps": [],
   "filter": {
     "serviceName": "models/spaces"
   },

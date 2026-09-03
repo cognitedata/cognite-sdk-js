@@ -1,5 +1,6 @@
 {
   "service": "documents",
+  "dateProps": [],
   "filter": {
     "serviceName": "documents"
   },

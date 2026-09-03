@@ -1,5 +1,6 @@
 // Copyright 2022 Cognite AS
 import { promises as fs } from 'node:fs';
+import { SUPPORTED_DATE_PROPS } from './ast_transformer/date_props';
 import {
   type DirectoryOption,
   type PackageOption,
@@ -63,6 +64,15 @@ export interface PackageConfig {
 export interface ServiceConfig {
   snapshot?: SnapshotPath;
   service: string;
+  /**
+   * Timestamp fields the service's API class converts to `Date` via
+   * `getDateProps()`. Generated types mix in the matching interface from
+   * `@cognite/sdk-core` for these, instead of typing them as epoch numbers.
+   *
+   * Declare it explicitly - an empty list states that the service converts
+   * nothing, which is what most services do.
+   */
+  dateProps?: string[];
   inlinedSchemas: {
     autoNameRequest: boolean;
   };
@@ -210,6 +220,14 @@ export class ServiceConfigManager extends ConfigManager<ServiceConfig> {
     if (config.snapshot != null) {
       await this.validateSnapshot(config.snapshot, ['path'], 'service');
     }
+    const unsupported = (config.dateProps ?? []).filter(
+      (prop) => !SUPPORTED_DATE_PROPS.includes(prop)
+    );
+    if (unsupported.length > 0) {
+      throw new Error(
+        `Unsupported "dateProps": ${unsupported.join(', ')}. Supported: ${SUPPORTED_DATE_PROPS.join(', ')}`
+      );
+    }
 
     return config;
   };
@@ -219,6 +237,7 @@ export class ServiceConfigManager extends ConfigManager<ServiceConfig> {
   ): ServiceConfig => {
     return {
       service: options.service,
+      dateProps: [],
       filter: {
         serviceName: options.service,
       },
