@@ -1,7 +1,8 @@
 // Copyright 2025 Cognite AS
 
 import { BaseResourceAPI } from '@cognite/sdk-core';
-import type { Stream, StreamRetrieveParams, StreamWrite } from './types';
+import type { Stream, StreamRetrieveParams } from './types';
+import type { StreamRequestItem } from './types.gen';
 
 export class StreamsAPI extends BaseResourceAPI<Stream> {
   /**
@@ -25,7 +26,7 @@ export class StreamsAPI extends BaseResourceAPI<Stream> {
    * });
    * ```
    */
-  public create = async (item: StreamWrite): Promise<Stream> => {
+  public create = async (item: StreamRequestItem): Promise<Stream> => {
     const path = this.url();
     const response = await this.post<{ items: Stream[] }>(path, {
       data: { items: [item] },
