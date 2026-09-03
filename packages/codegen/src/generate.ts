@@ -2,6 +2,7 @@
 
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
+import { datePropsForService } from './api_date_props';
 import {
   CodeGen,
   createPathFilter,
@@ -57,7 +58,7 @@ async function generateServiceTypes(
   const gen = new CodeGen(new AcacodeOpenApiGenerator(), {
     autoNameInlinedRequest: configFile.inlinedSchemas.autoNameRequest,
     outputDir: directory,
-    dateProps: configFile.dateProps,
+    dateProps: await datePropsForService(directory),
     filter: {
       path: predicate,
     },

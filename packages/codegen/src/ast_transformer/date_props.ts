@@ -10,14 +10,16 @@ import * as ts from 'typescript';
  * mixes in the matching interface from `@cognite/sdk-core` instead, so
  * `createdTime: EpochTimestamp` becomes `extends CreatedTime`.
  *
- * Which fields to convert is per service, since it has to match what the API
- * class actually does - see the `dateProps` setting in `codegen.json`.
+ * Which fields to convert is read out of the service's own `getDateProps()`,
+ * so there is nothing to keep in sync by hand - see `api_date_props.ts`.
+ *
+ * `createdTime` and `lastUpdatedTime` have shared interfaces in
+ * `@cognite/sdk-core` and are mixed in. Any other converted field (say
+ * `deletedTime`) simply has its type rewritten to `Date` in place.
  */
 
 const CREATED_TIME = 'createdTime';
 const LAST_UPDATED_TIME = 'lastUpdatedTime';
-
-export const SUPPORTED_DATE_PROPS = [CREATED_TIME, LAST_UPDATED_TIME];
 
 const SDK_CORE_MODULE = '@cognite/sdk-core';
 
@@ -51,6 +53,8 @@ const isEpochTimestamp = (member: ts.TypeElement): boolean => {
   );
 };
 
+const MIXIN_PROPS = [CREATED_TIME, LAST_UPDATED_TIME];
+
 const mixinFor = (converted: Set<string>): string | undefined => {
   const created = converted.has(CREATED_TIME);
   const lastUpdated = converted.has(LAST_UPDATED_TIME);
@@ -65,6 +69,16 @@ const mixinFor = (converted: Set<string>): string | undefined => {
   }
   return undefined;
 };
+
+/** `createdTime: EpochTimestamp` -> `createdTime: Date` */
+const asDate = (member: ts.PropertySignature): ts.PropertySignature =>
+  ts.factory.updatePropertySignature(
+    member,
+    member.modifiers,
+    member.name,
+    member.questionToken,
+    ts.factory.createTypeReferenceNode('Date', undefined)
+  );
 
 /**
  * Adds `specifiers` to the existing `@cognite/sdk-core` import when there is
@@ -157,19 +171,37 @@ const createDatePropsTransformer = (
         return ts.visitEachChild(node, visitor, context);
       }
 
-      const converted = new Set<string>();
-      const remaining = node.members.filter((member) => {
+      const mixedIn = new Set<string>();
+      let rewroteInPlace = false;
+
+      const members: ts.TypeElement[] = [];
+      for (const member of node.members) {
         const name = memberName(member);
         if (name == null || !wanted.has(name) || !isEpochTimestamp(member)) {
-          return true;
+          members.push(member);
+          continue;
         }
-        converted.add(name);
-        return false;
-      });
+        if (MIXIN_PROPS.includes(name)) {
+          // dropped from the body; supplied by the heritage clause below
+          mixedIn.add(name);
+          continue;
+        }
+        members.push(asDate(member as ts.PropertySignature));
+        rewroteInPlace = true;
+      }
 
-      const mixin = mixinFor(converted);
+      const mixin = mixinFor(mixedIn);
       if (mixin == null) {
-        return node;
+        return rewroteInPlace
+          ? ts.factory.updateInterfaceDeclaration(
+              node,
+              node.modifiers,
+              node.name,
+              node.typeParameters,
+              node.heritageClauses,
+              members
+            )
+          : node;
       }
       mixinsUsed.add(mixin);
 
@@ -189,7 +221,7 @@ const createDatePropsTransformer = (
         node.name,
         node.typeParameters,
         [...(node.heritageClauses || []), heritage],
-        remaining
+        members
       );
     };
 

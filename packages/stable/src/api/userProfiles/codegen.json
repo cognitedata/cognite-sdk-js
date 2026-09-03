@@ -1,6 +1,5 @@
 {
   "service": "profiles",
-  "dateProps": [],
   "filter": {
     "serviceName": "profiles"
   },
