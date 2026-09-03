@@ -1,5 +1,7 @@
 import { promises as fs } from 'node:fs';
-import { afterEach, describe, expect, test } from 'vitest';
+import * as os from 'node:os';
+import * as pathUtil from 'node:path';
+import { afterAll, beforeAll, describe, expect, test } from 'vitest';
 import { CodeGen, passThroughFilter } from '../codegen';
 import { AcacodeOpenApiGenerator } from '../generator/acacode';
 import type { OpenApiSchemas } from '../openapi';
@@ -32,12 +34,24 @@ const schemas = (): OpenApiSchemas => ({
       createdTime: { $ref: '#/components/schemas/EpochTimestamp' },
     },
   },
+  Deleted: {
+    type: 'object',
+    required: ['deletedTime', 'name'],
+    properties: {
+      deletedTime: { $ref: '#/components/schemas/EpochTimestamp' },
+      name: { type: 'string' },
+    },
+  },
 });
+
+// its own directory: the other specs also write CodeGen.outputFileName, and
+// vitest runs the files concurrently
+let outputDir: string;
 
 const generate = async (dateProps?: string[]): Promise<string> => {
   const gen = new CodeGen(new AcacodeOpenApiGenerator(), {
     autoNameInlinedRequest: false,
-    outputDir: process.cwd(),
+    outputDir,
     dateProps,
     filter: { path: passThroughFilter },
   });
@@ -46,10 +60,14 @@ const generate = async (dateProps?: string[]): Promise<string> => {
 };
 
 describe('dateProps transformer', () => {
-  afterEach(async () => {
-    try {
-      await fs.unlink(CodeGen.outputFileName);
-    } catch (error) {}
+  beforeAll(async () => {
+    outputDir = await fs.mkdtemp(
+      pathUtil.join(os.tmpdir(), 'codegen-date-props-')
+    );
+  });
+
+  afterAll(async () => {
+    await fs.rm(outputDir, { recursive: true, force: true });
   });
 
   test('leaves timestamps alone when nothing is declared', async () => {
@@ -85,6 +103,16 @@ describe('dateProps transformer', () => {
     const code = await generate(['createdTime']);
 
     expect(code).toMatch(/interface CreatedOnly extends CreatedTime \{\s*\}/);
+  });
+
+  test('a field with no shared interface is rewritten in place', async () => {
+    // only createdTime/lastUpdatedTime have interfaces in sdk-core; anything
+    // else a service converts still has to stop claiming to be a number
+    const code = await generate(['deletedTime']);
+
+    expect(code).toContain('deletedTime: Date');
+    expect(code).toContain('name: string');
+    expect(code).not.toContain('interface Deleted extends');
   });
 
   test('optional timestamps are left alone', async () => {

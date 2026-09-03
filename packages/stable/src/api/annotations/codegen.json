@@ -1,6 +1,5 @@
 {
   "service": "annotations",
-  "dateProps": [],
   "filter": {
     "serviceName": "annotations",
     "relevantReferenceNames": ["AnnotationData"]

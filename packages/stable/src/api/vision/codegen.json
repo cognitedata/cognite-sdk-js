@@ -1,6 +1,5 @@
 {
   "service": "vision",
-  "dateProps": [],
   "filter": {
     "serviceName": "context/vision/extract"
   },
