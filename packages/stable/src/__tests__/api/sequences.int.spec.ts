@@ -185,13 +185,15 @@ describe('Sequences integration test', () => {
     async () => {
       await runTestWithRetryWhenFailing(async () => {
         // The search endpoint matches whole words: wildcard patterns like
-        // 'des*tion' never match anything.
+        // 'des*tion' never match anything. It does match fuzzily, though, so
+        // a concurrent run's `sdksearch<other-int>` can show up too; only
+        // require that this run's sequence is among the hits.
         const result = await client.sequences.search({
           search: {
             query: searchWord,
           },
         });
-        expect(result.map((s) => s.id)).toEqual([sequences[0].id]);
+        expect(result.some((s) => s.id === sequences[0].id)).toBe(true);
       }, RETRY_SLEEP_BUDGET_MS);
     },
     SLOW_INDEX_TEST_TIMEOUT_MS
