@@ -9,16 +9,22 @@ import type {
 
 /**
  * Stream write - the input type for creating a stream
+ *
+ * @deprecated Kept for backwards compatibility. Use {@link StreamRequestItem}.
  */
 export type StreamWrite = StreamRequestItem;
 
 /**
  * Settings for creating a stream
+ *
+ * @deprecated Kept for backwards compatibility. Use {@link CreateStreamSettings}.
  */
 export type StreamCreateSettings = CreateStreamSettings;
 
 /**
  * Stream settings returned from the API
+ *
+ * @deprecated Kept for backwards compatibility. Use {@link StreamResponseItemSettings}.
  */
 export type StreamSettings = StreamResponseItemSettings;
 
@@ -46,7 +52,7 @@ export interface Stream extends CreatedTime {
   /**
    * Stream settings
    */
-  settings: StreamSettings;
+  settings: StreamResponseItemSettings;
 }
 
 /**
