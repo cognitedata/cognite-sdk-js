@@ -10,6 +10,7 @@ import type {
   SchemaTypePrimitiveContent,
 } from 'swagger-typescript-api-nextgen';
 import cursorAndAsyncIteratorTransformer from './ast_transformer/cursor_and_async_iterator';
+import createDatePropsTransformer from './ast_transformer/date_props';
 import sorterTransformer from './ast_transformer/sorter';
 import { formatWithBiome } from './format';
 import type { TypeGenerator, TypeGeneratorResult } from './generator/generator';
@@ -53,6 +54,12 @@ export interface CodeGenOptions extends AutoNameInlinedRequestOption {
     schema?: StringFilter;
   };
   outputDir: string;
+  /**
+   * Timestamp fields this service converts to `Date` at runtime, mirroring its
+   * `getDateProps()`. Empty means the generated types keep the epoch numbers
+   * the API actually sends.
+   */
+  dateProps?: string[];
 }
 
 /**
@@ -126,15 +133,19 @@ export class CodeGen {
   static outputFileName = 'types.gen.ts';
 
   // Ordering matters! "sorterTransformer" must be the last transformer specified.
-  astTransformers = [
-    cursorAndAsyncIteratorTransformer,
-    sorterTransformer, // must be last
-  ];
+  astTransformers: ts.TransformerFactory<ts.SourceFile>[];
 
   constructor(
     readonly generator: TypeGenerator,
     readonly options: CodeGenOptions
-  ) {}
+  ) {
+    const dateProps = options.dateProps ?? [];
+    this.astTransformers = [
+      cursorAndAsyncIteratorTransformer,
+      ...(dateProps.length > 0 ? [createDatePropsTransformer(dateProps)] : []),
+      sorterTransformer, // must be last
+    ];
+  }
 
   /**
    * runSwaggerGenerate generates types for all component schematics.
