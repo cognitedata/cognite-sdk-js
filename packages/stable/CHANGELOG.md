@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [10.14.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@10.13.0...@cognite/sdk@10.14.0) (2026-09-02)
+
+
+### Features
+
+* **dms:** add support for record views ([#1464](https://github.com/cognitedata/cognite-sdk-js/issues/1464)) ([939f2bc](https://github.com/cognitedata/cognite-sdk-js/commit/939f2bcc75507a26424e865ec538f698651f61cd)), closes [#1345](https://github.com/cognitedata/cognite-sdk-js/issues/1345)
+* **records:** support record views as sources in the records API ([#1469](https://github.com/cognitedata/cognite-sdk-js/issues/1469)) ([97ce761](https://github.com/cognitedata/cognite-sdk-js/commit/97ce761c4ece6461d2923f70e6c128c35e46741f)), closes [#1464](https://github.com/cognitedata/cognite-sdk-js/issues/1464)
+
+
+
+
+
 # [10.13.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@10.12.1...@cognite/sdk@10.13.0) (2026-08-04)
 
 

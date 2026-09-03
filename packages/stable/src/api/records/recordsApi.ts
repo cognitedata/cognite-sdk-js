@@ -41,6 +41,8 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
    *     externalId: 'record1',
    *     sources: [
    *       {
+   *         // A source may also reference a record view:
+   *         // { type: 'view', space: 'mySpace', externalId: 'myView', version: 'v1' }
    *         source: { type: 'container', space: 'mySpace', externalId: 'myContainer' },
    *         properties: { temperature: 25.5, timestamp: '2025-01-01T00:00:00Z' }
    *       }
@@ -131,13 +133,13 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
    * const records = await client.records.filter('my_stream', {
    *   sources: [
    *     {
-   *       source: { type: 'container', space: 'mySpace', externalId: 'myContainer' },
+   *       source: { type: 'view', space: 'mySpace', externalId: 'myView', version: 'v1' },
    *       properties: ['*']
    *     }
    *   ],
    *   filter: {
    *     equals: {
-   *       property: ['mySpace', 'myContainer', 'status'],
+   *       property: ['mySpace', 'myView/v1', 'status'],
    *       value: 'active'
    *     }
    *   },
