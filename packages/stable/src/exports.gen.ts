@@ -149,6 +149,15 @@ export type {
   UpsertConflict,
 } from './api/spaces/types.gen';
 export type {
+  CreateStreamRequest,
+  CreateStreamSettings,
+  StreamLifecycleSettings,
+  StreamLimit,
+  StreamLimitSettings,
+  StreamRequestItem,
+  StreamResponseItemSettings,
+} from './api/streams/types.gen';
+export type {
   IdentityType,
   IdentityTypeFilter,
   UserIdentifier,
