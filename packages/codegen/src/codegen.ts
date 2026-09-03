@@ -513,6 +513,10 @@ export class CodeGen {
       // it's just used in openapi to state we return an empty json `{}`.
       'EmptyResponse',
       'ErrorResponse',
+
+      // same as ErrorResponse, but the leading digit means the generator has
+      // to prefix it, so it would surface as `Type400ErrorResponse`.
+      '400ErrorResponse',
     ];
 
     const generated = await this.generateTypesFromSchemas(

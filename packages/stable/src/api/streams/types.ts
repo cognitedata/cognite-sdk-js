@@ -4,6 +4,7 @@ import type { CreatedTime } from '../../types';
 import type {
   CreateStreamSettings,
   StreamRequestItem,
+  StreamResponseItem,
   StreamResponseItemSettings,
 } from './types.gen';
 
@@ -31,29 +32,12 @@ export type StreamSettings = StreamResponseItemSettings;
 /**
  * A stream - target for high volume data ingestion.
  *
- * Not generated: the API returns `createdTime` as an epoch timestamp, which the
- * SDK converts to a `Date` before handing it back. See the `relevantReferenceNames`
- * roots in `codegen.json`, which keep `StreamResponseItem` out of `types.gen.ts`
- * so this name stays free.
+ * Identical to the generated {@link StreamResponseItem}, except that the SDK
+ * converts `createdTime` from an epoch timestamp to a `Date`.
  */
-export interface Stream extends CreatedTime {
-  /**
-   * Stream identifier
-   */
-  externalId: string;
-  /**
-   * Name of the template used for creating this stream.
-   */
-  createdFromTemplate: string;
-  /**
-   * Defines type of the stream.
-   */
-  type: 'Immutable' | 'Mutable';
-  /**
-   * Stream settings
-   */
-  settings: StreamResponseItemSettings;
-}
+export interface Stream
+  extends Omit<StreamResponseItem, 'createdTime'>,
+    CreatedTime {}
 
 /**
  * Parameters for retrieving a stream

@@ -151,10 +151,16 @@ export type {
 export type {
   CreateStreamRequest,
   CreateStreamSettings,
+  StreamCreateConflict,
+  StreamCreateConflictItem,
+  StreamDeleteItem,
+  StreamDeleteRequest,
   StreamLifecycleSettings,
   StreamLimit,
   StreamLimitSettings,
   StreamRequestItem,
+  StreamResponse,
+  StreamResponseItem,
   StreamResponseItemSettings,
 } from './api/streams/types.gen';
 export type {

@@ -26,6 +26,64 @@ export interface CreateStreamSettings {
   };
 }
 /**
+ * The number of milliseconds since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+ * @format int64
+ * @min 0
+ * @example 1730204346000
+ */
+export type EpochTimestamp = number;
+export interface StreamCreateConflict {
+  /**
+   * Details about the duplicated stream id.
+   *
+   */
+  error: {
+    code: 409;
+    message: string;
+    duplicated?: StreamCreateConflictItem[];
+  };
+}
+/**
+ * Stream creation conflict info.
+ */
+export interface StreamCreateConflictItem {
+  /**
+   * streamId
+   * Stream identifier.
+   *
+   * @example test1
+   */
+  externalId: string;
+}
+/**
+ * Stream identifier to delete.
+ */
+export interface StreamDeleteItem {
+  /**
+   * streamId
+   * Stream identifier. The identifier must be a valid stream identifier.
+   * Stream identifiers can only consist of alphanumeric characters, hyphens, and underscores.
+   * It must not start with cdf_ or cognite_, as those are reserved for Cognite internal use.
+   * Stream id cannot be logs or records. Max length is 100 characters.
+   *
+   * @pattern ^[a-z]([a-z0-9_-]{0,98}[a-z0-9])?$
+   * @example test_stream_1
+   */
+  externalId: string;
+}
+/**
+ * Request to delete a stream.
+ * @example {"items":[{"externalId":"my-stream"}]}
+ */
+export interface StreamDeleteRequest {
+  /**
+   * streamItems
+   * List of streams to delete. Currently limited to 1 item.
+   *
+   */
+  items: StreamDeleteItem[];
+}
+/**
 * Data lifecycle settings. These settings are populated from the stream creation template
 and there is no easy way to change them. This information is meant to be human-readable
 and is not really meant for machine consumption.
@@ -116,6 +174,59 @@ export interface StreamRequestItem {
    */
   externalId: string;
   settings: CreateStreamSettings;
+}
+/**
+ * Stream response.
+ */
+export interface StreamResponse {
+  /**
+   * streamItems
+   * List of streams.
+   *
+   */
+  items: StreamResponseItem[];
+}
+/**
+ * Stream object.
+ */
+export interface StreamResponseItem {
+  /**
+   * createdFromTemplate
+   * Name of the template used for creating this stream.
+   * **Note:** This value is for information only. The template might have been modified
+   * or even entirely deleted after the stream has been created.
+   *
+   * @example BasicArchive
+   */
+  createdFromTemplate: string;
+  /** The number of milliseconds since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds. */
+  createdTime: EpochTimestamp;
+  /**
+   * streamId
+   * Stream identifier.
+   *
+   * @example test1
+   */
+  externalId: string;
+  settings: StreamResponseItemSettings;
+  /**
+   * type
+   * Defines type of the stream. Both ```Immutable``` and ```Mutable``` streams are available.
+   *
+   * Records in an ```Immutable``` stream cannot be updated or deleted by the user.
+   * Instead, depending on the specific template, they can have a limited life span
+   * and be automatically deleted once ```dataDeletedAfter``` interval has passed.
+   * ```Immutable``` streams allow ingestion of very large amounts of data.
+   * These streams are most suitable for event or log type data or as a "staging area"
+   * for data that needs to be normalized before ingestion into a more permanent storage.
+   * Immutable streams are optimized for long-term retention and high-volume ingestion,
+   * which results in lower query performance compared to mutable streams.
+   * Records in a ```Mutable``` stream can be updated and deleted by the user,
+   * but total number of records that can be ingested into such a stream is limited.
+   * Mutable streams provide better query performance.
+   * @example Immutable
+   */
+  type: 'Immutable' | 'Mutable';
 }
 /**
  * Stream settings.
