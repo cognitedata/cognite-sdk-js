@@ -4,12 +4,14 @@
     "serviceName": "extractors",
     "relevantReferenceNames": [
       "Extractor",
-      "ExtractorId",
-      "Link",
-      "LinkType",
+      "Release",
       "SourceSystem",
       "Solution",
-      "ItemType"
+      "ReleaseId",
+      "ExtractorId",
+      "Artifact",
+      "Link",
+      "Changelog"
     ]
   },
   "inlinedSchemas": {

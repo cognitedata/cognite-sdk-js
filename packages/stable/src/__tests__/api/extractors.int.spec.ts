@@ -15,6 +15,14 @@ describe('extractors api', () => {
     expect(response.items[0].type).toBeDefined();
   });
 
+  it('list releases', async () => {
+    const response = await client.extractors.releases.list();
+    expect(response.items.length).toBeGreaterThan(0);
+    expect(response.items[0].externalId).toBeDefined();
+    expect(response.items[0].version).toBeDefined();
+    expect(response.items[0].artifacts).toBeDefined();
+  });
+
   it('list source systems', async () => {
     const response = await client.extractors.sourceSystems.list();
     expect(response.items.length).toBeGreaterThan(0);
@@ -38,5 +46,18 @@ describe('extractors api', () => {
     ]);
     expect(retrieved).toHaveLength(1);
     expect(retrieved[0].externalId).toBe(extractor.externalId);
+  });
+
+  it('retrieve release by external id and version', async () => {
+    const listResponse = await client.extractors.releases.list();
+    const release = listResponse.items[0];
+
+    const retrieved = await client.extractors.releases.retrieve([
+      { externalId: release.externalId, version: release.version },
+    ]);
+    expect(retrieved).toHaveLength(1);
+    expect(retrieved[0].externalId).toBe(release.externalId);
+    expect(retrieved[0].version).toBe(release.version);
+    expect(retrieved[0].artifacts.length).toBeGreaterThan(0);
   });
 });
