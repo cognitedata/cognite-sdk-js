@@ -6,7 +6,7 @@ import {
   type ExternalId,
 } from '@cognite/sdk-core';
 import type { IgnoreUnknownIds } from '../../types';
-import type { Solution } from './types';
+import type { Solution } from './types.gen';
 
 export class ExtractorSolutionsAPI extends BaseResourceAPI<Solution> {
   /**

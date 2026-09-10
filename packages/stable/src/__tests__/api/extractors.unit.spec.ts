@@ -13,12 +13,7 @@ import type {
   Solution,
   SourceSystem,
 } from '../..';
-import { ArtifactPlatform, ExtractorType, ItemType, LinkType } from '../..';
 import { mockBaseUrl, setupMockableClient } from '../testUtils';
-
-type ReleaseWire = Omit<Release, 'createdTime'> & {
-  createdTime?: number;
-};
 
 type ItemsResponseWire<T> = {
   items: T[];
@@ -26,7 +21,7 @@ type ItemsResponseWire<T> = {
 
 const mockLink: Link = {
   name: 'Documentation',
-  type: LinkType.EXTERNAL_DOCUMENTATION,
+  type: 'externalDocumentation',
   url: 'https://docs.cognite.com/industrial/pi',
 };
 
@@ -34,7 +29,7 @@ const mockExtractor: Extractor = {
   externalId: 'cognite-pi',
   name: 'PI Extractor',
   description: 'Extracts data from PI',
-  type: ExtractorType.GLOBAL,
+  type: 'global',
   latestVersion: '1.2.3',
   links: [mockLink],
   tags: ['pi', 'industrial'],
@@ -44,7 +39,7 @@ const mockArtifact: Artifact = {
   name: 'pi-extractor.zip',
   displayName: 'PI Extractor for Windows',
   link: '/extractors/artifacts/pi-extractor.zip',
-  platform: ArtifactPlatform.WINDOWS,
+  platform: 'windows',
 };
 
 const mockChangelog: Changelog = {
@@ -52,7 +47,7 @@ const mockChangelog: Changelog = {
   fixed: ['Connection timeout'],
 };
 
-const mockReleaseWire: ReleaseWire = {
+const mockRelease: Release = {
   externalId: 'cognite-pi',
   version: '1.2.3',
   createdTime: 1700000000000,
@@ -61,16 +56,11 @@ const mockReleaseWire: ReleaseWire = {
   changelog: mockChangelog,
 };
 
-const mockRelease: Release = {
-  ...mockReleaseWire,
-  createdTime: new Date(1700000000000),
-};
-
 const mockSourceSystem: SourceSystem = {
   externalId: 'cognite-pi',
   name: 'OSIsoft PI',
   description: 'PI System',
-  type: ItemType.GLOBAL,
+  type: 'global',
 };
 
 const mockSolution: Solution = {
@@ -91,8 +81,8 @@ const mockExtractorItemsResponse: ItemsResponseWire<Extractor> = {
   items: [mockExtractor],
 };
 
-const mockReleaseItemsResponse: ItemsResponseWire<ReleaseWire> = {
-  items: [mockReleaseWire],
+const mockReleaseItemsResponse: ItemsResponseWire<Release> = {
+  items: [mockRelease],
 };
 
 const mockSourceSystemItemsResponse: ItemsResponseWire<SourceSystem> = {
@@ -182,7 +172,7 @@ describe('Extractors unit test', () => {
     expect(response.items[0].version).toBe('1.2.3');
   });
 
-  test('list releases parses createdTime and maps nested fields', async () => {
+  test('list releases maps nested fields', async () => {
     nock(mockBaseUrl)
       .get(/\/extractors\/releases\/?$/)
       .once()

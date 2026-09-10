@@ -11,7 +11,8 @@ import type { IgnoreUnknownIds } from '../../types';
 import { ExtractorReleasesAPI } from './extractorReleasesApi';
 import { ExtractorSolutionsAPI } from './extractorSolutionsApi';
 import { ExtractorSourceSystemsAPI } from './extractorSourceSystemsApi';
-import type { Extractor, ExtractorSchema } from './types';
+import type { ExtractorSchema } from './types';
+import type { Extractor } from './types.gen';
 
 export class ExtractorsAPI extends BaseResourceAPI<Extractor> {
   private readonly releasesApi: ExtractorReleasesAPI;

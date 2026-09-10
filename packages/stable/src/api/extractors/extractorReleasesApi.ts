@@ -5,14 +5,10 @@ import {
   type CursorAndAsyncIterator,
 } from '@cognite/sdk-core';
 import type { IgnoreUnknownIds } from '../../types';
-import type { ExtractorReleasesListQuery, Release, ReleaseId } from './types';
+import type { ExtractorReleasesListQuery } from './types';
+import type { Release, ReleaseId } from './types.gen';
 
 export class ExtractorReleasesAPI extends BaseResourceAPI<Release> {
-  /** @hidden */
-  protected getDateProps() {
-    return this.pickDateProps(['items'], ['createdTime']);
-  }
-
   /**
    * [List releases](https://docs.cognite.com/20230101/extractors/list-releases)
    *
