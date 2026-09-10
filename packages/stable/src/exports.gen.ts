@@ -134,17 +134,10 @@ export type {
   Space,
 } from './api/documents/types.gen';
 export type {
-  Artifact,
-  Changelog,
   Extractor,
   ExtractorId,
-  ItemType,
   Link,
   LinkType,
-  Release,
-  ReleaseId,
-  Solution,
-  SourceSystem,
 } from './api/extractors/types.gen';
 export type {
   CursorQueryParameter,

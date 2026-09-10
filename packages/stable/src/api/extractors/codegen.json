@@ -2,17 +2,7 @@
   "service": "extractors",
   "filter": {
     "serviceName": "extractors",
-    "relevantReferenceNames": [
-      "Extractor",
-      "Release",
-      "SourceSystem",
-      "Solution",
-      "ReleaseId",
-      "ExtractorId",
-      "Artifact",
-      "Link",
-      "Changelog"
-    ]
+    "relevantReferenceNames": ["Extractor", "ExtractorId", "Link", "LinkType"]
   },
   "inlinedSchemas": {
     "autoNameRequest": true
