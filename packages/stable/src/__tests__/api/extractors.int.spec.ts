@@ -39,6 +39,7 @@ describe('extractors api', () => {
 
   it('retrieve extractor by external id', async () => {
     const listResponse = await client.extractors.list();
+    expect(listResponse.items.length).toBeGreaterThan(0);
     const extractor = listResponse.items[0];
 
     const retrieved = await client.extractors.retrieve([
@@ -50,6 +51,7 @@ describe('extractors api', () => {
 
   it('retrieve release by external id and version', async () => {
     const listResponse = await client.extractors.releases.list();
+    expect(listResponse.items.length).toBeGreaterThan(0);
     const release = listResponse.items[0];
 
     const retrieved = await client.extractors.releases.retrieve([
