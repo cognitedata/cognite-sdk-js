@@ -15,6 +15,20 @@ describe('extractors api', () => {
     expect(response.items[0].type).toBeDefined();
   });
 
+  it('list source systems', async () => {
+    const response = await client.extractors.sourceSystems.list();
+    expect(response.items.length).toBeGreaterThan(0);
+    expect(response.items[0].externalId).toBeDefined();
+    expect(response.items[0].name).toBeDefined();
+  });
+
+  it('list solutions', async () => {
+    const response = await client.extractors.solutions.list();
+    expect(response.items.length).toBeGreaterThan(0);
+    expect(response.items[0].externalId).toBeDefined();
+    expect(response.items[0].sourceSystemExternalId).toBeDefined();
+  });
+
   it('retrieve extractor by external id', async () => {
     const listResponse = await client.extractors.list();
     const extractor = listResponse.items[0];
