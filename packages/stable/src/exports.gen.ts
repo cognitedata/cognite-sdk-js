@@ -1,5 +1,6 @@
 // Copyright 2022 Cognite AS
 export type {
+  CogniteExternalId,
   EpochTimestamp,
   InstanceExternalId,
 } from './types.gen';
@@ -40,7 +41,6 @@ export type {
   AnnotationsView,
 } from './api/annotations/types.gen';
 export type {
-  CogniteExternalId,
   CogniteInstanceId,
   CogniteInternalId,
   Document,
@@ -133,6 +133,12 @@ export type {
   PassageSourceFile,
   Space,
 } from './api/documents/types.gen';
+export type {
+  Extractor,
+  ExtractorId,
+  Link,
+  LinkType,
+} from './api/extractors/types.gen';
 export type {
   CursorQueryParameter,
   IncludeGlobalQueryParameter,

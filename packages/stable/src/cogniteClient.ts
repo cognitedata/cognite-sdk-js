@@ -19,6 +19,7 @@ import { DataSetsAPI } from './api/datasets/datasetsApi';
 import { DocumentsAPI } from './api/documents/documentsApi';
 import { EntityMatchingApi } from './api/entityMatching/entityMatchingApi';
 import { EventsAPI } from './api/events/eventsApi';
+import { ExtractorsAPI } from './api/extractors/extractorsApi';
 import { FilesAPI } from './api/files/filesApi';
 import { FunctionsAPI } from './api/functions/functionsApi';
 import { GeospatialAPI } from './api/geospatial/geospatialAPI';
@@ -197,6 +198,9 @@ export default class CogniteClient extends BaseCogniteClient {
   public get records() {
     return accessApi(this.recordsApi);
   }
+  public get extractors() {
+    return accessApi(this.extractorsApi);
+  }
   private assetsApi?: AssetsAPI;
   private timeSeriesApi?: TimeSeriesAPI;
   protected dataPointsApi?: DataPointsAPI;
@@ -231,6 +235,7 @@ export default class CogniteClient extends BaseCogniteClient {
   private sessionsApi?: SessionsApi;
   private streamsApi?: StreamsAPI;
   private recordsApi?: RecordsAPI;
+  private extractorsApi?: ExtractorsAPI;
 
   protected get version() {
     return version;
@@ -290,6 +295,7 @@ export default class CogniteClient extends BaseCogniteClient {
     this.sessionsApi = this.apiFactory(SessionsApi, 'sessions');
     this.streamsApi = this.apiFactory(StreamsAPI, 'streams');
     this.recordsApi = this.apiFactory(RecordsAPI, 'streams');
+    this.extractorsApi = this.apiFactory(ExtractorsAPI, 'extractors');
   }
 
   static urlEncodeExternalId(externalId: string): string {

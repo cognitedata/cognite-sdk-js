@@ -3,6 +3,11 @@
 // Instead update the code generation logic or the OpenAPI document.
 
 /**
+ * The external ID provided by the client. Must be unique for the resource type.
+ * @example my.known.id
+ */
+export type CogniteExternalId = string;
+/**
  * The number of milliseconds since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
  * @format int64
  * @min 0
