@@ -4,9 +4,8 @@ import {
   BaseResourceAPI,
   type CursorAndAsyncIterator,
 } from '@cognite/sdk-core';
-import type { IgnoreUnknownIds } from '../../types';
+import type { IgnoreUnknownIds, Release, ReleaseId } from '../../types';
 import type { ExtractorReleasesListQuery } from './types';
-import type { Release, ReleaseId } from './types.gen';
 
 export class ExtractorReleasesAPI extends BaseResourceAPI<Release> {
   /**
