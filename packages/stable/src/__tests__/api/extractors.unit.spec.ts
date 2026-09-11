@@ -2,7 +2,14 @@
 
 import nock from 'nock';
 import { beforeEach, describe, expect, test } from 'vitest';
-import type { CogniteClient, Extractor, ExtractorSchema, Link } from '../..';
+import type {
+  CogniteClient,
+  Extractor,
+  ExtractorSchema,
+  Link,
+  Solution,
+  SourceSystem,
+} from '../..';
 import { mockBaseUrl, setupMockableClient } from '../testUtils';
 
 type ItemsResponseWire<T> = {
@@ -32,8 +39,30 @@ const mockSchema: ExtractorSchema = {
   },
 };
 
+const mockSourceSystem: SourceSystem = {
+  externalId: 'cognite-pi',
+  name: 'OSIsoft PI',
+  description: 'PI System',
+  type: 'global',
+};
+
+const mockSolution: Solution = {
+  externalId: 'cognite-pi-pi',
+  name: 'PI to CDF',
+  sourceSystemExternalId: 'cognite-pi',
+  extractorExternalId: 'cognite-pi',
+};
+
 const mockExtractorItemsResponse: ItemsResponseWire<Extractor> = {
   items: [mockExtractor],
+};
+
+const mockSourceSystemItemsResponse: ItemsResponseWire<SourceSystem> = {
+  items: [mockSourceSystem],
+};
+
+const mockSolutionItemsResponse: ItemsResponseWire<Solution> = {
+  items: [mockSolution],
 };
 
 describe('Extractors unit test', () => {
@@ -102,6 +131,58 @@ describe('Extractors unit test', () => {
       { ignoreUnknownIds: true }
     );
     expect(result).toHaveLength(1);
+  });
+
+  test('list source systems', async () => {
+    nock(mockBaseUrl)
+      .get(/\/extractors\/sources\/?$/)
+      .once()
+      .reply(200, mockSourceSystemItemsResponse);
+
+    const response = await client.extractors.sourceSystems.list();
+    expect(response.items).toHaveLength(1);
+    expect(response.items[0]).toEqual(mockSourceSystem);
+  });
+
+  test('retrieve source systems', async () => {
+    nock(mockBaseUrl)
+      .post(/\/extractors\/sources\/byids$/, {
+        items: [{ externalId: 'cognite-pi' }],
+      })
+      .once()
+      .reply(200, mockSourceSystemItemsResponse);
+
+    const result = await client.extractors.sourceSystems.retrieve([
+      { externalId: 'cognite-pi' },
+    ]);
+    expect(result).toHaveLength(1);
+    expect(result[0]).toEqual(mockSourceSystem);
+  });
+
+  test('list solutions', async () => {
+    nock(mockBaseUrl)
+      .get(/\/extractors\/solutions\/?$/)
+      .once()
+      .reply(200, mockSolutionItemsResponse);
+
+    const response = await client.extractors.solutions.list();
+    expect(response.items).toHaveLength(1);
+    expect(response.items[0]).toEqual(mockSolution);
+  });
+
+  test('retrieve solutions', async () => {
+    nock(mockBaseUrl)
+      .post(/\/extractors\/solutions\/byids$/, {
+        items: [{ externalId: 'cognite-pi-pi' }],
+      })
+      .once()
+      .reply(200, mockSolutionItemsResponse);
+
+    const result = await client.extractors.solutions.retrieve([
+      { externalId: 'cognite-pi-pi' },
+    ]);
+    expect(result).toHaveLength(1);
+    expect(result[0]).toEqual(mockSolution);
   });
 
   test('getSchema encodes path segments', async () => {

@@ -136,8 +136,11 @@ export type {
 export type {
   Extractor,
   ExtractorId,
+  ItemType,
   Link,
   LinkType,
+  Solution,
+  SourceSystem,
 } from './api/extractors/types.gen';
 export type {
   CursorQueryParameter,

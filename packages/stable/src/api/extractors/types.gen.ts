@@ -62,6 +62,10 @@ export interface ExtractorId {
   externalId: CogniteExternalId;
 }
 /**
+ * Status of this item. "Global" means that it is maintained by Cognite and considered official. "Community" means that it is community made and maintained. "Unreleased" means that it is not yet released and it is visible only as a preview or closed beta.
+ */
+export type ItemType = 'global' | 'community' | 'unreleased';
+/**
  * Link to an external resource for an extractor
  */
 export interface Link {
@@ -82,3 +86,42 @@ export interface Link {
  * Enumeration of link types.
  */
 export type LinkType = 'generic' | 'externalDocumentation';
+/**
+ * A solution represents a connection between an extractor and a source system it can be configured to read from.
+ */
+export interface Solution {
+  /** Long-form documentation of the solution, describing how to use the referenced extractor to connect to the referenced source. */
+  documentation?: string;
+  /** The external ID provided by the client. Must be unique for the resource type. */
+  externalId: CogniteExternalId;
+  /** External ID of the extractor of this solution. */
+  extractorExternalId?: string;
+  /** Solution name. */
+  name: string;
+  /** External ID of the source system of this solution. */
+  sourceSystemExternalId: string;
+  /** Status of this item. "Global" means that it is maintained by Cognite and considered official. "Community" means that it is community made and maintained. "Unreleased" means that it is not yet released and it is visible only as a preview or closed beta. */
+  type?: ItemType;
+}
+/**
+ * A source system representing a source extractors may read from.
+ */
+export interface SourceSystem {
+  /** Short description of the source system. */
+  description: string;
+  /** Long-form description of the source system. */
+  documentation?: string;
+  /** The external ID provided by the client. Must be unique for the resource type. */
+  externalId: CogniteExternalId;
+  /** URL of a publicly hosted logo for the source system. */
+  imageUrl?: string;
+  /** Source system name. */
+  name: string;
+  /**
+   * Tags
+   * A list of tags, used for searching and filtering.
+   */
+  tags?: string[];
+  /** Status of this item. "Global" means that it is maintained by Cognite and considered official. "Community" means that it is community made and maintained. "Unreleased" means that it is not yet released and it is visible only as a preview or closed beta. */
+  type: ItemType;
+}
