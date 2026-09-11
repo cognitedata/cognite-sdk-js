@@ -5,8 +5,7 @@ import {
   type CursorAndAsyncIterator,
   type ExternalId,
 } from '@cognite/sdk-core';
-import type { IgnoreUnknownIds } from '../../types';
-import type { Solution } from './types.gen';
+import type { IgnoreUnknownIds, Solution } from '../../types';
 
 export class ExtractorSolutionsAPI extends BaseResourceAPI<Solution> {
   /**
