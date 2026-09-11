@@ -3,10 +3,13 @@
 import nock from 'nock';
 import { beforeEach, describe, expect, test } from 'vitest';
 import type {
+  Artifact,
+  Changelog,
   CogniteClient,
   Extractor,
   ExtractorSchema,
   Link,
+  Release,
   Solution,
   SourceSystem,
 } from '../..';
@@ -39,6 +42,27 @@ const mockSchema: ExtractorSchema = {
   },
 };
 
+const mockArtifact: Artifact = {
+  name: 'pi-extractor.zip',
+  displayName: 'PI Extractor for Windows',
+  link: '/extractors/artifacts/pi-extractor.zip',
+  platform: 'windows',
+};
+
+const mockChangelog: Changelog = {
+  added: ['PI connectivity'],
+  fixed: ['Connection timeout'],
+};
+
+const mockRelease: Release = {
+  externalId: 'cognite-pi',
+  version: '1.2.3',
+  createdTime: 1700000000000,
+  description: 'Initial release',
+  artifacts: [mockArtifact],
+  changelog: mockChangelog,
+};
+
 const mockSourceSystem: SourceSystem = {
   externalId: 'cognite-pi',
   name: 'OSIsoft PI',
@@ -55,6 +79,10 @@ const mockSolution: Solution = {
 
 const mockExtractorItemsResponse: ItemsResponseWire<Extractor> = {
   items: [mockExtractor],
+};
+
+const mockReleaseItemsResponse: ItemsResponseWire<Release> = {
+  items: [mockRelease],
 };
 
 const mockSourceSystemItemsResponse: ItemsResponseWire<SourceSystem> = {
@@ -128,6 +156,76 @@ describe('Extractors unit test', () => {
 
     const result = await client.extractors.retrieve(
       [{ externalId: 'cognite-pi' }],
+      { ignoreUnknownIds: true }
+    );
+    expect(result).toHaveLength(1);
+  });
+
+  test('list releases', async () => {
+    nock(mockBaseUrl)
+      .get(/\/extractors\/releases\/?$/)
+      .once()
+      .reply(200, mockReleaseItemsResponse);
+
+    const response = await client.extractors.releases.list();
+    expect(response.items).toHaveLength(1);
+    expect(response.items[0].version).toBe('1.2.3');
+  });
+
+  test('list releases maps nested fields', async () => {
+    nock(mockBaseUrl)
+      .get(/\/extractors\/releases\/?$/)
+      .once()
+      .reply(200, mockReleaseItemsResponse);
+
+    const response = await client.extractors.releases.list();
+    expect(response.items[0]).toEqual(mockRelease);
+  });
+
+  test('list releases filtered by externalId', async () => {
+    nock(mockBaseUrl)
+      .get(/\/extractors\/releases\/?$/)
+      .query({ externalId: 'cognite-pi' })
+      .once()
+      .reply(200, mockReleaseItemsResponse);
+
+    const response = await client.extractors.releases.list({
+      externalId: 'cognite-pi',
+    });
+    expect(response.items).toHaveLength(1);
+    expect(response.items[0].externalId).toBe('cognite-pi');
+  });
+
+  test('retrieve releases', async () => {
+    nock(mockBaseUrl)
+      .post(/\/extractors\/releases\/byids$/, {
+        items: [{ externalId: 'cognite-pi', version: '1.2.3' }],
+      })
+      .once()
+      .reply(200, mockReleaseItemsResponse);
+
+    const result = await client.extractors.releases.retrieve([
+      { externalId: 'cognite-pi', version: '1.2.3' },
+    ]);
+    expect(result).toHaveLength(1);
+    expect(result[0]).toEqual(mockRelease);
+  });
+
+  test('retrieve releases with ignoreUnknownIds', async () => {
+    nock(mockBaseUrl)
+      .post(/\/extractors\/releases\/byids$/, (body) => {
+        return (
+          body.items?.length === 1 &&
+          body.items[0].externalId === 'cognite-pi' &&
+          body.items[0].version === '1.2.3' &&
+          body.ignoreUnknownIds === true
+        );
+      })
+      .once()
+      .reply(200, mockReleaseItemsResponse);
+
+    const result = await client.extractors.releases.retrieve(
+      [{ externalId: 'cognite-pi', version: '1.2.3' }],
       { ignoreUnknownIds: true }
     );
     expect(result).toHaveLength(1);
