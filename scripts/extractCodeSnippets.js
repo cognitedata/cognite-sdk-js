@@ -85,7 +85,7 @@ codeSnippets.forEach((snippets, operationId) => {
     return;
   }
   const codeToTest = `
-    import { CogniteClient, SequenceValueType } from '${packageName}';
+    import { CogniteClient, SequenceValueType, QueryRequest } from '${packageName}';
     const client = new CogniteClient({
       appId: '[APP NAME]',
       project: '[PROJECT]',
