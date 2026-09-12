@@ -2940,6 +2940,7 @@ export type {
   ViewOrContainer,
   ViewPropertyReference,
   ViewReference,
+  SearchOperator,
 } from './api/instances/types.gen';
 
 export type {
