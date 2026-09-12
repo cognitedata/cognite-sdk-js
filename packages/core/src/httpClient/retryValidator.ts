@@ -1,6 +1,5 @@
 // Copyright 2020 Cognite AS
 
-import inRange from 'lodash/inRange';
 import some from 'lodash/some';
 
 import type { HttpMethod, HttpResponse } from './basicHttpClient';
@@ -65,12 +64,10 @@ export const createUniversalRetryValidator =
     return isValidRetryStatusCode(response.status);
   };
 
+const RETRYABLE_STATUS_CODES = new Set([429, 502, 503, 504]);
+
 function isValidRetryStatusCode(status: number) {
-  return (
-    inRange(status, 100, 200) ||
-    inRange(status, 429, 430) ||
-    inRange(status, 500, 600)
-  );
+  return RETRYABLE_STATUS_CODES.has(status);
 }
 
 function matchPathWithEndpoints(path: string, endpoints: string[]) {
