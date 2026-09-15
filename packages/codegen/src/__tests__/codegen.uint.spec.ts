@@ -28,7 +28,7 @@ describe('code generation', () => {
     });
 
     basicTypesServiceBGenFile = (
-      await fs.readFile(`${testFolder}/testdata/8-serviceB-types.gen.ts`)
+      await fs.readFile(`${testFolder}/testdata/8-serviceB-types.gen.snapshot`)
     ).toString();
 
     cyclicReferencesGenFile = (
@@ -144,8 +144,6 @@ describe('code generation', () => {
       });
 
       const wants = [
-        'CogniteExternalId',
-        'CogniteInternalId',
         'EpochTimestamp',
         'Function',
         'FunctionBuildError',
@@ -229,8 +227,6 @@ describe('code generation', () => {
       ]);
 
       expect(typeNames).toEqual([
-        'CogniteExternalId',
-        'CogniteInternalId',
         'EpochTimestamp',
         'FunctionFileId',
         'FunctionFilter',
