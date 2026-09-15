@@ -77,6 +77,13 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    *    ],
    *    limit: 1000,
    *});
+   *
+   * // With debug notices for performance analysis
+   * const debugResponse = await client.instances.list({
+   *   instanceType: 'node',
+   *   sources: [{ source: { externalId: 'Describable', space: 'cdf_core', type: 'view', version: 'v1' } }],
+   *   debug: {},
+   * });
    * ```
    */
   public list = async (
@@ -235,6 +242,31 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    *       result_set_1: {},
    *     },
    *   });
+   *
+   * // With debug notices for performance analysis
+   * const debugResponse = await client.instances.query({
+   *   with: {
+   *     result_set_1: {
+   *       nodes: {
+   *         filter: {
+   *           equals: { property: ['node', 'externalId'], value: 'node-external-id' },
+   *         },
+   *       },
+   *     },
+   *   },
+   *   select: { result_set_1: {} },
+   *   debug: {},
+   * });
+   * for (const notice of debugResponse.debug?.notices ?? []) {
+   *   console.log(notice.code, notice.hint);
+   * }
+   *
+   * // Profile mode: deep analysis, no result data
+   * const profileResponse = await client.instances.query({
+   *   with: { result_set_1: { nodes: {} } },
+   *   select: { result_set_1: {} },
+   *   debug: { emitResults: false, profile: true, timeout: 30000 },
+   * });
    * ```
    */
   public query = async (params: QueryRequest): Promise<QueryResponse> => {
@@ -265,6 +297,16 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    *       result_set_1: {},
    *     },
    *   });
+   *
+   * // With debug notices for performance analysis
+   * const debugResponse = await client.instances.sync({
+   *   with: { result_set_1: { nodes: {} } },
+   *   select: { result_set_1: {} },
+   *   debug: {},
+   * });
+   * for (const notice of debugResponse.debug?.notices ?? []) {
+   *   console.log(notice.code, notice.hint);
+   * }
    * ```
    */
   public sync = async (params: SyncRequest): Promise<QueryResponse> => {

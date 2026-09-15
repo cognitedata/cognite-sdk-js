@@ -342,6 +342,88 @@ describe('Instances integration test', () => {
     expect(response.items.result_set_1).toHaveLength(1);
   });
 
+  describe('debug notices', () => {
+    const filterOnDescribable1 = {
+      equals: {
+        property: ['node', 'externalId'],
+        value: describable1.externalId,
+      },
+    };
+
+    test('query with debug: {} returns items and a notices array', async () => {
+      const response = await client.instances.query({
+        with: {
+          result_set_1: { nodes: { filter: filterOnDescribable1 } },
+        },
+        select: { result_set_1: {} },
+        debug: {},
+      });
+      expect(response.items.result_set_1).toHaveLength(1);
+      expect(response.debug?.notices).toBeInstanceOf(Array);
+    });
+
+    test('query with emitResults: false omits items but returns notices', async () => {
+      const response = await client.instances.query({
+        with: {
+          result_set_1: { nodes: { filter: filterOnDescribable1 } },
+        },
+        select: { result_set_1: {} },
+        debug: { emitResults: false },
+      });
+      expect(response.items?.result_set_1 ?? []).toHaveLength(0);
+      expect(response.debug?.notices).toBeInstanceOf(Array);
+    });
+
+    test('query with profile: true returns notices', async () => {
+      const response = await client.instances.query({
+        with: {
+          result_set_1: { nodes: { filter: filterOnDescribable1 } },
+        },
+        select: { result_set_1: {} },
+        debug: { emitResults: false, profile: true, timeout: 30000 },
+      });
+      expect(response.debug?.notices).toBeInstanceOf(Array);
+    });
+
+    test('sync with debug: {} returns a notices array', async () => {
+      const response = await client.instances.sync({
+        with: {
+          result_set_1: { nodes: { filter: filterOnDescribable1 } },
+        },
+        select: { result_set_1: {} },
+        debug: {},
+      });
+      expect(response.debug?.notices).toBeInstanceOf(Array);
+    });
+
+    test('list with debug: {} returns items and accepts the debug parameter', async () => {
+      const response = await client.instances.list({
+        sources: [{ source: view }],
+        instanceType: 'node',
+        limit: 2,
+        debug: {},
+      });
+      expect(response.items).toHaveLength(2);
+    });
+
+    test('narrows DebugNotice by its code discriminant', async () => {
+      const response = await client.instances.query({
+        with: {
+          result_set_1: { nodes: { filter: filterOnDescribable1 } },
+        },
+        select: { result_set_1: {} },
+        debug: {},
+      });
+      for (const notice of response.debug?.notices ?? []) {
+        if (notice.code === 'excessiveTimeout') {
+          expect(typeof notice.timeout).toBe('number');
+        } else if (notice.code === 'unindexedThrough') {
+          expect(Array.isArray(notice.property)).toBe(true);
+        }
+      }
+    });
+  });
+
   test('inspect', async () => {
     const response = await client.instances.inspect({
       inspectionOperations: {

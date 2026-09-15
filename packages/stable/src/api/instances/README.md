@@ -9,3 +9,13 @@ Until this is resolved, follow the following process to generate new types:
 4. Resolve any new duplicate types by deleting them from the newly added export lines.
 5. Delete the newly generated exports in `types.gen.ts`
 6. Rename `codegen.json` to `codegen.skip.json`
+
+## Maintenance log
+
+- **Debug notices (`debug` option on `query`/`sync`/`list`)** — added by following the
+  process above and copying over only the newly generated debug/notice schemas
+  (`DebugParameters`, `DebugResponse`, `DebugNotice` and its leaf/union types) rather than
+  the full regenerated file, since a full regen still pulls in unrelated schema drift. See
+  the comment block above the debug types in `types.gen.ts` for details. If the debug
+  notice schemas change upstream, redo the process above rather than hand-editing the
+  existing types.
