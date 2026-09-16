@@ -28,7 +28,7 @@ describe('code generation', () => {
     });
 
     basicTypesServiceBGenFile = (
-      await fs.readFile(`${testFolder}/testdata/8-serviceB-types.gen.snapshot`)
+      await fs.readFile(`${testFolder}/testdata/8-serviceB-types.gen.ts`)
     ).toString();
 
     cyclicReferencesGenFile = (
