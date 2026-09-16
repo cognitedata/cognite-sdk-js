@@ -804,7 +804,15 @@ export type DebugNotice =
  * Return query debug notices.
  */
 export interface DebugParameters {
-  /** Include the query result in the response. emitResults=false is required for advanced query analysis features. */
+  /**
+   * Include the query result in the response. emitResults=false is required for advanced query analysis features.
+   *
+   * Note: when set to `false`, the API omits `items` and `nextCursor` from the response even though
+   * `QueryResponse.items`/`nextCursor` are typed as required (this matches the OpenAPI schema, which
+   * still lists them as required — a known discrepancy between the documented schema and actual
+   * behavior). Code reading `response.items`/`response.nextCursor` after setting `emitResults: false`
+   * must handle them being absent at runtime despite the type.
+   */
   emitResults?: boolean;
   /** Most thorough level of query analysis. Requires emitResults=false. */
   profile?: boolean;
@@ -962,7 +970,9 @@ export interface QueryRequest {
 export interface QueryResponse {
   /** Contains debug notices if debug flag is set in the query. */
   debug?: DebugResponse;
+  /** Absent when the request set `debug.emitResults` to `false`, see {@link DebugParameters.emitResults}. */
   items: Record<string, NodeOrEdge[]>;
+  /** Absent when the request set `debug.emitResults` to `false`, see {@link DebugParameters.emitResults}. */
   nextCursor: Record<string, NextCursorV3>;
   /** Property type information for selected result expressions. */
   typing?: Record<string, TypeInformationOuter>;

@@ -261,12 +261,17 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    *   console.log(notice.code, notice.hint);
    * }
    *
-   * // Profile mode: deep analysis, no result data
+   * // Profile mode: deep analysis, no result data.
+   * // Note: `items` and `nextCursor` are omitted by the API in this mode, so access them
+   * // defensively even though QueryResponse types them as required (see DebugParameters.emitResults).
    * const profileResponse = await client.instances.query({
    *   with: { result_set_1: { nodes: {} } },
    *   select: { result_set_1: {} },
    *   debug: { emitResults: false, profile: true, timeout: 30000 },
    * });
+   * for (const notice of profileResponse.debug?.notices ?? []) {
+   *   console.log(notice.code, notice.hint);
+   * }
    * ```
    */
   public query = async (params: QueryRequest): Promise<QueryResponse> => {

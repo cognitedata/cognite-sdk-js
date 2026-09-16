@@ -370,6 +370,8 @@ describe('Instances integration test', () => {
         select: { result_set_1: {} },
         debug: { emitResults: false },
       });
+      // The API omits `items` here even though QueryResponse types it as required —
+      // see the note on DebugParameters.emitResults. Access it defensively.
       expect(response.items?.result_set_1 ?? []).toHaveLength(0);
       expect(response.debug?.notices).toBeInstanceOf(Array);
     });
@@ -396,7 +398,11 @@ describe('Instances integration test', () => {
       expect(response.debug?.notices).toBeInstanceOf(Array);
     });
 
-    test('list with debug: {} returns items and accepts the debug parameter', async () => {
+    // `list`'s response schema has no `debug`/`notices` field in the current OpenAPI
+    // snapshot (unlike `query`/`sync`), so this only verifies the API accepts the
+    // parameter without erroring — there are no notices to assert on yet. See the
+    // comment above the debug types in ../../api/instances/types.gen.ts.
+    test('list with debug: {} still returns items and does not error', async () => {
       const response = await client.instances.list({
         sources: [{ source: view }],
         instanceType: 'node',
