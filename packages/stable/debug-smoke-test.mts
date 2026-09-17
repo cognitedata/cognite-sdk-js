@@ -3,6 +3,15 @@
 // turned out to be stale/incomplete for this feature (see that PR for
 // details on what this surfaced). Not part of the test suite.
 //
+// Runs against the `DuneSdkStaging` data model (space `dune-sdk-model`) that
+// already exists in the target project, using its `Equipment` view — real
+// populated data, not empty/synthetic filters. That distinction mattered: the
+// first pass of this script used empty-filter queries and only reproduced
+// notices already known from the checked-in OpenAPI snapshot. Switching to
+// realistic filter/sort shapes against real data surfaced two more notice
+// codes (`unfilteredContainerScan`, `filterIncompatibleWithCursorableIndexScan`)
+// that have no schema in the snapshot at all.
+//
 // Usage:
 //   yarn build   # from repo root, so @cognite/sdk resolves to fresh dist output
 //   SECRETS_ENV_PATH=/path/to/secrets.env node --loader ts-node/esm debug-smoke-test.mts
@@ -10,7 +19,7 @@
 // COGNITE_TOKEN (a valid, short-lived OIDC access token for that project).
 
 import { readFileSync } from 'node:fs';
-import { CogniteClient } from '@cognite/sdk';
+import { CogniteClient, type ViewReference } from '@cognite/sdk';
 
 function loadSecrets(path: string): Record<string, string> {
   const env: Record<string, string> = {};
@@ -36,47 +45,225 @@ const client = new CogniteClient({
   oidcTokenProvider: async () => COGNITE_TOKEN,
 });
 
+const equipmentView: ViewReference = {
+  space: 'dune-sdk-model',
+  externalId: 'Equipment',
+  version: 'v1',
+  type: 'view',
+};
+// A property reference through the view, e.g. ['dune-sdk-model', 'Equipment/v1', 'manufacturer'].
+const prop = (name: string) => [
+  equipmentView.space,
+  `${equipmentView.externalId}/${equipmentView.version}`,
+  name,
+];
+
+function printNotices(label: string, notices: unknown) {
+  console.log(`${label} notices:`, JSON.stringify(notices, null, 2));
+}
+
+async function section(title: string, run: () => Promise<void>) {
+  console.log(`\n${title}`);
+  try {
+    await run();
+  } catch (err) {
+    console.log(
+      `  -> call failed (${err instanceof Error ? err.message : err}). Recording this as a result, not aborting the rest of the script.`
+    );
+  }
+}
+
 async function main() {
-  console.log(`Project: ${CDF_PROJECT} @ ${CDF_CLUSTER}\n`);
+  console.log(`Project: ${CDF_PROJECT} @ ${CDF_CLUSTER}`);
 
-  console.log('--- query with debug: {} ---');
-  const queryResponse = await client.instances.query({
-    with: { result_set_1: { nodes: {}, limit: 1 } },
-    select: { result_set_1: {} },
-    debug: {},
-  });
-  console.log('items keys:', Object.keys(queryResponse.items ?? {}));
-  console.log('debug.notices:', queryResponse.debug?.notices);
-
-  console.log('\n--- query with emitResults: false, profile: true ---');
-  const profileResponse = await client.instances.query({
-    with: { result_set_1: { nodes: {}, limit: 1 } },
-    select: { result_set_1: {} },
-    debug: { emitResults: false, profile: true },
-  });
-  console.log('full response:', JSON.stringify(profileResponse, null, 2));
-
-  console.log('\n--- sync with debug: {} ---');
-  const syncResponse = await client.instances.sync({
-    with: { result_set_1: { nodes: {}, limit: 1 } },
-    select: { result_set_1: {} },
-    debug: {},
-  });
-  console.log('debug.notices:', syncResponse.debug?.notices);
-
-  console.log('\n--- list with debug: {} ---');
-  const listResponse = await client.instances.list({
-    instanceType: 'node',
-    limit: 1,
-    debug: {},
-  });
-  console.log('items length:', listResponse.items.length);
-  console.log(
-    'debug value:',
-    JSON.stringify((listResponse as Record<string, unknown>).debug, null, 2)
+  await section(
+    '=== 1. list: real Equipment items with actual property data ===',
+    async () => {
+      const listResponse = await client.instances.list({
+        instanceType: 'node',
+        sources: [{ source: equipmentView }],
+        limit: 3,
+        debug: {},
+      });
+      console.log('items:', JSON.stringify(listResponse.items, null, 2));
+      printNotices('list', listResponse.debug?.notices);
+    }
   );
 
-  console.log('\nAll calls completed without error.');
+  await section(
+    '=== 2. query: hasData-only filter (no property filter) ===',
+    async () => {
+      // Expected to trigger unfilteredContainerScan (full container scan) and
+      // filterIncompatibleWithCursorableIndexScan with reasons: ["crossContainer"].
+      const hasDataOnly = await client.instances.query({
+        with: {
+          equipment: {
+            nodes: { filter: { hasData: [equipmentView] } },
+            limit: 5,
+          },
+        },
+        select: {
+          equipment: {
+            sources: [
+              { source: equipmentView, properties: ['name', 'manufacturer'] },
+            ],
+          },
+        },
+        debug: {},
+      });
+      console.log(
+        'sample item:',
+        JSON.stringify(hasDataOnly.items.equipment?.[0], null, 2)
+      );
+      printNotices('hasData-only query', hasDataOnly.debug?.notices);
+    }
+  );
+
+  await section(
+    '=== 3. query: OR filter across two manufacturers ===',
+    async () => {
+      // Expected to trigger filterIncompatibleWithCursorableIndexScan with
+      // reasons: ["orFilter"] and orHasNonEqualityBranches: false.
+      const orFilter = await client.instances.query({
+        with: {
+          equipment: {
+            nodes: {
+              filter: {
+                or: [
+                  {
+                    equals: {
+                      property: prop('manufacturer'),
+                      value: 'Alfa Laval',
+                    },
+                  },
+                  {
+                    equals: {
+                      property: prop('manufacturer'),
+                      value: 'Yokogawa',
+                    },
+                  },
+                ],
+              },
+            },
+            limit: 3,
+          },
+        },
+        select: {
+          equipment: {
+            sources: [
+              { source: equipmentView, properties: ['name', 'manufacturer'] },
+            ],
+          },
+        },
+        debug: {},
+      });
+      console.log('items:', JSON.stringify(orFilter.items.equipment, null, 2));
+      printNotices('OR-filter query', orFilter.debug?.notices);
+    }
+  );
+
+  await section(
+    '=== 4. query: two range predicates on different properties ===',
+    async () => {
+      // Expected to trigger filterIncompatibleWithCursorableIndexScan with
+      // reasons: ["multipleRangePredicates"].
+      const multiRange = await client.instances.query({
+        with: {
+          equipment: {
+            nodes: {
+              filter: {
+                and: [
+                  { range: { property: prop('purchaseCost'), gte: 0 } },
+                  { range: { property: prop('ratedPowerKw'), gte: 0 } },
+                ],
+              },
+            },
+            limit: 3,
+          },
+        },
+        select: {
+          equipment: {
+            sources: [{ source: equipmentView, properties: ['name'] }],
+          },
+        },
+        debug: {},
+      });
+      printNotices('multi-range query', multiRange.debug?.notices);
+    }
+  );
+
+  await section(
+    '=== 5. query: selective externalId equality filter, profile mode ===',
+    async () => {
+      // emitResults: false — items/nextCursor should stay present but empty.
+      const profileResponse = await client.instances.query({
+        with: {
+          equipment: {
+            nodes: {
+              filter: {
+                equals: {
+                  property: ['node', 'externalId'],
+                  value: 'eq:000000000',
+                },
+              },
+            },
+            limit: 1,
+          },
+        },
+        select: {
+          equipment: {
+            sources: [{ source: equipmentView, properties: ['name'] }],
+          },
+        },
+        debug: { emitResults: false, profile: true },
+      });
+      console.log(
+        'items (expect present but empty):',
+        JSON.stringify(profileResponse.items, null, 2)
+      );
+      printNotices('profile-mode query', profileResponse.debug?.notices);
+    }
+  );
+
+  await section(
+    '=== 6a. sync: WITHOUT a space filter (may legitimately time out on a large project) ===',
+    async () => {
+      const syncNoSpaceFilter = await client.instances.sync({
+        with: {
+          equipment: {
+            nodes: { filter: { hasData: [equipmentView] } },
+            limit: 1,
+          },
+        },
+        select: { equipment: {} },
+        debug: {},
+      });
+      printNotices('sync (no space filter)', syncNoSpaceFilter.debug?.notices);
+    }
+  );
+
+  await section('=== 6b. sync: WITH a space filter ===', async () => {
+    const syncWithSpaceFilter = await client.instances.sync({
+      with: {
+        equipment: {
+          nodes: {
+            filter: {
+              equals: { property: ['node', 'space'], value: 'dune-sdk-shared' },
+            },
+          },
+          limit: 1,
+        },
+      },
+      select: { equipment: {} },
+      debug: {},
+    });
+    printNotices(
+      'sync (with space filter)',
+      syncWithSpaceFilter.debug?.notices
+    );
+  });
+
+  console.log('\nDone.');
 }
 
 main().catch((err) => {
