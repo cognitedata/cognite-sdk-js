@@ -778,8 +778,11 @@ export interface QueryNodeTableExpressionV3 {
 // here — if the API changes, redo the process in ./README.md instead.
 //
 // Note: verified live against a real project (dune-sdk-staging/bluefield) on
-// 2026-09-17, since the checked-in `.cognite-openapi-snapshot.json` turned out
-// to be stale/incomplete for this feature in two ways:
+// 2026-09-17, first with synthetic empty-filter queries and later against
+// real data (a populated Equipment view), since the checked-in
+// `.cognite-openapi-snapshot.json` turned out to be stale/incomplete for this
+// feature in several ways — the real queries against real data are what
+// surfaced most of these, synthetic queries on empty result sets did not:
 //  - `list` responses DO include `debug.notices`, even though the snapshot's
 //    response schema for `list` has no `debug` property. Added it below
 //    despite the spec gap, since live behavior is the more reliable signal.
@@ -788,7 +791,17 @@ export interface QueryNodeTableExpressionV3 {
 //    entry in the snapshot's schema map, but it's a null placeholder). Added
 //    `SyncNotice`/`SyncMissingSpaceFilterNotice` below based on the observed
 //    shape; there may be sibling `sync` notices not covered here yet.
-// Worth reporting both gaps to the API team so the snapshot catches up.
+//  - Filtering/sorting a real, non-trivial query surfaced two more notices
+//    that also have null placeholder schemas in the snapshot rather than real
+//    ones: `unfilteredContainerScan` (category `filtering`) and
+//    `filterIncompatibleWithCursorableIndexScan` (category `indexing`, whose
+//    `reasons` field took on 4 different observed values across a handful of
+//    filter shapes — `crossContainer`, `nonCursorableProperty`, `orFilter`,
+//    `multipleRangePredicates` — strongly suggesting more exist that we
+//    haven't triggered; the hint text itself references NOT and multiple
+//    prefix/exists predicates as further causes). Modeled `reasons` as
+//    `string[]` rather than guessing a closed literal union.
+// Worth reporting all of these gaps to the API team so the snapshot catches up.
 // ---------------------------------------------------------------------------
 export interface ContainerSubObjectIdentifier {
   /** External id for the container */
@@ -849,10 +862,36 @@ export interface ExcessiveTimeoutNotice {
   /** The specified timeout for the query. */
   timeout: number;
 }
+/**
+ * Emitted when a `hasData` filter has no accompanying property-level filter within the
+ * matched containers, forcing a full scan of every instance in those containers. Observed
+ * live; not in the OpenAPI snapshot (see the comment at the top of this section).
+ */
+export interface FilterIncompatibleWithCursorableIndexScanNotice {
+  category: 'indexing';
+  code: 'filterIncompatibleWithCursorableIndexScan';
+  /** Containers involved when `reasons` includes `crossContainer`; absent otherwise. */
+  containers?: ContainerReference[];
+  grade: 'D';
+  hint: string;
+  level: 'warning';
+  /** Present only when `reasons` includes `orFilter`. */
+  orHasNonEqualityBranches?: boolean;
+  /**
+   * Why the filter can't use a cursorable index scan. Observed live: `crossContainer`,
+   * `nonCursorableProperty`, `orFilter`, `multipleRangePredicates`. Kept as `string[]`
+   * rather than a closed literal union — the hint text references further causes (NOT,
+   * multiple prefix/exists predicates) that weren't reproduced.
+   */
+  reasons: string[];
+  /** Identifier for the result set expression that the notice applies to. */
+  resultExpression: string;
+}
 export type FilteringNotice =
   | SelectiveExternalIDFilterNotice
   | SignificantPostFilteringNotice
-  | SignificantHasDataFiltersNotice;
+  | SignificantHasDataFiltersNotice
+  | UnfilteredContainerScanNotice;
 export interface FilterMatchesBrokenCursorableIndexNotice {
   category: 'sorting';
   code: 'filterMatchesBrokenCursorableIndex';
@@ -877,7 +916,8 @@ export interface FilterMatchesCursorableSortNotice {
 }
 export type IndexingNotice =
   | UnindexedThroughNotice
-  | ContainersWithoutIndexesInvolvedNotice;
+  | ContainersWithoutIndexesInvolvedNotice
+  | FilterIncompatibleWithCursorableIndexScanNotice;
 /**
  * Emitted when a query supplies both a cursor and a nested filter on the same result set expression. Nested filters require a join that invalidates cursor positions, making pagination results unreliable.
  */
@@ -972,6 +1012,20 @@ export interface SyncMissingSpaceFilterNotice {
   resultExpression: string;
 }
 export type SyncNotice = SyncMissingSpaceFilterNotice;
+/**
+ * Emitted when a `hasData` filter has no accompanying property-level filter within the
+ * matched containers, forcing a full scan of every instance in those containers. Observed
+ * live; not in the OpenAPI snapshot (see the comment at the top of this section).
+ */
+export interface UnfilteredContainerScanNotice {
+  category: 'filtering';
+  code: 'unfilteredContainerScan';
+  grade: 'D';
+  hint: string;
+  level: 'warning';
+  /** Identifier for the result set expression that the notice applies to. */
+  resultExpression: string;
+}
 export interface UnindexedThroughNotice {
   category: 'indexing';
   code: 'unindexedThrough';

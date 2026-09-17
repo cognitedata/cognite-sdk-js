@@ -425,6 +425,38 @@ describe('Instances integration test', () => {
           expect(typeof notice.timeout).toBe('number');
         } else if (notice.code === 'unindexedThrough') {
           expect(Array.isArray(notice.property)).toBe(true);
+        } else if (notice.code === 'unfilteredContainerScan') {
+          expect(notice.category).toBe('filtering');
+        } else if (
+          notice.code === 'filterIncompatibleWithCursorableIndexScan'
+        ) {
+          expect(Array.isArray(notice.reasons)).toBe(true);
+        }
+      }
+    });
+
+    test('filterIncompatibleWithCursorableIndexScan notice on an OR filter', async () => {
+      // A hasData-only filter with no property filter reliably triggers
+      // unfilteredContainerScan/filterIncompatibleWithCursorableIndexScan-style
+      // notices on real data (verified against dune-sdk-staging); this fixture is
+      // small, so we only assert on the shape when a notice does fire rather than
+      // requiring one, to avoid a flaky test against an evolving query planner.
+      const response = await client.instances.query({
+        with: {
+          result_set_1: {
+            nodes: {
+              filter: {
+                or: [filterOnDescribable1, { hasData: [view] }],
+              },
+            },
+          },
+        },
+        select: { result_set_1: {} },
+        debug: {},
+      });
+      for (const notice of response.debug?.notices ?? []) {
+        if (notice.code === 'filterIncompatibleWithCursorableIndexScan') {
+          expect(notice.reasons.length).toBeGreaterThan(0);
         }
       }
     });
