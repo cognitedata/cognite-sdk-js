@@ -362,7 +362,7 @@ describe('Instances integration test', () => {
       expect(response.debug?.notices).toBeInstanceOf(Array);
     });
 
-    test('query with emitResults: false omits items but returns notices', async () => {
+    test('query with emitResults: false returns empty items but still returns notices', async () => {
       const response = await client.instances.query({
         with: {
           result_set_1: { nodes: { filter: filterOnDescribable1 } },
@@ -370,9 +370,9 @@ describe('Instances integration test', () => {
         select: { result_set_1: {} },
         debug: { emitResults: false },
       });
-      // The API omits `items` here even though QueryResponse types it as required —
-      // see the note on DebugParameters.emitResults. Access it defensively.
-      expect(response.items?.result_set_1 ?? []).toHaveLength(0);
+      // `items` stays present but empty in this mode, not absent — see the note on
+      // DebugParameters.emitResults.
+      expect(response.items.result_set_1).toHaveLength(0);
       expect(response.debug?.notices).toBeInstanceOf(Array);
     });
 
@@ -398,11 +398,10 @@ describe('Instances integration test', () => {
       expect(response.debug?.notices).toBeInstanceOf(Array);
     });
 
-    // `list`'s response schema has no `debug`/`notices` field in the current OpenAPI
-    // snapshot (unlike `query`/`sync`), so this only verifies the API accepts the
-    // parameter without erroring — there are no notices to assert on yet. See the
-    // comment above the debug types in ../../api/instances/types.gen.ts.
-    test('list with debug: {} still returns items and does not error', async () => {
+    // The OpenAPI snapshot's response schema for `list` has no `debug` property, but
+    // live testing confirmed the API does return `debug.notices` here too — see the
+    // comment above NodeAndEdgeCollectionResponseWithCursorV3Response in types.gen.ts.
+    test('list with debug: {} returns items and a notices array', async () => {
       const response = await client.instances.list({
         sources: [{ source: view }],
         instanceType: 'node',
@@ -410,6 +409,7 @@ describe('Instances integration test', () => {
         debug: {},
       });
       expect(response.items).toHaveLength(2);
+      expect(response.debug?.notices).toBeInstanceOf(Array);
     });
 
     test('narrows DebugNotice by its code discriminant', async () => {
@@ -425,6 +425,22 @@ describe('Instances integration test', () => {
           expect(typeof notice.timeout).toBe('number');
         } else if (notice.code === 'unindexedThrough') {
           expect(Array.isArray(notice.property)).toBe(true);
+        }
+      }
+    });
+
+    test('narrows the sync-category syncMissingSpaceFilter notice', async () => {
+      const response = await client.instances.sync({
+        with: {
+          result_set_1: { nodes: { filter: filterOnDescribable1 } },
+        },
+        select: { result_set_1: {} },
+        debug: {},
+      });
+      for (const notice of response.debug?.notices ?? []) {
+        if (notice.code === 'syncMissingSpaceFilter') {
+          expect(notice.category).toBe('sync');
+          expect(typeof notice.hint).toBe('string');
         }
       }
     });

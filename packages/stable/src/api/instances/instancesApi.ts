@@ -84,6 +84,9 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    *   sources: [{ source: { externalId: 'Describable', space: 'cdf_core', type: 'view', version: 'v1' } }],
    *   debug: {},
    * });
+   * for (const notice of debugResponse.debug?.notices ?? []) {
+   *   console.log(notice.code, notice.hint);
+   * }
    * ```
    */
   public list = async (
@@ -261,9 +264,8 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    *   console.log(notice.code, notice.hint);
    * }
    *
-   * // Profile mode: deep analysis, no result data.
-   * // Note: `items` and `nextCursor` are omitted by the API in this mode, so access them
-   * // defensively even though QueryResponse types them as required (see DebugParameters.emitResults).
+   * // Profile mode: deep analysis. `items`/`nextCursor` are still returned but empty
+   * // (see DebugParameters.emitResults).
    * const profileResponse = await client.instances.query({
    *   with: { result_set_1: { nodes: {} } },
    *   select: { result_set_1: {} },

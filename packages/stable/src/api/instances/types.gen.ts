@@ -514,6 +514,13 @@ export interface MinAggregateFunctionV3 {
  */
 export type NextCursorV3 = string;
 export interface NodeAndEdgeCollectionResponseWithCursorV3Response {
+  /**
+   * Contains debug notices if `debug` was set on the request. Hand-added: the OpenAPI
+   * snapshot's response schema for `list` has no `debug` property, but live testing against
+   * a real project confirmed the API does return it — see the comment above the debug types
+   * further down in this file.
+   */
+  debug?: DebugResponse;
   /** List of nodes and edges */
   items: NodeOrEdge[];
   /** The cursor value used to return (paginate to) the next page of results, when more data is available. */
@@ -770,9 +777,18 @@ export interface QueryNodeTableExpressionV3 {
 // future regeneration is a no-op for this block. Do not hand-edit the shapes
 // here — if the API changes, redo the process in ./README.md instead.
 //
-// Note: the OpenAPI snapshot only adds a `debug` response (`notices`) to the
-// `query`/`sync` responses. The `list` endpoint accepts a `debug` request
-// parameter but its response schema does not (yet) include `notices`.
+// Note: verified live against a real project (dune-sdk-staging/bluefield) on
+// 2026-09-17, since the checked-in `.cognite-openapi-snapshot.json` turned out
+// to be stale/incomplete for this feature in two ways:
+//  - `list` responses DO include `debug.notices`, even though the snapshot's
+//    response schema for `list` has no `debug` property. Added it below
+//    despite the spec gap, since live behavior is the more reliable signal.
+//  - `sync` can return a `syncMissingSpaceFilter` notice under a `category:
+//    'sync'` that has no schema at all in the snapshot (there's a `SyncNotice`
+//    entry in the snapshot's schema map, but it's a null placeholder). Added
+//    `SyncNotice`/`SyncMissingSpaceFilterNotice` below based on the observed
+//    shape; there may be sibling `sync` notices not covered here yet.
+// Worth reporting both gaps to the API team so the snapshot catches up.
 // ---------------------------------------------------------------------------
 export interface ContainerSubObjectIdentifier {
   /** External id for the container */
@@ -799,7 +815,8 @@ export type DebugNotice =
   | SortingNotice
   | IndexingNotice
   | FilteringNotice
-  | CursoringNotice;
+  | CursoringNotice
+  | SyncNotice;
 /**
  * Return query debug notices.
  */
@@ -807,11 +824,9 @@ export interface DebugParameters {
   /**
    * Include the query result in the response. emitResults=false is required for advanced query analysis features.
    *
-   * Note: when set to `false`, the API omits `items` and `nextCursor` from the response even though
-   * `QueryResponse.items`/`nextCursor` are typed as required (this matches the OpenAPI schema, which
-   * still lists them as required — a known discrepancy between the documented schema and actual
-   * behavior). Code reading `response.items`/`response.nextCursor` after setting `emitResults: false`
-   * must handle them being absent at runtime despite the type.
+   * Note: when set to `false`, `items`/`nextCursor` are still present on the response (verified live
+   * against a real project) but empty — e.g. `items: { result_set_1: [] }`, `nextCursor: {}` — rather
+   * than actually returning matched instances.
    */
   emitResults?: boolean;
   /** Most thorough level of query analysis. Requires emitResults=false. */
@@ -942,6 +957,21 @@ export interface SortNotBackedByIndexNotice {
   resultExpression: string;
   sort: PropertySortV3[];
 }
+/**
+ * Emitted on `sync` when the request has no top-level equality filter on `node.space`/`edge.space`.
+ * Observed live against a real project; not present in the OpenAPI snapshot (see the comment at the
+ * top of this section) — there may be other `sync`-category notices not covered here yet.
+ */
+export interface SyncMissingSpaceFilterNotice {
+  category: 'sync';
+  code: 'syncMissingSpaceFilter';
+  grade: 'C';
+  hint: string;
+  level: 'warning';
+  /** Identifier for the result set expression that the notice applies to. */
+  resultExpression: string;
+}
+export type SyncNotice = SyncMissingSpaceFilterNotice;
 export interface UnindexedThroughNotice {
   category: 'indexing';
   code: 'unindexedThrough';
@@ -970,9 +1000,9 @@ export interface QueryRequest {
 export interface QueryResponse {
   /** Contains debug notices if debug flag is set in the query. */
   debug?: DebugResponse;
-  /** Absent when the request set `debug.emitResults` to `false`, see {@link DebugParameters.emitResults}. */
+  /** Empty (not absent) when the request set `debug.emitResults` to `false`, see {@link DebugParameters.emitResults}. */
   items: Record<string, NodeOrEdge[]>;
-  /** Absent when the request set `debug.emitResults` to `false`, see {@link DebugParameters.emitResults}. */
+  /** Empty (not absent) when the request set `debug.emitResults` to `false`, see {@link DebugParameters.emitResults}. */
   nextCursor: Record<string, NextCursorV3>;
   /** Property type information for selected result expressions. */
   typing?: Record<string, TypeInformationOuter>;

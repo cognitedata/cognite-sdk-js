@@ -2843,6 +2843,8 @@ export type {
   SignificantPostFilteringNotice,
   SortingNotice,
   SortNotBackedByIndexNotice,
+  SyncMissingSpaceFilterNotice,
+  SyncNotice,
   UnindexedThroughNotice,
   DMSExistsFilter,
   DMSExternalId,
