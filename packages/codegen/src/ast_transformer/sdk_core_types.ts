@@ -26,7 +26,7 @@ const getImportedTypeNames = (
   }
 
   for (const element of namedBindings.elements) {
-    imported.add(element.name.escapedText as string);
+    imported.add(element.name.text);
   }
   return imported;
 };
@@ -58,7 +58,7 @@ const collectReferencedTypeNames = (
   referenced: Set<string>
 ): void => {
   if (ts.isTypeReferenceNode(node) && ts.isIdentifier(node.typeName)) {
-    referenced.add(node.typeName.escapedText as string);
+    referenced.add(node.typeName.text);
   }
   ts.forEachChild(node, (child) =>
     collectReferencedTypeNames(child, referenced)
@@ -77,7 +77,7 @@ const sdkCoreTypesTransformer: ts.TransformerFactory<ts.SourceFile> = () => {
           ts.isTypeAliasDeclaration(statement) ||
           ts.isInterfaceDeclaration(statement)
         ) {
-          removedTypeNames.add(statement.name.escapedText as string);
+          removedTypeNames.add(statement.name.text);
         }
         return false;
       }

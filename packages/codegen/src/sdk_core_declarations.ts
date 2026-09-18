@@ -47,23 +47,28 @@ const memberName = (member: ts.TypeElement): string | undefined => {
   if (member.name == null || !ts.isIdentifier(member.name)) {
     return undefined;
   }
-  return member.name.escapedText as string;
+  return member.name.text;
 };
 
 const interfaceMembersEquivalent = (
   left: ts.InterfaceDeclaration,
   right: ts.InterfaceDeclaration
 ): boolean => {
-  const leftMembers = new Map(
-    left.members
-      .map((member) => [memberName(member), member] as const)
-      .filter(([name]) => name != null)
-  );
-  const rightMembers = new Map(
-    right.members
-      .map((member) => [memberName(member), member] as const)
-      .filter(([name]) => name != null)
-  );
+  const leftMembers = new Map<string, ts.TypeElement>();
+  for (const member of left.members) {
+    const name = memberName(member);
+    if (name != null) {
+      leftMembers.set(name, member);
+    }
+  }
+
+  const rightMembers = new Map<string, ts.TypeElement>();
+  for (const member of right.members) {
+    const name = memberName(member);
+    if (name != null) {
+      rightMembers.set(name, member);
+    }
+  }
 
   if (leftMembers.size !== rightMembers.size) {
     return false;
@@ -105,10 +110,7 @@ const getSdkCoreDeclarations = (): Map<string, SdkCoreExportDeclaration> => {
         ts.isInterfaceDeclaration(statement)) &&
       hasExportModifier(statement)
     ) {
-      cachedSdkCoreDeclarations.set(
-        statement.name.escapedText as string,
-        statement
-      );
+      cachedSdkCoreDeclarations.set(statement.name.text, statement);
     }
   }
 
@@ -130,9 +132,7 @@ export const isDuplicateOfSdkCoreDeclaration = (
     return false;
   }
 
-  const coreDeclaration = coreDeclarations.get(
-    statement.name.escapedText as string
-  );
+  const coreDeclaration = coreDeclarations.get(statement.name.text);
   if (coreDeclaration == null) {
     return false;
   }
@@ -174,7 +174,7 @@ export const extractExportedTypeNames = (code: string): string[] => {
         ts.isInterfaceDeclaration(statement)) &&
       hasExportModifier(statement)
     ) {
-      names.push(statement.name.escapedText as string);
+      names.push(statement.name.text);
     }
   }
 

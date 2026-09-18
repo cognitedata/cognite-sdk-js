@@ -24,7 +24,7 @@ const buildCoreDeclarations = (code: string) => {
       ts.isTypeAliasDeclaration(statement) ||
       ts.isInterfaceDeclaration(statement)
     ) {
-      declarations.set(statement.name.escapedText as string, statement);
+      declarations.set(statement.name.text, statement);
     }
   }
 
@@ -45,7 +45,7 @@ describe('sdk core declarations', () => {
     expect(
       duplicates.map((statement) => {
         if (ts.isTypeAliasDeclaration(statement)) {
-          return statement.name.escapedText;
+          return statement.name.text;
         }
         return undefined;
       })
