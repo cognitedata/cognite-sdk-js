@@ -5,6 +5,7 @@ import { accessApi } from '@cognite/sdk-core';
 import { version } from '../package.json';
 import { AlertsAPI } from './api/alerts/alertsApi';
 import { MonitoringTasksAPI } from './api/monitoringTasks/monitoringTasksApi';
+import { TransformationsExternalDataAPI } from './api/transformations/transformationsExternalDataApi';
 
 class CogniteClientCleaned extends CogniteClientStable {
   // Remove type restrictions
@@ -30,6 +31,7 @@ class CogniteClientCleaned extends CogniteClientStable {
 export default class CogniteClient extends CogniteClientCleaned {
   private alertsApi?: AlertsAPI;
   private monitoringTasksApi?: MonitoringTasksAPI;
+  private transformationsExternalDataApi?: TransformationsExternalDataAPI;
 
   public get alerts() {
     return accessApi(this.alertsApi);
@@ -40,6 +42,10 @@ export default class CogniteClient extends CogniteClientCleaned {
 
   public get monitoringTasks() {
     return accessApi(this.monitoringTasksApi);
+  }
+
+  public get transformationsExternalData() {
+    return accessApi(this.transformationsExternalDataApi);
   }
 
   protected get version() {
@@ -55,6 +61,10 @@ export default class CogniteClient extends CogniteClientCleaned {
     this.monitoringTasksApi = this.apiFactory(
       MonitoringTasksAPI,
       'monitoringtasks'
+    );
+    this.transformationsExternalDataApi = this.apiFactory(
+      TransformationsExternalDataAPI,
+      'transformations/externaldata'
     );
   }
 }
