@@ -1,10 +1,7 @@
 // Copyright 2026 Cognite AS
 
 import { BaseResourceAPI } from '@cognite/sdk-core';
-import type {
-  CursorAndAsyncIterator,
-  FilterQuery,
-} from '@cognite/sdk-core';
+import type { CursorAndAsyncIterator, FilterQuery } from '@cognite/sdk-core';
 import type {
   TransformationExternalData,
   TransformationExternalDataCreate,

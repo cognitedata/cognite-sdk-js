@@ -1,9 +1,6 @@
 // Copyright 2026 Cognite AS
 
-import type {
-  CogniteExternalId,
-  CogniteInternalId,
-} from '@cognite/sdk-core';
+import type { CogniteExternalId, CogniteInternalId } from '@cognite/sdk-core';
 
 export type TransformationExternalDataFormat = 'one_lake';
 
