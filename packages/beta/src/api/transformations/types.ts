@@ -58,5 +58,5 @@ export interface TransformationExternalDataUsabilityRequest {
 
 export interface TransformationExternalDataUsability {
   externalId: { externalId: CogniteExternalId };
-  usableVersion: string;
+  usableVersion?: string;
 }

@@ -12,6 +12,8 @@ import type {
 
 export class TransformationsExternalDataAPI extends BaseResourceAPI<TransformationExternalData> {
   /**
+   * [Create external data sources](https://api-docs.cognite.com/20230101-beta/tag/Transformation-External-Data-Sources/operation/createExternalDataSources)
+   *
    * ```js
    * const sources = await client.transformationsExternalData.create([
    *   {
@@ -41,6 +43,8 @@ export class TransformationsExternalDataAPI extends BaseResourceAPI<Transformati
   };
 
   /**
+   * [List external data sources](https://api-docs.cognite.com/20230101-beta/tag/Transformation-External-Data-Sources/operation/listExternalDataSources)
+   *
    * ```js
    * const sources = await client.transformationsExternalData.list({ limit: 10 });
    * ```
@@ -52,6 +56,8 @@ export class TransformationsExternalDataAPI extends BaseResourceAPI<Transformati
   };
 
   /**
+   * [Delete external data sources](https://api-docs.cognite.com/20230101-beta/tag/Transformation-External-Data-Sources/operation/deleteExternalDataSources)
+   *
    * ```js
    * await client.transformationsExternalData.delete([
    *   { externalId: 'my-fabric-source' },
@@ -63,6 +69,8 @@ export class TransformationsExternalDataAPI extends BaseResourceAPI<Transformati
   };
 
   /**
+   * [Verify external data source usability](https://api-docs.cognite.com/20230101-beta/tag/Transformation-External-Data-Sources/operation/verifyExternalDataSourceUsability)
+   *
    * ```js
    * const status = await client.transformationsExternalData.usability({
    *   externalId: 'my-fabric-source',
