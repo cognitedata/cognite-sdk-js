@@ -2,7 +2,6 @@
 export type {
   CogniteExternalId,
   EpochTimestamp,
-  InstanceExternalId,
 } from './types.gen';
 export type {
   AnnotationData,
@@ -42,7 +41,6 @@ export type {
 } from './api/annotations/types.gen';
 export type {
   CogniteInstanceId,
-  CogniteInternalId,
   Document,
   DocumentAggregateFilter,
   DocumentAggregateFilterBool,
@@ -181,7 +179,6 @@ export type {
   FileReference,
   IndustrialObjectDetection,
   IndustrialObjectDetectionParameters,
-  InstanceSpace,
   JobId,
   JobStatus,
   LevelGaugeDetection,

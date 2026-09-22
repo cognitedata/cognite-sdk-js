@@ -14,7 +14,3 @@ export type CogniteExternalId = string;
  * @example 1730204346000
  */
 export type EpochTimestamp = number;
-/**
- * @pattern ^[a-zA-Z]([a-zA-Z0-9_]{0,253}[a-zA-Z0-9])?$
- */
-export type InstanceExternalId = string;
