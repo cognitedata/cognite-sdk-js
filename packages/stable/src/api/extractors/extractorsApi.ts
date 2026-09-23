@@ -2,12 +2,46 @@
 
 import {
   BaseResourceAPI,
+  type CDFHttpClient,
   type CursorAndAsyncIterator,
   type ExternalId,
+  type MetadataMap,
 } from '@cognite/sdk-core';
 import type { Extractor, ExtractorSchema, IgnoreUnknownIds } from '../../types';
+import { ExtractorSolutionsAPI } from './extractorSolutionsApi';
+import { ExtractorSourceSystemsAPI } from './extractorSourceSystemsApi';
 
 export class ExtractorsAPI extends BaseResourceAPI<Extractor> {
+  private readonly sourceSystemsApi: ExtractorSourceSystemsAPI;
+  private readonly solutionsApi: ExtractorSolutionsAPI;
+
+  /** @hidden */
+  constructor(resourcePath: string, ...args: [CDFHttpClient, MetadataMap]) {
+    super(resourcePath, ...args);
+    this.sourceSystemsApi = new ExtractorSourceSystemsAPI(
+      this.url('sources'),
+      ...args
+    );
+    this.solutionsApi = new ExtractorSolutionsAPI(
+      this.url('solutions'),
+      ...args
+    );
+  }
+
+  /**
+   * [Extractor source systems](https://docs.cognite.com/20230101/extractors/list-source-systems)
+   */
+  public get sourceSystems() {
+    return this.sourceSystemsApi;
+  }
+
+  /**
+   * [Extractor solutions](https://docs.cognite.com/20230101/extractors/list-solutions)
+   */
+  public get solutions() {
+    return this.solutionsApi;
+  }
+
   /**
    * [List extractors](https://docs.cognite.com/20230101/extractors/list-extractors)
    *
