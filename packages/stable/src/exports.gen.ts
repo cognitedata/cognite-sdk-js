@@ -1,9 +1,5 @@
 // Copyright 2022 Cognite AS
-export type {
-  CogniteExternalId,
-  EpochTimestamp,
-  InstanceExternalId,
-} from './types.gen';
+export type { EpochTimestamp } from './types.gen';
 export type {
   AnnotationData,
   AnnotationsAssetRef,
@@ -42,7 +38,6 @@ export type {
 } from './api/annotations/types.gen';
 export type {
   CogniteInstanceId,
-  CogniteInternalId,
   Document,
   DocumentAggregateFilter,
   DocumentAggregateFilterBool,
@@ -184,7 +179,6 @@ export type {
   FileReference,
   IndustrialObjectDetection,
   IndustrialObjectDetectionParameters,
-  InstanceSpace,
   JobId,
   JobStatus,
   LevelGaugeDetection,

@@ -10,6 +10,7 @@ import type {
   SchemaTypePrimitiveContent,
 } from 'swagger-typescript-api-nextgen';
 import cursorAndAsyncIteratorTransformer from './ast_transformer/cursor_and_async_iterator';
+import sdkCoreTypesTransformer from './ast_transformer/sdk_core_types';
 import sorterTransformer from './ast_transformer/sorter';
 import { formatWithBiome } from './format';
 import type { TypeGenerator, TypeGeneratorResult } from './generator/generator';
@@ -27,6 +28,7 @@ import {
   isReferenceObject,
   operationsInPath,
 } from './openapi';
+import { extractExportedTypeNames } from './sdk_core_declarations';
 import type { AutoNameInlinedRequestOption } from './utils';
 export type StringFilter = (str: string) => boolean;
 
@@ -128,6 +130,7 @@ export class CodeGen {
   // Ordering matters! "sorterTransformer" must be the last transformer specified.
   astTransformers = [
     cursorAndAsyncIteratorTransformer,
+    sdkCoreTypesTransformer,
     sorterTransformer, // must be last
   ];
 
@@ -422,7 +425,10 @@ export class CodeGen {
     result.astProcessedCode = this.astPostProcessing(result.code);
     await this.saveGeneratedTypes(result);
 
-    return result;
+    return {
+      ...result,
+      typeNames: extractExportedTypeNames(result.astProcessedCode),
+    };
   };
 
   private astPostProcessing = (code: string): string => {
