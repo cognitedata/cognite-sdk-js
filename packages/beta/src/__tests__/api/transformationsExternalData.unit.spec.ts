@@ -14,7 +14,7 @@ describe('Transformations external data unit test', () => {
     externalId: 'my-fabric-source',
     name: 'Fabric - production lakehouse',
     format: 'one_lake' as const,
-    dataSetId: null,
+    dataSetId: 1,
     settings: {
       credentials: {
         clientId: 'client-id',
