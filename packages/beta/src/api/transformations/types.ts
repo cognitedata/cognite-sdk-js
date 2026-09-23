@@ -34,7 +34,7 @@ export interface TransformationExternalDataCreate {
   externalId: CogniteExternalId;
   name?: string;
   format: TransformationExternalDataFormat;
-  dataSetId?: CogniteInternalId | null;
+  dataSetId?: CogniteInternalId;
   settings: TransformationExternalDataSettings;
 }
 
