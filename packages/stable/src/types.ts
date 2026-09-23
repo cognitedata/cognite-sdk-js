@@ -70,6 +70,7 @@ export * from './api/timeSeries/types';
 export * from './api/timeSeries/subscriptions/types';
 export * from './api/dataPoints/types';
 export * from './api/functions/types';
+export * from './api/extractors/types';
 
 export interface Acl<ActionsType, ScopeType> {
   actions: ActionsType[];

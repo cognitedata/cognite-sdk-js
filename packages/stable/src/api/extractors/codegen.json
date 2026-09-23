@@ -1,0 +1,10 @@
+{
+  "service": "extractors",
+  "filter": {
+    "serviceName": "extractors",
+    "relevantReferenceNames": ["Extractor", "ExtractorId", "Link", "LinkType"]
+  },
+  "inlinedSchemas": {
+    "autoNameRequest": true
+  }
+}

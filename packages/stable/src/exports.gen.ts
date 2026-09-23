@@ -129,6 +129,12 @@ export type {
   Space,
 } from './api/documents/types.gen';
 export type {
+  Extractor,
+  ExtractorId,
+  Link,
+  LinkType,
+} from './api/extractors/types.gen';
+export type {
   CursorQueryParameter,
   IncludeGlobalQueryParameter,
   ListOfSpaceIdsRequest,
