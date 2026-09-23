@@ -40,7 +40,7 @@ export interface TransformationExternalDataCreate {
 
 export interface TransformationExternalData {
   externalId: CogniteExternalId;
-  name: string;
+  name?: string;
   format: TransformationExternalDataFormat;
   dataSetId?: CogniteInternalId;
   settings: TransformationExternalDataSettingsRead;
