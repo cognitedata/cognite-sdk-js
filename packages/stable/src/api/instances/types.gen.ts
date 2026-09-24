@@ -514,6 +514,13 @@ export interface MinAggregateFunctionV3 {
  */
 export type NextCursorV3 = string;
 export interface NodeAndEdgeCollectionResponseWithCursorV3Response {
+  /**
+   * Contains debug notices if `debug` was set on the request. Hand-added: the OpenAPI
+   * snapshot's response schema for `list` has no `debug` property, but live testing against
+   * a real project confirmed the API does return it — see the comment above the debug types
+   * further down in this file.
+   */
+  debug?: DebugResponse;
   /** List of nodes and edges */
   items: NodeOrEdge[];
   /** The cursor value used to return (paginate to) the next page of results, when more data is available. */
@@ -578,6 +585,8 @@ export interface NodeOrEdgeDeleteResponse {
  */
 export type NodeOrEdgeExternalId = string;
 export type NodeOrEdgeListRequestV3 = {
+  /** Return query debug notices. */
+  debug?: DebugParameters;
   includeTyping?: IncludeTyping;
   sources?: SourceSelectorWithoutPropertiesV3;
   instanceType?: InstanceType;
@@ -755,9 +764,285 @@ export interface QueryNodeTableExpressionV3 {
   };
   sort?: PropertySortV3[];
 }
+// ---------------------------------------------------------------------------
+// Debug notices (query/sync/list `debug` option) — hand-added, not from the
+// last full "yarn codegen" run for this service.
+//
+// `instances` codegen is disabled (see ./codegen.skip.json and ./README.md):
+// regenerating it wholesale currently pulls in unrelated schema drift and
+// duplicate-type issues. These types were instead produced by following the
+// documented workaround in ./README.md (temporarily re-enabling codegen,
+// generating, and diffing against `.cognite-openapi-snapshot.json`), then
+// copying over only the new debug-related schemas below verbatim so a real
+// future regeneration is a no-op for this block. Do not hand-edit the shapes
+// here — if the API changes, redo the process in ./README.md instead.
+//
+// Note: verified live against a real project (dune-sdk-staging/bluefield) on
+// 2026-09-17, first with synthetic empty-filter queries and later against
+// real data (a populated Equipment view), since the checked-in
+// `.cognite-openapi-snapshot.json` turned out to be stale/incomplete for this
+// feature in several ways — the real queries against real data are what
+// surfaced most of these, synthetic queries on empty result sets did not:
+//  - `list` responses DO include `debug.notices`, even though the snapshot's
+//    response schema for `list` has no `debug` property. Added it below
+//    despite the spec gap, since live behavior is the more reliable signal.
+//  - `sync` can return a `syncMissingSpaceFilter` notice under a `category:
+//    'sync'` that has no schema at all in the snapshot (there's a `SyncNotice`
+//    entry in the snapshot's schema map, but it's a null placeholder). Added
+//    `SyncNotice`/`SyncMissingSpaceFilterNotice` below based on the observed
+//    shape; there may be sibling `sync` notices not covered here yet.
+//  - Filtering/sorting a real, non-trivial query surfaced two more notices
+//    that also have null placeholder schemas in the snapshot rather than real
+//    ones: `unfilteredContainerScan` (category `filtering`) and
+//    `filterIncompatibleWithCursorableIndexScan` (category `indexing`, whose
+//    `reasons` field took on 4 different observed values across a handful of
+//    filter shapes — `crossContainer`, `nonCursorableProperty`, `orFilter`,
+//    `multipleRangePredicates` — strongly suggesting more exist that we
+//    haven't triggered; the hint text itself references NOT and multiple
+//    prefix/exists predicates as further causes). Modeled `reasons` as
+//    `string[]` rather than guessing a closed literal union.
+// Worth reporting all of these gaps to the API team so the snapshot catches up.
+// ---------------------------------------------------------------------------
+export interface ContainerSubObjectIdentifier {
+  /** External id for the container */
+  containerExternalId: DMSExternalId;
+  identifier: string;
+  space: SpaceSpecification;
+}
+export interface ContainersWithoutIndexesInvolvedNotice {
+  category: 'indexing';
+  code: 'containersWithoutIndexesInvolved';
+  /** List of containers that the notice applies to. */
+  containers: ContainerReference[];
+  grade: 'C';
+  hint: string;
+  level: 'warning';
+  /** Identifier for the result set expression that the notice applies to. */
+  resultExpression: string;
+}
+export type CursoringNotice =
+  | IntractableDirectRelationsCursorNotice
+  | IntractableCursorWithNestedFilterNotice;
+export type DebugNotice =
+  | InvalidDebugOptionsNotice
+  | SortingNotice
+  | IndexingNotice
+  | FilteringNotice
+  | CursoringNotice
+  | SyncNotice;
+/**
+ * Return query debug notices.
+ */
+export interface DebugParameters {
+  /**
+   * Include the query result in the response. emitResults=false is required for advanced query analysis features.
+   *
+   * Note: when set to `false`, `items`/`nextCursor` are still present on the response (verified live
+   * against a real project) but empty — e.g. `items: { result_set_1: [] }`, `nextCursor: {}` — rather
+   * than actually returning matched instances.
+   */
+  emitResults?: boolean;
+  /** Most thorough level of query analysis. Requires emitResults=false. */
+  profile?: boolean;
+  /** Query timeout in milliseconds. Can be used to override the default timeout when analysing queries. Requires emitResults=false. */
+  timeout?: number;
+}
+/**
+ * Contains debug notices if debug flag is set in the query.
+ */
+export interface DebugResponse {
+  /** A list of notices that provide insights into the query's execution. These can highlight potential performance issues, offer optimization suggestions, or explain aspects of the query processing. Each notice falls into a category, such as indexing, sorting, filtering, or cursoring, to help identify areas for improvement. */
+  notices?: DebugNotice[];
+}
+export interface ExcessiveTimeoutNotice {
+  category: 'invalidDebugOptions';
+  code: 'excessiveTimeout';
+  hint: string;
+  level: 'warning';
+  /** The specified timeout for the query. */
+  timeout: number;
+}
+/**
+ * Emitted when a `hasData` filter has no accompanying property-level filter within the
+ * matched containers, forcing a full scan of every instance in those containers. Observed
+ * live; not in the OpenAPI snapshot (see the comment at the top of this section).
+ */
+export interface FilterIncompatibleWithCursorableIndexScanNotice {
+  category: 'indexing';
+  code: 'filterIncompatibleWithCursorableIndexScan';
+  /** Containers involved when `reasons` includes `crossContainer`; absent otherwise. */
+  containers?: ContainerReference[];
+  grade: 'D';
+  hint: string;
+  level: 'warning';
+  /** Present only when `reasons` includes `orFilter`. */
+  orHasNonEqualityBranches?: boolean;
+  /**
+   * Why the filter can't use a cursorable index scan. Observed live: `crossContainer`,
+   * `nonCursorableProperty`, `orFilter`, `multipleRangePredicates`. Kept as `string[]`
+   * rather than a closed literal union — the hint text references further causes (NOT,
+   * multiple prefix/exists predicates) that weren't reproduced.
+   */
+  reasons: string[];
+  /** Identifier for the result set expression that the notice applies to. */
+  resultExpression: string;
+}
+export type FilteringNotice =
+  | SelectiveExternalIDFilterNotice
+  | SignificantPostFilteringNotice
+  | SignificantHasDataFiltersNotice
+  | UnfilteredContainerScanNotice;
+export interface FilterMatchesBrokenCursorableIndexNotice {
+  category: 'sorting';
+  code: 'filterMatchesBrokenCursorableIndex';
+  grade: 'D';
+  hint: string;
+  /** Identifier for the broken index */
+  index?: ContainerSubObjectIdentifier;
+  level: 'warning';
+  /** Identifier for the result set expression that the notice applies to. */
+  resultExpression: string;
+  sort?: PropertySortV3[];
+}
+export interface FilterMatchesCursorableSortNotice {
+  category: 'sorting';
+  code: 'filterMatchesCursorableSort';
+  grade: 'A' | 'B';
+  hint: string;
+  level: 'info';
+  /** Identifier for the result set expression that the notice applies to. */
+  resultExpression: string;
+  sort?: PropertySortV3[];
+}
+export type IndexingNotice =
+  | UnindexedThroughNotice
+  | ContainersWithoutIndexesInvolvedNotice
+  | FilterIncompatibleWithCursorableIndexScanNotice;
+/**
+ * Emitted when a query supplies both a cursor and a nested filter on the same result set expression. Nested filters require a join that invalidates cursor positions, making pagination results unreliable.
+ */
+export interface IntractableCursorWithNestedFilterNotice {
+  category: 'cursoring';
+  code: 'intractableCursorWithNestedFilter';
+  grade: 'D';
+  /** A user-friendly message explaining why cursoring is intractable with a nested filter. */
+  hint: string;
+  level: 'warning';
+  /** Identifier for the result set expression that the notice applies to. */
+  resultExpression: string;
+}
+export interface IntractableDirectRelationsCursorNotice {
+  category: 'cursoring';
+  code: 'intractableDirectRelationsCursor';
+  grade: 'D';
+  hint: string;
+  level: 'warning';
+  resultExpression: string;
+}
+export type InvalidDebugOptionsNotice =
+  | ExcessiveTimeoutNotice
+  | NoTimeoutWithResultsNotice;
+export interface NoTimeoutWithResultsNotice {
+  category: 'invalidDebugOptions';
+  code: 'noTimeoutWithResults';
+  hint: string;
+  level: 'warning';
+}
+export interface SelectiveExternalIDFilterNotice {
+  category: 'filtering';
+  code: 'selectiveExternalIDFilter';
+  grade: 'A';
+  hint: string;
+  level: 'info';
+  /** Identifier for the result set expression that the notice applies to. */
+  resultExpression: string;
+  /** Identifier for a result set. Indicates that the notice is inherited from this result expression. */
+  viaFrom?: string;
+}
+export interface SignificantHasDataFiltersNotice {
+  category: 'filtering';
+  code: 'significantHasDataFiltering';
+  /** List of containers that the notice applies to. */
+  containers: ContainerReference[];
+  grade: 'C';
+  hint: string;
+  level: 'warning';
+  /** Identifier for the result set expression that the notice applies to. */
+  resultExpression: string;
+}
+export interface SignificantPostFilteringNotice {
+  category: 'filtering';
+  code: 'significantPostFiltering';
+  grade: 'C';
+  hint: string;
+  level: 'warning';
+  /** The specified limit for the result expression. */
+  limit: number;
+  /** Number of rows of data that is internally processed. Value gives an indication of the complexity of evaluating the query. */
+  maxInvolvedRows: number;
+  /** Identifier for the result set expression that the notice applies to. */
+  resultExpression: string;
+}
+export type SortingNotice =
+  | SortNotBackedByIndexNotice
+  | FilterMatchesCursorableSortNotice
+  | FilterMatchesBrokenCursorableIndexNotice;
+export interface SortNotBackedByIndexNotice {
+  category: 'sorting';
+  code: 'sortNotBackedByIndex';
+  grade: 'C';
+  hint: string;
+  level: 'warning';
+  /** Identifier for the result set expression that the notice applies to. */
+  resultExpression: string;
+  sort: PropertySortV3[];
+}
+/**
+ * Emitted on `sync` when the request has no top-level equality filter on `node.space`/`edge.space`.
+ * Observed live against a real project; not present in the OpenAPI snapshot (see the comment at the
+ * top of this section) — there may be other `sync`-category notices not covered here yet.
+ */
+export interface SyncMissingSpaceFilterNotice {
+  category: 'sync';
+  code: 'syncMissingSpaceFilter';
+  grade: 'C';
+  hint: string;
+  level: 'warning';
+  /** Identifier for the result set expression that the notice applies to. */
+  resultExpression: string;
+}
+export type SyncNotice = SyncMissingSpaceFilterNotice;
+/**
+ * Emitted when a `hasData` filter has no accompanying property-level filter within the
+ * matched containers, forcing a full scan of every instance in those containers. Observed
+ * live; not in the OpenAPI snapshot (see the comment at the top of this section).
+ */
+export interface UnfilteredContainerScanNotice {
+  category: 'filtering';
+  code: 'unfilteredContainerScan';
+  grade: 'D';
+  hint: string;
+  level: 'warning';
+  /** Identifier for the result set expression that the notice applies to. */
+  resultExpression: string;
+}
+export interface UnindexedThroughNotice {
+  category: 'indexing';
+  code: 'unindexedThrough';
+  grade: 'E';
+  hint: string;
+  level: 'warning';
+  /** Reference to the property that the notice applies to. */
+  property: string[];
+  /** Identifier for the result set expression that the notice applies to. */
+  resultExpression: string;
+}
+// ---------------------------------------------------------------------------
 export interface QueryRequest {
   /** Cursors returned from the previous query request. These cursors match the result set expressions you specified in the ```with``` clause for the query. */
   cursors?: Record<string, NextCursorV3>;
+  /** Return query debug notices. */
+  debug?: DebugParameters;
   /** Should we return property type information as part of the result? */
   includeTyping?: IncludeTyping;
   /** Values in filters can be parameterised. Parameters are provided as part of the query object, and referenced in the filter itself. */
@@ -767,7 +1052,11 @@ export interface QueryRequest {
   with: Record<string, QueryTableExpressionV3>;
 }
 export interface QueryResponse {
+  /** Contains debug notices if debug flag is set in the query. */
+  debug?: DebugResponse;
+  /** Empty (not absent) when the request set `debug.emitResults` to `false`, see {@link DebugParameters.emitResults}. */
   items: Record<string, NodeOrEdge[]>;
+  /** Empty (not absent) when the request set `debug.emitResults` to `false`, see {@link DebugParameters.emitResults}. */
   nextCursor: Record<string, NextCursorV3>;
   /** Property type information for selected result expressions. */
   typing?: Record<string, TypeInformationOuter>;
@@ -1012,6 +1301,8 @@ export interface SyncRequest {
   allowExpiredCursorsAndAcceptMissedDeletes?: boolean;
   /** Cursors returned from the previous sync request. These cursors match the result set expressions you specified in the ```with``` clause for the sync. */
   cursors?: Record<string, NextCursorV3>;
+  /** Return query debug notices. */
+  debug?: DebugParameters;
   /** Should we return property type information as part of the result? */
   includeTyping?: IncludeTyping;
   /** Parameters to return */
