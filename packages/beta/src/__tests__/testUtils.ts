@@ -35,8 +35,12 @@ export function setupLoggedInClient() {
 }
 
 export function setupMockableClient() {
-  const client = setupClient(mockBaseUrl);
-  return client;
+  return new CogniteClient({
+    appId: 'JS SDK unit tests (beta)',
+    project: process.env.COGNITE_PROJECT || 'unit-test',
+    baseUrl: mockBaseUrl,
+    oidcTokenProvider: () => Promise.resolve('test accessToken'),
+  });
 }
 export function setupMockableClientForIntegrationTests() {
   const client = setupClient(process.env.COGNITE_BASE_URL);
