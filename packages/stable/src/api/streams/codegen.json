@@ -1,0 +1,10 @@
+{
+  "service": "streams",
+  "filter": {
+    "serviceName": "streams",
+    "ignore": ["streams/{streamId}/records"]
+  },
+  "inlinedSchemas": {
+    "autoNameRequest": true
+  }
+}
