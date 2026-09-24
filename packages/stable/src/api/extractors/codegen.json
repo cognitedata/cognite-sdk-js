@@ -2,7 +2,15 @@
   "service": "extractors",
   "filter": {
     "serviceName": "extractors",
-    "relevantReferenceNames": ["Extractor", "ExtractorId", "Link", "LinkType"]
+    "relevantReferenceNames": [
+      "Extractor",
+      "ExtractorId",
+      "Link",
+      "LinkType",
+      "SourceSystem",
+      "Solution",
+      "ItemType"
+    ]
   },
   "inlinedSchemas": {
     "autoNameRequest": true
