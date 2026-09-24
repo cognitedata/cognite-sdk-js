@@ -7,13 +7,13 @@
       "Changelog",
       "Extractor",
       "ExtractorId",
-      "ItemType",
       "Link",
       "LinkType",
+      "SourceSystem",
       "Release",
       "ReleaseId",
       "Solution",
-      "SourceSystem"
+      "ItemType"
     ]
   },
   "inlinedSchemas": {
