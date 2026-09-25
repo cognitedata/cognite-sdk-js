@@ -4,6 +4,7 @@ import matches from 'lodash/matches';
 import nock from 'nock';
 import { beforeEach, describe, expect, test } from 'vitest';
 import { mockBaseUrl } from '../../../../core/src/__tests__/testUtils';
+import type { Version } from '../../api/workflows/types';
 import type CogniteClientAlpha from '../../cogniteClient';
 import { setupMockableClient } from '../testUtils';
 
@@ -67,6 +68,28 @@ describe('Workflow versions unit test', () => {
     expect(response.nextCursor).toBe('next');
   });
 
+  test('list() response type does not expose warnings', async () => {
+    const listQuery = {
+      filter: {
+        workflowFilters: [{ externalId: 'wf-1', version: '1' }],
+      },
+      limit: 10,
+    };
+
+    nock(mockBaseUrl)
+      .post(/\/workflows\/versions\/list$/, listQuery)
+      .once()
+      .reply(200, {
+        items: [mockVersion],
+      });
+
+    const response = await client.workflowVersions.list(listQuery);
+    const item: Version = response.items[0];
+
+    // @ts-expect-error `warnings` only exists on VersionUpsertResponse (returned by upsert), not on Version (returned by list/get)
+    expect(item.warnings).toBeUndefined();
+  });
+
   test('upsert', async () => {
     nock(mockBaseUrl)
       .post(/\/workflows\/versions$/, matches({ items: [versionCreateBody] }))
@@ -81,6 +104,39 @@ describe('Workflow versions unit test', () => {
     expect(items[0].workflowExternalId).toEqual('wf-1');
     expect(items[0].version).toEqual('1');
     expect(items[0].workflowDefinition.hash).toEqual('abc123');
+  });
+
+  test('upsert surfaces warnings when the API returns them', async () => {
+    const versionWithWarnings = {
+      ...mockVersion,
+      warnings: ['Task "task-1" has no timeout set'],
+    };
+
+    nock(mockBaseUrl)
+      .post(/\/workflows\/versions$/, matches({ items: [versionCreateBody] }))
+      .once()
+      .reply(200, {
+        items: [versionWithWarnings],
+      });
+
+    const items = await client.workflowVersions.upsert([versionCreateBody]);
+
+    expect(items).toHaveLength(1);
+    expect(items[0].warnings).toEqual(['Task "task-1" has no timeout set']);
+  });
+
+  test('upsert has no warnings when the API does not return any', async () => {
+    nock(mockBaseUrl)
+      .post(/\/workflows\/versions$/, matches({ items: [versionCreateBody] }))
+      .once()
+      .reply(200, {
+        items: [mockVersion],
+      });
+
+    const items = await client.workflowVersions.upsert([versionCreateBody]);
+
+    expect(items).toHaveLength(1);
+    expect(items[0].warnings).toBeUndefined();
   });
 
   test('delete', async () => {
