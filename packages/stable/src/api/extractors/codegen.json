@@ -3,11 +3,15 @@
   "filter": {
     "serviceName": "extractors",
     "relevantReferenceNames": [
+      "Artifact",
+      "Changelog",
       "Extractor",
       "ExtractorId",
       "Link",
       "LinkType",
       "SourceSystem",
+      "Release",
+      "ReleaseId",
       "Solution",
       "ItemType"
     ]
