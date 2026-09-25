@@ -4,6 +4,73 @@
 
 import type { CogniteExternalId } from '@cognite/sdk-core';
 /**
+ * An artifact for an extractor release.
+ */
+export interface Artifact {
+  /**
+   * Display Name
+   * Human readable name of the artifact.
+   */
+  displayName?: string;
+  /**
+   * Link
+   * Link to obtain a temporary download link for the artifact.
+   */
+  link: string;
+  /**
+   * Name
+   * Filename of the artifact.
+   */
+  name: string;
+  /**
+   * Platform
+   * Platform the extractor runs on. One of "windows", "linux", "macos", "docs", or "all".
+   */
+  platform: 'windows' | 'linux' | 'macos' | 'docs' | 'all';
+}
+/**
+ * Extractor changelog, uses the [keep-a-changelog](https://keepachangelog.com/en/1.1.0/) format
+ */
+export interface Changelog {
+  /**
+   * Added
+   * Features added to this release.
+   */
+  added?: string[];
+  /**
+   * Changed
+   * Changes made to the extractor in this release.
+   */
+  changed?: string[];
+  /**
+   * Deprecated
+   * Features that have been deprecated, but not yet removed.
+   */
+  deprecated?: string[];
+  /**
+   * Fixed
+   * Bugs fixed in this release.
+   */
+  fixed?: string[];
+  /**
+   * Removed
+   * Features that have been removed.
+   */
+  removed?: string[];
+  /**
+   * Security
+   * Changes that affect security.
+   */
+  security?: string[];
+}
+/**
+ * The number of milliseconds since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+ * @format int64
+ * @min 0
+ * @example 1730204346000
+ */
+export type EpochTimestamp = number;
+/**
  * An extractor instance
  */
 export interface Extractor {
@@ -82,6 +149,44 @@ export interface Link {
  * Enumeration of link types.
  */
 export type LinkType = 'generic' | 'externalDocumentation';
+/**
+ * A release of an extractor
+ */
+export interface Release {
+  /**
+   * Artifacts
+   * List of artifacts included in this release.
+   */
+  artifacts: Artifact[];
+  /** Extractor changelog, uses the [keep-a-changelog](https://keepachangelog.com/en/1.1.0/) format */
+  changelog?: Changelog;
+  /** The number of milliseconds since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds. */
+  createdTime?: EpochTimestamp;
+  /**
+   * Description
+   * Short description of this release. Details are found in the changelog.
+   */
+  description?: string;
+  /** The external ID provided by the client. Must be unique for the resource type. */
+  externalId: CogniteExternalId;
+  /**
+   * Version
+   * Release version number, uses semantic versioning.
+   */
+  version: string;
+}
+/**
+ * Identifier for a release
+ */
+export interface ReleaseId {
+  /** The external ID provided by the client. Must be unique for the resource type. */
+  externalId: CogniteExternalId;
+  /**
+   * Version
+   * Release version number, uses semantic versioning.
+   */
+  version: string;
+}
 /**
  * A solution represents a connection between an extractor and a source system it can be configured to read from.
  */
