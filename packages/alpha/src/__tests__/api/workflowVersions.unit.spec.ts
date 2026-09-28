@@ -4,7 +4,6 @@ import matches from 'lodash/matches';
 import nock from 'nock';
 import { beforeEach, describe, expect, test } from 'vitest';
 import { mockBaseUrl } from '../../../../core/src/__tests__/testUtils';
-import type { Version } from '../../api/workflows/types';
 import type CogniteClientAlpha from '../../cogniteClient';
 import { setupMockableClient } from '../testUtils';
 
@@ -68,7 +67,7 @@ describe('Workflow versions unit test', () => {
     expect(response.nextCursor).toBe('next');
   });
 
-  test('list() response type does not expose warnings', async () => {
+  test('list does not surface warnings', async () => {
     const listQuery = {
       filter: {
         workflowFilters: [{ externalId: 'wf-1', version: '1' }],
@@ -84,10 +83,8 @@ describe('Workflow versions unit test', () => {
       });
 
     const response = await client.workflowVersions.list(listQuery);
-    const item: Version = response.items[0];
 
-    // @ts-expect-error `warnings` only exists on VersionUpsertResponse (returned by upsert), not on Version (returned by list/get)
-    expect(item.warnings).toBeUndefined();
+    expect('warnings' in response.items[0]).toBe(false);
   });
 
   test('upsert', async () => {
