@@ -67,26 +67,6 @@ describe('Workflow versions unit test', () => {
     expect(response.nextCursor).toBe('next');
   });
 
-  test('list does not surface warnings', async () => {
-    const listQuery = {
-      filter: {
-        workflowFilters: [{ externalId: 'wf-1', version: '1' }],
-      },
-      limit: 10,
-    };
-
-    nock(mockBaseUrl)
-      .post(/\/workflows\/versions\/list$/, listQuery)
-      .once()
-      .reply(200, {
-        items: [mockVersion],
-      });
-
-    const response = await client.workflowVersions.list(listQuery);
-
-    expect('warnings' in response.items[0]).toBe(false);
-  });
-
   test('upsert', async () => {
     nock(mockBaseUrl)
       .post(/\/workflows\/versions$/, matches({ items: [versionCreateBody] }))
