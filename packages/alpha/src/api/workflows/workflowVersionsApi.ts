@@ -6,6 +6,7 @@ import type {
   Version,
   VersionDelete,
   VersionUpsert,
+  VersionUpsertResponse,
   WorkflowVersionFilterQuery,
 } from './types';
 
@@ -44,7 +45,9 @@ export class WorkflowVersionsAPI extends BaseResourceAPI<Version> {
    * ]);
    * ```
    */
-  public upsert = (items: VersionUpsert[]): Promise<Version[]> => {
+  public upsert = (
+    items: VersionUpsert[]
+  ): Promise<VersionUpsertResponse[]> => {
     return this.createEndpoint(items, this.url());
   };
 

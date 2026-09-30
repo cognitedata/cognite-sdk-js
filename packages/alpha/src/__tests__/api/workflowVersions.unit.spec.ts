@@ -83,6 +83,39 @@ describe('Workflow versions unit test', () => {
     expect(items[0].workflowDefinition.hash).toEqual('abc123');
   });
 
+  test('upsert surfaces warnings when the API returns them', async () => {
+    const versionWithWarnings = {
+      ...mockVersion,
+      warnings: ['Task "task-1" has no timeout set'],
+    };
+
+    nock(mockBaseUrl)
+      .post(/\/workflows\/versions$/, matches({ items: [versionCreateBody] }))
+      .once()
+      .reply(200, {
+        items: [versionWithWarnings],
+      });
+
+    const items = await client.workflowVersions.upsert([versionCreateBody]);
+
+    expect(items).toHaveLength(1);
+    expect(items[0].warnings).toEqual(['Task "task-1" has no timeout set']);
+  });
+
+  test('upsert has no warnings when the API does not return any', async () => {
+    nock(mockBaseUrl)
+      .post(/\/workflows\/versions$/, matches({ items: [versionCreateBody] }))
+      .once()
+      .reply(200, {
+        items: [mockVersion],
+      });
+
+    const items = await client.workflowVersions.upsert([versionCreateBody]);
+
+    expect(items).toHaveLength(1);
+    expect(items[0].warnings).toBeUndefined();
+  });
+
   test('delete', async () => {
     nock(mockBaseUrl)
       .post(/\/workflows\/versions\/delete/, {
