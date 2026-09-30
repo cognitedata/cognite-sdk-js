@@ -81,7 +81,11 @@ describe('Annotations API', () => {
   });
 
   afterAll(async () => {
-    await client.annotations.delete(createdAnnotationIds);
+    // Empty when beforeAll failed to create the annotations; deleting an empty
+    // list is a 400 that would mask the real error and skip the file cleanup.
+    if (createdAnnotationIds.length > 0) {
+      await client.annotations.delete(createdAnnotationIds);
+    }
     await client.files.delete([
       {
         externalId: ANNOTATED_FILE_EXTERNAL_ID,
