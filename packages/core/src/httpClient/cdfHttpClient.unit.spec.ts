@@ -196,17 +196,17 @@ describe('CDFHttpClient', () => {
       const headerValue = '123';
       client.addOneTimeHeader(headerKey, headerValue);
       nock(baseUrl, { reqheaders: { [headerKey]: headerValue } })
-        .delete('/')
+        .put('/')
         .reply(101, {});
       nock(baseUrl, { reqheaders: { [headerKey]: headerValue } })
-        .delete('/')
+        .put('/')
         .reply(200, [1]);
       nock(baseUrl, { badheaders: [headerKey] })
-        .delete('/')
+        .put('/')
         .reply(200, {});
-      const res = await client.delete(baseUrl);
+      const res = await client.put(baseUrl);
       expect(res.data).toEqual([1]);
-      await client.delete(baseUrl);
+      await client.put(baseUrl);
     });
   });
 });
