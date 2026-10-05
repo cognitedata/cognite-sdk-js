@@ -1,7 +1,11 @@
 // Demo 2: queryTyped with MULTIPLE system views (cdf_cdm).
 // Type-check-only, never executed. See queryTypedDemo.ts for the single-view demo.
 // Do not merge: this PR is for review/testing only.
-import type { CogniteClient, QueryRequest } from '@cognite/sdk';
+import type {
+  CogniteClient,
+  QueryRequest,
+  SelectSourceWithParams,
+} from '@cognite/sdk';
 
 declare const client: CogniteClient;
 
@@ -228,5 +232,121 @@ export async function viaWrapper() {
     mimeTrim,
     assetTypo,
     keyTypo,
+  };
+}
+
+// ---------------------------------------------------------------------------
+// (D) Overriding / appending to the default 2nd generic
+// The 2nd generic REPLACES the default (SelectSourceWithParams); there is no
+// built-in merge. Experiments below show what happens per view / per property.
+// ---------------------------------------------------------------------------
+
+// (D1) Override with a PARTIAL view list: only CogniteAsset is described.
+export async function overridePartialViews() {
+  const res = await client.instances.queryTyped<
+    typeof query,
+    [
+      {
+        source: typeof CogniteAssetView;
+        properties: { name: string; description: string };
+      },
+    ]
+  >(query);
+  const assetName =
+    res.items.assets[0].properties.cdf_cdm['CogniteAsset/v1'].name;
+  const tsIsStep =
+    res.items.timeseries[0].properties.cdf_cdm['CogniteTimeSeries/v1'].isStep;
+  const fileMime =
+    res.items.files[0].properties.cdf_cdm['CogniteFile/v1'].mimeType;
+  return { assetName, tsIsStep, fileMime };
+}
+
+// (D2) Override with a PARTIAL property list: `description` is selected but
+// the typed view only lists `name`.
+export async function overridePartialProperties() {
+  const res = await client.instances.queryTyped<
+    typeof query,
+    [
+      {
+        source: typeof CogniteAssetView;
+        properties: { name: string };
+      },
+    ]
+  >(query);
+  const view = res.items.assets[0].properties.cdf_cdm['CogniteAsset/v1'];
+  const name = view.name;
+  const description = view.description;
+  return { name, description };
+}
+
+// (D3) APPEND: spread the base view set and add more views in a wrapper.
+const CogniteActivityView = {
+  type: 'view',
+  space: 'cdf_cdm',
+  externalId: 'CogniteActivity',
+  version: 'v1',
+} as const;
+
+const activityQuery = {
+  with: {
+    activities: {
+      nodes: { filter: { hasData: [CogniteActivityView] } },
+      limit: 10,
+    },
+  },
+  select: {
+    activities: {
+      sources: [
+        { source: CogniteActivityView, properties: ['name', 'startTime'] },
+      ],
+    },
+  },
+} as const satisfies QueryRequest;
+
+export const queryTypedSystemPlus = <
+  TQuery extends QueryRequest,
+  TExtra extends SelectSourceWithParams = [],
+>(
+  params: TQuery
+) =>
+  client.instances.queryTyped<TQuery, [...SystemViewSources, ...TExtra]>(
+    params
+  );
+
+export async function appendViaWrapper() {
+  // base views only: TExtra defaults to []
+  const base = await queryTypedSystemPlus(query);
+  const baseAssetName =
+    base.items.assets[0].properties.cdf_cdm['CogniteAsset/v1'].name;
+
+  // base + one extra view, given explicitly
+  const plus = await queryTypedSystemPlus<
+    typeof activityQuery,
+    [
+      {
+        source: typeof CogniteActivityView;
+        properties: { name: string; startTime: string };
+      },
+    ]
+  >(activityQuery);
+  const activityStart =
+    plus.items.activities[0].properties.cdf_cdm['CogniteActivity/v1'].startTime;
+
+  // base + extra, but the query only uses base views: still typed
+  const plusBase = await queryTypedSystemPlus<typeof query, []>(query);
+  const plusBaseIsStep =
+    plusBase.items.timeseries[0].properties.cdf_cdm['CogniteTimeSeries/v1']
+      .isStep;
+
+  // activity query WITHOUT declaring the extra: falls back to raw
+  const noExtra = await queryTypedSystemPlus(activityQuery);
+  const activityStartRaw =
+    noExtra.items.activities[0].properties.cdf_cdm['CogniteActivity/v1']
+      .startTime;
+  return {
+    baseAssetName,
+    activityStart,
+    plusBaseIsStep,
+    activityStartRaw,
   };
 }
