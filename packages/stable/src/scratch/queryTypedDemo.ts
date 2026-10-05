@@ -1,7 +1,12 @@
 // Type-check-only demo comparing client.instances.query vs queryTyped.
-// Never executed: verify with `yarn tsc --noEmit -p packages/stable/tsconfig.json`.
-// Each `@ts-expect-error` marks a line that is expected to fail; if the types
-// change, tsc reports TS2578 (unused directive) or a new error.
+// Never executed. Meant to be opened in an IDE: hover identifiers and look at
+// the squiggles. Every probe line is annotated with what you should see.
+//
+// SEE THE RAW ERRORS: `@ts-expect-error` hides squiggles. In the IDE, run
+// Find & Replace (Cmd/Ctrl+Alt+F), replace `@ts-expect-error` with `@ts-off`
+// in this file, and the squiggles appear. Undo (Cmd/Ctrl+Z) to restore.
+// CLI check (must exit 0 as committed): `yarn run -T tsc --noEmit -p tsconfig.json` in packages/stable.
+//
 // Do not merge: this PR is for review/testing only.
 import type { CogniteClient, QueryRequest } from '@cognite/sdk';
 
@@ -30,34 +35,55 @@ const query = {
   },
 } as const satisfies QueryRequest;
 
+// ---------------------------------------------------------------------------
 // (1) plain query()
+// Hover `res`  -> QueryResponse
+// Hover `view` -> { [x: string]: RawPropertyValueV3 }
+// ---------------------------------------------------------------------------
 export async function plainQuery() {
   const res = await client.instances.query(query);
-  // @ts-expect-error TS2532: NodeDefinition.properties is optional -> 'possibly undefined'
+  // EXPECT: squiggle (TS2532 'possibly undefined'); NodeDefinition.properties is optional
+  // @ts-expect-error
   const view = res.items.assets[0].properties.cdf_cdm['CogniteAsset/v1'];
+  // EXPECT: no squiggle. Hover `nameValid` -> RawPropertyValueV3 (string | number | boolean | object | ...[])
   const nameValid = view.name;
+  // EXPECT: NO squiggle (any string key is accepted) <- the gap vs queryTyped
   const nameTypo = view.nmae;
+  // EXPECT: NO squiggle (any result key is accepted). Hover -> NodeOrEdge[]
   const resultKeyTypo = res.items.assetz;
-  // @ts-expect-error TS2339: 'trim' does not exist on RawPropertyValueV3
+  // EXPECT: squiggle on `trim` (TS2339): not on RawPropertyValueV3
+  // @ts-expect-error
   const trimmed = view.name.trim();
   return { nameValid, nameTypo, resultKeyTypo, trimmed };
 }
 
+// ---------------------------------------------------------------------------
 // (2) queryTyped without generics
+// Hover `res.items`  -> only `assets` key
+// Hover `view`       -> { name: RawPropertyValueV3; description: RawPropertyValueV3 }
+// ---------------------------------------------------------------------------
 export async function typedNoGenerics() {
   const res = await client.instances.queryTyped(query);
+  // EXPECT: no squiggle. Autocomplete after `properties.` offers only `cdf_cdm`, then only 'CogniteAsset/v1'
   const view = res.items.assets[0].properties.cdf_cdm['CogniteAsset/v1'];
+  // EXPECT: no squiggle. Hover `nameValid` -> RawPropertyValueV3 (values are NOT narrowed without generics)
   const nameValid = view.name;
-  // @ts-expect-error TS2339: typo'd property
+  // EXPECT: squiggle on `nmae` (TS2339)
+  // @ts-expect-error
   const nameTypo = view.nmae;
-  // @ts-expect-error TS2551: typo'd result key
+  // EXPECT: squiggle on `assetz` (TS2551 'Did you mean assets?')
+  // @ts-expect-error
   const resultKeyTypo = res.items.assetz;
-  // @ts-expect-error TS2339: 'trim' does not exist on RawPropertyValueV3
+  // EXPECT: squiggle on `trim` (TS2339): value is still RawPropertyValueV3
+  // @ts-expect-error
   const trimmed = view.name.trim();
   return { nameValid, nameTypo, resultKeyTypo, trimmed };
 }
 
+// ---------------------------------------------------------------------------
 // (3) queryTyped with explicit generics
+// Hover `view` -> { name: string; description: string }
+// ---------------------------------------------------------------------------
 export async function typedWithGenerics() {
   const res = await client.instances.queryTyped<
     typeof query,
@@ -69,11 +95,15 @@ export async function typedWithGenerics() {
     ]
   >(query);
   const view = res.items.assets[0].properties.cdf_cdm['CogniteAsset/v1'];
+  // EXPECT: no squiggle. Hover `nameValid` -> string
   const nameValid = view.name;
-  // @ts-expect-error TS2339: typo'd property
+  // EXPECT: squiggle on `nmae` (TS2339)
+  // @ts-expect-error
   const nameTypo = view.nmae;
-  // @ts-expect-error TS2551: typo'd result key
+  // EXPECT: squiggle on `assetz` (TS2551)
+  // @ts-expect-error
   const resultKeyTypo = res.items.assetz;
+  // EXPECT: NO squiggle. Hover `trimmed` -> string
   const trimmed = view.name.trim();
   return { nameValid, nameTypo, resultKeyTypo, trimmed };
 }
