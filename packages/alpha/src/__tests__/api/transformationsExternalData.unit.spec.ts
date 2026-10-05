@@ -76,12 +76,12 @@ describe('Transformations external data unit test', () => {
         roleName: 'COGNITE_TRANSFORMATIONS_ROLE',
         publicKey:
           '-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8B',
-        expiryTime: 1692374400000,
       },
       locationDescription: {
         warehouseName: 'COGNITE_WH',
       },
     },
+    expiryTime: 1692374400000,
     createdTime: 1692374400000,
     lastUpdatedTime: 1692374400000,
   };
@@ -133,7 +133,7 @@ describe('Transformations external data unit test', () => {
     expect(items[0].settings.credentials.publicKey).toContain(
       'BEGIN PUBLIC KEY'
     );
-    expect(items[0].settings.credentials.expiryTime).toBe(1692374400000);
+    expect(items[0].expiryTime).toBe(1692374400000);
     expect(items[0].settings.locationDescription.warehouseName).toBe(
       'COGNITE_WH'
     );
@@ -216,7 +216,7 @@ describe('Transformations external data unit test', () => {
 
   test('rotateKeys', async () => {
     nock(mockBaseUrl)
-      .post(/\/transformations\/externaldata\/rotateKeys$/, {
+      .post(/\/transformations\/externaldata\/rotatekeys$/, {
         items: [
           {
             externalId: 'snowflake-sales-prod',

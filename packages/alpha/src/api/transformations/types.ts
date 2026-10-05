@@ -41,10 +41,11 @@ export interface TransformationExternalDataSnowflakeCredentials {
   expiryTime?: number;
 }
 
-export interface TransformationExternalDataSnowflakeCredentialsRead
-  extends TransformationExternalDataSnowflakeCredentials {
+export interface TransformationExternalDataSnowflakeCredentialsRead {
+  accountIdentifier: string;
+  userName: string;
+  roleName: string;
   publicKey: string;
-  expiryTime: number;
 }
 
 export interface TransformationExternalDataSnowflakeLocation {
@@ -97,6 +98,7 @@ export interface TransformationExternalDataSnowflake {
   format: 'snowflake';
   dataSetId?: CogniteInternalId;
   settings: TransformationExternalDataSnowflakeSettingsRead;
+  expiryTime: number;
   createdTime: number;
   lastUpdatedTime: number;
 }

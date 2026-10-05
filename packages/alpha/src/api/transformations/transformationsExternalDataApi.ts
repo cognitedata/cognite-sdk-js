@@ -120,7 +120,7 @@ export class TransformationsExternalDataAPI extends BaseResourceAPI<Transformati
   ): Promise<TransformationExternalDataRotatedKey[]> => {
     const response = await this.post<
       ItemsWrapper<TransformationExternalDataRotatedKey[]>
-    >(this.url('rotateKeys'), { data: { items } });
+    >(this.url('rotatekeys'), { data: { items } });
     return this.addToMapAndReturn(response.data.items, response);
   };
 }
