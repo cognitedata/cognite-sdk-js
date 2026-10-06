@@ -36,6 +36,7 @@ export class TransformationsExternalDataAPI extends BaseResourceAPI<Transformati
    *         warehouseName: 'COGNITE_WH',
    *       },
    *     },
+   *     expiryTime: 1692374400000,
    *   },
    * ]);
    * ```

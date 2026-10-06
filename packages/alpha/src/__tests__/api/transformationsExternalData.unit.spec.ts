@@ -62,6 +62,7 @@ describe('Transformations external data unit test', () => {
         warehouseName: 'COGNITE_WH',
       },
     },
+    expiryTime: 1692374400000,
   };
 
   const snowflakeSource = {

@@ -38,13 +38,10 @@ export interface TransformationExternalDataSnowflakeCredentials {
   accountIdentifier: string;
   userName: string;
   roleName: string;
-  expiryTime?: number;
 }
 
-export interface TransformationExternalDataSnowflakeCredentialsRead {
-  accountIdentifier: string;
-  userName: string;
-  roleName: string;
+export interface TransformationExternalDataSnowflakeCredentialsRead
+  extends TransformationExternalDataSnowflakeCredentials {
   publicKey: string;
 }
 
@@ -76,6 +73,7 @@ export interface TransformationExternalDataSnowflakeCreate {
   format: 'snowflake';
   dataSetId?: CogniteInternalId;
   settings: TransformationExternalDataSnowflakeSettings;
+  expiryTime: number;
 }
 
 export type TransformationExternalDataCreate =
