@@ -19,6 +19,9 @@ import type {
   DataPointSubscriptionsDeleteQuery,
 } from './types';
 
+/**
+ * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release. See https://docs.cognite.com/cdf/deprecated#deprecated-and-retired-features for more details.
+ */
 export class DataPointSubscriptionsAPI extends BaseResourceAPI<DataPointSubscription> {
   /**
    * @hidden
@@ -35,6 +38,8 @@ export class DataPointSubscriptionsAPI extends BaseResourceAPI<DataPointSubscrip
    *   { externalId: 'my_subscription', partitionCount: 1, timeSeriesIds: ['ts_external_id'] },
    * ]);
    * ```
+   *
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
    */
   public create = (
     items: DataPointSubscriptionCreate[]
@@ -48,6 +53,8 @@ export class DataPointSubscriptionsAPI extends BaseResourceAPI<DataPointSubscrip
    * ```js
    * const subscriptions = await client.timeseries.subscriptions.list({ limit: 100 });
    * ```
+   *
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
    */
   public list = (
     query?: DataPointSubscriptionListQuery
@@ -63,6 +70,8 @@ export class DataPointSubscriptionsAPI extends BaseResourceAPI<DataPointSubscrip
    *   items: [{ externalId: 'my_subscription' }],
    * });
    * ```
+   *
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
    */
   public retrieve = (
     query: DataPointSubscriptionByIdsQuery
@@ -81,6 +90,8 @@ export class DataPointSubscriptionsAPI extends BaseResourceAPI<DataPointSubscrip
    *   { externalId: 'my_subscription', update: { name: { set: 'new name' } } },
    * ]);
    * ```
+   *
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
    */
   public update = (
     items: DataPointSubscriptionUpdate[]
@@ -96,6 +107,8 @@ export class DataPointSubscriptionsAPI extends BaseResourceAPI<DataPointSubscrip
    *   items: [{ externalId: 'my_subscription' }],
    * });
    * ```
+   *
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
    */
   public delete = async (
     query: DataPointSubscriptionsDeleteQuery
@@ -127,6 +140,9 @@ export class DataPointSubscriptionsAPI extends BaseResourceAPI<DataPointSubscrip
     );
   };
 
+  /**
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   */
   public listMembers = (
     query: DataPointSubscriptionMembersListQuery
   ): CursorAndAsyncIterator<DataPointSubscriptionMember> => {
@@ -144,6 +160,8 @@ export class DataPointSubscriptionsAPI extends BaseResourceAPI<DataPointSubscrip
    *   initializeCursors: 'now',
    * });
    * ```
+   *
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
    */
   public listData = async (
     query: DataPointSubscriptionListDataQuery

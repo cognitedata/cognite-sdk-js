@@ -4,6 +4,9 @@ import type {
   GeospatialJsonComputeOutput,
 } from './types';
 
+/**
+ * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release. See https://docs.cognite.com/cdf/deprecated#deprecated-and-retired-features for more details.
+ */
 export class ComputeAPI extends BaseResourceAPI<GeospatialComputedItemList> {
   /**
    * [Compute custom json output structures or well known binary format responses based on calculation or selection of feature properties or direct values given in the request.](https://docs.cognite.com/api/v1/#operation/compute)
@@ -23,6 +26,8 @@ export class ComputeAPI extends BaseResourceAPI<GeospatialComputedItemList> {
    *   }
    * });
    * ```
+   *
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
    */
   public compute = async (
     request: GeospatialJsonComputeOutput

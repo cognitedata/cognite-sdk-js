@@ -102,12 +102,21 @@ export default class CogniteClient extends BaseCogniteClient {
   public get securityCategories() {
     return accessApi(this.securityCategoriesApi);
   }
+  /**
+   * @deprecated Asset-centric API, to be retired end of 2027. May move to `client.legacy.models3D` in the next major release. See https://docs.cognite.com/cdf/deprecated#deprecated-and-retired-features for more details.
+   */
   public get models3D() {
     return accessApi(this.models3DApi);
   }
+  /**
+   * @deprecated Asset-centric API, to be retired end of 2027. May move to `client.legacy.revisions3D` in the next major release. See https://docs.cognite.com/cdf/deprecated#deprecated-and-retired-features for more details.
+   */
   public get revisions3D() {
     return accessApi(this.revisions3DApi);
   }
+  /**
+   * @deprecated Asset-centric API, to be retired end of 2027. May move to `client.legacy.files3D` in the next major release. See https://docs.cognite.com/cdf/deprecated#deprecated-and-retired-features for more details.
+   */
   public get files3D() {
     return accessApi(this.files3DApi);
   }
@@ -117,12 +126,21 @@ export default class CogniteClient extends BaseCogniteClient {
   public get datasets() {
     return accessApi(this.datasetsApi);
   }
+  /**
+   * @deprecated Asset-centric API, to be retired end of 2027. May move to `client.legacy.assetMappings3D` in the next major release. See https://docs.cognite.com/cdf/deprecated#deprecated-and-retired-features for more details.
+   */
   public get assetMappings3D() {
     return accessApi(this.assetMappings3DApi);
   }
+  /**
+   * @deprecated Asset-centric API, to be retired end of 2027. May move to `client.legacy.viewer3D` in the next major release. See https://docs.cognite.com/cdf/deprecated#deprecated-and-retired-features for more details.
+   */
   public get viewer3D() {
     return accessApi(this.viewer3DApi);
   }
+  /**
+   * @deprecated Asset-centric API, will move to `client.legacy.relationships` in the next major release. See https://docs.cognite.com/cdf/deprecated#deprecated-and-retired-features for more details.
+   */
   public get relationships() {
     return accessApi(this.relationshipsApi);
   }
@@ -141,6 +159,9 @@ export default class CogniteClient extends BaseCogniteClient {
   public get documents() {
     return accessApi(this.documentsApi);
   }
+  /**
+   * @deprecated Asset-centric API, will move to `client.legacy.annotations` in the next major release. See https://docs.cognite.com/cdf/deprecated#deprecated-and-retired-features for more details.
+   */
   public get annotations() {
     return accessApi(this.annotationsApi);
   }

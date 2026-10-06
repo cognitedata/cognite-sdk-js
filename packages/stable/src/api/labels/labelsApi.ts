@@ -11,6 +11,9 @@ import type {
   LabelDefinitionFilterRequest,
 } from '../../types';
 
+/**
+ * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release. See https://docs.cognite.com/cdf/deprecated#deprecated-and-retired-features for more details.
+ */
 export class LabelsAPI extends BaseResourceAPI<LabelDefinition> {
   /**
    * @hidden
@@ -29,6 +32,8 @@ export class LabelsAPI extends BaseResourceAPI<LabelDefinition> {
    * ];
    * const createdLabels = await client.labels.create(labels);
    * ```
+   *
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
    */
   public create = (
     items: ExternalLabelDefinition[]
@@ -42,6 +47,8 @@ export class LabelsAPI extends BaseResourceAPI<LabelDefinition> {
    * ```js
    * const labels = await client.labels.list({ filter: { externalIdPrefix: 'Pu'}});
    * ```
+   *
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
    */
   public list = (
     query?: LabelDefinitionFilterRequest
@@ -55,6 +62,8 @@ export class LabelsAPI extends BaseResourceAPI<LabelDefinition> {
    * ```js
    * await client.labels.delete([{externalId: 'PUMP'}, {externalId: 'VALVE'}]);
    * ```
+   *
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
    */
   public delete = (ids: ExternalId[]) => {
     return super.deleteEndpoint(ids);

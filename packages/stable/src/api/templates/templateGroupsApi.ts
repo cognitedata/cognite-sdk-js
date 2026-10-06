@@ -11,6 +11,9 @@ import type {
   TemplateGroupFilterQuery,
 } from '../../types';
 
+/**
+ * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release. See https://docs.cognite.com/cdf/deprecated#deprecated-and-retired-features for more details.
+ */
 export class TemplateGroupsApi extends BaseResourceAPI<TemplateGroup> {
   /**
    * [Create Template Groups](https://pr-1202.specs.preview.cogniteapp.com/v1.json.html#operation/postApiV1ProjectsProjectTemplategroups)
@@ -21,6 +24,8 @@ export class TemplateGroupsApi extends BaseResourceAPI<TemplateGroup> {
    * ];
    * const createdTemplateGroups = await client.templates.groups.create(templateGroups);
    * ```
+   *
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
    */
   public create = (
     items: ExternalTemplateGroup[]
@@ -37,6 +42,8 @@ export class TemplateGroupsApi extends BaseResourceAPI<TemplateGroup> {
    * ];
    * const upsertedTemplateGroups = await client.templates.groups.upsert(templateGroups);
    * ```
+   *
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
    */
   public upsert = (
     items: ExternalTemplateGroup[]
@@ -50,6 +57,8 @@ export class TemplateGroupsApi extends BaseResourceAPI<TemplateGroup> {
    * ```js
    * const templateGroups = await client.templates.groups.retrieve([{externalId: 'abc'}]);
    * ```
+   *
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
    */
   public retrieve = (
     ids: ExternalId[],
@@ -64,6 +73,8 @@ export class TemplateGroupsApi extends BaseResourceAPI<TemplateGroup> {
    * ```js
    * const templateGroups = await client.templates.groups.list({ filter: { owners: ["user.name@example.com"] } });
    * ```
+   *
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
    */
   public list = (
     query?: TemplateGroupFilterQuery
@@ -77,6 +88,8 @@ export class TemplateGroupsApi extends BaseResourceAPI<TemplateGroup> {
    * ```js
    * await client.templates.groups.delete([{ externalId: "Wells" }]);
    * ```
+   *
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
    */
   public delete = (
     ids: ExternalId[],

@@ -4,6 +4,9 @@ import { BaseResourceAPI } from '@cognite/sdk-core';
 import type { DatapointInfo } from '../../types/common';
 import type { SyntheticQuery, SyntheticQueryResponse } from './types';
 
+/**
+ * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release. See https://docs.cognite.com/cdf/deprecated#deprecated-and-retired-features for more details.
+ */
 export class SyntheticTimeSeriesAPI extends BaseResourceAPI<SyntheticQueryResponse> {
   /**
    * @hidden
@@ -15,6 +18,9 @@ export class SyntheticTimeSeriesAPI extends BaseResourceAPI<SyntheticQueryRespon
     );
   }
 
+  /**
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   */
   public query = (
     items: SyntheticQuery[]
   ): Promise<SyntheticQueryResponse[]> => {

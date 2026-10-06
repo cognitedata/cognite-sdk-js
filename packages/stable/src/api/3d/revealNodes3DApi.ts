@@ -10,7 +10,13 @@ import type {
   RevealNode3D,
 } from '../../types';
 
+/**
+ * @deprecated Asset-centric API, to be retired end of 2027. May move to `client.legacy` in the next major release. See https://docs.cognite.com/cdf/deprecated#deprecated-and-retired-features for more details.
+ */
 export class RevealNodes3DAPI extends BaseResourceAPI<RevealNode3D> {
+  /**
+   * @deprecated Asset-centric API, to be retired end of 2027. May move to `client.legacy` in the next major release.
+   */
   public list(
     modelId: CogniteInternalId,
     revisionId: CogniteInternalId,
@@ -20,6 +26,9 @@ export class RevealNodes3DAPI extends BaseResourceAPI<RevealNode3D> {
     return super.listEndpoint((params) => this.get(path, { params }), scope);
   }
 
+  /**
+   * @deprecated Asset-centric API, to be retired end of 2027. May move to `client.legacy` in the next major release.
+   */
   public listAncestors(
     modelId: CogniteInternalId,
     revisionId: CogniteInternalId,

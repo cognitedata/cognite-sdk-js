@@ -10,6 +10,9 @@ import { FeatureAPI } from './featureAPI';
 import { FeatureTypeAPI } from './featureTypeAPI';
 import type { Geospatial } from './types';
 
+/**
+ * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release. See https://docs.cognite.com/cdf/deprecated#deprecated-and-retired-features for more details.
+ */
 export class GeospatialAPI extends BaseResourceAPI<Geospatial> {
   private readonly computeAPI: ComputeAPI;
   private readonly crsAPI: CrsAPI;

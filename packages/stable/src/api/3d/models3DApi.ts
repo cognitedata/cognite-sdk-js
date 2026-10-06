@@ -13,6 +13,9 @@ import type {
   UpdateModel3D,
 } from '../../types';
 
+/**
+ * @deprecated Asset-centric API, to be retired end of 2027. May move to `client.legacy` in the next major release. See https://docs.cognite.com/cdf/deprecated#deprecated-and-retired-features for more details.
+ */
 export class Models3DAPI extends BaseResourceAPI<Model3D> {
   /**
    * @hidden
@@ -31,6 +34,8 @@ export class Models3DAPI extends BaseResourceAPI<Model3D> {
    * ];
    * const models3D = await client.models3D.create(modelsToCreate);
    * ```
+   *
+   * @deprecated Asset-centric API, to be retired end of 2027. May move to `client.legacy` in the next major release.
    */
   public create = (models: CreateModel3D[]): Promise<Model3D[]> => {
     return super.createEndpoint(models);
@@ -42,6 +47,8 @@ export class Models3DAPI extends BaseResourceAPI<Model3D> {
    * ```js
    * const models3D = await client.models3D.list({ published: true });
    * ```
+   *
+   * @deprecated Asset-centric API, to be retired end of 2027. May move to `client.legacy` in the next major release.
    */
   public list = (
     scope?: Model3DListRequest
@@ -55,6 +62,8 @@ export class Models3DAPI extends BaseResourceAPI<Model3D> {
    * ```js
    * await client.models3D.retrieve(3744350296805509);
    * ```
+   *
+   * @deprecated Asset-centric API, to be retired end of 2027. May move to `client.legacy` in the next major release.
    */
   public retrieve = async (id: CogniteInternalId): Promise<Model3D> => {
     const path = this.url(`${id}`);
@@ -72,6 +81,8 @@ export class Models3DAPI extends BaseResourceAPI<Model3D> {
    * ];
    * const models3D = await client.models3D.update(modelsToUpdate);
    * ```
+   *
+   * @deprecated Asset-centric API, to be retired end of 2027. May move to `client.legacy` in the next major release.
    */
   public update = (changes: UpdateModel3D[]): Promise<Model3D[]> => {
     return super.updateEndpoint(changes);
@@ -83,6 +94,8 @@ export class Models3DAPI extends BaseResourceAPI<Model3D> {
    * ```js
    * await client.models3D.delete([{ id: 3744350296805509 }, { id: 8163365893677939 }]);
    * ```
+   *
+   * @deprecated Asset-centric API, to be retired end of 2027. May move to `client.legacy` in the next major release.
    */
   public delete = (ids: InternalId[]) => {
     return super.deleteEndpoint(ids);

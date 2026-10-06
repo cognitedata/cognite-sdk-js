@@ -19,6 +19,9 @@ import { RevealRevisions3DAPI } from './revealRevisions3DApi';
 import { RevealSectors3DAPI } from './revealSectors3DApi';
 import { UnrealRevisions3DAPI } from './unrealRevisions3DApi';
 
+/**
+ * @deprecated Asset-centric API, to be retired end of 2027. May move to `client.legacy` in the next major release. See https://docs.cognite.com/cdf/deprecated#deprecated-and-retired-features for more details.
+ */
 export class Viewer3DAPI extends BaseResourceAPI<unknown> {
   private revealRevisions3DAPI: RevealRevisions3DAPI;
   private revealNodes3DAPI: RevealNodes3DAPI;
@@ -57,6 +60,8 @@ export class Viewer3DAPI extends BaseResourceAPI<unknown> {
    * ```js
    * const revisionReveal = await client.viewer3D.retrieveRevealRevision3D(294879032167592, 3247239473298342)
    * ```
+   *
+   * @deprecated Asset-centric API, to be retired end of 2027. May move to `client.legacy` in the next major release.
    */
   public retrieveRevealRevision3D = (
     modelId: CogniteInternalId,
@@ -73,6 +78,8 @@ export class Viewer3DAPI extends BaseResourceAPI<unknown> {
    *  .listRevealNodes3D(8252999965991682, 4190022127342195)
    *  .autoPagingToArray();
    * ```
+   *
+   * @deprecated Asset-centric API, to be retired end of 2027. May move to `client.legacy` in the next major release.
    */
   public listRevealNodes3D = (
     modelId: CogniteInternalId,
@@ -90,6 +97,8 @@ export class Viewer3DAPI extends BaseResourceAPI<unknown> {
    *  .listRevealNode3DAncestors(8252999965991682, 4190022127342195, 120982398890213)
    *  .autoPagingToArray();
    * ```
+   *
+   * @deprecated Asset-centric API, to be retired end of 2027. May move to `client.legacy` in the next major release.
    */
   public listRevealNode3DAncestors = (
     modelId: CogniteInternalId,
@@ -113,6 +122,8 @@ export class Viewer3DAPI extends BaseResourceAPI<unknown> {
    *  .listRevealSectors3D(8252999965991682, 4190022127342195, { limit: 10 })
    *  .autoPagingToArray();
    * ```
+   *
+   * @deprecated Asset-centric API, to be retired end of 2027. May move to `client.legacy` in the next major release.
    */
   public listRevealSectors3D = (
     modelId: CogniteInternalId,
@@ -128,6 +139,8 @@ export class Viewer3DAPI extends BaseResourceAPI<unknown> {
    * ```js
    * const revisions3DUnreal = await client.viewer3D.retrieveUnrealRevision3D(8252999965991682, 4190022127342195);
    * ```
+   *
+   * @deprecated Asset-centric API, to be retired end of 2027. May move to `client.legacy` in the next major release.
    */
   public retrieveUnrealRevision3D = (
     modelId: CogniteInternalId,

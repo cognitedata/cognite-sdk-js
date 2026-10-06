@@ -14,6 +14,9 @@ import type {
   Filter3DAssetMappingsQuery,
 } from '../../types';
 
+/**
+ * @deprecated Asset-centric API, to be retired end of 2027. May move to `client.legacy` in the next major release. See https://docs.cognite.com/cdf/deprecated#deprecated-and-retired-features for more details.
+ */
 export class AssetMappings3DAPI extends BaseResourceAPI<AssetMapping3D> {
   /**
    * [List 3D asset mappings](https://doc.cognitedata.com/api/v1/#operation/get3DMappings)
@@ -21,6 +24,8 @@ export class AssetMappings3DAPI extends BaseResourceAPI<AssetMapping3D> {
    * ```js
    * const mappings3D = await client.assetMappings3D.list(3244265346345, 32423454353545);
    * ```
+   *
+   * @deprecated Asset-centric API, to be retired end of 2027. May move to `client.legacy` in the next major release.
    */
   public list = (
     modelId: CogniteInternalId,
@@ -44,6 +49,8 @@ export class AssetMappings3DAPI extends BaseResourceAPI<AssetMapping3D> {
    *   }
    * });
    * ```
+   *
+   * @deprecated Asset-centric API, to be retired end of 2027. May move to `client.legacy` in the next major release.
    */
   public filter = (
     modelId: CogniteInternalId,
@@ -78,6 +85,8 @@ export class AssetMappings3DAPI extends BaseResourceAPI<AssetMapping3D> {
    *  assetMappingsToCreate
    * );
    * ```
+   *
+   * @deprecated Asset-centric API, to be retired end of 2027. May move to `client.legacy` in the next major release.
    */
   public create = (
     modelId: CogniteInternalId,
@@ -104,6 +113,8 @@ export class AssetMappings3DAPI extends BaseResourceAPI<AssetMapping3D> {
    * ];
    * await client.assetMappings3D.delete(8252999965991682, 4190022127342195, assetMappingsToDelete);
    * ```
+   *
+   * @deprecated Asset-centric API, to be retired end of 2027. May move to `client.legacy` in the next major release.
    */
   public delete = (
     modelId: CogniteInternalId,

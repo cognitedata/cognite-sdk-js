@@ -3,6 +3,9 @@
 import { BaseResourceAPI } from '@cognite/sdk-core';
 import type { CogniteInternalId, UnrealRevision3D } from '../../types';
 
+/**
+ * @deprecated Asset-centric API, to be retired end of 2027. May move to `client.legacy` in the next major release. See https://docs.cognite.com/cdf/deprecated#deprecated-and-retired-features for more details.
+ */
 export class UnrealRevisions3DAPI extends BaseResourceAPI<UnrealRevision3D> {
   /**
    * @hidden
@@ -11,6 +14,9 @@ export class UnrealRevisions3DAPI extends BaseResourceAPI<UnrealRevision3D> {
     return this.pickDateProps(['items'], ['createdTime']);
   }
 
+  /**
+   * @deprecated Asset-centric API, to be retired end of 2027. May move to `client.legacy` in the next major release.
+   */
   public async retrieve(
     modelId: CogniteInternalId,
     revisionId: CogniteInternalId
