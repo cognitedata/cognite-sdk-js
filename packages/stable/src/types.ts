@@ -2947,6 +2947,7 @@ export type {
 } from './api/instances/types.gen';
 
 export type {
+  QueryRequestInput,
   QueryResult,
   QueryTypedSources,
 } from './api/instances/query.types';

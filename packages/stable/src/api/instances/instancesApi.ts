@@ -1,7 +1,11 @@
 // Copyright 2023 Cognite AS
 
 import { BaseResourceAPI } from '@cognite/sdk-core';
-import type { QueryResult, QueryTypedSources } from './query.types';
+import type {
+  QueryRequestInput,
+  QueryResult,
+  QueryTypedSources,
+} from './query.types';
 import type {
   AggregationRequest,
   AggregationResponse,
@@ -223,7 +227,8 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    * kind, spaces, views and property names inferred. A request typed as the
    * plain QueryRequest gives the untyped QueryResponse. Property values are
    * RawPropertyValueV3 unless you supply their types as the second type
-   * argument, see QueryTypedSources.
+   * argument, see QueryTypedSources. Cursor values from a previous response
+   * can be passed straight through, see QueryRequestInput.
    *
    * ```js
    *  const query = {
@@ -255,7 +260,7 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    * ```
    */
   public query = async <
-    TRequest extends QueryRequest = QueryRequest,
+    TRequest extends QueryRequestInput = QueryRequest,
     TTypedSources extends QueryTypedSources = [],
   >(
     params: TRequest

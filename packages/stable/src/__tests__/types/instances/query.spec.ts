@@ -8,6 +8,7 @@ import type {
   NodeOrEdge,
   PropertyValueGroupV3,
   QueryRequest,
+  QueryRequestInput,
   QueryResponse,
   QueryResult,
   QuerySelectV3,
@@ -82,6 +83,18 @@ describe('instances.query response types', () => {
     expectTypeOf<Awaited<ReturnType<Query>>>().toEqualTypeOf<QueryResponse>();
     expectTypeOf<ResultOf<QueryRequest>>().toEqualTypeOf<QueryResponse>();
     expectTypeOf<QueryResult<QueryRequest>>().toEqualTypeOf<QueryResponse>();
+    expectTypeOf<
+      QueryResult<QueryRequestInput>
+    >().toEqualTypeOf<QueryResponse>();
+  });
+
+  test('a cursor from a previous response can be passed straight through', () => {
+    type Previous = ConstResult['nextCursor']['nodesA'];
+    expectTypeOf<{
+      with: { nodesA: { nodes: Record<never, never> } };
+      select: { nodesA: Record<never, never> };
+      cursors: { nodesA: Previous };
+    }>().toMatchTypeOf<Parameters<Query>[0]>();
   });
 
   test('items has one array per select key', () => {

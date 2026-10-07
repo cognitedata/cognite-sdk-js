@@ -40,6 +40,18 @@ export type QueryTypedSources = ReadonlyArray<{
 }>;
 
 /**
+ * Request type accepted by `instances.query`: a `QueryRequest` whose cursor
+ * values may also be `undefined`, so that passing a cursor from a previous
+ * response straight through (`cursors: { alias: previous.nextCursor.alias }`)
+ * compiles. An `undefined` value is dropped when the request is serialised,
+ * so the API never sees it.
+ */
+export type QueryRequestInput = Omit<QueryRequest, 'cursors'> & {
+  /** Cursors returned from the previous query request, keyed by result set. */
+  cursors?: Record<string, NextCursorV3 | undefined>;
+};
+
+/**
  * Response type of `instances.query`, derived from the shape of the request.
  *
  * The DMS query response mirrors the request: `items` has one array per key in
@@ -81,13 +93,14 @@ export type QueryTypedSources = ReadonlyArray<{
  * Known limitation: when the same view is listed twice in `sources`, the API
  * keeps only the last entry, while this type merges both property lists.
  *
- * @typeParam TRequest - The request type. Use `typeof query` on a request
- *   declared `as const satisfies QueryRequest` for full inference.
+ * @typeParam TRequest - The request type ({@link QueryRequestInput}). Use
+ *   `typeof query` on a request declared `as const satisfies QueryRequest` for
+ *   full inference.
  * @typeParam TTypedSources - Optional {@link QueryTypedSources} with concrete
  *   property value types per view.
  */
 export type QueryResult<
-  TRequest extends QueryRequest,
+  TRequest extends QueryRequestInput,
   TTypedSources extends QueryTypedSources = [],
 > = QueryRequest extends TRequest
   ? QueryResponse
@@ -122,7 +135,7 @@ type WithDynamicKeys<TKnown, TFallback> = TKnown & {
 };
 
 type ResultItem<
-  TRequest extends QueryRequest,
+  TRequest extends QueryRequestInput,
   Alias extends keyof TRequest['select'],
   TTypedSources extends QueryTypedSources,
 > = WithSelectedProperties<
