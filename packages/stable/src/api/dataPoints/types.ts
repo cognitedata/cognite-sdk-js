@@ -209,6 +209,7 @@ export interface DatapointsInsertProperties {
 /** @deprecated Use DatapointsInsertProperties instead. Will be removed in next major release. */
 export type ExternalDatapoints = DatapointsInsertProperties;
 
+/** @deprecated Addressing time series by externalId is deprecated, use DatapointsInsertByInstanceId instead. Will be removed in next major release. */
 export interface DatapointsInsertByExternalId
   extends DatapointsInsertProperties,
     ExternalId {}
@@ -223,6 +224,7 @@ export interface DatapointsInsertByInstanceId
 /** @deprecated Use DatapointsInsertByInstanceId instead. Will be removed in next major release. */
 export type ExternalDatapointInstanceId = DatapointsInsertByInstanceId;
 
+/** @deprecated Addressing time series by internal id is deprecated, use DatapointsInsertByInstanceId instead. Will be removed in next major release. */
 export interface DatapointsInsertById
   extends DatapointsInsertProperties,
     InternalId {}
@@ -287,10 +289,12 @@ export type DatapointsQuery =
   | DatapointsQueryExternalId
   | DatapointsQueryInstanceId;
 
+/** @deprecated Addressing time series by externalId is deprecated, use DatapointsQueryInstanceId instead. Will be removed in next major release. */
 export interface DatapointsQueryExternalId
   extends DatapointsQueryProperties,
     ExternalId {}
 
+/** @deprecated Addressing time series by internal id is deprecated, use DatapointsQueryInstanceId instead. Will be removed in next major release. */
 export interface DatapointsQueryId
   extends DatapointsQueryProperties,
     InternalId {}
