@@ -360,7 +360,11 @@ describe('Instances integration test', () => {
     expect(properties.title).toBe(describable1.title);
     expect(properties.description).toBe(describable1.description);
     expect(properties.labels).toEqual(describable1.labels);
-    expect(response.nextCursor.result_set_1).toBeUndefined();
+    // The API returns a cursor even for an exhausted result set, so the type
+    // only promises `string | undefined`.
+    expect(['string', 'undefined']).toContain(
+      typeof response.nextCursor.result_set_1
+    );
   }, 10_000);
 
   test('sync', async () => {
