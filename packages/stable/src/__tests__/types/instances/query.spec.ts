@@ -133,11 +133,14 @@ describe('instances.query response types', () => {
     >().toEqualTypeOf<EdgeDefinition>();
   });
 
-  test('nextCursor is keyed like with, and each cursor may be absent', () => {
+  test('nextCursor has an optional entry per selected result set', () => {
     expectTypeOf<ConstResult['nextCursor']['nodesA']>().toEqualTypeOf<
       string | undefined
     >();
     expectTypeOf<ConstResult['nextCursor'][string]>().toEqualTypeOf<string>();
+    expectTypeOf<keyof KnownKeys<ConstResult['nextCursor']>>().toEqualTypeOf<
+      'nodesA' | 'edgesB'
+    >();
   });
 
   test('indexing with a runtime string keeps compiling, with the wide types', () => {

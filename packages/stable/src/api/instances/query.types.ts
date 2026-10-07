@@ -67,9 +67,10 @@ export type QueryTypedSources = ReadonlyArray<{
  * - A property list that is a widened array (`(keyof T)[]` rather than a tuple)
  *   makes every property optional, since the type cannot know which ones were
  *   selected. `['*']` or a plain `string[]` gives `Record<string, RawPropertyValueV3>`.
- * - `nextCursor` entries are optional, keyed like `with`. Note that the API
- *   can return a cursor for a result set that has no more data, so paginate
- *   until a page comes back empty rather than until the cursor is absent.
+ * - `nextCursor` has an optional entry per selected result set. The API omits
+ *   the cursor for an exhausted result set in most cases, but has been seen to
+ *   return one for a single-item result set too, so paginate until a page
+ *   comes back empty rather than relying on the cursor being absent.
  * - A `with` expression that is a union of a nodes and an edges expression gives
  *   `NodeDefinition | EdgeDefinition`.
  *
@@ -102,9 +103,9 @@ export type QueryResult<
         },
         NodeOrEdge[]
       >;
-      /** Cursors per result set, keyed like `with`. May be absent. */
+      /** Cursors per selected result set. May be absent. */
       nextCursor: WithDynamicKeys<
-        { [Alias in keyof TRequest['with']]?: NextCursorV3 },
+        { [Alias in keyof TRequest['select']]?: NextCursorV3 },
         NextCursorV3
       >;
       /** Property type information for selected result expressions. */
