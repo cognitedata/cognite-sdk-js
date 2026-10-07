@@ -1,6 +1,6 @@
 // Copyright 2024 Cognite AS
 
-import type { ViewReference } from 'stable/src/types';
+import type { QueryRequest, ViewReference } from 'stable/src/types';
 import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest';
 import type CogniteClient from '../../cogniteClient';
 import { randomInt, setupLoggedInClient } from '../testUtils';
@@ -58,12 +58,12 @@ describe('Instances integration test', () => {
     name: TEST_SPACE_EXT_ID,
     description: 'Instance space used for integration tests.',
   };
-  const view: ViewReference = {
+  const view = {
     externalId: 'Describable',
     space: 'cdf_core',
     type: 'view',
     version: 'v1',
-  };
+  } as const satisfies ViewReference;
 
   const describable1: Describable = {
     externalId: `describable_1_${timestamp}`,
@@ -319,6 +319,48 @@ describe('Instances integration test', () => {
       },
     });
     expect(response.items.result_set_1).toHaveLength(1);
+  }, 10_000);
+
+  test('query with a const request returns typed properties', async () => {
+    const query = {
+      with: {
+        result_set_1: {
+          nodes: {
+            filter: {
+              equals: {
+                property: ['node', 'externalId'],
+                value: describable1.externalId,
+              },
+            },
+          },
+        },
+      },
+      select: {
+        result_set_1: {
+          sources: [
+            { source: view, properties: ['title', 'description', 'labels'] },
+          ],
+        },
+      },
+    } as const satisfies QueryRequest;
+
+    const response = await client.instances.query<
+      typeof query,
+      [
+        {
+          source: typeof view;
+          properties: { title: string; description: string; labels: string[] };
+        },
+      ]
+    >(query);
+
+    expect(response.items.result_set_1).toHaveLength(1);
+    const properties =
+      response.items.result_set_1[0].properties.cdf_core['Describable/v1'];
+    expect(properties.title).toBe(describable1.title);
+    expect(properties.description).toBe(describable1.description);
+    expect(properties.labels).toEqual(describable1.labels);
+    expect(response.nextCursor.result_set_1).toBeUndefined();
   }, 10_000);
 
   test('sync', async () => {
