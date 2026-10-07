@@ -9,7 +9,7 @@ import type {
 } from './types';
 
 /**
- * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release. See https://docs.cognite.com/cdf/deprecated#deprecated-and-retired-features for more details.
+ * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.geospatial` in the next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md for details.
  */
 export class CrsAPI extends BaseResourceAPI<GeospatialCRSResponse> {
   /**
@@ -25,7 +25,7 @@ export class CrsAPI extends BaseResourceAPI<GeospatialCRSResponse> {
    * const createdCRS = await client.geospatial.crs.create(crsToCreate);
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.geospatial` in the next major release.
    */
   public create = (
     crs: GeospatialCoordinateReferenceSystem[]
@@ -40,7 +40,7 @@ export class CrsAPI extends BaseResourceAPI<GeospatialCRSResponse> {
    * const retrievedCRS = await client.geospatial.crs.retrieve([{ srid: 4326 }]);
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.geospatial` in the next major release.
    */
   public retrieve = (
     srids: GeospatialSridId[]
@@ -56,7 +56,7 @@ export class CrsAPI extends BaseResourceAPI<GeospatialCRSResponse> {
    * const allCRS = await client.geospatial.crs.list({ filterOnlyCustom : true });
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.geospatial` in the next major release.
    */
   public list = (params?: {
     filterOnlyCustom?: boolean;
@@ -74,7 +74,7 @@ export class CrsAPI extends BaseResourceAPI<GeospatialCRSResponse> {
    * await client.geospatial.crs.delete([{ srid: 4326}]);
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.geospatial` in the next major release.
    */
   public delete = (srids: GeospatialSridId[]) => {
     return this.deleteEndpoint<object, GeospatialSridId>(srids);

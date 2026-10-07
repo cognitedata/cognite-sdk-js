@@ -12,32 +12,32 @@ import type {
 } from '../../types';
 
 /**
- * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release. See https://docs.cognite.com/cdf/deprecated#deprecated-and-retired-features for more details.
+ * @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md for details.
  */
 export class ViewsApi extends BaseResourceAPI<View> {
   /**
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release.
    */
   public create = (items: ExternalView[]): Promise<View[]> => {
     return this.createEndpoint(items);
   };
 
   /**
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release.
    */
   public upsert = (items: ExternalView[]): Promise<View[]> => {
     return this.createEndpoint(items, this.url('upsert'));
   };
 
   /**
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release.
    */
   public list = (query?: ViewFilterQuery): CursorAndAsyncIterator<View> => {
     return this.listEndpoint(this.callListEndpointWithPost, query);
   };
 
   /**
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release.
    */
   public resolve = <T>(
     resolveRequest: ViewResolveRequest
@@ -59,7 +59,7 @@ export class ViewsApi extends BaseResourceAPI<View> {
   };
 
   /**
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release.
    */
   public delete = (
     ids: ExternalId[],

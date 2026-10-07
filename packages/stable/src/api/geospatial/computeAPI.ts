@@ -5,7 +5,7 @@ import type {
 } from './types';
 
 /**
- * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release. See https://docs.cognite.com/cdf/deprecated#deprecated-and-retired-features for more details.
+ * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.geospatial` in the next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md for details.
  */
 export class ComputeAPI extends BaseResourceAPI<GeospatialComputedItemList> {
   /**
@@ -27,7 +27,7 @@ export class ComputeAPI extends BaseResourceAPI<GeospatialComputedItemList> {
    * });
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.geospatial` in the next major release.
    */
   public compute = async (
     request: GeospatialJsonComputeOutput

@@ -14,7 +14,7 @@ import type {
 } from '../../types';
 
 /**
- * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release. See https://docs.cognite.com/cdf/deprecated#deprecated-and-retired-features for more details.
+ * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.relationships` in the next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md for details.
  */
 export class RelationshipsApi extends BaseResourceAPI<Relationship> {
   /**
@@ -40,7 +40,7 @@ export class RelationshipsApi extends BaseResourceAPI<Relationship> {
    * const createdRelationships = await client.relationships.create(relationships);
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.relationships` in the next major release.
    */
   public create = (items: ExternalRelationship[]): Promise<Relationship[]> => {
     return this.createEndpoint(items);
@@ -53,7 +53,7 @@ export class RelationshipsApi extends BaseResourceAPI<Relationship> {
    * const relationships = await client.relationships.list({ filter: { createdTime: { min: new Date('1 jan 2018'), max: new Date('1 jan 2019') }}});
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.relationships` in the next major release.
    */
   public list = (
     query?: RelationshipsFilterRequest
@@ -68,7 +68,7 @@ export class RelationshipsApi extends BaseResourceAPI<Relationship> {
    * const relationships = await client.relationships.retrieve([{externalId: 'abc'}, {externalId: 'def'}]);
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.relationships` in the next major release.
    */
   public retrieve = (
     ids: ExternalId[],
@@ -84,7 +84,7 @@ export class RelationshipsApi extends BaseResourceAPI<Relationship> {
    * await client.relationships.delete([{externalId: 'abc'}, {externalId: 'def'}]);
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.relationships` in the next major release.
    */
   public delete = (
     ids: ExternalId[],

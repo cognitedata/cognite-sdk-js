@@ -20,7 +20,7 @@ import type {
 } from './types';
 
 /**
- * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release. See https://docs.cognite.com/cdf/deprecated#deprecated-and-retired-features for more details.
+ * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.timeseries` in the next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md for details.
  */
 export class DataPointSubscriptionsAPI extends BaseResourceAPI<DataPointSubscription> {
   /**
@@ -39,7 +39,7 @@ export class DataPointSubscriptionsAPI extends BaseResourceAPI<DataPointSubscrip
    * ]);
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.timeseries` in the next major release.
    */
   public create = (
     items: DataPointSubscriptionCreate[]
@@ -54,7 +54,7 @@ export class DataPointSubscriptionsAPI extends BaseResourceAPI<DataPointSubscrip
    * const subscriptions = await client.timeseries.subscriptions.list({ limit: 100 });
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.timeseries` in the next major release.
    */
   public list = (
     query?: DataPointSubscriptionListQuery
@@ -71,7 +71,7 @@ export class DataPointSubscriptionsAPI extends BaseResourceAPI<DataPointSubscrip
    * });
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.timeseries` in the next major release.
    */
   public retrieve = (
     query: DataPointSubscriptionByIdsQuery
@@ -91,7 +91,7 @@ export class DataPointSubscriptionsAPI extends BaseResourceAPI<DataPointSubscrip
    * ]);
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.timeseries` in the next major release.
    */
   public update = (
     items: DataPointSubscriptionUpdate[]
@@ -108,7 +108,7 @@ export class DataPointSubscriptionsAPI extends BaseResourceAPI<DataPointSubscrip
    * });
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.timeseries` in the next major release.
    */
   public delete = async (
     query: DataPointSubscriptionsDeleteQuery
@@ -141,7 +141,7 @@ export class DataPointSubscriptionsAPI extends BaseResourceAPI<DataPointSubscrip
   };
 
   /**
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.timeseries` in the next major release.
    */
   public listMembers = (
     query: DataPointSubscriptionMembersListQuery
@@ -161,7 +161,7 @@ export class DataPointSubscriptionsAPI extends BaseResourceAPI<DataPointSubscrip
    * });
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.timeseries` in the next major release.
    */
   public listData = async (
     query: DataPointSubscriptionListDataQuery

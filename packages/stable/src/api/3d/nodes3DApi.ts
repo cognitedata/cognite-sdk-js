@@ -13,13 +13,7 @@ import type {
   Node3D,
 } from '../../types';
 
-/**
- * @deprecated Asset-centric API, to be retired end of 2027. May move to `client.legacy` in the next major release. See https://docs.cognite.com/cdf/deprecated#deprecated-and-retired-features for more details.
- */
 export class Nodes3DAPI extends BaseResourceAPI<Node3D> {
-  /**
-   * @deprecated Asset-centric API, to be retired end of 2027. May move to `client.legacy` in the next major release.
-   */
   public list(
     modelId: CogniteInternalId,
     revisionId: CogniteInternalId,
@@ -32,9 +26,6 @@ export class Nodes3DAPI extends BaseResourceAPI<Node3D> {
     );
   }
 
-  /**
-   * @deprecated Asset-centric API, to be retired end of 2027. May move to `client.legacy` in the next major release.
-   */
   public filter(
     modelId: CogniteInternalId,
     revisionId: CogniteInternalId,
@@ -47,9 +38,6 @@ export class Nodes3DAPI extends BaseResourceAPI<Node3D> {
     );
   }
 
-  /**
-   * @deprecated Asset-centric API, to be retired end of 2027. May move to `client.legacy` in the next major release.
-   */
   public retrieve = (
     modelId: CogniteInternalId,
     revisionId: CogniteInternalId,
@@ -59,9 +47,6 @@ export class Nodes3DAPI extends BaseResourceAPI<Node3D> {
     return super.retrieveEndpoint(ids, {}, path);
   };
 
-  /**
-   * @deprecated Asset-centric API, to be retired end of 2027. May move to `client.legacy` in the next major release.
-   */
   public listAncestors(
     modelId: CogniteInternalId,
     revisionId: CogniteInternalId,

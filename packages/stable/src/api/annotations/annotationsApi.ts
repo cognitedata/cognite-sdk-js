@@ -20,7 +20,7 @@ import type {
 } from '../../types';
 
 /**
- * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release. See https://docs.cognite.com/cdf/deprecated#deprecated-and-retired-features for more details.
+ * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.annotations` in the next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md for details.
  */
 export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
   /**
@@ -57,7 +57,7 @@ export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
    * const created = await client.annotations.create([annotation]);
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.annotations` in the next major release.
    */
   public create = (items: AnnotationCreate[]) => {
     return this.createEndpoint(items);
@@ -85,7 +85,7 @@ export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
    * const created = await client.annotations.suggest([partial]);
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.annotations` in the next major release.
    */
   public suggest = (items: AnnotationSuggest[]) => {
     return this.createEndpoint(items, this.suggestUrl);
@@ -102,7 +102,7 @@ export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
    * const response = await client.annotations.retrieve(annotationIds);
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.annotations` in the next major release.
    */
   public retrieve = (ids: InternalId[]) => {
     return this.retrieveEndpoint(ids);
@@ -122,7 +122,7 @@ export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
    * });
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.annotations` in the next major release.
    */
   public list = (
     filter: AnnotationFilterRequest
@@ -138,7 +138,7 @@ export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
    * await client.annotations.delete(annotationIds);
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.annotations` in the next major release.
    */
   public delete = (ids: InternalId[]) => {
     return this.deleteEndpoint(ids);
@@ -167,7 +167,7 @@ export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
    * const updatedResp = await client.annotations.update(changes);
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.annotations` in the next major release.
    */
   public update = (changes: AnnotationChangeById[]) => {
     return this.updateEndpoint(changes);
@@ -190,7 +190,7 @@ export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
    * const resourceIdsResponse = client.annotations.reverseLookup(assetQueryData);
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.annotations` in the next major release.
    */
   public reverseLookup = (
     filter: AnnotationReverseLookupRequest

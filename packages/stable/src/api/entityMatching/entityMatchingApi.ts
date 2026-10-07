@@ -20,7 +20,7 @@ import type {
 } from '../../types';
 
 /**
- * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release. See https://docs.cognite.com/cdf/deprecated#deprecated-and-retired-features for more details.
+ * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.entityMatching` in the next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md for details.
  */
 export class EntityMatchingApi extends BaseResourceAPI<EntityMatchingModel> {
   /**
@@ -45,7 +45,7 @@ export class EntityMatchingApi extends BaseResourceAPI<EntityMatchingModel> {
    * });
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.entityMatching` in the next major release.
    */
   public create = async (
     scope: EntityMatchingCreateRequest
@@ -64,7 +64,7 @@ export class EntityMatchingApi extends BaseResourceAPI<EntityMatchingModel> {
    * const [result] = await client.entityMatching.retrieve([{ externalId: 'model123' }]);
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.entityMatching` in the next major release.
    */
   public retrieve = (ids: IdEither[]): Promise<EntityMatchingModel[]> => {
     return super.retrieveEndpoint(ids);
@@ -77,7 +77,7 @@ export class EntityMatchingApi extends BaseResourceAPI<EntityMatchingModel> {
    * const { items } = await client.entityMatching.list({ filter: { name: 'model123' }});
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.entityMatching` in the next major release.
    */
   public list = (
     scope?: EntityMatchingFilterRequest
@@ -95,7 +95,7 @@ export class EntityMatchingApi extends BaseResourceAPI<EntityMatchingModel> {
    * }]);
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.entityMatching` in the next major release.
    */
   public update = (
     changes: EntityMatchingChange[]
@@ -110,7 +110,7 @@ export class EntityMatchingApi extends BaseResourceAPI<EntityMatchingModel> {
    * await client.entityMatching.delete([{ externalId: 'model123' }]);
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.entityMatching` in the next major release.
    */
   public delete = async (ids: IdEither[]): Promise<object> => {
     return super.deleteEndpoint(ids);
@@ -127,7 +127,7 @@ export class EntityMatchingApi extends BaseResourceAPI<EntityMatchingModel> {
    * });
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.entityMatching` in the next major release.
    */
   public predict = async (
     scope: EntityMatchingPredictRequest
@@ -146,7 +146,7 @@ export class EntityMatchingApi extends BaseResourceAPI<EntityMatchingModel> {
    * const { status, items } = await client.entityMatching.predictResult(12345678);
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.entityMatching` in the next major release.
    */
   public predictResult = async (
     jobId: ContextJobId
@@ -169,7 +169,7 @@ export class EntityMatchingApi extends BaseResourceAPI<EntityMatchingModel> {
    * });
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.entityMatching` in the next major release.
    */
   public refit = async (
     scope: EntityMatchingRefitRequest

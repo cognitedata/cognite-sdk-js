@@ -23,7 +23,7 @@ import type {
 import { SequenceRowsAPI } from './sequenceRowsApi';
 
 /**
- * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release. See https://docs.cognite.com/cdf/deprecated#deprecated-and-retired-features for more details.
+ * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.sequences` in the next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md for details.
  */
 export class SequencesAPI extends BaseResourceAPI<Sequence> {
   private sequenceRowsAPI: SequenceRowsAPI;
@@ -77,7 +77,7 @@ export class SequencesAPI extends BaseResourceAPI<Sequence> {
    * const [sequence] = await client.sequences.create(sequences);
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.sequences` in the next major release.
    */
   public create = (items: ExternalSequence[]): Promise<Sequence[]> => {
     return super.createEndpoint(items);
@@ -91,7 +91,7 @@ export class SequencesAPI extends BaseResourceAPI<Sequence> {
    * const sequences = await client.sequences.list({ filter: { name: 'sequence_name' } });
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.sequences` in the next major release.
    */
   public list = (
     scope?: SequenceListScope
@@ -107,7 +107,7 @@ export class SequencesAPI extends BaseResourceAPI<Sequence> {
    * console.log('Number of sequences named Well: ', aggregates[0].count)
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.sequences` in the next major release.
    */
   public aggregate = (query: SequenceFilter): Promise<SequenceAggregate[]> => {
     return super.aggregateEndpoint(query);
@@ -120,7 +120,7 @@ export class SequencesAPI extends BaseResourceAPI<Sequence> {
    * const [sequence1, sequence2] = await client.sequences.retrieve([{id: 123}, {externalId: 'abc'}]);
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.sequences` in the next major release.
    */
   public retrieve = (
     ids: IdEither[],
@@ -136,7 +136,7 @@ export class SequencesAPI extends BaseResourceAPI<Sequence> {
    * const [updatedSequence] = await client.sequences.update([{id: 123, update: {name: {set: 'New name'}}}]);
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.sequences` in the next major release.
    */
   public update = (changes: SequenceChange[]): Promise<Sequence[]> => {
     return super.updateEndpoint(changes);
@@ -156,7 +156,7 @@ export class SequencesAPI extends BaseResourceAPI<Sequence> {
    * });
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.sequences` in the next major release.
    */
   public search = (query: SequenceSearchFilter): Promise<Sequence[]> => {
     return super.searchEndpoint(query);
@@ -169,7 +169,7 @@ export class SequencesAPI extends BaseResourceAPI<Sequence> {
    * await client.sequences.delete([{id: 123}, {externalId: 'abc'}]);
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.sequences` in the next major release.
    */
   public delete = (ids: IdEither[]): Promise<object> => {
     return super.deleteEndpoint(ids);
@@ -187,7 +187,7 @@ export class SequencesAPI extends BaseResourceAPI<Sequence> {
    * await client.sequences.insertRows([{ id: 123, rows, columns: ['one', 'two', 'three'] }]);
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.sequences` in the next major release.
    */
   public insertRows = (items: SequenceRowsInsert[]): Promise<object> => {
     return this.sequenceRowsAPI.insert(items);
@@ -200,7 +200,7 @@ export class SequencesAPI extends BaseResourceAPI<Sequence> {
    * const rows = await client.sequences.retrieveRows({ externalId: 'sequence1' }).autoPagingToArray({ limit: 100 });
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.sequences` in the next major release.
    */
   public retrieveRows = (
     query: SequenceRowsRetrieve
@@ -215,7 +215,7 @@ export class SequencesAPI extends BaseResourceAPI<Sequence> {
    * await client.sequences.deleteRows([{ id: 32423849, rows: [1,2,3] }]);
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.sequences` in the next major release.
    */
   public deleteRows = (query: SequenceRowsDelete[]): Promise<object> => {
     return this.sequenceRowsAPI.delete(query);

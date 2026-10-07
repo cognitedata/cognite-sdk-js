@@ -15,7 +15,7 @@ import type {
 } from '../../types';
 
 /**
- * @deprecated Asset-centric API, to be retired end of 2027. May move to `client.legacy` in the next major release. See https://docs.cognite.com/cdf/deprecated#deprecated-and-retired-features for more details.
+ * @deprecated Asset-centric 3D asset mapping API, to be retired end of 2027. No SDK replacement exists yet; a data-modeling-based mapping API will be added before this is removed. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md for details.
  */
 export class AssetMappings3DAPI extends BaseResourceAPI<AssetMapping3D> {
   /**
@@ -25,7 +25,7 @@ export class AssetMappings3DAPI extends BaseResourceAPI<AssetMapping3D> {
    * const mappings3D = await client.assetMappings3D.list(3244265346345, 32423454353545);
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. May move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric 3D asset mapping API, to be retired end of 2027. No SDK replacement exists yet; a data-modeling-based mapping API will be added before this is removed.
    */
   public list = (
     modelId: CogniteInternalId,
@@ -50,7 +50,7 @@ export class AssetMappings3DAPI extends BaseResourceAPI<AssetMapping3D> {
    * });
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. May move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric 3D asset mapping API, to be retired end of 2027. No SDK replacement exists yet; a data-modeling-based mapping API will be added before this is removed.
    */
   public filter = (
     modelId: CogniteInternalId,
@@ -86,7 +86,7 @@ export class AssetMappings3DAPI extends BaseResourceAPI<AssetMapping3D> {
    * );
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. May move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric 3D asset mapping API, to be retired end of 2027. No SDK replacement exists yet; a data-modeling-based mapping API will be added before this is removed.
    */
   public create = (
     modelId: CogniteInternalId,
@@ -114,7 +114,7 @@ export class AssetMappings3DAPI extends BaseResourceAPI<AssetMapping3D> {
    * await client.assetMappings3D.delete(8252999965991682, 4190022127342195, assetMappingsToDelete);
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. May move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric 3D asset mapping API, to be retired end of 2027. No SDK replacement exists yet; a data-modeling-based mapping API will be added before this is removed.
    */
   public delete = (
     modelId: CogniteInternalId,

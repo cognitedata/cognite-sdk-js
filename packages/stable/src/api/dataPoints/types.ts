@@ -214,7 +214,7 @@ export interface DatapointsInsertByExternalId
   extends DatapointsInsertProperties,
     ExternalId {}
 
-/** @deprecated Use DatapointsInsertByExternalId instead. Will be removed in next major release. */
+/** @deprecated Use DatapointsInsertByInstanceId instead. Will be removed in next major release. */
 export type ExternalDatapointExternalId = DatapointsInsertByExternalId;
 
 export interface DatapointsInsertByInstanceId
@@ -229,7 +229,7 @@ export interface DatapointsInsertById
   extends DatapointsInsertProperties,
     InternalId {}
 
-/** @deprecated Use DatapointsInsertById instead. Will be removed in next major release. */
+/** @deprecated Use DatapointsInsertByInstanceId instead. Will be removed in next major release. */
 export type ExternalDatapointId = DatapointsInsertById;
 
 export type DatapointsInsertItem =

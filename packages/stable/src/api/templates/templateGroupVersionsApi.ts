@@ -11,7 +11,7 @@ import type {
 } from '../../types';
 
 /**
- * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release. See https://docs.cognite.com/cdf/deprecated#deprecated-and-retired-features for more details.
+ * @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md for details.
  */
 export class TemplateGroupVersionsApi extends BaseResourceAPI<TemplateGroupVersion> {
   /**
@@ -23,7 +23,7 @@ Create or update a Template Group version.
    * const newVersion = await client.group("myGroup").versions.upsert(version);
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release.
    */
   public upsert = (
     item: ExternalTemplateGroupVersion
@@ -40,7 +40,7 @@ Create or update a Template Group version.
    * const versions = await client.templates.group("myGroup").versions.list( { minVersion: 1, maxVersion: 4 } );
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release.
    */
   public list = (
     query?: TemplateGroupVersionFilterQuery
@@ -55,7 +55,7 @@ Create or update a Template Group version.
    * await client.templates.group("myGroup").versions.delete(1);
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release.
    */
   public delete = (version: number) => {
     return this.post(this.url('delete'), {

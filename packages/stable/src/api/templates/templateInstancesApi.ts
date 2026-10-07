@@ -20,7 +20,7 @@ import {
 } from '../../types';
 
 /**
- * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release. See https://docs.cognite.com/cdf/deprecated#deprecated-and-retired-features for more details.
+ * @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md for details.
  */
 export class TemplateInstancesApi extends BaseResourceAPI<TemplateInstance> {
   /**
@@ -34,7 +34,7 @@ export class TemplateInstancesApi extends BaseResourceAPI<TemplateInstance> {
    * const createdInstances = await client.templates.group("myGroup").version(1).create(instances);
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release.
    */
   public create = (
     items: ExternalTemplateInstance[]
@@ -55,7 +55,7 @@ export class TemplateInstancesApi extends BaseResourceAPI<TemplateInstance> {
    * const createdInstances = await client.templates.group("myGroup").version(1).upsert(instances);
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release.
    */
   public upsert = (
     items: ExternalTemplateInstance[]
@@ -81,7 +81,7 @@ export class TemplateInstancesApi extends BaseResourceAPI<TemplateInstance> {
    * }, externalId: 'someExtId' }] );
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release.
    */
   public update = (changes: TemplateInstancePatch[]) => {
     return super
@@ -96,7 +96,7 @@ export class TemplateInstancesApi extends BaseResourceAPI<TemplateInstance> {
    * const instances = await client.templates.group("myGroup").version(1).retrieve([ { externalId: 'Well } ]);
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release.
    */
   public retrieve = (
     ids: ExternalId[],
@@ -114,7 +114,7 @@ export class TemplateInstancesApi extends BaseResourceAPI<TemplateInstance> {
    * const instances = await client.templates.group("myGroup").version(1).list( { templateNames: ["Well"] } );
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release.
    */
   public list = (
     query?: TemplateInstanceFilterQuery
@@ -138,7 +138,7 @@ export class TemplateInstancesApi extends BaseResourceAPI<TemplateInstance> {
    * const instances = await client.templates.group("myGroup").version(1).delete([{ externalId: ["Well_a"] }]);
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release.
    */
   public delete = (
     ids: ExternalId[],

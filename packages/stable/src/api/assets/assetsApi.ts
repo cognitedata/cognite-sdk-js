@@ -20,7 +20,7 @@ import type {
 import { sortAssetCreateItems } from './assetUtils';
 
 /**
- * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release. See https://docs.cognite.com/cdf/deprecated#deprecated-and-retired-features for more details.
+ * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.assets` in the next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md for details.
  */
 export class AssetsAPI extends BaseResourceAPI<Asset> {
   /**
@@ -42,7 +42,7 @@ export class AssetsAPI extends BaseResourceAPI<Asset> {
    * const createdAssets = await client.assets.create(assets);
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.assets` in the next major release.
    */
   public create = (items: ExternalAssetItem[]): Promise<Asset[]> => {
     const { sort, unsort } = new RevertableArraySorter(sortAssetCreateItems);
@@ -57,7 +57,7 @@ export class AssetsAPI extends BaseResourceAPI<Asset> {
    * const assets = await client.assets.list({ filter: { name: '21PT1019' } });
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.assets` in the next major release.
    */
   public list = (scope?: AssetListScope): CursorAndAsyncIterator<Asset> => {
     return super.listEndpoint(this.callListEndpointWithPost, scope);
@@ -71,7 +71,7 @@ export class AssetsAPI extends BaseResourceAPI<Asset> {
    * console.log('Number of root assets: ', aggregates[0].count)
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.assets` in the next major release.
    */
   public aggregate = (
     query: AssetAggregateQuery
@@ -87,7 +87,7 @@ export class AssetsAPI extends BaseResourceAPI<Asset> {
    * const assets = await client.assets.retrieve([{id: 123}, {externalId: 'abc'}]);
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.assets` in the next major release.
    */
   public retrieve = (
     ids: IdEither[],
@@ -103,7 +103,7 @@ export class AssetsAPI extends BaseResourceAPI<Asset> {
    * const assets = await client.assets.update([{id: 123, update: {name: {set: 'New name'}}}]);
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.assets` in the next major release.
    */
   public update = (changes: AssetChange[]): Promise<Asset[]> => {
     return super.updateEndpoint(changes);
@@ -123,7 +123,7 @@ export class AssetsAPI extends BaseResourceAPI<Asset> {
    * });
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.assets` in the next major release.
    */
   public search = (query: AssetSearchFilter): Promise<Asset[]> => {
     return super.searchEndpoint(query);
@@ -136,7 +136,7 @@ export class AssetsAPI extends BaseResourceAPI<Asset> {
    * await client.assets.delete([{id: 123}, {externalId: 'abc'}]);
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.assets` in the next major release.
    */
   public delete = (ids: AssetIdEither[], params: AssetDeleteParams = {}) => {
     const paramsWithIgnoreUnknownIds = {

@@ -4,7 +4,7 @@ import { BaseResourceAPI } from '@cognite/sdk-core';
 import type { GraphQlResponse } from '../../types';
 
 /**
- * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release. See https://docs.cognite.com/cdf/deprecated#deprecated-and-retired-features for more details.
+ * @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md for details.
  */
 export class TemplateGraphQlApi extends BaseResourceAPI<unknown> {
   /**
@@ -18,7 +18,7 @@ export class TemplateGraphQlApi extends BaseResourceAPI<unknown> {
    * `});
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release.
    */
   runQuery = async <TVariables extends Record<string, unknown>>({
     query,

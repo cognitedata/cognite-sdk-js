@@ -19,9 +19,6 @@ import type {
 } from '../../types';
 import { Nodes3DAPI } from './nodes3DApi';
 
-/**
- * @deprecated Asset-centric API, to be retired end of 2027. May move to `client.legacy` in the next major release. See https://docs.cognite.com/cdf/deprecated#deprecated-and-retired-features for more details.
- */
 export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
   private nodes3DApi: Nodes3DAPI;
   constructor(
@@ -46,8 +43,6 @@ export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
    * ```js
    * const revisions = await client.revisions3D.create(4234325345643654, [{ fileId: 8252999965991682 }, { fileId: 6305529564379596 }]);
    * ```
-   *
-   * @deprecated Asset-centric API, to be retired end of 2027. May move to `client.legacy` in the next major release.
    */
   public create = (
     modelId: CogniteInternalId,
@@ -62,8 +57,6 @@ export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
    * ```js
    * const revisions3D = await client.revisions3D.list(324566546546346);
    * ```
-   *
-   * @deprecated Asset-centric API, to be retired end of 2027. May move to `client.legacy` in the next major release.
    */
   public list = (
     modelId: CogniteInternalId,
@@ -79,8 +72,6 @@ export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
    * ```js
    * const revisions3D = await client.revisions3D.retrieve(8252999965991682, 4190022127342195)
    * ```
-   *
-   * @deprecated Asset-centric API, to be retired end of 2027. May move to `client.legacy` in the next major release.
    */
   public retrieve = async (
     modelId: CogniteInternalId,
@@ -111,8 +102,6 @@ export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
    * }];
    * const updated = await client.revisions3D.update(8252999965991682, revisionsToUpdate);
    * ```
-   *
-   * @deprecated Asset-centric API, to be retired end of 2027. May move to `client.legacy` in the next major release.
    */
   public update = (
     modelId: CogniteInternalId,
@@ -128,8 +117,6 @@ export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
    * ```js
    * await client.revisions3D.delete(8252999965991682, [{ id: 4190022127342195 }]);
    * ```
-   *
-   * @deprecated Asset-centric API, to be retired end of 2027. May move to `client.legacy` in the next major release.
    */
   public delete = (
     modelId: CogniteInternalId,
@@ -145,8 +132,6 @@ export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
    * ```js
    * await client.revisions3D.updateThumbnail(8252999965991682, 4190022127342195, 3243334242324);
    * ```
-   *
-   * @deprecated Asset-centric API, to be retired end of 2027. May move to `client.legacy` in the next major release.
    */
   public updateThumbnail = async (
     modelId: CogniteInternalId,
@@ -164,8 +149,6 @@ export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
    * ```js
    * const nodes3d = await client.revisions3D.list3DNodes(8252999965991682, 4190022127342195);
    * ```
-   *
-   * @deprecated Asset-centric API, to be retired end of 2027. May move to `client.legacy` in the next major release.
    */
   public list3DNodes = (
     modelId: CogniteInternalId,
@@ -191,8 +174,6 @@ export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
    * };
    * const nodes3d = await client.revisions3D.filter3DNodes(8252999965991682, 4190022127342195, query);
    * ```
-   *
-   * @deprecated Asset-centric API, to be retired end of 2027. May move to `client.legacy` in the next major release.
    */
   public filter3DNodes = (
     modelId: CogniteInternalId,
@@ -208,8 +189,6 @@ export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
    * ```js
    * const nodes3d = await client.revisions3D.retrieve3DNodes(8252999965991682, 4190022127342195, [{id: 123}, {id: 456}]);
    * ```
-   *
-   * @deprecated Asset-centric API, to be retired end of 2027. May move to `client.legacy` in the next major release.
    */
   public retrieve3DNodes = (
     modelId: CogniteInternalId,
@@ -225,8 +204,6 @@ export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
    * ```js
    * const nodes3d = await client.revisions3D.list3DNodeAncestors(8252999965991682, 4190022127342195, 572413075141081);
    * ```
-   *
-   * @deprecated Asset-centric API, to be retired end of 2027. May move to `client.legacy` in the next major release.
    */
   public list3DNodeAncestors = (
     modelId: CogniteInternalId,

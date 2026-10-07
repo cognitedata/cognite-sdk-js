@@ -12,7 +12,7 @@ import type {
 } from '../../types';
 
 /**
- * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release. See https://docs.cognite.com/cdf/deprecated#deprecated-and-retired-features for more details.
+ * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.labels` in the next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md for details.
  */
 export class LabelsAPI extends BaseResourceAPI<LabelDefinition> {
   /**
@@ -33,7 +33,7 @@ export class LabelsAPI extends BaseResourceAPI<LabelDefinition> {
    * const createdLabels = await client.labels.create(labels);
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.labels` in the next major release.
    */
   public create = (
     items: ExternalLabelDefinition[]
@@ -48,7 +48,7 @@ export class LabelsAPI extends BaseResourceAPI<LabelDefinition> {
    * const labels = await client.labels.list({ filter: { externalIdPrefix: 'Pu'}});
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.labels` in the next major release.
    */
   public list = (
     query?: LabelDefinitionFilterRequest
@@ -63,7 +63,7 @@ export class LabelsAPI extends BaseResourceAPI<LabelDefinition> {
    * await client.labels.delete([{externalId: 'PUMP'}, {externalId: 'VALVE'}]);
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy` in the next major release.
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.labels` in the next major release.
    */
   public delete = (ids: ExternalId[]) => {
     return super.deleteEndpoint(ids);

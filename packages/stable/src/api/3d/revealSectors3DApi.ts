@@ -10,13 +10,7 @@ import type {
   RevealSector3D,
 } from '../../types';
 
-/**
- * @deprecated Asset-centric API, to be retired end of 2027. May move to `client.legacy` in the next major release. See https://docs.cognite.com/cdf/deprecated#deprecated-and-retired-features for more details.
- */
 export class RevealSectors3DAPI extends BaseResourceAPI<RevealSector3D> {
-  /**
-   * @deprecated Asset-centric API, to be retired end of 2027. May move to `client.legacy` in the next major release.
-   */
   public list(
     modelId: CogniteInternalId,
     revisionId: CogniteInternalId,
