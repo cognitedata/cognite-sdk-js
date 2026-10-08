@@ -20,24 +20,36 @@ import type {
 } from './types.gen';
 
 /**
- * Optional, caller supplied property value types for {@link QueryResult}.
+ * Key of a view in {@link QueryTypedSources}: `space/externalId/version`.
+ *
+ * ```ts
+ * type DescribableKey = QueryViewKey<typeof describableView>; // 'cdf_core/Describable/v1'
+ * ```
+ */
+export type QueryViewKey<TView extends ViewReference> =
+  `${TView['space']}/${TView['externalId']}/${TView['version']}`;
+
+/**
+ * Optional, caller supplied property value types for {@link QueryResult},
+ * keyed by view as `space/externalId/version` (see {@link QueryViewKey}).
  *
  * The DMS API does not tell the SDK which TypeScript type a property has, so
- * selected properties are typed as `RawPropertyValueV3` by default. Pass a
- * tuple of `{ source, properties }` entries as the second type argument of
- * `instances.query` to replace that with concrete types for the views you know.
+ * selected properties are typed as `RawPropertyValueV3` by default. Pass a map
+ * from view key to property types as the second type argument of
+ * `instances.query` to replace that for the views you know. Views that are
+ * not in the map keep `RawPropertyValueV3`. The map is looked up by key, so a
+ * map covering a whole data model costs nothing extra per call.
  *
  * ```ts
  * const response = await client.instances.query<
  *   typeof query,
- *   [{ source: typeof view; properties: { title: string; labels: string[] } }]
+ *   { 'cdf_core/Describable/v1': { title: string; labels: string[] } }
  * >(query);
  * ```
  */
-export type QueryTypedSources = ReadonlyArray<{
-  source: ViewReference;
-  properties: Record<string, unknown>;
-}>;
+export type QueryTypedSources = {
+  [viewKey: `${string}/${string}/${string}`]: Record<string, unknown>;
+};
 
 /**
  * Request type accepted by `instances.query`: a `QueryRequest` whose cursor
@@ -96,12 +108,12 @@ export type QueryRequestInput = Omit<QueryRequest, 'cursors'> & {
  * @typeParam TRequest - The request type ({@link QueryRequestInput}). Use
  *   `typeof query` on a request declared `as const satisfies QueryRequest` for
  *   full inference.
- * @typeParam TTypedSources - Optional {@link QueryTypedSources} with concrete
- *   property value types per view.
+ * @typeParam TTypedSources - Optional {@link QueryTypedSources}: concrete
+ *   property value types per view, keyed `space/externalId/version`.
  */
 export type QueryResult<
   TRequest extends QueryRequestInput,
-  TTypedSources extends QueryTypedSources = [],
+  TTypedSources extends QueryTypedSources = Record<never, never>,
 > = QueryRequest extends TRequest
   ? QueryResponse
   : {
@@ -259,7 +271,11 @@ type ViewProperties<
 type TypedPropertiesFor<
   TView extends ViewReference,
   TTypedSources extends QueryTypedSources,
-> = Extract<TTypedSources[number], { source: TView }>['properties'];
+> = QueryViewKey<TView> extends infer TKey
+  ? TKey extends keyof TTypedSources
+    ? TTypedSources[TKey]
+    : never
+  : never;
 
 type PropertyType<Property extends PropertyKey, TTypedProps> = [
   TTypedProps,

@@ -261,7 +261,7 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    */
   public query = async <
     TRequest extends QueryRequestInput = QueryRequest,
-    TTypedSources extends QueryTypedSources = [],
+    TTypedSources extends QueryTypedSources = Record<never, never>,
   >(
     params: TRequest
   ): Promise<QueryResult<TRequest, TTypedSources>> => {

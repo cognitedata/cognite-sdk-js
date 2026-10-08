@@ -346,12 +346,13 @@ describe('Instances integration test', () => {
 
     const response = await client.instances.query<
       typeof query,
-      [
-        {
-          source: typeof view;
-          properties: { title: string; description: string; labels: string[] };
-        },
-      ]
+      {
+        'cdf_core/Describable/v1': {
+          title: string;
+          description: string;
+          labels: string[];
+        };
+      }
     >(query);
 
     expect(response.items.result_set_1).toHaveLength(1);

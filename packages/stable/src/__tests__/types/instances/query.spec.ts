@@ -12,6 +12,7 @@ import type {
   QueryResponse,
   QueryResult,
   QuerySelectV3,
+  QueryViewKey,
   RawPropertyValueV3,
 } from '../../../types';
 
@@ -178,12 +179,12 @@ describe('instances.query response types', () => {
       ReturnType<
         typeof InstancesAPI.prototype.query<
           typeof constQuery,
-          [
-            {
-              source: typeof view;
-              properties: { propOne: string; propTwo: number[] };
-            },
-          ]
+          {
+            [K in QueryViewKey<typeof view>]: {
+              propOne: string;
+              propTwo: number[];
+            };
+          }
         >
       >
     >;
@@ -193,6 +194,21 @@ describe('instances.query response types', () => {
     expectTypeOf<
       Props['ViewB/v2']['propThree']
     >().toEqualTypeOf<RawPropertyValueV3>();
+    expectTypeOf<
+      QueryViewKey<typeof view>
+    >().toEqualTypeOf<'spaceA/ViewA/v1'>();
+  });
+
+  test('a typed-sources map covering many views is looked up by key', () => {
+    type Model = {
+      'spaceA/ViewA/v1': { propOne: string; propTwo: number[] };
+      'spaceA/ViewB/v2': { propThree: boolean };
+      'spaceB/ViewC/v1': { other: string };
+    };
+    type Typed = QueryResult<typeof constQuery, Model>;
+    type Props = Typed['items']['nodesA'][number]['properties']['spaceA'];
+    expectTypeOf<Props['ViewA/v1']['propOne']>().toEqualTypeOf<string>();
+    expectTypeOf<Props['ViewB/v2']['propThree']>().toEqualTypeOf<boolean>();
   });
 });
 
