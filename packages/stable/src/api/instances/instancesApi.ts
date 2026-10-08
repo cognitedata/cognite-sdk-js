@@ -6,6 +6,7 @@ import type {
   QueryResult,
   QueryTypedSources,
 } from './query.types';
+import type { SearchRequestInput, SearchResult } from './search.types';
 import type {
   AggregationRequest,
   AggregationResponse,
@@ -29,8 +30,17 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
   /**
    * [Search instances](https://developer.cognite.com/api#tag/Instances/operation/searchInstances)
    *
+   * The response is typed from the request. Declare the request
+   * "as const satisfies SearchRequestInput" to get the node or edge kind and
+   * the space and view of `properties` inferred. A request typed as the plain
+   * NodeOrEdgeSearchRequest gives the untyped ByIdsResponse. Property values
+   * are RawPropertyValueV3 unless you supply their types as the second type
+   * argument, see QueryTypedSources, or by assigning the method to a
+   * TypedSearch once. `properties` in the request selects the fields to
+   * search, it does not limit the properties that are returned.
+   *
    * ```js
-   *  const response = await client.instances.search({
+   *  const request = {
    *    view: {
    *      externalId: 'Describable',
    *      space: 'cdf_core',
@@ -45,15 +55,23 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    *      },
    *    },
    *    limit: 1000,
-   *  });
+   *  } as const satisfies SearchRequestInput;
+   *  const response = await client.instances.search(request);
+   *  const title = response.items[0].properties?.cdf_core?.['Describable/v1']?.title;
    * ```
    */
-  public search = async (
-    params: NodeOrEdgeSearchRequest
-  ): Promise<ByIdsResponse> => {
-    const response = await this.post<ByIdsResponse>(this.searchUrl, {
-      data: params,
-    });
+  public search = async <
+    TRequest extends SearchRequestInput = NodeOrEdgeSearchRequest,
+    TTypedSources extends QueryTypedSources = Record<never, never>,
+  >(
+    params: TRequest
+  ): Promise<SearchResult<TRequest, TTypedSources>> => {
+    const response = await this.post<SearchResult<TRequest, TTypedSources>>(
+      this.searchUrl,
+      {
+        data: params,
+      }
+    );
     return response.data;
   };
 

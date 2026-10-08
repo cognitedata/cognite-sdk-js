@@ -2953,6 +2953,11 @@ export type {
   QueryViewKey,
   TypedQuery,
 } from './api/instances/query.types';
+export type {
+  SearchRequestInput,
+  SearchResult,
+  TypedSearch,
+} from './api/instances/search.types';
 
 export type {
   AllVersionsQueryParameter,
