@@ -14,6 +14,7 @@ import type {
   QuerySelectV3,
   QueryViewKey,
   RawPropertyValueV3,
+  TypedQuery,
 } from '../../../types';
 
 // These tests only hold at the type level. They are enforced by `tsc` when the
@@ -77,6 +78,13 @@ const constQuery = {
 } as const satisfies QueryRequest;
 
 type ConstResult = ResultOf<typeof constQuery>;
+
+declare const typedQuery: TypedQuery<{
+  'spaceA/ViewA/v1': { propOne: string };
+}>;
+declare function constQueryViaTypedQuery(): ReturnType<
+  typeof typedQuery<typeof constQuery>
+>;
 type NodesAItem = ConstResult['items']['nodesA'][number];
 
 describe('instances.query response types', () => {
@@ -197,6 +205,17 @@ describe('instances.query response types', () => {
     expectTypeOf<
       QueryViewKey<typeof view>
     >().toEqualTypeOf<'spaceA/ViewA/v1'>();
+  });
+
+  test('TypedQuery fixes the typed sources and infers the request per call', () => {
+    type Model = { 'spaceA/ViewA/v1': { propOne: string } };
+    expectTypeOf<Query>().toMatchTypeOf<TypedQuery<Model>>();
+    type Typed = Awaited<ReturnType<TypedQuery<Model>>>;
+    expectTypeOf<Typed>().toEqualTypeOf<QueryResponse>();
+    type ViaTyped = Awaited<
+      ReturnType<typeof constQueryViaTypedQuery>
+    >['items']['nodesA'][number]['properties']['spaceA']['ViewA/v1']['propOne'];
+    expectTypeOf<ViaTyped>().toEqualTypeOf<string>();
   });
 
   test('a typed-sources map covering many views is looked up by key', () => {

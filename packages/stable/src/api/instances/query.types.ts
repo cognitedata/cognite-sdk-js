@@ -52,6 +52,28 @@ export type QueryTypedSources = {
 };
 
 /**
+ * `instances.query` with the property value types fixed and the request still
+ * inferred per call. Assign the method once and use the result everywhere, so
+ * callers never spell out `<typeof request, Model>`:
+ *
+ * ```ts
+ * type Model = { 'cdf_core/Describable/v1': { title: string; labels: string[] } };
+ * const query: TypedQuery<Model> = client.instances.query;
+ *
+ * const response = await query(request);          // typed from `request` and `Model`
+ * await query({ ...request, cursors: { rs: response.nextCursor.rs } });
+ * ```
+ *
+ * `instances.query` is an arrow function property, so it can be detached from
+ * the client safely.
+ */
+export type TypedQuery<TTypedSources extends QueryTypedSources> = <
+  TRequest extends QueryRequestInput = QueryRequest,
+>(
+  params: TRequest
+) => Promise<QueryResult<TRequest, TTypedSources>>;
+
+/**
  * Request type accepted by `instances.query`: a `QueryRequest` whose cursor
  * values may also be `undefined`, so that passing a cursor from a previous
  * response straight through (`cursors: { alias: previous.nextCursor.alias }`)

@@ -227,8 +227,9 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    * kind, spaces, views and property names inferred. A request typed as the
    * plain QueryRequest gives the untyped QueryResponse. Property values are
    * RawPropertyValueV3 unless you supply their types as the second type
-   * argument, see QueryTypedSources. Cursor values from a previous response
-   * can be passed straight through, see QueryRequestInput.
+   * argument, see QueryTypedSources, or by assigning the method to a
+   * TypedQuery once. Cursor values from a previous response can be passed
+   * straight through, see QueryRequestInput.
    *
    * ```js
    *  const query = {
