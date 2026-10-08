@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.2.0](https://github.com/cognitedata/cognite-sdk-js/compare/%40cognite%2Fsdk-beta%406.1.4...%40cognite%2Fsdk-beta%406.2.0) (2026-10-07)
+
+### Features
+
+* integrations - add zero copy 'externaldata' APIs ([#1488](https://github.com/cognitedata/cognite-sdk-js/issues/1488)) ([7a63134](https://github.com/cognitedata/cognite-sdk-js/commit/7a6313458ab3987f757eda7262e5a581f53891a1))
+
+
 ## [6.1.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@6.1.3...@cognite/sdk-beta@6.1.4) (2026-09-02)
 
 **Note:** Version bump only for package @cognite/sdk-beta

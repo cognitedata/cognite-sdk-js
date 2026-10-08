@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [10.15.0](https://github.com/cognitedata/cognite-sdk-js/compare/%40cognite%2Fsdk%4010.14.0...%40cognite%2Fsdk%4010.15.0) (2026-10-07)
+
+### Bug Fixes
+
+* **codegen:** dedupe types that match @cognite/sdk-core exports ([#1485](https://github.com/cognitedata/cognite-sdk-js/issues/1485)) ([0104cf3](https://github.com/cognitedata/cognite-sdk-js/commit/0104cf395fd546e2db2e6eaa1ae6300dad55a483)), closes [#1480](https://github.com/cognitedata/cognite-sdk-js/issues/1480)
+
+### Features
+
+* **extractors:** add list, retrieve, and getSchema ([#1480](https://github.com/cognitedata/cognite-sdk-js/issues/1480)) ([26f7986](https://github.com/cognitedata/cognite-sdk-js/commit/26f79862434d92dd55c2b9cd90bd9dca1bd66427)), closes [#1482](https://github.com/cognitedata/cognite-sdk-js/issues/1482) [#1483](https://github.com/cognitedata/cognite-sdk-js/issues/1483)
+* **extractors:** add releases list and retrieval ([#1483](https://github.com/cognitedata/cognite-sdk-js/issues/1483)) ([ea6475d](https://github.com/cognitedata/cognite-sdk-js/commit/ea6475d214d45b372cf31ef08575809dd3021751))
+* **extractors:** add source systems and solutions list and retrieval ([#1482](https://github.com/cognitedata/cognite-sdk-js/issues/1482)) ([eaed231](https://github.com/cognitedata/cognite-sdk-js/commit/eaed231801a3f9c2efa6240d0affa4720f658106))
+
+
 # [10.14.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@10.13.0...@cognite/sdk@10.14.0) (2026-09-02)
 
 
