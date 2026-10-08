@@ -6,8 +6,6 @@ import type {
   NodeDefinition,
   NodeOrEdge,
   PropertyValueGroupV3,
-  QueryEdgeTableExpressionV3,
-  QueryNodeTableExpressionV3,
   QueryRequest,
   QueryResponse,
   QuerySelectV3,
@@ -74,16 +72,34 @@ export type TypedQuery<TTypedSources extends QueryTypedSources> = <
 ) => Promise<QueryResult<TRequest, TTypedSources>>;
 
 /**
- * Request type accepted by `instances.query`: a `QueryRequest` whose cursor
- * values may also be `undefined`, so that passing a cursor from a previous
- * response straight through (`cursors: { alias: previous.nextCursor.alias }`)
- * compiles. An `undefined` value is dropped when the request is serialised,
- * so the API never sees it.
+ * Request type accepted by `instances.query`. It is `QueryRequest` with two
+ * relaxations, and a plain `QueryRequest` always satisfies it:
+ *
+ * - Every array and object may be `readonly`, so a request declared
+ *   `as const` is accepted on every supported TypeScript version. (From
+ *   TypeScript 5.3, `as const satisfies QueryRequest` also works, because the
+ *   compiler then infers mutable tuples; `as const satisfies QueryRequestInput`
+ *   works everywhere.)
+ * - Cursor values may be `undefined`, so a cursor from a previous response can
+ *   be passed straight through (`cursors: { alias: previous.nextCursor.alias }`).
+ *   An `undefined` value is dropped when the request is serialised.
  */
-export type QueryRequestInput = Omit<QueryRequest, 'cursors'> & {
+export type QueryRequestInput = DeepReadonly<Omit<QueryRequest, 'cursors'>> & {
   /** Cursors returned from the previous query request, keyed by result set. */
-  cursors?: Record<string, NextCursorV3 | undefined>;
+  readonly cursors?: Readonly<Record<string, NextCursorV3 | undefined>>;
 };
+
+/**
+ * Readonly at every level. A type without keys (`object`, `{}`) is kept as is:
+ * it already accepts anything, and a mapped type over it would lose that.
+ */
+type DeepReadonly<T> = T extends readonly (infer U)[]
+  ? ReadonlyArray<DeepReadonly<U>>
+  : T extends object
+    ? [keyof T] extends [never]
+      ? T
+      : { readonly [K in keyof T]: DeepReadonly<T[K]> }
+    : T;
 
 /**
  * Response type of `instances.query`, derived from the shape of the request.
@@ -101,8 +117,9 @@ export type QueryRequestInput = Omit<QueryRequest, 'cursors'> & {
  * - An inline object literal infers the result set keys and node/edge kind.
  *   Spaces, views and properties stay wide because TypeScript widens their
  *   string values.
- * - `const query = { ... } as const satisfies QueryRequest` infers everything:
- *   result set keys, node/edge kind, space keys, view keys and property names.
+ * - `const query = { ... } as const satisfies QueryRequestInput` infers
+ *   everything: result set keys, node/edge kind, space keys, view keys and
+ *   property names. (`satisfies QueryRequest` works from TypeScript 5.3.)
  *
  * Rules that keep the type honest about what the API returns:
  *
@@ -128,8 +145,8 @@ export type QueryRequestInput = Omit<QueryRequest, 'cursors'> & {
  * keeps only the last entry, while this type merges both property lists.
  *
  * @typeParam TRequest - The request type ({@link QueryRequestInput}). Use
- *   `typeof query` on a request declared `as const satisfies QueryRequest` for
- *   full inference.
+ *   `typeof query` on a request declared `as const satisfies QueryRequestInput`
+ *   for full inference.
  * @typeParam TTypedSources - Optional {@link QueryTypedSources}: concrete
  *   property value types per view, keyed `space/externalId/version`.
  */
@@ -187,22 +204,29 @@ type ResultItem<
  * operations (`union`, `unionAll`, `intersection`) can yield either. This is
  * distributive, so a union of expressions gives a union of definitions.
  */
-type InstanceDefinition<TExpression> =
-  TExpression extends QueryNodeTableExpressionV3
-    ? NodeDefinition
-    : TExpression extends QueryEdgeTableExpressionV3
-      ? EdgeDefinition
-      : NodeOrEdge;
+type InstanceDefinition<TExpression> = TExpression extends {
+  readonly nodes: unknown;
+}
+  ? NodeDefinition
+  : TExpression extends { readonly edges: unknown }
+    ? EdgeDefinition
+    : NodeOrEdge;
+
+/** A `select` entry as accepted by {@link QueryRequestInput}. */
+type SelectInput = DeepReadonly<QuerySelectV3>;
+
+/** One entry of `sources` as accepted by {@link QueryRequestInput}. */
+type SourceSelection = DeepReadonly<SourceSelectorV3[number]>;
 
 /** `sources` of a select entry, or `undefined` when the entry has none. */
-type SelectSources<TSelect extends QuerySelectV3> =
+type SelectSources<TSelect extends SelectInput> =
   'sources' extends keyof TSelect
     ? Extract<TSelect, { sources?: unknown }>['sources']
     : undefined;
 
 type WithSelectedProperties<
   TDefinition extends NodeOrEdge,
-  TSelect extends QuerySelectV3,
+  TSelect extends SelectInput,
   TTypedSources extends QueryTypedSources,
 > = TDefinition extends NodeOrEdge
   ? SelectSources<TSelect> extends infer TSources
@@ -232,7 +256,7 @@ type WithSelectedProperties<
 type SelectedProperties<
   TSources,
   TTypedSources extends QueryTypedSources,
-> = TSources extends SourceSelectorV3
+> = TSources extends readonly SourceSelection[]
   ? WithDynamicKeys<
       {
         [TSource in TSources[number] as TSource['source']['space']]: WithDynamicKeys<
@@ -259,7 +283,7 @@ type ViewKey<TView extends ViewReference> = string extends
   : `${TView['externalId']}/${TView['version']}`;
 
 type ViewProperties<
-  TSource extends SourceSelectorV3[number],
+  TSource extends SourceSelection,
   TTypedSources extends QueryTypedSources,
 > = TypedPropertiesFor<
   TSource['source'],

@@ -223,8 +223,9 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    * [Query instances](https://developer.cognite.com/api#tag/Instances/operation/queryContent)
    *
    * The response is typed from the request. Declare the request
-   * "as const satisfies QueryRequest" to get result set keys, node or edge
-   * kind, spaces, views and property names inferred. A request typed as the
+   * "as const satisfies QueryRequestInput" to get result set keys, node or
+   * edge kind, spaces, views and property names inferred (from TypeScript 5.3,
+   * "as const satisfies QueryRequest" works as well). A request typed as the
    * plain QueryRequest gives the untyped QueryResponse. Property values are
    * RawPropertyValueV3 unless you supply their types as the second type
    * argument, see QueryTypedSources, or by assigning the method to a
@@ -255,7 +256,7 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    *        ],
    *      },
    *    },
-   *  } as const satisfies QueryRequest;
+   *  } as const satisfies QueryRequestInput;
    *  const response = await client.instances.query(query);
    *  const title = response.items.result_set_1[0].properties.cdf_core['Describable/v1'].title;
    * ```

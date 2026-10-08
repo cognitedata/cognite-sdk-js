@@ -21,7 +21,7 @@ import type {
 // package is built, since this file lives under `src/`.
 
 type Query = InstancesAPI['query'];
-type ResultOf<TRequest extends QueryRequest> = Awaited<
+type ResultOf<TRequest extends QueryRequestInput> = Awaited<
   ReturnType<typeof InstancesAPI.prototype.query<TRequest>>
 >;
 
@@ -95,6 +95,24 @@ describe('instances.query response types', () => {
     expectTypeOf<
       QueryResult<QueryRequestInput>
     >().toEqualTypeOf<QueryResponse>();
+  });
+
+  test('a request declared as const without satisfies is accepted (TypeScript < 5.3)', () => {
+    const readonlyQuery = {
+      with: { nodesA: { nodes: { filter: { hasData: [view] } } } },
+      select: {
+        nodesA: { sources: [{ source: view, properties: ['propOne'] }] },
+      },
+    } as const;
+    const accepts = (request: Parameters<Query>[0]) => request;
+    accepts(readonlyQuery);
+    type Item = ResultOf<typeof readonlyQuery>['items']['nodesA'][number];
+    expectTypeOf<Item['instanceType']>().toEqualTypeOf<'node'>();
+    expectTypeOf<
+      keyof KnownKeys<Item['properties']['spaceA']['ViewA/v1']>
+    >().toEqualTypeOf<'propOne'>();
+    const plain = {} as QueryRequest;
+    accepts(plain);
   });
 
   test('a cursor from a previous response can be passed straight through', () => {
