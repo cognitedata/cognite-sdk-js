@@ -14,6 +14,9 @@ import type {
   GeospatialOutput,
 } from './types';
 
+/**
+ * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.geospatial` in the next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md for details.
+ */
 export class FeatureAPI extends BaseResourceAPI<GeospatialFeatureResponse> {
   /**
    * [Create features](https://docs.cognite.com/api/v1/#operation/createFeatures)
@@ -26,6 +29,8 @@ export class FeatureAPI extends BaseResourceAPI<GeospatialFeatureResponse> {
    * ];
    * const createdFeatures = await client.geospatial.feature.create(featureTypeExternalId, features);
    * ```
+   *
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.geospatial` in the next major release.
    */
   public create = (
     featureTypeExternalId: CogniteExternalId,
@@ -46,6 +51,8 @@ export class FeatureAPI extends BaseResourceAPI<GeospatialFeatureResponse> {
    *
    * const retrievedFeatures = await client.geospatial.feature.retrieve('ocean_temperature', featuresToRetrieve, outputParams);
    * ```
+   *
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.geospatial` in the next major release.
    */
   public retrieve = (
     featureTypeExternalId: CogniteExternalId,
@@ -72,6 +79,8 @@ export class FeatureAPI extends BaseResourceAPI<GeospatialFeatureResponse> {
    *
    * const updatedFeatures = await client.geospatial.feature.update('ocean_temperature', featuresToUpdate);
    * ```
+   *
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.geospatial` in the next major release.
    */
   public update = (
     featureTypeExternalId: CogniteExternalId,
@@ -91,6 +100,8 @@ export class FeatureAPI extends BaseResourceAPI<GeospatialFeatureResponse> {
    *
    * await client.geospatial.feature.delete('ocean_temperature', featuresToDelete);
    * ```
+   *
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.geospatial` in the next major release.
    */
   public delete = (
     featureTypeExternalId: CogniteExternalId,
@@ -120,6 +131,8 @@ export class FeatureAPI extends BaseResourceAPI<GeospatialFeatureResponse> {
    *
    * const searchedFeatures = await client.geospatial.feature.search('ocean_temperature', params);
    * ```
+   *
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.geospatial` in the next major release.
    */
   public search = (
     featureTypeExternalId: CogniteExternalId,
@@ -148,6 +161,8 @@ export class FeatureAPI extends BaseResourceAPI<GeospatialFeatureResponse> {
    *
    * const featureStreamString = await client.geospatial.feature.searchStream('ocean_temperature', params);
    * ```
+   *
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.geospatial` in the next major release.
    */
   public searchStream = (
     featureTypeExternalId: CogniteExternalId,
@@ -181,6 +196,8 @@ export class FeatureAPI extends BaseResourceAPI<GeospatialFeatureResponse> {
    *
    * const featureStream = await client.geospatial.feature.searchStream('ocean_temperature', aggregateParams);
    * ```
+   *
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.geospatial` in the next major release.
    */
   public aggregate = (
     featureTypeExternalId: CogniteExternalId,
@@ -207,6 +224,8 @@ export class FeatureAPI extends BaseResourceAPI<GeospatialFeatureResponse> {
    *
    * const allFeaturesList = await client.geospatial.feature.list('ocean_temperature', params);
    * ```
+   *
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.geospatial` in the next major release.
    */
   public list = (
     featureTypeExternalId: CogniteExternalId,

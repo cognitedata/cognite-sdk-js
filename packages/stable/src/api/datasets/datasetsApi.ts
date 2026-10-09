@@ -15,6 +15,9 @@ import type {
   IgnoreUnknownIds,
 } from '../../types';
 
+/**
+ * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.datasets` in the next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md for details.
+ */
 export class DataSetsAPI extends BaseResourceAPI<DataSet> {
   /**
    * @hidden
@@ -33,6 +36,8 @@ export class DataSetsAPI extends BaseResourceAPI<DataSet> {
    * ];
    * const createdDatasets = await client.datasets.create(datasets);
    * ```
+   *
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.datasets` in the next major release.
    */
   public create = (items: ExternalDataSet[]): Promise<DataSet[]> => {
     return super.createEndpoint(items);
@@ -44,6 +49,8 @@ export class DataSetsAPI extends BaseResourceAPI<DataSet> {
    * ```js
    * const dataSets = await client.datasets.list({ filter: { createdTime: { min: new Date('1 jan 2018'), max: new Date('1 jan 2019') }}});
    * ```
+   *
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.datasets` in the next major release.
    */
   public list = (
     query?: DataSetFilterRequest
@@ -58,6 +65,8 @@ export class DataSetsAPI extends BaseResourceAPI<DataSet> {
    * const aggregates = await client.datasets.aggregate({ filter: { writeProtected: true } });
    * console.log('Number of write protected datasets: ', aggregates[0].count)
    * ```
+   *
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.datasets` in the next major release.
    */
   public aggregate = (
     query: DataSetAggregateQuery
@@ -71,6 +80,8 @@ export class DataSetsAPI extends BaseResourceAPI<DataSet> {
    * ```js
    * const dataSets = await client.datasets.retrieve([{id: 123}, {externalId: 'abc'}]);
    * ```
+   *
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.datasets` in the next major release.
    */
   public retrieve = (
     ids: IdEither[],
@@ -85,6 +96,8 @@ export class DataSetsAPI extends BaseResourceAPI<DataSet> {
    * ```js
    * const dataSets = await client.datasets.update([{id: 123, update: {description: {set: 'New description'}}}]);
    * ```
+   *
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.datasets` in the next major release.
    */
   public update = (changes: DataSetChange[]): Promise<DataSet[]> => {
     return super.updateEndpoint(changes);

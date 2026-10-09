@@ -11,19 +11,34 @@ import type {
   ViewResolveRequest,
 } from '../../types';
 
+/**
+ * @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md for details.
+ */
 export class ViewsApi extends BaseResourceAPI<View> {
+  /**
+   * @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release.
+   */
   public create = (items: ExternalView[]): Promise<View[]> => {
     return this.createEndpoint(items);
   };
 
+  /**
+   * @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release.
+   */
   public upsert = (items: ExternalView[]): Promise<View[]> => {
     return this.createEndpoint(items, this.url('upsert'));
   };
 
+  /**
+   * @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release.
+   */
   public list = (query?: ViewFilterQuery): CursorAndAsyncIterator<View> => {
     return this.listEndpoint(this.callListEndpointWithPost, query);
   };
 
+  /**
+   * @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release.
+   */
   public resolve = <T>(
     resolveRequest: ViewResolveRequest
   ): CursorAndAsyncIterator<T> => {
@@ -43,6 +58,9 @@ export class ViewsApi extends BaseResourceAPI<View> {
     ) as unknown as CursorAndAsyncIterator<T>;
   };
 
+  /**
+   * @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release.
+   */
   public delete = (
     ids: ExternalId[],
     options?: { ignoreUnknownIds: boolean }

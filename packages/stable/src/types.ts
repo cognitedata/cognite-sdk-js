@@ -255,6 +255,7 @@ export type ArrayPatchString =
   | { set: string[] }
   | { add?: string[]; remove?: string[] };
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface Asset
   extends ExternalAsset,
     AssetInternalId,
@@ -282,11 +283,15 @@ export interface UniqueValuesAggregateResponse extends AggregateResponse {
 
 /**
  * Response from asset aggregate endpoint
+ *
+ * @deprecated Asset-centric API type, will move to the legacy namespace in the next major release.
  */
 export type AssetAggregate = AggregateResponse;
 
 /**
  * Response from event aggregate endpoint
+ *
+ * @deprecated Asset-centric API type, will move to the legacy namespace in the next major release.
  */
 export type EventAggregate = AggregateResponse;
 
@@ -297,11 +302,15 @@ export type FileAggregate = AggregateResponse;
 
 /**
  * Response from sequence aggregate endpoint
+ *
+ * @deprecated Asset-centric API type, will move to the legacy namespace in the next major release.
  */
 export type SequenceAggregate = AggregateResponse;
 
 /**
  * Query schema for asset aggregate endpoint
+ *
+ * @deprecated Asset-centric API type, will move to the legacy namespace in the next major release.
  */
 export interface AssetAggregateQuery {
   /**
@@ -320,6 +329,7 @@ export interface FileAggregateQuery {
   filter?: FileFilterProps;
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface AssetAggregateResult {
   /**
    * Number of direct descendants for the asset
@@ -335,28 +345,38 @@ export interface AssetAggregateResult {
   path?: AssetIdEither[];
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export type AssetAggregatedProperty = 'childCount' | 'path' | 'depth';
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export type AssetChange = AssetChangeById | AssetChangeByExternalId;
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface AssetChangeByExternalId extends AssetPatch, ExternalId {}
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface AssetChangeById extends AssetPatch, InternalId {}
 
 /**
  * Description of asset.
+ *
+ * @deprecated Asset-centric API type, will move to the legacy namespace in the next major release.
  */
 export type AssetDescription = string;
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export type AssetExternalId = ExternalId;
 
 /**
  * Filter on assets with exact match
+ *
+ * @deprecated Asset-centric API type, will move to the legacy namespace in the next major release.
  */
 export interface AssetFilter extends Limit {
   filter?: AssetFilterProps;
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface AssetFilterProps {
   name?: AssetName;
   /**
@@ -392,10 +412,13 @@ export interface AssetFilterProps {
   externalIdPrefix?: ExternalIdPrefix;
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export type AssetIdEither = IdEither;
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export type AssetInternalId = InternalId;
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface AssetListScope extends AssetFilter, FilterQuery {
   /**
    * Set of aggregated properties to include
@@ -404,6 +427,7 @@ export interface AssetListScope extends AssetFilter, FilterQuery {
   partition?: Partition;
 }
 
+/** @deprecated Asset-centric 3D asset mapping type, to be retired end of 2027. No SDK replacement exists yet; a data-modeling-based mapping API will be added before this is removed. */
 export interface AssetMapping3D extends AssetMapping3DBase {
   /**
    * A number describing the position of this node in the 3D hierarchy, starting from 0.
@@ -418,6 +442,7 @@ export interface AssetMapping3D extends AssetMapping3DBase {
   subtreeSize?: number;
 }
 
+/** @deprecated Asset-centric 3D asset mapping type, to be retired end of 2027. No SDK replacement exists yet; a data-modeling-based mapping API will be added before this is removed. */
 export interface AssetMapping3DBase {
   /**
    * The ID of the node.
@@ -433,6 +458,7 @@ export interface AssetMapping3DBase {
   assetInstanceId?: UnitDMSUniqueIdentifier;
 }
 
+/** @deprecated Asset-centric 3D asset mapping type, to be retired end of 2027. No SDK replacement exists yet; a data-modeling-based mapping API will be added before this is removed. */
 export interface AssetMappings3DListFilter extends FilterQuery {
   nodeId?: CogniteInternalId;
   assetId?: CogniteInternalId;
@@ -446,18 +472,22 @@ export interface AssetMappings3DListFilter extends FilterQuery {
   getDmsInstances?: boolean;
 }
 
+/** @deprecated Asset-centric 3D asset mapping type, to be retired end of 2027. No SDK replacement exists yet; a data-modeling-based mapping API will be added before this is removed. */
 export interface AssetMappings3DAssetFilter {
   assetIds: CogniteInternalId[];
 }
 
+/** @deprecated Asset-centric 3D asset mapping type, to be retired end of 2027. No SDK replacement exists yet; a data-modeling-based mapping API will be added before this is removed. */
 export interface AssetMappings3DNodeFilter {
   nodeIds: CogniteInternalId[];
 }
 
+/** @deprecated Asset-centric 3D asset mapping type, to be retired end of 2027. No SDK replacement exists yet; a data-modeling-based mapping API will be added before this is removed. */
 export interface AssetMappings3DTreeIndexFilter {
   treeIndexes: CogniteInternalId[];
 }
 
+/** @deprecated Asset-centric 3D asset mapping type, to be retired end of 2027. No SDK replacement exists yet; a data-modeling-based mapping API will be added before this is removed. */
 export interface Filter3DAssetMappingsQuery extends FilterQuery {
   /**
    * A filter for either `assetIds`, `nodeIds` or `treeIndices`.
@@ -470,9 +500,12 @@ export interface Filter3DAssetMappingsQuery extends FilterQuery {
 
 /**
  * Name of asset. Often referred to as tag.
+ *
+ * @deprecated Asset-centric API type, will move to the legacy namespace in the next major release.
  */
 export type AssetName = string;
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface AssetPatch {
   update: {
     externalId?: SinglePatchString;
@@ -485,6 +518,7 @@ export interface AssetPatch {
   };
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface AssetRetrieveParams extends IgnoreUnknownIds {
   /**
    * Set of aggregated properties to include
@@ -492,6 +526,7 @@ export interface AssetRetrieveParams extends IgnoreUnknownIds {
   aggregatedProperties?: AssetAggregatedProperty[];
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface AssetSearchFilter extends AssetFilter {
   search?: {
     name?: AssetName;
@@ -502,6 +537,8 @@ export interface AssetSearchFilter extends AssetFilter {
 
 /**
  * The source of this asset
+ *
+ * @deprecated Asset-centric API type, will move to the legacy namespace in the next major release.
  */
 export type AssetSource = string;
 
@@ -524,11 +561,13 @@ export type CREATE = 'CREATE';
 
 export type CogniteCapability = SingleCogniteCapability[];
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface CogniteEvent
   extends ExternalEvent,
     InternalId,
     CreatedAndLastUpdatedTime {}
 
+/** @deprecated Asset-centric 3D asset mapping type, to be retired end of 2027. No SDK replacement exists yet; a data-modeling-based mapping API will be added before this is removed. */
 export type CreateAssetMapping3D = AssetMapping3DBase;
 
 export interface CreateModel3D {
@@ -569,6 +608,7 @@ export interface DataIds {
   items?: AssetIdEither[];
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface DataSet
   extends ExternalDataSet,
     InternalId,
@@ -578,6 +618,8 @@ export interface DataSet
 
 /**
  * Response from dataset aggregate endpoint
+ *
+ * @deprecated Asset-centric API type, will move to the legacy namespace in the next major release.
  */
 export interface DataSetAggregate {
   /**
@@ -588,6 +630,8 @@ export interface DataSetAggregate {
 
 /**
  * Query schema for datasets aggregate endpoint
+ *
+ * @deprecated Asset-centric API type, will move to the legacy namespace in the next major release.
  */
 export interface DataSetAggregateQuery {
   /**
@@ -596,10 +640,13 @@ export interface DataSetAggregateQuery {
   filter?: DataSetFilter;
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export type DataSetChange = DataSetChangeById | DataSetChangeByExternalId;
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface DataSetChangeByExternalId extends DataSetPatch, ExternalId {}
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface DataSetChangeById extends DataSetPatch, InternalId {}
 
 export type Label = ExternalId;
@@ -625,6 +672,7 @@ export interface LabelsPatch {
   remove?: Label[];
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface ExternalLabelDefinition extends Label {
   /**
    * Name of the label.
@@ -637,10 +685,12 @@ export interface ExternalLabelDefinition extends Label {
   description?: string;
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface LabelDefinition extends ExternalLabelDefinition {
   createdTime: Date;
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface LabelDefinitionFilter {
   /**
    * Returns the label definitions matching that name.
@@ -653,12 +703,15 @@ export interface LabelDefinitionFilter {
   externalIdPrefix?: ExternalIdPrefix;
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface LabelDefinitionFilterRequest extends FilterQuery {
   filter?: LabelDefinitionFilter;
 }
 
 /**
  * Filter on data sets with exact match
+ *
+ * @deprecated Asset-centric API type, will move to the legacy namespace in the next major release.
  */
 export interface DataSetFilter extends CreatedAndLastUpdatedTimeFilter {
   metadata?: Metadata;
@@ -666,10 +719,12 @@ export interface DataSetFilter extends CreatedAndLastUpdatedTimeFilter {
   writeProtected?: DataSetWriteProtected;
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface DataSetFilterRequest extends FilterQuery {
   filter?: DataSetFilter;
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface DataSetPatch {
   update: {
     externalId?: SinglePatchString;
@@ -684,15 +739,20 @@ export interface DataSetPatch {
  * Write-protected data sets impose additional restrictions on write access to resources inside a data set which can help ensuring data integrity of the data set.
  * For write-protected data set in addition to a writing capability that has given resource data in scope, principal must be an owners of the data set.
  * Note that this does not affect any security categories set for given resource data, both security category membership and data set ownership is required in such case
+ *
+ * @deprecated Asset-centric API type, will move to the legacy namespace in the next major release.
  */
 export type DataSetWriteProtected = boolean;
 
+/** @deprecated Asset-centric 3D asset mapping type, to be retired end of 2027. No SDK replacement exists yet; a data-modeling-based mapping API will be added before this is removed. */
 export type DeleteAssetMapping3D = AssetMapping3DBase;
 
 export type EXECUTE = 'EXECUTE';
 
 /**
  * Query schema for event aggregate endpoint
+ *
+ * @deprecated Asset-centric API type, will move to the legacy namespace in the next major release.
  */
 export interface EventAggregateQuery {
   /**
@@ -701,6 +761,7 @@ export interface EventAggregateQuery {
   filter?: EventFilter;
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface EventUniqueValuesAggregate extends EventAggregateQuery {
   /**
    * The field name(s) to apply the aggregation on. Currently limited to one field.
@@ -708,12 +769,16 @@ export interface EventUniqueValuesAggregate extends EventAggregateQuery {
   fields: ('type' | 'subtype' | 'dataSetId')[];
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export type EventChange = EventChangeById | EventChangeByExternalId;
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface EventChangeByExternalId extends EventPatch, ExternalId {}
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface EventChangeById extends EventPatch, InternalId {}
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface EventFilter extends CreatedAndLastUpdatedTimeFilter {
   startTime?: DateRange;
   /**
@@ -759,12 +824,14 @@ export interface EventFilter extends CreatedAndLastUpdatedTimeFilter {
   externalIdPrefix?: ExternalIdPrefix;
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface EventFilterRequest extends FilterQuery {
   filter?: EventFilter;
   sort?: EventSort;
   partition?: Partition;
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface EventPatch {
   update: {
     externalId?: SinglePatchString;
@@ -780,10 +847,12 @@ export interface EventPatch {
   };
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface EventSearch {
   description?: string;
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface EventSearchRequest extends Limit {
   filter?: EventFilter;
   search?: EventSearch;
@@ -793,6 +862,8 @@ export interface EventSearchRequest extends Limit {
  * Sort by selected fields.
  * Only sorting on 1 field is currently supported.
  * Partitions are done independently of sorting, there is no guarantee on sort order between elements from different partitions.
+ *
+ * @deprecated Asset-centric API type, will move to the legacy namespace in the next major release.
  */
 export interface EventSort {
   startTime?: SortOrder;
@@ -801,6 +872,7 @@ export interface EventSort {
   lastUpdatedTime?: SortOrder;
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface ExternalAsset {
   externalId?: CogniteExternalId;
   name: AssetName;
@@ -812,6 +884,7 @@ export interface ExternalAsset {
   labels?: Label[];
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface ExternalAssetItem extends ExternalAsset {
   /**
    * External id to the parent asset
@@ -819,6 +892,7 @@ export interface ExternalAssetItem extends ExternalAsset {
   parentExternalId?: CogniteExternalId;
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface ExternalDataSet {
   externalId?: CogniteExternalId;
   /**
@@ -835,6 +909,8 @@ export interface ExternalDataSet {
 
 /**
  * An event represents something that happened at a given interval in time, e.g a failure, a work order etc.
+ *
+ * @deprecated Asset-centric API type, will move to the legacy namespace in the next major release.
  */
 export interface ExternalEvent {
   externalId?: CogniteExternalId;
@@ -865,6 +941,7 @@ export interface ExternalFileInfo {
   geoLocation?: FileGeoLocation;
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface ExternalSequence extends SequenceBase {
   /**
    * List of column definitions
@@ -874,6 +951,8 @@ export interface ExternalSequence extends SequenceBase {
 
 /**
  * Describes a new column
+ *
+ * @deprecated Asset-centric API type, will move to the legacy namespace in the next major release.
  */
 export interface ExternalSequenceColumn
   extends ExternalSequenceColumnBase,
@@ -1411,6 +1490,7 @@ export interface RemoveField {
   setNull: boolean;
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export type RelationshipResourceType =
   | 'asset'
   | 'timeSeries'
@@ -1418,6 +1498,7 @@ export type RelationshipResourceType =
   | 'event'
   | 'sequence';
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface ExternalRelationship {
   /**
    * External id of the relationship, must be unique within the project
@@ -1468,10 +1549,12 @@ export interface ExternalRelationship {
   labels?: Label[];
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface Relationship
   extends ExternalRelationship,
     CreatedAndLastUpdatedTime {}
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface RelationshipsFilterRequest extends FilterQuery {
   /**
    * Filter on relationships with exact match.
@@ -1490,6 +1573,7 @@ export interface RelationshipsFilterRequest extends FilterQuery {
   fetchResources?: boolean;
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface RelationshipsFilter extends CreatedAndLastUpdatedTimeFilter {
   /**
    * Include relationships that have any of these values in their sourceExternalId field
@@ -1687,6 +1771,8 @@ export interface SecurityCategorySpec {
 
 /**
  * Information about the sequence stored in the database
+ *
+ * @deprecated Asset-centric API type, will move to the legacy namespace in the next major release.
  */
 export interface Sequence
   extends SequenceBase,
@@ -1697,6 +1783,8 @@ export interface Sequence
 
 /**
  * A sequence row values with row number and columns information
+ *
+ * @deprecated Asset-centric API type, will move to the legacy namespace in the next major release.
  */
 export interface SequenceRow {
   rowNumber: number;
@@ -1716,10 +1804,13 @@ interface SequenceBase {
   metadata?: Metadata;
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export type SequenceChange = SequencePatch & IdEither;
 
 /**
  * Information about a column stored in the database
+ *
+ * @deprecated Asset-centric API type, will move to the legacy namespace in the next major release.
  */
 export interface SequenceColumn
   extends ExternalSequenceColumnBase,
@@ -1731,6 +1822,8 @@ export interface SequenceColumn
 
 /**
  * Information about a column stored in the database
+ *
+ * @deprecated Asset-centric API type, will move to the legacy namespace in the next major release.
  */
 export interface SequenceColumnBasicInfo {
   name?: SequenceColumnName;
@@ -1740,19 +1833,26 @@ export interface SequenceColumnBasicInfo {
 
 /**
  * Description of the column
+ *
+ * @deprecated Asset-centric API type, will move to the legacy namespace in the next major release.
  */
 export type SequenceColumnDescription = string;
 
 /**
  *  Human readable name of the column
+ *
+ * @deprecated Asset-centric API type, will move to the legacy namespace in the next major release.
  */
 export type SequenceColumnName = string;
 
 /**
  * Description of the sequence
+ *
+ * @deprecated Asset-centric API type, will move to the legacy namespace in the next major release.
  */
 export type SequenceDescription = string;
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface SequenceFilter {
   filter?: {
     name?: SequenceName;
@@ -1776,16 +1876,22 @@ export interface SequenceFilter {
 
 /**
  * Element of type corresponding to the column type. May include NULL!
+ *
+ * @deprecated Asset-centric API type, will move to the legacy namespace in the next major release.
  */
 export type SequenceItem = number | string | null;
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface SequenceListScope extends SequenceFilter, Limit, Cursor {}
 
 /**
  * Name of the sequence
+ *
+ * @deprecated Asset-centric API type, will move to the legacy namespace in the next major release.
  */
 export type SequenceName = string;
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface SequencePatch {
   update: {
     name?: SinglePatchString;
@@ -1800,6 +1906,8 @@ export interface SequencePatch {
 
 /**
  * A single row of datapoints
+ *
+ * @deprecated Asset-centric API type, will move to the legacy namespace in the next major release.
  */
 export interface SequenceRowData {
   /**
@@ -1813,6 +1921,7 @@ export interface SequenceRowData {
   values: SequenceItem[];
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface SequenceRowsData extends InternalId {
   externalId?: ExternalId;
   /**
@@ -1825,6 +1934,7 @@ export interface SequenceRowsData extends InternalId {
   rows: SequenceRowData[];
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export type SequenceRowsDelete = SequenceRowsDeleteData & IdEither;
 
 interface SequenceRowsDeleteData {
@@ -1834,10 +1944,13 @@ interface SequenceRowsDeleteData {
   rows: number[];
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export type SequenceRowsInsert = SequenceRowsInsertData & IdEither;
 
 /**
  * Data from a sequence
+ *
+ * @deprecated Asset-centric API type, will move to the legacy namespace in the next major release.
  */
 export interface SequenceRowsInsertData {
   /**
@@ -1850,6 +1963,7 @@ export interface SequenceRowsInsertData {
   rows: SequenceRowData[];
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface SequenceRowsResponseData extends InternalId {
   externalId?: ExternalId;
   columns: SequenceColumnBasicInfo[];
@@ -1859,6 +1973,8 @@ export interface SequenceRowsResponseData extends InternalId {
 
 /**
  * A request for datapoints stored
+ *
+ * @deprecated Asset-centric API type, will move to the legacy namespace in the next major release.
  */
 export type SequenceRowsRetrieve = SequenceRowsRetriveData & IdEither;
 
@@ -1880,6 +1996,7 @@ interface SequenceRowsRetriveData extends Cursor, Limit {
   columns?: string[];
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface SequenceSearchFilter extends SequenceFilter {
   search?: {
     name?: SequenceName;
@@ -1892,6 +2009,7 @@ export interface SequenceSearchFilter extends SequenceFilter {
   };
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export const SequenceValueType = {
   STRING: 'STRING' as SequenceValueType,
   DOUBLE: 'DOUBLE' as SequenceValueType,
@@ -1902,6 +2020,8 @@ export const SequenceValueType = {
  * What type the datapoints in a column will have.
  * DOUBLE is restricted to the range [-1E100, 1E100]
  * @default STRING
+ *
+ * @deprecated Asset-centric API type, will move to the legacy namespace in the next major release.
  */
 export type SequenceValueType = 'STRING' | 'DOUBLE' | 'LONG';
 
@@ -2033,8 +2153,10 @@ export type WRITE = 'WRITE';
 
 export type WRITE_PROPERTIES = 'WRITE_PROPERTIES';
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export type ContextJobStatus = 'QUEUED' | 'RUNNING' | 'COMPLETED' | 'FAILED';
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export const ContextJobStatus = {
   QUEUED: 'QUEUED' as ContextJobStatus,
   RUNNING: 'RUNNING' as ContextJobStatus,
@@ -2044,9 +2166,12 @@ export const ContextJobStatus = {
 
 /**
  * Contextualization job ID.
+ *
+ * @deprecated Asset-centric API type, will move to the legacy namespace in the next major release.
  */
 export type ContextJobId = number;
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface EntityMatchingResponseBase {
   /**
    * User defined name of the model.
@@ -2065,12 +2190,14 @@ export interface EntityMatchingResponseBase {
   statusTime: Date;
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface ExternalEntityToMatch {
   id?: CogniteInternalId;
   externalId?: CogniteExternalId;
   [key: string]: string | number | undefined;
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export type EntityMatchingFeatureType =
   | 'simple'
   | 'bigram'
@@ -2078,6 +2205,7 @@ export type EntityMatchingFeatureType =
   | 'bigramextratokenizers'
   | 'bigramcombo';
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export const EntityMatchingFeatureType = {
   SIMPLE: 'simple' as EntityMatchingFeatureType,
   BIGRAM: 'bigram' as EntityMatchingFeatureType,
@@ -2087,6 +2215,7 @@ export const EntityMatchingFeatureType = {
   BIGRAM_COMBO: 'bigramcombo' as EntityMatchingFeatureType,
 };
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export type EntityMatchingClassifier =
   | 'randomforest'
   | 'decisiontree'
@@ -2094,6 +2223,7 @@ export type EntityMatchingClassifier =
   | 'augmentedlogisticregression'
   | 'augmentedrandomforest';
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export const EntityMatchingClassifier = {
   RANDOM_FOREST: 'randomforest' as EntityMatchingClassifier,
   DECISION_TREE: 'decisiontree' as EntityMatchingClassifier,
@@ -2103,11 +2233,13 @@ export const EntityMatchingClassifier = {
   AUGMENTED_RANDOM_FOREST: 'augmentedrandomforest' as EntityMatchingClassifier,
 };
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface EntityMatchingField {
   from: string;
   to: string;
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export type ExternalEntityTrueMatch = ExternalEntityTrueMatchSource &
   ExternalEntityTrueMatchTarget;
 
@@ -2139,6 +2271,7 @@ type ExternalEntityTrueMatchTarget =
       targetExternalId: CogniteExternalId;
     };
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface EntityMatchingCreateRequest {
   /**
    * List of custom source object to match from, for example, time series. String key -> value. Only string values are considered in the matching. Optional id and/or externalId fields.
@@ -2184,6 +2317,7 @@ export interface EntityMatchingCreateRequest {
   ignoreMissingFields?: boolean;
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface EntityMatchingCreateResponse
   extends EntityMatchingResponseBase {
   id: CogniteInternalId;
@@ -2210,6 +2344,7 @@ export interface EntityMatchingCreateResponse
   originalId?: CogniteInternalId;
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface EntityMatchingModel extends EntityMatchingResponseBase {
   id: CogniteInternalId;
   externalId: CogniteExternalId;
@@ -2231,8 +2366,10 @@ export interface EntityMatchingModel extends EntityMatchingResponseBase {
   originalId?: number;
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export type EntityMatchingChange = IdEither & EntityMatchingPatch;
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface EntityMatchingPatch {
   update: {
     /**
@@ -2246,6 +2383,7 @@ export interface EntityMatchingPatch {
   };
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export type EntityMatchingPredictRequest = IdEither &
   EntityMatchingPredictRequestBase;
 
@@ -2268,6 +2406,7 @@ interface EntityMatchingPredictRequestBase {
   scoreThreshold?: number;
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface EntityMatchingPredictResponse
   extends EntityMatchingResponseBase {
   /**
@@ -2276,6 +2415,7 @@ export interface EntityMatchingPredictResponse
   jobId: number;
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export type EntityMatchingRefitRequest = IdEither &
   EntityMatchingRefitRequestBase;
 
@@ -2298,6 +2438,7 @@ interface EntityMatchingRefitRequestBase {
   targets?: ExternalEntityToMatch[];
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface EntityMatchingRefitResponse
   extends EntityMatchingResponseBase {
   id: CogniteInternalId;
@@ -2324,6 +2465,7 @@ export interface EntityMatchingRefitResponse
   originalId: CogniteInternalId;
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface EntityMatchingPredictions {
   jobId: ContextJobId;
   /**
@@ -2336,6 +2478,7 @@ export interface EntityMatchingPredictions {
   items: EntityMatchingPrediction[];
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface EntityMatchingPrediction {
   /**
    * The matchFrom item given to predict.
@@ -2347,6 +2490,7 @@ export interface EntityMatchingPrediction {
   matches: EntityMatchingPredictedItem[];
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface EntityMatchingPredictedItem {
   /**
    * The matchTo item given to predict.
@@ -2358,6 +2502,7 @@ export interface EntityMatchingPredictedItem {
   score: number;
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface EntityMatchingFilter {
   /**
    * User defined name of the model.
@@ -2385,10 +2530,12 @@ export interface EntityMatchingFilter {
   originalModelId?: CogniteInternalId;
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface EntityMatchingFilterRequest extends FilterQuery {
   filter?: EntityMatchingFilter;
 }
 
+/** @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release. */
 export type Source =
   | EventsSource
   | AssetsSource
@@ -2398,49 +2545,58 @@ export type Source =
 
 type ObjectOrString<T> = { [K in keyof T]: ObjectOrString<T[K]> | string };
 
+/** @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release. */
 export type EventsSource = {
   type: 'events';
   filter?: ObjectOrString<EventFilter>;
   mappings?: { [K in string]: string };
 };
 
+/** @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release. */
 export type AssetsSource = {
   type: 'assets';
   filter?: ObjectOrString<AssetFilterProps>;
   mappings?: { [K in string]: string };
 };
 
+/** @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release. */
 export type SequencesSource = {
   type: 'sequences';
   filter?: ObjectOrString<SequenceFilter>;
   mappings?: { [K in string]: string };
 };
 
+/** @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release. */
 export type TimeSeriesSource = {
   type: 'timeSeries';
   filter?: ObjectOrString<TimeSeriesFilter>;
   mappings?: { [K in string]: string };
 };
 
+/** @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release. */
 export type FilesSource = {
   type: 'files';
   filter?: ObjectOrString<FileFilter>;
   mappings?: { [K in string]: string };
 };
 
+/** @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release. */
 export type ExternalView = {
   externalId: string;
   source: Source;
   dataSetId?: number;
 };
 
+/** @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release. */
 export type View = ExternalView & {
   createdTime: Timestamp;
   lastUpdatedTime: Timestamp;
 };
 
+/** @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release. */
 export type ViewFilterQuery = FilterQuery;
 
+/** @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release. */
 export interface ViewResolveRequest extends FilterQuery {
   externalId: string;
   input?: { [K in string]: unknown };
@@ -2448,6 +2604,7 @@ export interface ViewResolveRequest extends FilterQuery {
   limit?: number;
 }
 
+/** @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release. */
 export interface ExternalTemplateGroup extends ExternalId {
   /**
    * The externalId of a Template Group
@@ -2470,6 +2627,7 @@ export interface ExternalTemplateGroup extends ExternalId {
   dataSetId?: number;
 }
 
+/** @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release. */
 export type TemplateGroup = ExternalTemplateGroup & {
   /**
    * The owners of a Template Group
@@ -2487,6 +2645,7 @@ export type TemplateGroup = ExternalTemplateGroup & {
   lastUpdatedTime: Timestamp;
 };
 
+/** @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release. */
 export interface TemplateGroupFilter {
   /**
    * Filter on owners.
@@ -2499,10 +2658,12 @@ export interface TemplateGroupFilter {
   dataSetIds?: number[];
 }
 
+/** @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release. */
 export interface TemplateGroupFilterQuery extends FilterQuery {
   filter?: TemplateGroupFilter;
 }
 
+/** @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release. */
 export interface TemplateGroupVersion {
   version: number;
   schema: string;
@@ -2518,6 +2679,7 @@ export interface TemplateGroupVersion {
   lastUpdatedTime: Timestamp;
 }
 
+/** @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release. */
 export enum ConflictMode {
   /** Patch the existing version, but will fail if there are breaking changes. */
   Patch = 'Patch',
@@ -2527,6 +2689,7 @@ export enum ConflictMode {
   Force = 'Force',
 }
 
+/** @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release. */
 export interface ExternalTemplateGroupVersion {
   schema: string;
   /** Specifies the conflict mode to use. By default the mode is 'ConflictMode.Patch'.*/
@@ -2534,21 +2697,25 @@ export interface ExternalTemplateGroupVersion {
   version?: number;
 }
 
+/** @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release. */
 export interface TemplateGroupVersionFilter extends FilterQuery {
   minVersion?: number;
   maxVersion?: number;
 }
 
+/** @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release. */
 export interface TemplateGroupVersionFilterQuery extends FilterQuery {
   filter?: TemplateGroupVersionFilter;
 }
 
+/** @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release. */
 export interface ExternalTemplateInstance extends ExternalId {
   templateName: string;
   dataSetId?: number;
   fieldResolvers: { [K in string]: FieldResolver | object };
 }
 
+/** @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release. */
 export type TemplateInstance = ExternalTemplateInstance & {
   /**
    * When resource was created
@@ -2561,16 +2728,19 @@ export type TemplateInstance = ExternalTemplateInstance & {
   lastUpdatedTime: Timestamp;
 };
 
+/** @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release. */
 export interface TemplateInstancePatch extends ExternalId {
   update: {
     fieldResolvers: ObjectPatch<FieldResolver | object>;
   };
 }
 
+/** @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release. */
 export interface FieldResolver {
   type: string;
 }
 
+/** @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release. */
 export class ConstantResolver implements FieldResolver {
   type = 'constant';
   value: object;
@@ -2580,6 +2750,7 @@ export class ConstantResolver implements FieldResolver {
   }
 }
 
+/** @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release. */
 export class RawResolver implements FieldResolver {
   type = 'raw';
   dbName: string;
@@ -2600,6 +2771,7 @@ export class RawResolver implements FieldResolver {
   }
 }
 
+/** @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release. */
 export class SyntheticTimeSeriesResolver implements FieldResolver {
   type = 'syntheticTimeSeries';
   expression: string;
@@ -2629,6 +2801,7 @@ export class SyntheticTimeSeriesResolver implements FieldResolver {
   }
 }
 
+/** @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release. */
 export class ViewResolver implements FieldResolver {
   type = 'view';
   externalId: string;
@@ -2640,26 +2813,31 @@ export class ViewResolver implements FieldResolver {
   }
 }
 
+/** @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release. */
 export interface TemplateInstanceFilter {
   dataSetIds?: number[];
   templateNames?: string[];
 }
 
+/** @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release. */
 export interface TemplateInstanceFilterQuery extends FilterQuery {
   filter?: TemplateInstanceFilter;
 }
 
+/** @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release. */
 export type GraphQlResponse = {
   data: unknown;
   errors: GraphQlError[];
 };
 
+/** @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release. */
 export type GraphQlError = {
   message: string;
   path: string[];
   locations: { line: number; column: number }[];
 };
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface RelationshipsRetrieveParams extends IgnoreUnknownIds {
   /**
    * If true, will try to fetch the resources referred to in the relationship,
@@ -2669,22 +2847,28 @@ export interface RelationshipsRetrieveParams extends IgnoreUnknownIds {
   fetchResources?: boolean;
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export type AnnotatedResourceType = 'file' | 'threedmodel';
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export type AnnotationStatus = 'suggested' | 'approved' | 'rejected';
 
 // TODO [CXT-463] Use annotation-types package definitions
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export type AnnotationType = string;
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface AnnotationModel extends AnnotationCreate {
   id: CogniteInternalId;
   createdTime: Date;
   lastUpdatedTime: Date;
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface AnnotationCreate extends AnnotationSuggest {
   status: AnnotationStatus;
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface AnnotationSuggest {
   annotatedResourceType: AnnotatedResourceType;
   annotatedResourceId: CogniteInternalId;
@@ -2695,8 +2879,10 @@ export interface AnnotationSuggest {
   data: AnnotationData;
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface AnnotationChangeById extends InternalId, AnnotationUpdate {}
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface AnnotationUpdate {
   update: {
     annotationType?: SetField<AnnotationType>;
@@ -2704,13 +2890,16 @@ export interface AnnotationUpdate {
     status?: SetField<AnnotationStatus>;
   };
 }
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface AnnotationFilterRequest
   extends AnnotationFilter,
     FilterQuery {}
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface AnnotationFilter {
   filter: AnnotationFilterProps;
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface AnnotationFilterProps {
   annotatedResourceType: AnnotatedResourceType;
   annotatedResourceIds: IdEither[];
@@ -2722,14 +2911,17 @@ export interface AnnotationFilterProps {
   data?: Partial<AnnotationData>;
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface AnnotationReverseLookupRequest
   extends AnnotationReverseLookupFilter,
     FilterQuery {}
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface AnnotationReverseLookupFilter {
   filter: AnnotationReverseLookupFilterProps;
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface AnnotationReverseLookupFilterProps {
   annotatedResourceType: AnnotatedResourceType;
   annotationType?: AnnotationType;

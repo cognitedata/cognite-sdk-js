@@ -1,5 +1,7 @@
 # Sequences
 
+> **Deprecated.** This is an asset-centric API, retired at the end of 2027. In the next major release it moves to `client.legacy`. See [DEPRECATIONS.md](./DEPRECATIONS.md).
+
 <!--What are Sequences?  Generic overview information-->
 
 In Cognite Data Fusion, a [sequence](https://docs.cognite.com/dev/concepts/resource_types/sequences) is a generic **resource type** for indexing a series of **rows** by **row number**. Each **row** contains one or more **columns** with either string or numeric data. Examples of sequences are performance curves and various types of logs.

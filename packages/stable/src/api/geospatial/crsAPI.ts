@@ -8,6 +8,9 @@ import type {
   GeospatialSridId,
 } from './types';
 
+/**
+ * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.geospatial` in the next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md for details.
+ */
 export class CrsAPI extends BaseResourceAPI<GeospatialCRSResponse> {
   /**
    * [Create Coordinate Reference Systems](https://docs.cognite.com/api/v1/#operation/createGeospatialCoordinateReferenceSystems)
@@ -21,6 +24,8 @@ export class CrsAPI extends BaseResourceAPI<GeospatialCRSResponse> {
    *
    * const createdCRS = await client.geospatial.crs.create(crsToCreate);
    * ```
+   *
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.geospatial` in the next major release.
    */
   public create = (
     crs: GeospatialCoordinateReferenceSystem[]
@@ -34,6 +39,8 @@ export class CrsAPI extends BaseResourceAPI<GeospatialCRSResponse> {
    * ```js
    * const retrievedCRS = await client.geospatial.crs.retrieve([{ srid: 4326 }]);
    * ```
+   *
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.geospatial` in the next major release.
    */
   public retrieve = (
     srids: GeospatialSridId[]
@@ -48,6 +55,8 @@ export class CrsAPI extends BaseResourceAPI<GeospatialCRSResponse> {
    * ```js
    * const allCRS = await client.geospatial.crs.list({ filterOnlyCustom : true });
    * ```
+   *
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.geospatial` in the next major release.
    */
   public list = (params?: {
     filterOnlyCustom?: boolean;
@@ -64,6 +73,8 @@ export class CrsAPI extends BaseResourceAPI<GeospatialCRSResponse> {
    * ```js
    * await client.geospatial.crs.delete([{ srid: 4326}]);
    * ```
+   *
+   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.geospatial` in the next major release.
    */
   public delete = (srids: GeospatialSridId[]) => {
     return this.deleteEndpoint<object, GeospatialSridId>(srids);

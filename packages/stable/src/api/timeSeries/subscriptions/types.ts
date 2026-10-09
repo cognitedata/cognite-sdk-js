@@ -22,10 +22,13 @@ import type { TimeSeriesType } from '../types';
 // Subscription filter DSL
 // =====================================================
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export type SubscriptionFilterProperty = [string] | [string, string];
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export type SubscriptionFilterScalar = string | number | boolean;
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface SubscriptionEqualsFilter {
   equals: {
     property: SubscriptionFilterProperty;
@@ -33,6 +36,7 @@ export interface SubscriptionEqualsFilter {
   };
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface SubscriptionInFilter {
   in: {
     property: SubscriptionFilterProperty;
@@ -40,6 +44,7 @@ export interface SubscriptionInFilter {
   };
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface SubscriptionRangeFilter {
   range: {
     property: SubscriptionFilterProperty;
@@ -50,6 +55,7 @@ export interface SubscriptionRangeFilter {
   };
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface SubscriptionPrefixFilter {
   prefix: {
     property: SubscriptionFilterProperty;
@@ -57,12 +63,14 @@ export interface SubscriptionPrefixFilter {
   };
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface SubscriptionExistsFilter {
   exists: {
     property: SubscriptionFilterProperty;
   };
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface SubscriptionContainsAnyFilter {
   containsAny: {
     property: SubscriptionFilterProperty;
@@ -70,6 +78,7 @@ export interface SubscriptionContainsAnyFilter {
   };
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface SubscriptionContainsAllFilter {
   containsAll: {
     property: SubscriptionFilterProperty;
@@ -77,6 +86,7 @@ export interface SubscriptionContainsAllFilter {
   };
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export type SubscriptionLeafFilter =
   | SubscriptionEqualsFilter
   | SubscriptionInFilter
@@ -86,11 +96,13 @@ export type SubscriptionLeafFilter =
   | SubscriptionContainsAnyFilter
   | SubscriptionContainsAllFilter;
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export type SubscriptionBoolFilter =
   | { and: SubscriptionFilterLanguage[] }
   | { or: SubscriptionFilterLanguage[] }
   | { not: SubscriptionFilterLanguage };
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export type SubscriptionFilterLanguage =
   | SubscriptionBoolFilter
   | SubscriptionLeafFilter;
@@ -99,6 +111,7 @@ export type SubscriptionFilterLanguage =
 // Create / read / update / delete
 // =====================================================
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface DataPointSubscriptionCreateBase {
   externalId: CogniteExternalId;
   name?: string;
@@ -107,6 +120,7 @@ export interface DataPointSubscriptionCreateBase {
   partitionCount: number;
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export type DataPointSubscriptionCreate =
   | (DataPointSubscriptionCreateBase & {
       timeSeriesIds: CogniteExternalId[];
@@ -124,6 +138,7 @@ export type DataPointSubscriptionCreate =
       instanceIds?: undefined;
     });
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface DataPointSubscription {
   externalId: CogniteExternalId;
   name?: string;
@@ -136,39 +151,47 @@ export interface DataPointSubscription {
   lastUpdatedTime: Date;
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface DataPointSubscriptionMember {
   externalId?: CogniteExternalId;
   id?: CogniteInternalId;
   instanceId?: CogniteInstanceId;
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface DataPointSubscriptionListQuery extends Cursor {
   limit?: number;
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface DataPointSubscriptionListResponse {
   items: DataPointSubscription[];
   nextCursor?: string;
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface DataPointSubscriptionMembersListQuery extends Cursor {
   externalId: CogniteExternalId;
   limit?: number;
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface DataPointSubscriptionMembersListResponse {
   items: DataPointSubscriptionMember[];
   nextCursor?: string;
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export type DataPointSubscriptionTimeSeriesIdsUpdate =
   | { add: CogniteExternalId[]; remove: CogniteExternalId[] }
   | { set: CogniteExternalId[] };
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export type DataPointSubscriptionInstanceIdsUpdate =
   | { add: CogniteInstanceId[]; remove: CogniteInstanceId[] }
   | { set: CogniteInstanceId[] };
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface DataPointSubscriptionUpdateBody {
   timeSeriesIds?: DataPointSubscriptionTimeSeriesIdsUpdate;
   instanceIds?: DataPointSubscriptionInstanceIdsUpdate;
@@ -178,15 +201,18 @@ export interface DataPointSubscriptionUpdateBody {
   filter?: { set: SubscriptionFilterLanguage };
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface DataPointSubscriptionUpdate {
   externalId: CogniteExternalId;
   update: DataPointSubscriptionUpdateBody;
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface DataPointSubscriptionByIdsQuery extends IgnoreUnknownIds {
   items: { externalId: CogniteExternalId }[];
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface DataPointSubscriptionsDeleteQuery extends IgnoreUnknownIds {
   items: { externalId: CogniteExternalId }[];
 }
@@ -195,11 +221,13 @@ export interface DataPointSubscriptionsDeleteQuery extends IgnoreUnknownIds {
 // List subscription data
 // =====================================================
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface DataPointSubscriptionPartitionCursor {
   index: number;
   cursor?: string;
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface DataPointSubscriptionListDataQuery {
   externalId?: CogniteExternalId;
   partitions: DataPointSubscriptionPartitionCursor[];
@@ -211,6 +239,7 @@ export interface DataPointSubscriptionListDataQuery {
   treatUncertainAsBad?: boolean;
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface GetTimeSeriesForSubscription {
   id: CogniteInternalId;
   externalId?: CogniteExternalId;
@@ -219,14 +248,17 @@ export interface GetTimeSeriesForSubscription {
   type: TimeSeriesType;
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export type SubscriptionDataUpsert = DoubleDatapoint | StringDatapoint;
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface DataPointSubscriptionDataUpdate {
   timeSeries?: GetTimeSeriesForSubscription;
   upserts?: SubscriptionDataUpsert[];
   deletes?: DatapointsDeleteRange[];
 }
 
+/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
 export interface DataPointSubscriptionListDataResponse {
   updates: DataPointSubscriptionDataUpdate[];
   subscriptionChanges?: {
