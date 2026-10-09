@@ -81,6 +81,7 @@ const constQuery = {
 
 type ConstResult = ResultOf<typeof constQuery>;
 
+declare const api: InstancesAPI;
 declare const typedQuery: TypedQuery<{
   'spaceA/ViewA/v1': { propOne: string };
 }>;
@@ -311,8 +312,48 @@ describe('instances.query response types', () => {
   });
 });
 
+describe('instances.query response types for inline request literals', () => {
+  test('an inline literal infers everything, as if declared as const', () => {
+    async function run() {
+      const result = await api.query({
+        with: { nodesA: { nodes: { filter: { hasData: [view] } } } },
+        select: {
+          nodesA: {
+            sources: [{ source: view, properties: ['propOne', 'propTwo'] }],
+          },
+        },
+      });
+      return result;
+    }
+    type Result = Awaited<ReturnType<typeof run>>;
+    expectTypeOf<keyof KnownKeys<Result['items']>>().toEqualTypeOf<'nodesA'>();
+    expectTypeOf<
+      Result['items']['nodesA'][number]
+    >().toMatchTypeOf<NodeDefinition>();
+    type Props =
+      Result['items']['nodesA'][number]['properties']['spaceA']['ViewA/v1'];
+    expectTypeOf<KnownKeys<Props>>().toEqualTypeOf<{
+      propOne: RawPropertyValueV3;
+      propTwo: RawPropertyValueV3;
+    }>();
+  });
+
+  test('an inline literal passed to a TypedQuery gets concrete property types', () => {
+    async function run() {
+      const result = await typedQuery({
+        with: { nodesA: { nodes: { filter: { hasData: [view] } } } },
+        select: {
+          nodesA: { sources: [{ source: view, properties: ['propOne'] }] },
+        },
+      });
+      return result.items.nodesA[0].properties.spaceA['ViewA/v1'].propOne;
+    }
+    expectTypeOf<Awaited<ReturnType<typeof run>>>().toEqualTypeOf<string>();
+  });
+});
+
 describe('instances.query response types for requests built at runtime', () => {
-  test('an inline literal infers keys and kind but keeps spaces, views and properties wide', () => {
+  test('a literal stored without as const infers keys and kind but keeps spaces, views and properties wide', () => {
     type Result = ResultOf<{
       with: { rs: { nodes: { filter: { hasData: [] } } } };
       select: {

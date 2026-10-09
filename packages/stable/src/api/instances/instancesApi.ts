@@ -222,11 +222,10 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
   /**
    * [Query instances](https://developer.cognite.com/api#tag/Instances/operation/queryContent)
    *
-   * The response is typed from the request. Declare the request
-   * "as const satisfies QueryRequestInput" to get result set keys, node or
-   * edge kind, spaces, views and property names inferred (from TypeScript 5.3,
-   * "as const satisfies QueryRequest" works as well). A request typed as the
-   * plain QueryRequest gives the untyped QueryResponse. Property values are
+   * The response is typed from the request. An inline request literal, or a
+   * request declared "as const satisfies QueryRequestInput", gets result set
+   * keys, node or edge kind, spaces, views and property names inferred. A
+   * request typed as the plain QueryRequest gives the untyped QueryResponse. Property values are
    * RawPropertyValueV3 unless you supply their types as the second type
    * argument, see QueryTypedSources, or by assigning the method to a
    * TypedQuery once. Cursor values from a previous response can be passed
@@ -262,7 +261,7 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    * ```
    */
   public query = async <
-    TRequest extends QueryRequestInput = QueryRequest,
+    const TRequest extends QueryRequestInput = QueryRequest,
     TTypedSources extends QueryTypedSources = Record<never, never>,
   >(
     params: TRequest
