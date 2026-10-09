@@ -46,7 +46,38 @@ export type QueryViewKey<TView extends ViewReference> =
  * ```
  */
 export type QueryTypedSources = {
-  [viewKey: `${string}/${string}/${string}`]: Record<string, unknown>;
+  [viewKey: `${string}/${string}/${string}`]: object;
+};
+
+/**
+ * Builds a {@link QueryTypedSources} map from a list of `{ source, properties }`
+ * entries, the shape a code generator emits per view. The list is folded into
+ * the keyed map once, when the alias is instantiated, so lookups per query stay
+ * constant-time. View references must be literal (`as const`); an entry whose
+ * reference is widened to `string` is dropped from the map.
+ *
+ * ```ts
+ * type Model = QueryTypedSourcesFromList<[
+ *   { source: typeof EquipmentView; properties: Equipment },
+ *   { source: typeof AssetView; properties: Asset },
+ * ]>;
+ * ```
+ */
+export type QueryTypedSourcesFromList<
+  TList extends readonly QueryTypedSourceEntry[],
+> = {
+  [Entry in TList[number] as string extends
+    | Entry['source']['space']
+    | Entry['source']['externalId']
+    | Entry['source']['version']
+    ? never
+    : QueryViewKey<Entry['source']>]: Entry['properties'];
+};
+
+/** One entry of {@link QueryTypedSourcesFromList}. */
+export type QueryTypedSourceEntry = {
+  readonly source: ViewReference;
+  readonly properties: object;
 };
 
 /**
@@ -66,7 +97,7 @@ export type QueryTypedSources = {
  * the client safely.
  */
 export type TypedQuery<TTypedSources extends QueryTypedSources> = <
-  TRequest extends QueryRequestInput = QueryRequest,
+  const TRequest extends QueryRequestInput = QueryRequest,
 >(
   params: TRequest
 ) => Promise<QueryResult<TRequest, TTypedSources>>;
@@ -114,12 +145,13 @@ export type DeepReadonly<T> = T extends readonly (infer U)[]
  *
  * - A value of the plain `QueryRequest` type (or no type argument) gives the
  *   untyped `QueryResponse`, exactly as before.
- * - An inline object literal infers the result set keys and node/edge kind.
- *   Spaces, views and properties stay wide because TypeScript widens their
- *   string values.
- * - `const query = { ... } as const satisfies QueryRequestInput` infers
- *   everything: result set keys, node/edge kind, space keys, view keys and
- *   property names. (`satisfies QueryRequest` works from TypeScript 5.3.)
+ * - An inline object literal infers everything: result set keys, node/edge
+ *   kind, space keys, view keys and property names. The type parameter is
+ *   `const`, so the literal is read as if it were declared `as const`.
+ * - A request stored in a variable infers the same when it is declared
+ *   `as const satisfies QueryRequestInput` (`satisfies QueryRequest` works from
+ *   TypeScript 5.3). Without `as const` its string values are widened and the
+ *   result keeps the wide property types.
  *
  * Rules that keep the type honest about what the API returns:
  *

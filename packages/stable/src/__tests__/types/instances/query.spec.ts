@@ -12,6 +12,8 @@ import type {
   QueryResponse,
   QueryResult,
   QuerySelectV3,
+  QueryTypedSources,
+  QueryTypedSourcesFromList,
   QueryViewKey,
   RawPropertyValueV3,
   TypedQuery,
@@ -79,6 +81,7 @@ const constQuery = {
 
 type ConstResult = ResultOf<typeof constQuery>;
 
+declare const api: InstancesAPI;
 declare const typedQuery: TypedQuery<{
   'spaceA/ViewA/v1': { propOne: string };
 }>;
@@ -247,10 +250,110 @@ describe('instances.query response types', () => {
     expectTypeOf<Props['ViewA/v1']['propOne']>().toEqualTypeOf<string>();
     expectTypeOf<Props['ViewB/v2']['propThree']>().toEqualTypeOf<boolean>();
   });
+
+  test('property types may be interfaces, not only type literals', () => {
+    interface PropsA {
+      propOne: string;
+      propTwo: number[];
+    }
+    type Model = { 'spaceA/ViewA/v1': PropsA };
+    expectTypeOf<Model>().toMatchTypeOf<QueryTypedSources>();
+    type Typed = QueryResult<typeof constQuery, Model>;
+    type Props = Typed['items']['nodesA'][number]['properties']['spaceA'];
+    expectTypeOf<Props['ViewA/v1']['propOne']>().toEqualTypeOf<string>();
+    expectTypeOf<Props['ViewA/v1']['propTwo']>().toEqualTypeOf<number[]>();
+  });
+
+  test('a generated list of { source, properties } entries folds into the keyed map', () => {
+    interface PropsA {
+      propOne: string;
+      propTwo: number[];
+    }
+    const viewB = {
+      type: 'view',
+      space: 'spaceA',
+      externalId: 'ViewB',
+      version: 'v2',
+    } as const;
+    type Model = QueryTypedSourcesFromList<
+      [
+        { source: typeof view; properties: PropsA },
+        { source: typeof viewB; properties: { propThree: boolean } },
+      ]
+    >;
+    expectTypeOf<Model>().toMatchTypeOf<QueryTypedSources>();
+    expectTypeOf<keyof Model>().toEqualTypeOf<
+      'spaceA/ViewA/v1' | 'spaceA/ViewB/v2'
+    >();
+    type Typed = QueryResult<typeof constQuery, Model>;
+    type Props = Typed['items']['nodesA'][number]['properties']['spaceA'];
+    expectTypeOf<Props['ViewA/v1']['propOne']>().toEqualTypeOf<string>();
+    expectTypeOf<Props['ViewB/v2']['propThree']>().toEqualTypeOf<boolean>();
+    expectTypeOf<ReturnType<TypedQuery<Model>>>().toEqualTypeOf<
+      Promise<QueryResponse>
+    >();
+  });
+
+  test('a list entry with a widened view reference is dropped, not collapsed', () => {
+    const wide = {
+      type: 'view' as const,
+      space: 'spaceA',
+      externalId: 'ViewA',
+      version: 'v1',
+    };
+    type Model = QueryTypedSourcesFromList<
+      [
+        { source: typeof wide; properties: { propOne: string } },
+        { source: typeof view; properties: { propOne: number } },
+      ]
+    >;
+    expectTypeOf<keyof Model>().toEqualTypeOf<'spaceA/ViewA/v1'>();
+    expectTypeOf<Model['spaceA/ViewA/v1']['propOne']>().toEqualTypeOf<number>();
+  });
+});
+
+describe('instances.query response types for inline request literals', () => {
+  test('an inline literal infers everything, as if declared as const', () => {
+    async function run() {
+      const result = await api.query({
+        with: { nodesA: { nodes: { filter: { hasData: [view] } } } },
+        select: {
+          nodesA: {
+            sources: [{ source: view, properties: ['propOne', 'propTwo'] }],
+          },
+        },
+      });
+      return result;
+    }
+    type Result = Awaited<ReturnType<typeof run>>;
+    expectTypeOf<keyof KnownKeys<Result['items']>>().toEqualTypeOf<'nodesA'>();
+    expectTypeOf<
+      Result['items']['nodesA'][number]
+    >().toMatchTypeOf<NodeDefinition>();
+    type Props =
+      Result['items']['nodesA'][number]['properties']['spaceA']['ViewA/v1'];
+    expectTypeOf<KnownKeys<Props>>().toEqualTypeOf<{
+      propOne: RawPropertyValueV3;
+      propTwo: RawPropertyValueV3;
+    }>();
+  });
+
+  test('an inline literal passed to a TypedQuery gets concrete property types', () => {
+    async function run() {
+      const result = await typedQuery({
+        with: { nodesA: { nodes: { filter: { hasData: [view] } } } },
+        select: {
+          nodesA: { sources: [{ source: view, properties: ['propOne'] }] },
+        },
+      });
+      return result.items.nodesA[0].properties.spaceA['ViewA/v1'].propOne;
+    }
+    expectTypeOf<Awaited<ReturnType<typeof run>>>().toEqualTypeOf<string>();
+  });
 });
 
 describe('instances.query response types for requests built at runtime', () => {
-  test('an inline literal infers keys and kind but keeps spaces, views and properties wide', () => {
+  test('a literal stored without as const infers keys and kind but keeps spaces, views and properties wide', () => {
     type Result = ResultOf<{
       with: { rs: { nodes: { filter: { hasData: [] } } } };
       select: {
