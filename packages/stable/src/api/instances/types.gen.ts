@@ -515,10 +515,10 @@ export interface MinAggregateFunctionV3 {
 export type NextCursorV3 = string;
 export interface NodeAndEdgeCollectionResponseWithCursorV3Response {
   /**
-   * Contains debug notices if `debug` was set on the request. Hand-added: the OpenAPI
-   * snapshot's response schema for `list` has no `debug` property, but live testing against
-   * a real project confirmed the API does return it — see the comment above the debug types
-   * further down in this file.
+   * Contains debug notices if `debug` was set on the request. Hand-added: the published
+   * OpenAPI document has no `debug` on the `list` response, but the API does return it
+   * (verified live). With `debug.emitResults: false`, `items` is an empty array and
+   * `nextCursor` is absent on `list`, unlike `query` where `nextCursor` is `{}`.
    */
   debug?: DebugResponse;
   /** List of nodes and edges */
@@ -765,43 +765,23 @@ export interface QueryNodeTableExpressionV3 {
   sort?: PropertySortV3[];
 }
 // ---------------------------------------------------------------------------
-// Debug notices (query/sync/list `debug` option) — hand-added, not from the
-// last full "yarn codegen" run for this service.
+// Debug notices (query/sync/list `debug` option).
 //
-// `instances` codegen is disabled (see ./codegen.skip.json and ./README.md):
-// regenerating it wholesale currently pulls in unrelated schema drift and
-// duplicate-type issues. These types were instead produced by following the
-// documented workaround in ./README.md (temporarily re-enabling codegen,
-// generating, and diffing against `.cognite-openapi-snapshot.json`), then
-// copying over only the new debug-related schemas below verbatim so a real
-// future regeneration is a no-op for this block. Do not hand-edit the shapes
-// here — if the API changes, redo the process in ./README.md instead.
+// Generated with the process in ./README.md from the published OpenAPI
+// document (https://storage.googleapis.com/cognitedata-api-docs/dist/20230101.json,
+// fetched 2026-10-09), which defines every schema below. The checked-in
+// `.cognite-openapi-snapshot.json` predates these schemas; only this block was
+// copied over because a full instances regeneration still pulls in unrelated
+// drift. The next `yarn codegen fetch-latest` + regeneration should make this
+// block a no-op. Do not hand-edit the shapes here; redo the process instead.
 //
-// Note: verified live against a real project (dune-sdk-staging/bluefield) on
-// 2026-09-17, first with synthetic empty-filter queries and later against
-// real data (a populated Equipment view), since the checked-in
-// `.cognite-openapi-snapshot.json` turned out to be stale/incomplete for this
-// feature in several ways — the real queries against real data are what
-// surfaced most of these, synthetic queries on empty result sets did not:
-//  - `list` responses DO include `debug.notices`, even though the snapshot's
-//    response schema for `list` has no `debug` property. Added it below
-//    despite the spec gap, since live behavior is the more reliable signal.
-//  - `sync` can return a `syncMissingSpaceFilter` notice under a `category:
-//    'sync'` that has no schema at all in the snapshot (there's a `SyncNotice`
-//    entry in the snapshot's schema map, but it's a null placeholder). Added
-//    `SyncNotice`/`SyncMissingSpaceFilterNotice` below based on the observed
-//    shape; there may be sibling `sync` notices not covered here yet.
-//  - Filtering/sorting a real, non-trivial query surfaced two more notices
-//    that also have null placeholder schemas in the snapshot rather than real
-//    ones: `unfilteredContainerScan` (category `filtering`) and
-//    `filterIncompatibleWithCursorableIndexScan` (category `indexing`, whose
-//    `reasons` field took on 4 different observed values across a handful of
-//    filter shapes — `crossContainer`, `nonCursorableProperty`, `orFilter`,
-//    `multipleRangePredicates` — strongly suggesting more exist that we
-//    haven't triggered; the hint text itself references NOT and multiple
-//    prefix/exists predicates as further causes). Modeled `reasons` as
-//    `string[]` rather than guessing a closed literal union.
-// Worth reporting all of these gaps to the API team so the snapshot catches up.
+// Verified live against dune-sdk-staging (bluefield) on 2026-09-17 and
+// 2026-10-09: `unfilteredContainerScan`, `filterIncompatibleWithCursorableIndexScan`
+// (reasons crossContainer, orFilter, multipleRangePredicates, nonCursorableProperty),
+// `suggestedCursorableSort`, `syncMissingSpaceFilter` and `noTimeoutWithResults`
+// were all observed with the shapes below. One deliberate deviation from the
+// document remains: `list` responses carry `debug` too, which the document
+// omits, see NodeAndEdgeCollectionResponseWithCursorV3Response.
 // ---------------------------------------------------------------------------
 export interface ContainerSubObjectIdentifier {
   /** External id for the container */
@@ -834,17 +814,15 @@ export type DebugNotice =
  * Return query debug notices.
  */
 export interface DebugParameters {
-  /**
-   * Include the query result in the response. emitResults=false is required for advanced query analysis features.
-   *
-   * Note: when set to `false`, `items`/`nextCursor` are still present on the response (verified live
-   * against a real project) but empty — e.g. `items: { result_set_1: [] }`, `nextCursor: {}` — rather
-   * than actually returning matched instances.
-   */
+  /** Include the query result in the response. emitResults=false is required for advanced query analysis features. */
   emitResults?: boolean;
   /** Most thorough level of query analysis. Requires emitResults=false. */
   profile?: boolean;
-  /** Query timeout in milliseconds. Can be used to override the default timeout when analysing queries. Requires emitResults=false. */
+  /**
+   * Query timeout in milliseconds, between 1 and 55000. Can be used to override the default timeout when analysing queries. Requires emitResults=false.
+   * @min 1
+   * @max 55000
+   */
   timeout?: number;
 }
 /**
@@ -862,28 +840,31 @@ export interface ExcessiveTimeoutNotice {
   /** The specified timeout for the query. */
   timeout: number;
 }
-/**
- * Emitted when a `hasData` filter has no accompanying property-level filter within the
- * matched containers, forcing a full scan of every instance in those containers. Observed
- * live; not in the OpenAPI snapshot (see the comment at the top of this section).
- */
 export interface FilterIncompatibleWithCursorableIndexScanNotice {
   category: 'indexing';
   code: 'filterIncompatibleWithCursorableIndexScan';
-  /** Containers involved when `reasons` includes `crossContainer`; absent otherwise. */
+  /** Containers whose properties participate in a cross-container AND condition. The built-in space predicate is excluded from this list. This field is present when `crossContainer` is reported. */
   containers?: ContainerReference[];
   grade: 'D';
   hint: string;
+  /** Names of concrete filters that contributed to this notice, when available. For `incompatibleLeafType`, this identifies the operator itself, for example `OverlapsFilter`, `AllFilter`, or `ContainedByFilter`. */
+  incompatibleFilterTypes?: string[];
   level: 'warning';
-  /** Present only when `reasons` includes `orFilter`. */
+  /** Whether an OR filter contains branches other than equality predicates. This is meaningful when `reasons` contains `orFilter`; if false, rewrite the branches as `in` only when they are equality predicates on the same property. */
   orHasNonEqualityBranches?: boolean;
   /**
-   * Why the filter can't use a cursorable index scan. Observed live: `crossContainer`,
-   * `nonCursorableProperty`, `orFilter`, `multipleRangePredicates`. Kept as `string[]`
-   * rather than a closed literal union — the hint text references further causes (NOT,
-   * multiple prefix/exists predicates) that weren't reproduced.
+   * Reasons why a filter is not recognized as compatible with efficient index-backed cursoring:
+   *
+   * - `multipleRangePredicates`: `range`, `prefix`, or `exists` applies to more than one property in an AND filter. Multiple bounds on one property are allowed.
+   * - `crossContainer`: An AND filter combines properties from multiple containers (space is excluded; type plus a container property still triggers this reason).
+   * - `multipleNodeEdgeIndexGroups`: Node/edge `space` and `type` use separate built-in index groups.
+   * - `nestedFilter`: A direct relation target is filtered, requiring a join. Denormalize the property onto the current instance when possible.
+   * - `incompatibleLeafType`: The leaf operator cannot be represented as a cursor-compatible predicate. See `incompatibleFilterTypes`.
+   * - `nonCursorableProperty`: The property cannot support a stable cursor scan, including list properties and non-cursorable node/edge built-ins such as `externalId`, `createdTime`, and `lastUpdatedTime`.
+   * - `notFilter`: Negation is generally not one ordered range. Rewrite only when null behavior is preserved; negated `equals` is exclusion, and negation of `space` `equals`/`in` is exempt for access control.
+   * - `orFilter`: OR branches cannot generally use one ordered cursor scan. If all branches are equality predicates on the same property, rewrite them as `in`; `orHasNonEqualityBranches` identifies non-equality branches.
    */
-  reasons: string[];
+  reasons: IncompatibleIndexScanReason[];
   /** Identifier for the result set expression that the notice applies to. */
   resultExpression: string;
 }
@@ -914,6 +895,15 @@ export interface FilterMatchesCursorableSortNotice {
   resultExpression: string;
   sort?: PropertySortV3[];
 }
+export type IncompatibleIndexScanReason =
+  | 'orFilter'
+  | 'notFilter'
+  | 'nestedFilter'
+  | 'incompatibleLeafType'
+  | 'nonCursorableProperty'
+  | 'multipleRangePredicates'
+  | 'crossContainer'
+  | 'multipleNodeEdgeIndexGroups';
 export type IndexingNotice =
   | UnindexedThroughNotice
   | ContainersWithoutIndexesInvolvedNotice
@@ -985,23 +975,36 @@ export interface SignificantPostFilteringNotice {
 }
 export type SortingNotice =
   | SortNotBackedByIndexNotice
+  | SuggestedCursorableSortNotice
   | FilterMatchesCursorableSortNotice
   | FilterMatchesBrokenCursorableIndexNotice;
 export interface SortNotBackedByIndexNotice {
   category: 'sorting';
   code: 'sortNotBackedByIndex';
   grade: 'C';
+  /** Whether there is an incompatible combination of sort direction and null placement. */
+  hasIncompatibleNullsFirst: boolean;
   hint: string;
   level: 'warning';
   /** Identifier for the result set expression that the notice applies to. */
   resultExpression: string;
   sort: PropertySortV3[];
 }
-/**
- * Emitted on `sync` when the request has no top-level equality filter on `node.space`/`edge.space`.
- * Observed live against a real project; not present in the OpenAPI snapshot (see the comment at the
- * top of this section) — there may be other `sync`-category notices not covered here yet.
- */
+export interface SuggestedCursorableSortNotice {
+  category: 'sorting';
+  code: 'suggestedCursorableSort';
+  grade: 'C';
+  hint: string;
+  level: 'warning';
+  /** The user-stated sort, when present. Omitted when the query had no sort. */
+  originalSort?: PropertySortV3[];
+  /** Identifier for the result set expression that the notice applies to. */
+  resultExpression: string;
+  /** The cursorable index that backs `suggestedSort`, of the form (`space`, `containerExternalId`, `identifier`). */
+  suggestedIndex: ContainerSubObjectIdentifier;
+  /** An extension to the input sort, with new property sorts appended at the end. Properties used in equality filters might also be prepended. This suggested sort is equivalent to the user-provided sort, except for tie-breaks, and matches the index given in `suggestedIndex`, which makes the sort cursorable. If no sort was requested, it proposes a cursorable sort. */
+  suggestedSort: PropertySortV3[];
+}
 export interface SyncMissingSpaceFilterNotice {
   category: 'sync';
   code: 'syncMissingSpaceFilter';
@@ -1012,11 +1015,6 @@ export interface SyncMissingSpaceFilterNotice {
   resultExpression: string;
 }
 export type SyncNotice = SyncMissingSpaceFilterNotice;
-/**
- * Emitted when a `hasData` filter has no accompanying property-level filter within the
- * matched containers, forcing a full scan of every instance in those containers. Observed
- * live; not in the OpenAPI snapshot (see the comment at the top of this section).
- */
 export interface UnfilteredContainerScanNotice {
   category: 'filtering';
   code: 'unfilteredContainerScan';

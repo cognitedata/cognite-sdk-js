@@ -398,9 +398,9 @@ describe('Instances integration test', () => {
       expect(response.debug?.notices).toBeInstanceOf(Array);
     });
 
-    // The OpenAPI snapshot's response schema for `list` has no `debug` property, but
-    // live testing confirmed the API does return `debug.notices` here too — see the
-    // comment above NodeAndEdgeCollectionResponseWithCursorV3Response in types.gen.ts.
+    // The published OpenAPI document has no `debug` on the `list` response, but live
+    // testing confirmed the API does return `debug.notices` here too — see the comment
+    // above NodeAndEdgeCollectionResponseWithCursorV3Response in types.gen.ts.
     test('list with debug: {} returns items and a notices array', async () => {
       const response = await client.instances.list({
         sources: [{ source: view }],
@@ -431,8 +431,31 @@ describe('Instances integration test', () => {
           notice.code === 'filterIncompatibleWithCursorableIndexScan'
         ) {
           expect(Array.isArray(notice.reasons)).toBe(true);
+        } else if (notice.code === 'suggestedCursorableSort') {
+          expect(Array.isArray(notice.suggestedSort)).toBe(true);
+          expect(typeof notice.suggestedIndex.identifier).toBe('string');
         }
       }
+    });
+
+    test('a hasData-only filter reports unfilteredContainerScan', async () => {
+      // Deterministic on the filter shape, not on the data: a hasData filter with no
+      // property-level filter always forces a container scan (verified live on two dates).
+      const response = await client.instances.query({
+        with: {
+          result_set_1: { nodes: { filter: { hasData: [view] } }, limit: 1 },
+        },
+        select: { result_set_1: {} },
+        debug: {},
+      });
+      expect(response.debug?.notices).toContainEqual(
+        expect.objectContaining({
+          code: 'unfilteredContainerScan',
+          category: 'filtering',
+          grade: 'D',
+          resultExpression: 'result_set_1',
+        })
+      );
     });
 
     test('filterIncompatibleWithCursorableIndexScan notice on an OR filter', async () => {
@@ -469,11 +492,15 @@ describe('Instances integration test', () => {
         select: { result_set_1: {} },
         debug: {},
       });
-      for (const notice of response.debug?.notices ?? []) {
-        if (notice.code === 'syncMissingSpaceFilter') {
-          expect(notice.category).toBe('sync');
-          expect(typeof notice.hint).toBe('string');
-        }
+      // No equality filter on node.space in the request, so the notice must fire.
+      const notice = response.debug?.notices?.find(
+        (n) => n.code === 'syncMissingSpaceFilter'
+      );
+      expect(notice).toBeDefined();
+      if (notice?.code === 'syncMissingSpaceFilter') {
+        expect(notice.category).toBe('sync');
+        expect(notice.grade).toBe('C');
+        expect(typeof notice.hint).toBe('string');
       }
     });
   });
