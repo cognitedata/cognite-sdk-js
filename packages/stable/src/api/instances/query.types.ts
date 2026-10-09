@@ -46,7 +46,38 @@ export type QueryViewKey<TView extends ViewReference> =
  * ```
  */
 export type QueryTypedSources = {
-  [viewKey: `${string}/${string}/${string}`]: Record<string, unknown>;
+  [viewKey: `${string}/${string}/${string}`]: object;
+};
+
+/**
+ * Builds a {@link QueryTypedSources} map from a list of `{ source, properties }`
+ * entries, the shape a code generator emits per view. The list is folded into
+ * the keyed map once, when the alias is instantiated, so lookups per query stay
+ * constant-time. View references must be literal (`as const`); an entry whose
+ * reference is widened to `string` is dropped from the map.
+ *
+ * ```ts
+ * type Model = QueryTypedSourcesFromList<[
+ *   { source: typeof EquipmentView; properties: Equipment },
+ *   { source: typeof AssetView; properties: Asset },
+ * ]>;
+ * ```
+ */
+export type QueryTypedSourcesFromList<
+  TList extends readonly QueryTypedSourceEntry[],
+> = {
+  [Entry in TList[number] as string extends
+    | Entry['source']['space']
+    | Entry['source']['externalId']
+    | Entry['source']['version']
+    ? never
+    : QueryViewKey<Entry['source']>]: Entry['properties'];
+};
+
+/** One entry of {@link QueryTypedSourcesFromList}. */
+export type QueryTypedSourceEntry = {
+  readonly source: ViewReference;
+  readonly properties: object;
 };
 
 /**

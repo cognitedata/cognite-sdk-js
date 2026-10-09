@@ -2949,7 +2949,9 @@ export type {
 export type {
   QueryRequestInput,
   QueryResult,
+  QueryTypedSourceEntry,
   QueryTypedSources,
+  QueryTypedSourcesFromList,
   QueryViewKey,
   TypedQuery,
 } from './api/instances/query.types';

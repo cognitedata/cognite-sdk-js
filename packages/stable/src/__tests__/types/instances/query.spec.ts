@@ -12,6 +12,8 @@ import type {
   QueryResponse,
   QueryResult,
   QuerySelectV3,
+  QueryTypedSources,
+  QueryTypedSourcesFromList,
   QueryViewKey,
   RawPropertyValueV3,
   TypedQuery,
@@ -246,6 +248,66 @@ describe('instances.query response types', () => {
     type Props = Typed['items']['nodesA'][number]['properties']['spaceA'];
     expectTypeOf<Props['ViewA/v1']['propOne']>().toEqualTypeOf<string>();
     expectTypeOf<Props['ViewB/v2']['propThree']>().toEqualTypeOf<boolean>();
+  });
+
+  test('property types may be interfaces, not only type literals', () => {
+    interface PropsA {
+      propOne: string;
+      propTwo: number[];
+    }
+    type Model = { 'spaceA/ViewA/v1': PropsA };
+    expectTypeOf<Model>().toMatchTypeOf<QueryTypedSources>();
+    type Typed = QueryResult<typeof constQuery, Model>;
+    type Props = Typed['items']['nodesA'][number]['properties']['spaceA'];
+    expectTypeOf<Props['ViewA/v1']['propOne']>().toEqualTypeOf<string>();
+    expectTypeOf<Props['ViewA/v1']['propTwo']>().toEqualTypeOf<number[]>();
+  });
+
+  test('a generated list of { source, properties } entries folds into the keyed map', () => {
+    interface PropsA {
+      propOne: string;
+      propTwo: number[];
+    }
+    const viewB = {
+      type: 'view',
+      space: 'spaceA',
+      externalId: 'ViewB',
+      version: 'v2',
+    } as const;
+    type Model = QueryTypedSourcesFromList<
+      [
+        { source: typeof view; properties: PropsA },
+        { source: typeof viewB; properties: { propThree: boolean } },
+      ]
+    >;
+    expectTypeOf<Model>().toMatchTypeOf<QueryTypedSources>();
+    expectTypeOf<keyof Model>().toEqualTypeOf<
+      'spaceA/ViewA/v1' | 'spaceA/ViewB/v2'
+    >();
+    type Typed = QueryResult<typeof constQuery, Model>;
+    type Props = Typed['items']['nodesA'][number]['properties']['spaceA'];
+    expectTypeOf<Props['ViewA/v1']['propOne']>().toEqualTypeOf<string>();
+    expectTypeOf<Props['ViewB/v2']['propThree']>().toEqualTypeOf<boolean>();
+    expectTypeOf<ReturnType<TypedQuery<Model>>>().toEqualTypeOf<
+      Promise<QueryResponse>
+    >();
+  });
+
+  test('a list entry with a widened view reference is dropped, not collapsed', () => {
+    const wide = {
+      type: 'view' as const,
+      space: 'spaceA',
+      externalId: 'ViewA',
+      version: 'v1',
+    };
+    type Model = QueryTypedSourcesFromList<
+      [
+        { source: typeof wide; properties: { propOne: string } },
+        { source: typeof view; properties: { propOne: number } },
+      ]
+    >;
+    expectTypeOf<keyof Model>().toEqualTypeOf<'spaceA/ViewA/v1'>();
+    expectTypeOf<Model['spaceA/ViewA/v1']['propOne']>().toEqualTypeOf<number>();
   });
 });
 
