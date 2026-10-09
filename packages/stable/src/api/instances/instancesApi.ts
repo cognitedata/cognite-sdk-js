@@ -2,6 +2,11 @@
 
 import { BaseResourceAPI } from '@cognite/sdk-core';
 import type {
+  QueryRequestInput,
+  QueryResult,
+  QueryTypedSources,
+} from './query.types';
+import type {
   AggregationRequest,
   AggregationResponse,
   ByIdsResponse,
@@ -217,30 +222,56 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
   /**
    * [Query instances](https://developer.cognite.com/api#tag/Instances/operation/queryContent)
    *
+   * The response is typed from the request. An inline request literal, or a
+   * request declared "as const satisfies QueryRequestInput", gets result set
+   * keys, node or edge kind, spaces, views and property names inferred. A
+   * request typed as the plain QueryRequest gives the untyped QueryResponse. Property values are
+   * RawPropertyValueV3 unless you supply their types as the second type
+   * argument, see QueryTypedSources, or by assigning the method to a
+   * TypedQuery once. Cursor values from a previous response can be passed
+   * straight through, see QueryRequestInput.
+   *
    * ```js
-   *  const response = await client.instances.query({
-   *     with: {
-   *       result_set_1: {
-   *         nodes: {
-   *           filter: {
-   *             equals: {
-   *               property: ['node', 'externalId'],
-   *               value: "node-external-id",
-   *             },
-   *           },
-   *         },
-   *       },
-   *     },
-   *     select: {
-   *       result_set_1: {},
-   *     },
-   *   });
+   *  const query = {
+   *    with: {
+   *      result_set_1: {
+   *        nodes: {
+   *          filter: {
+   *            equals: {
+   *              property: ['node', 'externalId'],
+   *              value: "node-external-id",
+   *            },
+   *          },
+   *        },
+   *      },
+   *    },
+   *    select: {
+   *      result_set_1: {
+   *        sources: [
+   *          {
+   *            source: { type: 'view', space: 'cdf_core', externalId: 'Describable', version: 'v1' },
+   *            properties: ['title', 'description'],
+   *          },
+   *        ],
+   *      },
+   *    },
+   *  } as const satisfies QueryRequestInput;
+   *  const response = await client.instances.query(query);
+   *  const title = response.items.result_set_1[0].properties.cdf_core['Describable/v1'].title;
    * ```
    */
-  public query = async (params: QueryRequest): Promise<QueryResponse> => {
-    const response = await this.post<QueryResponse>(this.url('query'), {
-      data: params,
-    });
+  public query = async <
+    const TRequest extends QueryRequestInput = QueryRequest,
+    TTypedSources extends QueryTypedSources = Record<never, never>,
+  >(
+    params: TRequest
+  ): Promise<QueryResult<TRequest, TTypedSources>> => {
+    const response = await this.post<QueryResult<TRequest, TTypedSources>>(
+      this.url('query'),
+      {
+        data: params,
+      }
+    );
     return response.data;
   };
 

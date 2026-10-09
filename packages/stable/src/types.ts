@@ -2947,6 +2947,16 @@ export type {
 } from './api/instances/types.gen';
 
 export type {
+  QueryRequestInput,
+  QueryResult,
+  QueryTypedSourceEntry,
+  QueryTypedSources,
+  QueryTypedSourcesFromList,
+  QueryViewKey,
+  TypedQuery,
+} from './api/instances/query.types';
+
+export type {
   AllVersionsQueryParameter,
   ByExternalIdsDataModelsRequest,
   ConnectionDefinition,
