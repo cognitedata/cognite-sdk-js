@@ -514,6 +514,13 @@ export interface MinAggregateFunctionV3 {
  */
 export type NextCursorV3 = string;
 export interface NodeAndEdgeCollectionResponseWithCursorV3Response {
+  /**
+   * Contains debug notices if `debug` was set on the request. Hand-added: the published
+   * OpenAPI document has no `debug` on the `list` response, but the API does return it
+   * (verified live). With `debug.emitResults: false`, `items` is an empty array and
+   * `nextCursor` is absent on `list`, unlike `query` where `nextCursor` is `{}`.
+   */
+  debug?: DebugResponse;
   /** List of nodes and edges */
   items: NodeOrEdge[];
   /** The cursor value used to return (paginate to) the next page of results, when more data is available. */
@@ -578,6 +585,8 @@ export interface NodeOrEdgeDeleteResponse {
  */
 export type NodeOrEdgeExternalId = string;
 export type NodeOrEdgeListRequestV3 = {
+  /** Return query debug notices. */
+  debug?: DebugParameters;
   includeTyping?: IncludeTyping;
   sources?: SourceSelectorWithoutPropertiesV3;
   instanceType?: InstanceType;
@@ -755,9 +764,283 @@ export interface QueryNodeTableExpressionV3 {
   };
   sort?: PropertySortV3[];
 }
+// ---------------------------------------------------------------------------
+// Debug notices (query/sync/list `debug` option).
+//
+// Generated with the process in ./README.md from the published OpenAPI
+// document (https://storage.googleapis.com/cognitedata-api-docs/dist/20230101.json,
+// fetched 2026-10-09), which defines every schema below. The checked-in
+// `.cognite-openapi-snapshot.json` predates these schemas; only this block was
+// copied over because a full instances regeneration still pulls in unrelated
+// drift. The next `yarn codegen fetch-latest` + regeneration should make this
+// block a no-op. Do not hand-edit the shapes here; redo the process instead.
+//
+// Verified live against dune-sdk-staging (bluefield) on 2026-09-17 and
+// 2026-10-09: `unfilteredContainerScan`, `filterIncompatibleWithCursorableIndexScan`
+// (reasons crossContainer, orFilter, multipleRangePredicates, nonCursorableProperty),
+// `suggestedCursorableSort`, `syncMissingSpaceFilter` and `noTimeoutWithResults`
+// were all observed with the shapes below. One deliberate deviation from the
+// document remains: `list` responses carry `debug` too, which the document
+// omits, see NodeAndEdgeCollectionResponseWithCursorV3Response.
+// ---------------------------------------------------------------------------
+export interface ContainerSubObjectIdentifier {
+  /** External id for the container */
+  containerExternalId: DMSExternalId;
+  identifier: string;
+  space: SpaceSpecification;
+}
+export interface ContainersWithoutIndexesInvolvedNotice {
+  category: 'indexing';
+  code: 'containersWithoutIndexesInvolved';
+  /** List of containers that the notice applies to. */
+  containers: ContainerReference[];
+  grade: 'C';
+  hint: string;
+  level: 'warning';
+  /** Identifier for the result set expression that the notice applies to. */
+  resultExpression: string;
+}
+export type CursoringNotice =
+  | IntractableDirectRelationsCursorNotice
+  | IntractableCursorWithNestedFilterNotice;
+export type DebugNotice =
+  | InvalidDebugOptionsNotice
+  | SortingNotice
+  | IndexingNotice
+  | FilteringNotice
+  | CursoringNotice
+  | SyncNotice;
+/**
+ * Return query debug notices.
+ */
+export interface DebugParameters {
+  /** Include the query result in the response. emitResults=false is required for advanced query analysis features. */
+  emitResults?: boolean;
+  /** Most thorough level of query analysis. Requires emitResults=false. */
+  profile?: boolean;
+  /**
+   * Query timeout in milliseconds, between 1 and 55000. Can be used to override the default timeout when analysing queries. Requires emitResults=false.
+   * @min 1
+   * @max 55000
+   */
+  timeout?: number;
+}
+/**
+ * Contains debug notices if debug flag is set in the query.
+ */
+export interface DebugResponse {
+  /** A list of notices that provide insights into the query's execution. These can highlight potential performance issues, offer optimization suggestions, or explain aspects of the query processing. Each notice falls into a category, such as indexing, sorting, filtering, or cursoring, to help identify areas for improvement. */
+  notices?: DebugNotice[];
+}
+export interface ExcessiveTimeoutNotice {
+  category: 'invalidDebugOptions';
+  code: 'excessiveTimeout';
+  hint: string;
+  level: 'warning';
+  /** The specified timeout for the query. */
+  timeout: number;
+}
+export interface FilterIncompatibleWithCursorableIndexScanNotice {
+  category: 'indexing';
+  code: 'filterIncompatibleWithCursorableIndexScan';
+  /** Containers whose properties participate in a cross-container AND condition. The built-in space predicate is excluded from this list. This field is present when `crossContainer` is reported. */
+  containers?: ContainerReference[];
+  grade: 'D';
+  hint: string;
+  /** Names of concrete filters that contributed to this notice, when available. For `incompatibleLeafType`, this identifies the operator itself, for example `OverlapsFilter`, `AllFilter`, or `ContainedByFilter`. */
+  incompatibleFilterTypes?: string[];
+  level: 'warning';
+  /** Whether an OR filter contains branches other than equality predicates. This is meaningful when `reasons` contains `orFilter`; if false, rewrite the branches as `in` only when they are equality predicates on the same property. */
+  orHasNonEqualityBranches?: boolean;
+  /**
+   * Reasons why a filter is not recognized as compatible with efficient index-backed cursoring:
+   *
+   * - `multipleRangePredicates`: `range`, `prefix`, or `exists` applies to more than one property in an AND filter. Multiple bounds on one property are allowed.
+   * - `crossContainer`: An AND filter combines properties from multiple containers (space is excluded; type plus a container property still triggers this reason).
+   * - `multipleNodeEdgeIndexGroups`: Node/edge `space` and `type` use separate built-in index groups.
+   * - `nestedFilter`: A direct relation target is filtered, requiring a join. Denormalize the property onto the current instance when possible.
+   * - `incompatibleLeafType`: The leaf operator cannot be represented as a cursor-compatible predicate. See `incompatibleFilterTypes`.
+   * - `nonCursorableProperty`: The property cannot support a stable cursor scan, including list properties and non-cursorable node/edge built-ins such as `externalId`, `createdTime`, and `lastUpdatedTime`.
+   * - `notFilter`: Negation is generally not one ordered range. Rewrite only when null behavior is preserved; negated `equals` is exclusion, and negation of `space` `equals`/`in` is exempt for access control.
+   * - `orFilter`: OR branches cannot generally use one ordered cursor scan. If all branches are equality predicates on the same property, rewrite them as `in`; `orHasNonEqualityBranches` identifies non-equality branches.
+   */
+  reasons: IncompatibleIndexScanReason[];
+  /** Identifier for the result set expression that the notice applies to. */
+  resultExpression: string;
+}
+export type FilteringNotice =
+  | SelectiveExternalIDFilterNotice
+  | SignificantPostFilteringNotice
+  | SignificantHasDataFiltersNotice
+  | UnfilteredContainerScanNotice;
+export interface FilterMatchesBrokenCursorableIndexNotice {
+  category: 'sorting';
+  code: 'filterMatchesBrokenCursorableIndex';
+  grade: 'D';
+  hint: string;
+  /** Identifier for the broken index */
+  index?: ContainerSubObjectIdentifier;
+  level: 'warning';
+  /** Identifier for the result set expression that the notice applies to. */
+  resultExpression: string;
+  sort?: PropertySortV3[];
+}
+export interface FilterMatchesCursorableSortNotice {
+  category: 'sorting';
+  code: 'filterMatchesCursorableSort';
+  grade: 'A' | 'B';
+  hint: string;
+  level: 'info';
+  /** Identifier for the result set expression that the notice applies to. */
+  resultExpression: string;
+  sort?: PropertySortV3[];
+}
+export type IncompatibleIndexScanReason =
+  | 'orFilter'
+  | 'notFilter'
+  | 'nestedFilter'
+  | 'incompatibleLeafType'
+  | 'nonCursorableProperty'
+  | 'multipleRangePredicates'
+  | 'crossContainer'
+  | 'multipleNodeEdgeIndexGroups';
+export type IndexingNotice =
+  | UnindexedThroughNotice
+  | ContainersWithoutIndexesInvolvedNotice
+  | FilterIncompatibleWithCursorableIndexScanNotice;
+/**
+ * Emitted when a query supplies both a cursor and a nested filter on the same result set expression. Nested filters require a join that invalidates cursor positions, making pagination results unreliable.
+ */
+export interface IntractableCursorWithNestedFilterNotice {
+  category: 'cursoring';
+  code: 'intractableCursorWithNestedFilter';
+  grade: 'D';
+  /** A user-friendly message explaining why cursoring is intractable with a nested filter. */
+  hint: string;
+  level: 'warning';
+  /** Identifier for the result set expression that the notice applies to. */
+  resultExpression: string;
+}
+export interface IntractableDirectRelationsCursorNotice {
+  category: 'cursoring';
+  code: 'intractableDirectRelationsCursor';
+  grade: 'D';
+  hint: string;
+  level: 'warning';
+  resultExpression: string;
+}
+export type InvalidDebugOptionsNotice =
+  | ExcessiveTimeoutNotice
+  | NoTimeoutWithResultsNotice;
+export interface NoTimeoutWithResultsNotice {
+  category: 'invalidDebugOptions';
+  code: 'noTimeoutWithResults';
+  hint: string;
+  level: 'warning';
+}
+export interface SelectiveExternalIDFilterNotice {
+  category: 'filtering';
+  code: 'selectiveExternalIDFilter';
+  grade: 'A';
+  hint: string;
+  level: 'info';
+  /** Identifier for the result set expression that the notice applies to. */
+  resultExpression: string;
+  /** Identifier for a result set. Indicates that the notice is inherited from this result expression. */
+  viaFrom?: string;
+}
+export interface SignificantHasDataFiltersNotice {
+  category: 'filtering';
+  code: 'significantHasDataFiltering';
+  /** List of containers that the notice applies to. */
+  containers: ContainerReference[];
+  grade: 'C';
+  hint: string;
+  level: 'warning';
+  /** Identifier for the result set expression that the notice applies to. */
+  resultExpression: string;
+}
+export interface SignificantPostFilteringNotice {
+  category: 'filtering';
+  code: 'significantPostFiltering';
+  grade: 'C';
+  hint: string;
+  level: 'warning';
+  /** The specified limit for the result expression. */
+  limit: number;
+  /** Number of rows of data that is internally processed. Value gives an indication of the complexity of evaluating the query. */
+  maxInvolvedRows: number;
+  /** Identifier for the result set expression that the notice applies to. */
+  resultExpression: string;
+}
+export type SortingNotice =
+  | SortNotBackedByIndexNotice
+  | SuggestedCursorableSortNotice
+  | FilterMatchesCursorableSortNotice
+  | FilterMatchesBrokenCursorableIndexNotice;
+export interface SortNotBackedByIndexNotice {
+  category: 'sorting';
+  code: 'sortNotBackedByIndex';
+  grade: 'C';
+  /** Whether there is an incompatible combination of sort direction and null placement. */
+  hasIncompatibleNullsFirst: boolean;
+  hint: string;
+  level: 'warning';
+  /** Identifier for the result set expression that the notice applies to. */
+  resultExpression: string;
+  sort: PropertySortV3[];
+}
+export interface SuggestedCursorableSortNotice {
+  category: 'sorting';
+  code: 'suggestedCursorableSort';
+  grade: 'C';
+  hint: string;
+  level: 'warning';
+  /** The user-stated sort, when present. Omitted when the query had no sort. */
+  originalSort?: PropertySortV3[];
+  /** Identifier for the result set expression that the notice applies to. */
+  resultExpression: string;
+  /** The cursorable index that backs `suggestedSort`, of the form (`space`, `containerExternalId`, `identifier`). */
+  suggestedIndex: ContainerSubObjectIdentifier;
+  /** An extension to the input sort, with new property sorts appended at the end. Properties used in equality filters might also be prepended. This suggested sort is equivalent to the user-provided sort, except for tie-breaks, and matches the index given in `suggestedIndex`, which makes the sort cursorable. If no sort was requested, it proposes a cursorable sort. */
+  suggestedSort: PropertySortV3[];
+}
+export interface SyncMissingSpaceFilterNotice {
+  category: 'sync';
+  code: 'syncMissingSpaceFilter';
+  grade: 'C';
+  hint: string;
+  level: 'warning';
+  /** Identifier for the result set expression that the notice applies to. */
+  resultExpression: string;
+}
+export type SyncNotice = SyncMissingSpaceFilterNotice;
+export interface UnfilteredContainerScanNotice {
+  category: 'filtering';
+  code: 'unfilteredContainerScan';
+  grade: 'D';
+  hint: string;
+  level: 'warning';
+  /** Identifier for the result set expression that the notice applies to. */
+  resultExpression: string;
+}
+export interface UnindexedThroughNotice {
+  category: 'indexing';
+  code: 'unindexedThrough';
+  grade: 'E';
+  hint: string;
+  level: 'warning';
+  /** Reference to the property that the notice applies to. */
+  property: string[];
+  /** Identifier for the result set expression that the notice applies to. */
+  resultExpression: string;
+}
+// ---------------------------------------------------------------------------
 export interface QueryRequest {
   /** Cursors returned from the previous query request. These cursors match the result set expressions you specified in the ```with``` clause for the query. */
   cursors?: Record<string, NextCursorV3>;
+  /** Return query debug notices. */
+  debug?: DebugParameters;
   /** Should we return property type information as part of the result? */
   includeTyping?: IncludeTyping;
   /** Values in filters can be parameterised. Parameters are provided as part of the query object, and referenced in the filter itself. */
@@ -767,7 +1050,11 @@ export interface QueryRequest {
   with: Record<string, QueryTableExpressionV3>;
 }
 export interface QueryResponse {
+  /** Contains debug notices if debug flag is set in the query. */
+  debug?: DebugResponse;
+  /** Empty (not absent) when the request set `debug.emitResults` to `false`, see {@link DebugParameters.emitResults}. */
   items: Record<string, NodeOrEdge[]>;
+  /** Empty (not absent) when the request set `debug.emitResults` to `false`, see {@link DebugParameters.emitResults}. */
   nextCursor: Record<string, NextCursorV3>;
   /** Property type information for selected result expressions. */
   typing?: Record<string, TypeInformationOuter>;
@@ -1012,6 +1299,8 @@ export interface SyncRequest {
   allowExpiredCursorsAndAcceptMissedDeletes?: boolean;
   /** Cursors returned from the previous sync request. These cursors match the result set expressions you specified in the ```with``` clause for the sync. */
   cursors?: Record<string, NextCursorV3>;
+  /** Return query debug notices. */
+  debug?: DebugParameters;
   /** Should we return property type information as part of the result? */
   includeTyping?: IncludeTyping;
   /** Parameters to return */

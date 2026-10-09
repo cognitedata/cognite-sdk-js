@@ -342,6 +342,169 @@ describe('Instances integration test', () => {
     expect(response.items.result_set_1).toHaveLength(1);
   });
 
+  describe('debug notices', () => {
+    const filterOnDescribable1 = {
+      equals: {
+        property: ['node', 'externalId'],
+        value: describable1.externalId,
+      },
+    };
+
+    test('query with debug: {} returns items and a notices array', async () => {
+      const response = await client.instances.query({
+        with: {
+          result_set_1: { nodes: { filter: filterOnDescribable1 } },
+        },
+        select: { result_set_1: {} },
+        debug: {},
+      });
+      expect(response.items.result_set_1).toHaveLength(1);
+      expect(response.debug?.notices).toBeInstanceOf(Array);
+    });
+
+    test('query with emitResults: false returns empty items but still returns notices', async () => {
+      const response = await client.instances.query({
+        with: {
+          result_set_1: { nodes: { filter: filterOnDescribable1 } },
+        },
+        select: { result_set_1: {} },
+        debug: { emitResults: false },
+      });
+      // `items` stays present but empty in this mode, not absent — see the note on
+      // DebugParameters.emitResults.
+      expect(response.items.result_set_1).toHaveLength(0);
+      expect(response.debug?.notices).toBeInstanceOf(Array);
+    });
+
+    test('query with profile: true returns notices', async () => {
+      const response = await client.instances.query({
+        with: {
+          result_set_1: { nodes: { filter: filterOnDescribable1 } },
+        },
+        select: { result_set_1: {} },
+        debug: { emitResults: false, profile: true, timeout: 30000 },
+      });
+      expect(response.debug?.notices).toBeInstanceOf(Array);
+    });
+
+    test('sync with debug: {} returns a notices array', async () => {
+      const response = await client.instances.sync({
+        with: {
+          result_set_1: { nodes: { filter: filterOnDescribable1 } },
+        },
+        select: { result_set_1: {} },
+        debug: {},
+      });
+      expect(response.debug?.notices).toBeInstanceOf(Array);
+    });
+
+    // The published OpenAPI document has no `debug` on the `list` response, but live
+    // testing confirmed the API does return `debug.notices` here too — see the comment
+    // above NodeAndEdgeCollectionResponseWithCursorV3Response in types.gen.ts.
+    test('list with debug: {} returns items and a notices array', async () => {
+      const response = await client.instances.list({
+        sources: [{ source: view }],
+        instanceType: 'node',
+        limit: 2,
+        debug: {},
+      });
+      expect(response.items).toHaveLength(2);
+      expect(response.debug?.notices).toBeInstanceOf(Array);
+    });
+
+    test('narrows DebugNotice by its code discriminant', async () => {
+      const response = await client.instances.query({
+        with: {
+          result_set_1: { nodes: { filter: filterOnDescribable1 } },
+        },
+        select: { result_set_1: {} },
+        debug: {},
+      });
+      for (const notice of response.debug?.notices ?? []) {
+        if (notice.code === 'excessiveTimeout') {
+          expect(typeof notice.timeout).toBe('number');
+        } else if (notice.code === 'unindexedThrough') {
+          expect(Array.isArray(notice.property)).toBe(true);
+        } else if (notice.code === 'unfilteredContainerScan') {
+          expect(notice.category).toBe('filtering');
+        } else if (
+          notice.code === 'filterIncompatibleWithCursorableIndexScan'
+        ) {
+          expect(Array.isArray(notice.reasons)).toBe(true);
+        } else if (notice.code === 'suggestedCursorableSort') {
+          expect(Array.isArray(notice.suggestedSort)).toBe(true);
+          expect(typeof notice.suggestedIndex.identifier).toBe('string');
+        }
+      }
+    });
+
+    test('a hasData-only filter reports unfilteredContainerScan', async () => {
+      // Deterministic on the filter shape, not on the data: a hasData filter with no
+      // property-level filter always forces a container scan (verified live on two dates).
+      const response = await client.instances.query({
+        with: {
+          result_set_1: { nodes: { filter: { hasData: [view] } }, limit: 1 },
+        },
+        select: { result_set_1: {} },
+        debug: {},
+      });
+      expect(response.debug?.notices).toContainEqual(
+        expect.objectContaining({
+          code: 'unfilteredContainerScan',
+          category: 'filtering',
+          grade: 'D',
+          resultExpression: 'result_set_1',
+        })
+      );
+    });
+
+    test('filterIncompatibleWithCursorableIndexScan notice on an OR filter', async () => {
+      // A hasData-only filter with no property filter reliably triggers
+      // unfilteredContainerScan/filterIncompatibleWithCursorableIndexScan-style
+      // notices on real data (verified against dune-sdk-staging); this fixture is
+      // small, so we only assert on the shape when a notice does fire rather than
+      // requiring one, to avoid a flaky test against an evolving query planner.
+      const response = await client.instances.query({
+        with: {
+          result_set_1: {
+            nodes: {
+              filter: {
+                or: [filterOnDescribable1, { hasData: [view] }],
+              },
+            },
+          },
+        },
+        select: { result_set_1: {} },
+        debug: {},
+      });
+      for (const notice of response.debug?.notices ?? []) {
+        if (notice.code === 'filterIncompatibleWithCursorableIndexScan') {
+          expect(notice.reasons.length).toBeGreaterThan(0);
+        }
+      }
+    });
+
+    test('narrows the sync-category syncMissingSpaceFilter notice', async () => {
+      const response = await client.instances.sync({
+        with: {
+          result_set_1: { nodes: { filter: filterOnDescribable1 } },
+        },
+        select: { result_set_1: {} },
+        debug: {},
+      });
+      // No equality filter on node.space in the request, so the notice must fire.
+      const notice = response.debug?.notices?.find(
+        (n) => n.code === 'syncMissingSpaceFilter'
+      );
+      expect(notice).toBeDefined();
+      if (notice?.code === 'syncMissingSpaceFilter') {
+        expect(notice.category).toBe('sync');
+        expect(notice.grade).toBe('C');
+        expect(typeof notice.hint).toBe('string');
+      }
+    });
+  });
+
   test('inspect', async () => {
     const response = await client.instances.inspect({
       inspectionOperations: {
