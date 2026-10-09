@@ -9,6 +9,8 @@ import type {
   NodeOrEdge,
   NodeOrEdgeSearchRequest,
   PropertyValueGroupV3,
+  QueryTypedSources,
+  QueryTypedSourcesFromList,
   RawPropertyValueV3,
   SearchRequestInput,
   SearchResult,
@@ -20,10 +22,7 @@ import type {
 
 type ResultOf<
   TRequest extends SearchRequestInput,
-  TTypedSources extends Record<
-    `${string}/${string}/${string}`,
-    Record<string, unknown>
-  > = Record<never, never>,
+  TTypedSources extends QueryTypedSources = Record<never, never>,
 > = Awaited<
   ReturnType<typeof InstancesAPI.prototype.search<TRequest, TTypedSources>>
 >;
@@ -166,5 +165,86 @@ describe('SearchRequestInput', () => {
     // @ts-expect-error a view is required
     const noView = { query: 'x' } as const satisfies SearchRequestInput;
     void noView;
+  });
+});
+
+declare const search: InstancesAPI['search'];
+
+describe('instances.search with an inline request', () => {
+  // The calls are inside functions that are never run: `search` is only
+  // declared here, and `tsc` checks the types of what is inside.
+  test('an inline literal is inferred as if it were declared as const', () => {
+    const inline = async () => {
+      const response = await search({
+        view: {
+          type: 'view',
+          space: 'spaceA',
+          externalId: 'ViewA',
+          version: 'v1',
+        },
+        instanceType: 'node',
+        query: 'hello',
+      });
+      type Item = (typeof response)['items'][number];
+      expectTypeOf<Item['instanceType']>().toEqualTypeOf<'node'>();
+      expectTypeOf<
+        NonNullable<Item['properties']>['spaceA']['ViewA/v1']['title']
+      >().toEqualTypeOf<RawPropertyValueV3>();
+    };
+    void inline;
+  });
+
+  test('a view that is built at runtime still gives ByIdsResponse', () => {
+    const dynamic = async (space: string) => {
+      const response = await search({
+        view: { type: 'view', space, externalId: 'ViewA', version: 'v1' },
+      });
+      expectTypeOf(response).toEqualTypeOf<ByIdsResponse>();
+    };
+    void dynamic;
+  });
+});
+
+describe('instances.search typed sources from interfaces and lists', () => {
+  interface ViewAProps {
+    title: string;
+    count: number;
+  }
+  interface ViewBProps {
+    onlyB: boolean;
+  }
+
+  test('interface property types are accepted in the map', () => {
+    type Model = { 'spaceA/ViewA/v1': ViewAProps };
+    expectTypeOf<Model>().toMatchTypeOf<QueryTypedSources>();
+    type Props = NonNullable<
+      ResultOf<typeof nodeRequest, Model>['items'][number]['properties']
+    >['spaceA']['ViewA/v1'];
+    expectTypeOf<Props['title']>().toEqualTypeOf<string>();
+    expectTypeOf<Props['count']>().toEqualTypeOf<number>();
+  });
+
+  test('a list of { source, properties } entries is folded into the map', () => {
+    // The shape a generator emits per view, such as dune's `ViewPropertyMap`.
+    type Model = QueryTypedSourcesFromList<
+      [
+        { source: typeof view; properties: ViewAProps },
+        {
+          source: {
+            readonly type: 'view';
+            readonly space: 'spaceA';
+            readonly externalId: 'ViewB';
+            readonly version: 'v1';
+          };
+          properties: ViewBProps;
+        },
+      ]
+    >;
+    type PropsA = NonNullable<
+      ResultOf<typeof nodeRequest, Model>['items'][number]['properties']
+    >['spaceA']['ViewA/v1'];
+    expectTypeOf<PropsA['title']>().toEqualTypeOf<string>();
+    // The entry for ViewB is not applied to a ViewA request.
+    expectTypeOf<PropsA['onlyB']>().toEqualTypeOf<RawPropertyValueV3>();
   });
 });

@@ -36,7 +36,7 @@ export type SearchRequestInput = DeepReadonly<NodeOrEdgeSearchRequest>;
  * ```
  */
 export type TypedSearch<TTypedSources extends QueryTypedSources> = <
-  TRequest extends SearchRequestInput = NodeOrEdgeSearchRequest,
+  const TRequest extends SearchRequestInput = NodeOrEdgeSearchRequest,
 >(
   params: TRequest
 ) => Promise<SearchResult<TRequest, TTypedSources>>;
@@ -46,10 +46,11 @@ export type TypedSearch<TTypedSources extends QueryTypedSources> = <
  *
  * - A request typed as the plain `NodeOrEdgeSearchRequest`, or one whose `view`
  *   is not made of literals, gives the untyped `ByIdsResponse`.
- * - A request declared `as const` types `items`: an `instanceType` of `'node'`
- *   or `'edge'` narrows the items to that kind (otherwise they are either),
- *   and `properties` is nested by the space and `externalId/version` of
- *   `view`. Search does not project the response: `request.properties` selects
+ * - An inline request literal, or one declared `as const`, types `items`: an
+ *   `instanceType` of `'node'` or `'edge'` narrows the items to that kind
+ *   (otherwise they are either), and `properties` is nested by the space and
+ *   `externalId/version` of `view`. A request stored in a variable without
+ *   `as const` has widened strings and gives `ByIdsResponse`. Search does not project the response: `request.properties` selects
  *   the fields that are searched, so every property of the view can be
  *   returned.
  * - Property values are `RawPropertyValueV3` unless the view is in

@@ -30,10 +30,10 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
   /**
    * [Search instances](https://developer.cognite.com/api#tag/Instances/operation/searchInstances)
    *
-   * The response is typed from the request. Declare the request
-   * "as const satisfies SearchRequestInput" to get the node or edge kind and
-   * the space and view of `properties` inferred. A request typed as the plain
-   * NodeOrEdgeSearchRequest gives the untyped ByIdsResponse. Property values
+   * The response is typed from the request. An inline request literal, or a
+   * request declared "as const satisfies SearchRequestInput", gets the node or
+   * edge kind and the space and view of `properties` inferred. A request typed
+   * as the plain NodeOrEdgeSearchRequest gives the untyped ByIdsResponse. Property values
    * are RawPropertyValueV3 unless you supply their types as the second type
    * argument, see QueryTypedSources, or by assigning the method to a
    * TypedSearch once. `properties` in the request selects the fields to
@@ -61,7 +61,7 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    * ```
    */
   public search = async <
-    TRequest extends SearchRequestInput = NodeOrEdgeSearchRequest,
+    const TRequest extends SearchRequestInput = NodeOrEdgeSearchRequest,
     TTypedSources extends QueryTypedSources = Record<never, never>,
   >(
     params: TRequest
