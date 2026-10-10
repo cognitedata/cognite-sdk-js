@@ -161,13 +161,17 @@ type DeepReadonly<T> = T extends readonly (infer U)[]
  *   absent when no `sources` are given.
  * - A property list that is a widened array (`(keyof T)[]` rather than a tuple)
  *   makes every property optional, since the type cannot know which ones were
- *   selected. `['*']` or a plain `string[]` gives `Record<string, RawPropertyValueV3>`.
+ *   selected. `['*']` or a plain `string[]` gives `Record<string, RawPropertyValueV3>`;
+ *   with typed sources, `['*']` gives every typed property and a plain
+ *   `string[]` gives every typed property as optional.
  * - `nextCursor` has an optional entry per selected result set. The API omits
  *   the cursor for an exhausted result set in most cases, but has been seen to
  *   return one for a single-item result set too, so paginate until a page
  *   comes back empty rather than relying on the cursor being absent.
  * - A `with` expression that is a union of a nodes and an edges expression gives
  *   `NodeDefinition | EdgeDefinition`.
+ * - A `source` chosen at runtime between views (`flag ? viewA : viewB`) gives
+ *   one entry per possible view, each with its own property types.
  *
  * Every level (`items`, spaces, views, properties) also keeps a string index
  * signature with the wide types used by `QueryResponse`, so code that indexes
@@ -250,6 +254,21 @@ type SelectInput = DeepReadonly<QuerySelectV3>;
 /** One entry of `sources` as accepted by {@link QueryRequestInput}. */
 type SourceSelection = DeepReadonly<SourceSelectorV3[number]>;
 
+/**
+ * Distributes a selector whose `source` is a union (`flag ? viewA : viewB`)
+ * into one selector per view, so each possible view keeps its own key and
+ * its own property types. Without this, the view keys would be the cross
+ * product of the externalIds and versions, typed by the union of every view.
+ */
+type ExpandedSelection<TSource extends SourceSelection> =
+  TSource extends SourceSelection
+    ? TSource['source'] extends infer TView
+      ? TView extends ViewReference
+        ? Omit<TSource, 'source'> & { readonly source: TView }
+        : never
+      : never
+    : never;
+
 /** `sources` of a select entry, or `undefined` when the entry has none. */
 type SelectSources<TSelect extends SelectInput> =
   'sources' extends keyof TSelect
@@ -291,7 +310,9 @@ type SelectedProperties<
 > = TSources extends readonly SourceSelection[]
   ? WithDynamicKeys<
       {
-        [TSource in TSources[number] as TSource['source']['space']]: WithDynamicKeys<
+        [TSource in ExpandedSelection<
+          TSources[number]
+        > as TSource['source']['space']]: WithDynamicKeys<
           {
             [TViewSource in TSource as ViewKey<
               TViewSource['source']
@@ -321,12 +342,16 @@ type ViewProperties<
   TSource['source'],
   TTypedSources
 > extends infer TTypedProps
-  ? '*' extends TSource['properties'][number]
+  ? // `string[]` is checked before `'*'`: `'*' extends string`, but a runtime
+    // list says nothing about which properties were selected.
+    string extends TSource['properties'][number]
     ? [TTypedProps] extends [never]
       ? PropertyValueGroupV3
-      : WithDynamicKeys<TTypedProps, RawPropertyValueV3>
-    : string extends TSource['properties'][number]
-      ? PropertyValueGroupV3
+      : WithDynamicKeys<Partial<TTypedProps>, RawPropertyValueV3>
+    : '*' extends TSource['properties'][number]
+      ? [TTypedProps] extends [never]
+        ? PropertyValueGroupV3
+        : WithDynamicKeys<TTypedProps, RawPropertyValueV3>
       : WithDynamicKeys<
           IsTuple<TSource['properties']> extends true
             ? {
