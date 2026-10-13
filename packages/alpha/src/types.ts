@@ -16,7 +16,6 @@ import type {
 
 export * from '@cognite/sdk';
 export * from './api/workflows/types';
-export * from './api/dataProducts/types';
 export * from './api/transformations/types';
 
 // This file is here mostly to allow apis to import { ... } from '../../types';
