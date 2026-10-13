@@ -4,11 +4,11 @@ import matches from 'lodash/matches';
 import nock from 'nock';
 import { beforeEach, describe, expect, test } from 'vitest';
 import { mockBaseUrl } from '../../../../core/src/__tests__/testUtils';
-import type CogniteClientAlpha from '../../cogniteClient';
+import type CogniteClient from '../../cogniteClient';
 import { setupMockableClient } from '../testUtils';
 
 describe('Data products unit test', () => {
-  let client: CogniteClientAlpha;
+  let client: CogniteClient;
 
   const dataProductFixture = {
     externalId: 'dp-1',
@@ -71,17 +71,46 @@ describe('Data products unit test', () => {
     expect(response.nextCursor).toBe('next');
   });
 
-  test('retrieve by external id', async () => {
+  test('retrieve by external ids', async () => {
     nock(mockBaseUrl)
-      .get(/\/dataproducts\/dp-2$/)
+      .post(/\/dataproducts\/byids$/, {
+        items: [{ externalId: 'dp-1' }, { externalId: 'dp-2' }],
+      })
       .once()
       .reply(200, {
-        ...mockDataProduct,
-        externalId: 'dp-2',
+        items: [mockDataProduct, { ...mockDataProduct, externalId: 'dp-2' }],
       });
 
-    const response = await client.dataProducts.retrieve('dp-2');
-    expect(response.externalId).toEqual('dp-2');
+    const items = await client.dataProducts.retrieve([
+      { externalId: 'dp-1' },
+      { externalId: 'dp-2' },
+    ]);
+    expect(items.map((item) => item.externalId)).toEqual(['dp-1', 'dp-2']);
+    expect(items[0].createdTime).toEqual(mockDataProduct.createdTime);
+  });
+
+  test('retrieve splits more than 100 ids into multiple requests', async () => {
+    const ids = Array.from({ length: 150 }, (_, i) => ({
+      externalId: `dp-${i}`,
+    }));
+    const requestSizes: number[] = [];
+
+    nock(mockBaseUrl)
+      .post(/\/dataproducts\/byids$/)
+      .times(2)
+      .reply(200, (_uri, body: { items: { externalId: string }[] }) => {
+        requestSizes.push(body.items.length);
+        return {
+          items: body.items.map(({ externalId }) => ({
+            ...mockDataProduct,
+            externalId,
+          })),
+        };
+      });
+
+    const items = await client.dataProducts.retrieve(ids);
+    expect(requestSizes.sort((a, b) => b - a)).toEqual([100, 50]);
+    expect(items).toHaveLength(150);
   });
 
   test('update', async () => {
