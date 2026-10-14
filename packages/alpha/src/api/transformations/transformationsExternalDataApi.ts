@@ -13,8 +13,6 @@ import type {
   TransformationExternalDataListQuery,
   TransformationExternalDataRotateKeysItem,
   TransformationExternalDataRotatedKey,
-  TransformationExternalDataUsability,
-  TransformationExternalDataUsabilityRequest,
 } from './types';
 
 export class TransformationsExternalDataAPI extends BaseResourceAPI<TransformationExternalData> {
@@ -70,23 +68,6 @@ export class TransformationsExternalDataAPI extends BaseResourceAPI<Transformati
    */
   public delete = (ids: TransformationExternalDataDelete[]) => {
     return this.deleteEndpoint(ids);
-  };
-
-  /**
-   * ```js
-   * const status = await client.transformationsExternalData.usability({
-   *   externalId: 'my-fabric-source',
-   * });
-   * ```
-   */
-  public usability = async (
-    request: TransformationExternalDataUsabilityRequest
-  ): Promise<TransformationExternalDataUsability> => {
-    const response = await this.post<TransformationExternalDataUsability>(
-      this.url('usability'),
-      { data: request }
-    );
-    return this.addToMapAndReturn(response.data, response);
   };
 
   /**

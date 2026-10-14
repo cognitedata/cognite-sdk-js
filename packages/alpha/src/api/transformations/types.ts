@@ -113,15 +113,6 @@ export interface TransformationExternalDataDelete {
   externalId: CogniteExternalId;
 }
 
-export interface TransformationExternalDataUsabilityRequest {
-  externalId: CogniteExternalId;
-}
-
-export interface TransformationExternalDataUsability {
-  externalId: { externalId: CogniteExternalId };
-  usableVersion?: string;
-}
-
 export interface TransformationExternalDataRotateKeysItem {
   externalId: CogniteExternalId;
   expiryTime: number;

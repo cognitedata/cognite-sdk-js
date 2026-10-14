@@ -174,26 +174,6 @@ describe('Transformations external data unit test', () => {
     ]);
   });
 
-  test('usability', async () => {
-    nock(mockBaseUrl)
-      .post(
-        /\/transformations\/externaldata\/usability$/,
-        matches({ externalId: 'my-fabric-source' })
-      )
-      .once()
-      .reply(200, {
-        externalId: { externalId: 'my-fabric-source' },
-        usableVersion: '9f2b1c34-5d6e-4f70-8a91-b2c3d4e5f607',
-      });
-
-    const status = await client.transformationsExternalData.usability({
-      externalId: 'my-fabric-source',
-    });
-
-    expect(status.externalId.externalId).toBe('my-fabric-source');
-    expect(status.usableVersion).toBe('9f2b1c34-5d6e-4f70-8a91-b2c3d4e5f607');
-  });
-
   test('byExternalId', async () => {
     nock(mockBaseUrl)
       .get(/\/transformations\/externaldata\/byExternalId$/)
