@@ -15,6 +15,7 @@ import { AnnotationsAPI } from './api/annotations/annotationsApi';
 import { AssetsAPI } from './api/assets/assetsApi';
 import { ContainersAPI } from './api/containers/containersApi';
 import { DataPointsAPI } from './api/dataPoints/dataPointsApi';
+import { DataProductsAPI } from './api/dataProducts/dataProductsApi';
 import { DataSetsAPI } from './api/datasets/datasetsApi';
 import { DocumentsAPI } from './api/documents/documentsApi';
 import { EntityMatchingApi } from './api/entityMatching/entityMatchingApi';
@@ -201,6 +202,9 @@ export default class CogniteClient extends BaseCogniteClient {
   public get extractors() {
     return accessApi(this.extractorsApi);
   }
+  public get dataProducts() {
+    return accessApi(this.dataProductsApi);
+  }
   private assetsApi?: AssetsAPI;
   private timeSeriesApi?: TimeSeriesAPI;
   protected dataPointsApi?: DataPointsAPI;
@@ -236,6 +240,7 @@ export default class CogniteClient extends BaseCogniteClient {
   private streamsApi?: StreamsAPI;
   private recordsApi?: RecordsAPI;
   private extractorsApi?: ExtractorsAPI;
+  private dataProductsApi?: DataProductsAPI;
 
   protected get version() {
     return version;
@@ -296,6 +301,7 @@ export default class CogniteClient extends BaseCogniteClient {
     this.streamsApi = this.apiFactory(StreamsAPI, 'streams');
     this.recordsApi = this.apiFactory(RecordsAPI, 'streams');
     this.extractorsApi = this.apiFactory(ExtractorsAPI, 'extractors');
+    this.dataProductsApi = this.apiFactory(DataProductsAPI, 'dataproducts');
   }
 
   static urlEncodeExternalId(externalId: string): string {

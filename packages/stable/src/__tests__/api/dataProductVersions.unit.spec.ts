@@ -4,11 +4,11 @@ import matches from 'lodash/matches';
 import nock from 'nock';
 import { beforeEach, describe, expect, test } from 'vitest';
 import { mockBaseUrl } from '../../../../core/src/__tests__/testUtils';
-import type CogniteClientAlpha from '../../cogniteClient';
+import type CogniteClient from '../../cogniteClient';
 import { setupMockableClient } from '../testUtils';
 
 describe('Data product versions unit test', () => {
-  let client: CogniteClientAlpha;
+  let client: CogniteClient;
 
   const dataProductExternalId = 'dp-1';
   const versionCreateBody = {
@@ -41,7 +41,7 @@ describe('Data product versions unit test', () => {
         items: [mockVersion],
       });
 
-    const items = await client.dataProductVersions.create(
+    const items = await client.dataProducts.versions.create(
       dataProductExternalId,
       [versionCreateBody]
     );
@@ -59,7 +59,7 @@ describe('Data product versions unit test', () => {
         nextCursor: 'next',
       });
 
-    const response = await client.dataProductVersions.list(
+    const response = await client.dataProducts.versions.list(
       dataProductExternalId,
       {
         limit: 10,
@@ -77,7 +77,7 @@ describe('Data product versions unit test', () => {
       .once()
       .reply(200, mockVersion);
 
-    const response = await client.dataProductVersions.retrieve(
+    const response = await client.dataProducts.versions.retrieve(
       dataProductExternalId,
       '1.0.0'
     );
@@ -139,7 +139,7 @@ describe('Data product versions unit test', () => {
         ],
       });
 
-    const items = await client.dataProductVersions.update(
+    const items = await client.dataProducts.versions.update(
       dataProductExternalId,
       [updateBody]
     );
@@ -156,7 +156,7 @@ describe('Data product versions unit test', () => {
       .once()
       .reply(200, {});
 
-    await client.dataProductVersions.delete(dataProductExternalId, [
+    await client.dataProducts.versions.delete(dataProductExternalId, [
       { version: '1.0.0' },
     ]);
   });
