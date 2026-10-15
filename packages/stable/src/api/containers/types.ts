@@ -6,7 +6,7 @@ import type {
   IncludeGlobalQueryParameter,
   ReducedLimitQueryParameter,
   SpaceQueryParameter,
-  UsedForQueryParameter,
+  FilterUsedForQueryParameter as UsedForQueryParameter,
 } from './types.gen';
 
 export type { ContainerUsedFor };
