@@ -174,23 +174,27 @@ describe('Transformations external data unit test', () => {
     ]);
   });
 
-  test('byExternalId', async () => {
+  test('retrieve', async () => {
     nock(mockBaseUrl)
-      .get(/\/transformations\/externaldata\/byExternalId$/)
-      .query({ externalId: 'snowflake-sales-prod' })
+      .post(/\/transformations\/externaldata\/byids$/, {
+        items: [{ externalId: 'snowflake-sales-prod' }],
+        ignoreUnknownIds: true,
+      })
       .once()
-      .reply(200, snowflakeSource);
+      .reply(200, { items: [snowflakeSource] });
 
-    const source = await client.transformationsExternalData.byExternalId(
-      'snowflake-sales-prod'
+    const sources = await client.transformationsExternalData.retrieve(
+      [{ externalId: 'snowflake-sales-prod' }],
+      { ignoreUnknownIds: true }
     );
 
-    expect(source.externalId).toBe('snowflake-sales-prod');
-    expect(source.format).toBe('snowflake');
-    if (source.format !== 'snowflake') {
+    expect(sources).toHaveLength(1);
+    expect(sources[0].externalId).toBe('snowflake-sales-prod');
+    expect(sources[0].format).toBe('snowflake');
+    if (sources[0].format !== 'snowflake') {
       throw new Error('expected snowflake source');
     }
-    expect(source.settings.credentials.accountIdentifier).toBe(
+    expect(sources[0].settings.credentials.accountIdentifier).toBe(
       'myorg-myaccount'
     );
   });

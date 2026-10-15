@@ -2,8 +2,8 @@
 
 import { BaseResourceAPI } from '@cognite/sdk-core';
 import type {
-  CogniteExternalId,
   CursorAndAsyncIterator,
+  ExternalId,
   ItemsWrapper,
 } from '@cognite/sdk-core';
 import type {
@@ -11,6 +11,7 @@ import type {
   TransformationExternalDataCreate,
   TransformationExternalDataDelete,
   TransformationExternalDataListQuery,
+  TransformationExternalDataRetrieveParams,
   TransformationExternalDataRotateKeysItem,
   TransformationExternalDataRotatedKey,
 } from './types';
@@ -72,19 +73,17 @@ export class TransformationsExternalDataAPI extends BaseResourceAPI<Transformati
 
   /**
    * ```js
-   * const source = await client.transformationsExternalData.byExternalId(
-   *   'snowflake-sales-prod'
+   * const sources = await client.transformationsExternalData.retrieve(
+   *   [{ externalId: 'snowflake-sales-prod' }],
+   *   { ignoreUnknownIds: true }
    * );
    * ```
    */
-  public byExternalId = async (
-    externalId: CogniteExternalId
-  ): Promise<TransformationExternalData> => {
-    const response = await this.get<TransformationExternalData>(
-      this.url('byExternalId'),
-      { params: { externalId } }
-    );
-    return this.addToMapAndReturn(response.data, response);
+  public retrieve = (
+    ids: ExternalId[],
+    params: TransformationExternalDataRetrieveParams = {}
+  ): Promise<TransformationExternalData[]> => {
+    return this.retrieveEndpoint(ids, params);
   };
 
   /**

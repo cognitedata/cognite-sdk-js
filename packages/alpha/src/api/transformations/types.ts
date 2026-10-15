@@ -113,6 +113,14 @@ export interface TransformationExternalDataDelete {
   externalId: CogniteExternalId;
 }
 
+export interface TransformationExternalDataRetrieveParams {
+  /**
+   * Ignore external IDs that are not found.
+   * @default false
+   */
+  ignoreUnknownIds?: boolean;
+}
+
 export interface TransformationExternalDataRotateKeysItem {
   externalId: CogniteExternalId;
   expiryTime: number;
