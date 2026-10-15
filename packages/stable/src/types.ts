@@ -2895,6 +2895,7 @@ export type {
   RawPropertyValueListV3,
   RawPropertyValueV3,
   ReferencedPropertyValueV3,
+  SearchOperator,
   SearchRequestV3,
   SearchResponse,
   SearchSort,
