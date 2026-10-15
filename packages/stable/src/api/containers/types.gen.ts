@@ -3,7 +3,7 @@
 // Instead update the code generation logic or the OpenAPI document.
 
 import type { CursorAndAsyncIterator } from '@cognite/sdk-core';
-export interface BtreeIndex {
+export interface BtreeIndexCreateDefinition {
   /** Whether to make the index space-specific */
   bySpace?: boolean;
   /** Whether the index can be used for cursor-based pagination */
@@ -22,6 +22,7 @@ export interface BtreeIndex {
   /** List of properties to define the index across */
   properties: string[];
 }
+export type BtreeIndexDefinition = BtreeIndexCreateDefinition & IndexState;
 /**
 * An external-id reference to an existing CDF resource type item, such as a time series.
 
@@ -31,6 +32,7 @@ are no referential integrity guarantees for this, and the client should handle i
 or the client may not have access to it.
 
 Currently, time series, sequence and file references are supported.
+CDF external ID reference types (timeseries, file, sequence) are not allowed for containers with ```usedFor``` set to ```record```.
 */
 export interface CDFExternalIdReference {
   /**
@@ -55,52 +57,71 @@ A 'uniqueness' constraint can only apply to properties that are in the same cont
 
 A 'requires' constraint can reference other containers. As a result, the properties in those other containers must then also be set. Up to 25 'requires' constraints can be added per container.
 */
+export type ConstraintCreateDefinition =
+  | RequiresConstraintCreateDefinition
+  | UniquenessConstraintCreateDefinition;
+/**
+* Describes a constraint across the properties included.
+
+
+Constraints enforce that;
+ * Certain properties must be present,
+ * A value must be unique across a single or several properties.
+
+A 'uniqueness' constraint can only apply to properties that are in the same container. Up to 10 'uniqueness' constraints can be added per container.
+
+
+A 'requires' constraint can reference other containers. As a result, the properties in those other containers must then also be set. Up to 25 'requires' constraints can be added per container.
+*/
 export type ConstraintDefinition =
   | RequiresConstraintDefinition
   | UniquenessConstraintDefinition;
+export type ConstraintOrIndexState = 'current' | 'pending' | 'failed';
+export interface ConstraintState {
+  /**
+   * This field describes the validity of the constraint.
+   *
+   * Possible values are:
+   * * `"failed"`: The constraint is violated. This can occur if there exists data violating the constraint when the constraint was created. New data violating the constraint will still be rejected.
+   * * `"current"`: The constraint is satisfied.
+   * * `"pending"`: The constraint validity has not yet been computed.
+   */
+  state: ConstraintOrIndexState;
+}
 export interface ContainerCollectionResponse {
   /** List of containers */
   items: ContainerDefinition[];
 }
 export interface ContainerCollectionResponseWithCursorResponse
   extends CursorAndAsyncIterator<ContainerDefinition> {}
-export type ContainerCorePropertyDefinition = CorePropertyDefinition & {
-  type:
-    | TextProperty
-    | PrimitiveProperty
-    | CDFExternalIdReference
-    | DirectNodeRelation
-    | EnumProperty;
-};
-export interface ContainerCreateCollection {
-  /** List of containers to create/update */
-  items: ContainerCreateDefinition[];
-}
 /**
- * Container for properties you can access through views.  Container specifications give details about storage related details. For instance, how to index the data, and what constraints should be present.     You can define a single container to only contain nodes (```node```), only contain edges (```edge```), or to contain both (```all```).
+ * Container for properties you can access through views. Container specifications give details about storage related details, such as how to index the data and what constraints should be present.
  */
-export interface ContainerCreateDefinition {
-  /** Set of constraints to apply to the container. Constraint identifiers must be between 1 and 43 characters long. */
-  constraints?: Record<string, ConstraintDefinition>;
+export interface ContainerCommon {
   /** Description of what the property contains, and how you intend to use it. */
   description?: string;
   /** External-id of the container. The values ```Query```, ```Mutation```, ```Subscription```, ```String```, ```Int32```, ```Int64```, ```Int```, ```Float32```, ```Float64```, ```Float```, ```Timestamp```, ```JSONObject```, ```Date```, ```Numeric```, ```Boolean```, ```PageInfo```, ```File```, ```Sequence``` and ```TimeSeries``` are reserved. */
   externalId: DMSExternalId;
-  /** Set of indexes to apply to the container. Up to 10 indexes can be added on a container. Index identifiers must be between 1 and 43 characters long. */
-  indexes?: Record<string, IndexDefinition>;
   /** Readable name for container meant for use in UIs */
   name?: string;
-  /** We index the property by a local unique identifier. The identifier has to have a length of between 1 and 255 characters.  It must also match the pattern ```^[a-zA-Z0-9][a-zA-Z0-9_-]{0,253}[a-zA-Z0-9]?$``` , and it cannot be any of the following reserved identifiers: ```space```, ```externalId```, ```createdTime```, ```lastUpdatedTime```, ```deletedTime```, ```edge_id```, ```node_id```, ```project_id```, ```property_group```, ```seq```, ```tg_table_name```, and ```extensions```. The maximum number of properties depends on the project subscription and is by default 100. */
-  properties: Record<string, ContainerPropertyDefinition>;
   /** Id of the space the container belongs to */
   space: SpaceSpecification;
-  /** Should this operation apply to nodes, edges or both. */
-  usedFor?: UsedFor;
 }
-export type ContainerDefinition = ContainerCreateDefinition & {
+export interface ContainerCreateCollection {
+  /** List of containers to create/update */
+  items: ContainerCreateDefinition[];
+}
+export type ContainerCreateDefinition =
+  | InstanceContainerCreateDefinition
+  | RecordContainerCreateDefinition;
+export type ContainerDefinition = ContainerCommon & {
+  usedFor?: UsedFor;
   createdTime?: EpochTimestamp;
   lastUpdatedTime?: EpochTimestamp;
   isGlobal?: boolean;
+  properties?: any;
+  constraints?: Record<string, ConstraintDefinition>;
+  indexes?: Record<string, IndexDefinition>;
 };
 export interface ContainerInspectRequest {
   inspectionOperations: {
@@ -133,7 +154,41 @@ export interface ContainerInspectResultItem {
 /**
  * Defines a property of a container.  You can reference this property in views.
  */
-export type ContainerPropertyDefinition = ContainerCorePropertyDefinition;
+export type ContainerPropertyCreateDefinition = CorePropertyCreateDefinition &
+  ContainerPropertyTypeDefinition;
+/**
+ * Defines a property of a container.  You can reference this property in views.
+ */
+export type ContainerPropertyDefinition = CorePropertyDefinition &
+  ContainerPropertyTypeDefinition;
+export interface ContainerPropertyTypeDefinition {
+  /**
+   * The type of data you can store in this property. Most properties can also hold a list of values, for example, a list of integers or a list of timestamps. The supported storage types are:
+   *
+   * * text (allows user control of collation),
+   *  * boolean,
+   *  * 32-bit, and 64-bit float,
+   *  * 32-bit, and 64-bit integer,
+   *  * timestamp,
+   *  * date,
+   *  * JSON fragment,
+   *  * direct relation to an existing node,
+   *  * time series external-id reference,
+   *  * file external-id reference,
+   *  * sequence external-id reference,
+   *  * enum.
+   * The JSON fragments have to be valid JSON objects. If JSON arrays are to be stored, these must be wrapped in a JSON object. JSON values (such as string, number, boolean) should use their respective primitive form instead. The maximum allowed size for a JSON object is 40960 bytes. For lists of json values, the size of the entire list must be within this limit. The maximum allowed length of a key is 128, while the maximum allowed size of a value is 10240 bytes and you can have up to 256 key-value pairs. The  byte sizes are computed by representing the data as a UTF-8 encoded JSON string.
+   * Direct relations use a space external-id, the external-id for an existing node, and the external-id for the data container. E.g. ```s-spaceExternalId.uniqueNodeExternalId.containerExternalId```
+   * Timestamps must be a string in the format 'YYYY-MM-DDTHH:MM:SS[.millis][Z|time zone]' with optional milliseconds having precision of 1-3 decimal digits and optional timezone with format ±HH:MM, ±HHMM, ±HH or Z, where Z represents UTC, Year must be between 0001 and 9999.
+   * Dates must be a date string in the format 'YYYY-MM-DD'. Year must be between 1 and 9999.
+   */
+  type:
+    | TextProperty
+    | PrimitiveProperty
+    | CDFExternalIdReference
+    | DirectNodeRelation
+    | EnumProperty;
+}
 /**
  * Reference to an existing container
  */
@@ -144,8 +199,14 @@ export interface ContainerReference {
   space: SpaceSpecification;
   type: 'container';
 }
-export interface CorePropertyDefinition {
-  /** When set to ```true```, the API will increment the property based on its highest current value (max value).  You can only use this functionality to increment properties of type `int32` or `int64`. If the property has a different data type, the API will return an error. */
+export interface ContainerSubObjectIdentifier {
+  /** External id for the container */
+  containerExternalId: DMSExternalId;
+  identifier: string;
+  space: SpaceSpecification;
+}
+export interface CorePropertyCreateDefinition {
+  /** When set to ```true```, the API will increment the property based on its highest current value (max value).  You can only use this functionality to increment properties of type `int32` or `int64`. If the property has a different data type, the API will return an error. Auto-increment is not supported for records. The value will not be auto-generated, so omitting a non-nullable auto-increment property during record ingestion will fail validation. */
   autoIncrement?: boolean;
   /**
    * Default value to use when you do not specify a value for the property.  The default value must be of the same type as what you defined for the property itself.
@@ -155,13 +216,20 @@ export interface CorePropertyDefinition {
   defaultValue?: string | number | boolean | object;
   /** Description of the content and suggested use for this property. */
   description?: string;
-  /** Should updates to this property be rejected after the initial population? */
+  /** Should updates to this property be rejected after the initial population? Per-property immutability is not applicable for records. For records, immutability is a stream-level concept only. */
   immutable?: boolean;
   /** Readable property name. */
   name?: string;
   /** Does this property need to be set to a value, or not? */
   nullable?: boolean;
 }
+export type CorePropertyDefinition = CorePropertyCreateDefinition & {
+  constraintState: {
+    nullability?: ConstraintOrIndexState;
+    maxListSize?: ConstraintOrIndexState;
+    maxTextSize?: ConstraintOrIndexState;
+  };
+};
 export interface CursorQueryParameter {
   /** @example 4zj0Vy2fo0NtNMb229mI9r1V3YG5NBL752kQz1cKtwo */
   cursor?: string;
@@ -170,7 +238,7 @@ export interface CursorQueryParameter {
  * Direct node relation
  */
 export interface DirectNodeRelation {
-  /** The (optional) required type for the node the direct relation points to. If specified, the node must exist before the direct relation is referenced and of the specified type. If no container specification is used, the node will be auto created with the built-in ```node``` container type, and it does not explicitly have to be created before the node that references it. */
+  /** The (optional) required type for the node the direct relation points to. If specified, the node must exist before the direct relation is referenced and of the specified type. If no container specification is used, the node will be auto created with the built-in ```node``` container type, and it does not explicitly have to be created before the node that references it. For records, the container type constraint is not enforced and targets are not auto-created. Only the target space existence is validated. */
   container?: ContainerReference;
   /**
    * Specifies that the data type is a list of values. The ordering of values is preserved.
@@ -192,7 +260,7 @@ export type DMSVersion = string;
 /**
 * An enum type property.
 
-An enum property can only consist for predefined values.
+An enum property can only consist of predefined values.
 * @example {"unknownValue":"unknown","values":{"value1":{"name":"Value 1","description":"This is value 1"},"value2":{},"unknown":{"name":"Unknown","description":"Used if the client does not recognize the returned value."}}}
 */
 export interface EnumProperty {
@@ -203,7 +271,7 @@ export interface EnumProperty {
    */
   unknownValue?: string;
   /**
-   * A set of all possible values for the enum property.  The enum value identifier has to have a length of between 1 and 127 characters.  It must also match the pattern ```^[_A-Za-z][_0-9A-Za-z]{0,127}$```.
+   * A set of all possible values for the enum property. The enum value identifier has to have a length of between 1 and 127 characters.  It must also match the pattern ```^[_A-Za-z][_0-9A-Za-z]{0,127}$```, and not be `"true"`, `"false"` or `"null"`.
    *
    * Example: ```{ "value1": { "name": "Value 1", "description": "This is value 1" }, "value2": { } }```
    */
@@ -225,12 +293,12 @@ export interface EnumValueProperties {
  * @example 1730204346000
  */
 export type EpochTimestamp = number;
+export interface FilterUsedForQueryParameter {
+  /** @example ["node","edge","all","record"] */
+  usedFor?: UsedFor[];
+}
 export interface IncludeGlobalQueryParameter {
   includeGlobal?: boolean;
-}
-export interface UsedForQueryParameter {
-  /** Only include containers that have been marked as used for the specified purposes. Defaults to [node, edge, all] */
-  usedFor?: UsedFor[];
 }
 /**
 * You can optimize query performance by defining an index to apply to a container.  You can only create an index across properties belonging to the same container.
@@ -242,21 +310,51 @@ Ordering of the properties included in the index definition list is significant.
 Indexes have different requirements for the different property data types.  As a result, the create index operation will fail if you specify an invalid combination.
 
 
-Up to 10 indexes can be added on a container.'
+Up to 10 indexes can be added on a container.
 */
-export type IndexDefinition = BtreeIndex | InvertedIndex;
-export interface InvertedIndex {
+export type IndexCreateDefinition =
+  | BtreeIndexCreateDefinition
+  | InvertedIndexCreateDefinition;
+/**
+* Indexes applied to a container.  The properties of an index always belong to the same container.
+
+
+Ordering of the properties included in the index definition list is significant.  The order should match the queries you expect. The properties of an index cannot be updated after creation. If you need to change the index, it must be recreated.
+
+
+Up to 10 indexes can be added on a container.
+*/
+export type IndexDefinition = BtreeIndexDefinition | InvertedIndexDefinition;
+export interface IndexState {
+  /**
+   * This field describes the validity of the index.
+   *
+   * Possible values are:
+   * * `"failed"`: The index can't be built.
+   *   This can occur if data existing before the index was created data prevents the index from being built.
+   *   For example, property values in a btree index have a size limit on them.
+   *   Use `maxListSize` and `maxTextSize` to bound the size of btree indexed properties.
+   * * `"current"`: The index is built successfully.
+   * * `"pending"`: The index is still building.
+   */
+  state: ConstraintOrIndexState;
+}
+export type InstanceContainerCreateDefinition = ContainerCommon & {
+  usedFor?: 'node' | 'edge' | 'all';
+  properties: any;
+  constraints?: Record<string, ConstraintCreateDefinition>;
+  indexes?: Record<string, IndexCreateDefinition>;
+};
+export interface InvertedIndexCreateDefinition {
   /** An inverted index can be used to index composite values, and the queries to be handled by the index need to search for element values that appear within the composite items. So if for example you have a property X of type `int[]` and you want to efficiently query for all instances where X contains some value Y, you can create an inverted index on X.  */
   indexType?: 'inverted';
   /** List of properties to define the index across */
   properties: string[];
 }
+export type InvertedIndexDefinition = InvertedIndexCreateDefinition &
+  IndexState;
 export interface ListOfContainerSubObjectIdentifierRequest {
-  items: {
-    space: SpaceSpecification;
-    containerExternalId: DMSExternalId;
-    identifier: string;
-  }[];
+  items: ContainerSubObjectIdentifier[];
 }
 export interface ListOfContainerSubObjectIdentifierResponse {
   items: {
@@ -322,6 +420,81 @@ export interface PrimitiveProperty {
     sourceUnit?: string;
   };
 }
+export type RecordContainerCreateDefinition = ContainerCommon & {
+  usedFor?: 'record';
+  properties: any;
+};
+/**
+ * Defines a property of a record container. You can reference this property in views.
+ */
+export type RecordContainerPropertyCreateDefinition =
+  RecordCorePropertyCreateDefinition & RecordContainerPropertyTypeDefinition;
+export interface RecordContainerPropertyTypeDefinition {
+  /**
+   * The type of data you can store in this property. Most properties can also hold a list of values, for example, a list of integers or a list of timestamps. The supported storage types are:
+   *
+   * * text,
+   *  * boolean,
+   *  * 32-bit, and 64-bit float,
+   *  * 32-bit, and 64-bit integer,
+   *  * timestamp,
+   *  * date,
+   *  * JSON fragment,
+   *  * direct relation to an existing node,
+   *  * enum.
+   * The JSON fragments have to be valid JSON objects. If JSON arrays are to be stored, these must be wrapped in a JSON object. JSON values (such as string, number, boolean) should use their respective primitive form instead. The maximum allowed size for a JSON object is 40960 bytes. For lists of json values, the size of the entire list must be within this limit. The maximum allowed length of a key is 128, while the maximum allowed size of a value is 10240 bytes and you can have up to 256 key-value pairs. The  byte sizes are computed by representing the data as a UTF-8 encoded JSON string.
+   * Direct relations use a space external-id and the external-id for an existing node. Only the target space existence is validated for records.
+   * Timestamps must be a string in the format 'YYYY-MM-DDTHH:MM:SS[.millis][Z|time zone]' with optional milliseconds having precision of 1-3 decimal digits and optional timezone with format ±HH:MM, ±HHMM, ±HH or Z, where Z represents UTC, Year must be between 0001 and 9999.
+   * Dates must be a date string in the format 'YYYY-MM-DD'. Year must be between 1 and 9999.
+   */
+  type:
+    | RecordTextProperty
+    | PrimitiveProperty
+    | RecordDirectNodeRelation
+    | EnumProperty;
+}
+export interface RecordCorePropertyCreateDefinition {
+  /**
+   * Default value to use when you do not specify a value for the property.  The default value must be of the same type as what you defined for the property itself.
+   *
+   * We do not currently support using default values for array/list types.
+   */
+  defaultValue?: string | number | boolean | object;
+  /** Description of the content and suggested use for this property. */
+  description?: string;
+  /** Readable property name. */
+  name?: string;
+  /** Does this property need to be set to a value, or not? */
+  nullable?: boolean;
+}
+/**
+ * Direct node relation. Only the target space existence is validated for records. Target nodes are not auto-created.
+ */
+export interface RecordDirectNodeRelation {
+  /**
+   * Specifies that the data type is a list of values. The ordering of values is preserved.
+   *
+   */
+  list?: boolean;
+  /** Specifies the maximum number of values in the list */
+  maxListSize?: number;
+  type: 'direct';
+}
+/**
+ * Text type
+ */
+export interface RecordTextProperty {
+  /**
+   * Specifies that the data type is a list of values. The ordering of values is preserved.
+   *
+   */
+  list?: boolean;
+  /** Specifies the maximum number of values in the list */
+  maxListSize?: number;
+  /** Specifies the maximum size in bytes of the text property, when encoded with utf-8 */
+  maxTextSize?: number;
+  type: 'text';
+}
 export interface ReducedLimitQueryParameter {
   /**
    * @min 1
@@ -329,11 +502,13 @@ export interface ReducedLimitQueryParameter {
    */
   limit?: number;
 }
-export interface RequiresConstraintDefinition {
+export interface RequiresConstraintCreateDefinition {
   constraintType?: 'requires';
   /** Reference to an existing container */
   require: ContainerReference;
 }
+export type RequiresConstraintDefinition = ConstraintState &
+  RequiresConstraintCreateDefinition;
 export interface SpaceQueryParameter {
   /**
    * @pattern (?!^(space|cdf|dms|pg3|shared|system|node|edge)$)(^[a-zA-Z][a-zA-Z0-9_-]{0,41}[a-zA-Z0-9]?$)
@@ -349,7 +524,7 @@ export type SpaceSpecification = string;
  * Text type
  */
 export interface TextProperty {
-  /** Collation - the set of language specific rules - used when sorting text fields */
+  /** Collation - the set of language specific rules - used when sorting text fields. Collation is not applicable for records. */
   collation?:
     | 'ucs_basic'
     | 'und'
@@ -1142,26 +1317,31 @@ export interface TextProperty {
   list?: boolean;
   /** Specifies the maximum number of values in the list */
   maxListSize?: number;
+  /** Specifies the maximum size in bytes of the text property, when encoded with utf-8 */
+  maxTextSize?: number;
   type: 'text';
 }
-export interface UniquenessConstraintDefinition {
+export interface UniquenessConstraintCreateDefinition {
   /** Whether to make the constraint space-specific */
   bySpace?: boolean;
   constraintType?: 'uniqueness';
   /** List of properties included in the constraint. The order you list the properties in is significant. */
   properties: string[];
 }
+export type UniquenessConstraintDefinition = ConstraintState &
+  UniquenessConstraintCreateDefinition;
 export interface UpsertConflict {
   /** Details about the error caused by the upsert/update. */
   error: {
     code: number;
     message: string;
+    isAutoRetryable?: boolean;
   };
 }
 /**
- * Should this operation apply to nodes, edges or both.
+ * Should this operation apply to nodes, edges, records, or both nodes and edges. The ```record``` value refers to Streams & Records-backed storage. **NB!** ```all``` applies to nodes and edges, but not records.
  */
-export type UsedFor = 'node' | 'edge' | 'all' | 'record';
+export type UsedFor = 'node' | 'edge' | 'record' | 'all';
 /**
  * Reference to a view
  */

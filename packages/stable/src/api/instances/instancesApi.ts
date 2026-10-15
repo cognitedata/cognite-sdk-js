@@ -5,11 +5,11 @@ import type {
   AggregationRequest,
   AggregationResponse,
   ByIdsResponse,
+  InstanceBulk,
   InstanceInspectRequest,
   InstanceInspectResponse,
   ListOfSpaceExternalIdsRequestWithTyping,
   NodeAndEdgeCollectionResponseWithCursorV3Response,
-  NodeAndEdgeCreateCollection,
   NodeOrEdge,
   NodeOrEdgeDeleteRequest,
   NodeOrEdgeListRequestV3,
@@ -154,7 +154,7 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    * ```
    */
   public upsert = async (
-    params: NodeAndEdgeCreateCollection
+    params: InstanceBulk
   ): Promise<SlimNodeAndEdgeCollectionResponse> => {
     const response = await this.post<SlimNodeAndEdgeCollectionResponse>(
       this.url(),
