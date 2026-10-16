@@ -52,13 +52,13 @@ import { retryValidator } from './retryValidator';
 
 export default class CogniteClient extends BaseCogniteClient {
   /**
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.assets` in the next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md for details.
+   * @deprecated Asset-centric API, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
    */
   public get assets() {
     return accessApi(this.assetsApi);
   }
   /**
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.timeseries` in the next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md for details.
+   * @deprecated Asset-centric time series metadata and asset-hierarchy filters are deprecated 2026-10-15 and retired 2027-12-31; data point reads and writes stay on client.datapoints via instanceId. Will be removed or moved in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
    */
   public get timeseries() {
     return accessApi(this.timeSeriesApi);
@@ -67,13 +67,13 @@ export default class CogniteClient extends BaseCogniteClient {
     return accessApi(this.dataPointsApi);
   }
   /**
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.sequences` in the next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md for details.
+   * @deprecated Asset-centric API, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
    */
   public get sequences() {
     return accessApi(this.sequencesApi);
   }
   /**
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.events` in the next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md for details.
+   * @deprecated Asset-centric API, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
    */
   public get events() {
     return accessApi(this.eventsApi);
@@ -85,7 +85,7 @@ export default class CogniteClient extends BaseCogniteClient {
     return accessApi(this.functionsApi);
   }
   /**
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.labels` in the next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md for details.
+   * @deprecated Asset-centric API, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
    */
   public get labels() {
     return accessApi(this.labelsApi);
@@ -112,7 +112,7 @@ export default class CogniteClient extends BaseCogniteClient {
     return accessApi(this.files3DApi);
   }
   /**
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.datasets` in the next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md for details.
+   * @deprecated Asset-centric API, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
    */
   public get datasets() {
     return accessApi(this.datasetsApi);
@@ -127,19 +127,19 @@ export default class CogniteClient extends BaseCogniteClient {
     return accessApi(this.viewer3DApi);
   }
   /**
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.relationships` in the next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md for details.
+   * @deprecated Asset-centric API, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
    */
   public get relationships() {
     return accessApi(this.relationshipsApi);
   }
   /**
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.entityMatching` in the next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md for details.
+   * @deprecated Operates on asset-centric resources, which are retired 2027-12-31. Will be removed or moved in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
    */
   public get entityMatching() {
     return accessApi(this.entityMatchingApi);
   }
   /**
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.geospatial` in the next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md for details.
+   * @deprecated Asset-centric API, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
    */
   public get geospatial() {
     return accessApi(this.geospatialApi);
@@ -148,7 +148,7 @@ export default class CogniteClient extends BaseCogniteClient {
     return accessApi(this.documentsApi);
   }
   /**
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.annotations` in the next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md for details.
+   * @deprecated Asset-centric API, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
    */
   public get annotations() {
     return accessApi(this.annotationsApi);

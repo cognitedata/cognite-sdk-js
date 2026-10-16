@@ -4,7 +4,7 @@ import type { GeoJSON, Geometry } from 'geojson';
 
 export type { GeoJSON };
 
-/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
+/** @deprecated Asset-centric API type, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. */
 export type GeometryType = 'WKT' | 'GEOJSON';
 
 type GeometryPropertyType =
@@ -40,7 +40,7 @@ type GeometryPropertyType =
   | 'MULTIPOLYGONZM'
   | 'GEOMETRYCOLLECTIONZM';
 
-/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
+/** @deprecated Asset-centric API type, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. */
 export type GeospatialPropertyType =
   | 'STRING'
   | 'LONG'
@@ -49,7 +49,7 @@ export type GeospatialPropertyType =
   | 'TIMESTAMP'
   | GeometryPropertyType;
 
-/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
+/** @deprecated Asset-centric API type, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. */
 export type GeospatialFeatureTypeProperty =
   | {
       type: Exclude<GeospatialPropertyType, GeometryPropertyType | 'STRING'>;
@@ -71,25 +71,25 @@ export type GeospatialFeatureTypeProperty =
 
 type Properties = Record<string, GeospatialFeatureTypeProperty>;
 
-/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
+/** @deprecated Asset-centric API type, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. */
 export interface Geospatial {
   featureType: unknown;
   feature: unknown;
   crs: unknown;
 }
 
-/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
+/** @deprecated Asset-centric API type, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. */
 export interface GeospatialFeature extends ExternalId {
   [property: string]: string | number | boolean | { wkt: string } | Geometry;
 }
 
-/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
+/** @deprecated Asset-centric API type, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. */
 export interface GeospatialFeatureResponse extends GeospatialFeature {
   createdTime: number;
   lastUpdatedTime: number;
 }
 
-/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
+/** @deprecated Asset-centric API type, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. */
 export interface FeatureType extends ExternalId, InternalId {
   properties: Properties & {
     createdTime: { type: 'LONG' };
@@ -114,7 +114,7 @@ type GeospatialIndexSpec = {
   properties: string[];
 };
 
-/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
+/** @deprecated Asset-centric API type, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. */
 export interface GeospatialCreateFeatureType extends ExternalId {
   properties: Properties;
   searchSpec?: {
@@ -122,7 +122,7 @@ export interface GeospatialCreateFeatureType extends ExternalId {
   };
 }
 
-/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
+/** @deprecated Asset-centric API type, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. */
 export interface GeospatialUpdateFeatureType extends ExternalId {
   update:
     | {
@@ -137,12 +137,12 @@ export interface GeospatialUpdateFeatureType extends ExternalId {
       };
 }
 
-/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
+/** @deprecated Asset-centric API type, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. */
 export interface GeospatialRecursiveDelete {
   recursive?: boolean;
 }
 
-/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
+/** @deprecated Asset-centric API type, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. */
 export interface GeospatialOutput {
   output?:
     | {
@@ -218,7 +218,7 @@ type GeospatialFeatureFilter =
       stWithinDistance: GeospatialPropertyAndValue & { distance: number };
     };
 
-/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
+/** @deprecated Asset-centric API type, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. */
 export interface GeospatialFeatureSearchFilter
   extends GeospatialAllowCrsTransformation,
     GeospatialAllowDimensionalityMismatch,
@@ -228,7 +228,7 @@ export interface GeospatialFeatureSearchFilter
   sort?: string[];
 }
 
-/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
+/** @deprecated Asset-centric API type, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. */
 export interface GeospatialFeatureSearchStreamFilter
   extends GeospatialAllowCrsTransformation,
     GeospatialAllowDimensionalityMismatch,
@@ -245,7 +245,7 @@ export interface GeospatialFeatureSearchStreamFilter
       };
 }
 
-/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
+/** @deprecated Asset-centric API type, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. */
 export interface GeospatialFeatureListFilter
   extends GeospatialFeatureSearchStreamFilter,
     Cursor {}
@@ -254,11 +254,11 @@ export interface GeospatialFeatureListFilter
  * Search stream returns a string of delimited json of features (GeospatialFeatureResponse[]).
  * jsonStreamFormat in the filter decides what the delimiter will be.
  *
- * @deprecated Asset-centric API type, will move to the legacy namespace in the next major release.
+ * @deprecated Asset-centric API type, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release.
  */
 export type GeospatialFeatureSearchStreamResponse = string;
 
-/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
+/** @deprecated Asset-centric API type, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. */
 export interface FeatureAggregateParams {
   filter?: GeospatialFeatureFilter;
   aggregates: Aggregates[];
@@ -280,47 +280,47 @@ type Aggregates =
   | 'sum'
   | 'variance';
 
-/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
+/** @deprecated Asset-centric API type, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. */
 export interface GeospatialCoordinateReferenceSystem {
   srid: number;
   wkt: string;
   projString: string;
 }
 
-/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
+/** @deprecated Asset-centric API type, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. */
 export interface GeospatialCRSResponse
   extends GeospatialCoordinateReferenceSystem {
   createdTime: number;
   lastUpdatedTime: number;
 }
 
-/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
+/** @deprecated Asset-centric API type, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. */
 export interface GeospatialSridId {
   srid: number;
 }
 
-/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
+/** @deprecated Asset-centric API type, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. */
 export type GeospatialComputeFunction = {
   stTransform: GeospatialGeometryTransformComputeFunction;
 };
 
-/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
+/** @deprecated Asset-centric API type, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. */
 export interface GeospatialGeometryTransformComputeFunction {
   geometry: GeospatialExtendedWellKnownText;
   srid: number;
 }
 
-/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
+/** @deprecated Asset-centric API type, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. */
 export interface GeospatialExtendedWellKnownText {
   ewkt: string;
 }
 
-/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
+/** @deprecated Asset-centric API type, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. */
 export interface GeospatialComputedItemList {
   items: Record<string, unknown>[];
 }
 
-/** @deprecated Asset-centric API type, will move to the legacy namespace in the next major release. */
+/** @deprecated Asset-centric API type, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. */
 export interface GeospatialJsonComputeOutput {
   output: Record<string, GeospatialComputeFunction>;
 }

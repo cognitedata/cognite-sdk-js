@@ -9,7 +9,7 @@ import type {
 } from '../../types';
 
 /**
- * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.events` in the next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md for details.
+ * @deprecated Asset-centric API, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
  */
 export class EventsAggregateAPI extends BaseResourceAPI<unknown> {
   /**
@@ -20,7 +20,7 @@ export class EventsAggregateAPI extends BaseResourceAPI<unknown> {
    * console.log('Number of events: ', aggregates[0].count)
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.events` in the next major release.
+   * @deprecated Asset-centric API, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release.
    */
   public count = (query: EventAggregateQuery): Promise<AggregateResponse[]> => {
     return super.aggregateEndpoint(query);
@@ -34,7 +34,7 @@ export class EventsAggregateAPI extends BaseResourceAPI<unknown> {
    * console.log('Unique values: ', uniqueValues)
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.events` in the next major release.
+   * @deprecated Asset-centric API, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release.
    */
   public uniqueValues = (
     query: EventUniqueValuesAggregate

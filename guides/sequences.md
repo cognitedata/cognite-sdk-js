@@ -1,6 +1,6 @@
 # Sequences
 
-> **Deprecated.** This is an asset-centric API, retired at the end of 2027. In the next major release it moves to `client.legacy`. See [DEPRECATIONS.md](./DEPRECATIONS.md).
+> **Deprecated.** This is an asset-centric API, deprecated 2026-10-15 and retired 2027-12-31. It will be removed or moved in a future major release. See [DEPRECATIONS.md](./DEPRECATIONS.md).
 
 <!--What are Sequences?  Generic overview information-->
 

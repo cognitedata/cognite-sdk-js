@@ -22,7 +22,7 @@ import type {
 } from './types';
 
 /**
- * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.timeseries` in the next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md for details.
+ * @deprecated Asset-centric time series metadata and asset-hierarchy filters are deprecated 2026-10-15 and retired 2027-12-31; data point reads and writes stay on client.datapoints via instanceId. Will be removed or moved in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
  */
 export class TimeSeriesAPI extends BaseResourceAPI<TimeSeries> {
   private syntheticTimeseriesApi: SyntheticTimeSeriesAPI;
@@ -66,7 +66,7 @@ export class TimeSeriesAPI extends BaseResourceAPI<TimeSeries> {
    * const createdTimeseries = await client.timeseries.create(timeseries);
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.timeseries` in the next major release.
+   * @deprecated Asset-centric time series metadata and asset-hierarchy filters are deprecated 2026-10-15 and retired 2027-12-31; data point reads and writes stay on client.datapoints via instanceId. Will be removed or moved in a future major release.
    */
   public create = (items: TimeSeriesCreate[]): Promise<TimeSeries[]> => {
     return super.createEndpoint(items);
@@ -79,7 +79,7 @@ export class TimeSeriesAPI extends BaseResourceAPI<TimeSeries> {
    * const timeseries = await client.timeseries.list({ filter: { assetIds: [1, 2] }});
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.timeseries` in the next major release.
+   * @deprecated Asset-centric time series metadata and asset-hierarchy filters are deprecated 2026-10-15 and retired 2027-12-31; data point reads and writes stay on client.datapoints via instanceId. Will be removed or moved in a future major release.
    */
   public list = (
     scope?: TimeSeriesFilterQuery
@@ -95,7 +95,7 @@ export class TimeSeriesAPI extends BaseResourceAPI<TimeSeries> {
    * console.log('Number of string timeseries: ', aggregates[0].count)
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.timeseries` in the next major release.
+   * @deprecated Asset-centric time series metadata and asset-hierarchy filters are deprecated 2026-10-15 and retired 2027-12-31; data point reads and writes stay on client.datapoints via instanceId. Will be removed or moved in a future major release.
    */
   public aggregate = (
     query: TimeSeriesAggregateQuery
@@ -113,7 +113,7 @@ export class TimeSeriesAPI extends BaseResourceAPI<TimeSeries> {
    * ]);
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.timeseries` in the next major release.
+   * @deprecated Asset-centric time series metadata and asset-hierarchy filters are deprecated 2026-10-15 and retired 2027-12-31; data point reads and writes stay on client.datapoints via instanceId. Will be removed or moved in a future major release.
    */
   public retrieve = (
     ids: IdEitherWithInstance[],
@@ -134,7 +134,7 @@ export class TimeSeriesAPI extends BaseResourceAPI<TimeSeries> {
    * }]);
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.timeseries` in the next major release.
+   * @deprecated Asset-centric time series metadata and asset-hierarchy filters are deprecated 2026-10-15 and retired 2027-12-31; data point reads and writes stay on client.datapoints via instanceId. Will be removed or moved in a future major release.
    */
   public update = (changes: TimeSeriesUpdate[]) => {
     return super.updateEndpoint(changes);
@@ -154,7 +154,7 @@ export class TimeSeriesAPI extends BaseResourceAPI<TimeSeries> {
    * });
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.timeseries` in the next major release.
+   * @deprecated Asset-centric time series metadata and asset-hierarchy filters are deprecated 2026-10-15 and retired 2027-12-31; data point reads and writes stay on client.datapoints via instanceId. Will be removed or moved in a future major release.
    */
   public search = (query: TimeSeriesSearchFilter) => {
     return super.searchEndpoint(query);
@@ -170,7 +170,7 @@ export class TimeSeriesAPI extends BaseResourceAPI<TimeSeries> {
    * ]);
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.timeseries` in the next major release.
+   * @deprecated Asset-centric time series metadata and asset-hierarchy filters are deprecated 2026-10-15 and retired 2027-12-31; data point reads and writes stay on client.datapoints via instanceId. Will be removed or moved in a future major release.
    */
   public delete = (ids: IdEither[]) => {
     return super.deleteEndpoint(ids);
@@ -190,7 +190,7 @@ export class TimeSeriesAPI extends BaseResourceAPI<TimeSeries> {
    * ]);
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.timeseries` in the next major release.
+   * @deprecated Data point operation that stays available; it may move to another namespace in a future major release.
    */
   public syntheticQuery = (items: SyntheticQuery[]) => {
     return this.syntheticTimeseriesApi.query(items);

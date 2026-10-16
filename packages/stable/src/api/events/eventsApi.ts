@@ -19,7 +19,7 @@ import type {
 import { EventsAggregateAPI } from './eventsAggregateApi';
 
 /**
- * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.events` in the next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md for details.
+ * @deprecated Asset-centric API, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
  */
 export class EventsAPI extends BaseResourceAPI<CogniteEvent> {
   private aggregateAPI: EventsAggregateAPI;
@@ -47,7 +47,7 @@ export class EventsAPI extends BaseResourceAPI<CogniteEvent> {
    * const createdEvents = await client.events.create(events);
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.events` in the next major release.
+   * @deprecated Asset-centric API, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release.
    */
   public create = (items: ExternalEvent[]): Promise<CogniteEvent[]> => {
     return super.createEndpoint(items);
@@ -61,7 +61,7 @@ export class EventsAPI extends BaseResourceAPI<CogniteEvent> {
    * const events = await client.events.list({ filter: { startTime: { min: new Date('1 jan 2018') }, endTime: { max: new Date('1 jan 2019') } } });
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.events` in the next major release.
+   * @deprecated Asset-centric API, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release.
    */
   public list = (
     scope?: EventFilterRequest
@@ -79,7 +79,7 @@ export class EventsAPI extends BaseResourceAPI<CogniteEvent> {
    * const events = await client.events.retrieve([{id: 123}, {externalId: 'abc'}]);
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.events` in the next major release.
+   * @deprecated Asset-centric API, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release.
    */
   public retrieve = (ids: IdEither[], params: EventRetrieveParams = {}) => {
     return super.retrieveEndpoint(ids, params);
@@ -92,7 +92,7 @@ export class EventsAPI extends BaseResourceAPI<CogniteEvent> {
    * const events = await client.events.update([{id: 123, update: {description: {set: 'New description'}}}]);
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.events` in the next major release.
+   * @deprecated Asset-centric API, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release.
    */
   public update = (changes: EventChange[]) => {
     return super.updateEndpoint(changes);
@@ -112,7 +112,7 @@ export class EventsAPI extends BaseResourceAPI<CogniteEvent> {
    * });
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.events` in the next major release.
+   * @deprecated Asset-centric API, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release.
    */
   public search = (query: EventSearchRequest) => {
     return super.searchEndpoint(query);
@@ -125,7 +125,7 @@ export class EventsAPI extends BaseResourceAPI<CogniteEvent> {
    * await client.events.delete([{id: 123}, {externalId: 'abc'}]);
    * ```
    *
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.events` in the next major release.
+   * @deprecated Asset-centric API, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release.
    */
   public delete = (ids: IdEither[]) => {
     return super.deleteEndpoint(ids);

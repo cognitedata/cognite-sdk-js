@@ -5,7 +5,7 @@ import type { DatapointInfo } from '../../types/common';
 import type { SyntheticQuery, SyntheticQueryResponse } from './types';
 
 /**
- * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.timeseries` in the next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md for details.
+ * @deprecated Data point operation that stays available; it may move to another namespace in a future major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
  */
 export class SyntheticTimeSeriesAPI extends BaseResourceAPI<SyntheticQueryResponse> {
   /**
@@ -19,7 +19,7 @@ export class SyntheticTimeSeriesAPI extends BaseResourceAPI<SyntheticQueryRespon
   }
 
   /**
-   * @deprecated Asset-centric API, to be retired end of 2027. Will move to `client.legacy.timeseries` in the next major release.
+   * @deprecated Data point operation that stays available; it may move to another namespace in a future major release.
    */
   public query = (
     items: SyntheticQuery[]
