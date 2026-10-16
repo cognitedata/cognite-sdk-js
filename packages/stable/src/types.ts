@@ -427,7 +427,7 @@ export interface AssetListScope extends AssetFilter, FilterQuery {
   partition?: Partition;
 }
 
-/** @deprecated Asset-centric 3D asset mapping type, to be retired end of 2027. No SDK replacement exists yet; a data-modeling-based mapping API will be added before this is removed. */
+/** @deprecated Asset-centric 3D asset mapping type, deprecated 2026-10-15; no retirement date is announced. Use the 3D contextualization APIs in data modeling (public preview, not in this SDK yet). Will be removed or moved in a future major release. */
 export interface AssetMapping3D extends AssetMapping3DBase {
   /**
    * A number describing the position of this node in the 3D hierarchy, starting from 0.
@@ -442,7 +442,7 @@ export interface AssetMapping3D extends AssetMapping3DBase {
   subtreeSize?: number;
 }
 
-/** @deprecated Asset-centric 3D asset mapping type, to be retired end of 2027. No SDK replacement exists yet; a data-modeling-based mapping API will be added before this is removed. */
+/** @deprecated Asset-centric 3D asset mapping type, deprecated 2026-10-15; no retirement date is announced. Use the 3D contextualization APIs in data modeling (public preview, not in this SDK yet). Will be removed or moved in a future major release. */
 export interface AssetMapping3DBase {
   /**
    * The ID of the node.
@@ -458,7 +458,7 @@ export interface AssetMapping3DBase {
   assetInstanceId?: UnitDMSUniqueIdentifier;
 }
 
-/** @deprecated Asset-centric 3D asset mapping type, to be retired end of 2027. No SDK replacement exists yet; a data-modeling-based mapping API will be added before this is removed. */
+/** @deprecated Asset-centric 3D asset mapping type, deprecated 2026-10-15; no retirement date is announced. Use the 3D contextualization APIs in data modeling (public preview, not in this SDK yet). Will be removed or moved in a future major release. */
 export interface AssetMappings3DListFilter extends FilterQuery {
   nodeId?: CogniteInternalId;
   assetId?: CogniteInternalId;
@@ -472,22 +472,22 @@ export interface AssetMappings3DListFilter extends FilterQuery {
   getDmsInstances?: boolean;
 }
 
-/** @deprecated Asset-centric 3D asset mapping type, to be retired end of 2027. No SDK replacement exists yet; a data-modeling-based mapping API will be added before this is removed. */
+/** @deprecated Asset-centric 3D asset mapping type, deprecated 2026-10-15; no retirement date is announced. Use the 3D contextualization APIs in data modeling (public preview, not in this SDK yet). Will be removed or moved in a future major release. */
 export interface AssetMappings3DAssetFilter {
   assetIds: CogniteInternalId[];
 }
 
-/** @deprecated Asset-centric 3D asset mapping type, to be retired end of 2027. No SDK replacement exists yet; a data-modeling-based mapping API will be added before this is removed. */
+/** @deprecated Asset-centric 3D asset mapping type, deprecated 2026-10-15; no retirement date is announced. Use the 3D contextualization APIs in data modeling (public preview, not in this SDK yet). Will be removed or moved in a future major release. */
 export interface AssetMappings3DNodeFilter {
   nodeIds: CogniteInternalId[];
 }
 
-/** @deprecated Asset-centric 3D asset mapping type, to be retired end of 2027. No SDK replacement exists yet; a data-modeling-based mapping API will be added before this is removed. */
+/** @deprecated Asset-centric 3D asset mapping type, deprecated 2026-10-15; no retirement date is announced. Use the 3D contextualization APIs in data modeling (public preview, not in this SDK yet). Will be removed or moved in a future major release. */
 export interface AssetMappings3DTreeIndexFilter {
   treeIndexes: CogniteInternalId[];
 }
 
-/** @deprecated Asset-centric 3D asset mapping type, to be retired end of 2027. No SDK replacement exists yet; a data-modeling-based mapping API will be added before this is removed. */
+/** @deprecated Asset-centric 3D asset mapping type, deprecated 2026-10-15; no retirement date is announced. Use the 3D contextualization APIs in data modeling (public preview, not in this SDK yet). Will be removed or moved in a future major release. */
 export interface Filter3DAssetMappingsQuery extends FilterQuery {
   /**
    * A filter for either `assetIds`, `nodeIds` or `treeIndices`.
@@ -567,7 +567,7 @@ export interface CogniteEvent
     InternalId,
     CreatedAndLastUpdatedTime {}
 
-/** @deprecated Asset-centric 3D asset mapping type, to be retired end of 2027. No SDK replacement exists yet; a data-modeling-based mapping API will be added before this is removed. */
+/** @deprecated Asset-centric 3D asset mapping type, deprecated 2026-10-15; no retirement date is announced. Use the 3D contextualization APIs in data modeling (public preview, not in this SDK yet). Will be removed or moved in a future major release. */
 export type CreateAssetMapping3D = AssetMapping3DBase;
 
 export interface CreateModel3D {
@@ -744,7 +744,7 @@ export interface DataSetPatch {
  */
 export type DataSetWriteProtected = boolean;
 
-/** @deprecated Asset-centric 3D asset mapping type, to be retired end of 2027. No SDK replacement exists yet; a data-modeling-based mapping API will be added before this is removed. */
+/** @deprecated Asset-centric 3D asset mapping type, deprecated 2026-10-15; no retirement date is announced. Use the 3D contextualization APIs in data modeling (public preview, not in this SDK yet). Will be removed or moved in a future major release. */
 export type DeleteAssetMapping3D = AssetMapping3DBase;
 
 export type EXECUTE = 'EXECUTE';

@@ -28,10 +28,14 @@ release. The methods and types themselves are unchanged.
 | `client.annotations`      |                                                         |
 | `client.entityMatching`   |                                                         |
 | `client.geospatial`       |                                                         |
-| `client.assetMappings3D`  | No SDK replacement yet. A data-modeling-based 3D mapping API will be added before this is removed. |
 
-The other 3D APIs (`client.models3D`, `client.revisions3D`, `client.files3D`, `client.viewer3D`)
-are **not** deprecated.
+### 3D asset mappings
+
+`client.assetMappings3D` is deprecated as of 2026-10-15 as part of asset-centric 3D
+contextualization; no retirement date is announced. The replacement is the 3D contextualization
+APIs in data modeling, which are in public preview and not yet part of this SDK. The other 3D
+APIs (`client.models3D`, `client.revisions3D`, `client.files3D`, `client.viewer3D`) are **not**
+deprecated.
 
 ### Time series: a pattern shift, not a retirement
 

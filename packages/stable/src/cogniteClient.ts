@@ -118,7 +118,7 @@ export default class CogniteClient extends BaseCogniteClient {
     return accessApi(this.datasetsApi);
   }
   /**
-   * @deprecated Asset-centric 3D asset mapping API, to be retired end of 2027. No SDK replacement exists yet; a data-modeling-based mapping API will be added before this is removed. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md for details.
+   * @deprecated Asset-centric 3D contextualization is deprecated 2026-10-15; no retirement date is announced. Use the 3D contextualization APIs in data modeling (public preview, not in this SDK yet). Will be removed or moved in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
    */
   public get assetMappings3D() {
     return accessApi(this.assetMappings3DApi);
