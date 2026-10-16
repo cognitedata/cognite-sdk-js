@@ -13,7 +13,8 @@ import type {
 } from '../../../types/common';
 import type {
   DatapointsDeleteRange,
-  DoubleDatapoint,
+  NumericDatapoint,
+  StateDatapoint,
   StringDatapoint,
 } from '../../dataPoints/types';
 import type { TimeSeriesType } from '../types';
@@ -219,7 +220,10 @@ export interface GetTimeSeriesForSubscription {
   type: TimeSeriesType;
 }
 
-export type SubscriptionDataUpsert = DoubleDatapoint | StringDatapoint;
+export type SubscriptionDataUpsert =
+  | NumericDatapoint
+  | StringDatapoint
+  | StateDatapoint;
 
 export interface DataPointSubscriptionDataUpdate {
   timeSeries?: GetTimeSeriesForSubscription;
