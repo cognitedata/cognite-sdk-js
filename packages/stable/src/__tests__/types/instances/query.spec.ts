@@ -1,0 +1,763 @@
+// Copyright 2025 Cognite AS
+
+import { describe, expectTypeOf, test } from 'vitest';
+import type { InstancesAPI } from '../../../api/instances/instancesApi';
+import type {
+  EdgeDefinition,
+  NodeDefinition,
+  NodeOrEdge,
+  PropertyValueGroupV3,
+  QueryRequest,
+  QueryRequestInput,
+  QueryResponse,
+  QueryResult,
+  QuerySelectV3,
+  QueryTypedSources,
+  QueryTypedSourcesFromList,
+  QueryViewKey,
+  RawPropertyValueV3,
+  TypedQuery,
+} from '../../../types';
+
+// These tests only hold at the type level. They are enforced by `tsc` when the
+// package is built, since this file lives under `src/`.
+
+type Query = InstancesAPI['query'];
+type ResultOf<TRequest extends QueryRequestInput> = Awaited<
+  ReturnType<typeof InstancesAPI.prototype.query<TRequest>>
+>;
+
+/** An empty object type, as in `select: { alias: {} }`. */
+type Empty = Record<never, never>;
+
+/** Strips string index signatures so that `keyof` lists only the known keys. */
+type KnownKeys<T> = {
+  [K in keyof T as string extends K
+    ? never
+    : number extends K
+      ? never
+      : K]: T[K];
+};
+
+const view = {
+  type: 'view',
+  space: 'spaceA',
+  externalId: 'ViewA',
+  version: 'v1',
+} as const;
+
+const constQuery = {
+  with: {
+    nodesA: { nodes: {}, limit: 10 },
+    edgesB: { edges: {} },
+  },
+  select: {
+    nodesA: {
+      sources: [
+        { source: view, properties: ['propOne', 'propTwo'] },
+        {
+          source: {
+            type: 'view',
+            space: 'spaceA',
+            externalId: 'ViewB',
+            version: 'v2',
+          },
+          properties: ['propThree'],
+        },
+        {
+          source: {
+            type: 'view',
+            space: 'spaceB',
+            externalId: 'ViewC',
+            version: 'v1',
+          },
+          properties: ['*'],
+        },
+      ],
+    },
+    edgesB: {},
+  },
+} as const satisfies QueryRequest;
+
+type ConstResult = ResultOf<typeof constQuery>;
+
+declare const api: InstancesAPI;
+declare const typedQuery: TypedQuery<{
+  'spaceA/ViewA/v1': { propOne: string };
+}>;
+declare function constQueryViaTypedQuery(): ReturnType<
+  typeof typedQuery<typeof constQuery>
+>;
+type NodesAItem = ConstResult['items']['nodesA'][number];
+
+describe('instances.query response types', () => {
+  test('a request typed as QueryRequest gives the untyped QueryResponse', () => {
+    expectTypeOf<Awaited<ReturnType<Query>>>().toEqualTypeOf<QueryResponse>();
+    expectTypeOf<ResultOf<QueryRequest>>().toEqualTypeOf<QueryResponse>();
+    expectTypeOf<QueryResult<QueryRequest>>().toEqualTypeOf<QueryResponse>();
+    expectTypeOf<
+      QueryResult<QueryRequestInput>
+    >().toEqualTypeOf<QueryResponse>();
+  });
+
+  test('a request declared as const without satisfies is accepted (TypeScript < 5.3)', () => {
+    const readonlyQuery = {
+      with: { nodesA: { nodes: { filter: { hasData: [view] } } } },
+      select: {
+        nodesA: { sources: [{ source: view, properties: ['propOne'] }] },
+      },
+    } as const;
+    const accepts = (request: Parameters<Query>[0]) => request;
+    accepts(readonlyQuery);
+    type Item = ResultOf<typeof readonlyQuery>['items']['nodesA'][number];
+    expectTypeOf<Item['instanceType']>().toEqualTypeOf<'node'>();
+    expectTypeOf<
+      keyof KnownKeys<Item['properties']['spaceA']['ViewA/v1']>
+    >().toEqualTypeOf<'propOne'>();
+    const plain = {} as QueryRequest;
+    accepts(plain);
+  });
+
+  test('a cursor from a previous response can be passed straight through', () => {
+    type Previous = ConstResult['nextCursor']['nodesA'];
+    expectTypeOf<{
+      with: { nodesA: { nodes: Record<never, never> } };
+      select: { nodesA: Record<never, never> };
+      cursors: { nodesA: Previous };
+    }>().toMatchTypeOf<Parameters<Query>[0]>();
+  });
+
+  test('items has one array per select key', () => {
+    expectTypeOf<keyof KnownKeys<ConstResult['items']>>().toEqualTypeOf<
+      'nodesA' | 'edgesB'
+    >();
+  });
+
+  test('a nodes expression gives nodes and an edges expression gives edges', () => {
+    expectTypeOf<NodesAItem['instanceType']>().toEqualTypeOf<'node'>();
+    expectTypeOf<
+      ConstResult['items']['edgesB'][number]['instanceType']
+    >().toEqualTypeOf<'edge'>();
+    expectTypeOf<
+      ConstResult['items']['edgesB'][number]['startNode']
+    >().toEqualTypeOf<EdgeDefinition['startNode']>();
+  });
+
+  test('properties are nested by space, then by externalId/version of the view', () => {
+    expectTypeOf<keyof KnownKeys<NodesAItem['properties']>>().toEqualTypeOf<
+      'spaceA' | 'spaceB'
+    >();
+    expectTypeOf<
+      keyof KnownKeys<NodesAItem['properties']['spaceA']>
+    >().toEqualTypeOf<'ViewA/v1' | 'ViewB/v2'>();
+    expectTypeOf<
+      keyof KnownKeys<NodesAItem['properties']['spaceA']['ViewA/v1']>
+    >().toEqualTypeOf<'propOne' | 'propTwo'>();
+    expectTypeOf<
+      keyof KnownKeys<NodesAItem['properties']['spaceA']['ViewB/v2']>
+    >().toEqualTypeOf<'propThree'>();
+  });
+
+  test('a selected property is RawPropertyValueV3 unless typed sources are given', () => {
+    expectTypeOf<
+      NodesAItem['properties']['spaceA']['ViewA/v1']['propOne']
+    >().toEqualTypeOf<RawPropertyValueV3 | undefined>();
+  });
+
+  test('selecting * gives the untyped property group', () => {
+    expectTypeOf<
+      NodesAItem['properties']['spaceB']['ViewC/v1']
+    >().toEqualTypeOf<PropertyValueGroupV3>();
+  });
+
+  test('a select entry without sources gives the plain definition', () => {
+    expectTypeOf<
+      ConstResult['items']['edgesB'][number]
+    >().toEqualTypeOf<EdgeDefinition>();
+  });
+
+  test('nextCursor has an optional entry per selected result set', () => {
+    expectTypeOf<ConstResult['nextCursor']['nodesA']>().toEqualTypeOf<
+      string | undefined
+    >();
+    expectTypeOf<ConstResult['nextCursor'][string]>().toEqualTypeOf<string>();
+    expectTypeOf<keyof KnownKeys<ConstResult['nextCursor']>>().toEqualTypeOf<
+      'nodesA' | 'edgesB'
+    >();
+  });
+
+  test('indexing with a runtime string keeps compiling, with the wide types', () => {
+    expectTypeOf<ConstResult['items'][string]>().toEqualTypeOf<NodeOrEdge[]>();
+    expectTypeOf<NodesAItem['properties'][string]>().toEqualTypeOf<
+      Record<string, PropertyValueGroupV3>
+    >();
+    expectTypeOf<
+      NodesAItem['properties']['spaceA'][string]
+    >().toEqualTypeOf<PropertyValueGroupV3>();
+    expectTypeOf<
+      NodesAItem['properties']['spaceA']['ViewA/v1'][string]
+    >().toEqualTypeOf<RawPropertyValueV3>();
+  });
+
+  test('a typed result is still assignable to QueryResponse', () => {
+    expectTypeOf<ConstResult>().toMatchTypeOf<QueryResponse>();
+  });
+
+  test('typed sources replace RawPropertyValueV3 for the listed view only', () => {
+    type Typed = Awaited<
+      ReturnType<
+        typeof InstancesAPI.prototype.query<
+          typeof constQuery,
+          {
+            [K in QueryViewKey<typeof view>]: {
+              propOne: string;
+              propTwo: number[];
+            };
+          }
+        >
+      >
+    >;
+    type Props = Typed['items']['nodesA'][number]['properties']['spaceA'];
+    expectTypeOf<Props['ViewA/v1']['propOne']>().toEqualTypeOf<
+      string | undefined
+    >();
+    expectTypeOf<Props['ViewA/v1']['propTwo']>().toEqualTypeOf<
+      number[] | undefined
+    >();
+    expectTypeOf<Props['ViewB/v2']['propThree']>().toEqualTypeOf<
+      RawPropertyValueV3 | undefined
+    >();
+    expectTypeOf<
+      QueryViewKey<typeof view>
+    >().toEqualTypeOf<'spaceA/ViewA/v1'>();
+  });
+
+  test('TypedQuery fixes the typed sources and infers the request per call', () => {
+    type Model = { 'spaceA/ViewA/v1': { propOne: string } };
+    expectTypeOf<Query>().toMatchTypeOf<TypedQuery<Model>>();
+    type Typed = Awaited<ReturnType<TypedQuery<Model>>>;
+    expectTypeOf<Typed>().toEqualTypeOf<QueryResponse>();
+    type ViaTyped = Awaited<
+      ReturnType<typeof constQueryViaTypedQuery>
+    >['items']['nodesA'][number]['properties']['spaceA']['ViewA/v1']['propOne'];
+    expectTypeOf<ViaTyped>().toEqualTypeOf<string | undefined>();
+  });
+
+  test('a typed-sources map covering many views is looked up by key', () => {
+    type Model = {
+      'spaceA/ViewA/v1': { propOne: string; propTwo: number[] };
+      'spaceA/ViewB/v2': { propThree: boolean };
+      'spaceB/ViewC/v1': { other: string };
+    };
+    type Typed = QueryResult<typeof constQuery, Model>;
+    type Props = Typed['items']['nodesA'][number]['properties']['spaceA'];
+    expectTypeOf<Props['ViewA/v1']['propOne']>().toEqualTypeOf<
+      string | undefined
+    >();
+    expectTypeOf<Props['ViewB/v2']['propThree']>().toEqualTypeOf<
+      boolean | undefined
+    >();
+  });
+
+  test('property types may be interfaces, not only type literals', () => {
+    interface PropsA {
+      propOne: string;
+      propTwo: number[];
+    }
+    type Model = { 'spaceA/ViewA/v1': PropsA };
+    expectTypeOf<Model>().toMatchTypeOf<QueryTypedSources>();
+    type Typed = QueryResult<typeof constQuery, Model>;
+    type Props = Typed['items']['nodesA'][number]['properties']['spaceA'];
+    expectTypeOf<Props['ViewA/v1']['propOne']>().toEqualTypeOf<
+      string | undefined
+    >();
+    expectTypeOf<Props['ViewA/v1']['propTwo']>().toEqualTypeOf<
+      number[] | undefined
+    >();
+  });
+
+  test('a generated list of { source, properties } entries folds into the keyed map', () => {
+    interface PropsA {
+      propOne: string;
+      propTwo: number[];
+    }
+    const viewB = {
+      type: 'view',
+      space: 'spaceA',
+      externalId: 'ViewB',
+      version: 'v2',
+    } as const;
+    type Model = QueryTypedSourcesFromList<
+      [
+        { source: typeof view; properties: PropsA },
+        { source: typeof viewB; properties: { propThree: boolean } },
+      ]
+    >;
+    expectTypeOf<Model>().toMatchTypeOf<QueryTypedSources>();
+    expectTypeOf<keyof Model>().toEqualTypeOf<
+      'spaceA/ViewA/v1' | 'spaceA/ViewB/v2'
+    >();
+    type Typed = QueryResult<typeof constQuery, Model>;
+    type Props = Typed['items']['nodesA'][number]['properties']['spaceA'];
+    expectTypeOf<Props['ViewA/v1']['propOne']>().toEqualTypeOf<
+      string | undefined
+    >();
+    expectTypeOf<Props['ViewB/v2']['propThree']>().toEqualTypeOf<
+      boolean | undefined
+    >();
+    expectTypeOf<ReturnType<TypedQuery<Model>>>().toEqualTypeOf<
+      Promise<QueryResponse>
+    >();
+  });
+
+  test('a list entry with a widened view reference is dropped, not collapsed', () => {
+    const wide = {
+      type: 'view' as const,
+      space: 'spaceA',
+      externalId: 'ViewA',
+      version: 'v1',
+    };
+    type Model = QueryTypedSourcesFromList<
+      [
+        { source: typeof wide; properties: { propOne: string } },
+        { source: typeof view; properties: { propOne: number } },
+      ]
+    >;
+    expectTypeOf<keyof Model>().toEqualTypeOf<'spaceA/ViewA/v1'>();
+    expectTypeOf<Model['spaceA/ViewA/v1']['propOne']>().toEqualTypeOf<number>();
+  });
+});
+
+describe('instances.query response types for inline request literals', () => {
+  test('an inline literal infers everything, as if declared as const', () => {
+    async function run() {
+      const result = await api.query({
+        with: { nodesA: { nodes: { filter: { hasData: [view] } } } },
+        select: {
+          nodesA: {
+            sources: [{ source: view, properties: ['propOne', 'propTwo'] }],
+          },
+        },
+      });
+      return result;
+    }
+    type Result = Awaited<ReturnType<typeof run>>;
+    expectTypeOf<keyof KnownKeys<Result['items']>>().toEqualTypeOf<'nodesA'>();
+    expectTypeOf<
+      Result['items']['nodesA'][number]
+    >().toMatchTypeOf<NodeDefinition>();
+    type Props =
+      Result['items']['nodesA'][number]['properties']['spaceA']['ViewA/v1'];
+    expectTypeOf<KnownKeys<Props>>().toEqualTypeOf<{
+      propOne?: RawPropertyValueV3;
+      propTwo?: RawPropertyValueV3;
+    }>();
+  });
+
+  test('an inline literal passed to a TypedQuery gets concrete property types', () => {
+    async function run() {
+      const result = await typedQuery({
+        with: { nodesA: { nodes: { filter: { hasData: [view] } } } },
+        select: {
+          nodesA: { sources: [{ source: view, properties: ['propOne'] }] },
+        },
+      });
+      return result.items.nodesA[0].properties.spaceA['ViewA/v1'].propOne;
+    }
+    expectTypeOf<Awaited<ReturnType<typeof run>>>().toEqualTypeOf<
+      string | undefined
+    >();
+  });
+});
+
+describe('instances.query response types for requests built at runtime', () => {
+  test('a literal stored without as const infers keys and kind but keeps spaces, views and properties wide', () => {
+    type Result = ResultOf<{
+      with: { rs: { nodes: { filter: { hasData: [] } } } };
+      select: {
+        rs: {
+          sources: {
+            source: {
+              type: 'view';
+              space: string;
+              externalId: string;
+              version: string;
+            };
+            properties: string[];
+          }[];
+        };
+      };
+    }>;
+    type Item = Result['items']['rs'][number];
+    expectTypeOf<Item['instanceType']>().toEqualTypeOf<'node'>();
+    expectTypeOf<
+      Item['properties'][string][string]
+    >().toEqualTypeOf<PropertyValueGroupV3>();
+    expectTypeOf<Result>().toMatchTypeOf<QueryResponse>();
+  });
+
+  test('a select built as a Record stays wide and assignable to QueryResponse', () => {
+    type Result = ResultOf<{
+      with: { rs: { nodes: Empty } };
+      select: Record<string, QuerySelectV3>;
+    }>;
+    expectTypeOf<Result['items'][string]>().toMatchTypeOf<NodeOrEdge[]>();
+    expectTypeOf<Result>().toMatchTypeOf<QueryResponse>();
+  });
+
+  test('a result set that is only conditionally selected is optional', () => {
+    type Result = ResultOf<{
+      with: { a: { nodes: Empty }; b: { edges: Empty } };
+      select: { a: Empty; b?: Empty };
+    }>;
+    expectTypeOf<Result['items']['a']>().toEqualTypeOf<NodeDefinition[]>();
+    expectTypeOf<Result['items']['b']>().toEqualTypeOf<
+      EdgeDefinition[] | undefined
+    >();
+    expectTypeOf<Result>().toMatchTypeOf<QueryResponse>();
+  });
+
+  test('properties is optional when sources is optional in the request', () => {
+    type Result = ResultOf<{
+      with: { a: { nodes: Empty } };
+      select: {
+        a: { sources?: [{ source: typeof view; properties: ['propOne'] }] };
+      };
+    }>;
+    type Props = Result['items']['a'][number]['properties'];
+    expectTypeOf<undefined>().toMatchTypeOf<Props>();
+    expectTypeOf<
+      NonNullable<
+        NonNullable<NonNullable<Props>['spaceA']>['ViewA/v1']
+      >['propOne']
+    >().toEqualTypeOf<RawPropertyValueV3 | undefined>();
+  });
+
+  test('a widened property list makes every property optional', () => {
+    type Result = ResultOf<{
+      with: { a: { nodes: Empty } };
+      select: {
+        a: {
+          sources: [
+            { source: typeof view; properties: ('propOne' | 'propTwo')[] },
+          ];
+        };
+      };
+    }>;
+    type Props =
+      Result['items']['a'][number]['properties']['spaceA']['ViewA/v1'];
+    expectTypeOf<KnownKeys<Props>>().toEqualTypeOf<{
+      propOne?: RawPropertyValueV3;
+      propTwo?: RawPropertyValueV3;
+    }>();
+  });
+
+  test('a plain string[] property list keeps typed properties optional', () => {
+    type Model = { 'spaceA/ViewA/v1': { required: boolean; name?: string } };
+    type Result = QueryResult<
+      {
+        with: { a: { nodes: Empty } };
+        select: {
+          a: { sources: [{ source: typeof view; properties: string[] }] };
+        };
+      },
+      Model
+    >;
+    type Props =
+      Result['items']['a'][number]['properties']['spaceA']['ViewA/v1'];
+    expectTypeOf<KnownKeys<Props>>().toEqualTypeOf<{
+      required?: boolean;
+      name?: string;
+    }>();
+    expectTypeOf<Props[string]>().toEqualTypeOf<RawPropertyValueV3>();
+    type Untyped = ResultOf<{
+      with: { a: { nodes: Empty } };
+      select: {
+        a: { sources: [{ source: typeof view; properties: string[] }] };
+      };
+    }>;
+    expectTypeOf<
+      Untyped['items']['a'][number]['properties']['spaceA']['ViewA/v1']
+    >().toEqualTypeOf<PropertyValueGroupV3>();
+  });
+
+  test('a union of a nodes and an edges expression gives a union of definitions', () => {
+    type Result = ResultOf<{
+      with: { x: { nodes: Empty } | { edges: Empty } };
+      select: { x: Empty };
+    }>;
+    expectTypeOf<Result['items']['x'][number]>().toEqualTypeOf<
+      NodeDefinition | EdgeDefinition
+    >();
+  });
+
+  test('a set operation gives NodeOrEdge', () => {
+    type Result = ResultOf<{
+      with: { a: { nodes: Empty }; u: { unionAll: ['a'] } };
+      select: { u: Empty };
+    }>;
+    expectTypeOf<Result['items']['u'][number]>().toEqualTypeOf<NodeOrEdge>();
+  });
+});
+
+const viewB = {
+  type: 'view',
+  space: 'spaceB',
+  externalId: 'ViewB',
+  version: 'v2',
+} as const;
+const viewAv2 = {
+  type: 'view',
+  space: 'spaceA',
+  externalId: 'ViewA',
+  version: 'v2',
+} as const;
+type PropsA = { name: string; weightKg: number };
+type PropsB = { name: string; parent: { space: string; externalId: string } };
+type TwoViewModel = {
+  'spaceA/ViewA/v1': PropsA;
+  'spaceA/ViewA/v2': { name: string; renamed: boolean };
+  'spaceB/ViewB/v2': PropsB;
+};
+/** A runtime value, since vitest executes this file; its type is what matters. */
+const flag: boolean = Math.random() > 0.5;
+/** Strips `undefined` from an optional space or view key. */
+type Opt<T> = NonNullable<T>;
+type TwoViewProperties<TRequest extends QueryRequestInput> = NonNullable<
+  QueryResult<TRequest, TwoViewModel>['items']['rs'][number]['properties']
+>;
+
+describe('instances.query response types for a source chosen at runtime', () => {
+  const source = flag ? view : viewB;
+
+  test('a wildcard selection keeps each possible view paired with its own fields', () => {
+    const request = {
+      with: { rs: { nodes: {} } },
+      select: { rs: { sources: [{ source, properties: ['*'] }] } },
+    } as const;
+    type Props = TwoViewProperties<typeof request>;
+    expectTypeOf<keyof KnownKeys<Props>>().toEqualTypeOf<'spaceA' | 'spaceB'>();
+    // Only the view that was sent comes back, so neither key is certain.
+    expectTypeOf<undefined>().toMatchTypeOf<Props['spaceA']>();
+    expectTypeOf<undefined>().toMatchTypeOf<Opt<Props['spaceB']>['ViewB/v2']>();
+    expectTypeOf<
+      keyof KnownKeys<Opt<Props['spaceA']>>
+    >().toEqualTypeOf<'ViewA/v1'>();
+    expectTypeOf<
+      keyof KnownKeys<Opt<Props['spaceB']>>
+    >().toEqualTypeOf<'ViewB/v2'>();
+    expectTypeOf<
+      KnownKeys<Opt<Opt<Props['spaceA']>['ViewA/v1']>>
+    >().toEqualTypeOf<Partial<PropsA>>();
+    expectTypeOf<
+      KnownKeys<Opt<Opt<Props['spaceB']>['ViewB/v2']>>
+    >().toEqualTypeOf<Partial<PropsB>>();
+    // A field of the other possible view is not a known key, only the wide fallback.
+    expectTypeOf<
+      Opt<Opt<Props['spaceA']>['ViewA/v1']>['parent']
+    >().toEqualTypeOf<RawPropertyValueV3>();
+    expectTypeOf<
+      Opt<Opt<Props['spaceB']>['ViewB/v2']>['weightKg']
+    >().toEqualTypeOf<RawPropertyValueV3>();
+  });
+
+  test('a named selection is typed per possible view', () => {
+    const request = {
+      with: { rs: { nodes: {} } },
+      select: { rs: { sources: [{ source, properties: ['name'] }] } },
+    } as const;
+    type Props = TwoViewProperties<typeof request>;
+    expectTypeOf<
+      keyof KnownKeys<Opt<Props['spaceA']>>
+    >().toEqualTypeOf<'ViewA/v1'>();
+    expectTypeOf<
+      KnownKeys<Opt<Opt<Props['spaceA']>['ViewA/v1']>>
+    >().toEqualTypeOf<{
+      name?: string;
+    }>();
+    expectTypeOf<
+      KnownKeys<Opt<Opt<Props['spaceB']>['ViewB/v2']>>
+    >().toEqualTypeOf<{
+      name?: string;
+    }>();
+  });
+
+  test('two versions of a view in the same space each keep their own types', () => {
+    const versioned = flag ? view : viewAv2;
+    const request = {
+      with: { rs: { nodes: {} } },
+      select: {
+        rs: { sources: [{ source: versioned, properties: ['*'] }] },
+      },
+    } as const;
+    type Props = TwoViewProperties<typeof request>;
+    expectTypeOf<keyof KnownKeys<Opt<Props['spaceA']>>>().toEqualTypeOf<
+      'ViewA/v1' | 'ViewA/v2'
+    >();
+    expectTypeOf<
+      KnownKeys<Opt<Opt<Props['spaceA']>['ViewA/v1']>>
+    >().toEqualTypeOf<Partial<PropsA>>();
+    expectTypeOf<
+      KnownKeys<Opt<Opt<Props['spaceA']>['ViewA/v2']>>
+    >().toEqualTypeOf<{
+      name?: string;
+      renamed?: boolean;
+    }>();
+  });
+
+  test('a whole selector chosen at runtime keeps the fields of each branch', () => {
+    // `as const` and const type parameters do not reach into the branches of a
+    // conditional expression, so a literal in that form widens its property
+    // lists. The distribution itself is tested with an explicit request type.
+    type Props = TwoViewProperties<{
+      with: { rs: { nodes: Empty } };
+      select: {
+        rs: {
+          sources: [
+            | { source: typeof view; properties: ['weightKg'] }
+            | { source: typeof viewB; properties: ['parent'] },
+          ];
+        };
+      };
+    }>;
+    expectTypeOf<
+      keyof KnownKeys<Opt<Props['spaceA']>>
+    >().toEqualTypeOf<'ViewA/v1'>();
+    expectTypeOf<
+      KnownKeys<Opt<Opt<Props['spaceA']>['ViewA/v1']>>
+    >().toEqualTypeOf<{
+      weightKg?: number;
+    }>();
+    expectTypeOf<
+      KnownKeys<Opt<Opt<Props['spaceB']>['ViewB/v2']>>
+    >().toEqualTypeOf<{
+      parent?: { space: string; externalId: string };
+    }>();
+  });
+});
+
+describe('instances.query response types follow what the API returns', () => {
+  type Model = { 'spaceA/ViewA/v1': { required: boolean; name?: string } };
+
+  test('named properties are optional, also the ones the model requires', () => {
+    // The API omits a property without a value and returns `{}` for an
+    // instance that has no data in the view.
+    type Props = QueryResult<
+      {
+        with: { a: { nodes: Empty } };
+        select: {
+          a: {
+            sources: [
+              { source: typeof view; properties: ['required', 'name'] },
+            ];
+          };
+        };
+      },
+      Model
+    >['items']['a'][number]['properties']['spaceA']['ViewA/v1'];
+    expectTypeOf<KnownKeys<Props>>().toEqualTypeOf<{
+      required?: boolean;
+      name?: string;
+    }>();
+    expectTypeOf<Record<never, never>>().toMatchTypeOf<KnownKeys<Props>>();
+  });
+
+  test('a wildcard and an empty property list give every typed property as optional', () => {
+    type PropsOf<TProperties extends readonly string[]> = QueryResult<
+      {
+        with: { a: { nodes: Empty } };
+        select: {
+          a: { sources: [{ source: typeof view; properties: TProperties }] };
+        };
+      },
+      Model
+    >['items']['a'][number]['properties']['spaceA']['ViewA/v1'];
+    expectTypeOf<KnownKeys<PropsOf<['*']>>>().toEqualTypeOf<
+      Partial<Model['spaceA/ViewA/v1']>
+    >();
+    expectTypeOf<KnownKeys<PropsOf<[]>>>().toEqualTypeOf<
+      Partial<Model['spaceA/ViewA/v1']>
+    >();
+    type Untyped = ResultOf<{
+      with: { a: { nodes: Empty } };
+      select: { a: { sources: [{ source: typeof view; properties: [] }] } };
+    }>['items']['a'][number]['properties']['spaceA']['ViewA/v1'];
+    expectTypeOf<Untyped>().toEqualTypeOf<PropertyValueGroupV3>();
+  });
+
+  test('a view key is required for a tuple element and optional for an array of unknown length', () => {
+    type Tuple = ResultOf<{
+      with: { a: { nodes: Empty } };
+      select: {
+        a: { sources: [{ source: typeof view; properties: ['propOne'] }] };
+      };
+    }>['items']['a'][number]['properties'];
+    expectTypeOf<undefined>().not.toMatchTypeOf<Tuple['spaceA']>();
+    expectTypeOf<undefined>().not.toMatchTypeOf<Tuple['spaceA']['ViewA/v1']>();
+    type List = ResultOf<{
+      with: { a: { nodes: Empty } };
+      select: {
+        a: { sources: { source: typeof view; properties: ['propOne'] }[] };
+      };
+    }>['items']['a'][number]['properties'];
+    expectTypeOf<undefined>().toMatchTypeOf<List['spaceA']>();
+    expectTypeOf<
+      keyof KnownKeys<Opt<List['spaceA']>>
+    >().toEqualTypeOf<'ViewA/v1'>();
+  });
+
+  test('two views of one space keep their own keys', () => {
+    type Props = ResultOf<{
+      with: { a: { nodes: Empty } };
+      select: {
+        a: {
+          sources: [
+            { source: typeof view; properties: ['propOne'] },
+            { source: typeof viewB; properties: ['propTwo'] },
+            { source: typeof viewAv2; properties: ['propThree'] },
+          ];
+        };
+      };
+    }>['items']['a'][number]['properties'];
+    expectTypeOf<keyof KnownKeys<Props['spaceA']>>().toEqualTypeOf<
+      'ViewA/v1' | 'ViewA/v2'
+    >();
+    expectTypeOf<
+      keyof KnownKeys<Props['spaceB']>
+    >().toEqualTypeOf<'ViewB/v2'>();
+    expectTypeOf<
+      keyof KnownKeys<Props['spaceA']['ViewA/v2']>
+    >().toEqualTypeOf<'propThree'>();
+  });
+
+  test('optional sources make every space key optional', () => {
+    // Without sources the API returns `properties: {}`.
+    type Props = NonNullable<
+      ResultOf<{
+        with: { a: { nodes: Empty } };
+        select: {
+          a: { sources?: [{ source: typeof view; properties: ['propOne'] }] };
+        };
+      }>['items']['a'][number]['properties']
+    >;
+    expectTypeOf<undefined>().toMatchTypeOf<Props['spaceA']>();
+  });
+
+  test('a result set that is selected but not defined in with is an error type', () => {
+    type Item = ResultOf<{
+      with: { a: { nodes: Empty } };
+      select: { a: Empty; ghost: Empty };
+    }>['items'];
+    expectTypeOf<Item['a']>().toEqualTypeOf<NodeDefinition[]>();
+    expectTypeOf<Item['ghost'][number]['alias']>().toEqualTypeOf<'ghost'>();
+    expectTypeOf<Item['ghost'][number]>().not.toMatchTypeOf<NodeOrEdge>();
+  });
+
+  test('a null cursor is accepted', () => {
+    expectTypeOf<{
+      with: { a: { nodes: Empty } };
+      select: { a: Empty };
+      cursors: { a: null };
+    }>().toMatchTypeOf<Parameters<Query>[0]>();
+  });
+});
