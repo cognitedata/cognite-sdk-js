@@ -124,7 +124,7 @@ export type QueryRequestInput = DeepReadonly<Omit<QueryRequest, 'cursors'>> & {
  * Readonly at every level. A type without keys (`object`, `{}`) is kept as is:
  * it already accepts anything, and a mapped type over it would lose that.
  */
-type DeepReadonly<T> = T extends readonly (infer U)[]
+export type DeepReadonly<T> = T extends readonly (infer U)[]
   ? ReadonlyArray<DeepReadonly<U>>
   : T extends object
     ? [keyof T] extends [never]
@@ -227,7 +227,7 @@ export type QueryResult<
  * indexing with an arbitrary string, which yields `TFallback`. The fallback is
  * the wide type the untyped `QueryResponse` uses at the same level.
  */
-type WithDynamicKeys<TKnown, TFallback> = TKnown & {
+export type WithDynamicKeys<TKnown, TFallback> = TKnown & {
   [key: string]: TFallback;
 };
 
@@ -474,7 +474,7 @@ type AllProperties<TTypedProps> = [TTypedProps] extends [never]
   ? PropertyValueGroupV3
   : WithDynamicKeys<Partial<TTypedProps>, RawPropertyValueV3>;
 /** The caller supplied property types for a view, or `never` if none were given. */
-type TypedPropertiesFor<
+export type TypedPropertiesFor<
   TView extends ViewReference,
   TTypedSources extends QueryTypedSources,
 > = QueryViewKey<TView> extends infer TKey
