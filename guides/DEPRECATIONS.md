@@ -17,17 +17,17 @@ keep working during the deprecation period but get no new features, and they shu
 In the SDK these APIs are marked `@deprecated` and will be removed or moved in a future major
 release. The methods and types themselves are unchanged.
 
-| Deprecated                | Notes                                                   |
-| ------------------------- | ------------------------------------------------------- |
-| `client.assets`           |                                                         |
-| `client.events`           |                                                         |
-| `client.sequences`        |                                                         |
-| `client.labels`           |                                                         |
-| `client.datasets`         |                                                         |
-| `client.relationships`    |                                                         |
-| `client.annotations`      |                                                         |
-| `client.entityMatching`   |                                                         |
-| `client.geospatial`       |                                                         |
+| Deprecated              | Replacement                                                              |
+| ----------------------- | ------------------------------------------------------------------------ |
+| `client.assets`         | `CogniteAsset` instances                                                 |
+| `client.events`         | Records, or `CogniteActivity` / `CogniteMaintenanceOrder` instances      |
+| `client.sequences`      | Files in data modeling, or records for data that needs row-level queries |
+| `client.labels`         | No direct replacement; model labels as a concept in your data model      |
+| `client.datasets`       | Spaces, with data products for governance                                |
+| `client.relationships`  | Edges                                                                    |
+| `client.annotations`    | `CogniteAnnotation` instances                                            |
+| `client.geospatial`     | No replacement; stop using it before 2027-12-31                          |
+| `client.entityMatching` | Not listed on the CDF page; tagged because it works on asset-centric resources |
 
 ### 3D asset mappings
 
