@@ -20,7 +20,6 @@ release. The methods and types themselves are unchanged.
 | Deprecated                | Notes                                                   |
 | ------------------------- | ------------------------------------------------------- |
 | `client.assets`           |                                                         |
-| `client.timeseries`       | Includes synthetic time series and datapoint subscriptions |
 | `client.events`           |                                                         |
 | `client.sequences`        |                                                         |
 | `client.labels`           |                                                         |
@@ -33,6 +32,41 @@ release. The methods and types themselves are unchanged.
 
 The other 3D APIs (`client.models3D`, `client.revisions3D`, `client.files3D`, `client.viewer3D`)
 are **not** deprecated.
+
+### Time series: a pattern shift, not a retirement
+
+`client.timeseries` is not going away. CDF deprecates asset-centric time series metadata and the
+asset-hierarchy filters, while data point reads and writes stay on the Time series API and address
+a time series by `instanceId`. In the SDK this means:
+
+- Deprecated: `client.timeseries.create`, `update`, `list`, `search`, `aggregate`, `delete` and
+  `retrieve` by `id` or `externalId`, together with the create, filter, search and update types.
+  Create and query time series as `CogniteTimeSeries` instances via `client.instances` instead.
+- Staying: `client.datapoints` with `instanceId` (see below), `client.timeseries.subscriptions`
+  and synthetic queries. Where these live in the next major release is still being decided, so
+  they carry a tag that says so.
+
+```ts
+// before
+await client.timeseries.create([{ externalId: 'my-ts', name: 'Pressure', isStep: false }]);
+
+// after
+await client.instances.upsert({
+  items: [
+    {
+      instanceType: 'node',
+      space: 'my-space',
+      externalId: 'my-ts',
+      sources: [
+        {
+          source: { type: 'view', space: 'cdf_cdm', externalId: 'CogniteTimeSeries', version: 'v1' },
+          properties: { name: 'Pressure', isStep: false, type: 'numeric' },
+        },
+      ],
+    },
+  ],
+});
+```
 
 ### Datapoints: identify time series by `instanceId`
 
