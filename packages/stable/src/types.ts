@@ -1326,6 +1326,7 @@ export interface ListRevealSectors3DQuery extends FilterQuery {
   boundingBox?: BoundingBox3D;
 }
 
+/** @deprecated Asset-centric API type, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. */
 export interface ListSecurityCategories extends FilterQuery {
   sort?: 'ASC' | 'DESC';
 }
@@ -1751,6 +1752,7 @@ export interface RevisionMetadataUpdateAddRemove {
   remove?: string[];
 }
 
+/** @deprecated Asset-centric API type, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. */
 export interface SecurityCategory {
   /**
    * Name of the security category
@@ -1762,6 +1764,7 @@ export interface SecurityCategory {
   id: number;
 }
 
+/** @deprecated Asset-centric API type, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. */
 export interface SecurityCategorySpec {
   /**
    * Name of the security category

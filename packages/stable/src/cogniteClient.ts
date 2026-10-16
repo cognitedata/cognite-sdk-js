@@ -99,6 +99,9 @@ export default class CogniteClient extends BaseCogniteClient {
   public get groups() {
     return accessApi(this.groupsApi);
   }
+  /**
+   * @deprecated Asset-centric API, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
+   */
   public get securityCategories() {
     return accessApi(this.securityCategoriesApi);
   }
