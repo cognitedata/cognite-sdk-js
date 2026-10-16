@@ -28,7 +28,6 @@ release. The methods and types themselves are unchanged.
 | `client.annotations`    | `CogniteAnnotation` instances                                            |
 | `client.securityCategories` | Data products and granular access control                        |
 | `client.geospatial`     | No replacement; stop using it before 2027-12-31                          |
-| `client.entityMatching` | Not listed on the CDF page; tagged because it works on asset-centric resources |
 
 ### 3D asset mappings
 

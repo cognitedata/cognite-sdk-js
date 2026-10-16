@@ -2156,10 +2156,8 @@ export type WRITE = 'WRITE';
 
 export type WRITE_PROPERTIES = 'WRITE_PROPERTIES';
 
-/** @deprecated Asset-centric API type, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. */
 export type ContextJobStatus = 'QUEUED' | 'RUNNING' | 'COMPLETED' | 'FAILED';
 
-/** @deprecated Asset-centric API type, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. */
 export const ContextJobStatus = {
   QUEUED: 'QUEUED' as ContextJobStatus,
   RUNNING: 'RUNNING' as ContextJobStatus,
@@ -2169,12 +2167,9 @@ export const ContextJobStatus = {
 
 /**
  * Contextualization job ID.
- *
- * @deprecated Asset-centric API type, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release.
  */
 export type ContextJobId = number;
 
-/** @deprecated Entity matching type; the API operates on asset-centric resources, which are retired 2027-12-31. Will be removed or moved in a future major release. */
 export interface EntityMatchingResponseBase {
   /**
    * User defined name of the model.
@@ -2193,14 +2188,12 @@ export interface EntityMatchingResponseBase {
   statusTime: Date;
 }
 
-/** @deprecated Asset-centric API type, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. */
 export interface ExternalEntityToMatch {
   id?: CogniteInternalId;
   externalId?: CogniteExternalId;
   [key: string]: string | number | undefined;
 }
 
-/** @deprecated Entity matching type; the API operates on asset-centric resources, which are retired 2027-12-31. Will be removed or moved in a future major release. */
 export type EntityMatchingFeatureType =
   | 'simple'
   | 'bigram'
@@ -2208,7 +2201,6 @@ export type EntityMatchingFeatureType =
   | 'bigramextratokenizers'
   | 'bigramcombo';
 
-/** @deprecated Entity matching type; the API operates on asset-centric resources, which are retired 2027-12-31. Will be removed or moved in a future major release. */
 export const EntityMatchingFeatureType = {
   SIMPLE: 'simple' as EntityMatchingFeatureType,
   BIGRAM: 'bigram' as EntityMatchingFeatureType,
@@ -2218,7 +2210,6 @@ export const EntityMatchingFeatureType = {
   BIGRAM_COMBO: 'bigramcombo' as EntityMatchingFeatureType,
 };
 
-/** @deprecated Entity matching type; the API operates on asset-centric resources, which are retired 2027-12-31. Will be removed or moved in a future major release. */
 export type EntityMatchingClassifier =
   | 'randomforest'
   | 'decisiontree'
@@ -2226,7 +2217,6 @@ export type EntityMatchingClassifier =
   | 'augmentedlogisticregression'
   | 'augmentedrandomforest';
 
-/** @deprecated Entity matching type; the API operates on asset-centric resources, which are retired 2027-12-31. Will be removed or moved in a future major release. */
 export const EntityMatchingClassifier = {
   RANDOM_FOREST: 'randomforest' as EntityMatchingClassifier,
   DECISION_TREE: 'decisiontree' as EntityMatchingClassifier,
@@ -2236,13 +2226,11 @@ export const EntityMatchingClassifier = {
   AUGMENTED_RANDOM_FOREST: 'augmentedrandomforest' as EntityMatchingClassifier,
 };
 
-/** @deprecated Entity matching type; the API operates on asset-centric resources, which are retired 2027-12-31. Will be removed or moved in a future major release. */
 export interface EntityMatchingField {
   from: string;
   to: string;
 }
 
-/** @deprecated Asset-centric API type, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. */
 export type ExternalEntityTrueMatch = ExternalEntityTrueMatchSource &
   ExternalEntityTrueMatchTarget;
 
@@ -2274,7 +2262,6 @@ type ExternalEntityTrueMatchTarget =
       targetExternalId: CogniteExternalId;
     };
 
-/** @deprecated Entity matching type; the API operates on asset-centric resources, which are retired 2027-12-31. Will be removed or moved in a future major release. */
 export interface EntityMatchingCreateRequest {
   /**
    * List of custom source object to match from, for example, time series. String key -> value. Only string values are considered in the matching. Optional id and/or externalId fields.
@@ -2320,7 +2307,6 @@ export interface EntityMatchingCreateRequest {
   ignoreMissingFields?: boolean;
 }
 
-/** @deprecated Entity matching type; the API operates on asset-centric resources, which are retired 2027-12-31. Will be removed or moved in a future major release. */
 export interface EntityMatchingCreateResponse
   extends EntityMatchingResponseBase {
   id: CogniteInternalId;
@@ -2347,7 +2333,6 @@ export interface EntityMatchingCreateResponse
   originalId?: CogniteInternalId;
 }
 
-/** @deprecated Entity matching type; the API operates on asset-centric resources, which are retired 2027-12-31. Will be removed or moved in a future major release. */
 export interface EntityMatchingModel extends EntityMatchingResponseBase {
   id: CogniteInternalId;
   externalId: CogniteExternalId;
@@ -2369,10 +2354,8 @@ export interface EntityMatchingModel extends EntityMatchingResponseBase {
   originalId?: number;
 }
 
-/** @deprecated Entity matching type; the API operates on asset-centric resources, which are retired 2027-12-31. Will be removed or moved in a future major release. */
 export type EntityMatchingChange = IdEither & EntityMatchingPatch;
 
-/** @deprecated Entity matching type; the API operates on asset-centric resources, which are retired 2027-12-31. Will be removed or moved in a future major release. */
 export interface EntityMatchingPatch {
   update: {
     /**
@@ -2386,7 +2369,6 @@ export interface EntityMatchingPatch {
   };
 }
 
-/** @deprecated Entity matching type; the API operates on asset-centric resources, which are retired 2027-12-31. Will be removed or moved in a future major release. */
 export type EntityMatchingPredictRequest = IdEither &
   EntityMatchingPredictRequestBase;
 
@@ -2409,7 +2391,6 @@ interface EntityMatchingPredictRequestBase {
   scoreThreshold?: number;
 }
 
-/** @deprecated Entity matching type; the API operates on asset-centric resources, which are retired 2027-12-31. Will be removed or moved in a future major release. */
 export interface EntityMatchingPredictResponse
   extends EntityMatchingResponseBase {
   /**
@@ -2418,7 +2399,6 @@ export interface EntityMatchingPredictResponse
   jobId: number;
 }
 
-/** @deprecated Entity matching type; the API operates on asset-centric resources, which are retired 2027-12-31. Will be removed or moved in a future major release. */
 export type EntityMatchingRefitRequest = IdEither &
   EntityMatchingRefitRequestBase;
 
@@ -2441,7 +2421,6 @@ interface EntityMatchingRefitRequestBase {
   targets?: ExternalEntityToMatch[];
 }
 
-/** @deprecated Entity matching type; the API operates on asset-centric resources, which are retired 2027-12-31. Will be removed or moved in a future major release. */
 export interface EntityMatchingRefitResponse
   extends EntityMatchingResponseBase {
   id: CogniteInternalId;
@@ -2468,7 +2447,6 @@ export interface EntityMatchingRefitResponse
   originalId: CogniteInternalId;
 }
 
-/** @deprecated Entity matching type; the API operates on asset-centric resources, which are retired 2027-12-31. Will be removed or moved in a future major release. */
 export interface EntityMatchingPredictions {
   jobId: ContextJobId;
   /**
@@ -2481,7 +2459,6 @@ export interface EntityMatchingPredictions {
   items: EntityMatchingPrediction[];
 }
 
-/** @deprecated Entity matching type; the API operates on asset-centric resources, which are retired 2027-12-31. Will be removed or moved in a future major release. */
 export interface EntityMatchingPrediction {
   /**
    * The matchFrom item given to predict.
@@ -2493,7 +2470,6 @@ export interface EntityMatchingPrediction {
   matches: EntityMatchingPredictedItem[];
 }
 
-/** @deprecated Entity matching type; the API operates on asset-centric resources, which are retired 2027-12-31. Will be removed or moved in a future major release. */
 export interface EntityMatchingPredictedItem {
   /**
    * The matchTo item given to predict.
@@ -2505,7 +2481,6 @@ export interface EntityMatchingPredictedItem {
   score: number;
 }
 
-/** @deprecated Entity matching type; the API operates on asset-centric resources, which are retired 2027-12-31. Will be removed or moved in a future major release. */
 export interface EntityMatchingFilter {
   /**
    * User defined name of the model.
@@ -2533,7 +2508,6 @@ export interface EntityMatchingFilter {
   originalModelId?: CogniteInternalId;
 }
 
-/** @deprecated Entity matching type; the API operates on asset-centric resources, which are retired 2027-12-31. Will be removed or moved in a future major release. */
 export interface EntityMatchingFilterRequest extends FilterQuery {
   filter?: EntityMatchingFilter;
 }

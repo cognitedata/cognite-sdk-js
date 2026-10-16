@@ -135,9 +135,6 @@ export default class CogniteClient extends BaseCogniteClient {
   public get relationships() {
     return accessApi(this.relationshipsApi);
   }
-  /**
-   * @deprecated Operates on asset-centric resources, which are retired 2027-12-31. Will be removed or moved in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
-   */
   public get entityMatching() {
     return accessApi(this.entityMatchingApi);
   }
