@@ -4,6 +4,9 @@ import { BaseResourceAPI } from '@cognite/sdk-core';
 import type { DatapointInfo } from '../../types/common';
 import type { SyntheticQuery, SyntheticQueryResponse } from './types';
 
+/**
+ * @deprecated Data point operation that stays available; it may move to another namespace in a future major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
+ */
 export class SyntheticTimeSeriesAPI extends BaseResourceAPI<SyntheticQueryResponse> {
   /**
    * @hidden
@@ -15,6 +18,9 @@ export class SyntheticTimeSeriesAPI extends BaseResourceAPI<SyntheticQueryRespon
     );
   }
 
+  /**
+   * @deprecated Data point operation that stays available; it may move to another namespace in a future major release.
+   */
   public query = (
     items: SyntheticQuery[]
   ): Promise<SyntheticQueryResponse[]> => {

@@ -19,6 +19,9 @@ import type {
   DataPointSubscriptionsDeleteQuery,
 } from './types';
 
+/**
+ * @deprecated Data point operation that stays available; it may move to another namespace in a future major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
+ */
 export class DataPointSubscriptionsAPI extends BaseResourceAPI<DataPointSubscription> {
   /**
    * @hidden
@@ -35,6 +38,8 @@ export class DataPointSubscriptionsAPI extends BaseResourceAPI<DataPointSubscrip
    *   { externalId: 'my_subscription', partitionCount: 1, timeSeriesIds: ['ts_external_id'] },
    * ]);
    * ```
+   *
+   * @deprecated Data point operation that stays available; it may move to another namespace in a future major release.
    */
   public create = (
     items: DataPointSubscriptionCreate[]
@@ -48,6 +53,8 @@ export class DataPointSubscriptionsAPI extends BaseResourceAPI<DataPointSubscrip
    * ```js
    * const subscriptions = await client.timeseries.subscriptions.list({ limit: 100 });
    * ```
+   *
+   * @deprecated Data point operation that stays available; it may move to another namespace in a future major release.
    */
   public list = (
     query?: DataPointSubscriptionListQuery
@@ -63,6 +70,8 @@ export class DataPointSubscriptionsAPI extends BaseResourceAPI<DataPointSubscrip
    *   items: [{ externalId: 'my_subscription' }],
    * });
    * ```
+   *
+   * @deprecated Data point operation that stays available; it may move to another namespace in a future major release.
    */
   public retrieve = (
     query: DataPointSubscriptionByIdsQuery
@@ -81,6 +90,8 @@ export class DataPointSubscriptionsAPI extends BaseResourceAPI<DataPointSubscrip
    *   { externalId: 'my_subscription', update: { name: { set: 'new name' } } },
    * ]);
    * ```
+   *
+   * @deprecated Data point operation that stays available; it may move to another namespace in a future major release.
    */
   public update = (
     items: DataPointSubscriptionUpdate[]
@@ -96,6 +107,8 @@ export class DataPointSubscriptionsAPI extends BaseResourceAPI<DataPointSubscrip
    *   items: [{ externalId: 'my_subscription' }],
    * });
    * ```
+   *
+   * @deprecated Data point operation that stays available; it may move to another namespace in a future major release.
    */
   public delete = async (
     query: DataPointSubscriptionsDeleteQuery
@@ -127,6 +140,9 @@ export class DataPointSubscriptionsAPI extends BaseResourceAPI<DataPointSubscrip
     );
   };
 
+  /**
+   * @deprecated Data point operation that stays available; it may move to another namespace in a future major release.
+   */
   public listMembers = (
     query: DataPointSubscriptionMembersListQuery
   ): CursorAndAsyncIterator<DataPointSubscriptionMember> => {
@@ -144,6 +160,8 @@ export class DataPointSubscriptionsAPI extends BaseResourceAPI<DataPointSubscrip
    *   initializeCursors: 'now',
    * });
    * ```
+   *
+   * @deprecated Data point operation that stays available; it may move to another namespace in a future major release.
    */
   public listData = async (
     query: DataPointSubscriptionListDataQuery
