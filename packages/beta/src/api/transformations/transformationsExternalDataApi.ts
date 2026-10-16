@@ -6,8 +6,6 @@ import type {
   TransformationExternalData,
   TransformationExternalDataCreate,
   TransformationExternalDataDelete,
-  TransformationExternalDataUsability,
-  TransformationExternalDataUsabilityRequest,
 } from './types';
 
 export class TransformationsExternalDataAPI extends BaseResourceAPI<TransformationExternalData> {
@@ -66,24 +64,5 @@ export class TransformationsExternalDataAPI extends BaseResourceAPI<Transformati
    */
   public delete = (ids: TransformationExternalDataDelete[]) => {
     return this.deleteEndpoint(ids);
-  };
-
-  /**
-   * [Verify external data source usability](https://api-docs.cognite.com/20230101-beta/tag/Transformation-External-Data-Sources/operation/verifyExternalDataSourceUsability)
-   *
-   * ```js
-   * const status = await client.transformationsExternalData.usability({
-   *   externalId: 'my-fabric-source',
-   * });
-   * ```
-   */
-  public usability = async (
-    request: TransformationExternalDataUsabilityRequest
-  ): Promise<TransformationExternalDataUsability> => {
-    const response = await this.post<TransformationExternalDataUsability>(
-      this.url('usability'),
-      { data: request }
-    );
-    return this.addToMapAndReturn(response.data, response);
   };
 }

@@ -51,12 +51,3 @@ export interface TransformationExternalData {
 export interface TransformationExternalDataDelete {
   externalId: CogniteExternalId;
 }
-
-export interface TransformationExternalDataUsabilityRequest {
-  externalId: CogniteExternalId;
-}
-
-export interface TransformationExternalDataUsability {
-  externalId: { externalId: CogniteExternalId };
-  usableVersion?: string;
-}
