@@ -30,6 +30,11 @@ export {
   createRetryValidator,
 } from './httpClient/retryValidator';
 export type { EndpointList, RetryValidator } from './httpClient/retryValidator';
+export {
+  DEFAULT_DATA_MODELING_CONCURRENCY,
+  type DataModelingConcurrencyCategory,
+  type DataModelingConcurrencyOptions,
+} from './httpClient/dataModelingConcurrency';
 export { RevertableArraySorter } from './revertableArraySorter';
 export {
   sleepPromise,

@@ -9,6 +9,10 @@ import {
 } from './constants';
 import type { HttpResponse } from './httpClient/basicHttpClient';
 import { CDFHttpClient } from './httpClient/cdfHttpClient';
+import {
+  DataModelingConcurrencyLimiter,
+  type DataModelingConcurrencyOptions,
+} from './httpClient/dataModelingConcurrency';
 import type { HttpHeaders } from './httpClient/httpHeaders';
 import {
   type RetryValidator,
@@ -51,6 +55,20 @@ export interface ClientOptions {
    * Used to override the default retry validator.
    */
   retryValidator?: RetryValidator;
+  /**
+   * Maximum concurrent HTTP attempts per Data Modeling category, per client.
+   * Defaults: read = 1 (list/retrieve/query/sync/inspect/schema reads),
+   * search = 2 (search/aggregate), write = 1 (upsert and container index,
+   * constraint, and property retry operations), delete = 1.
+   * Categories have independent budgets shared by all DM endpoints.
+   * Set a category to Infinity to disable its limit. Omitted values use defaults.
+   * Retry backoff does not hold a slot. Concurrent mutations are not guaranteed
+   * to complete in invocation order; await dependent mutations explicitly.
+   * The SDK imposes no request timeout. A request that never settles retains
+   * its slot indefinitely; with read = 1, it blocks all other DM reads on that
+   * client, including when response-body consumption stalls.
+   */
+  dataModelingConcurrency?: DataModelingConcurrencyOptions;
 }
 
 export function accessApi<T>(api: T | undefined): T {
@@ -176,7 +194,8 @@ export default class BaseCogniteClient {
   ) {
     const httpClient = new CDFHttpClient(
       getBaseUrl(baseUrl),
-      this.getRetryValidator()
+      this.getRetryValidator(),
+      new DataModelingConcurrencyLimiter(options.dataModelingConcurrency)
     );
 
     httpClient
