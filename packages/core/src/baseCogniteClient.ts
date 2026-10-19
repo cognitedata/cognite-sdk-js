@@ -63,6 +63,8 @@ export interface ClientOptions {
    * writeSchema = 1 (schema upserts, deletes, container index/constraint/property
    * retry operations, and GraphQL DML writes). Schema operations cover spaces,
    * containers, views and data models.
+   * DM user GraphQL queries and mutations both use read; request bodies are not
+   * inspected. These mutations do not acquire the write or delete budgets.
    * Categories have independent budgets shared by all DM endpoints.
    * Set a category to Infinity to disable its limit. Omitted values use defaults.
    * Retry backoff does not hold a slot. Concurrent mutations are not guaranteed

@@ -121,7 +121,7 @@ namespace and Data Modeling GraphQL routes, including raw client HTTP calls:
 
 | Category | Default | Operations |
 | --- | --- | --- |
-| `read` | 1 | Instance list, retrieve, query, sync, inspect, and GraphQL instance queries |
+| `read` | 1 | Instance list, retrieve, query, sync, inspect, and DM user GraphQL queries and mutations |
 | `search` | 2 | Instance search and aggregate |
 | `write` | 1 | Instance upsert/apply |
 | `delete` | 1 | Instance deletes |
@@ -129,9 +129,12 @@ namespace and Data Modeling GraphQL routes, including raw client HTTP calls:
 | `writeSchema` | 1 | Schema upserts and deletes, container index/constraint/property retries, and GraphQL DML writes |
 
 Schema deletes use `writeSchema`, not the instance `delete` budget.
-Data Modeling GraphQL instance queries under
-`/userapis/spaces/{space}/datamodels/{model}/versions/{version}/graphql` use `read`;
-`/dml/graphql` writes use `writeSchema`.
+Data Modeling GraphQL queries and mutations under
+`/userapis/spaces/{space}/datamodels/{model}/versions/{version}/graphql` all use
+`read`. Classification is based on the endpoint, not the GraphQL request body, so
+these mutations do not acquire the REST `write` or `delete` budgets. Increasing
+`read` also increases the allowed concurrency for these mutations.
+GraphQL DML writes to `/dml/graphql` use `writeSchema`.
 
 Unknown operations within known schema namespaces use `readSchema`; other unknown
 operations within the Data Modeling `/models` namespace use `read`.
