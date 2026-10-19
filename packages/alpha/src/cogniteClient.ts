@@ -2,8 +2,6 @@
 import { CogniteClient as CogniteClientStable } from '@cognite/sdk';
 import { accessApi } from '@cognite/sdk-core';
 import { version } from '../package.json';
-import { DataProductVersionsAPI } from './api/dataProducts/dataProductVersionsApi';
-import { DataProductsAPI } from './api/dataProducts/dataProductsApi';
 import { LimitsAPI } from './api/limits/limitsApi';
 import { MeteringAPI } from './api/metering/meteringApi';
 import { SimulatorsAPI } from './api/simulators/simulatorsApi';
@@ -21,8 +19,6 @@ export default class CogniteClientAlpha extends CogniteClientStable {
   private workflowVersionsApi?: WorkflowVersionsAPI;
   private workflowExecutionsApi?: WorkflowExecutionsAPI;
   private workflowTriggersApi?: WorkflowTriggersAPI;
-  private dataProductsApi?: DataProductsAPI;
-  private dataProductVersionsApi?: DataProductVersionsAPI;
   private transformationsExternalDataApi?: TransformationsExternalDataAPI;
 
   public get limits() {
@@ -53,14 +49,6 @@ export default class CogniteClientAlpha extends CogniteClientStable {
     return accessApi(this.workflowTriggersApi);
   }
 
-  public get dataProducts() {
-    return accessApi(this.dataProductsApi);
-  }
-
-  public get dataProductVersions() {
-    return accessApi(this.dataProductVersionsApi);
-  }
-
   public get transformationsExternalData() {
     return accessApi(this.transformationsExternalDataApi);
   }
@@ -81,11 +69,6 @@ export default class CogniteClientAlpha extends CogniteClientStable {
     this.workflowTriggersApi = this.apiFactory(
       WorkflowTriggersAPI,
       'workflows/triggers'
-    );
-    this.dataProductsApi = this.apiFactory(DataProductsAPI, 'dataproducts');
-    this.dataProductVersionsApi = this.apiFactory(
-      DataProductVersionsAPI,
-      'dataproducts'
     );
     this.transformationsExternalDataApi = this.apiFactory(
       TransformationsExternalDataAPI,
