@@ -57,16 +57,19 @@ export interface ClientOptions {
   retryValidator?: RetryValidator;
   /**
    * Maximum concurrent HTTP attempts per Data Modeling category, per client.
-   * Defaults: read = 1 (list/retrieve/query/sync/inspect/schema reads),
-   * search = 2 (search/aggregate), write = 1 (upsert and container index,
-   * constraint, and property retry operations), delete = 1.
+   * Defaults: read = 1 (instance list/retrieve/query/sync/inspect and GraphQL),
+   * search = 2 (instance search/aggregate), write = 1 (instance upsert),
+   * delete = 1 (instance deletes), readSchema = 2 (schema reads and statistics),
+   * writeSchema = 1 (schema upserts, deletes, container index/constraint/property
+   * retry operations, and GraphQL DML writes). Schema operations cover spaces,
+   * containers, views and data models.
    * Categories have independent budgets shared by all DM endpoints.
    * Set a category to Infinity to disable its limit. Omitted values use defaults.
    * Retry backoff does not hold a slot. Concurrent mutations are not guaranteed
    * to complete in invocation order; await dependent mutations explicitly.
    * The SDK imposes no request timeout. A request that never settles retains
-   * its slot indefinitely; with read = 1, it blocks all other DM reads on that
-   * client, including when response-body consumption stalls.
+   * its slot indefinitely; with read = 1, it blocks other non-schema DM reads on
+   * that client, including when response-body consumption stalls.
    */
   dataModelingConcurrency?: DataModelingConcurrencyOptions;
 }
