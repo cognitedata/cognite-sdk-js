@@ -8,6 +8,7 @@ import {
   type HttpRequestOptions,
   type HttpResponse,
 } from './basicHttpClient';
+import type { DataModelingConcurrencyLimiter } from './dataModelingConcurrency';
 import { ExponentialJitterBackoff } from './exponentialJitterBackoff';
 import { MAX_RETRY_ATTEMPTS, type RetryValidator } from './retryValidator';
 
@@ -47,7 +48,8 @@ export class RetryableHttpClient extends BasicHttpClient {
 
   constructor(
     baseUrl: string,
-    private retryValidator: RetryValidator
+    private retryValidator: RetryValidator,
+    private readonly concurrencyLimiter?: DataModelingConcurrencyLimiter
   ) {
     super(baseUrl);
   }
@@ -106,7 +108,16 @@ export class RetryableHttpClient extends BasicHttpClient {
   ): Promise<HttpResponse<ResponseType>> {
     let retryCount = 0;
     while (true) {
-      const response = await super.rawRequest<ResponseType>(request);
+      const send = () => super.rawRequest<ResponseType>(request);
+      const response = await (this.concurrencyLimiter
+        ? this.concurrencyLimiter.run(
+            {
+              method: request.method,
+              path: new URL(this.constructUrl(request.path)).pathname,
+            },
+            send
+          )
+        : send());
 
       const retryValidator = isFunction(request.retryValidator)
         ? request.retryValidator

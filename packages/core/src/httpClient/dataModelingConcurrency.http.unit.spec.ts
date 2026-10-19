@@ -1,0 +1,333 @@
+// Copyright 2026 Cognite AS
+
+import { Response } from 'cross-fetch';
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
+import {
+  controlFetch,
+  deferred,
+  flushRequests,
+} from '../__tests__/concurrencyTestUtils';
+import { CDFHttpClient } from './cdfHttpClient';
+import {
+  DataModelingConcurrencyLimiter,
+  type DataModelingConcurrencyOptions,
+} from './dataModelingConcurrency';
+import {
+  MAX_RETRY_ATTEMPTS,
+  createUniversalRetryValidator,
+} from './retryValidator';
+import { RetryableHttpClient } from './retryableHttpClient';
+
+vi.mock('cross-fetch', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('cross-fetch')>()),
+  default: vi.fn(),
+}));
+
+describe('Data Modeling HTTP concurrency', () => {
+  let requests: ReturnType<typeof controlFetch>;
+  const baseUrl = 'https://example.com';
+  const query = '/api/v1/projects/test/models/instances/query';
+  const createClient = (options?: DataModelingConcurrencyOptions) =>
+    new RetryableHttpClient(
+      baseUrl,
+      createUniversalRetryValidator(),
+      new DataModelingConcurrencyLimiter(options)
+    );
+
+  beforeEach(() => {
+    requests = controlFetch();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+    vi.restoreAllMocks();
+  });
+
+  test.each([
+    [query, undefined, 1],
+    ['/models/instances/search', undefined, 2],
+    [query, { read: 3 }, 3],
+    [query, { read: undefined }, 1],
+    [query, { read: Number.POSITIVE_INFINITY }, 6],
+    ['/assets/list', undefined, 6],
+  ] satisfies [string, DataModelingConcurrencyOptions | undefined, number][])(
+    'limits %s with %j to %s in-flight requests',
+    async (path, options, limit) => {
+      const client = createClient(options);
+      const results = Array.from({ length: 6 }, () => client.post(path));
+      let completed = 0;
+      while (completed < results.length) {
+        await flushRequests();
+        const started = requests.length;
+        expect(started - completed).toBe(
+          Math.min(limit, results.length - completed)
+        );
+        for (; completed < started; completed++) {
+          requests[completed].reply();
+        }
+      }
+      await Promise.all(results);
+    }
+  );
+
+  test('shares category budgets while keeping categories independent', async () => {
+    const client = createClient();
+    const paths = [
+      query,
+      '/models/instances/list',
+      '/models/views/byids',
+      '/models/instances/search',
+      '/models/instances/aggregate',
+      '/models/instances/search',
+      '/models/instances',
+      '/models/views',
+      '/models/instances/delete',
+      '/models/containers/indexes/delete',
+    ];
+    const results = paths.map((path) => client.post(path));
+    await flushRequests();
+    expect(requests.map((request) => new URL(request.url).pathname)).toEqual([
+      paths[0],
+      paths[3],
+      paths[4],
+      paths[6],
+      paths[8],
+    ]);
+    for (let i = 0; i < paths.length; i++) {
+      requests[i].reply();
+      await flushRequests();
+    }
+    await Promise.all(results);
+  });
+
+  test.each([
+    [baseUrl, '/api/v1/projects/test/models/views?usedFor=node&usedFor=record'],
+    [
+      baseUrl,
+      '/api/v1/projects/test/models/instances/query/?debug=true#result',
+    ],
+    [baseUrl, `${baseUrl}/api/v1/projects/test/models/views?limit=10`],
+    [`${baseUrl}/api/v1/projects/test/`, 'models/views?limit=10'],
+    [`${baseUrl}/api/v1/projects/test/`, '/models/views/?limit=10'],
+    [`${baseUrl}/cdf`, query],
+    [
+      `${baseUrl}/gateway/cdf`,
+      '/api/v1/projects/test/models/views?usedFor=node&usedFor=record',
+    ],
+    [`${baseUrl}/cdf/api/v1/projects/test/`, 'models/views?limit=10'],
+    [baseUrl, `${baseUrl}/cdf${query}/?debug=true#result`],
+  ])(
+    'classifies the effective pathname for base %s and path %s',
+    async (base, path) => {
+      const client = createClient();
+      client.setBaseUrl(base);
+      const results = [client.post(path), client.post(path)];
+      await flushRequests();
+      expect(requests).toHaveLength(1);
+      requests[0].reply();
+      await flushRequests();
+      expect(requests).toHaveLength(2);
+      requests[1].reply();
+      await Promise.all(results);
+    }
+  );
+
+  test('copies options instead of retaining mutable configuration', async () => {
+    const options = { read: 1 };
+    const client = createClient(options);
+    options.read = 10;
+    const results = [client.post(query), client.post(query)];
+    await flushRequests();
+    expect(requests).toHaveLength(1);
+    requests[0].reply();
+    await flushRequests();
+    requests[1].reply();
+    await Promise.all(results);
+  });
+
+  test('holds the slot until the entire response body is consumed', async () => {
+    const client = createClient();
+    const results = [client.post(query), client.post(query)];
+    await flushRequests();
+    const body = deferred<unknown>();
+    const fallback = deferred<string>();
+    const response = new Response();
+    const clone = new Response();
+    vi.spyOn(response, 'json').mockReturnValue(body.promise);
+    vi.spyOn(clone, 'text').mockReturnValue(fallback.promise);
+    vi.spyOn(response, 'clone').mockReturnValue(clone);
+    requests[0].resolve(response);
+    await flushRequests();
+    expect(requests).toHaveLength(1);
+    body.resolve({ items: [] });
+    await flushRequests();
+    expect(requests).toHaveLength(1);
+    fallback.resolve('{"items":[]}');
+    await results[0];
+    await flushRequests();
+    expect(requests).toHaveLength(2);
+    requests[1].reply();
+    await Promise.all(results);
+  });
+
+  test('releases during 429 backoff and reacquires behind queued requests', async () => {
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
+    const client = createClient();
+    const first = client.post(query);
+    const second = client.post(query);
+    await flushRequests();
+    requests[0].reply({}, 429);
+    await flushRequests();
+    expect(requests).toHaveLength(2);
+    expect(vi.getTimerCount()).toBe(1);
+    await vi.runAllTimersAsync();
+    expect(requests).toHaveLength(2);
+    requests[1].reply();
+    await second;
+    await flushRequests();
+    expect(requests).toHaveLength(3);
+    requests[2].reply();
+    await first;
+  });
+
+  test('transport failures release slots without changing rejection behavior', async () => {
+    const client = createClient();
+    const failed = client.post(query);
+    const rejection = expect(failed).rejects.toThrow('connection failed');
+    const next = client.post(query);
+    await flushRequests();
+    requests[0].reject(new Error('connection failed'));
+    await rejection;
+    await flushRequests();
+    expect(requests).toHaveLength(2);
+    requests[1].reply();
+    await next;
+  });
+
+  test('reclassifies a retry after its base URL changes during backoff', async () => {
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
+    const client = createClient();
+    const path = '/models/instances/query';
+    client.setBaseUrl(`${baseUrl}/unrelated`);
+    const first = client.post(path);
+    await flushRequests();
+    requests[0].reply({}, 429);
+    await flushRequests();
+    client.setBaseUrl(baseUrl);
+    const second = client.post(path);
+    await flushRequests();
+    expect(requests).toHaveLength(2);
+    await vi.runAllTimersAsync();
+    expect(requests).toHaveLength(2);
+    requests[1].reply();
+    await second;
+    await flushRequests();
+    expect(requests).toHaveLength(3);
+    expect(requests[2].url).toBe(`${baseUrl}${path}`);
+    requests[2].reply();
+    await first;
+  });
+
+  test('reclassifies a retry after its validator changes the request path', async () => {
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
+    const client = createClient();
+    const search = '/models/instances/search';
+    const first = client.post(query, {
+      retryValidator: (request, response) => {
+        if (response.status !== 429) return false;
+        request.path = search;
+        return true;
+      },
+    });
+    await flushRequests();
+    requests[0].reply({}, 429);
+    await flushRequests();
+    const searches = [client.post(search), client.post(search)];
+    await flushRequests();
+    expect(requests).toHaveLength(3);
+    await vi.runAllTimersAsync();
+    expect(requests).toHaveLength(3);
+    requests[1].reply();
+    await searches[0];
+    await flushRequests();
+    expect(requests).toHaveLength(4);
+    expect(requests[3].url).toBe(`${baseUrl}${search}`);
+    requests[2].reply();
+    requests[3].reply();
+    await Promise.all([first, ...searches]);
+  });
+
+  test('exhausted retries leave the queue usable', async () => {
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
+    const client = createClient();
+    const failed = client.post(query);
+    const rejection = expect(failed).rejects.toThrow('status code: 429');
+    for (let i = 0; i <= MAX_RETRY_ATTEMPTS; i++) {
+      await flushRequests();
+      expect(requests).toHaveLength(i + 1);
+      requests[i].reply({}, 429);
+      await flushRequests();
+      await vi.runAllTimersAsync();
+    }
+    await rejection;
+    const next = client.post(query);
+    await flushRequests();
+    requests[MAX_RETRY_ATTEMPTS + 1].reply();
+    await next;
+  });
+
+  test('disabling retries does not disable concurrency limits', async () => {
+    const client = createClient();
+    const failed = client.post(query, { retryValidator: false });
+    const rejection = expect(failed).rejects.toThrow('status code: 429');
+    const next = client.post(query, { retryValidator: false });
+    await flushRequests();
+    expect(requests).toHaveLength(1);
+    requests[0].reply({}, 429);
+    await rejection;
+    await flushRequests();
+    expect(requests).toHaveLength(2);
+    requests[1].reply();
+    await next;
+    expect(requests).toHaveLength(2);
+  });
+
+  test.each([true, false])(
+    '401 handling leaves the queue usable (retry: %s)',
+    async (retryAuthentication) => {
+      const client = new CDFHttpClient(
+        baseUrl,
+        createUniversalRetryValidator(),
+        new DataModelingConcurrencyLimiter()
+      );
+      client.set401ResponseHandler((_, __, retry, reject) => {
+        if (retryAuthentication) {
+          client.setBearerToken('refreshed');
+          retry();
+        } else {
+          reject();
+        }
+      });
+      const first = client.post(query);
+      const outcome = retryAuthentication
+        ? expect(first).resolves.toMatchObject({ status: 200 })
+        : expect(first).rejects.toThrow('status code: 401');
+      const second = client.post(query);
+      await flushRequests();
+      requests[0].reply({}, 401);
+      await flushRequests();
+      expect(requests).toHaveLength(2);
+      requests[1].reply();
+      await second;
+      await flushRequests();
+      if (retryAuthentication) {
+        expect(requests).toHaveLength(3);
+        expect(requests[2].options?.headers).toMatchObject({
+          Authorization: 'Bearer refreshed',
+        });
+        requests[2].reply();
+      }
+      await outcome;
+    }
+  );
+});

@@ -248,7 +248,7 @@ export class BasicHttpClient {
     return this.postRequest(rawResponse, request, mutatedRequest);
   }
 
-  private constructUrl<T extends object>(path: string, params?: T) {
+  protected constructUrl<T extends object>(path: string, params?: T) {
     let url = path;
     const hasQueryParams = !!params && Object.keys(params).length > 0;
     if (hasQueryParams) {
