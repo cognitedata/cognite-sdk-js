@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.46.0](https://github.com/cognitedata/cognite-sdk-js/compare/%40cognite%2Fsdk-alpha%400.45.0...%40cognite%2Fsdk-alpha%400.46.0) (2026-10-19)
+
+### Features
+
+* **dataproducts:** move data products API to stable ([#1505](https://github.com/cognitedata/cognite-sdk-js/issues/1505)) ([9180e08](https://github.com/cognitedata/cognite-sdk-js/commit/9180e08c6955e21d01b0180e55a7c416219ad01f))
+* **transformations:** add transformations/externaldata apis with updated contract to alpha client ([#1494](https://github.com/cognitedata/cognite-sdk-js/issues/1494)) ([33b3a54](https://github.com/cognitedata/cognite-sdk-js/commit/33b3a542b3d63d460338085fbea23a2c4446a9ae))
+
+
 # [0.45.0](https://github.com/cognitedata/cognite-sdk-js/compare/%40cognite%2Fsdk-alpha%400.44.0...%40cognite%2Fsdk-alpha%400.45.0) (2026-10-07)
 
 ### Features

@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.3.0](https://github.com/cognitedata/cognite-sdk-js/compare/%40cognite%2Fsdk-beta%406.2.0...%40cognite%2Fsdk-beta%406.3.0) (2026-10-19)
+
+### Features
+
+* **transformations:** add transformations/externaldata apis with updated contract to alpha client ([#1494](https://github.com/cognitedata/cognite-sdk-js/issues/1494)) ([33b3a54](https://github.com/cognitedata/cognite-sdk-js/commit/33b3a542b3d63d460338085fbea23a2c4446a9ae))
+
+
 # [6.2.0](https://github.com/cognitedata/cognite-sdk-js/compare/%40cognite%2Fsdk-beta%406.1.4...%40cognite%2Fsdk-beta%406.2.0) (2026-10-07)
 
 ### Features
