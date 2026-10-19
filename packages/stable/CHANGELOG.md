@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [10.16.0](https://github.com/cognitedata/cognite-sdk-js/compare/%40cognite%2Fsdk%4010.15.0...%40cognite%2Fsdk%4010.16.0) (2026-10-19)
+
+### Features
+
+* **dataproducts:** move data products API to stable ([#1505](https://github.com/cognitedata/cognite-sdk-js/issues/1505)) ([9180e08](https://github.com/cognitedata/cognite-sdk-js/commit/9180e08c6955e21d01b0180e55a7c416219ad01f))
+* **stable:** add operator to instances SearchRequestV3 ([#1506](https://github.com/cognitedata/cognite-sdk-js/issues/1506)) ([3104376](https://github.com/cognitedata/cognite-sdk-js/commit/3104376ef72b7aa1df0679cc53bf630502ecd031))
+
+
 # [10.15.0](https://github.com/cognitedata/cognite-sdk-js/compare/%40cognite%2Fsdk%4010.14.0...%40cognite%2Fsdk%4010.15.0) (2026-10-07)
 
 ### Bug Fixes
