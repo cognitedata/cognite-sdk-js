@@ -73,8 +73,58 @@ describe('Client Data Modeling concurrency', () => {
     await rejection;
   });
 
-  test('container and view lists share the budget and preserve queries during pagination', async () => {
+  test('schema reads share two default slots independently of instance reads', async () => {
     const client = createClient();
+    const results = [
+      client.containers.list(),
+      client.views.list(),
+      client.spaces.list(),
+      client.instances.query({ with: {}, select: {} }),
+    ];
+    await flushRequests();
+    expect(requests.map((request) => new URL(request.url).pathname)).toEqual([
+      '/api/v1/projects/test/models/containers/',
+      '/api/v1/projects/test/models/views/',
+      '/api/v1/projects/test/models/instances/query',
+    ]);
+    requests[0].reply({ items: [] });
+    await flushRequests();
+    expect(requests).toHaveLength(4);
+    expect(new URL(requests[3].url).pathname).toBe(
+      '/api/v1/projects/test/models/spaces/'
+    );
+    for (const request of requests.slice(1)) request.reply({ items: [] });
+    await Promise.all(results);
+  });
+
+  test('schema writes and deletes share a slot separately from instance writes and deletes', async () => {
+    const client = createClient();
+    const results = [
+      client.views.upsert([]),
+      client.spaces.delete(['test']),
+      client.instances.upsert({ items: [] }),
+      client.instances.delete([
+        { instanceType: 'node', space: 'test', externalId: 'node' },
+      ]),
+    ];
+    await flushRequests();
+    expect(requests.map((request) => new URL(request.url).pathname)).toEqual([
+      '/api/v1/projects/test/models/views',
+      '/api/v1/projects/test/models/instances',
+      '/api/v1/projects/test/models/instances/delete',
+    ]);
+    requests[0].reply({ items: [] });
+    await flushRequests();
+    expect(requests).toHaveLength(4);
+    expect(new URL(requests[3].url).pathname).toBe(
+      '/api/v1/projects/test/models/spaces/delete'
+    );
+    for (const request of requests.slice(1)) request.reply({ items: [] });
+    await Promise.all(results);
+  });
+
+  test('schema read overrides preserve query serialization during pagination', async () => {
+    const client = createClient({ dataModelingConcurrency: { readSchema: 1 } });
     const containers = client.containers.list();
     const views = client.views.list({
       usedFor: ['node', 'record'],
@@ -143,6 +193,8 @@ describe('Client Data Modeling concurrency', () => {
         search: Number.POSITIVE_INFINITY,
         write: Number.POSITIVE_INFINITY,
         delete: Number.POSITIVE_INFINITY,
+        readSchema: Number.POSITIVE_INFINITY,
+        writeSchema: Number.POSITIVE_INFINITY,
       },
       6,
     ],
@@ -166,11 +218,36 @@ describe('Client Data Modeling concurrency', () => {
     }
   );
 
+  test.each(['readSchema', 'writeSchema'] as const)(
+    'passes %s overrides through to the HTTP stack',
+    async (category) => {
+      const client = createClient({
+        dataModelingConcurrency: { [category]: 3 },
+      });
+      const results = Array.from({ length: 4 }, () =>
+        category === 'readSchema'
+          ? client.views.list()
+          : client.views.upsert([])
+      );
+      await flushRequests();
+      expect(requests).toHaveLength(3);
+      requests[0].reply({ items: [] });
+      await flushRequests();
+      expect(requests).toHaveLength(4);
+      for (const request of requests.slice(1)) request.reply({ items: [] });
+      await Promise.all(results);
+    }
+  );
+
   test('fails at construction on invalid options and exposes public defaults', () => {
     expect(DEFAULT_DATA_MODELING_CONCURRENCY.read).toBe(1);
-    expect(() =>
-      createClient({ dataModelingConcurrency: { delete: 0 } })
-    ).toThrow('dataModelingConcurrency.delete');
+    expect(DEFAULT_DATA_MODELING_CONCURRENCY.readSchema).toBe(2);
+    expect(DEFAULT_DATA_MODELING_CONCURRENCY.writeSchema).toBe(1);
+    for (const category of ['delete', 'readSchema', 'writeSchema']) {
+      expect(() =>
+        createClient({ dataModelingConcurrency: { [category]: 0 } })
+      ).toThrow(`dataModelingConcurrency.${category}`);
+    }
   });
 
   test.each([true, false])(

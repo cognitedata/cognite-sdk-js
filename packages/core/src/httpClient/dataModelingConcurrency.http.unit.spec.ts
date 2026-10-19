@@ -49,6 +49,21 @@ describe('Data Modeling HTTP concurrency', () => {
     [query, { read: 3 }, 3],
     [query, { read: undefined }, 1],
     [query, { read: Number.POSITIVE_INFINITY }, 6],
+    ['/models/views/byids', undefined, 2],
+    ['/models/views/byids', { readSchema: 3 }, 3],
+    ['/models/views/byids', { readSchema: undefined }, 2],
+    ['/models/views/byids', { readSchema: Number.POSITIVE_INFINITY }, 6],
+    ['/models/views', undefined, 1],
+    ['/models/views', { writeSchema: 3 }, 3],
+    ['/models/views', { writeSchema: undefined }, 1],
+    ['/models/views', { writeSchema: Number.POSITIVE_INFINITY }, 6],
+    ['/models/containers/indexes/delete', undefined, 1],
+    [
+      '/userapis/spaces/test/datamodels/model/versions/v1/graphql',
+      undefined,
+      1,
+    ],
+    ['/dml/graphql', undefined, 1],
     ['/assets/list', undefined, 6],
   ] satisfies [string, DataModelingConcurrencyOptions | undefined, number][])(
     'limits %s with %j to %s in-flight requests',
@@ -70,19 +85,26 @@ describe('Data Modeling HTTP concurrency', () => {
     }
   );
 
-  test('shares category budgets while keeping categories independent', async () => {
+  test('shares budgets within each of the six independent categories', async () => {
     const client = createClient();
     const paths = [
       query,
       '/models/instances/list',
-      '/models/views/byids',
+      '/userapis/spaces/test/datamodels/model/versions/v1/graphql',
       '/models/instances/search',
       '/models/instances/aggregate',
       '/models/instances/search',
       '/models/instances',
-      '/models/views',
+      '/models/instances',
       '/models/instances/delete',
+      '/models/instances/delete',
+      '/models/views/byids',
+      '/models/containers/byids',
+      '/models/statistics/spaces/byids',
+      '/models/spaces/byids',
+      '/models/views',
       '/models/containers/indexes/delete',
+      '/dml/graphql',
     ];
     const results = paths.map((path) => client.post(path));
     await flushRequests();
@@ -92,6 +114,9 @@ describe('Data Modeling HTTP concurrency', () => {
       paths[4],
       paths[6],
       paths[8],
+      paths[10],
+      paths[11],
+      paths[14],
     ]);
     for (let i = 0; i < paths.length; i++) {
       requests[i].reply();
@@ -119,7 +144,7 @@ describe('Data Modeling HTTP concurrency', () => {
   ])(
     'classifies the effective pathname for base %s and path %s',
     async (base, path) => {
-      const client = createClient();
+      const client = createClient({ readSchema: 1 });
       client.setBaseUrl(base);
       const results = [client.post(path), client.post(path)];
       await flushRequests();

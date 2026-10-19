@@ -9,7 +9,7 @@ import {
   classifyDataModelingRequest,
 } from './dataModelingConcurrency';
 
-const resources = ['instances', 'spaces', 'containers', 'views', 'datamodels'];
+const schemaResources = ['spaces', 'containers', 'views', 'datamodels'];
 const prefixes = [
   '',
   '/api/v1/projects/test-project',
@@ -17,18 +17,15 @@ const prefixes = [
   '/gateway/cdf/api/20230101/projects/test-project',
 ];
 const endpoints: [HttpMethod, string, DataModelingConcurrencyCategory][] = [
-  ...resources.flatMap(
+  [HttpMethod.Post, '/models/instances', 'write'],
+  [HttpMethod.Post, '/models/instances/byids', 'read'],
+  [HttpMethod.Post, '/models/instances/delete', 'delete'],
+  ...schemaResources.flatMap(
     (resource): [HttpMethod, string, DataModelingConcurrencyCategory][] => [
-      [HttpMethod.Post, `/models/${resource}`, 'write'],
-      [HttpMethod.Post, `/models/${resource}/byids`, 'read'],
-      [HttpMethod.Post, `/models/${resource}/delete`, 'delete'],
-    ]
-  ),
-  ...['spaces', 'containers', 'views', 'datamodels'].map(
-    (resource): [HttpMethod, string, DataModelingConcurrencyCategory] => [
-      HttpMethod.Get,
-      `/models/${resource}`,
-      'read',
+      [HttpMethod.Post, `/models/${resource}`, 'writeSchema'],
+      [HttpMethod.Post, `/models/${resource}/byids`, 'readSchema'],
+      [HttpMethod.Post, `/models/${resource}/delete`, 'writeSchema'],
+      [HttpMethod.Get, `/models/${resource}`, 'readSchema'],
     ]
   ),
   ...['list', 'query', 'sync', 'inspect'].map(
@@ -40,15 +37,24 @@ const endpoints: [HttpMethod, string, DataModelingConcurrencyCategory][] = [
   ),
   [HttpMethod.Post, '/models/instances/search', 'search'],
   [HttpMethod.Post, '/models/instances/aggregate', 'search'],
-  [HttpMethod.Post, '/models/containers/inspect', 'read'],
-  [HttpMethod.Post, '/models/containers/indexes/delete', 'delete'],
-  [HttpMethod.Post, '/models/containers/constraints/delete', 'delete'],
-  [HttpMethod.Post, '/models/containers/indexes/retry', 'write'],
-  [HttpMethod.Post, '/models/containers/constraints/retry', 'write'],
-  [HttpMethod.Post, '/models/containers/properties/retry', 'write'],
-  [HttpMethod.Get, '/models/statistics', 'read'],
-  [HttpMethod.Get, '/models/statistics/spaces', 'read'],
-  [HttpMethod.Post, '/models/statistics/spaces/byids', 'read'],
+  [HttpMethod.Post, '/models/containers/inspect', 'readSchema'],
+  [HttpMethod.Post, '/models/containers/indexes/delete', 'writeSchema'],
+  [HttpMethod.Post, '/models/containers/constraints/delete', 'writeSchema'],
+  [HttpMethod.Post, '/models/containers/indexes/retry', 'writeSchema'],
+  [HttpMethod.Post, '/models/containers/constraints/retry', 'writeSchema'],
+  [HttpMethod.Post, '/models/containers/properties/retry', 'writeSchema'],
+  [HttpMethod.Get, '/models/statistics', 'readSchema'],
+  [HttpMethod.Get, '/models/statistics/spaces', 'readSchema'],
+  [HttpMethod.Post, '/models/statistics/spaces/byids', 'readSchema'],
+  [
+    HttpMethod.Post,
+    '/userapis/spaces/test/datamodels/model/versions/v1/graphql',
+    'read',
+  ],
+  [HttpMethod.Post, '/dml/graphql', 'writeSchema'],
+  [HttpMethod.Post, '/models/containers/future-operation', 'readSchema'],
+  [HttpMethod.Post, '/models/views-extra/byids', 'read'],
+  [HttpMethod.Post, '/models/statistics-extra', 'read'],
   [HttpMethod.Get, '/models', 'read'],
   [HttpMethod.Post, '/models/future/operation', 'read'],
 ];
@@ -72,6 +78,11 @@ describe('Data Modeling request classification', () => {
     '/simulators/models/instances/delete',
     '/models-other/instances',
     '/prefix/models/instances',
+    '/templategroups/test/versions/1/graphql',
+    '/userapis/spaces/test/datamodels/model/versions/v1/graphql-extra',
+    '/userapis/spaces/test/datamodels/model/graphql',
+    '/dml/graphql-extra',
+    '/dml/graphql/extra',
   ])('does not limit %s', (path) => {
     for (const prefix of prefixes) {
       expect(
@@ -113,18 +124,28 @@ describe('Data Modeling concurrency options', () => {
       search: 2,
       write: 1,
       delete: 1,
+      readSchema: 2,
+      writeSchema: 1,
     });
     expect(Object.isFrozen(DEFAULT_DATA_MODELING_CONCURRENCY)).toBe(true);
   });
 
-  test.each([0, -1, 1.5, Number.NaN, Number.NEGATIVE_INFINITY])(
-    'rejects invalid limits: %s',
-    (read) => {
-      expect(() => new DataModelingConcurrencyLimiter({ read })).toThrow(
-        /dataModelingConcurrency.read.*positive integer.*Infinity/
+  test.each<DataModelingConcurrencyCategory>([
+    'read',
+    'search',
+    'write',
+    'delete',
+    'readSchema',
+    'writeSchema',
+  ])('rejects invalid limits for %s', (category) => {
+    for (const max of [0, -1, 1.5, Number.NaN, Number.NEGATIVE_INFINITY]) {
+      expect(
+        () => new DataModelingConcurrencyLimiter({ [category]: max })
+      ).toThrow(
+        `dataModelingConcurrency.${category} must be a positive integer or Infinity`
       );
     }
-  );
+  });
 
   test('accepts partial options, undefined and Infinity', () => {
     expect(
@@ -133,6 +154,8 @@ describe('Data Modeling concurrency options', () => {
           read: undefined,
           search: 3,
           write: Number.POSITIVE_INFINITY,
+          readSchema: undefined,
+          writeSchema: Number.POSITIVE_INFINITY,
         })
     ).not.toThrow();
   });
