@@ -84,6 +84,62 @@ quickstart();
 - [API reference documentation](https://doc.cognitedata.com/api/v1)
 - [JS SDK reference documentation](https://cognitedata.github.io/cognite-sdk-js/classes/cogniteclient.html)
 
+## Data Modeling concurrency
+
+Data Modeling requests are concurrency-limited by default. Each client has
+independent budgets shared across all endpoints in the Data Modeling `/models`
+namespace, including raw client HTTP calls:
+
+| Category | Default | Operations |
+| --- | --- | --- |
+| `read` | 1 | List, retrieve, query, sync, inspect, schema reads, statistics |
+| `search` | 2 | Instance search and aggregate |
+| `write` | 1 | Upsert/apply and container index, constraint, or property retries |
+| `delete` | 1 | Deletes, including container indexes and constraints |
+
+Unknown operations within the Data Modeling namespace use the read budget.
+Other APIs, including 3D models and simulator models, are unaffected.
+Project routes remain limited behind proxy path prefixes, for example
+`https://proxy.example/cdf/api/v1/projects/my-project/models/instances/query`.
+The category budgets are separate: up to five HTTP attempts can be in flight
+across categories with the defaults. Separate clients do not share budgets.
+
+To raise specific limits:
+
+```js
+const client = new CogniteClient({
+  appId: 'YOUR APPLICATION NAME',
+  project: 'YOUR PROJECT',
+  oidcTokenProvider: async () => 'YOUR_OIDC_ACCESS_TOKEN',
+  dataModelingConcurrency: { read: 4, search: 4, write: 2 },
+});
+```
+
+Omitted or `undefined` category values retain their defaults. Limits must be
+positive integers or `Infinity`; invalid values throw during client construction.
+Set a category to `Infinity` to disable its limit. To restore unlimited
+concurrency for all Data Modeling operations, set all four:
+
+```js
+const dataModelingConcurrency = {
+  read: Infinity,
+  search: Infinity,
+  write: Infinity,
+  delete: Infinity,
+};
+```
+
+Slots cover individual HTTP attempts through response-body consumption, but are
+released during retry backoff. Queued attempts are admitted in FIFO order;
+logical calls, including concurrent writes and deletes, are **not guaranteed to
+complete in invocation order**. Continue to await dependent mutations explicitly.
+
+The SDK imposes **no request timeout**. A request that never settles, including a
+stalled response body, retains its slot indefinitely. With the default `read: 1`,
+this blocks all other Data Modeling reads on the same client. Other categories
+and separate clients remain independent. Timing out an outer promise, for example
+with `Promise.race`, does not cancel the underlying request or release its slot.
+
 ## Best practices
 
 ### No submodule imports
