@@ -7,10 +7,10 @@ import {
 } from '../../../../core/src/__tests__/concurrencyTestUtils';
 import {
   type ClientOptions,
-  CogniteClient,
   DEFAULT_DATA_MODELING_CONCURRENCY,
   type DataModelingConcurrencyOptions,
 } from '../../index';
+import { setupMockableClient } from '../testUtils';
 
 vi.mock('cross-fetch', async (importOriginal) => ({
   ...(await importOriginal<typeof import('cross-fetch')>()),
@@ -20,11 +20,8 @@ vi.mock('cross-fetch', async (importOriginal) => ({
 describe('Client Data Modeling concurrency', () => {
   let requests: ReturnType<typeof controlFetch>;
   const createClient = (options: Partial<ClientOptions> = {}) =>
-    new CogniteClient({
-      appId: 'concurrency test',
+    setupMockableClient({
       project: 'test',
-      baseUrl: 'https://example.com',
-      oidcTokenProvider: async () => 'test token',
       ...options,
     });
 

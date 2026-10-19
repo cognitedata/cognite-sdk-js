@@ -17,6 +17,8 @@ export function deferred<T>() {
 export const flushRequests = () =>
   new Promise<void>((resolve) => setImmediate(resolve));
 
+// Mock fetch rather than nock to control request and response-body completion
+// independently, without timing-based network delays.
 export function controlFetch() {
   const requests: {
     url: string;
