@@ -57,9 +57,6 @@ export default class CogniteClient extends BaseCogniteClient {
   public get assets() {
     return accessApi(this.assetsApi);
   }
-  /**
-   * @deprecated Asset-centric time series metadata and asset-hierarchy filters are deprecated 2026-10-15 and retired 2027-12-31; data point reads and writes stay on client.datapoints via instanceId. Will be removed or moved in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
-   */
   public get timeseries() {
     return accessApi(this.timeSeriesApi);
   }

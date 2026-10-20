@@ -37,40 +37,13 @@ APIs in data modeling, which are in public preview and not yet part of this SDK.
 APIs (`client.models3D`, `client.revisions3D`, `client.files3D`, `client.viewer3D`) are **not**
 deprecated.
 
-### Time series: a pattern shift, not a retirement
+### Time series
 
-`client.timeseries` is not going away. CDF deprecates asset-centric time series metadata and the
-asset-hierarchy filters, while data point reads and writes stay on the Time series API and address
-a time series by `instanceId`. In the SDK this means:
-
-- Deprecated: `client.timeseries.create`, `update`, `list`, `search`, `aggregate`, `delete` and
-  `retrieve` by `id` or `externalId`, together with the create, filter, search and update types.
-  Create and query time series as `CogniteTimeSeries` instances via `client.instances` instead.
-- Staying: `client.datapoints` with `instanceId` (see below), `client.timeseries.subscriptions`
-  and synthetic queries. Where these live in the next major release is still being decided, so
-  they carry a tag that says so.
-
-```ts
-// before
-await client.timeseries.create([{ externalId: 'my-ts', name: 'Pressure', isStep: false }]);
-
-// after
-await client.instances.upsert({
-  items: [
-    {
-      instanceType: 'node',
-      space: 'my-space',
-      externalId: 'my-ts',
-      sources: [
-        {
-          source: { type: 'view', space: 'cdf_cdm', externalId: 'CogniteTimeSeries', version: 'v1' },
-          properties: { name: 'Pressure', isStep: false, type: 'numeric' },
-        },
-      ],
-    },
-  ],
-});
-```
+`client.timeseries` is not going away: data point reads and writes stay on the Time series API and
+address a time series by `instanceId`. Only the asset-centric metadata methods (`create`, `update`,
+`list`, `search`, `aggregate`, `delete` and `retrieve` by `id` or `externalId`) are deprecated.
+Those tags, together with the move of `client.datapoints` under `client.timeseries.data`, land in
+a separate pull request so the new layout can be reviewed on its own.
 
 ### Datapoints: identify time series by `instanceId`
 
