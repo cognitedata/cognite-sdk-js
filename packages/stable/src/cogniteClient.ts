@@ -60,6 +60,9 @@ export default class CogniteClient extends BaseCogniteClient {
   public get timeseries() {
     return accessApi(this.timeSeriesApi);
   }
+  /**
+   * @deprecated Use client.timeseries.data instead; it has the same methods and types. Will be removed in the next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
+   */
   public get datapoints() {
     return accessApi(this.dataPointsApi);
   }

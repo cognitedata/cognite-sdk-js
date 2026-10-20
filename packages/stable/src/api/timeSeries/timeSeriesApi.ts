@@ -8,6 +8,7 @@ import {
   type MetadataMap,
 } from '@cognite/sdk-core';
 import type { IdEither, IgnoreUnknownIds } from '../../types';
+import { DataPointsAPI } from '../dataPoints/dataPointsApi';
 import { DataPointSubscriptionsAPI } from './subscriptions/dataPointSubscriptionsApi';
 import { SyntheticTimeSeriesAPI } from './syntheticTimeSeriesApi';
 import type {
@@ -22,12 +23,14 @@ import type {
 } from './types';
 
 export class TimeSeriesAPI extends BaseResourceAPI<TimeSeries> {
+  private readonly dataPointsApi: DataPointsAPI;
   private syntheticTimeseriesApi: SyntheticTimeSeriesAPI;
   private readonly dataPointSubscriptionsApi: DataPointSubscriptionsAPI;
 
   /** @hidden */
   constructor(resourcePath: string, ...args: [CDFHttpClient, MetadataMap]) {
     super(resourcePath, ...args);
+    this.dataPointsApi = new DataPointsAPI(this.url('data'), ...args);
     this.syntheticTimeseriesApi = new SyntheticTimeSeriesAPI(
       this.url('synthetic'),
       ...args
@@ -36,6 +39,32 @@ export class TimeSeriesAPI extends BaseResourceAPI<TimeSeries> {
       this.url('subscriptions'),
       ...args
     );
+  }
+
+  /**
+   * [Data points](https://docs.cognite.com/api/v1/#tag/Time-series/operation/getMultiTimeSeriesDatapoints)
+   *
+   * ```js
+   * const result = await client.timeseries.data.retrieve({
+   *   items: [{ instanceId: { space: 'my-space', externalId: 'my-ts' } }],
+   * });
+   * ```
+   */
+  public get data() {
+    return this.dataPointsApi;
+  }
+
+  /**
+   * [Synthetic time series](https://docs.cognite.com/api/v1/#tag/Synthetic-Time-Series)
+   *
+   * ```js
+   * const results = await client.timeseries.synthetic.query([
+   *   { expression: "TS{externalId='my-ts'} * 2", start: '2d-ago', end: 'now', limit: 100 },
+   * ]);
+   * ```
+   */
+  public get synthetic() {
+    return this.syntheticTimeseriesApi;
   }
 
   /**
@@ -62,6 +91,8 @@ export class TimeSeriesAPI extends BaseResourceAPI<TimeSeries> {
    * ];
    * const createdTimeseries = await client.timeseries.create(timeseries);
    * ```
+   *
+   * @deprecated Asset-centric time series metadata, deprecated 2026-10-15 and retired 2027-12-31. Create and query time series as CogniteTimeSeries instances via client.instances instead. Will be removed in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
    */
   public create = (items: TimeSeriesCreate[]): Promise<TimeSeries[]> => {
     return super.createEndpoint(items);
@@ -73,6 +104,8 @@ export class TimeSeriesAPI extends BaseResourceAPI<TimeSeries> {
    * ```js
    * const timeseries = await client.timeseries.list({ filter: { assetIds: [1, 2] }});
    * ```
+   *
+   * @deprecated Asset-centric time series metadata, deprecated 2026-10-15 and retired 2027-12-31. Create and query time series as CogniteTimeSeries instances via client.instances instead. Will be removed in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
    */
   public list = (
     scope?: TimeSeriesFilterQuery
@@ -87,6 +120,8 @@ export class TimeSeriesAPI extends BaseResourceAPI<TimeSeries> {
    * const aggregates = await client.timeseries.aggregate({ filter: { isString: true } });
    * console.log('Number of string timeseries: ', aggregates[0].count)
    * ```
+   *
+   * @deprecated Asset-centric time series metadata, deprecated 2026-10-15 and retired 2027-12-31. Create and query time series as CogniteTimeSeries instances via client.instances instead. Will be removed in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
    */
   public aggregate = (
     query: TimeSeriesAggregateQuery
@@ -103,6 +138,8 @@ export class TimeSeriesAPI extends BaseResourceAPI<TimeSeries> {
    *   { externalId: 'abc' }
    * ]);
    * ```
+   *
+   * @deprecated Asset-centric time series metadata, deprecated 2026-10-15 and retired 2027-12-31. Create and query time series as CogniteTimeSeries instances via client.instances instead. Will be removed in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
    */
   public retrieve = (
     ids: IdEitherWithInstance[],
@@ -122,6 +159,8 @@ export class TimeSeriesAPI extends BaseResourceAPI<TimeSeries> {
    *   }
    * }]);
    * ```
+   *
+   * @deprecated Asset-centric time series metadata, deprecated 2026-10-15 and retired 2027-12-31. Create and query time series as CogniteTimeSeries instances via client.instances instead. Will be removed in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
    */
   public update = (changes: TimeSeriesUpdate[]) => {
     return super.updateEndpoint(changes);
@@ -140,6 +179,8 @@ export class TimeSeriesAPI extends BaseResourceAPI<TimeSeries> {
    *   }
    * });
    * ```
+   *
+   * @deprecated Asset-centric time series metadata, deprecated 2026-10-15 and retired 2027-12-31. Create and query time series as CogniteTimeSeries instances via client.instances instead. Will be removed in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
    */
   public search = (query: TimeSeriesSearchFilter) => {
     return super.searchEndpoint(query);
@@ -154,6 +195,8 @@ export class TimeSeriesAPI extends BaseResourceAPI<TimeSeries> {
    *   { externalId: 'abc' }
    * ]);
    * ```
+   *
+   * @deprecated Asset-centric time series metadata, deprecated 2026-10-15 and retired 2027-12-31. Create and query time series as CogniteTimeSeries instances via client.instances instead. Will be removed in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
    */
   public delete = (ids: IdEither[]) => {
     return super.deleteEndpoint(ids);
@@ -172,6 +215,8 @@ export class TimeSeriesAPI extends BaseResourceAPI<TimeSeries> {
    *   }
    * ]);
    * ```
+   *
+   * @deprecated Use client.timeseries.synthetic.query instead. Will be removed in the next major release.
    */
   public syntheticQuery = (items: SyntheticQuery[]) => {
     return this.syntheticTimeseriesApi.query(items);
