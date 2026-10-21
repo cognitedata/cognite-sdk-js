@@ -29,13 +29,21 @@ release. The methods and types themselves are unchanged.
 | `client.securityCategories` | Data products and granular access control                        |
 | `client.geospatial`     | No replacement; stop using it before 2027-12-31                          |
 
-### 3D asset mappings
+### 3D (classic)
 
-`client.assetMappings3D` is deprecated as of 2026-10-15 as part of asset-centric 3D
-contextualization; no retirement date is announced. The replacement is the 3D contextualization
-APIs in data modeling, which are in public preview and not yet part of this SDK. The other 3D
-APIs (`client.models3D`, `client.revisions3D`, `client.files3D`, `client.viewer3D`) are **not**
-deprecated.
+The classic 3D API is deprecated as of 2026-10-15; no retirement date is announced. 3D models are
+managed through data modeling going forward. `client.assetMappings3D` is part of asset-centric 3D
+contextualization, whose replacement is the 3D contextualization APIs in data modeling (public
+preview, not yet part of this SDK).
+
+```
+client
+  models3D                 @deprecated, /3d/models
+  revisions3D              @deprecated, /3d/models/{id}/revisions (incl. nodes, logs, thumbnail, outputs)
+  files3D                  @deprecated, /3d/files
+  assetMappings3D          @deprecated, /3d/models/{id}/revisions/{id}/mappings
+  viewer3D                 unchanged (not part of the public API contract)
+```
 
 ## Templates (retired 2025-05-31)
 
