@@ -37,14 +37,6 @@ APIs in data modeling, which are in public preview and not yet part of this SDK.
 APIs (`client.models3D`, `client.revisions3D`, `client.files3D`, `client.viewer3D`) are **not**
 deprecated.
 
-### Time series
-
-`client.timeseries` is not going away: data point reads and writes stay on the Time series API and
-address a time series by `instanceId`. Only the asset-centric metadata methods (`create`, `update`,
-`list`, `search`, `aggregate`, `delete` and `retrieve` by `id` or `externalId`) are deprecated.
-Those tags, together with the move of `client.datapoints` under `client.timeseries.data`, land in
-a separate pull request so the new layout can be reviewed on its own.
-
 ### Datapoints: identify time series by `instanceId`
 
 `client.datapoints` stays, but addressing a time series by `id` or `externalId` is deprecated in
