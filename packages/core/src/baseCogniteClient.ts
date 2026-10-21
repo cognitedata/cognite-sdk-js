@@ -9,6 +9,7 @@ import {
 } from './constants';
 import type { HttpResponse } from './httpClient/basicHttpClient';
 import { CDFHttpClient } from './httpClient/cdfHttpClient';
+import type { RequestConcurrencyLimiter } from './httpClient/concurrencyLimiter';
 import type { HttpHeaders } from './httpClient/httpHeaders';
 import {
   type RetryValidator,
@@ -51,6 +52,13 @@ export interface ClientOptions {
    * Used to override the default retry validator.
    */
   retryValidator?: RetryValidator;
+  /**
+   * Per-API concurrency limits, keyed by API name (for example `dataModeling`).
+   * Which keys are supported depends on the SDK package; see its README.
+   */
+  concurrency?: Readonly<
+    Record<string, Readonly<Record<string, number | undefined>> | undefined>
+  >;
 }
 
 export function accessApi<T>(api: T | undefined): T {
@@ -178,6 +186,7 @@ export default class BaseCogniteClient {
       getBaseUrl(baseUrl),
       this.getRetryValidator()
     );
+    httpClient.setConcurrencyLimiters(this.createConcurrencyLimiters(options));
 
     httpClient
       .setDefaultHeader(X_CDF_APP_HEADER, options.appId)
@@ -336,6 +345,16 @@ export default class BaseCogniteClient {
    */
   protected getRetryValidator(): RetryValidator {
     return this.retryValidator;
+  }
+
+  /**
+   * Returns the concurrency limiters to be used in the http client.
+   * Override to limit requests of specific APIs, see `options.concurrency`.
+   */
+  protected createConcurrencyLimiters(
+    _options: ClientOptions
+  ): RequestConcurrencyLimiter[] {
+    return [];
   }
 
   protected get version() {

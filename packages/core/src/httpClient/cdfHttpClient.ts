@@ -7,7 +7,12 @@ import {
 } from '../constants';
 import { handleErrorResponse } from '../error';
 import { bearerString, isJson } from '../utils';
-import type { HttpQueryParams, HttpResponse } from './basicHttpClient';
+import type {
+  HttpQueryParams,
+  HttpRequest,
+  HttpResponse,
+} from './basicHttpClient';
+import type { RequestConcurrencyLimiter } from './concurrencyLimiter';
 import { HttpError } from './httpError';
 import type { HttpHeaders } from './httpHeaders';
 import {
@@ -60,6 +65,23 @@ export class CDFHttpClient extends RetryableHttpClient {
   }
 
   private oneTimeHeaders: HttpHeaders = {};
+  private concurrencyLimiter?: RequestConcurrencyLimiter;
+
+  /**
+   * Limits concurrent HTTP attempts of the requests the limiters' policies match.
+   * The limit is held per attempt, not across retries or backoff.
+   */
+  public setConcurrencyLimiters(
+    limiters: readonly RequestConcurrencyLimiter[]
+  ) {
+    if (limiters.length > 1) {
+      // only a single limiter is supported. To support limiters for several
+      // APIs, apply every matching limiter (nesting them, or acquiring their slots
+      // in a fixed order) and decide how overlapping policies behave.
+      throw new Error('Using multiple concurrency limiters is not implemented');
+    }
+    this.concurrencyLimiter = limiters[0];
+  }
 
   public addOneTimeHeader(name: string, value: string) {
     this.oneTimeHeaders[name] = value;
@@ -91,6 +113,19 @@ export class CDFHttpClient extends RetryableHttpClient {
       headers,
       params,
     };
+  }
+
+  protected executeRequest<ResponseType>(
+    request: HttpRequest,
+    url: string
+  ): Promise<HttpResponse<ResponseType>> {
+    const send = () => super.executeRequest<ResponseType>(request, url);
+    return this.concurrencyLimiter
+      ? this.concurrencyLimiter.run(
+          { method: request.method, path: new URL(url).pathname },
+          send
+        )
+      : send();
   }
 
   protected async request<ResponseType>(request: RetryableHttpRequest) {
