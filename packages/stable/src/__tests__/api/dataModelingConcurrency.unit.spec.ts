@@ -121,7 +121,9 @@ describe('Client Data Modeling concurrency', () => {
   });
 
   test('schema read overrides preserve query serialization during pagination', async () => {
-    const client = createClient({ dataModelingConcurrency: { readSchema: 1 } });
+    const client = createClient({
+      concurrency: { dataModeling: { readSchema: 1 } },
+    });
     const containers = client.containers.list();
     const views = client.views.list({
       usedFor: ['node', 'record'],
@@ -198,7 +200,9 @@ describe('Client Data Modeling concurrency', () => {
   ] satisfies [DataModelingConcurrencyOptions, number][])(
     'passes client overrides %j through to the HTTP stack',
     async (dataModelingConcurrency, limit) => {
-      const client = createClient({ dataModelingConcurrency });
+      const client = createClient({
+        concurrency: { dataModeling: dataModelingConcurrency },
+      });
       const results = Array.from({ length: 6 }, () =>
         client.instances.query({ with: {}, select: {} })
       );
@@ -219,7 +223,7 @@ describe('Client Data Modeling concurrency', () => {
     'passes %s overrides through to the HTTP stack',
     async (category) => {
       const client = createClient({
-        dataModelingConcurrency: { [category]: 3 },
+        concurrency: { dataModeling: { [category]: 3 } },
       });
       const results = Array.from({ length: 4 }, () =>
         category === 'readSchema'
@@ -242,8 +246,8 @@ describe('Client Data Modeling concurrency', () => {
     expect(DEFAULT_DATA_MODELING_CONCURRENCY.writeSchema).toBe(1);
     for (const category of ['delete', 'readSchema', 'writeSchema']) {
       expect(() =>
-        createClient({ dataModelingConcurrency: { [category]: 0 } })
-      ).toThrow(`dataModelingConcurrency.${category}`);
+        createClient({ concurrency: { dataModeling: { [category]: 0 } } })
+      ).toThrow(`concurrency.dataModeling.${category}`);
     }
   });
 

@@ -1,22 +1,22 @@
 // Copyright 2026 Cognite AS
 
+import {
+  CDFHttpClient,
+  ConcurrencyLimiter,
+  createUniversalRetryValidator,
+} from '@cognite/sdk-core';
 import { Response } from 'cross-fetch';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import {
   controlFetch,
   deferred,
   flushRequests,
-} from '../__tests__/concurrencyTestUtils';
-import { CDFHttpClient } from './cdfHttpClient';
+} from '../../../../core/src/__tests__/concurrencyTestUtils';
+import { MAX_RETRY_ATTEMPTS } from '../../../../core/src/httpClient/retryValidator';
 import {
-  DataModelingConcurrencyLimiter,
   type DataModelingConcurrencyOptions,
-} from './dataModelingConcurrency';
-import {
-  MAX_RETRY_ATTEMPTS,
-  createUniversalRetryValidator,
-} from './retryValidator';
-import { RetryableHttpClient } from './retryableHttpClient';
+  dataModelingConcurrencyPolicy,
+} from '../../api/dataModeling/concurrency';
 
 vi.mock('cross-fetch', async (importOriginal) => ({
   ...(await importOriginal<typeof import('cross-fetch')>()),
@@ -27,12 +27,15 @@ describe('Data Modeling HTTP concurrency', () => {
   let requests: ReturnType<typeof controlFetch>;
   const baseUrl = 'https://example.com';
   const query = '/api/v1/projects/test/models/instances/query';
+  const createCdfClient = (options?: DataModelingConcurrencyOptions) => {
+    const client = new CDFHttpClient(baseUrl, createUniversalRetryValidator());
+    client.setConcurrencyLimiters([
+      new ConcurrencyLimiter(dataModelingConcurrencyPolicy, options),
+    ]);
+    return client;
+  };
   const createClient = (options?: DataModelingConcurrencyOptions) =>
-    new RetryableHttpClient(
-      baseUrl,
-      createUniversalRetryValidator(),
-      new DataModelingConcurrencyLimiter(options)
-    );
+    createCdfClient(options);
 
   beforeEach(() => {
     requests = controlFetch();
@@ -404,11 +407,7 @@ describe('Data Modeling HTTP concurrency', () => {
   test.each([true, false])(
     '401 handling leaves the queue usable (retry: %s)',
     async (retryAuthentication) => {
-      const client = new CDFHttpClient(
-        baseUrl,
-        createUniversalRetryValidator(),
-        new DataModelingConcurrencyLimiter()
-      );
+      const client = createCdfClient();
       client.set401ResponseHandler((_, __, retry, reject) => {
         if (retryAuthentication) {
           client.setBearerToken('refreshed');

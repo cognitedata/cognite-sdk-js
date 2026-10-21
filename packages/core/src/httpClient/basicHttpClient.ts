@@ -205,10 +205,22 @@ export class BasicHttpClient {
     };
   }
 
-  protected async rawRequest<ResponseType>(
+  protected rawRequest<ResponseType>(
     request: HttpRequest
   ): Promise<HttpResponse<ResponseType>> {
     const url = this.constructUrl(request.path, request.params);
+    return this.executeRequest<ResponseType>(request, url);
+  }
+
+  /**
+   * Performs a single HTTP attempt: sends the request and reads the response body.
+   * Retries call this again for each attempt, so overriding it wraps individual
+   * attempts and not the whole retry loop. `url` is the fully resolved URL.
+   */
+  protected async executeRequest<ResponseType>(
+    request: HttpRequest,
+    url: string
+  ): Promise<HttpResponse<ResponseType>> {
     const headers = headersWithDefaultField(
       request.headers || {},
       'Accept',
@@ -248,7 +260,7 @@ export class BasicHttpClient {
     return this.postRequest(rawResponse, request, mutatedRequest);
   }
 
-  protected constructUrl<T extends object>(path: string, params?: T) {
+  private constructUrl<T extends object>(path: string, params?: T) {
     let url = path;
     const hasQueryParams = !!params && Object.keys(params).length > 0;
     if (hasQueryParams) {

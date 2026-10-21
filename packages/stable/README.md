@@ -150,9 +150,8 @@ const client = new CogniteClient({
   appId: 'YOUR APPLICATION NAME',
   project: 'YOUR PROJECT',
   oidcTokenProvider: async () => 'YOUR_OIDC_ACCESS_TOKEN',
-  dataModelingConcurrency: {
-    read: 2,
-    write: 2,
+  concurrency: {
+    dataModeling: { read: 2, write: 2 },
   },
 });
 ```

@@ -9,10 +9,7 @@ import {
 } from './constants';
 import type { HttpResponse } from './httpClient/basicHttpClient';
 import { CDFHttpClient } from './httpClient/cdfHttpClient';
-import {
-  DataModelingConcurrencyLimiter,
-  type DataModelingConcurrencyOptions,
-} from './httpClient/dataModelingConcurrency';
+import type { RequestConcurrencyLimiter } from './httpClient/concurrencyLimiter';
 import type { HttpHeaders } from './httpClient/httpHeaders';
 import {
   type RetryValidator,
@@ -56,13 +53,12 @@ export interface ClientOptions {
    */
   retryValidator?: RetryValidator;
   /**
-   * Maximum concurrent HTTP attempts per Data Modeling category, per client.
-   * Omitted categories use {@link DEFAULT_DATA_MODELING_CONCURRENCY}.
-   *
-   * See the [concurrency guide](https://github.com/cognitedata/cognite-sdk-js/blob/master/packages/stable/README.md#concurrency)
-   * for operation categories, configuration examples, and limitations.
+   * Per-API concurrency limits, keyed by API name (for example `dataModeling`).
+   * Which keys are supported depends on the SDK package; see its README.
    */
-  dataModelingConcurrency?: DataModelingConcurrencyOptions;
+  concurrency?: Readonly<
+    Record<string, Readonly<Record<string, number | undefined>> | undefined>
+  >;
 }
 
 export function accessApi<T>(api: T | undefined): T {
@@ -188,9 +184,9 @@ export default class BaseCogniteClient {
   ) {
     const httpClient = new CDFHttpClient(
       getBaseUrl(baseUrl),
-      this.getRetryValidator(),
-      new DataModelingConcurrencyLimiter(options.dataModelingConcurrency)
+      this.getRetryValidator()
     );
+    httpClient.setConcurrencyLimiters(this.createConcurrencyLimiters(options));
 
     httpClient
       .setDefaultHeader(X_CDF_APP_HEADER, options.appId)
@@ -349,6 +345,16 @@ export default class BaseCogniteClient {
    */
   protected getRetryValidator(): RetryValidator {
     return this.retryValidator;
+  }
+
+  /**
+   * Returns the concurrency limiters to be used in the http client.
+   * Override to limit requests of specific APIs, see `options.concurrency`.
+   */
+  protected createConcurrencyLimiters(
+    _options: ClientOptions
+  ): RequestConcurrencyLimiter[] {
+    return [];
   }
 
   protected get version() {

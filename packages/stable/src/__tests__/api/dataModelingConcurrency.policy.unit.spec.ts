@@ -1,13 +1,16 @@
 // Copyright 2026 Cognite AS
 
+import { ConcurrencyLimiter, HttpMethod } from '@cognite/sdk-core';
 import { describe, expect, test } from 'vitest';
-import { HttpMethod } from './basicHttpClient';
 import {
   DEFAULT_DATA_MODELING_CONCURRENCY,
   type DataModelingConcurrencyCategory,
-  DataModelingConcurrencyLimiter,
-  classifyDataModelingRequest,
-} from './dataModelingConcurrency';
+  dataModelingConcurrencyPolicy,
+} from '../../api/dataModeling/concurrency';
+
+const limiter = new ConcurrencyLimiter(dataModelingConcurrencyPolicy);
+const classifyDataModelingRequest = (method: HttpMethod, path: string) =>
+  limiter.classify(method, path);
 
 const schemaResources = ['spaces', 'containers', 'views', 'datamodels'];
 const prefixes = [
@@ -140,9 +143,12 @@ describe('Data Modeling concurrency options', () => {
   ])('rejects invalid limits for %s', (category) => {
     for (const max of [0, -1, 1.5, Number.NaN, Number.NEGATIVE_INFINITY]) {
       expect(
-        () => new DataModelingConcurrencyLimiter({ [category]: max })
+        () =>
+          new ConcurrencyLimiter(dataModelingConcurrencyPolicy, {
+            [category]: max,
+          })
       ).toThrow(
-        `dataModelingConcurrency.${category} must be a positive integer or Infinity`
+        `concurrency.dataModeling.${category} must be a positive integer or Infinity`
       );
     }
   });
@@ -150,7 +156,7 @@ describe('Data Modeling concurrency options', () => {
   test('accepts partial options, undefined and Infinity', () => {
     expect(
       () =>
-        new DataModelingConcurrencyLimiter({
+        new ConcurrencyLimiter(dataModelingConcurrencyPolicy, {
           read: undefined,
           search: 3,
           write: Number.POSITIVE_INFINITY,

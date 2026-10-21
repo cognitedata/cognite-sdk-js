@@ -1,6 +1,9 @@
 // Copyright 2020 Cognite AS
 import {
   BaseCogniteClient,
+  ConcurrencyLimiter,
+  type ClientOptions as CoreClientOptions,
+  type RequestConcurrencyLimiter,
   type RetryValidator,
   accessApi,
   apiUrl,
@@ -14,6 +17,7 @@ import { Viewer3DAPI } from './api/3d/viewer3DApi';
 import { AnnotationsAPI } from './api/annotations/annotationsApi';
 import { AssetsAPI } from './api/assets/assetsApi';
 import { ContainersAPI } from './api/containers/containersApi';
+import { dataModelingConcurrencyPolicy } from './api/dataModeling/concurrency';
 import { DataPointsAPI } from './api/dataPoints/dataPointsApi';
 import { DataSetsAPI } from './api/datasets/datasetsApi';
 import { DocumentsAPI } from './api/documents/documentsApi';
@@ -48,9 +52,14 @@ import { UnitsAPI } from './api/units/unitsApi';
 import { ProfilesAPI } from './api/userProfiles/profilesApi';
 import { ViewsAPI } from './api/views/viewsApi';
 import { VisionAPI } from './api/vision/visionApi';
+import type { ClientOptions } from './clientOptions';
 import { retryValidator } from './retryValidator';
 
 export default class CogniteClient extends BaseCogniteClient {
+  constructor(options: ClientOptions) {
+    super(options as CoreClientOptions);
+  }
+
   public get assets() {
     return accessApi(this.assetsApi);
   }
@@ -243,6 +252,15 @@ export default class CogniteClient extends BaseCogniteClient {
 
   protected getRetryValidator(): RetryValidator {
     return retryValidator;
+  }
+
+  protected createConcurrencyLimiters(
+    options: CoreClientOptions
+  ): RequestConcurrencyLimiter[] {
+    const { dataModeling } = (options as ClientOptions).concurrency ?? {};
+    return [
+      new ConcurrencyLimiter(dataModelingConcurrencyPolicy, dataModeling),
+    ];
   }
 
   protected initAPIs() {

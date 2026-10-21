@@ -4,7 +4,21 @@ export class Semaphore {
   private active = 0;
   private readonly waiters: (() => void)[] = [];
 
-  constructor(private readonly max: number) {}
+  /**
+   * @param max Maximum number of concurrent holders: a positive integer, or `Infinity` for no limit.
+   * @param label Name used in the validation error message.
+   */
+  constructor(
+    private readonly max: number,
+    label = 'Semaphore limit'
+  ) {
+    if (
+      max !== Number.POSITIVE_INFINITY &&
+      (!Number.isInteger(max) || max <= 0)
+    ) {
+      throw new Error(`${label} must be a positive integer or Infinity`);
+    }
+  }
 
   public acquire(): Promise<() => void> {
     return new Promise((resolve) => {

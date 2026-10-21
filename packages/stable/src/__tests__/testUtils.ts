@@ -2,9 +2,9 @@
 
 import { createReadStream, readFileSync, statSync } from 'node:fs';
 import { PassThrough } from 'node:stream';
-import type { ClientOptions } from '@cognite/sdk-core';
 import { vi } from 'vitest';
 import { mockBaseUrl, randomInt } from '../../../core/src/__tests__/testUtils';
+import type { ClientOptions } from '../clientOptions';
 import CogniteClient from '../cogniteClient';
 import type { ExternalFileInfo, NodeOrEdge } from '../types';
 import { login } from './login';

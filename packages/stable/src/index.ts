@@ -9,11 +9,14 @@ export {
   HttpResponseType,
   CogniteError,
   CogniteMultiError,
-  type ClientOptions,
+  type ConcurrencySettings,
+} from '@cognite/sdk-core';
+export type { ClientOptions, ConcurrencyOptions } from './clientOptions';
+export {
   DEFAULT_DATA_MODELING_CONCURRENCY,
   type DataModelingConcurrencyCategory,
   type DataModelingConcurrencyOptions,
-} from '@cognite/sdk-core';
+} from './api/dataModeling/concurrency';
 export { default as CogniteClient } from './cogniteClient';
 
 export { AssetMappings3DAPI } from './api/3d/assetMappings3DApi';

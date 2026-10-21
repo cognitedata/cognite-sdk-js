@@ -31,10 +31,16 @@ export {
 } from './httpClient/retryValidator';
 export type { EndpointList, RetryValidator } from './httpClient/retryValidator';
 export {
-  DEFAULT_DATA_MODELING_CONCURRENCY,
-  type DataModelingConcurrencyCategory,
-  type DataModelingConcurrencyOptions,
-} from './httpClient/dataModelingConcurrency';
+  ConcurrencyLimiter,
+  combineConcurrencyLimiters,
+} from './httpClient/concurrencyLimiter';
+export type {
+  ConcurrencyLimitedRequest,
+  ConcurrencyPolicy,
+  ConcurrencyRule,
+  ConcurrencySettings,
+  RequestConcurrencyLimiter,
+} from './httpClient/concurrencyLimiter';
 export { RevertableArraySorter } from './revertableArraySorter';
 export {
   sleepPromise,
