@@ -212,11 +212,6 @@ export class BasicHttpClient {
     return this.executeRequest<ResponseType>(request, url);
   }
 
-  /**
-   * Performs a single HTTP attempt: sends the request and reads the response body.
-   * Retries call this again for each attempt, so overriding it wraps individual
-   * attempts and not the whole retry loop. `url` is the fully resolved URL.
-   */
   protected async executeRequest<ResponseType>(
     request: HttpRequest,
     url: string

@@ -12,10 +12,7 @@ import type {
   HttpRequest,
   HttpResponse,
 } from './basicHttpClient';
-import {
-  type RequestConcurrencyLimiter,
-  combineConcurrencyLimiters,
-} from './concurrencyLimiter';
+import type { RequestConcurrencyLimiter } from './concurrencyLimiter';
 import { HttpError } from './httpError';
 import type { HttpHeaders } from './httpHeaders';
 import {
@@ -71,14 +68,19 @@ export class CDFHttpClient extends RetryableHttpClient {
   private concurrencyLimiter?: RequestConcurrencyLimiter;
 
   /**
-   * Limits concurrent HTTP attempts. Each limiter only applies to the requests
-   * its policy matches. The limit is held per attempt, not across retries or backoff.
+   * Limits concurrent HTTP attempts of the requests the limiters' policies match.
+   * The limit is held per attempt, not across retries or backoff.
    */
   public setConcurrencyLimiters(
     limiters: readonly RequestConcurrencyLimiter[]
   ) {
-    this.concurrencyLimiter =
-      limiters.length > 0 ? combineConcurrencyLimiters(limiters) : undefined;
+    if (limiters.length > 1) {
+      // only a single limiter is supported. To support limiters for several
+      // APIs, apply every matching limiter (nesting them, or acquiring their slots
+      // in a fixed order) and decide how overlapping policies behave.
+      throw new Error('Using multiple concurrency limiters is not implemented');
+    }
+    this.concurrencyLimiter = limiters[0];
   }
 
   public addOneTimeHeader(name: string, value: string) {

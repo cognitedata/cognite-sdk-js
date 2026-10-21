@@ -6,7 +6,6 @@ import { HttpMethod } from './basicHttpClient';
 import {
   ConcurrencyLimiter,
   type ConcurrencyPolicy,
-  combineConcurrencyLimiters,
 } from './concurrencyLimiter';
 
 type Category = 'fast' | 'slow';
@@ -73,32 +72,5 @@ describe('ConcurrencyLimiter', () => {
     expect(() => new ConcurrencyLimiter(policy, { typo: 1 } as never)).toThrow(
       'Unknown concurrency category concurrency.toy.typo'
     );
-  });
-
-  test('combined limiters each apply to their own requests', async () => {
-    const other = new ConcurrencyLimiter<'only'>({
-      name: 'other',
-      defaults: { only: 1 },
-      rules: [{ pattern: /^\/other$/, category: 'only' }],
-    });
-    const combined = combineConcurrencyLimiters([limiter, other]);
-    const gate = deferred<void>();
-    let started = 0;
-    const run = (path: string) =>
-      combined.run({ method: HttpMethod.Get, path }, async () => {
-        started++;
-        await gate.promise;
-        return path;
-      });
-    const results = [run('/other'), run('/other'), run('/toy/fast'), run('/x')];
-    await flushRequests();
-    expect(started).toBe(3);
-    gate.resolve();
-    await expect(Promise.all(results)).resolves.toEqual([
-      '/other',
-      '/other',
-      '/toy/fast',
-      '/x',
-    ]);
   });
 });

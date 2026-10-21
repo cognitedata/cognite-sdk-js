@@ -80,6 +80,16 @@ const rules: readonly ConcurrencyRule<DataModelingConcurrencyCategory>[] = [
   },
 ];
 
+/**
+ * Strips trailing slashes and any proxy prefix plus `/api/<version>/projects/<project>`,
+ * so the rules only see the path from `/models`, `/userapis` or `/dml` onwards:
+ *
+ * - `/api/v1/projects/my-project/models/instances/query` -> `/models/instances/query`
+ * - `/cdf/api/v1/projects/my-project/models/views/` -> `/models/views`
+ * - `/gateway/cdf/api/20230101/projects/p/dml/graphql` -> `/dml/graphql`
+ * - `/models/instances` -> `/models/instances` (already normalized)
+ * - `/api/v1/projects/p/assets/list` -> unchanged, no DM segment follows the project
+ */
 function normalizePath(pathname: string): string {
   return pathname
     .replace(/\/+$/, '')

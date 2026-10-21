@@ -140,8 +140,9 @@ Unknown operations within known schema namespaces use `readSchema`; other unknow
 operations within the Data Modeling `/models` namespace use `read`.
 Project routes remain limited behind proxy path prefixes, for example
 `https://proxy.example/cdf/api/v1/projects/my-project/models/instances/query`.
-With the defaults, up to eight HTTP attempts can be in flight across Data Modeling
-categories per client.
+Categories have independent budgets, so requests in different categories can run
+at the same time. If every category is saturated, the defaults allow at most 8
+requests in flight per client (1 + 2 + 1 + 1 + 2 + 1).
 
 To set specific limits:
 

@@ -87,16 +87,3 @@ export class ConcurrencyLimiter<C extends string>
     return category ? this.semaphores[category].run(fn) : fn();
   }
 }
-
-/** Applies each limiter in turn; limiters ignore requests outside their policy. */
-export function combineConcurrencyLimiters(
-  limiters: readonly RequestConcurrencyLimiter[]
-): RequestConcurrencyLimiter {
-  return {
-    run: (request, fn) =>
-      limiters.reduceRight<() => Promise<never>>(
-        (next, limiter) => () => limiter.run(request, next),
-        fn as () => Promise<never>
-      )(),
-  };
-}

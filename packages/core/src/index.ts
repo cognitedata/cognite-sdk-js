@@ -30,10 +30,7 @@ export {
   createRetryValidator,
 } from './httpClient/retryValidator';
 export type { EndpointList, RetryValidator } from './httpClient/retryValidator';
-export {
-  ConcurrencyLimiter,
-  combineConcurrencyLimiters,
-} from './httpClient/concurrencyLimiter';
+export { ConcurrencyLimiter } from './httpClient/concurrencyLimiter';
 export type {
   ConcurrencyLimitedRequest,
   ConcurrencyPolicy,
