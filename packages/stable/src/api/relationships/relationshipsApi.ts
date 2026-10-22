@@ -94,4 +94,5 @@ export class RelationshipsApi extends BaseResourceAPI<Relationship> {
   };
 }
 
+/** @deprecated Asset-centric API type, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. */
 export type RelationshipsDeleteParams = IgnoreUnknownIds;
