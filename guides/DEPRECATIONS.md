@@ -101,6 +101,10 @@ applies to `client.timeseries.data` and to the deprecated `client.datapoints` al
 `DatapointsQueryId` and `DatapointsQueryExternalId` are deprecated; use `DatapointsInsertByInstanceId`
 and `DatapointsQueryInstanceId`.
 
+This part is docs-only: TypeScript only flags `@deprecated` when a type is referenced by name, so
+`retrieve({ items: [{ id: 123 }] })` shows no warning in your editor. Check your own code for `id`
+or `externalId` in datapoint requests.
+
 ```ts
 // before
 await client.timeseries.data.retrieve({ items: [{ externalId: 'my-ts' }] });
