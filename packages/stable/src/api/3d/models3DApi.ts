@@ -13,6 +13,9 @@ import type {
   UpdateModel3D,
 } from '../../types';
 
+/**
+ * @deprecated Classic 3D API, deprecated 2026-10-15; no retirement date is announced. 3D models are managed through data modeling going forward. Will be removed or moved in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
+ */
 export class Models3DAPI extends BaseResourceAPI<Model3D> {
   /**
    * @hidden
@@ -31,6 +34,8 @@ export class Models3DAPI extends BaseResourceAPI<Model3D> {
    * ];
    * const models3D = await client.models3D.create(modelsToCreate);
    * ```
+   *
+   * @deprecated Classic 3D API, deprecated 2026-10-15; no retirement date is announced. 3D models are managed through data modeling going forward. Will be removed or moved in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
    */
   public create = (models: CreateModel3D[]): Promise<Model3D[]> => {
     return super.createEndpoint(models);
@@ -42,6 +47,8 @@ export class Models3DAPI extends BaseResourceAPI<Model3D> {
    * ```js
    * const models3D = await client.models3D.list({ published: true });
    * ```
+   *
+   * @deprecated Classic 3D API, deprecated 2026-10-15; no retirement date is announced. 3D models are managed through data modeling going forward. Will be removed or moved in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
    */
   public list = (
     scope?: Model3DListRequest
@@ -55,6 +62,8 @@ export class Models3DAPI extends BaseResourceAPI<Model3D> {
    * ```js
    * await client.models3D.retrieve(3744350296805509);
    * ```
+   *
+   * @deprecated Classic 3D API, deprecated 2026-10-15; no retirement date is announced. 3D models are managed through data modeling going forward. Will be removed or moved in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
    */
   public retrieve = async (id: CogniteInternalId): Promise<Model3D> => {
     const path = this.url(`${id}`);
@@ -72,6 +81,8 @@ export class Models3DAPI extends BaseResourceAPI<Model3D> {
    * ];
    * const models3D = await client.models3D.update(modelsToUpdate);
    * ```
+   *
+   * @deprecated Classic 3D API, deprecated 2026-10-15; no retirement date is announced. 3D models are managed through data modeling going forward. Will be removed or moved in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
    */
   public update = (changes: UpdateModel3D[]): Promise<Model3D[]> => {
     return super.updateEndpoint(changes);
@@ -83,6 +94,8 @@ export class Models3DAPI extends BaseResourceAPI<Model3D> {
    * ```js
    * await client.models3D.delete([{ id: 3744350296805509 }, { id: 8163365893677939 }]);
    * ```
+   *
+   * @deprecated Classic 3D API, deprecated 2026-10-15; no retirement date is announced. 3D models are managed through data modeling going forward. Will be removed or moved in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
    */
   public delete = (ids: InternalId[]) => {
     return super.deleteEndpoint(ids);

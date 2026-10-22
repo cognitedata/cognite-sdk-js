@@ -102,12 +102,21 @@ export default class CogniteClient extends BaseCogniteClient {
   public get securityCategories() {
     return accessApi(this.securityCategoriesApi);
   }
+  /**
+   * @deprecated Classic 3D API, deprecated 2026-10-15; no retirement date is announced. 3D models are managed through data modeling going forward. Will be removed or moved in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
+   */
   public get models3D() {
     return accessApi(this.models3DApi);
   }
+  /**
+   * @deprecated Classic 3D API, deprecated 2026-10-15; no retirement date is announced. 3D models are managed through data modeling going forward. Will be removed or moved in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
+   */
   public get revisions3D() {
     return accessApi(this.revisions3DApi);
   }
+  /**
+   * @deprecated Classic 3D API, deprecated 2026-10-15; no retirement date is announced. 3D models are managed through data modeling going forward. Will be removed or moved in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
+   */
   public get files3D() {
     return accessApi(this.files3DApi);
   }

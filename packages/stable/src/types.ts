@@ -545,6 +545,8 @@ export type AssetSource = string;
 /**
  * The bounding box of the subtree with this sector as the root sector.
  * Is null if there are no geometries in the subtree.
+ *
+ * @deprecated Classic 3D API type, deprecated 2026-10-15; no retirement date is announced. Will be removed or moved in a future major release.
  */
 export interface BoundingBox3D {
   /**
@@ -570,6 +572,7 @@ export interface CogniteEvent
 /** @deprecated Asset-centric 3D asset mapping type, deprecated 2026-10-15; no retirement date is announced. Use the 3D contextualization APIs in data modeling (public preview, not in this SDK yet). Will be removed or moved in a future major release. */
 export type CreateAssetMapping3D = AssetMapping3DBase;
 
+/** @deprecated Classic 3D API type, deprecated 2026-10-15; no retirement date is announced. Will be removed or moved in a future major release. */
 export interface CreateModel3D {
   /**
    * The name of the model.
@@ -579,6 +582,7 @@ export interface CreateModel3D {
   dataSetId?: number;
 }
 
+/** @deprecated Classic 3D API type, deprecated 2026-10-15; no retirement date is announced. Will be removed or moved in a future major release. */
 export interface CreateRevision3D {
   /**
    * True if the revision is marked as published.
@@ -1239,6 +1243,7 @@ export type IntegerRange = Range<number>;
 
 export type LIST = 'LIST';
 
+/** @deprecated Classic 3D API type, deprecated 2026-10-15; no retirement date is announced. Will be removed or moved in a future major release. */
 export interface List3DNodesQuery extends FilterQuery {
   /**
    * Get sub nodes up to this many levels below the specified node. Depth 0 is the root node.
@@ -1262,6 +1267,7 @@ export interface List3DNodesQuery extends FilterQuery {
   sortByNodeId?: boolean;
 }
 
+/** @deprecated Classic 3D API type, deprecated 2026-10-15; no retirement date is announced. Will be removed or moved in a future major release. */
 export interface Filter3DNodesByNames {
   /**
    * Name filter. Nodes satisfy the filter if, the name of the node exists in the provided array.
@@ -1269,6 +1275,7 @@ export interface Filter3DNodesByNames {
   names: string[];
 }
 
+/** @deprecated Classic 3D API type, deprecated 2026-10-15; no retirement date is announced. Will be removed or moved in a future major release. */
 export interface Filter3DNodesByProperty {
   /**
    * Property filters. Nodes satisfy the filter if, for each property in the nested map(s), they have a value corresponding to that property that is contained within the list associated with that property in the map.
@@ -1276,6 +1283,7 @@ export interface Filter3DNodesByProperty {
   properties: { [key: string]: { [key: string]: string[] } };
 }
 
+/** @deprecated Classic 3D API type, deprecated 2026-10-15; no retirement date is announced. Will be removed or moved in a future major release. */
 export interface Filter3DNodesQuery extends FilterQuery {
   /**
    * List filter
@@ -1333,6 +1341,7 @@ export interface ListSecurityCategories extends FilterQuery {
 
 export type MEMBEROF = 'MEMBEROF';
 
+/** @deprecated Classic 3D API type, deprecated 2026-10-15; no retirement date is announced. Will be removed or moved in a future major release. */
 export interface Model3D {
   /**
    * The name of the model.
@@ -1347,6 +1356,7 @@ export interface Model3D {
   dataSetId?: number;
 }
 
+/** @deprecated Classic 3D API type, deprecated 2026-10-15; no retirement date is announced. Will be removed or moved in a future major release. */
 export interface Model3DListRequest extends FilterQuery {
   /**
    * Filter based on whether or not it has published revisions.
@@ -1354,6 +1364,7 @@ export interface Model3DListRequest extends FilterQuery {
   published?: boolean;
 }
 
+/** @deprecated Classic 3D API type, deprecated 2026-10-15; no retirement date is announced. Will be removed or moved in a future major release. */
 export interface Node3D {
   /**
    * The ID of the node.
@@ -1393,6 +1404,8 @@ export interface Node3D {
 
 /**
  * Properties extracted from 3D model, with property categories containing key/value string pairs.
+ *
+ * @deprecated Classic 3D API type, deprecated 2026-10-15; no retirement date is announced. Will be removed or moved in a future major release.
  */
 export interface Node3DProperties {
   [category: string]: {
@@ -1658,6 +1671,7 @@ export interface RevealSector3D {
   threedFiles: Versioned3DFile[];
 }
 
+/** @deprecated Classic 3D API type, deprecated 2026-10-15; no retirement date is announced. Will be removed or moved in a future major release. */
 export interface Revision3D {
   /**
    * The ID of the revision.
@@ -1711,6 +1725,7 @@ export interface Revision3D {
   metadata?: Metadata;
 }
 
+/** @deprecated Classic 3D API type, deprecated 2026-10-15; no retirement date is announced. Will be removed or moved in a future major release. */
 export interface Revision3DListRequest extends Limit {
   /**
    * Filter based on whether or not it has published revisions.
@@ -1718,8 +1733,10 @@ export interface Revision3DListRequest extends Limit {
   published?: boolean;
 }
 
+/** @deprecated Classic 3D API type, deprecated 2026-10-15; no retirement date is announced. Will be removed or moved in a future major release. */
 export type Revision3DStatus = 'Queued' | 'Processing' | 'Done' | 'Failed';
 
+/** @deprecated Classic 3D API type, deprecated 2026-10-15; no retirement date is announced. Will be removed or moved in a future major release. */
 export interface RevisionCameraProperties {
   /**
    * Initial camera target.
@@ -1731,16 +1748,20 @@ export interface RevisionCameraProperties {
   position?: Tuple3<number>;
 }
 
+/** @deprecated Classic 3D API type, deprecated 2026-10-15; no retirement date is announced. Will be removed or moved in a future major release. */
 export type RevisionMetadata = { [key: string]: string };
 
+/** @deprecated Classic 3D API type, deprecated 2026-10-15; no retirement date is announced. Will be removed or moved in a future major release. */
 export type RevisionMetadataUpdate =
   | RevisionMetadataUpdateSet
   | RevisionMetadataUpdateAddRemove;
 
+/** @deprecated Classic 3D API type, deprecated 2026-10-15; no retirement date is announced. Will be removed or moved in a future major release. */
 export interface RevisionMetadataUpdateSet {
   set: RevisionMetadata;
 }
 
+/** @deprecated Classic 3D API type, deprecated 2026-10-15; no retirement date is announced. Will be removed or moved in a future major release. */
 export interface RevisionMetadataUpdateAddRemove {
   /**
    * Key/value pairs to add
@@ -2084,8 +2105,10 @@ export interface UnrealRevision3D extends Revision3D {
   sceneThreedFiles: Versioned3DFile[];
 }
 
+/** @deprecated Classic 3D API type, deprecated 2026-10-15; no retirement date is announced. Will be removed or moved in a future major release. */
 export interface UpdateModel3D extends UpdateModel3DField, InternalId {}
 
+/** @deprecated Classic 3D API type, deprecated 2026-10-15; no retirement date is announced. Will be removed or moved in a future major release. */
 export interface UpdateModel3DField {
   update: {
     name?: SetField<string>;
@@ -2094,6 +2117,7 @@ export interface UpdateModel3DField {
   };
 }
 
+/** @deprecated Classic 3D API type, deprecated 2026-10-15; no retirement date is announced. Will be removed or moved in a future major release. */
 export interface UpdateRevision3D {
   id: CogniteInternalId;
   update: {
@@ -2140,6 +2164,8 @@ export type UrlName = string;
 /**
  * The file ID of the data file for this resource, with multiple versions supported.
  * Use /3d/files/{id} to retrieve the file.
+ *
+ * @deprecated Classic 3D API type, deprecated 2026-10-15; no retirement date is announced. Will be removed or moved in a future major release.
  */
 export interface Versioned3DFile {
   /**
