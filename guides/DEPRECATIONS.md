@@ -37,23 +37,6 @@ APIs in data modeling, which are in public preview and not yet part of this SDK.
 APIs (`client.models3D`, `client.revisions3D`, `client.files3D`, `client.viewer3D`) are **not**
 deprecated.
 
-### Datapoints: identify time series by `instanceId`
-
-`client.datapoints` stays, but addressing a time series by `id` or `externalId` is deprecated in
-favour of `instanceId`. The input types `DatapointsInsertById`, `DatapointsInsertByExternalId`,
-`DatapointsQueryId` and `DatapointsQueryExternalId` are deprecated; use `DatapointsInsertByInstanceId`
-and `DatapointsQueryInstanceId`.
-
-```ts
-// before
-await client.datapoints.retrieve({ items: [{ externalId: 'my-ts' }] });
-
-// after
-await client.datapoints.retrieve({
-  items: [{ instanceId: { space: 'my-space', externalId: 'my-ts' } }],
-});
-```
-
 ## Templates (retired 2025-05-31)
 
 The Templates API was retired on 2025-05-31. `client.templates` and its types will be removed in
