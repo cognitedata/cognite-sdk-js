@@ -1,6 +1,6 @@
 // Copyright 2020 Cognite AS
 
-import { beforeAll, describe, expect, test } from 'vitest';
+import { afterAll, beforeAll, describe, expect, test } from 'vitest';
 import type CogniteClient from '../../cogniteClient';
 import type { Asset } from '../../types';
 import {
@@ -23,9 +23,12 @@ describe('Sequences integration test', () => {
   let sequences: Sequence[];
   const testValues = [1, 1.5, 'two'];
   const testExternalId = `sequence${randomInt()}`;
+  // A word that only this run's sequence carries, so the search test cannot be
+  // satisfied or crowded out by sequences left behind by other runs.
+  const searchWord = `sdksearch${randomInt()}`;
   const sequenceToCreate: ExternalSequence = {
     name: 'sequence1',
-    description: 'description',
+    description: `description ${searchWord}`,
     columns: [
       {
         externalId: 'column',
@@ -68,6 +71,20 @@ describe('Sequences integration test', () => {
     // reassignment would leave the created sequence without the assetId the
     // filter tests depend on.
     sequenceToCreate.assetId = asset.id;
+  });
+
+  // Safety net: nothing created here may outlive the run, even if a test fails
+  // midway. Without this the project accumulated hundreds of leaked sequences
+  // and assets, which in turn made the search test flaky.
+  afterAll(async () => {
+    const ids = [
+      ...(sequences ?? []).map(({ id }) => ({ id })),
+      { externalId: testExternalId },
+    ];
+    await client.sequences.delete(ids).catch(() => undefined);
+    if (asset) {
+      await client.assets.delete([{ id: asset.id }]).catch(() => undefined);
+    }
   });
 
   test('create', async () => {
@@ -162,6 +179,26 @@ describe('Sequences integration test', () => {
     expect(aggregates[0].count).toBeDefined();
   });
 
+  // Must run before 'update', which replaces the description this searches for.
+  test(
+    'search',
+    async () => {
+      await runTestWithRetryWhenFailing(async () => {
+        // The search endpoint matches whole words: wildcard patterns like
+        // 'des*tion' never match anything. It does match fuzzily, though, so
+        // a concurrent run's `sdksearch<other-int>` can show up too; only
+        // require that this run's sequence is among the hits.
+        const result = await client.sequences.search({
+          search: {
+            query: searchWord,
+          },
+        });
+        expect(result.some((s) => s.id === sequences[0].id)).toBe(true);
+      }, RETRY_SLEEP_BUDGET_MS);
+    },
+    SLOW_INDEX_TEST_TIMEOUT_MS
+  );
+
   test('update', async () => {
     const [updated] = await client.sequences.update([
       {
@@ -175,23 +212,6 @@ describe('Sequences integration test', () => {
     expect(updated.name).toBeUndefined();
     expect(updated.description).toBe('hey');
   });
-
-  test(
-    'search',
-    async () => {
-      await runTestWithRetryWhenFailing(async () => {
-        // The search endpoint matches whole words: wildcard patterns like
-        // 'des*tion' never match anything.
-        const result = await client.sequences.search({
-          search: {
-            query: 'description',
-          },
-        });
-        expect(result.some((s) => s.id === sequences[0].id)).toBe(true);
-      }, RETRY_SLEEP_BUDGET_MS);
-    },
-    SLOW_INDEX_TEST_TIMEOUT_MS
-  );
 
   describe('rows', () => {
     test('insert', async () => {
