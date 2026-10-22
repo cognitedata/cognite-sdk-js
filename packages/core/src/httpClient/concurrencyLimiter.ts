@@ -94,7 +94,7 @@ export class ConcurrencyLimiter<C extends string>
     return this.policy.fallback?.(path);
   }
 
-  public run<T>(
+  public async run<T>(
     request: ConcurrencyLimitedRequest,
     fn: () => Promise<T>
   ): Promise<T> {
