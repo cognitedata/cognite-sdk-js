@@ -10,6 +10,9 @@ export {
   CogniteError,
   CogniteMultiError,
   type ClientOptions,
+  DEFAULT_DATA_MODELING_CONCURRENCY,
+  type DataModelingConcurrencyCategory,
+  type DataModelingConcurrencyOptions,
 } from '@cognite/sdk-core';
 export { default as CogniteClient } from './cogniteClient';
 

@@ -9,6 +9,10 @@ import {
 } from './constants';
 import type { HttpResponse } from './httpClient/basicHttpClient';
 import { CDFHttpClient } from './httpClient/cdfHttpClient';
+import {
+  DataModelingConcurrencyLimiter,
+  type DataModelingConcurrencyOptions,
+} from './httpClient/dataModelingConcurrency';
 import type { HttpHeaders } from './httpClient/httpHeaders';
 import {
   type RetryValidator,
@@ -51,6 +55,14 @@ export interface ClientOptions {
    * Used to override the default retry validator.
    */
   retryValidator?: RetryValidator;
+  /**
+   * Maximum concurrent HTTP attempts per Data Modeling category, per client.
+   * Omitted categories use {@link DEFAULT_DATA_MODELING_CONCURRENCY}.
+   *
+   * See the [concurrency guide](https://github.com/cognitedata/cognite-sdk-js/blob/master/packages/stable/README.md#concurrency)
+   * for operation categories, configuration examples, and limitations.
+   */
+  dataModelingConcurrency?: DataModelingConcurrencyOptions;
 }
 
 export function accessApi<T>(api: T | undefined): T {
@@ -176,7 +188,8 @@ export default class BaseCogniteClient {
   ) {
     const httpClient = new CDFHttpClient(
       getBaseUrl(baseUrl),
-      this.getRetryValidator()
+      this.getRetryValidator(),
+      new DataModelingConcurrencyLimiter(options.dataModelingConcurrency)
     );
 
     httpClient
