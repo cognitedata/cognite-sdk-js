@@ -30,6 +30,11 @@ export interface ConcurrencyPolicy<C extends string> {
   readonly fallback?: (normalizedPath: string) => C | undefined;
 }
 
+export interface ConcurrencyPolicyWithSettings {
+  readonly policy: ConcurrencyPolicy<string>;
+  readonly settings?: ConcurrencySettings<string>;
+}
+
 export interface ConcurrencyLimitedRequest {
   method: HttpMethod;
   pathname: string;
