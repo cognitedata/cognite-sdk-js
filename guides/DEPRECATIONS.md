@@ -96,7 +96,8 @@ await client.timeseries.synthetic.query([
 
 ### Datapoints: identify time series by `instanceId`
 
-Addressing a time series by `id` or `externalId` is deprecated in favour of `instanceId`. This
+Addressing a time series by `id` or `externalId` is deprecated as of 2026-10-15 and retired on
+2027-12-31, in favour of `instanceId`. This
 applies to `client.timeseries.data` and to the deprecated `client.datapoints` alike. The input types `DatapointsInsertById`, `DatapointsInsertByExternalId`,
 `DatapointsQueryId` and `DatapointsQueryExternalId` are deprecated; use `DatapointsInsertByInstanceId`
 and `DatapointsQueryInstanceId`.
