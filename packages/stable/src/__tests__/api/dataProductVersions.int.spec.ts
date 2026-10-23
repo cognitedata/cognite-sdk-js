@@ -1,7 +1,7 @@
 // Copyright 2026 Cognite AS
 
 import { afterAll, beforeAll, describe, expect, test } from 'vitest';
-import type CogniteClientAlpha from '../../cogniteClient';
+import type CogniteClient from '../../cogniteClient';
 import {
   cleanupDataProductSchemaSpaces,
   cleanupOrphanedDataProductTestResources,
@@ -14,10 +14,10 @@ function uniqueSchemaSpace(prefix: string): string {
 }
 
 describe('Data product versions integration test', () => {
-  let client: CogniteClientAlpha;
+  let client: CogniteClient;
   const dataProductRandom = randomInt();
   const dataProductExternalId = `int-dp-version-${dataProductRandom}`;
-  const schemaSpace = uniqueSchemaSpace('sdk_js_alpha_dpv_int');
+  const schemaSpace = uniqueSchemaSpace('sdk_js_dpv_int');
   const containerExternalId = `int_dpv_container_${dataProductRandom}`;
   const viewExternalId = `int_dpv_view_${dataProductRandom}`;
   const versionNumber = '1.0.0';
@@ -77,7 +77,7 @@ describe('Data product versions integration test', () => {
         tags: ['integration'],
       },
     ]);
-    await client.dataProductVersions.create(dataProductExternalId, [
+    await client.dataProducts.versions.create(dataProductExternalId, [
       {
         version: versionNumber,
         views: [
@@ -100,7 +100,7 @@ describe('Data product versions integration test', () => {
   test('create', async () => {
     const createVersion = '2.0.0';
 
-    const items = await client.dataProductVersions.create(
+    const items = await client.dataProducts.versions.create(
       dataProductExternalId,
       [
         {
@@ -121,7 +121,7 @@ describe('Data product versions integration test', () => {
     expect(created.version).toBe(createVersion);
     expect(created.views).toHaveLength(1);
 
-    await client.dataProductVersions
+    await client.dataProducts.versions
       .delete(dataProductExternalId, [{ version: createVersion }])
       .catch(() => {});
   });
@@ -129,7 +129,7 @@ describe('Data product versions integration test', () => {
   test('list', async () => {
     // Page through everything: concurrent runs can push this run's fixture off
     // the first page.
-    const items = await client.dataProductVersions
+    const items = await client.dataProducts.versions
       .list(dataProductExternalId, { limit: 10 })
       .autoPagingToArray({ limit: Number.POSITIVE_INFINITY });
 
@@ -138,7 +138,7 @@ describe('Data product versions integration test', () => {
   });
 
   test('retrieve by version', async () => {
-    const version = await client.dataProductVersions.retrieve(
+    const version = await client.dataProducts.versions.retrieve(
       dataProductExternalId,
       versionNumber
     );
@@ -146,7 +146,7 @@ describe('Data product versions integration test', () => {
   });
 
   test('update existing data product version', async () => {
-    const items = await client.dataProductVersions.update(
+    const items = await client.dataProducts.versions.update(
       dataProductExternalId,
       [
         {
@@ -173,7 +173,7 @@ describe('Data product versions integration test', () => {
   test('delete', async () => {
     const deleteVersion = '3.0.0';
 
-    const items = await client.dataProductVersions.create(
+    const items = await client.dataProducts.versions.create(
       dataProductExternalId,
       [
         {
@@ -191,12 +191,12 @@ describe('Data product versions integration test', () => {
     const versionToDelete = items[0];
 
     await expect(
-      client.dataProductVersions.delete(dataProductExternalId, [
+      client.dataProducts.versions.delete(dataProductExternalId, [
         { version: versionToDelete.version },
       ])
     ).resolves.toBeDefined();
 
-    const listAfterDelete = await client.dataProductVersions.list(
+    const listAfterDelete = await client.dataProducts.versions.list(
       dataProductExternalId
     );
     expect(

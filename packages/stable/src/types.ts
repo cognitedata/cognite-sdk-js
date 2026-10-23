@@ -69,6 +69,7 @@ export * from './api/sessions/types';
 export * from './api/timeSeries/types';
 export * from './api/timeSeries/subscriptions/types';
 export * from './api/dataPoints/types';
+export * from './api/dataProducts/types';
 export * from './api/functions/types';
 export * from './api/extractors/types';
 
@@ -3064,6 +3065,7 @@ export type {
   RawPropertyValueListV3,
   RawPropertyValueV3,
   ReferencedPropertyValueV3,
+  SearchOperator,
   SearchRequestV3,
   SearchResponse,
   SearchSort,

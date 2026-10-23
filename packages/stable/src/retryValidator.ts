@@ -29,6 +29,7 @@ const ENDPOINTS_TO_RETRY: EndpointList = {
     '/records/aggregate',
     '/records/upsert',
     '/records/delete',
+    '/dataproducts/byids',
   ],
 };
 
