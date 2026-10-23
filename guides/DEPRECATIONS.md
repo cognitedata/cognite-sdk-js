@@ -61,7 +61,7 @@ client.datapoints          @deprecated, use client.timeseries.data
 - Moved: `client.datapoints` is now `client.timeseries.data` and `client.timeseries.syntheticQuery`
   is `client.timeseries.synthetic.query`. The old paths keep working in 10.x and are removed in
   the next major release. Use the new paths with `instanceId`: addressing a time series by `id` or
-  `externalId` is asset-centric and may move to a legacy namespace in the next major release.
+  `externalId` is asset-centric.
 - Unchanged: `client.timeseries.subscriptions`.
 
 ```ts
