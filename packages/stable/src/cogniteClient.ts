@@ -62,7 +62,7 @@ export default class CogniteClient extends BaseCogniteClient {
     return accessApi(this.timeSeriesApi);
   }
   /**
-   * @deprecated Use client.timeseries.data with instanceId instead. Addressing time series by id or externalId is asset-centric (retired 2027-12-31) and may move to a legacy namespace in the next major release, where client.datapoints is removed. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
+   * @deprecated Use client.timeseries.data with instanceId instead. Addressing time series by id or externalId is asset-centric (deprecated 2026-10-15, retired 2027-12-31) and may move to a legacy namespace in the next major release, where client.datapoints is removed. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#datapoints-identify-time-series-by-instanceid.
    */
   public get datapoints() {
     return accessApi(this.dataPointsApi);
