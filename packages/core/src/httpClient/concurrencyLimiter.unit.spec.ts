@@ -63,13 +63,28 @@ describe('ConcurrencyLimiter', () => {
     await Promise.all(results);
   });
 
-  test('accepts overrides that are Infinity or undefined', () => {
-    expect(
-      () => new ConcurrencyLimiter(policy, { fast: Number.POSITIVE_INFINITY })
-    ).not.toThrow();
-    expect(
-      () => new ConcurrencyLimiter(policy, { fast: undefined })
-    ).not.toThrow();
+  test('applies overrides and falls back to the default when undefined', async () => {
+    const overridden = new ConcurrencyLimiter(policy, {
+      fast: undefined,
+      slow: 2,
+    });
+    const gate = Promise.withResolvers<void>();
+    const startedBy = { fast: 0, slow: 0 };
+    const results = (['fast', 'slow'] as const).flatMap((category) =>
+      Array.from({ length: 3 }, () =>
+        overridden.run(
+          { method: HttpMethod.Post, pathname: `/toy/${category}` },
+          async () => {
+            startedBy[category]++;
+            await gate.promise;
+          }
+        )
+      )
+    );
+    await setImmediate();
+    expect(startedBy).toEqual({ fast: 2, slow: 2 });
+    gate.resolve();
+    await Promise.all(results);
   });
 
   const withRules = (rules: ConcurrencyPolicy<Category>['rules']) => ({

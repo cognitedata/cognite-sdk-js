@@ -30,6 +30,12 @@ export {
   createRetryValidator,
 } from './httpClient/retryValidator';
 export type { EndpointList, RetryValidator } from './httpClient/retryValidator';
+export type {
+  ConcurrencyPolicy,
+  ConcurrencyPolicyWithSettings,
+  ConcurrencyRule,
+  ConcurrencySettings,
+} from './httpClient/concurrencyLimiter';
 export { RevertableArraySorter } from './revertableArraySorter';
 export {
   sleepPromise,
