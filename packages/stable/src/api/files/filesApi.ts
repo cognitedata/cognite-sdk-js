@@ -113,9 +113,12 @@ export class FilesAPI extends BaseResourceAPI<FileInfo> {
   /**
    * [Retrieve files](https://doc.cognitedata.com/api/v1/#operation/byIdsFiles)
    * <!-- or [just one](https://doc.cognitedata.com/api/v1/#operation/getFileByInternalId) -->
+   * Asset-centric file metadata is deprecated 2026-10-15 and retired 2027-12-31. Prefer instanceId, and query CogniteFile instances with client.instances to look up files.
    *
    * ```js
-   * const files = await client.files.retrieve([{id: 123}, {externalId: 'abc'}]);
+   * const files = await client.files.retrieve([
+   *   { instanceId: { space: 'my-space', externalId: 'my-file' } },
+   * ]);
    * ```
    */
   public retrieve = (
@@ -172,9 +175,12 @@ export class FilesAPI extends BaseResourceAPI<FileInfo> {
 
   /**
    * [Get download urls](https://doc.cognitedata.com/api/v1/#operation/downloadLinks)
+   * File content download stays on the Files API and uses instanceId. Identifying files by id or externalId is asset-centric, deprecated 2026-10-15 and retired 2027-12-31.
    *
    * ```js
-   * await client.files.getDownloadUrls([{id: 123}, {externalId: 'abc'}]);
+   * await client.files.getDownloadUrls([
+   *   { instanceId: { space: 'my-space', externalId: 'my-file' } },
+   * ]);
    * ```
    */
   public getDownloadUrls = (
