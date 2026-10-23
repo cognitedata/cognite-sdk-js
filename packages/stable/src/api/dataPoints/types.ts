@@ -214,7 +214,7 @@ export interface DatapointsInsertByExternalId
   extends DatapointsInsertProperties,
     ExternalId {}
 
-/** @deprecated Use DatapointsInsertByInstanceId instead. Will be removed in next major release. */
+/** @deprecated Addressing time series by externalId is deprecated 2026-10-15 and retired 2027-12-31, use DatapointsInsertByInstanceId instead. Will be removed in next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#datapoints-identify-time-series-by-instanceid. */
 export type ExternalDatapointExternalId = DatapointsInsertByExternalId;
 
 export interface DatapointsInsertByInstanceId
@@ -229,7 +229,7 @@ export interface DatapointsInsertById
   extends DatapointsInsertProperties,
     InternalId {}
 
-/** @deprecated Use DatapointsInsertByInstanceId instead. Will be removed in next major release. */
+/** @deprecated Addressing time series by internal id is deprecated 2026-10-15 and retired 2027-12-31, use DatapointsInsertByInstanceId instead. Will be removed in next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#datapoints-identify-time-series-by-instanceid. */
 export type ExternalDatapointId = DatapointsInsertById;
 
 export type DatapointsInsertItem =

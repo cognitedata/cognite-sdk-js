@@ -47,10 +47,10 @@ export type TimeseriesUnit = string;
 // Time Series identifier type
 // =====================================================
 
-/** @deprecated Addressing time series by id or externalId is deprecated; use instanceId. Will be removed in a future major release. */
+/** @deprecated Addressing time series by id or externalId is deprecated 2026-10-15 and retired 2027-12-31, use InstanceId (`{ instanceId: { space, externalId } }`) instead. Will be removed in a future major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#datapoints-identify-time-series-by-instanceid. */
 export type TimeSeriesIdEither = InternalId | ExternalId;
 
-/** @deprecated Use TimeSeriesIdEither instead. Will be removed in next major release. */
+/** @deprecated Misspelled alias of TimeSeriesIdEither, which is also deprecated: addressing time series by id or externalId is deprecated 2026-10-15 and retired 2027-12-31, use InstanceId (`{ instanceId: { space, externalId } }`) instead. Will be removed in next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#datapoints-identify-time-series-by-instanceid. */
 export type TimeseriesIdEither = TimeSeriesIdEither;
 
 // =====================================================
