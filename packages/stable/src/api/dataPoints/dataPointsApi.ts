@@ -29,8 +29,12 @@ export class DataPointsAPI extends BaseResourceAPI<
   /**
    * [Insert data points](https://doc.cognitedata.com/api/v1/#operation/postMultiTimeSeriesDatapoints)
    *
+   * Identifying time series by id or externalId is deprecated 2026-10-15 and retired 2027-12-31. Use instanceId.
+   *
    * ```js
-   * await client.datapoints.insert([{ id: 123, datapoints: [{timestamp: 1557320284000, value: -2}] }]);
+   * await client.timeseries.data.insert([
+   *   { instanceId: { space: 'my-space', externalId: 'my-ts' }, datapoints: [{ timestamp: 1557320284000, value: -2 }] },
+   * ]);
    * ```
    */
   public insert = (items: DatapointsInsertItem[]): Promise<object> => {
@@ -40,8 +44,12 @@ export class DataPointsAPI extends BaseResourceAPI<
   /**
    * [Retrieve data points](https://doc.cognitedata.com/api/v1/#operation/getMultiTimeSeriesDatapoints)
    *
+   * Identifying time series by id or externalId is deprecated 2026-10-15 and retired 2027-12-31. Use instanceId.
+   *
    * ```js
-   * const data = await client.datapoints.retrieve({ items: [{ id: 123 }] });
+   * const data = await client.timeseries.data.retrieve({
+   *   items: [{ instanceId: { space: 'my-space', externalId: 'my-ts' } }],
+   * });
    * ```
    */
   public retrieve = (
@@ -72,16 +80,12 @@ export class DataPointsAPI extends BaseResourceAPI<
   /**
    * [Get latest data point in a time series](https://doc.cognitedata.com/api/v1/#operation/getLatest)
    *
+   * Identifying time series by id or externalId is deprecated 2026-10-15 and retired 2027-12-31. Use instanceId.
+   *
    * ```js
-   * const datapoints = await client.datapoints.retrieveLatest([
-   *   {
-   *    before: 'now',
-   *    id: 123
-   *  },
-   *  {
-   *    externalId: 'abc',
-   *    before: new Date('21 jan 2018'),
-   *  }
+   * const datapoints = await client.timeseries.data.retrieveLatest([
+   *   { instanceId: { space: 'my-space', externalId: 'my-ts' }, before: 'now' },
+   *   { instanceId: { space: 'my-space', externalId: 'other-ts' }, before: new Date('21 jan 2018') },
    * ]);
    * ```
    */
@@ -95,8 +99,12 @@ export class DataPointsAPI extends BaseResourceAPI<
   /**
    * [Delete data points](https://doc.cognitedata.com/api/v1/#operation/deleteDatapoints)
    *
+   * Identifying time series by id or externalId is deprecated 2026-10-15 and retired 2027-12-31. Use instanceId.
+   *
    * ```js
-   * await client.datapoints.delete([{id: 123, inclusiveBegin: new Date('1 jan 2019')}]);
+   * await client.timeseries.data.delete([
+   *   { instanceId: { space: 'my-space', externalId: 'my-ts' }, inclusiveBegin: new Date('1 jan 2019') },
+   * ]);
    * ```
    */
   public delete = (items: DatapointsDeleteRequest[]): Promise<object> => {

@@ -47,9 +47,10 @@ export type TimeseriesUnit = string;
 // Time Series identifier type
 // =====================================================
 
+/** @deprecated Addressing time series by id or externalId is deprecated 2026-10-15 and retired 2027-12-31, use InstanceId (`{ instanceId: { space, externalId } }`) instead. Will be removed in a future major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#datapoints-identify-time-series-by-instanceid. */
 export type TimeSeriesIdEither = InternalId | ExternalId;
 
-/** @deprecated Use TimeSeriesIdEither instead. Will be removed in next major release. */
+/** @deprecated Misspelled alias of TimeSeriesIdEither, which is also deprecated: addressing time series by id or externalId is deprecated 2026-10-15 and retired 2027-12-31, use InstanceId (`{ instanceId: { space, externalId } }`) instead. Will be removed in next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#datapoints-identify-time-series-by-instanceid. */
 export type TimeseriesIdEither = TimeSeriesIdEither;
 
 // =====================================================
@@ -61,6 +62,7 @@ export type TimeSeriesType = 'numeric' | 'string' | 'state';
 /** @deprecated Use TimeSeriesType instead. Will be removed in next major release. */
 export type TimeseriesType = TimeSeriesType;
 
+/** @deprecated Asset-centric time series metadata type, deprecated 2026-10-15 and retired 2027-12-31. Use CogniteTimeSeries instances via client.instances instead. Will be removed in a future major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#time-series-metadata-is-deprecated-data-points-move-under-clienttimeseries. */
 export interface TimeSeries extends InternalId, CreatedAndLastUpdatedTime {
   /**
    * Externally supplied id of the time series
@@ -100,6 +102,7 @@ export interface TimeSeries extends InternalId, CreatedAndLastUpdatedTime {
 /** @deprecated Use TimeSeries instead. Will be removed in next major release. */
 export type Timeseries = TimeSeries;
 
+/** @deprecated Asset-centric time series metadata type, deprecated 2026-10-15 and retired 2027-12-31. Use CogniteTimeSeries instances via client.instances instead. Will be removed in a future major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#time-series-metadata-is-deprecated-data-points-move-under-clienttimeseries. */
 export interface TimeSeriesCreate {
   /**
    * Externally provided id for the time series (optional but recommended)
@@ -158,6 +161,7 @@ export type ExternalTimeseries = TimeSeriesCreate;
 // Time Series filter types
 // =====================================================
 
+/** @deprecated Asset-centric time series metadata type, deprecated 2026-10-15 and retired 2027-12-31. Use CogniteTimeSeries instances via client.instances instead. Will be removed in a future major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#time-series-metadata-is-deprecated-data-points-move-under-clienttimeseries. */
 export interface TimeSeriesFilter extends CreatedAndLastUpdatedTimeFilter {
   name?: string;
   unit?: string;
@@ -199,6 +203,7 @@ export interface TimeSeriesFilter extends CreatedAndLastUpdatedTimeFilter {
 /** @deprecated Use TimeSeriesFilter instead. Will be removed in next major release. */
 export type TimeseriesFilter = TimeSeriesFilter;
 
+/** @deprecated Asset-centric time series metadata type, deprecated 2026-10-15 and retired 2027-12-31. Use CogniteTimeSeries instances via client.instances instead. Will be removed in a future major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#time-series-metadata-is-deprecated-data-points-move-under-clienttimeseries. */
 export interface TimeSeriesFilterQuery extends FilterQuery {
   filter?: TimeSeriesFilter;
   partition?: Partition;
@@ -211,6 +216,7 @@ export type TimeseriesFilterQuery = TimeSeriesFilterQuery;
 // Time Series search types
 // =====================================================
 
+/** @deprecated Asset-centric time series metadata type, deprecated 2026-10-15 and retired 2027-12-31. Use CogniteTimeSeries instances via client.instances instead. Will be removed in a future major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#time-series-metadata-is-deprecated-data-points-move-under-clienttimeseries. */
 export interface TimeSeriesSearch {
   /**
    * Prefix and fuzzy search on name.
@@ -229,6 +235,7 @@ export interface TimeSeriesSearch {
 /** @deprecated Use TimeSeriesSearch instead. Will be removed in next major release. */
 export type TimeseriesSearch = TimeSeriesSearch;
 
+/** @deprecated Asset-centric time series metadata type, deprecated 2026-10-15 and retired 2027-12-31. Use CogniteTimeSeries instances via client.instances instead. Will be removed in a future major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#time-series-metadata-is-deprecated-data-points-move-under-clienttimeseries. */
 export interface TimeSeriesSearchFilter extends Limit {
   filter?: TimeSeriesFilter;
   search?: TimeSeriesSearch;
@@ -241,6 +248,7 @@ export type TimeseriesSearchFilter = TimeSeriesSearchFilter;
 // Time Series update types
 // =====================================================
 
+/** @deprecated Asset-centric time series metadata type, deprecated 2026-10-15 and retired 2027-12-31. Use CogniteTimeSeries instances via client.instances instead. Will be removed in a future major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#time-series-metadata-is-deprecated-data-points-move-under-clienttimeseries. */
 export type TimeSeriesUpdateCommonProperties = {
   externalId?: NullableSinglePatchString;
   metadata?: MetadataPatch;
@@ -251,6 +259,7 @@ export type TimeSeriesUpdateCommonProperties = {
 /** @deprecated Use TimeSeriesUpdateCommonProperties instead. Will be removed in next major release. */
 export type TimeseriesUpdateCommonProperies = TimeSeriesUpdateCommonProperties;
 
+/** @deprecated Asset-centric time series metadata type, deprecated 2026-10-15 and retired 2027-12-31. Use CogniteTimeSeries instances via client.instances instead. Will be removed in a future major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#time-series-metadata-is-deprecated-data-points-move-under-clienttimeseries. */
 export type TimeSeriesUpdateAssetCentricProperties =
   TimeSeriesUpdateCommonProperties & {
     name?: NullableSinglePatchString;
@@ -264,24 +273,30 @@ export type TimeSeriesUpdateAssetCentricProperties =
 export type TimeseriesUpdateAssetCentricProperies =
   TimeSeriesUpdateAssetCentricProperties;
 
+/** @deprecated Asset-centric time series metadata type, deprecated 2026-10-15 and retired 2027-12-31. Use CogniteTimeSeries instances via client.instances instead. Will be removed in a future major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#time-series-metadata-is-deprecated-data-points-move-under-clienttimeseries. */
 export interface TimeSeriesPatch {
   update: TimeSeriesUpdateAssetCentricProperties;
 }
 
+/** @deprecated Asset-centric time series metadata type, deprecated 2026-10-15 and retired 2027-12-31. Use CogniteTimeSeries instances via client.instances instead. Will be removed in a future major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#time-series-metadata-is-deprecated-data-points-move-under-clienttimeseries. */
 export interface TimeSeriesPatchByInstanceId {
   update: TimeSeriesUpdateCommonProperties;
 }
 
+/** @deprecated Asset-centric time series metadata type, deprecated 2026-10-15 and retired 2027-12-31. Use CogniteTimeSeries instances via client.instances instead. Will be removed in a future major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#time-series-metadata-is-deprecated-data-points-move-under-clienttimeseries. */
 export interface TimeSeriesUpdateByExternalId
   extends TimeSeriesPatch,
     ExternalId {}
 
+/** @deprecated Asset-centric time series metadata type, deprecated 2026-10-15 and retired 2027-12-31. Use CogniteTimeSeries instances via client.instances instead. Will be removed in a future major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#time-series-metadata-is-deprecated-data-points-move-under-clienttimeseries. */
 export interface TimeSeriesUpdateById extends TimeSeriesPatch, InternalId {}
 
+/** @deprecated Asset-centric time series metadata type, deprecated 2026-10-15 and retired 2027-12-31. Use CogniteTimeSeries instances via client.instances instead. Will be removed in a future major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#time-series-metadata-is-deprecated-data-points-move-under-clienttimeseries. */
 export interface TimeSeriesUpdateByInstanceId
   extends TimeSeriesPatchByInstanceId,
     InstanceId {}
 
+/** @deprecated Asset-centric time series metadata type, deprecated 2026-10-15 and retired 2027-12-31. Use CogniteTimeSeries instances via client.instances instead. Will be removed in a future major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#time-series-metadata-is-deprecated-data-points-move-under-clienttimeseries. */
 export type TimeSeriesUpdate =
   | TimeSeriesUpdateById
   | TimeSeriesUpdateByExternalId
@@ -291,11 +306,13 @@ export type TimeSeriesUpdate =
 // Time Series aggregate types
 // =====================================================
 
+/** @deprecated Asset-centric time series metadata type, deprecated 2026-10-15 and retired 2027-12-31. Use CogniteTimeSeries instances via client.instances instead. Will be removed in a future major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#time-series-metadata-is-deprecated-data-points-move-under-clienttimeseries. */
 export type TimeSeriesAggregate = AggregateResponse;
 
 /** @deprecated Use TimeSeriesAggregate instead. Will be removed in next major release. */
 export type TimeseriesAggregate = TimeSeriesAggregate;
 
+/** @deprecated Asset-centric time series metadata type, deprecated 2026-10-15 and retired 2027-12-31. Use CogniteTimeSeries instances via client.instances instead. Will be removed in a future major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#time-series-metadata-is-deprecated-data-points-move-under-clienttimeseries. */
 export interface TimeSeriesAggregateQuery {
   /**
    * Filter on timeseries with strict matching.
