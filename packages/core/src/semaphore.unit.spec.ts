@@ -36,23 +36,39 @@ describe('Semaphore', () => {
     releaseFourth();
   });
 
-  test('releases after a synchronous throw or asynchronous rejection', async () => {
+  test('releases after a rejection and still respects FIFO', async () => {
     const semaphore = new Semaphore(1);
     await expect(
       semaphore.run(() => {
         throw new Error('sync failure');
       })
     ).rejects.toThrow('sync failure');
+
+    const order: string[] = [];
     const pending = Promise.withResolvers<void>();
+    const firstGate = Promise.withResolvers<void>();
     const failed = semaphore.run(() => pending.promise);
-    const next = vi.fn(async () => 42);
-    const queued = semaphore.run(next);
+    const first = semaphore.run(async () => {
+      order.push('first');
+      await firstGate.promise;
+      return 42;
+    });
+    const second = semaphore.run(async () => {
+      order.push('second');
+    });
     const rejection = expect(failed).rejects.toThrow('async failure');
     await setImmediate();
-    expect(next).not.toHaveBeenCalled();
+    expect(order).toEqual([]);
+
     pending.reject(new Error('async failure'));
     await rejection;
-    await expect(queued).resolves.toBe(42);
+    await setImmediate();
+    expect(order).toEqual(['first']);
+
+    firstGate.resolve();
+    await expect(first).resolves.toBe(42);
+    await second;
+    expect(order).toEqual(['first', 'second']);
   });
 
   test('Infinity admits all work without waiting', async () => {
