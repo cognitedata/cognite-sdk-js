@@ -37,6 +37,45 @@ APIs in data modeling, which are in public preview and not yet part of this SDK.
 APIs (`client.models3D`, `client.revisions3D`, `client.files3D`, `client.viewer3D`) are **not**
 deprecated.
 
+### Files: asset-centric metadata and filters
+
+`client.files` stays, but its asset-centric metadata and asset filters are deprecated (2026-10-15,
+retired 2027-12-31). File content upload and download stay on the Files API and use `instanceId`.
+The upload endpoints also stay available for files that are not `CogniteFile`.
+
+```
+files
+  upload  multipartUploadSession   unchanged
+  getDownloadUrls                  prefer instanceId
+  retrieve                         prefer instanceId; look up files as CogniteFile instances
+  list  search  aggregate          unchanged, asset filters deprecated
+  update  delete                   unchanged
+  fields
+    assetIds  rootAssetIds  assetSubtreeIds (filter)   @deprecated → CogniteFile linked to CogniteAsset
+    assetIds (file)                                    @deprecated → CogniteFile.assets
+    dataSetId  dataSetIds  labels                      @deprecated, governance removed
+    securityCategories                                 @deprecated → data products and access control
+```
+
+```ts
+// before
+await client.files.list({ filter: { assetSubtreeIds: [{ externalId: 'plant' }] } });
+await client.files.getDownloadUrls([{ externalId: 'my-file' }]);
+
+// after: look up files as CogniteFile instances, download by instanceId
+await client.instances.list({
+  instanceType: 'node',
+  sources: [{ source: { type: 'view', space: 'cdf_cdm', externalId: 'CogniteFile', version: 'v1' } }],
+});
+await client.files.getDownloadUrls([
+  { instanceId: { space: 'my-space', externalId: 'my-file' } },
+]);
+```
+
+The field tags are docs-only in most code: TypeScript only flags `@deprecated` when a name is
+referenced directly, so `list({ filter: { assetIds: [1] } })` shows no warning in the editor.
+Check your own code for these fields.
+
 ## Templates (retired 2025-05-31)
 
 The Templates API was retired on 2025-05-31. `client.templates` and its types will be removed in
