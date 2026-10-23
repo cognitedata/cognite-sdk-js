@@ -15,13 +15,18 @@ describe('Time series namespace unit test', () => {
     nock.cleanAll();
   });
 
-  test('timeseries.data exposes the same methods as datapoints', () => {
-    for (const method of ['insert', 'retrieve', 'retrieveLatest', 'delete']) {
-      expect(typeof client.timeseries.data[method as 'insert']).toBe(
-        'function'
-      );
-      expect(typeof client.datapoints[method as 'insert']).toBe('function');
-    }
+  test('timeseries.data.insert posts to /timeseries/data', async () => {
+    const items = [
+      { instanceId, datapoints: [{ timestamp: 1700000000000, value: 1 }] },
+    ];
+    nock(mockBaseUrl)
+      .post(/\/timeseries\/data$/, { items })
+      .once()
+      .reply(200, {});
+
+    const result = await client.timeseries.data.insert(items);
+    expect(result).toEqual({});
+    expect(nock.isDone()).toBe(true);
   });
 
   test('timeseries.data.retrieve posts to /timeseries/data/list', async () => {
@@ -62,6 +67,18 @@ describe('Time series namespace unit test', () => {
     expect(result).toHaveLength(1);
   });
 
+  test('timeseries.data.delete posts to /timeseries/data/delete', async () => {
+    const items = [{ instanceId, inclusiveBegin: 0, exclusiveEnd: 1 }];
+    nock(mockBaseUrl)
+      .post(/\/timeseries\/data\/delete$/, { items })
+      .once()
+      .reply(200, {});
+
+    const result = await client.timeseries.data.delete(items);
+    expect(result).toEqual({});
+    expect(nock.isDone()).toBe(true);
+  });
+
   test('timeseries.synthetic.query posts to /timeseries/synthetic/query', async () => {
     const items = [{ expression: "TS{externalId='my-ts'} * 2", limit: 10 }];
     nock(mockBaseUrl)
@@ -80,5 +97,86 @@ describe('Time series namespace unit test', () => {
     const viaOld = await client.timeseries.syntheticQuery(items);
     expect(viaNew).toEqual(viaOld);
     expect(viaNew[0].datapoints[0].timestamp).toEqual(new Date(1700000000000));
+  });
+
+  describe('client.datapoints and client.timeseries.data are equivalent', () => {
+    test('insert', async () => {
+      const items = [
+        { instanceId, datapoints: [{ timestamp: 1700000000000, value: 1 }] },
+      ];
+      nock(mockBaseUrl)
+        .post(/\/timeseries\/data$/, { items })
+        .twice()
+        .reply(200, {});
+
+      const viaNew = await client.timeseries.data.insert(items);
+      const viaOld = await client.datapoints.insert(items);
+      expect(viaNew).toEqual(viaOld);
+      expect(nock.isDone()).toBe(true);
+    });
+
+    test('retrieve', async () => {
+      const query = { items: [{ instanceId }] };
+      nock(mockBaseUrl)
+        .post(/\/timeseries\/data\/list$/, query)
+        .twice()
+        .reply(200, {
+          items: [
+            {
+              id: 1,
+              instanceId,
+              isString: false,
+              isStep: false,
+              datapoints: [{ timestamp: 1700000000000, value: 1 }],
+            },
+          ],
+        });
+
+      const viaNew = await client.timeseries.data.retrieve(query);
+      const viaOld = await client.datapoints.retrieve(query);
+      expect(viaNew).toEqual(viaOld);
+      expect(viaNew[0].datapoints[0].timestamp).toEqual(
+        new Date(1700000000000)
+      );
+      expect(nock.isDone()).toBe(true);
+    });
+
+    test('retrieveLatest', async () => {
+      const items = [{ instanceId, before: 'now' }];
+      nock(mockBaseUrl)
+        .post(/\/timeseries\/data\/latest$/, { items })
+        .twice()
+        .reply(200, {
+          items: [
+            {
+              id: 1,
+              instanceId,
+              isString: false,
+              datapoints: [{ timestamp: 1700000000000, value: 1 }],
+            },
+          ],
+        });
+
+      const viaNew = await client.timeseries.data.retrieveLatest(items);
+      const viaOld = await client.datapoints.retrieveLatest(items);
+      expect(viaNew).toEqual(viaOld);
+      expect(viaNew[0].datapoints[0].timestamp).toEqual(
+        new Date(1700000000000)
+      );
+      expect(nock.isDone()).toBe(true);
+    });
+
+    test('delete', async () => {
+      const items = [{ instanceId, inclusiveBegin: 0, exclusiveEnd: 1 }];
+      nock(mockBaseUrl)
+        .post(/\/timeseries\/data\/delete$/, { items })
+        .twice()
+        .reply(200, {});
+
+      const viaNew = await client.timeseries.data.delete(items);
+      const viaOld = await client.datapoints.delete(items);
+      expect(viaNew).toEqual(viaOld);
+      expect(nock.isDone()).toBe(true);
+    });
   });
 });
