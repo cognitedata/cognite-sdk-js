@@ -44,13 +44,14 @@ asset-hierarchy filters as of 2026-10-15 and retires them on 2027-12-31. Data po
 writes stay on the Time series API and address a time series by `instanceId` (see below).
 
 - Deprecated: `client.timeseries.create`, `update`, `list`, `search`, `aggregate`, `delete` and
-  `retrieve`, together with the create, filter, search, update and aggregate types. Create and
-  query time series as `CogniteTimeSeries` instances via `client.instances` instead.
-- Not deprecated: the data point endpoints (`client.timeseries.data`) and synthetic queries
-  (`client.timeseries.synthetic.query`) stay available, but identify time series by `instanceId`;
-  see [Datapoints: identify time series by `instanceId`](#datapoints-identify-time-series-by-instanceid).
-  The old entry points `client.datapoints` and `client.timeseries.syntheticQuery` are deprecated in
-  favour of these; see
+  `retrieve`, together with the `TimeSeries` type and the create, filter, search, update and
+  aggregate types. Create and query time series as `CogniteTimeSeries` instances via
+  `client.instances` instead.
+- Not deprecated: the data point endpoints (`client.timeseries.data`) stay available, but identify
+  time series by `instanceId`; see
+  [Datapoints: identify time series by `instanceId`](#datapoints-identify-time-series-by-instanceid).
+  Synthetic queries (`client.timeseries.synthetic.query`) also stay available. The old entry points
+  `client.datapoints` and `client.timeseries.syntheticQuery` are deprecated in favour of these; see
   [Data points and synthetic queries move under `client.timeseries`](#data-points-and-synthetic-queries-move-under-clienttimeseries).
 - Unchanged: `client.timeseries.subscriptions`.
 
