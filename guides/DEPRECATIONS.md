@@ -37,38 +37,21 @@ APIs in data modeling, which are in public preview and not yet part of this SDK.
 APIs (`client.models3D`, `client.revisions3D`, `client.files3D`, `client.viewer3D`) are **not**
 deprecated.
 
-### Time series: metadata is deprecated, data points move under `client.timeseries`
+### Time series: metadata is deprecated
 
 `client.timeseries` is not going away. CDF deprecates asset-centric time series metadata and the
-asset-hierarchy filters, while data point reads and writes stay on the Time series API and address
-a time series by `instanceId`. The SDK namespace is reshaped to mirror the API paths, and the same
-layout is used by the Python SDK (`client.time_series`):
-
-```
-client.timeseries
-  create … aggregate       @deprecated, retired 2027-12-31
-  data                     new, /timeseries/data (was client.datapoints)
-    insert  retrieve  retrieveLatest  delete
-  synthetic.query          new, /timeseries/synthetic/query (was syntheticQuery)
-  syntheticQuery           @deprecated, use synthetic.query
-  subscriptions.*          unchanged, /timeseries/subscriptions
-client.datapoints          @deprecated, use client.timeseries.data
-```
+asset-hierarchy filters as of 2026-10-15 and retires them on 2027-12-31. Data point reads and
+writes stay on the Time series API and address a time series by `instanceId` (see below).
 
 - Deprecated: `client.timeseries.create`, `update`, `list`, `search`, `aggregate`, `delete` and
   `retrieve`, together with the create, filter, search, update and aggregate types. Create and
   query time series as `CogniteTimeSeries` instances via `client.instances` instead.
-- Moved: `client.datapoints` is now `client.timeseries.data` and `client.timeseries.syntheticQuery`
-  is `client.timeseries.synthetic.query`. The old paths keep working in 10.x and are removed in
-  the next major release. Use the new paths with `instanceId`: addressing a time series by `id` or
-  `externalId` is asset-centric.
-- Unchanged: `client.timeseries.subscriptions`.
+- Unchanged: `client.datapoints`, `client.timeseries.syntheticQuery` and
+  `client.timeseries.subscriptions`.
 
 ```ts
 // before
 await client.timeseries.create([{ externalId: 'my-ts', name: 'Pressure', isStep: false }]);
-await client.datapoints.retrieve({ items: [{ externalId: 'my-ts' }] });
-await client.timeseries.syntheticQuery([{ expression: "TS{externalId='my-ts'} * 2" }]);
 
 // after
 await client.instances.upsert({
@@ -86,22 +69,16 @@ await client.instances.upsert({
     },
   ],
 });
-await client.timeseries.data.retrieve({
-  items: [{ instanceId: { space: 'my-space', externalId: 'my-ts' } }],
-});
-await client.timeseries.synthetic.query([
-  { expression: "TS{space='my-space', externalId='my-ts'} * 2" },
-]);
 ```
 
 ### Datapoints: identify time series by `instanceId`
 
 Addressing a time series by `id` or `externalId` is deprecated as of 2026-10-15 and retired on
-2027-12-31, in favour of `instanceId`. This applies to `client.timeseries.data` and to the
-deprecated `client.datapoints` alike. The input types `DatapointsInsertById`,
-`DatapointsInsertByExternalId`, `DatapointsQueryId` and `DatapointsQueryExternalId` are deprecated;
-use `DatapointsInsertByInstanceId` and `DatapointsQueryInstanceId`. `TimeSeriesIdEither` is
-deprecated on the same terms; use `InstanceId` instead.
+2027-12-31, in favour of `instanceId`. This applies to all `client.datapoints` methods. The input
+types `DatapointsInsertById`, `DatapointsInsertByExternalId`, `DatapointsQueryId` and
+`DatapointsQueryExternalId` are deprecated; use `DatapointsInsertByInstanceId` and
+`DatapointsQueryInstanceId`. `TimeSeriesIdEither` is deprecated on the same terms; use
+`InstanceId` instead.
 
 This part is docs-only: TypeScript only flags `@deprecated` when a type is referenced by name, so
 `retrieve({ items: [{ id: 123 }] })` shows no warning in your editor. Check your own code for `id`
@@ -109,10 +86,10 @@ or `externalId` in datapoint requests.
 
 ```ts
 // before
-await client.timeseries.data.retrieve({ items: [{ externalId: 'my-ts' }] });
+await client.datapoints.retrieve({ items: [{ externalId: 'my-ts' }] });
 
 // after
-await client.timeseries.data.retrieve({
+await client.datapoints.retrieve({
   items: [{ instanceId: { space: 'my-space', externalId: 'my-ts' } }],
 });
 ```

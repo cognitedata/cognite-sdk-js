@@ -32,7 +32,7 @@ export class DataPointsAPI extends BaseResourceAPI<
    * Identifying time series by id or externalId is deprecated 2026-10-15 and retired 2027-12-31. Use instanceId.
    *
    * ```js
-   * await client.timeseries.data.insert([
+   * await client.datapoints.insert([
    *   { instanceId: { space: 'my-space', externalId: 'my-ts' }, datapoints: [{ timestamp: 1557320284000, value: -2 }] },
    * ]);
    * ```
@@ -47,7 +47,7 @@ export class DataPointsAPI extends BaseResourceAPI<
    * Identifying time series by id or externalId is deprecated 2026-10-15 and retired 2027-12-31. Use instanceId.
    *
    * ```js
-   * const data = await client.timeseries.data.retrieve({
+   * const data = await client.datapoints.retrieve({
    *   items: [{ instanceId: { space: 'my-space', externalId: 'my-ts' } }],
    * });
    * ```
@@ -83,7 +83,7 @@ export class DataPointsAPI extends BaseResourceAPI<
    * Identifying time series by id or externalId is deprecated 2026-10-15 and retired 2027-12-31. Use instanceId.
    *
    * ```js
-   * const datapoints = await client.timeseries.data.retrieveLatest([
+   * const datapoints = await client.datapoints.retrieveLatest([
    *   { instanceId: { space: 'my-space', externalId: 'my-ts' }, before: 'now' },
    *   { instanceId: { space: 'my-space', externalId: 'other-ts' }, before: new Date('21 jan 2018') },
    * ]);
@@ -102,7 +102,7 @@ export class DataPointsAPI extends BaseResourceAPI<
    * Identifying time series by id or externalId is deprecated 2026-10-15 and retired 2027-12-31. Use instanceId.
    *
    * ```js
-   * await client.timeseries.data.delete([
+   * await client.datapoints.delete([
    *   { instanceId: { space: 'my-space', externalId: 'my-ts' }, inclusiveBegin: new Date('1 jan 2019') },
    * ]);
    * ```
