@@ -8,6 +8,7 @@ import {
   type MetadataMap,
 } from '@cognite/sdk-core';
 import type { IdEither, IgnoreUnknownIds } from '../../types';
+import { DataPointsAPI } from '../dataPoints/dataPointsApi';
 import { DataPointSubscriptionsAPI } from './subscriptions/dataPointSubscriptionsApi';
 import { SyntheticTimeSeriesAPI } from './syntheticTimeSeriesApi';
 import type {
@@ -22,12 +23,14 @@ import type {
 } from './types';
 
 export class TimeSeriesAPI extends BaseResourceAPI<TimeSeries> {
+  private readonly dataPointsApi: DataPointsAPI;
   private syntheticTimeseriesApi: SyntheticTimeSeriesAPI;
   private readonly dataPointSubscriptionsApi: DataPointSubscriptionsAPI;
 
   /** @hidden */
   constructor(resourcePath: string, ...args: [CDFHttpClient, MetadataMap]) {
     super(resourcePath, ...args);
+    this.dataPointsApi = new DataPointsAPI(this.url('data'), ...args);
     this.syntheticTimeseriesApi = new SyntheticTimeSeriesAPI(
       this.url('synthetic'),
       ...args
@@ -36,6 +39,32 @@ export class TimeSeriesAPI extends BaseResourceAPI<TimeSeries> {
       this.url('subscriptions'),
       ...args
     );
+  }
+
+  /**
+   * [Data points](https://docs.cognite.com/api/v1/#tag/Time-series/operation/getMultiTimeSeriesDatapoints)
+   *
+   * ```js
+   * const result = await client.timeseries.data.retrieve({
+   *   items: [{ instanceId: { space: 'my-space', externalId: 'my-ts' } }],
+   * });
+   * ```
+   */
+  public get data() {
+    return this.dataPointsApi;
+  }
+
+  /**
+   * [Synthetic time series](https://docs.cognite.com/api/v1/#tag/Synthetic-Time-Series)
+   *
+   * ```js
+   * const results = await client.timeseries.synthetic.query([
+   *   { expression: "TS{externalId='my-ts'} * 2", start: '2d-ago', end: 'now', limit: 100 },
+   * ]);
+   * ```
+   */
+  public get synthetic() {
+    return this.syntheticTimeseriesApi;
   }
 
   /**
@@ -186,6 +215,8 @@ export class TimeSeriesAPI extends BaseResourceAPI<TimeSeries> {
    *   }
    * ]);
    * ```
+   *
+   * @deprecated Use client.timeseries.synthetic.query instead. Will be removed in the next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#data-points-and-synthetic-queries-move-under-clienttimeseries.
    */
   public syntheticQuery = (items: SyntheticQuery[]) => {
     return this.syntheticTimeseriesApi.query(items);
