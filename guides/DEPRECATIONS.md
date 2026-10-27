@@ -46,8 +46,10 @@ writes stay on the Time series API and address a time series by `instanceId` (se
 - Deprecated: `client.timeseries.create`, `update`, `list`, `search`, `aggregate`, `delete` and
   `retrieve`, together with the create, filter, search, update and aggregate types. Create and
   query time series as `CogniteTimeSeries` instances via `client.instances` instead.
-- Unchanged: `client.datapoints`, `client.timeseries.syntheticQuery` and
-  `client.timeseries.subscriptions`.
+- Not deprecated: the data point endpoints (`client.datapoints`) and synthetic queries
+  (`client.timeseries.syntheticQuery`) stay available, but identify time series by `instanceId`;
+  see [Datapoints: identify time series by `instanceId`](#datapoints-identify-time-series-by-instanceid).
+- Unchanged: `client.timeseries.subscriptions`.
 
 ```ts
 // before
@@ -80,9 +82,10 @@ types `DatapointsInsertById`, `DatapointsInsertByExternalId`, `DatapointsQueryId
 `DatapointsQueryInstanceId`. `TimeSeriesIdEither` is deprecated on the same terms; use
 `InstanceId` instead.
 
-This part is docs-only: TypeScript only flags `@deprecated` when a type is referenced by name, so
-`retrieve({ items: [{ id: 123 }] })` shows no warning in your editor. Check your own code for `id`
-or `externalId` in datapoint requests.
+These types (and the aliases `ExternalDatapointId`, `ExternalDatapointExternalId` and
+`TimeseriesIdEither`) are tagged `@deprecated`, so your editor flags them where you reference them
+by name. Inline request objects such as `retrieve({ items: [{ id: 123 }] })` get no warning, so
+check your own code for `id` or `externalId` in datapoint requests. Nothing changes at runtime.
 
 ```ts
 // before
