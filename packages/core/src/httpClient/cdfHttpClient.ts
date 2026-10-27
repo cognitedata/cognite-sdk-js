@@ -74,6 +74,9 @@ export class CDFHttpClient extends RetryableHttpClient {
   /**
    * Limits concurrent HTTP attempts of the requests the policies match.
    * The limit is held per attempt, not across retries or backoff.
+   *
+   * @alpha This functionality is experimental. Breaking changes are to be expected
+   * in any release, including patch and minor versions.
    */
   public setConcurrencyPolicies(
     policies: readonly ConcurrencyPolicyWithOptions[]
