@@ -24,7 +24,7 @@ const policy: ConcurrencyPolicy<Category> = {
 };
 
 describe('ConcurrencyLimiter', () => {
-  const limiter = new ConcurrencyLimiter(policy);
+  const limiter = new ConcurrencyLimiter([{ policy }]);
 
   test('classifies by method, normalized path and fallback; first rule wins', () => {
     expect(limiter.classify(HttpMethod.Post, '/toy/slow')).toBe('slow');
@@ -64,10 +64,9 @@ describe('ConcurrencyLimiter', () => {
   });
 
   test('applies overrides and falls back to the default when undefined', async () => {
-    const overridden = new ConcurrencyLimiter(policy, {
-      fast: undefined,
-      slow: 2,
-    });
+    const overridden = new ConcurrencyLimiter([
+      { policy, options: { fast: undefined, slow: 2 } },
+    ]);
     const gate = Promise.withResolvers<void>();
     const startedBy = { fast: 0, slow: 0 };
     const results = (['fast', 'slow'] as const).flatMap((category) =>
@@ -87,7 +86,7 @@ describe('ConcurrencyLimiter', () => {
     await Promise.all(results);
   });
 
-  const withRules = (rules: ConcurrencyPolicy<Category>['rules']) => ({
+  const withRules = (rules: ConcurrencyPolicy<string>['rules']) => ({
     ...policy,
     rules,
   });
@@ -95,39 +94,47 @@ describe('ConcurrencyLimiter', () => {
   test.each<[string, () => unknown, string]>([
     ...[0, -1, 1.5, Number.NaN].map((max): [string, () => unknown, string] => [
       `limit ${max}`,
-      () => new ConcurrencyLimiter(policy, { slow: max }),
+      () => new ConcurrencyLimiter([{ policy, options: { slow: max } }]),
       'concurrency.toy.slow must be a positive integer or Infinity',
     ]),
     [
-      'unknown category in settings',
-      () => new ConcurrencyLimiter(policy, { typo: 1 } as never),
+      'unknown category in options',
+      () => new ConcurrencyLimiter([{ policy, options: { typo: 1 } }]),
       'Unknown concurrency category concurrency.toy.typo',
     ],
     [
       'empty category name',
       () =>
-        new ConcurrencyLimiter({
-          ...policy,
-          defaults: { '': 1 } as never,
-        }),
+        new ConcurrencyLimiter([
+          { policy: { ...policy, defaults: { '': 1 } } },
+        ]),
       'concurrency.toy has an empty category name',
     ],
     [
       'rule with unknown category',
       () =>
-        new ConcurrencyLimiter(
-          withRules([{ pattern: /^\/toy$/, category: 'missing' as Category }])
-        ),
+        new ConcurrencyLimiter([
+          {
+            policy: withRules([{ pattern: /^\/toy$/, category: 'missing' }]),
+          },
+        ]),
       'uses unknown category missing',
+    ],
+    [
+      'multiple policies',
+      () => new ConcurrencyLimiter([{ policy }, { policy }]),
+      'Using multiple concurrency policies is not implemented',
     ],
     ...['g', 'y'].map((flags): [string, () => unknown, string] => [
       `rule pattern with the ${flags} flag`,
       () =>
-        new ConcurrencyLimiter(
-          withRules([
-            { pattern: new RegExp('^/toy$', flags), category: 'fast' },
-          ])
-        ),
+        new ConcurrencyLimiter([
+          {
+            policy: withRules([
+              { pattern: new RegExp('^/toy$', flags), category: 'fast' },
+            ]),
+          },
+        ]),
       'must not use the g or y flag',
     ]),
   ])('rejects %s', (_, create, message) => {

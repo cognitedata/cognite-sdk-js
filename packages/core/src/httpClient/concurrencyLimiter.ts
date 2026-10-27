@@ -4,7 +4,7 @@ import { Semaphore } from '../semaphore';
 import type { HttpMethod } from './basicHttpClient';
 
 /** Per-category limits. Omitted categories use the policy defaults. */
-export type ConcurrencySettings<C extends string> = Partial<Record<C, number>>;
+export type ConcurrencyOptions<C extends string> = Partial<Record<C, number>>;
 
 export interface ConcurrencyRule<C extends string> {
   /** Matches any method when omitted. */
@@ -30,9 +30,9 @@ export interface ConcurrencyPolicy<C extends string> {
   readonly fallback?: (normalizedPath: string) => C | undefined;
 }
 
-export interface ConcurrencyPolicyWithSettings {
+export interface ConcurrencyPolicyWithOptions {
   readonly policy: ConcurrencyPolicy<string>;
-  readonly settings?: ConcurrencySettings<string>;
+  readonly options?: ConcurrencyOptions<string>;
 }
 
 export interface ConcurrencyLimitedRequest {
@@ -45,21 +45,22 @@ export interface RequestConcurrencyLimiter {
 }
 
 /** Limits concurrent HTTP attempts per category of a {@link ConcurrencyPolicy}. */
-export class ConcurrencyLimiter<C extends string>
-  implements RequestConcurrencyLimiter
-{
-  private readonly semaphores: Record<C, Semaphore>;
+export class ConcurrencyLimiter implements RequestConcurrencyLimiter {
+  private readonly policy: ConcurrencyPolicy<string>;
+  private readonly semaphores: Record<string, Semaphore>;
 
-  constructor(
-    private readonly policy: ConcurrencyPolicy<C>,
-    settings: ConcurrencySettings<C> = {}
-  ) {
-    const categories = Object.keys(policy.defaults) as C[];
+  constructor(policies: readonly ConcurrencyPolicyWithOptions[]) {
+    if (policies.length > 1) {
+      throw new Error('Using multiple concurrency policies is not implemented');
+    }
+    const { policy, options = {} } = policies[0];
+    this.policy = policy;
+    const categories = Object.keys(policy.defaults);
     if (categories.some((category) => !category)) {
       throw new Error(`concurrency.${policy.name} has an empty category name`);
     }
-    for (const key of Object.keys(settings)) {
-      if (!categories.includes(key as C)) {
+    for (const key of Object.keys(options)) {
+      if (!categories.includes(key)) {
         throw new Error(
           `Unknown concurrency category concurrency.${policy.name}.${key}`
         );
@@ -77,16 +78,16 @@ export class ConcurrencyLimiter<C extends string>
         );
       }
     }
-    this.semaphores = {} as Record<C, Semaphore>;
+    this.semaphores = {};
     for (const category of categories) {
       this.semaphores[category] = new Semaphore(
-        settings[category] ?? policy.defaults[category],
+        options[category] ?? policy.defaults[category],
         `concurrency.${policy.name}.${category}`
       );
     }
   }
 
-  public classify(method: HttpMethod, pathname: string): C | undefined {
+  public classify(method: HttpMethod, pathname: string): string | undefined {
     const path = this.policy.normalizePath?.(pathname) ?? pathname;
     for (const rule of this.policy.rules) {
       if (

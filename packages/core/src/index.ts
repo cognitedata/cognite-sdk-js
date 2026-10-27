@@ -32,9 +32,9 @@ export {
 export type { EndpointList, RetryValidator } from './httpClient/retryValidator';
 export type {
   ConcurrencyPolicy,
-  ConcurrencyPolicyWithSettings,
+  ConcurrencyPolicyWithOptions,
   ConcurrencyRule,
-  ConcurrencySettings,
+  ConcurrencyOptions,
 } from './httpClient/concurrencyLimiter';
 export { RevertableArraySorter } from './revertableArraySorter';
 export {

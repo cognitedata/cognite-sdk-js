@@ -14,7 +14,7 @@ import type {
 } from './basicHttpClient';
 import {
   ConcurrencyLimiter,
-  type ConcurrencyPolicyWithSettings,
+  type ConcurrencyPolicyWithOptions,
   type RequestConcurrencyLimiter,
 } from './concurrencyLimiter';
 import { HttpError } from './httpError';
@@ -76,14 +76,10 @@ export class CDFHttpClient extends RetryableHttpClient {
    * The limit is held per attempt, not across retries or backoff.
    */
   public setConcurrencyPolicies(
-    policies: readonly ConcurrencyPolicyWithSettings[]
+    policies: readonly ConcurrencyPolicyWithOptions[]
   ) {
-    if (policies.length > 1) {
-      throw new Error('Using multiple concurrency policies is not implemented');
-    }
-    this.concurrencyLimiter = policies[0]
-      ? new ConcurrencyLimiter(policies[0].policy, policies[0].settings)
-      : undefined;
+    this.concurrencyLimiter =
+      policies.length > 0 ? new ConcurrencyLimiter(policies) : undefined;
   }
 
   public addOneTimeHeader(name: string, value: string) {
