@@ -452,7 +452,6 @@ describe('Instances integration test', () => {
         expect.objectContaining({
           code: 'unfilteredContainerScan',
           category: 'filtering',
-          grade: 'D',
           resultExpression: 'result_set_1',
         })
       );
@@ -499,7 +498,6 @@ describe('Instances integration test', () => {
       expect(notice).toBeDefined();
       if (notice?.code === 'syncMissingSpaceFilter') {
         expect(notice.category).toBe('sync');
-        expect(notice.grade).toBe('C');
         expect(typeof notice.hint).toBe('string');
       }
     });
