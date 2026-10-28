@@ -15,6 +15,12 @@ export type ConcurrencyOptions = {
 };
 
 export interface ClientOptions extends Omit<CoreClientOptions, 'concurrency'> {
-  /** Per-API request concurrency limits. */
+  /**
+   * Opt-in per-API request concurrency limits. Requests are not limited unless
+   * this is set; `{}` enables the default limits.
+   *
+   * @alpha This functionality is experimental. Breaking changes are to be expected
+   * in any release, including patch and minor versions.
+   */
   concurrency?: ConcurrencyOptions;
 }

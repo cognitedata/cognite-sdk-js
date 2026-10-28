@@ -53,7 +53,12 @@ export interface ClientOptions {
    */
   retryValidator?: RetryValidator;
   /**
-   * Per-API concurrency limits, keyed by API name (for example `dataModeling`).
+   * Opt-in per-API concurrency limits, keyed by API name (for example `dataModeling`).
+   * Requests are not limited unless this is set; an empty object enables the
+   * default limits of every API the SDK package supports.
+   *
+   * @alpha This functionality is experimental. Breaking changes are to be expected
+   * in any release, including patch and minor versions.
    */
   concurrency?: Readonly<
     Record<string, Readonly<Record<string, number | undefined>> | undefined>
@@ -146,12 +151,18 @@ export default class BaseCogniteClient {
     };
 
     this.initAPIs();
-    this.http.setConcurrencyPolicies(
-      this.concurrencyPolicies.map((policy) => ({
-        policy,
-        options: options.concurrency?.[policy.name],
-      }))
-    );
+    const { concurrency } = options;
+    if (concurrency) {
+      console.warn(
+        'options.concurrency is experimental. Breaking changes are to be expected in any release, including patch and minor versions.'
+      );
+      this.http.setConcurrencyPolicies(
+        this.concurrencyPolicies.map((policy) => ({
+          policy,
+          options: concurrency[policy.name],
+        }))
+      );
+    }
   }
 
   public authenticate: () => Promise<string | undefined> = async () => {

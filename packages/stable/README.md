@@ -86,6 +86,9 @@ quickstart();
 
 ## Concurrency
 
+> **Experimental:** the `concurrency` option is experimental. Breaking changes
+> are to be expected in any release, including patch and minor versions.
+
 Concurrency limits control how many HTTP requests the SDK can have in flight at
 the same time, not how many requests it sends per second. Limits are applied per
 client and operation category. Requests that reach a category's limit wait in a
@@ -105,6 +108,8 @@ stalled response body, retains its slot indefinitely. Timing out an outer promis
 for example with `Promise.race`, does not cancel the underlying request or release
 its slot.
 
+Concurrency limits are **opt-in**: requests are not limited unless you pass the
+`concurrency` client option. Pass an empty object to enable the defaults.
 Currently, the SDK applies concurrency limits only to Data Modeling requests.
 Other API requests are not limited by this mechanism.
 
@@ -115,8 +120,8 @@ Other API requests are not limited by this mechanism.
 
 ### Data Modeling concurrency
 
-Data Modeling requests are concurrency-limited by default. Each client has
-independent budgets shared across all endpoints in the Data Modeling `/models`
+Once `concurrency` is set, Data Modeling requests are limited by the defaults
+below. Each client has independent budgets shared across all endpoints in the Data Modeling `/models`
 namespace and Data Modeling GraphQL routes, including raw client HTTP calls:
 
 | Category | Default | Operations |
@@ -142,6 +147,17 @@ Project routes remain limited behind proxy path prefixes, for example
 Categories have independent budgets, so requests in different categories can run
 at the same time. If every category is saturated, the defaults allow at most 8
 requests in flight per client (1 + 2 + 1 + 1 + 2 + 1).
+
+To enable the default limits:
+
+```js
+const client = new CogniteClient({
+  appId: 'YOUR APPLICATION NAME',
+  project: 'YOUR PROJECT',
+  oidcTokenProvider: async () => 'YOUR_OIDC_ACCESS_TOKEN',
+  concurrency: {},
+});
+```
 
 To set specific limits:
 

@@ -18,11 +18,15 @@ describe('Client Data Modeling concurrency', () => {
   const createClient = (options: Partial<ClientOptions> = {}) =>
     setupMockableClient({
       project: 'test',
+      concurrency: {},
       ...options,
     });
 
+  let warn: ReturnType<typeof vi.spyOn>;
+
   beforeEach(() => {
     requests = controlFetch();
+    warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
   });
 
   afterEach(() => vi.restoreAllMocks());
@@ -69,6 +73,26 @@ describe('Client Data Modeling concurrency', () => {
     expect(requests).toHaveLength(3);
     requests[2].reply({});
     await Promise.all(results);
+  });
+
+  test('does not limit requests unless concurrency is set', async () => {
+    const client = createClient({ concurrency: undefined });
+    expect(warn).not.toHaveBeenCalled();
+    const results = Array.from({ length: 4 }, () =>
+      client.instances.query({ with: {}, select: {} })
+    );
+    await setImmediate();
+    expect(requests).toHaveLength(4);
+    for (const request of requests) request.reply();
+    await Promise.all(results);
+  });
+
+  test('warns that concurrency is experimental', () => {
+    createClient();
+    expect(warn).toHaveBeenCalledOnce();
+    expect(warn).toHaveBeenCalledWith(
+      expect.stringContaining('options.concurrency is experimental')
+    );
   });
 
   test('passes client overrides through to the HTTP stack', async () => {
