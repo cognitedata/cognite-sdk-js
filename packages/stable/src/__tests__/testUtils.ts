@@ -8,6 +8,7 @@ import type { ClientOptions } from '../clientOptions';
 import CogniteClient from '../cogniteClient';
 import type { ExternalFileInfo, NodeOrEdge } from '../types';
 import { login } from './login';
+import { testConcurrency } from './testConcurrency';
 
 function setupClient(baseUrl: string = process.env.COGNITE_BASE_URL as string) {
   return new CogniteClient({
@@ -30,6 +31,7 @@ function setupLoggedInClient() {
       login().then((account) => {
         return account.access_token;
       }),
+    concurrency: testConcurrency,
   });
   return client;
 }
