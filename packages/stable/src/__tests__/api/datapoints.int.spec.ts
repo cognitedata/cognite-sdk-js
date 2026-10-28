@@ -9,15 +9,15 @@ import type {
   NodeWrite,
   Timeseries,
 } from '../../types';
-import { randomInt, setupLoggedInClient } from '../testUtils';
+import { TEST_DATA_SPACE, randomInt, setupLoggedInClient } from '../testUtils';
 
 describe('Datapoints integration test', () => {
   let client: CogniteClient;
   let timeserie: Timeseries;
 
   const testSpace = {
-    space: 'test_data_space',
-    name: 'test_data_space',
+    space: TEST_DATA_SPACE,
+    name: TEST_DATA_SPACE,
     description: 'Instance space used for integration tests.',
   };
 

@@ -3,6 +3,39 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [10.16.0](https://github.com/cognitedata/cognite-sdk-js/compare/%40cognite%2Fsdk%4010.15.0...%40cognite%2Fsdk%4010.16.0) (2026-10-19)
+
+### Features
+
+* **dataproducts:** move data products API to stable ([#1505](https://github.com/cognitedata/cognite-sdk-js/issues/1505)) ([9180e08](https://github.com/cognitedata/cognite-sdk-js/commit/9180e08c6955e21d01b0180e55a7c416219ad01f))
+* **stable:** add operator to instances SearchRequestV3 ([#1506](https://github.com/cognitedata/cognite-sdk-js/issues/1506)) ([3104376](https://github.com/cognitedata/cognite-sdk-js/commit/3104376ef72b7aa1df0679cc53bf630502ecd031))
+
+
+# [10.15.0](https://github.com/cognitedata/cognite-sdk-js/compare/%40cognite%2Fsdk%4010.14.0...%40cognite%2Fsdk%4010.15.0) (2026-10-07)
+
+### Bug Fixes
+
+* **codegen:** dedupe types that match @cognite/sdk-core exports ([#1485](https://github.com/cognitedata/cognite-sdk-js/issues/1485)) ([0104cf3](https://github.com/cognitedata/cognite-sdk-js/commit/0104cf395fd546e2db2e6eaa1ae6300dad55a483)), closes [#1480](https://github.com/cognitedata/cognite-sdk-js/issues/1480)
+
+### Features
+
+* **extractors:** add list, retrieve, and getSchema ([#1480](https://github.com/cognitedata/cognite-sdk-js/issues/1480)) ([26f7986](https://github.com/cognitedata/cognite-sdk-js/commit/26f79862434d92dd55c2b9cd90bd9dca1bd66427)), closes [#1482](https://github.com/cognitedata/cognite-sdk-js/issues/1482) [#1483](https://github.com/cognitedata/cognite-sdk-js/issues/1483)
+* **extractors:** add releases list and retrieval ([#1483](https://github.com/cognitedata/cognite-sdk-js/issues/1483)) ([ea6475d](https://github.com/cognitedata/cognite-sdk-js/commit/ea6475d214d45b372cf31ef08575809dd3021751))
+* **extractors:** add source systems and solutions list and retrieval ([#1482](https://github.com/cognitedata/cognite-sdk-js/issues/1482)) ([eaed231](https://github.com/cognitedata/cognite-sdk-js/commit/eaed231801a3f9c2efa6240d0affa4720f658106))
+
+
+# [10.14.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@10.13.0...@cognite/sdk@10.14.0) (2026-09-02)
+
+
+### Features
+
+* **dms:** add support for record views ([#1464](https://github.com/cognitedata/cognite-sdk-js/issues/1464)) ([939f2bc](https://github.com/cognitedata/cognite-sdk-js/commit/939f2bcc75507a26424e865ec538f698651f61cd)), closes [#1345](https://github.com/cognitedata/cognite-sdk-js/issues/1345)
+* **records:** support record views as sources in the records API ([#1469](https://github.com/cognitedata/cognite-sdk-js/issues/1469)) ([97ce761](https://github.com/cognitedata/cognite-sdk-js/commit/97ce761c4ece6461d2923f70e6c128c35e46741f)), closes [#1464](https://github.com/cognitedata/cognite-sdk-js/issues/1464)
+
+
+
+
+
 # [10.13.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@10.12.1...@cognite/sdk@10.13.0) (2026-08-04)
 
 

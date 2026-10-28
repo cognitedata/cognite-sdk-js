@@ -144,8 +144,6 @@ describe('code generation', () => {
       });
 
       const wants = [
-        'CogniteExternalId',
-        'CogniteInternalId',
         'EpochTimestamp',
         'Function',
         'FunctionBuildError',
@@ -229,8 +227,6 @@ describe('code generation', () => {
       ]);
 
       expect(typeNames).toEqual([
-        'CogniteExternalId',
-        'CogniteInternalId',
         'EpochTimestamp',
         'FunctionFileId',
         'FunctionFilter',

@@ -19,6 +19,11 @@ import type {
   EntityMatchingRefitResponse,
 } from '../../types';
 
+/**
+ * Entity matching works on any objects with string fields, so it is not tied to asset-centric resources.
+ * To match data modeling instances, pass each node with its `space` as an extra field: `externalId` is
+ * only unique within a space, and every field of a source or target is returned in the predictions.
+ */
 export class EntityMatchingApi extends BaseResourceAPI<EntityMatchingModel> {
   /**
    * @hidden
@@ -34,11 +39,32 @@ export class EntityMatchingApi extends BaseResourceAPI<EntityMatchingModel> {
    * [Create entity matcher](https://docs.cognite.com/api/v1/#operation/entityMatchingCreate)
    *
    * ```js
+   * // Match time series to assets, both stored as core data model instances.
+   * const { items: timeSeries } = await client.instances.list({
+   *   instanceType: 'node',
+   *   sources: [{ source: { type: 'view', space: 'cdf_cdm', externalId: 'CogniteTimeSeries', version: 'v1' } }],
+   * });
+   * const { items: assets } = await client.instances.list({
+   *   instanceType: 'node',
+   *   sources: [{ source: { type: 'view', space: 'cdf_cdm', externalId: 'CogniteAsset', version: 'v1' } }],
+   * });
+   * // externalId is only unique within a space, so keep the space as an extra field.
+   * const sources = timeSeries.map((node) => ({
+   *   externalId: node.externalId,
+   *   space: node.space,
+   *   name: String(node.properties?.cdf_cdm?.['CogniteTimeSeries/v1']?.name ?? ''),
+   * }));
+   * const targets = assets.map((node) => ({
+   *   externalId: node.externalId,
+   *   space: node.space,
+   *   name: String(node.properties?.cdf_cdm?.['CogniteAsset/v1']?.name ?? ''),
+   * }));
+   *
    * const result = await client.entityMatching.create({
-   *  sources: [{externalId: 'asset1', name: 'asset1'}, {externalId: 'asset2', name: 'asset2'}],
-   *  targets: [{externalId: 'ts1', name: 'ts1'}, {externalId: 'ts2', name: 'ts2'}],
-   *  externalId: 'model123',
-   *  name: 'model123',
+   *   sources,
+   *   targets,
+   *   externalId: 'model123',
+   *   name: 'model123',
    * });
    * ```
    */
@@ -107,10 +133,12 @@ export class EntityMatchingApi extends BaseResourceAPI<EntityMatchingModel> {
    * [Predict matches](https://docs.cognite.com/api/v1/#operation/entityMatchingPredict)
    *
    * ```js
+   * // sources and targets built from instances as in the create example:
+   * // { externalId: node.externalId, space: node.space, name: ... }
    * const response = await client.entityMatching.predict({
-   *  externalId: 'model123',
-   *  sources: [{externalId: 'asset1', name: 'asset1'}, {externalId: 'asset2', name: 'asset2'}],
-   *  targets: [{externalId: 'ts1', name: 'ts1'}, {externalId: 'ts2', name: 'ts2'}],
+   *   externalId: 'model123',
+   *   sources: [{ externalId: 'pump-01-pressure', space: 'my-space', name: 'Pump 01 pressure' }],
+   *   targets: [{ externalId: 'pump-01', space: 'my-space', name: 'Pump 01' }],
    * });
    * ```
    */
@@ -129,6 +157,9 @@ export class EntityMatchingApi extends BaseResourceAPI<EntityMatchingModel> {
    *
    * ```js
    * const { status, items } = await client.entityMatching.predictResult(12345678);
+   * // The space passed in with each target comes back, so a match maps to an instance id.
+   * const best = items[0].matches[0];
+   * const assetId = { space: String(best.matchTo.space), externalId: String(best.matchTo.externalId) };
    * ```
    */
   public predictResult = async (
@@ -144,11 +175,12 @@ export class EntityMatchingApi extends BaseResourceAPI<EntityMatchingModel> {
    *
    * ```js
    * await client.entityMatching.refit({
-   *  newExternalId: 'newModel123',
-   *  sources: [{externalId: 'asset1', name: 'asset1'}, {externalId: 'asset2', name: 'asset2'}],
-   *  targets: [{externalId: 'ts1', name: 'ts1'}, {externalId: 'ts2', name: 'ts2'}],
-   *  externalId: 'model123',
-   *  trueMatches: [{sourceExternalId: 'asset1', targetExternalId: 'ts1'}]
+   *   externalId: 'model123',
+   *   newExternalId: 'newModel123',
+   *   sources: [{ externalId: 'pump-01-pressure', space: 'my-space', name: 'Pump 01 pressure' }],
+   *   targets: [{ externalId: 'pump-01', space: 'my-space', name: 'Pump 01' }],
+   *   // Confirmed matches refer to sources and targets by externalId.
+   *   trueMatches: [{ sourceExternalId: 'pump-01-pressure', targetExternalId: 'pump-01' }],
    * });
    * ```
    */

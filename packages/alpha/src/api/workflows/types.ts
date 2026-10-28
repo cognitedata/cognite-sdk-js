@@ -167,6 +167,11 @@ export type Version = {
   workflowDefinition: WorkflowDefinition;
 };
 
+/** A {@link Version} as returned from the upsert endpoint, which may include validation warnings about the workflow definition. */
+export type VersionUpsertResponse = Version & {
+  warnings?: string[];
+};
+
 export type VersionDelete = {
   workflowExternalId: CogniteExternalId;
   version: string;

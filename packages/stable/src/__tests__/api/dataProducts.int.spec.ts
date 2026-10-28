@@ -1,7 +1,7 @@
 // Copyright 2026 Cognite AS
 
 import { afterAll, beforeAll, describe, expect, test } from 'vitest';
-import type CogniteClientAlpha from '../../cogniteClient';
+import type CogniteClient from '../../cogniteClient';
 import {
   cleanupDataProductSchemaSpaces,
   cleanupOrphanedDataProductTestResources,
@@ -14,10 +14,10 @@ function uniqueSchemaSpace(prefix: string): string {
 }
 
 describe('Data products integration test', () => {
-  let client: CogniteClientAlpha;
+  let client: CogniteClient;
   const dataProductRandom = randomInt();
   const dataProductExternalId = `int-dataproduct-${dataProductRandom}`;
-  const setupSchemaSpace = uniqueSchemaSpace('sdk_js_alpha_dp_int_setup');
+  const setupSchemaSpace = uniqueSchemaSpace('sdk_js_dp_int_setup');
   const schemaSpacesToDelete: string[] = [setupSchemaSpace];
 
   beforeAll(async () => {
@@ -49,7 +49,7 @@ describe('Data products integration test', () => {
 
   test('create', async () => {
     const externalId = `int-dataproduct-create-${randomInt()}`;
-    const schemaSpace = uniqueSchemaSpace('sdk_js_alpha_dp_int_create');
+    const schemaSpace = uniqueSchemaSpace('sdk_js_dp_int_create');
     schemaSpacesToDelete.push(schemaSpace);
     await client.spaces.upsert([
       {
@@ -74,22 +74,28 @@ describe('Data products integration test', () => {
     expect(created.name).toBe('data product create test');
     expect(created.isGoverned).toBe(true);
 
-    await client.dataProducts.delete([{ externalId }]).catch();
+    await client.dataProducts.delete([{ externalId }]).catch(() => {});
   });
 
   test('list', async () => {
-    const response = await client.dataProducts.list({ limit: 10 });
-    expect(response.items.length).toBeGreaterThan(0);
+    // Page through everything: concurrent runs and not-yet-cleaned orphans can
+    // push this run's fixture off the first page.
+    const items = await client.dataProducts
+      .list({ limit: 100 })
+      .autoPagingToArray({ limit: Number.POSITIVE_INFINITY });
+    expect(items.length).toBeGreaterThan(0);
     expect(
-      response.items.some((item) => item.externalId === dataProductExternalId)
+      items.some((item) => item.externalId === dataProductExternalId)
     ).toBe(true);
   });
 
-  test('retrieve by external id', async () => {
-    const dataProduct = await client.dataProducts.retrieve(
-      dataProductExternalId
-    );
-    expect(dataProduct.externalId).toBe(dataProductExternalId);
+  test('retrieve by external ids', async () => {
+    const items = await client.dataProducts.retrieve([
+      { externalId: dataProductExternalId },
+    ]);
+    expect(items).toHaveLength(1);
+    expect(items[0].externalId).toBe(dataProductExternalId);
+    expect(typeof items[0].createdTime).toBe('number');
   });
 
   test('update existing data product', async () => {
@@ -113,7 +119,7 @@ describe('Data products integration test', () => {
 
   test('delete', async () => {
     const externalId = `int-dataproduct-delete-${randomInt()}`;
-    const schemaSpace = uniqueSchemaSpace('sdk_js_alpha_dp_int_delete');
+    const schemaSpace = uniqueSchemaSpace('sdk_js_dp_int_delete');
     schemaSpacesToDelete.push(schemaSpace);
     await client.spaces.upsert([
       {

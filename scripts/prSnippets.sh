@@ -16,16 +16,16 @@ cd "${stablePackage}"
 yarn extract-snippets
 cd - # Go back to repo root
 
-echo "Cloning service contract repo"
-git clone https://$GITHUB_TOKEN@github.com/cognitedata/service-contracts.git >/dev/null 2>&1
-cd service-contracts
+echo "Cloning infrastructure repo"
+git clone --depth 1 https://$GITHUB_TOKEN@github.com/cognitedata/infrastructure.git >/dev/null 2>&1
+cd infrastructure
 
 echo "Checking out branch $branchName"
 git checkout -b "$branchName"
 
 echo "Copying stable SDK's code snippets"
-cp "../${stablePackage}/codeSnippets/index.json" ./versions/v1/js-sdk-examples.json
-git add ./versions/v1/js-sdk-examples.json
+cp "../${stablePackage}/codeSnippets/index.json" ./services/service_contracts/versions/v1/js-sdk-examples.json
+git add ./services/service_contracts/versions/v1/js-sdk-examples.json
 if git commit -m "$message" ; then
     echo "service contracts code snippets have changed. making pull request"
     git push origin "$branchName" >/dev/null 2>&1
@@ -36,4 +36,4 @@ else
 fi
 
 cd ../
-rm -rf service-contracts
+rm -rf infrastructure
