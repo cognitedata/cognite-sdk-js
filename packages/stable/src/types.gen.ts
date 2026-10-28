@@ -9,3 +9,12 @@
  * @example 1730204346000
  */
 export type EpochTimestamp = number;
+export interface ListOfSpaceIdsRequest {
+  items: {
+    space: SpaceSpecification;
+  }[];
+}
+/**
+ * @pattern ^[a-zA-Z][a-zA-Z0-9_-]{0,41}[a-zA-Z0-9]?$
+ */
+export type SpaceSpecification = string;
