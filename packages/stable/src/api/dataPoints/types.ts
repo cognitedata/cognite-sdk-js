@@ -126,9 +126,23 @@ export interface DatapointsDeleteRange {
 }
 
 export type DatapointsDeleteRequest =
-  | (InternalId & DatapointsDeleteRange)
-  | (ExternalId & DatapointsDeleteRange)
-  | (InstanceId & DatapointsDeleteRange);
+  | DatapointsDeleteRequestId
+  | DatapointsDeleteRequestExternalId
+  | DatapointsDeleteRequestInstanceId;
+
+/** @deprecated Addressing time series by internal id is deprecated 2026-10-15 and retired 2027-12-31, use DatapointsDeleteRequestInstanceId instead. Will be removed in next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#datapoints-identify-time-series-by-instanceid. */
+export interface DatapointsDeleteRequestId
+  extends DatapointsDeleteRange,
+    InternalId {}
+
+/** @deprecated Addressing time series by externalId is deprecated 2026-10-15 and retired 2027-12-31, use DatapointsDeleteRequestInstanceId instead. Will be removed in next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#datapoints-identify-time-series-by-instanceid. */
+export interface DatapointsDeleteRequestExternalId
+  extends DatapointsDeleteRange,
+    ExternalId {}
+
+export interface DatapointsDeleteRequestInstanceId
+  extends DatapointsDeleteRange,
+    InstanceId {}
 
 // =====================================================
 // Data points response types
@@ -362,9 +376,23 @@ export interface DatapointsQueryProperties extends Limit, Cursor {
 // =====================================================
 
 export type LatestDataBeforeRequest =
-  | (InternalId & LatestDataPropertyFilter)
-  | (ExternalId & LatestDataPropertyFilter)
-  | (InstanceId & LatestDataPropertyFilter);
+  | LatestDataBeforeRequestId
+  | LatestDataBeforeRequestExternalId
+  | LatestDataBeforeRequestInstanceId;
+
+/** @deprecated Addressing time series by internal id is deprecated 2026-10-15 and retired 2027-12-31, use LatestDataBeforeRequestInstanceId instead. Will be removed in next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#datapoints-identify-time-series-by-instanceid. */
+export interface LatestDataBeforeRequestId
+  extends LatestDataPropertyFilter,
+    InternalId {}
+
+/** @deprecated Addressing time series by externalId is deprecated 2026-10-15 and retired 2027-12-31, use LatestDataBeforeRequestInstanceId instead. Will be removed in next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#datapoints-identify-time-series-by-instanceid. */
+export interface LatestDataBeforeRequestExternalId
+  extends LatestDataPropertyFilter,
+    ExternalId {}
+
+export interface LatestDataBeforeRequestInstanceId
+  extends LatestDataPropertyFilter,
+    InstanceId {}
 
 export interface LatestDataPropertyFilter {
   /**

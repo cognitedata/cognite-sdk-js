@@ -50,8 +50,11 @@ writes stay on the Time series API and address a time series by `instanceId` (se
 - Not deprecated: the data point endpoints (`client.datapoints`) stay available, but identify time
   series by `instanceId`; see
   [Datapoints: identify time series by `instanceId`](#datapoints-identify-time-series-by-instanceid).
-  Synthetic queries (`client.timeseries.syntheticQuery`) also stay available.
-- Unchanged: `client.timeseries.subscriptions`.
+  Synthetic queries (`client.timeseries.syntheticQuery`) also stay available; reference time
+  series in expressions as `TS{space='...', externalId='...'}` instead of `TS{id=...}` or
+  `TS{externalId='...'}`.
+- Subscriptions (`client.timeseries.subscriptions`) stay available. Track time series by
+  `instanceIds`; `timeSeriesIds` and filter subscriptions are deprecated on the same terms.
 
 ```ts
 // before
@@ -79,9 +82,11 @@ await client.instances.upsert({
 
 Addressing a time series by `id` or `externalId` is deprecated as of 2026-10-15 and retired on
 2027-12-31, in favour of `instanceId`. This applies to all `client.datapoints` methods. The input
-types `DatapointsInsertById`, `DatapointsInsertByExternalId`, `DatapointsQueryId` and
-`DatapointsQueryExternalId` are deprecated; use `DatapointsInsertByInstanceId` and
-`DatapointsQueryInstanceId`. `TimeSeriesIdEither` is deprecated on the same terms; use
+types `DatapointsInsertById`, `DatapointsInsertByExternalId`, `DatapointsQueryId`,
+`DatapointsQueryExternalId`, `LatestDataBeforeRequestId`, `LatestDataBeforeRequestExternalId`,
+`DatapointsDeleteRequestId` and `DatapointsDeleteRequestExternalId` are deprecated; use
+`DatapointsInsertByInstanceId`, `DatapointsQueryInstanceId`, `LatestDataBeforeRequestInstanceId`
+and `DatapointsDeleteRequestInstanceId`. `TimeSeriesIdEither` is deprecated on the same terms; use
 `InstanceId` instead.
 
 These types (and the aliases `ExternalDatapointId`, `ExternalDatapointExternalId` and
