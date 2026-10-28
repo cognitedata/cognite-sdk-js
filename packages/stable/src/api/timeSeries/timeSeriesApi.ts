@@ -162,7 +162,7 @@ export class TimeSeriesAPI extends BaseResourceAPI<TimeSeries> {
   /**
    * [Synthetic Query](https://docs.cognite.com/api/v1/#operation/querySyntheticTimeseries)
    *
-   * Reference a time series by instance ID with TS{space='...', externalId='...'}.
+   * Referencing time series by TS{id=...} or TS{externalId='...'} is deprecated 2026-10-15 and retired 2027-12-31. Use the instance ID, TS{space='...', externalId='...'}.
    *
    * ```js
    * await client.timeseries.syntheticQuery([
