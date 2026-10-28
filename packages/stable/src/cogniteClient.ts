@@ -15,10 +15,12 @@ import { AnnotationsAPI } from './api/annotations/annotationsApi';
 import { AssetsAPI } from './api/assets/assetsApi';
 import { ContainersAPI } from './api/containers/containersApi';
 import { DataPointsAPI } from './api/dataPoints/dataPointsApi';
+import { DataProductsAPI } from './api/dataProducts/dataProductsApi';
 import { DataSetsAPI } from './api/datasets/datasetsApi';
 import { DocumentsAPI } from './api/documents/documentsApi';
 import { EntityMatchingApi } from './api/entityMatching/entityMatchingApi';
 import { EventsAPI } from './api/events/eventsApi';
+import { ExtractorsAPI } from './api/extractors/extractorsApi';
 import { FilesAPI } from './api/files/filesApi';
 import { FunctionsAPI } from './api/functions/functionsApi';
 import { GeospatialAPI } from './api/geospatial/geospatialAPI';
@@ -50,6 +52,9 @@ import { VisionAPI } from './api/vision/visionApi';
 import { retryValidator } from './retryValidator';
 
 export default class CogniteClient extends BaseCogniteClient {
+  /**
+   * @deprecated Asset-centric API, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
+   */
   public get assets() {
     return accessApi(this.assetsApi);
   }
@@ -59,9 +64,15 @@ export default class CogniteClient extends BaseCogniteClient {
   public get datapoints() {
     return accessApi(this.dataPointsApi);
   }
+  /**
+   * @deprecated Asset-centric API, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
+   */
   public get sequences() {
     return accessApi(this.sequencesApi);
   }
+  /**
+   * @deprecated Asset-centric API, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
+   */
   public get events() {
     return accessApi(this.eventsApi);
   }
@@ -71,6 +82,9 @@ export default class CogniteClient extends BaseCogniteClient {
   public get functions() {
     return accessApi(this.functionsApi);
   }
+  /**
+   * @deprecated Asset-centric API, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
+   */
   public get labels() {
     return accessApi(this.labelsApi);
   }
@@ -83,6 +97,9 @@ export default class CogniteClient extends BaseCogniteClient {
   public get groups() {
     return accessApi(this.groupsApi);
   }
+  /**
+   * @deprecated Asset-centric API, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
+   */
   public get securityCategories() {
     return accessApi(this.securityCategoriesApi);
   }
@@ -95,27 +112,42 @@ export default class CogniteClient extends BaseCogniteClient {
   public get files3D() {
     return accessApi(this.files3DApi);
   }
+  /**
+   * @deprecated Asset-centric API, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
+   */
   public get datasets() {
     return accessApi(this.datasetsApi);
   }
+  /**
+   * @deprecated Asset-centric 3D contextualization is deprecated 2026-10-15; no retirement date is announced. Use the 3D contextualization APIs in data modeling (public preview, not in this SDK yet). Will be removed or moved in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
+   */
   public get assetMappings3D() {
     return accessApi(this.assetMappings3DApi);
   }
   public get viewer3D() {
     return accessApi(this.viewer3DApi);
   }
+  /**
+   * @deprecated Asset-centric API, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
+   */
   public get relationships() {
     return accessApi(this.relationshipsApi);
   }
   public get entityMatching() {
     return accessApi(this.entityMatchingApi);
   }
+  /**
+   * @deprecated Asset-centric API, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
+   */
   public get geospatial() {
     return accessApi(this.geospatialApi);
   }
   public get documents() {
     return accessApi(this.documentsApi);
   }
+  /**
+   * @deprecated Asset-centric API, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
+   */
   public get annotations() {
     return accessApi(this.annotationsApi);
   }
@@ -134,6 +166,9 @@ export default class CogniteClient extends BaseCogniteClient {
   public get sessions() {
     return accessApi(this.sessionsApi);
   }
+  /**
+   * @deprecated Templates API was retired 2025-05-31 and will be removed in the next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md for details.
+   */
   public get templates() {
     return {
       groups: accessApi(this.apiFactory(TemplateGroupsApi, 'templategroups')),
@@ -197,6 +232,12 @@ export default class CogniteClient extends BaseCogniteClient {
   public get records() {
     return accessApi(this.recordsApi);
   }
+  public get extractors() {
+    return accessApi(this.extractorsApi);
+  }
+  public get dataProducts() {
+    return accessApi(this.dataProductsApi);
+  }
   private assetsApi?: AssetsAPI;
   private timeSeriesApi?: TimeSeriesAPI;
   protected dataPointsApi?: DataPointsAPI;
@@ -231,6 +272,8 @@ export default class CogniteClient extends BaseCogniteClient {
   private sessionsApi?: SessionsApi;
   private streamsApi?: StreamsAPI;
   private recordsApi?: RecordsAPI;
+  private extractorsApi?: ExtractorsAPI;
+  private dataProductsApi?: DataProductsAPI;
 
   protected get version() {
     return version;
@@ -290,6 +333,8 @@ export default class CogniteClient extends BaseCogniteClient {
     this.sessionsApi = this.apiFactory(SessionsApi, 'sessions');
     this.streamsApi = this.apiFactory(StreamsAPI, 'streams');
     this.recordsApi = this.apiFactory(RecordsAPI, 'streams');
+    this.extractorsApi = this.apiFactory(ExtractorsAPI, 'extractors');
+    this.dataProductsApi = this.apiFactory(DataProductsAPI, 'dataproducts');
   }
 
   static urlEncodeExternalId(externalId: string): string {

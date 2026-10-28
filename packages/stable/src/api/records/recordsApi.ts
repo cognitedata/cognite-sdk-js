@@ -41,6 +41,8 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
    *     externalId: 'record1',
    *     sources: [
    *       {
+   *         // A source may also reference a record view:
+   *         // { type: 'view', space: 'mySpace', externalId: 'myView', version: 'v1' }
    *         source: { type: 'container', space: 'mySpace', externalId: 'myContainer' },
    *         properties: { temperature: 25.5, timestamp: '2025-01-01T00:00:00Z' }
    *       }
@@ -48,6 +50,9 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
    *   }
    * ]);
    * ```
+   *
+   * @remarks
+   * A record view used as a source must target the stream being written to.
    */
   public ingest = async (
     streamExternalId: string,
@@ -131,19 +136,22 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
    * const records = await client.records.filter('my_stream', {
    *   sources: [
    *     {
-   *       source: { type: 'container', space: 'mySpace', externalId: 'myContainer' },
+   *       source: { type: 'view', space: 'mySpace', externalId: 'myView', version: 'v1' },
    *       properties: ['*']
    *     }
    *   ],
    *   filter: {
    *     equals: {
-   *       property: ['mySpace', 'myContainer', 'status'],
+   *       property: ['mySpace', 'myView/v1', 'status'],
    *       value: 'active'
    *     }
    *   },
    *   limit: 100
    * });
    * ```
+   *
+   * @remarks
+   * A record view used as a source must target the stream being read.
    */
   public filter(
     streamExternalId: string,
@@ -245,6 +253,12 @@ export class RecordsAPI extends BaseResourceAPI<RecordItem> {
    *   }
    * });
    * ```
+   *
+   * @remarks
+   * - A single dictionary level accepts at most five aggregates; split larger
+   *   requests or nest them as sub-aggregates.
+   * - Of the top-level record properties, `uniqueValues` only supports
+   *   `['space']`.
    */
   public aggregate(
     streamExternalId: string,

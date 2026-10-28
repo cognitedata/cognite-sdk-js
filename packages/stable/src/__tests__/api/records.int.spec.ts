@@ -1,6 +1,7 @@
 // Copyright 2025 Cognite AS
 
 import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest';
+import type { ViewCreateDefinition } from '../../api/views/types.gen';
 import type CogniteClient from '../../cogniteClient';
 import type { RecordDelete, SyncRecordItem } from '../../types';
 import {
@@ -1176,4 +1177,178 @@ describe('mutable records integration test', () => {
       .sort((a, b) => (a as number) - (b as number));
     expect(values).toEqual([10, 20, 30]);
   });
+});
+
+describe('record views integration test', () => {
+  let client: CogniteClient;
+
+  const immutableStreamId = 'sdk_test_immutable_stream';
+  const testSpaceId = RECORDS_TEST_SPACE;
+  const testContainerId = 'sdk_test_records_container';
+  const viewVersion = 'v1';
+  const recordsViewId = 'sdk_test_records_view';
+
+  const recordsViewRef = {
+    type: 'view' as const,
+    space: testSpaceId,
+    externalId: recordsViewId,
+    version: viewVersion,
+  };
+  const recordsViewKey = `${recordsViewId}/${viewVersion}`;
+
+  const lastDay = () => ({
+    gte: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
+  });
+
+  beforeAll(async () => {
+    client = setupLoggedInClient();
+
+    try {
+      await client.streams.retrieve({ externalId: immutableStreamId });
+    } catch {
+      await client.streams.create({
+        externalId: immutableStreamId,
+        settings: { template: { name: 'ImmutableTestStream' } },
+      });
+    }
+
+    await client.spaces.upsert([
+      {
+        space: testSpaceId,
+        name: testSpaceId,
+        description: 'Space used for records integration tests.',
+      },
+    ]);
+
+    await client.containers.upsert([
+      {
+        externalId: testContainerId,
+        space: testSpaceId,
+        name: 'Test Records Container',
+        description: 'Container used for records integration tests.',
+        usedFor: 'record',
+        properties: {
+          name: { type: { type: 'text' } },
+          value: { type: { type: 'float64' } },
+          timestamp: { type: { type: 'timestamp' } },
+        },
+      },
+    ]);
+
+    const containerRef = {
+      type: 'container' as const,
+      space: testSpaceId,
+      externalId: testContainerId,
+    };
+
+    const recordViewDefinition: ViewCreateDefinition = {
+      externalId: recordsViewId,
+      space: testSpaceId,
+      version: viewVersion,
+      name: 'Records view',
+      description: 'Record view used for records integration tests.',
+      streamId: [immutableStreamId],
+      properties: {
+        recordName: {
+          container: containerRef,
+          containerPropertyIdentifier: 'name',
+        },
+        recordValue: {
+          container: containerRef,
+          containerPropertyIdentifier: 'value',
+        },
+      },
+    };
+    await client.views.upsert([recordViewDefinition]);
+
+    // Wait until the records API refreshes the schema cache
+    await vi.waitFor(
+      async () => {
+        await client.records.filter(immutableStreamId, {
+          lastUpdatedTime: lastDay(),
+          sources: [{ source: recordsViewRef, properties: ['*'] }],
+          limit: 1,
+        });
+      },
+      { timeout: 30_000, interval: 1_000 }
+    );
+  }, 90_000);
+
+  test('ingest, filter, and aggregate through a record view', async () => {
+    const testName = `view_roundtrip_${randomInt()}`;
+
+    await client.records.ingest(immutableStreamId, [
+      {
+        space: testSpaceId,
+        externalId: `view_roundtrip_1_${randomInt()}`,
+        sources: [
+          {
+            source: recordsViewRef,
+            properties: { recordName: testName, recordValue: 100 },
+          },
+        ],
+      },
+      {
+        space: testSpaceId,
+        externalId: `view_roundtrip_2_${randomInt()}`,
+        sources: [
+          {
+            source: recordsViewRef,
+            properties: { recordName: testName, recordValue: 200 },
+          },
+        ],
+      },
+    ]);
+
+    const { items, typing } = await vi.waitFor(
+      async () => {
+        const response = await client.records.filter(immutableStreamId, {
+          lastUpdatedTime: lastDay(),
+          sources: [{ source: recordsViewRef, properties: ['*'] }],
+          filter: {
+            equals: {
+              property: [testSpaceId, recordsViewKey, 'recordName'],
+              value: testName,
+            },
+          },
+          includeTyping: true,
+          limit: 10,
+        });
+        expect(response.items.length).toBe(2);
+        return response;
+      },
+      { timeout: 10_000, interval: 200 }
+    );
+
+    const values = items
+      .map((r) => r.properties[testSpaceId][recordsViewKey].recordValue)
+      .sort();
+    expect(values).toEqual([100, 200]);
+    expect(items[0].createdTime).toBeInstanceOf(Date);
+    expect(
+      typing?.[testSpaceId]?.[recordsViewKey]?.recordValue?.type
+    ).toBeDefined();
+
+    // Aggregates accept view property paths.
+    const valueProp = [testSpaceId, recordsViewKey, 'recordValue'] satisfies [
+      string,
+      string,
+      string,
+    ];
+    const aggregates = await client.records.aggregate(immutableStreamId, {
+      lastUpdatedTime: lastDay(),
+      filter: {
+        equals: {
+          property: [testSpaceId, recordsViewKey, 'recordName'],
+          value: testName,
+        },
+      },
+      aggregates: {
+        totalCount: { count: {} },
+        totalSum: { sum: { property: valueProp } },
+      },
+    });
+    expect((aggregates.totalCount as { count: number }).count).toBe(2);
+    expect((aggregates.totalSum as { sum: number }).sum).toBe(300);
+  }, 30_000);
 });

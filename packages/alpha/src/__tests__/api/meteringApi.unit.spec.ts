@@ -126,8 +126,8 @@ describe('Metering API unit tests', () => {
           {
             meterId: 'atlas.monthly_ai_tokens',
             datapoints: [
-              { timestamp: epochMs, value: 10 },
-              { timestamp: epochMs + 1000, value: 20 },
+              { timestamp: epochMs, average: 10 },
+              { timestamp: epochMs + 1000, average: 20 },
             ],
           },
         ],
@@ -151,8 +151,8 @@ describe('Metering API unit tests', () => {
       expect(result.items[0].datapoints[1].timestamp).toEqual(
         new Date(epochMs + 1000)
       );
-      expect(result.items[0].datapoints[0].value).toBe(10);
-      expect(result.items[0].datapoints[1].value).toBe(20);
+      expect(result.items[0].datapoints[0].average).toBe(10);
+      expect(result.items[0].datapoints[1].average).toBe(20);
     });
 
     test('should handle pagination with cursor', async () => {
@@ -165,7 +165,7 @@ describe('Metering API unit tests', () => {
         items: [
           {
             meterId: 'functions.concurrent_executions',
-            datapoints: [{ timestamp: epochMs, value: 2 }],
+            datapoints: [{ timestamp: epochMs, average: 2 }],
           },
         ],
         nextCursor: 'cursor-456',
@@ -191,7 +191,7 @@ describe('Metering API unit tests', () => {
         items: [
           {
             meterId: 'atlas.monthly_ai_tokens',
-            datapoints: [{ timestamp: epochMs, value: 10 }],
+            datapoints: [{ timestamp: epochMs, average: 10 }],
           },
         ],
       };
@@ -214,7 +214,7 @@ describe('Metering API unit tests', () => {
       expect(result.items[0].datapoints[0].timestamp).toEqual(
         new Date(epochMs)
       );
-      expect(result.items[0].datapoints[0].value).toBe(10);
+      expect(result.items[0].datapoints[0].average).toBe(10);
     });
 
     test('should retrieve multiple meters and parse datapoint timestamps', async () => {
@@ -223,13 +223,13 @@ describe('Metering API unit tests', () => {
           {
             meterId: 'atlas.monthly_ai_tokens',
             datapoints: [
-              { timestamp: epochMs, value: 10 },
-              { timestamp: epochMs + 1000, value: 20 },
+              { timestamp: epochMs, average: 10 },
+              { timestamp: epochMs + 1000, average: 20 },
             ],
           },
           {
             meterId: 'files.storage_bytes',
-            datapoints: [{ timestamp: epochMs + 1000, value: 20 }],
+            datapoints: [{ timestamp: epochMs + 1000, average: 20 }],
           },
         ],
       };
@@ -260,8 +260,8 @@ describe('Metering API unit tests', () => {
       expect(result.items[1].datapoints[0].timestamp).toEqual(
         new Date(epochMs + 1000)
       );
-      expect(result.items[0].datapoints[0].value).toBe(10);
-      expect(result.items[1].datapoints[0].value).toBe(20);
+      expect(result.items[0].datapoints[0].average).toBe(10);
+      expect(result.items[1].datapoints[0].average).toBe(20);
     });
 
     test('should merge optional historical params into the request body', async () => {
