@@ -176,10 +176,12 @@ export class TimeSeriesAPI extends BaseResourceAPI<TimeSeries> {
   /**
    * [Synthetic Query](https://docs.cognite.com/api/v1/#operation/querySyntheticTimeseries)
    *
+   * Reference a time series by instance ID with TS{space='...', externalId='...'}.
+   *
    * ```js
    * await client.timeseries.syntheticQuery([
    *   {
-   *     expression: "24 * TS{externalId='production/hour', aggregate='average', granularity='1d'}",
+   *     expression: "24 * TS{space='my-space', externalId='production/hour', aggregate='average', granularity='1d'}",
    *     start: '48h-ago',
    *     end: 'now',
    *     limit: 100
