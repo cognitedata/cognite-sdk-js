@@ -4,6 +4,7 @@ import { createReadStream, readFileSync, statSync } from 'node:fs';
 import { PassThrough } from 'node:stream';
 import { vi } from 'vitest';
 import { mockBaseUrl, randomInt } from '../../../core/src/__tests__/testUtils';
+import type { ClientOptions } from '../clientOptions';
 import CogniteClient from '../cogniteClient';
 import type { ExternalFileInfo, NodeOrEdge } from '../types';
 import { login } from './login';
@@ -33,12 +34,13 @@ function setupLoggedInClient() {
   return client;
 }
 
-function setupMockableClient() {
+function setupMockableClient(options: Partial<ClientOptions> = {}) {
   return new CogniteClient({
     appId: 'JS SDK integration tests',
     project: process.env.COGNITE_PROJECT as string,
     baseUrl: mockBaseUrl,
     oidcTokenProvider: () => Promise.resolve('test accessToken'),
+    ...options,
   });
 }
 
