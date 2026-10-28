@@ -72,7 +72,8 @@ export interface StreamSettings {
  */
 export interface StreamLifecycleSettings {
   /**
-   * Time specifying how long to retain a record in this stream.
+   * Time specifying how long to retain a record in this stream. When absent,
+   * records are retained indefinitely.
    */
   dataDeletedAfter?: string;
   /**

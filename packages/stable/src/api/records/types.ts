@@ -552,7 +552,11 @@ export type CalendarInterval =
   | '1q'
   | '1y';
 
-/** Hard bounds for histogram aggregates */
+/**
+ * Hard bounds for histogram aggregates. Bounds only restrict the bucket range:
+ * empty buckets are filled between the minimum and maximum values found in the
+ * data, never padded out to `min` or `max`.
+ */
 export interface HistogramHardBounds {
   min?: number | string;
   max?: number | string;
