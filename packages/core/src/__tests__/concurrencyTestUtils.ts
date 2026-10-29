@@ -2,20 +2,20 @@
 
 /// <reference lib="es2024.promise" />
 
-import fetch, { Response } from 'cross-fetch';
-import { vi } from 'vitest';
+import { Response } from 'cross-fetch';
+import type { FetchFunction } from '../httpClient/basicHttpClient';
 
-// Mock fetch rather than nock to control request and response-body completion
-// independently, without timing-based network delays.
+// A fake fetch, injected into the HTTP client, to control request and
+// response-body completion independently, without timing-based network delays.
 export function controlFetch() {
   const requests: {
     url: string;
-    options: Parameters<typeof fetch>[1];
+    options: Parameters<FetchFunction>[1];
     resolve: (response: Response) => void;
     reject: (reason: unknown) => void;
     reply: (data?: unknown, status?: number) => void;
   }[] = [];
-  vi.mocked(fetch).mockImplementation((url, options) => {
+  const fetch: FetchFunction = (url, options) => {
     const response = Promise.withResolvers<Response>();
     requests.push({
       url: String(url),
@@ -26,6 +26,6 @@ export function controlFetch() {
         response.resolve(new Response(JSON.stringify(data), { status })),
     });
     return response.promise;
-  });
-  return requests;
+  };
+  return { fetch, requests };
 }

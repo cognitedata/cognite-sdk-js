@@ -10,11 +10,6 @@ import { CDFHttpClient } from './cdfHttpClient';
 import type { ConcurrencyPolicy } from './concurrencyLimiter';
 import { createUniversalRetryValidator } from './retryValidator';
 
-vi.mock('cross-fetch', async (importOriginal) => ({
-  ...(await importOriginal<typeof import('cross-fetch')>()),
-  default: vi.fn(),
-}));
-
 type Category = 'slow';
 
 const policy: ConcurrencyPolicy<Category> = {
@@ -24,17 +19,23 @@ const policy: ConcurrencyPolicy<Category> = {
 };
 
 describe('CDFHttpClient concurrency limiting', () => {
-  let requests: ReturnType<typeof controlFetch>;
+  let fake: ReturnType<typeof controlFetch>;
+  let requests: typeof fake.requests;
   const baseUrl = 'https://example.com';
   const query = '/toy/slow';
   const createClient = () => {
-    const client = new CDFHttpClient(baseUrl, createUniversalRetryValidator());
+    const client = new CDFHttpClient(
+      baseUrl,
+      createUniversalRetryValidator(),
+      fake.fetch
+    );
     client.setConcurrencyPolicies([{ policy }]);
     return client;
   };
 
   beforeEach(() => {
-    requests = controlFetch();
+    fake = controlFetch();
+    requests = fake.requests;
   });
 
   afterEach(() => {
@@ -82,7 +83,7 @@ describe('CDFHttpClient concurrency limiting', () => {
 
   test.each<{
     name: string;
-    finish: (request: ReturnType<typeof controlFetch>[number]) => void;
+    finish: (request: (typeof requests)[number]) => void;
     error: string;
   }>([
     {

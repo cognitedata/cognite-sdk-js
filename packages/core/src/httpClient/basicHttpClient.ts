@@ -1,6 +1,6 @@
 // Copyright 2020 Cognite AS
 
-import fetch, { Response } from 'cross-fetch';
+import crossFetch, { Response } from 'cross-fetch';
 import { DEFAULT_DOMAIN } from '../constants';
 import { isJson } from '../utils';
 import { HttpError, type HttpErrorData } from './httpError';
@@ -24,8 +24,10 @@ import type { HttpHeaders } from './httpHeaders';
  * propagated, allowing for robust error handling.
  *
  * @remarks
- * This class relies on the `cross-fetch` library for making HTTP requests,
+ * This class uses the `cross-fetch` library for making HTTP requests by default,
  * and it uses custom error and header types defined in the project.
+ * Another {@link FetchFunction} can be passed to the constructor, e.g. to fake
+ * HTTP requests in tests.
  *
  * @see {@link HttpError}
  * @see {@link HttpHeaders}
@@ -113,8 +115,12 @@ export class BasicHttpClient {
    * See HttpRequest.
    *
    * @param baseUrl
+   * @param fetch The fetch implementation used to send requests. Defaults to `cross-fetch`.
    */
-  constructor(protected baseUrl: string) {}
+  constructor(
+    protected baseUrl: string,
+    private readonly fetch: FetchFunction = crossFetch
+  ) {}
 
   public setDefaultHeader(name: string, value: string) {
     this.defaultHeaders[name] = value;
@@ -226,7 +232,7 @@ export class BasicHttpClient {
       body = BasicHttpClient.transformRequestBody(body);
       headers['Content-Type'] = 'application/json';
     }
-    const res = await fetch(url, {
+    const res = await this.fetch(url, {
       // @ts-ignore
       body,
       method: request.method,
@@ -359,6 +365,9 @@ export const HttpResponseType = {
 };
 
 export type HttpQueryParams = object;
+
+/** A `fetch`-compatible function. */
+export type FetchFunction = typeof crossFetch;
 
 type ResponseHandler<ResponseType> = (res: Response) => Promise<ResponseType>;
 

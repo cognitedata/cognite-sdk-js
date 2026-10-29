@@ -4,6 +4,7 @@ import isFunction from 'lodash/isFunction';
 import { sleepPromise } from '../utils';
 import {
   BasicHttpClient,
+  type FetchFunction,
   type HttpRequest,
   type HttpRequestOptions,
   type HttpResponse,
@@ -47,9 +48,10 @@ export class RetryableHttpClient extends BasicHttpClient {
 
   constructor(
     baseUrl: string,
-    private retryValidator: RetryValidator
+    private retryValidator: RetryValidator,
+    fetch?: FetchFunction
   ) {
-    super(baseUrl);
+    super(baseUrl, fetch);
   }
 
   public get<ResponseType>(
