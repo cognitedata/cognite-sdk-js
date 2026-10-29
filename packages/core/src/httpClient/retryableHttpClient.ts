@@ -49,9 +49,9 @@ export class RetryableHttpClient extends BasicHttpClient {
   constructor(
     baseUrl: string,
     private retryValidator: RetryValidator,
-    fetch?: FetchFunction
+    fetchImpl?: FetchFunction
   ) {
-    super(baseUrl, fetch);
+    super(baseUrl, fetchImpl);
   }
 
   public get<ResponseType>(

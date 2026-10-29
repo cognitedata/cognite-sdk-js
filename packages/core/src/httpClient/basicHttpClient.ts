@@ -1,6 +1,6 @@
 // Copyright 2020 Cognite AS
 
-import crossFetch, { Response } from 'cross-fetch';
+import fetch, { Response } from 'cross-fetch';
 import { DEFAULT_DOMAIN } from '../constants';
 import { isJson } from '../utils';
 import { HttpError, type HttpErrorData } from './httpError';
@@ -115,11 +115,11 @@ export class BasicHttpClient {
    * See HttpRequest.
    *
    * @param baseUrl
-   * @param fetch The fetch implementation used to send requests. Defaults to `cross-fetch`.
+   * @param fetchImpl The fetch implementation used to send requests. Defaults to `cross-fetch`.
    */
   constructor(
     protected baseUrl: string,
-    private readonly fetch: FetchFunction = crossFetch
+    private readonly fetchImpl: FetchFunction = fetch
   ) {}
 
   public setDefaultHeader(name: string, value: string) {
@@ -232,7 +232,7 @@ export class BasicHttpClient {
       body = BasicHttpClient.transformRequestBody(body);
       headers['Content-Type'] = 'application/json';
     }
-    const res = await this.fetch(url, {
+    const res = await this.fetchImpl(url, {
       // @ts-ignore
       body,
       method: request.method,
@@ -367,7 +367,7 @@ export const HttpResponseType = {
 export type HttpQueryParams = object;
 
 /** A `fetch`-compatible function. */
-export type FetchFunction = typeof crossFetch;
+export type FetchFunction = typeof fetch;
 
 type ResponseHandler<ResponseType> = (res: Response) => Promise<ResponseType>;
 
