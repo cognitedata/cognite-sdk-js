@@ -24,8 +24,10 @@ import type { HttpHeaders } from './httpHeaders';
  * propagated, allowing for robust error handling.
  *
  * @remarks
- * This class relies on the `cross-fetch` library for making HTTP requests,
+ * This class uses the `cross-fetch` library for making HTTP requests by default,
  * and it uses custom error and header types defined in the project.
+ * Another `fetch` implementation can be passed to the constructor, e.g. to fake
+ * HTTP requests in tests.
  *
  * @see {@link HttpError}
  * @see {@link HttpHeaders}
@@ -113,8 +115,12 @@ export class BasicHttpClient {
    * See HttpRequest.
    *
    * @param baseUrl
+   * @param fetchImpl The fetch implementation used to send requests. Defaults to `cross-fetch`.
    */
-  constructor(protected baseUrl: string) {}
+  constructor(
+    protected baseUrl: string,
+    private readonly fetchImpl: typeof fetch = fetch
+  ) {}
 
   public setDefaultHeader(name: string, value: string) {
     this.defaultHeaders[name] = value;
@@ -226,7 +232,7 @@ export class BasicHttpClient {
       body = BasicHttpClient.transformRequestBody(body);
       headers['Content-Type'] = 'application/json';
     }
-    const res = await fetch(url, {
+    const res = await this.fetchImpl(url, {
       // @ts-ignore
       body,
       method: request.method,

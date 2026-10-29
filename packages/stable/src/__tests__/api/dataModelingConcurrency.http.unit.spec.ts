@@ -7,24 +7,24 @@ import {
   CDFHttpClient,
   createUniversalRetryValidator,
 } from '@cognite/sdk-core';
-import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
+import { beforeEach, describe, expect, test } from 'vitest';
 import { controlFetch } from '../../../../core/src/__tests__/concurrencyTestUtils';
 import {
   type DataModelingConcurrencyOptions,
   dataModelingConcurrencyPolicy,
 } from '../../api/dataModeling/concurrency';
 
-vi.mock('cross-fetch', async (importOriginal) => ({
-  ...(await importOriginal<typeof import('cross-fetch')>()),
-  default: vi.fn(),
-}));
-
 describe('Data Modeling HTTP concurrency', () => {
-  let requests: ReturnType<typeof controlFetch>;
+  let fake: ReturnType<typeof controlFetch>;
+  let requests: typeof fake.requests;
   const baseUrl = 'https://example.com';
   const query = '/api/v1/projects/test/models/instances/query';
   const createClient = (options?: DataModelingConcurrencyOptions) => {
-    const client = new CDFHttpClient(baseUrl, createUniversalRetryValidator());
+    const client = new CDFHttpClient(
+      baseUrl,
+      createUniversalRetryValidator(),
+      fake.fetch
+    );
     client.setConcurrencyPolicies([
       { policy: dataModelingConcurrencyPolicy, options },
     ]);
@@ -54,12 +54,8 @@ describe('Data Modeling HTTP concurrency', () => {
   };
 
   beforeEach(() => {
-    requests = controlFetch();
-  });
-
-  afterEach(() => {
-    vi.useRealTimers();
-    vi.restoreAllMocks();
+    fake = controlFetch();
+    requests = fake.requests;
   });
 
   describe.each([
