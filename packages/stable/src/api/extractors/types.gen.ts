@@ -115,7 +115,7 @@ export interface Extractor {
    * Type
    * Type of extractor. "Global" means that it is globally available and maintained by cognite. "Community" means that it is unofficial and community maintained. "Unreleased" means that it is not yet publicly available and it is visible only as a prerelease or private beta. "Hosted" means it is a hosted extractor that runs as part of the CDF platform.
    */
-  type: 'global' | 'community' | 'unreleased' | 'hosted';
+  type: 'global' | 'community' | 'unreleased' | 'hosted' | 'zero_copy';
 }
 /**
  * Identifier for an extractor

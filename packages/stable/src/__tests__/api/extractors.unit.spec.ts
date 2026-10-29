@@ -35,6 +35,23 @@ const mockExtractor: Extractor = {
   tags: ['pi', 'industrial'],
 };
 
+const mockZeroCopyLink: Link = {
+  url: 'https://example.com/snowflake',
+  name: 'Setup guide',
+  type: 'generic',
+};
+
+const mockZeroCopyExtractor: Extractor = {
+  externalId: 'cognite-snowflake',
+  name: 'Snowflake Connector',
+  imageUrl: 'https://storage.googleapis.com/<bucket>/connectors/snowflake.png',
+  description: 'Zero-copy connector to Snowflake.',
+  documentation: '# Snowflake Connector\n\nMarkdown documentation...',
+  type: 'zero_copy',
+  links: [mockZeroCopyLink],
+  tags: ['database'],
+};
+
 const mockSchema: ExtractorSchema = {
   type: 'object',
   properties: {
@@ -81,6 +98,10 @@ const mockExtractorItemsResponse: ItemsResponseWire<Extractor> = {
   items: [mockExtractor],
 };
 
+const mockZeroCopyExtractorItemsResponse: ItemsResponseWire<Extractor> = {
+  items: [mockZeroCopyExtractor],
+};
+
 const mockReleaseItemsResponse: ItemsResponseWire<Release> = {
   items: [mockRelease],
 };
@@ -110,6 +131,18 @@ describe('Extractors unit test', () => {
     const response = await client.extractors.list();
     expect(response.items).toHaveLength(1);
     expect(response.items[0].externalId).toBe('cognite-pi');
+  });
+
+  test('list zero-copy extractors', async () => {
+    nock(mockBaseUrl)
+      .get(/\/extractors\/?$/)
+      .once()
+      .reply(200, mockZeroCopyExtractorItemsResponse);
+
+    const response = await client.extractors.list();
+    expect(response.items).toHaveLength(1);
+    expect(response.items[0].externalId).toBe('cognite-snowflake');
+    expect(response.items[0].type).toBe('zero_copy');
   });
 
   test('list extractors maps nested links and tags', async () => {
