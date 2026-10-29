@@ -74368,7 +74368,8 @@
               "global",
               "community",
               "unreleased",
-              "hosted"
+              "hosted",
+              "zero_copy"
             ]
           }
         },
