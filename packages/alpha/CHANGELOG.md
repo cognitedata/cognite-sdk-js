@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.47.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.46.1...@cognite/sdk-alpha@0.47.0) (2026-10-29)
+
+
+### Features
+
+* **alpha:** add data domains API ([#1536](https://github.com/cognitedata/cognite-sdk-js/issues/1536)) ([61938bd](https://github.com/cognitedata/cognite-sdk-js/commit/61938bdf08faef06d6fc4d000711385f356cba96))
+
+
+
+
+
 ## [0.46.1](https://github.com/cognitedata/cognite-sdk-js/compare/%40cognite%2Fsdk-alpha%400.46.0...%40cognite%2Fsdk-alpha%400.46.1) (2026-10-29)
 
 **Note:** Version bump only for package @cognite/sdk-alpha
