@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [10.17.0](https://github.com/cognitedata/cognite-sdk-js/compare/%40cognite%2Fsdk%4010.16.0...%40cognite%2Fsdk%4010.17.0) (2026-10-29)
+
+### Features
+
+* deprecate asset-centric APIs, methods and types ([#1497](https://github.com/cognitedata/cognite-sdk-js/issues/1497)) ([cba21ac](https://github.com/cognitedata/cognite-sdk-js/commit/cba21acf264672062e266550ea5143588ae30f06)), closes [#1513](https://github.com/cognitedata/cognite-sdk-js/issues/1513) [#1513](https://github.com/cognitedata/cognite-sdk-js/issues/1513) [#1513](https://github.com/cognitedata/cognite-sdk-js/issues/1513) [#1498](https://github.com/cognitedata/cognite-sdk-js/issues/1498) [#1513](https://github.com/cognitedata/cognite-sdk-js/issues/1513) [#1513](https://github.com/cognitedata/cognite-sdk-js/issues/1513)
+* **extractors:** add zero_copy extractor type ([#1529](https://github.com/cognitedata/cognite-sdk-js/issues/1529)) ([f34a5ba](https://github.com/cognitedata/cognite-sdk-js/commit/f34a5baffeef1dc85132436f3aead43927fc315e))
+
+
 # [10.16.0](https://github.com/cognitedata/cognite-sdk-js/compare/%40cognite%2Fsdk%4010.15.0...%40cognite%2Fsdk%4010.16.0) (2026-10-19)
 
 ### Features
