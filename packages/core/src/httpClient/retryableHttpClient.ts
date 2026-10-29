@@ -1,10 +1,10 @@
 // Copyright 2020 Cognite AS
 
+import type fetch from 'cross-fetch';
 import isFunction from 'lodash/isFunction';
 import { sleepPromise } from '../utils';
 import {
   BasicHttpClient,
-  type FetchFunction,
   type HttpRequest,
   type HttpRequestOptions,
   type HttpResponse,
@@ -49,7 +49,7 @@ export class RetryableHttpClient extends BasicHttpClient {
   constructor(
     baseUrl: string,
     private retryValidator: RetryValidator,
-    fetchImpl?: FetchFunction
+    fetchImpl?: typeof fetch
   ) {
     super(baseUrl, fetchImpl);
   }

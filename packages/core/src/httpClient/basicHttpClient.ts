@@ -26,7 +26,7 @@ import type { HttpHeaders } from './httpHeaders';
  * @remarks
  * This class uses the `cross-fetch` library for making HTTP requests by default,
  * and it uses custom error and header types defined in the project.
- * Another {@link FetchFunction} can be passed to the constructor, e.g. to fake
+ * Another `fetch` implementation can be passed to the constructor, e.g. to fake
  * HTTP requests in tests.
  *
  * @see {@link HttpError}
@@ -119,7 +119,7 @@ export class BasicHttpClient {
    */
   constructor(
     protected baseUrl: string,
-    private readonly fetchImpl: FetchFunction = fetch
+    private readonly fetchImpl: typeof fetch = fetch
   ) {}
 
   public setDefaultHeader(name: string, value: string) {
@@ -365,9 +365,6 @@ export const HttpResponseType = {
 };
 
 export type HttpQueryParams = object;
-
-/** A `fetch`-compatible function. */
-export type FetchFunction = typeof fetch;
 
 type ResponseHandler<ResponseType> = (res: Response) => Promise<ResponseType>;
 
