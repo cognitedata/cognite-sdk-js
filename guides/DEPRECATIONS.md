@@ -37,6 +37,112 @@ APIs in data modeling, which are in public preview and not yet part of this SDK.
 APIs (`client.models3D`, `client.revisions3D`, `client.files3D`, `client.viewer3D`) are **not**
 deprecated.
 
+### Time series: metadata is deprecated
+
+`client.timeseries` is not going away. CDF deprecates asset-centric time series metadata and the
+asset-hierarchy filters as of 2026-10-15 and retires them on 2027-12-31. Data point reads and
+writes stay on the Time series API and address a time series by `instanceId` (see below).
+
+- Deprecated: `client.timeseries.create`, `update`, `list`, `search`, `aggregate`, `delete` and
+  `retrieve`, together with the `TimeSeries` type and the create, filter, search, update and
+  aggregate types. Create and query time series as `CogniteTimeSeries` instances via
+  `client.instances` instead.
+- Not deprecated: the data point endpoints (`client.datapoints`) stay available, but identify time
+  series by `instanceId`; see
+  [Datapoints: identify time series by `instanceId`](#datapoints-identify-time-series-by-instanceid).
+  Synthetic queries (`client.timeseries.syntheticQuery`) also stay available; reference time
+  series in expressions as `TS{space='...', externalId='...'}` instead of `TS{id=...}` or
+  `TS{externalId='...'}`.
+- Subscriptions (`client.timeseries.subscriptions`) stay available, but track time series by
+  `instanceIds`; see
+  [Data point subscriptions: track time series by `instanceIds`](#data-point-subscriptions-track-time-series-by-instanceids).
+
+```ts
+// before
+await client.timeseries.create([{ externalId: 'my-ts', name: 'Pressure', isStep: false }]);
+
+// after
+await client.instances.upsert({
+  items: [
+    {
+      instanceType: 'node',
+      space: 'my-space',
+      externalId: 'my-ts',
+      sources: [
+        {
+          source: { type: 'view', space: 'cdf_cdm', externalId: 'CogniteTimeSeries', version: 'v1' },
+          properties: { name: 'Pressure', isStep: false, type: 'numeric' },
+        },
+      ],
+    },
+  ],
+});
+```
+
+### Datapoints: identify time series by `instanceId`
+
+Addressing a time series by `id` or `externalId` is deprecated as of 2026-10-15 and retired on
+2027-12-31, in favour of `instanceId`. This applies to all `client.datapoints` methods. The input
+types `DatapointsInsertById`, `DatapointsInsertByExternalId`, `DatapointsQueryId`,
+`DatapointsQueryExternalId`, `LatestDataBeforeRequestId`, `LatestDataBeforeRequestExternalId`,
+`DatapointsDeleteRequestId` and `DatapointsDeleteRequestExternalId` are deprecated; use
+`DatapointsInsertByInstanceId`, `DatapointsQueryInstanceId`, `LatestDataBeforeRequestInstanceId`
+and `DatapointsDeleteRequestInstanceId`. `TimeSeriesIdEither` is deprecated on the same terms; use
+`InstanceId` instead.
+
+These types (and the aliases `ExternalDatapointId`, `ExternalDatapointExternalId` and
+`TimeseriesIdEither`) are tagged `@deprecated`, so your editor flags them where you reference them
+by name. Inline request objects such as `retrieve({ items: [{ id: 123 }] })` get no warning, so
+check your own code for `id` or `externalId` in datapoint requests. Nothing changes at runtime.
+
+```ts
+// before
+await client.datapoints.retrieve({ items: [{ externalId: 'my-ts' }] });
+
+// after
+await client.datapoints.retrieve({
+  items: [{ instanceId: { space: 'my-space', externalId: 'my-ts' } }],
+});
+```
+
+### Data point subscriptions: track time series by `instanceIds`
+
+`client.timeseries.subscriptions` and its methods stay available. Defining a subscription by time
+series external ids (`timeSeriesIds`), filter subscriptions (`filter`) and data sets on
+subscriptions (`dataSetId`) are deprecated as of 2026-10-15 and retired on 2027-12-31. Define
+subscriptions through a list of time series instance ids (`instanceIds`) instead.
+
+- Deprecated on create and update: `timeSeriesIds`, `filter` and `dataSetId`
+  (`DataPointSubscriptionCreate`, `DataPointSubscriptionUpdateBody`), and the
+  `DataPointSubscriptionTimeSeriesIdsUpdate` type. Use `instanceIds` and
+  `DataPointSubscriptionInstanceIdsUpdate`. `dataSetId` has no replacement on subscriptions.
+- Deprecated in responses: `dataSetId` and `filter` on `DataPointSubscription`, `id` and
+  `externalId` on subscription members (`listMembers`), and `id` and `externalId` on the time
+  series in subscription data and subscription changes (`listData`). Use `instanceId`.
+
+Existing filter subscriptions keep working until retirement, but there is no filter-based
+replacement: to replace one, create a subscription that lists its time series in `instanceIds`.
+The filter types (`SubscriptionFilterLanguage` and the filters it is built from) are not tagged.
+As with data points, editors flag the deprecated fields when you read them or reference the
+deprecated types by name, but not in inline request objects, so check your own code for
+`timeSeriesIds`, `filter` and `dataSetId` in subscription requests. Nothing changes at runtime.
+
+```ts
+// before
+await client.timeseries.subscriptions.create([
+  { externalId: 'my-subscription', partitionCount: 1, timeSeriesIds: ['my-ts'] },
+]);
+
+// after
+await client.timeseries.subscriptions.create([
+  {
+    externalId: 'my-subscription',
+    partitionCount: 1,
+    instanceIds: [{ space: 'my-space', externalId: 'my-ts' }],
+  },
+]);
+```
+
 ## Templates (retired 2025-05-31)
 
 The Templates API was retired on 2025-05-31. `client.templates` and its types will be removed in

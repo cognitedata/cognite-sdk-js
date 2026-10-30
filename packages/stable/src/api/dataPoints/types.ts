@@ -126,9 +126,23 @@ export interface DatapointsDeleteRange {
 }
 
 export type DatapointsDeleteRequest =
-  | (InternalId & DatapointsDeleteRange)
-  | (ExternalId & DatapointsDeleteRange)
-  | (InstanceId & DatapointsDeleteRange);
+  | DatapointsDeleteRequestId
+  | DatapointsDeleteRequestExternalId
+  | DatapointsDeleteRequestInstanceId;
+
+/** @deprecated Addressing time series by internal id is deprecated 2026-10-15 and retired 2027-12-31, use DatapointsDeleteRequestInstanceId instead. Will be removed in next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#datapoints-identify-time-series-by-instanceid. */
+export interface DatapointsDeleteRequestId
+  extends DatapointsDeleteRange,
+    InternalId {}
+
+/** @deprecated Addressing time series by externalId is deprecated 2026-10-15 and retired 2027-12-31, use DatapointsDeleteRequestInstanceId instead. Will be removed in next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#datapoints-identify-time-series-by-instanceid. */
+export interface DatapointsDeleteRequestExternalId
+  extends DatapointsDeleteRange,
+    ExternalId {}
+
+export interface DatapointsDeleteRequestInstanceId
+  extends DatapointsDeleteRange,
+    InstanceId {}
 
 // =====================================================
 // Data points response types
@@ -209,11 +223,12 @@ export interface DatapointsInsertProperties {
 /** @deprecated Use DatapointsInsertProperties instead. Will be removed in next major release. */
 export type ExternalDatapoints = DatapointsInsertProperties;
 
+/** @deprecated Addressing time series by externalId is deprecated 2026-10-15 and retired 2027-12-31, use DatapointsInsertByInstanceId instead. Will be removed in next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#datapoints-identify-time-series-by-instanceid. */
 export interface DatapointsInsertByExternalId
   extends DatapointsInsertProperties,
     ExternalId {}
 
-/** @deprecated Use DatapointsInsertByExternalId instead. Will be removed in next major release. */
+/** @deprecated Addressing time series by externalId is deprecated 2026-10-15 and retired 2027-12-31, use DatapointsInsertByInstanceId instead. Will be removed in next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#datapoints-identify-time-series-by-instanceid. */
 export type ExternalDatapointExternalId = DatapointsInsertByExternalId;
 
 export interface DatapointsInsertByInstanceId
@@ -223,11 +238,12 @@ export interface DatapointsInsertByInstanceId
 /** @deprecated Use DatapointsInsertByInstanceId instead. Will be removed in next major release. */
 export type ExternalDatapointInstanceId = DatapointsInsertByInstanceId;
 
+/** @deprecated Addressing time series by internal id is deprecated 2026-10-15 and retired 2027-12-31, use DatapointsInsertByInstanceId instead. Will be removed in next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#datapoints-identify-time-series-by-instanceid. */
 export interface DatapointsInsertById
   extends DatapointsInsertProperties,
     InternalId {}
 
-/** @deprecated Use DatapointsInsertById instead. Will be removed in next major release. */
+/** @deprecated Addressing time series by internal id is deprecated 2026-10-15 and retired 2027-12-31, use DatapointsInsertByInstanceId instead. Will be removed in next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#datapoints-identify-time-series-by-instanceid. */
 export type ExternalDatapointId = DatapointsInsertById;
 
 export type DatapointsInsertItem =
@@ -287,10 +303,12 @@ export type DatapointsQuery =
   | DatapointsQueryExternalId
   | DatapointsQueryInstanceId;
 
+/** @deprecated Addressing time series by externalId is deprecated 2026-10-15 and retired 2027-12-31, use DatapointsQueryInstanceId instead. Will be removed in next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#datapoints-identify-time-series-by-instanceid. */
 export interface DatapointsQueryExternalId
   extends DatapointsQueryProperties,
     ExternalId {}
 
+/** @deprecated Addressing time series by internal id is deprecated 2026-10-15 and retired 2027-12-31, use DatapointsQueryInstanceId instead. Will be removed in next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#datapoints-identify-time-series-by-instanceid. */
 export interface DatapointsQueryId
   extends DatapointsQueryProperties,
     InternalId {}
@@ -358,9 +376,23 @@ export interface DatapointsQueryProperties extends Limit, Cursor {
 // =====================================================
 
 export type LatestDataBeforeRequest =
-  | (InternalId & LatestDataPropertyFilter)
-  | (ExternalId & LatestDataPropertyFilter)
-  | (InstanceId & LatestDataPropertyFilter);
+  | LatestDataBeforeRequestId
+  | LatestDataBeforeRequestExternalId
+  | LatestDataBeforeRequestInstanceId;
+
+/** @deprecated Addressing time series by internal id is deprecated 2026-10-15 and retired 2027-12-31, use LatestDataBeforeRequestInstanceId instead. Will be removed in next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#datapoints-identify-time-series-by-instanceid. */
+export interface LatestDataBeforeRequestId
+  extends LatestDataPropertyFilter,
+    InternalId {}
+
+/** @deprecated Addressing time series by externalId is deprecated 2026-10-15 and retired 2027-12-31, use LatestDataBeforeRequestInstanceId instead. Will be removed in next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#datapoints-identify-time-series-by-instanceid. */
+export interface LatestDataBeforeRequestExternalId
+  extends LatestDataPropertyFilter,
+    ExternalId {}
+
+export interface LatestDataBeforeRequestInstanceId
+  extends LatestDataPropertyFilter,
+    InstanceId {}
 
 export interface LatestDataPropertyFilter {
   /**
