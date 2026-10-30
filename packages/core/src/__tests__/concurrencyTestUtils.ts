@@ -2,23 +2,27 @@
 
 /// <reference lib="es2024.promise" />
 
-import type fetch from 'cross-fetch';
 import { Response } from 'cross-fetch';
+import type {
+  FetchLike,
+  FetchLikeRequestInit,
+  FetchLikeResponse,
+} from '../httpClient/basicHttpClient';
 
 // A fake fetch, injected into the HTTP client, to control request and
 // response-body completion independently, without timing-based network delays.
 export function controlFetch() {
   const requests: {
     url: string;
-    options: Parameters<typeof fetch>[1];
-    resolve: (response: Response) => void;
+    options: FetchLikeRequestInit;
+    resolve: (response: FetchLikeResponse) => void;
     reject: (reason: unknown) => void;
     reply: (data?: unknown, status?: number) => void;
   }[] = [];
-  const fakeFetch: typeof fetch = (url, options) => {
-    const response = Promise.withResolvers<Response>();
+  const fakeFetch: FetchLike = (url, options) => {
+    const response = Promise.withResolvers<FetchLikeResponse>();
     requests.push({
-      url: String(url),
+      url,
       options,
       resolve: response.resolve,
       reject: response.reject,

@@ -26,7 +26,7 @@ import type { HttpHeaders } from './httpHeaders';
  * @remarks
  * This class uses the `cross-fetch` library for making HTTP requests by default,
  * and it uses custom error and header types defined in the project.
- * Another `fetch` implementation can be passed to the constructor, e.g. to fake
+ * Another {@link FetchLike} implementation can be passed to the constructor, e.g. to fake
  * HTTP requests in tests.
  *
  * @see {@link HttpError}
@@ -46,19 +46,19 @@ export class BasicHttpClient {
   }
 
   private static jsonResponseHandler<ResponseType>(
-    res: Response
+    res: FetchLikeResponse
   ): Promise<ResponseType> {
     return res.json() as Promise<ResponseType>;
   }
 
   private static textResponseHandler<ResponseType>(
-    res: Response
+    res: FetchLikeResponse
   ): Promise<ResponseType> {
     return res.text() as unknown as Promise<ResponseType>;
   }
 
   private static arrayBufferResponseHandler<ResponseType>(
-    res: Response
+    res: FetchLikeResponse
   ): Promise<ResponseType> {
     return res
       .blob()
@@ -80,7 +80,9 @@ export class BasicHttpClient {
     }
   }
 
-  private static convertFetchHeaders(fetchHeaders: Headers) {
+  private static convertFetchHeaders(
+    fetchHeaders: FetchLikeResponse['headers']
+  ) {
     const headers: HttpHeaders = {};
     fetchHeaders.forEach((value, key) => {
       headers[key] = value;
@@ -119,7 +121,7 @@ export class BasicHttpClient {
    */
   constructor(
     protected baseUrl: string,
-    private readonly fetchImpl: typeof fetch = fetch
+    private readonly fetchImpl: FetchLike = fetch
   ) {}
 
   public setDefaultHeader(name: string, value: string) {
@@ -366,7 +368,35 @@ export const HttpResponseType = {
 
 export type HttpQueryParams = object;
 
-type ResponseHandler<ResponseType> = (res: Response) => Promise<ResponseType>;
+/**
+ * The subset of the Fetch API that {@link BasicHttpClient} uses to send requests.
+ * `cross-fetch` and the global `fetch` both satisfy it.
+ */
+export type FetchLike = (
+  url: string,
+  init: FetchLikeRequestInit
+) => Promise<FetchLikeResponse>;
+
+export interface FetchLikeRequestInit {
+  method: string;
+  headers: HttpHeaders;
+  body?: BodyInit | null;
+}
+
+export interface FetchLikeResponse {
+  readonly status: number;
+  readonly headers: {
+    forEach(callback: (value: string, key: string) => void): void;
+  };
+  clone(): FetchLikeResponse;
+  json(): Promise<unknown>;
+  text(): Promise<string>;
+  blob(): Promise<Blob>;
+}
+
+type ResponseHandler<ResponseType> = (
+  res: FetchLikeResponse
+) => Promise<ResponseType>;
 
 export type HttpCall = <ResponseType>(
   path: string,

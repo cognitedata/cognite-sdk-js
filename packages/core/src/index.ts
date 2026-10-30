@@ -19,6 +19,9 @@ export { CogniteMultiError } from './multiError';
 export { HttpError } from './httpClient/httpError';
 export { HttpResponseType } from './httpClient/basicHttpClient';
 export type {
+  FetchLike,
+  FetchLikeRequestInit,
+  FetchLikeResponse,
   HttpResponse,
   HttpQueryParams,
   HttpRequestOptions,
