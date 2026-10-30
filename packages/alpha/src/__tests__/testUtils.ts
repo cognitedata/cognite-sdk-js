@@ -1,6 +1,7 @@
 // Copyright 2023 Cognite AS
 
 import { mockBaseUrl } from '../../../core/src/__tests__/testUtils';
+import { testConcurrency } from '../../../stable/src/__tests__/testConcurrency';
 import CogniteClientAlpha from '../cogniteClient';
 import { login } from './login';
 
@@ -13,6 +14,7 @@ export function setupLoggedInClient() {
       login().then((account) => {
         return account.access_token;
       }),
+    concurrency: testConcurrency,
   });
 }
 

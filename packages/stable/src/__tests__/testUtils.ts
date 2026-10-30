@@ -4,9 +4,11 @@ import { createReadStream, readFileSync, statSync } from 'node:fs';
 import { PassThrough } from 'node:stream';
 import { vi } from 'vitest';
 import { mockBaseUrl, randomInt } from '../../../core/src/__tests__/testUtils';
+import type { ClientOptions } from '../clientOptions';
 import CogniteClient from '../cogniteClient';
 import type { ExternalFileInfo, NodeOrEdge } from '../types';
 import { login } from './login';
+import { testConcurrency } from './testConcurrency';
 
 function setupClient(baseUrl: string = process.env.COGNITE_BASE_URL as string) {
   return new CogniteClient({
@@ -29,16 +31,18 @@ function setupLoggedInClient() {
       login().then((account) => {
         return account.access_token;
       }),
+    concurrency: testConcurrency,
   });
   return client;
 }
 
-function setupMockableClient() {
+function setupMockableClient(options: Partial<ClientOptions> = {}) {
   return new CogniteClient({
     appId: 'JS SDK integration tests',
     project: process.env.COGNITE_PROJECT as string,
     baseUrl: mockBaseUrl,
     oidcTokenProvider: () => Promise.resolve('test accessToken'),
+    ...options,
   });
 }
 
