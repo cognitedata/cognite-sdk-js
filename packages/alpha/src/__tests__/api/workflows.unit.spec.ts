@@ -19,6 +19,7 @@ describe('Workflows unit test', () => {
 
   const mockWorkflow = {
     ...workflowFixture,
+    isDataAware: false,
     createdTime: Date.now(),
     lastUpdatedTime: Date.now() + 1000,
   };
@@ -55,6 +56,30 @@ describe('Workflows unit test', () => {
 
     const response = await client.workflows.retrieve('wf-2');
     expect(response.externalId).toEqual('wf-2');
+  });
+
+  test('upsert forwards isDataAware', async () => {
+    const upsertBody = {
+      externalId: 'wf-data-aware',
+      isDataAware: true,
+    };
+    nock(mockBaseUrl)
+      .post(/\/workflows$/, matches({ items: [upsertBody] }))
+      .once()
+      .reply(200, {
+        items: [
+          {
+            ...mockWorkflow,
+            externalId: upsertBody.externalId,
+            isDataAware: true,
+          },
+        ],
+      });
+
+    const items = await client.workflows.upsert([upsertBody]);
+
+    expect(items).toHaveLength(1);
+    expect(items[0].isDataAware).toBe(true);
   });
 
   test('upsert forwards maxConcurrentExecutions, dataSetId, and dataDomainExternalId', async () => {
