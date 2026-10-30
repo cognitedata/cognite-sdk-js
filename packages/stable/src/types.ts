@@ -933,15 +933,15 @@ export interface ExternalFileInfo {
   mimeType?: FileMimeType;
   directory?: string;
   metadata?: Metadata;
-  /** @deprecated Asset-centric file metadata, deprecated 2026-10-15 and retired 2027-12-31. Link CogniteFile instances to CogniteAsset instances instead. */
+  /** @deprecated Asset-centric file metadata, deprecated 2026-10-15 and retired 2027-12-31. Query CogniteFile instances connected to CogniteAsset instead. Will be removed in a future major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#files-asset-centric-metadata-and-filters. */
   assetIds?: CogniteInternalId[];
-  /** @deprecated Data set and label governance on files is deprecated 2026-10-15 and retired 2027-12-31. */
+  /** @deprecated Data sets on files are deprecated 2026-10-15 and retired 2027-12-31. Scope data with spaces and govern consumption with data products instead. Will be removed in a future major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#files-asset-centric-metadata-and-filters. */
   dataSetId?: CogniteInternalId;
-  /** @deprecated Security categories are deprecated 2026-10-15 and retired 2027-12-31. Use data products and granular access control instead. */
+  /** @deprecated Security categories on files are deprecated 2026-10-15 and retired 2027-12-31. Use data products and granular access control instead. Will be removed in a future major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#files-asset-centric-metadata-and-filters. */
   securityCategories?: CogniteInternalId[];
   sourceCreatedTime?: Date;
   sourceModifiedTime?: Date;
-  /** @deprecated Data set and label governance on files is deprecated 2026-10-15 and retired 2027-12-31. */
+  /** @deprecated Labels on files are deprecated 2026-10-15 and retired 2027-12-31. There is no direct replacement; model labels as a concept in your data model. Will be removed in a future major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#files-asset-centric-metadata-and-filters. */
   labels?: Label[];
   geoLocation?: FileGeoLocation;
 }
@@ -973,11 +973,11 @@ interface ExternalSequenceColumnBase {
 export type FileChangeCommonProperties = {
   externalId?: SinglePatchString;
   metadata?: MetadataPatch;
-  /** @deprecated Asset-centric file metadata, deprecated 2026-10-15 and retired 2027-12-31. Link CogniteFile instances to CogniteAsset instances instead. */
+  /** @deprecated Asset-centric file metadata, deprecated 2026-10-15 and retired 2027-12-31. Query CogniteFile instances connected to CogniteAsset instead. Will be removed in a future major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#files-asset-centric-metadata-and-filters. */
   assetIds?: ArrayPatchLong;
-  /** @deprecated Data set and label governance on files is deprecated 2026-10-15 and retired 2027-12-31. */
+  /** @deprecated Data sets on files are deprecated 2026-10-15 and retired 2027-12-31. Scope data with spaces and govern consumption with data products instead. Will be removed in a future major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#files-asset-centric-metadata-and-filters. */
   dataSetId?: NullableSinglePatchLong;
-  /** @deprecated Data set and label governance on files is deprecated 2026-10-15 and retired 2027-12-31. */
+  /** @deprecated Labels on files are deprecated 2026-10-15 and retired 2027-12-31. There is no direct replacement; model labels as a concept in your data model. Will be removed in a future major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#files-asset-centric-metadata-and-filters. */
   labels?: LabelsPatch;
   geoLocation?: FileGeoLocationPatch;
 };
@@ -985,7 +985,7 @@ export type FileChangeCommonProperties = {
 export type FileChangeAssetCentricProperties = FileChangeCommonProperties & {
   source?: SinglePatchString;
   mimeType?: SinglePatchString;
-  /** @deprecated Security categories are deprecated 2026-10-15 and retired 2027-12-31. Use data products and granular access control instead. */
+  /** @deprecated Security categories on files are deprecated 2026-10-15 and retired 2027-12-31. Use data products and granular access control instead. Will be removed in a future major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#files-asset-centric-metadata-and-filters. */
   securityCategories?: ArrayPatchLong;
   sourceCreatedTime?: SinglePatchDate;
   sourceModifiedTime?: SinglePatchDate;
@@ -1021,26 +1021,26 @@ export interface FileFilterProps {
   /**
    * Only include files that reference these specific asset IDs.
    *
-   * @deprecated Asset filter on files, deprecated 2026-10-15 and retired 2027-12-31. Query CogniteFile instances connected to CogniteAsset instead.
+   * @deprecated Asset filters on files are deprecated 2026-10-15 and retired 2027-12-31. Query CogniteFile instances connected to CogniteAsset instead. Will be removed in a future major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#files-asset-centric-metadata-and-filters.
    */
   assetIds?: CogniteInternalId[];
   /**
    * Only include files that have a related asset in a tree rooted at any of these root assetIds.
    *
-   * @deprecated Asset filter on files, deprecated 2026-10-15 and retired 2027-12-31. Query CogniteFile instances connected to CogniteAsset instead.
+   * @deprecated Asset filters on files are deprecated 2026-10-15 and retired 2027-12-31. Query CogniteFile instances connected to CogniteAsset instead. Will be removed in a future major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#files-asset-centric-metadata-and-filters.
    */
   rootAssetIds?: IdEither[];
   /**
    * Only include items that reference these specific dataSet IDs
    *
-   * @deprecated Data set and label governance on files is deprecated 2026-10-15 and retired 2027-12-31.
+   * @deprecated Data sets on files are deprecated 2026-10-15 and retired 2027-12-31. Scope data with spaces and govern consumption with data products instead. Will be removed in a future major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#files-asset-centric-metadata-and-filters.
    */
   dataSetIds?: IdEither[];
   /**
    * Only include files that are related to an asset in a subtree rooted at any of these assetIds.
    * If the total size of the given subtrees exceeds 100,000 assets, an error will be returned.
    *
-   * @deprecated Asset filter on files, deprecated 2026-10-15 and retired 2027-12-31. Query CogniteFile instances connected to CogniteAsset instead.
+   * @deprecated Asset filters on files are deprecated 2026-10-15 and retired 2027-12-31. Query CogniteFile instances connected to CogniteAsset instead. Will be removed in a future major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#files-asset-centric-metadata-and-filters.
    */
   assetSubtreeIds?: IdEither[];
   directoryPrefix?: string;
@@ -1055,7 +1055,7 @@ export interface FileFilterProps {
   /**
    * Return only the resource matching the specified label constraints.
    *
-   * @deprecated Data set and label governance on files is deprecated 2026-10-15 and retired 2027-12-31.
+   * @deprecated Labels on files are deprecated 2026-10-15 and retired 2027-12-31. There is no direct replacement; model labels as a concept in your data model. Will be removed in a future major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#files-asset-centric-metadata-and-filters.
    */
   labels?: LabelFilter;
   geoLocation?: FileGeoLocationFilter;
