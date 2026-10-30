@@ -370,8 +370,7 @@ describe('Instances integration test', () => {
         select: { result_set_1: {} },
         debug: { emitResults: false },
       });
-      // `items` stays present but empty in this mode, not absent — see the note on
-      // DebugParameters.emitResults.
+      // Observed live: `items` stays present but empty in this mode.
       expect(response.items.result_set_1).toHaveLength(0);
       expect(response.debug?.notices).toBeInstanceOf(Array);
     });
@@ -398,10 +397,10 @@ describe('Instances integration test', () => {
       expect(response.debug?.notices).toBeInstanceOf(Array);
     });
 
-    // The published OpenAPI document has no `debug` on the `list` response, but live
-    // testing confirmed the API does return `debug.notices` here too — see the comment
-    // above NodeAndEdgeCollectionResponseWithCursorV3Response in types.gen.ts.
-    test('list with debug: {} returns items and a notices array', async () => {
+    // `debug` is accepted on the list request. The OpenAPI document does not define
+    // `debug` on the list response, so the notices are intentionally not asserted
+    // (see the spec-gap note above the debug notice types in types.gen.ts).
+    test('list accepts debug: {} and still returns items', async () => {
       const response = await client.instances.list({
         sources: [{ source: view }],
         instanceType: 'node',
@@ -409,7 +408,6 @@ describe('Instances integration test', () => {
         debug: {},
       });
       expect(response.items).toHaveLength(2);
-      expect(response.debug?.notices).toBeInstanceOf(Array);
     });
 
     test('narrows DebugNotice by its code discriminant', async () => {

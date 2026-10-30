@@ -77,16 +77,6 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    *    ],
    *    limit: 1000,
    *});
-   *
-   * // With debug notices for performance analysis
-   * const debugResponse = await client.instances.list({
-   *   instanceType: 'node',
-   *   sources: [{ source: { externalId: 'Describable', space: 'cdf_core', type: 'view', version: 'v1' } }],
-   *   debug: {},
-   * });
-   * for (const notice of debugResponse.debug?.notices ?? []) {
-   *   console.log(notice.code, notice.hint);
-   * }
    * ```
    */
   public list = async (
@@ -264,8 +254,7 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    *   console.log(notice.code, notice.hint);
    * }
    *
-   * // Profile mode: deep analysis. `items`/`nextCursor` are still returned but empty
-   * // (see DebugParameters.emitResults).
+   * // Profile mode: deep analysis (requires `emitResults: false`)
    * const profileResponse = await client.instances.query({
    *   with: { result_set_1: { nodes: {} } },
    *   select: { result_set_1: {} },

@@ -514,13 +514,6 @@ export interface MinAggregateFunctionV3 {
  */
 export type NextCursorV3 = string;
 export interface NodeAndEdgeCollectionResponseWithCursorV3Response {
-  /**
-   * Contains debug notices if `debug` was set on the request. Hand-added: the published
-   * OpenAPI document has no `debug` on the `list` response, but the API does return it
-   * (verified live). With `debug.emitResults: false`, `items` is an empty array and
-   * `nextCursor` is absent on `list`, unlike `query` where `nextCursor` is `{}`.
-   */
-  debug?: DebugResponse;
   /** List of nodes and edges */
   items: NodeOrEdge[];
   /** The cursor value used to return (paginate to) the next page of results, when more data is available. */
@@ -779,14 +772,13 @@ export interface QueryNodeTableExpressionV3 {
 // 2026-10-09: `unfilteredContainerScan`, `filterIncompatibleWithCursorableIndexScan`
 // (reasons crossContainer, orFilter, multipleRangePredicates, nonCursorableProperty),
 // `suggestedCursorableSort`, `syncMissingSpaceFilter` and `noTimeoutWithResults`
-// were all observed with the shapes below. One deliberate deviation from the
-// document remains: `list` responses carry `debug` too, which the document
-// omits, see NodeAndEdgeCollectionResponseWithCursorV3Response.
+// were all observed with the shapes below.
 //
 // Re-checked against the document on 2026-10-30: every notice schema below matches
 // it field by field (names, required-ness, literal and enum values), and the
-// request/response `debug` placement matches too. The `list` response `debug`
-// is the only deviation.
+// request/response `debug` placement matches too. Known spec gap, deliberately
+// not typed here: the API also returns `debug` on `list` responses, but the
+// document does not define it on NodeAndEdgeCollectionResponseWithCursorV3Response.
 // ---------------------------------------------------------------------------
 export interface ContainerSubObjectIdentifier {
   /** External id for the container */
@@ -1057,9 +1049,7 @@ export interface QueryRequest {
 export interface QueryResponse {
   /** Contains debug notices if debug flag is set in the query. */
   debug?: DebugResponse;
-  /** Empty (not absent) when the request set `debug.emitResults` to `false`, see {@link DebugParameters.emitResults}. */
   items: Record<string, NodeOrEdge[]>;
-  /** Empty (not absent) when the request set `debug.emitResults` to `false`, see {@link DebugParameters.emitResults}. */
   nextCursor: Record<string, NextCursorV3>;
   /** Property type information for selected result expressions. */
   typing?: Record<string, TypeInformationOuter>;
