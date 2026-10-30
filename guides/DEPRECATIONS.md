@@ -39,42 +39,49 @@ deprecated.
 
 ### Files: asset-centric metadata and filters
 
-`client.files` stays, but its asset-centric metadata and asset filters are deprecated (2026-10-15,
-retired 2027-12-31). File content upload and download stay on the Files API and use `instanceId`.
-The upload endpoints also stay available for files that are not `CogniteFile`.
+`client.files` is not going away. CDF deprecates asset-centric file metadata and the asset filters
+on the Files API as of 2026-10-15 and retires them on 2027-12-31. File content upload and download
+stay on the Files API and use `instanceId`.
 
-```
-files
-  upload  multipartUploadSession   unchanged
-  getDownloadUrls                  prefer instanceId
-  retrieve                         prefer instanceId; look up files as CogniteFile instances
-  list  search  aggregate          unchanged, asset filters deprecated
-  update  delete                   unchanged
-  fields
-    assetIds  rootAssetIds  assetSubtreeIds (filter)   @deprecated → CogniteFile linked to CogniteAsset
-    assetIds (file)                                    @deprecated → CogniteFile.assets
-    dataSetId  dataSetIds  labels                      @deprecated, governance removed
-    securityCategories                                 @deprecated → data products and access control
-```
+- Deprecated: `client.files.retrieve`, `search`, `update`, `aggregate` and `delete`. Create and
+  query files as `CogniteFile` instances via `client.instances` instead. To read a file, retrieve
+  its `CogniteFile` instance and get the download URL with `getDownloadUrls` by `instanceId`; to
+  delete one, delete its `CogniteFile` instance with `client.instances.delete`.
+- Not deprecated: `upload` and `multipartUploadSession` (single-part and multi-part upload stay
+  available, also for files that are not `CogniteFile`), `list`, and `getDownloadUrls`. Prefer
+  `instanceId` where a method accepts it.
+- Deprecated fields on the file types (`ExternalFileInfo`, `FileInfo`, the update types and the
+  filter used by `list`, `search` and `aggregate`), each with the replacement from its row on the
+  CDF deprecation page:
+
+| Field                                                           | Replacement                                                         |
+| --------------------------------------------------------------- | ------------------------------------------------------------------- |
+| `assetIds` (file and filter), `rootAssetIds`, `assetSubtreeIds` | Query `CogniteFile` instances connected to `CogniteAsset`           |
+| `dataSetId`, `dataSetIds`                                       | Scope data with spaces and govern consumption with data products    |
+| `labels`                                                        | No direct replacement; model labels as a concept in your data model |
+| `securityCategories`                                            | Data products and granular access control                           |
 
 ```ts
 // before
-await client.files.list({ filter: { assetSubtreeIds: [{ externalId: 'plant' }] } });
-await client.files.getDownloadUrls([{ externalId: 'my-file' }]);
+await client.files.retrieve([{ id: 123 }]);
+await client.files.getDownloadUrls([{ id: 123 }]);
 
-// after: look up files as CogniteFile instances, download by instanceId
-await client.instances.list({
-  instanceType: 'node',
-  sources: [{ source: { type: 'view', space: 'cdf_cdm', externalId: 'CogniteFile', version: 'v1' } }],
+// after
+const { items } = await client.instances.retrieve({
+  items: [{ instanceType: 'node', space: 'my-space', externalId: 'my-file' }],
+  sources: [
+    { source: { type: 'view', space: 'cdf_cdm', externalId: 'CogniteFile', version: 'v1' } },
+  ],
 });
 await client.files.getDownloadUrls([
   { instanceId: { space: 'my-space', externalId: 'my-file' } },
 ]);
 ```
 
-The field tags are docs-only in most code: TypeScript only flags `@deprecated` when a name is
-referenced directly, so `list({ filter: { assetIds: [1] } })` shows no warning in the editor.
-Check your own code for these fields.
+Editors flag the deprecated methods, and the deprecated fields where you read them (for example
+`file.assetIds`). TypeScript does not flag deprecated fields inside inline object literals, so
+`list({ filter: { assetIds: [1] } })` shows no warning; check your own code for these fields.
+Nothing changes at runtime.
 
 ## Templates (retired 2025-05-31)
 
