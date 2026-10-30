@@ -32,7 +32,11 @@ export class DataPointSubscriptionsAPI extends BaseResourceAPI<DataPointSubscrip
    *
    * ```js
    * const subscriptions = await client.timeseries.subscriptions.create([
-   *   { externalId: 'my_subscription', partitionCount: 1, timeSeriesIds: ['ts_external_id'] },
+   *   {
+   *     externalId: 'my_subscription',
+   *     partitionCount: 1,
+   *     instanceIds: [{ space: 'my_space', externalId: 'my_time_series' }],
+   *   },
    * ]);
    * ```
    */
