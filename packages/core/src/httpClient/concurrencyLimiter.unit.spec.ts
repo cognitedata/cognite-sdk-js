@@ -19,7 +19,6 @@ const policy: ConcurrencyPolicy<Category> = {
     { method: HttpMethod.Post, pattern: /^\/toy\/slow$/, category: 'slow' },
     { pattern: /^\/toy\/(?:slow|fast)$/, category: 'fast' },
   ],
-  normalizePath: (path) => path.replace(/^\/proxy/, ''),
   fallback: (path) => (path.startsWith('/toy/') ? 'slow' : undefined),
 };
 
@@ -29,9 +28,23 @@ describe('ConcurrencyLimiter', () => {
   test('classifies by method, normalized path and fallback; first rule wins', () => {
     expect(limiter.classify(HttpMethod.Post, '/toy/slow')).toBe('slow');
     expect(limiter.classify(HttpMethod.Get, '/toy/slow')).toBe('fast');
-    expect(limiter.classify(HttpMethod.Get, '/proxy/toy/fast')).toBe('fast');
+    expect(
+      limiter.classify(HttpMethod.Get, '/cdf/api/v1/projects/p/toy/fast/')
+    ).toBe('fast');
+    expect(
+      limiter.classify(
+        HttpMethod.Post,
+        '/gateway/api/20230101/projects/p/toy/slow'
+      )
+    ).toBe('slow');
     expect(limiter.classify(HttpMethod.Get, '/toy/other')).toBe('slow');
     expect(limiter.classify(HttpMethod.Get, '/other')).toBeUndefined();
+    expect(
+      limiter.classify(HttpMethod.Get, '/api/v1/projects//toy/fast')
+    ).toBeUndefined();
+    expect(
+      limiter.classify(HttpMethod.Get, '/api/v1/projects-other/p/toy/fast')
+    ).toBeUndefined();
   });
 
   test('limits each category independently and ignores unmatched requests', async () => {
