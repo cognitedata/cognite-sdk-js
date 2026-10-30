@@ -24,6 +24,7 @@ export { Revisions3DAPI } from './api/3d/revisions3DApi';
 export { UnrealRevisions3DAPI } from './api/3d/unrealRevisions3DApi';
 export { Viewer3DAPI } from './api/3d/viewer3DApi';
 export { AssetsAPI } from './api/assets/assetsApi';
+export { DataModelingStatisticsAPI } from './api/dataModelingStatistics/dataModelingStatisticsApi';
 export { DataPointsAPI } from './api/dataPoints/dataPointsApi';
 export { DataProductsAPI } from './api/dataProducts/dataProductsApi';
 export { DataProductVersionsAPI } from './api/dataProducts/dataProductVersionsApi';

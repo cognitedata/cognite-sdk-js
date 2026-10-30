@@ -14,6 +14,7 @@ import { Viewer3DAPI } from './api/3d/viewer3DApi';
 import { AnnotationsAPI } from './api/annotations/annotationsApi';
 import { AssetsAPI } from './api/assets/assetsApi';
 import { ContainersAPI } from './api/containers/containersApi';
+import { DataModelingStatisticsAPI } from './api/dataModelingStatistics/dataModelingStatisticsApi';
 import { DataPointsAPI } from './api/dataPoints/dataPointsApi';
 import { DataProductsAPI } from './api/dataProducts/dataProductsApi';
 import { DataSetsAPI } from './api/datasets/datasetsApi';
@@ -226,6 +227,9 @@ export default class CogniteClient extends BaseCogniteClient {
   public get dataModels() {
     return accessApi(this.dataModelsApi);
   }
+  public get dataModelingStatistics() {
+    return accessApi(this.dataModelingStatisticsApi);
+  }
   public get streams() {
     return accessApi(this.streamsApi);
   }
@@ -269,6 +273,7 @@ export default class CogniteClient extends BaseCogniteClient {
   private viewsApi?: ViewsAPI;
   private spacesApi?: SpacesAPI;
   private dataModelsApi?: DataModelsAPI;
+  private dataModelingStatisticsApi?: DataModelingStatisticsAPI;
   private sessionsApi?: SessionsApi;
   private streamsApi?: StreamsAPI;
   private recordsApi?: RecordsAPI;
@@ -330,6 +335,10 @@ export default class CogniteClient extends BaseCogniteClient {
     this.viewsApi = this.apiFactory(ViewsAPI, 'models/views');
     this.spacesApi = this.apiFactory(SpacesAPI, 'models/spaces');
     this.dataModelsApi = this.apiFactory(DataModelsAPI, 'models/datamodels');
+    this.dataModelingStatisticsApi = this.apiFactory(
+      DataModelingStatisticsAPI,
+      'models/statistics'
+    );
     this.sessionsApi = this.apiFactory(SessionsApi, 'sessions');
     this.streamsApi = this.apiFactory(StreamsAPI, 'streams');
     this.recordsApi = this.apiFactory(RecordsAPI, 'streams');

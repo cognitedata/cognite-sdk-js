@@ -1,0 +1,9 @@
+{
+  "service": "models/statistics",
+  "filter": {
+    "serviceName": "models/statistics"
+  },
+  "inlinedSchemas": {
+    "autoNameRequest": true
+  }
+}
