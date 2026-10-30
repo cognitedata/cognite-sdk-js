@@ -10,6 +10,9 @@ export type ConcurrencyOptions = {
    *
    * See the [concurrency guide](https://github.com/cognitedata/cognite-sdk-js/blob/master/packages/stable/README.md#concurrency)
    * for operation categories, configuration examples, and limitations.
+   *
+   * @alpha This functionality is experimental. Breaking changes are to be expected
+   * in any release, including patch and minor versions.
    */
   dataModeling?: DataModelingConcurrencyOptions;
 };

@@ -10,12 +10,7 @@ export {
   CogniteError,
   CogniteMultiError,
 } from '@cognite/sdk-core';
-export type { ClientOptions, ConcurrencyOptions } from './clientOptions';
-export {
-  DEFAULT_DATA_MODELING_CONCURRENCY,
-  type DataModelingConcurrencyCategory,
-  type DataModelingConcurrencyOptions,
-} from './api/dataModeling/concurrency';
+export type { ClientOptions } from './clientOptions';
 export { default as CogniteClient } from './cogniteClient';
 
 export { AssetMappings3DAPI } from './api/3d/assetMappings3DApi';

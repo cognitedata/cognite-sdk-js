@@ -87,14 +87,6 @@ describe('Client Data Modeling concurrency', () => {
     await Promise.all(results);
   });
 
-  test('warns that concurrency is experimental', () => {
-    createClient();
-    expect(warn).toHaveBeenCalledOnce();
-    expect(warn).toHaveBeenCalledWith(
-      expect.stringContaining('options.concurrency is experimental')
-    );
-  });
-
   test('passes client overrides through to the HTTP stack', async () => {
     const client = createClient({
       concurrency: { dataModeling: { read: 3 } },

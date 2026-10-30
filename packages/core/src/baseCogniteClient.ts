@@ -153,9 +153,6 @@ export default class BaseCogniteClient {
     this.initAPIs();
     const { concurrency } = options;
     if (concurrency) {
-      console.warn(
-        'options.concurrency is experimental. Breaking changes are to be expected in any release, including patch and minor versions.'
-      );
       this.http.setConcurrencyPolicies(
         this.concurrencyPolicies.map((policy) => ({
           policy,
