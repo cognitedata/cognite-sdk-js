@@ -182,7 +182,7 @@ export class FilesAPI extends BaseResourceAPI<FileInfo> {
 
   /**
    * [Get download urls](https://doc.cognitedata.com/api/v1/#operation/downloadLinks)
-   * File content download stays on the Files API and uses instanceId. Identifying files by id or externalId is asset-centric, deprecated 2026-10-15 and retired 2027-12-31.
+   * File content download stays on the Files API; prefer instanceId.
    *
    * ```js
    * await client.files.getDownloadUrls([
