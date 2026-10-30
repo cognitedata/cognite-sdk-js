@@ -782,6 +782,11 @@ export interface QueryNodeTableExpressionV3 {
 // were all observed with the shapes below. One deliberate deviation from the
 // document remains: `list` responses carry `debug` too, which the document
 // omits, see NodeAndEdgeCollectionResponseWithCursorV3Response.
+//
+// Re-checked against the document on 2026-10-30: every notice schema below matches
+// it field by field (names, required-ness, literal and enum values), and the
+// request/response `debug` placement matches too. The `list` response `debug`
+// is the only deviation.
 // ---------------------------------------------------------------------------
 export interface ContainerSubObjectIdentifier {
   /** External id for the container */
