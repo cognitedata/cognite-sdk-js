@@ -289,22 +289,28 @@ describe('Timeseries integration test', () => {
     expect(items.length).toBeGreaterThan(0);
   });
 
+  // The asset filter indexes lag behind the 'update' test that attaches the
+  // asset, so these are retried like 'list from assetIds' above.
   test('list with assetExternalIds', async () => {
-    const { items } = await client.timeseries.list({
-      filter: { assetExternalIds: [asset.externalId || ''] },
-      limit: 1,
+    await runTestWithRetryWhenFailing(async () => {
+      const { items } = await client.timeseries.list({
+        filter: { assetExternalIds: [asset.externalId || ''] },
+        limit: 1,
+      });
+      expect(items.length).toBe(1);
+      expect(items[0].id).toBe(createdTimeseries[0].id);
     });
-    expect(items.length).toBe(1);
-    expect(items[0].id).toBe(createdTimeseries[0].id);
   });
 
   test('list with assetSubtreeIds', async () => {
-    const { items } = await client.timeseries.list({
-      filter: { assetSubtreeIds: [{ id: asset.id }] },
-      limit: 1,
+    await runTestWithRetryWhenFailing(async () => {
+      const { items } = await client.timeseries.list({
+        filter: { assetSubtreeIds: [{ id: asset.id }] },
+        limit: 1,
+      });
+      expect(items.length).toBe(1);
+      expect(items[0].id).toBe(createdTimeseries[0].id);
     });
-    expect(items.length).toBe(1);
-    expect(items[0].id).toBe(createdTimeseries[0].id);
   });
 
   test('search', async () => {

@@ -1,7 +1,7 @@
 // Copyright 2020 Cognite AS
 
 import type { CogniteClient, CogniteError } from '@cognite/sdk-beta';
-import { describe, expect, test, vi } from 'vitest';
+import { afterAll, describe, expect, test, vi } from 'vitest';
 import { setupLoggedInClient } from '../testUtils';
 
 describe('alerts api', () => {
@@ -13,8 +13,20 @@ describe('alerts api', () => {
   const client: CogniteClient = setupLoggedInClient();
   const ts = Date.now();
   const channelExternalId = `test_channel_${ts}`;
+  const channelExternalIdWithDeduplication = `${channelExternalId}_dedup`;
   const alertExternalId = `test_alert_${ts}`;
   const email = `ivan.polomanyi+${ts}@cognite.com`;
+
+  // Safety net: channels created here must never outlive the run, even if a test
+  // fails midway. The project has a hard limit of 1000 channels, and leaked test
+  // channels have previously filled it and broken CI for every subsequent run.
+  afterAll(async () => {
+    const cleanup = [channelExternalId, channelExternalIdWithDeduplication].map(
+      (externalId) =>
+        client.alerts.deleteChannels([{ externalId }]).catch(() => undefined)
+    );
+    await Promise.all(cleanup);
+  });
 
   test('create channels', async () => {
     const response = await client.alerts.createChannels([
@@ -29,7 +41,6 @@ describe('alerts api', () => {
   });
 
   test('create channels with deduplication params', async () => {
-    const channelExternalIdWithDeduplication = `${channelExternalId}_dedup`;
     const response = await client.alerts.createChannels([
       {
         externalId: channelExternalIdWithDeduplication,
@@ -186,23 +197,27 @@ describe('alerts api', () => {
     expect(emptyRes.items.length).toBe(0);
   });
 
-  test('delete channel', async () => {
-    const response = await client.alerts.deleteChannels([
-      {
-        externalId: channelExternalId,
-      },
-    ]);
-    expect(response).toEqual({});
-  });
-
   test('sort alerts', async () => {
+    // Runs before the channels are deleted and is scoped to this run's own
+    // channel, so it never depends on alerts left behind by other runs.
     const response = await client.alerts.list({
+      filter: {
+        channelExternalIds: [channelExternalId],
+      },
       sort: {
         property: 'createdTime',
         order: 'desc',
       },
     });
     expect(response.items.length).toBeGreaterThan(0);
+  });
+
+  test('delete channels', async () => {
+    const response = await client.alerts.deleteChannels([
+      { externalId: channelExternalId },
+      { externalId: channelExternalIdWithDeduplication },
+    ]);
+    expect(response).toEqual({});
   });
 
   test('test limit', async () => {
