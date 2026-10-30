@@ -45,6 +45,7 @@ import {
   ViewsApi,
 } from './api/templates';
 import { TimeSeriesAPI } from './api/timeSeries/timeSeriesApi';
+import { TokenAPI } from './api/token/tokenApi';
 import { UnitsAPI } from './api/units/unitsApi';
 import { ProfilesAPI } from './api/userProfiles/profilesApi';
 import { ViewsAPI } from './api/views/viewsApi';
@@ -93,6 +94,10 @@ export default class CogniteClient extends BaseCogniteClient {
   }
   public get projects() {
     return accessApi(this.projectsApi);
+  }
+
+  public get token() {
+    return accessApi(this.tokenApi);
   }
   public get groups() {
     return accessApi(this.groupsApi);
@@ -248,6 +253,7 @@ export default class CogniteClient extends BaseCogniteClient {
   private labelsApi?: LabelsAPI;
   private rawApi?: RawAPI;
   private projectsApi?: ProjectsAPI;
+  private tokenApi?: TokenAPI;
   private groupsApi?: GroupsAPI;
   private securityCategoriesApi?: SecurityCategoriesAPI;
   private models3DApi?: Models3DAPI;
@@ -319,6 +325,7 @@ export default class CogniteClient extends BaseCogniteClient {
       this.httpClient,
       this.metadataMap
     );
+    this.tokenApi = new TokenAPI(apiUrl(), this.httpClient, this.metadataMap);
     this.geospatialApi = this.apiFactory(GeospatialAPI, 'geospatial');
     this.documentsApi = this.apiFactory(DocumentsAPI, 'documents');
     this.annotationsApi = this.apiFactory(AnnotationsAPI, 'annotations');
