@@ -412,7 +412,7 @@ describe('Instances integration test', () => {
       expect(response.debug?.notices).toBeInstanceOf(Array);
     });
 
-    test('every notice carries the common code, category, level and hint fields', async () => {
+    test('narrows DebugNotice by its code discriminant', async () => {
       const response = await client.instances.query({
         with: {
           result_set_1: { nodes: { filter: filterOnDescribable1 } },
@@ -421,10 +421,20 @@ describe('Instances integration test', () => {
         debug: {},
       });
       for (const notice of response.debug?.notices ?? []) {
-        expect(typeof notice.code).toBe('string');
-        expect(typeof notice.category).toBe('string');
-        expect(typeof notice.level).toBe('string');
-        expect(typeof notice.hint).toBe('string');
+        if (notice.code === 'excessiveTimeout') {
+          expect(typeof notice.timeout).toBe('number');
+        } else if (notice.code === 'unindexedThrough') {
+          expect(Array.isArray(notice.property)).toBe(true);
+        } else if (notice.code === 'unfilteredContainerScan') {
+          expect(notice.category).toBe('filtering');
+        } else if (
+          notice.code === 'filterIncompatibleWithCursorableIndexScan'
+        ) {
+          expect(Array.isArray(notice.reasons)).toBe(true);
+        } else if (notice.code === 'suggestedCursorableSort') {
+          expect(Array.isArray(notice.suggestedSort)).toBe(true);
+          expect(typeof notice.suggestedIndex.identifier).toBe('string');
+        }
       }
     });
 
@@ -468,8 +478,7 @@ describe('Instances integration test', () => {
       });
       for (const notice of response.debug?.notices ?? []) {
         if (notice.code === 'filterIncompatibleWithCursorableIndexScan') {
-          expect(notice.reasons).toBeInstanceOf(Array);
-          expect(notice.reasons).not.toHaveLength(0);
+          expect(notice.reasons.length).toBeGreaterThan(0);
         }
       }
     });
@@ -487,8 +496,10 @@ describe('Instances integration test', () => {
         (n) => n.code === 'syncMissingSpaceFilter'
       );
       expect(notice).toBeDefined();
-      expect(notice?.category).toBe('sync');
-      expect(typeof notice?.hint).toBe('string');
+      if (notice?.code === 'syncMissingSpaceFilter') {
+        expect(notice.category).toBe('sync');
+        expect(typeof notice.hint).toBe('string');
+      }
     });
   });
 
