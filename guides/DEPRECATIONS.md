@@ -37,6 +37,52 @@ APIs in data modeling, which are in public preview and not yet part of this SDK.
 APIs (`client.models3D`, `client.revisions3D`, `client.files3D`, `client.viewer3D`) are **not**
 deprecated.
 
+### Files: asset-centric metadata and filters
+
+`client.files` is not going away. CDF deprecates asset-centric file metadata and the asset filters
+on the Files API as of 2026-10-15 and retires them on 2027-12-31. File content upload and download
+stay on the Files API and use `instanceId`.
+
+- Deprecated: `client.files.retrieve`, `search`, `update`, `aggregate` and `delete`. Create and
+  query files as `CogniteFile` instances via `client.instances` instead. To read a file, retrieve
+  its `CogniteFile` instance and get the download URL with `getDownloadUrls` by `instanceId`; to
+  delete one, delete its `CogniteFile` instance with `client.instances.delete`.
+- Not deprecated: `upload` and `multipartUploadSession` (single-part and multi-part upload stay
+  available, also for files that are not `CogniteFile`), `list`, and `getDownloadUrls`. Prefer
+  `instanceId` where a method accepts it.
+- Deprecated fields on the file types (`ExternalFileInfo`, `FileInfo`, the update types and the
+  filter used by `list`, `search` and `aggregate`), each with the replacement from its row on the
+  CDF deprecation page:
+
+| Field                                                           | Replacement                                                         |
+| --------------------------------------------------------------- | ------------------------------------------------------------------- |
+| `assetIds` (file and filter), `rootAssetIds`, `assetSubtreeIds` | Query `CogniteFile` instances connected to `CogniteAsset`           |
+| `dataSetId`, `dataSetIds`                                       | Scope data with spaces and govern consumption with data products    |
+| `labels`                                                        | No direct replacement; model labels as a concept in your data model |
+| `securityCategories`                                            | Data products and granular access control                           |
+
+```ts
+// before
+await client.files.retrieve([{ id: 123 }]);
+await client.files.getDownloadUrls([{ id: 123 }]);
+
+// after
+const { items } = await client.instances.retrieve({
+  items: [{ instanceType: 'node', space: 'my-space', externalId: 'my-file' }],
+  sources: [
+    { source: { type: 'view', space: 'cdf_cdm', externalId: 'CogniteFile', version: 'v1' } },
+  ],
+});
+await client.files.getDownloadUrls([
+  { instanceId: { space: 'my-space', externalId: 'my-file' } },
+]);
+```
+
+Editors flag the deprecated methods, and the deprecated fields where you read them (for example
+`file.assetIds`). TypeScript does not flag deprecated fields inside inline object literals, so
+`list({ filter: { assetIds: [1] } })` shows no warning; check your own code for these fields.
+Nothing changes at runtime.
+
 ## Templates (retired 2025-05-31)
 
 The Templates API was retired on 2025-05-31. `client.templates` and its types will be removed in
