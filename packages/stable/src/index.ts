@@ -9,8 +9,8 @@ export {
   HttpResponseType,
   CogniteError,
   CogniteMultiError,
-  type ClientOptions,
 } from '@cognite/sdk-core';
+export type { ClientOptions } from './clientOptions';
 export { default as CogniteClient } from './cogniteClient';
 
 export { AssetMappings3DAPI } from './api/3d/assetMappings3DApi';
@@ -36,6 +36,7 @@ export { FilesMultipartUploadSessionAPI } from './api/files/filesMultipartUpload
 export { GroupsAPI } from './api/groups/groupsApi';
 export { LabelsAPI } from './api/labels/labelsApi';
 export { ProjectsAPI } from './api/projects/projectsApi';
+export { TokenAPI } from './api/token/tokenApi';
 export { RawAPI } from './api/raw/rawApi';
 export { RawRowsAPI } from './api/raw/rawRowsApi';
 export { RawTablesAPI } from './api/raw/rawTablesApi';

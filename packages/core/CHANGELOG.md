@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.4.0](https://github.com/cognitedata/cognite-sdk-js/compare/%40cognite%2Fsdk-core%405.3.1...%40cognite%2Fsdk-core%405.4.0) (2026-11-02)
+
+### Features
+
+* **stable:** support concurrency policy for data modeling ([#1525](https://github.com/cognitedata/cognite-sdk-js/issues/1525)) ([4ee8023](https://github.com/cognitedata/cognite-sdk-js/commit/4ee80232b28e0dd4a210c67b72ede66e7ad8f36e))
+
+
 ## [5.3.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@5.3.0...@cognite/sdk-core@5.3.1) (2026-10-29)
 
 **Note:** Version bump only for package @cognite/sdk-core
