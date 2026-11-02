@@ -98,8 +98,8 @@ client.datapoints          @deprecated, use client.timeseries.data
 ```
 
 - Moved: `client.datapoints` is now `client.timeseries.data` and `client.timeseries.syntheticQuery`
-  is `client.timeseries.synthetic.query`. The old paths keep working in 10.x and are removed in
-  the next major release.
+  is `client.timeseries.synthetic.query`. The old paths keep working in 10.x and are removed or moved in
+  a future major release.
 
 The Python SDK uses the same layout under `client.time_series`.
 
