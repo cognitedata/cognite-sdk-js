@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.48.0](https://github.com/cognitedata/cognite-sdk-js/compare/%40cognite%2Fsdk-alpha%400.46.1...%40cognite%2Fsdk-alpha%400.48.0) (2026-11-02)
+
+### Features
+
+* **alpha:** add data domains API ([#1536](https://github.com/cognitedata/cognite-sdk-js/issues/1536)) ([61938bd](https://github.com/cognitedata/cognite-sdk-js/commit/61938bdf08faef06d6fc4d000711385f356cba96))
+* **stable:** support concurrency policy for data modeling ([#1525](https://github.com/cognitedata/cognite-sdk-js/issues/1525)) ([4ee8023](https://github.com/cognitedata/cognite-sdk-js/commit/4ee80232b28e0dd4a210c67b72ede66e7ad8f36e))
+* **workflows:** add isDataAware flag to Workflow types and upsert API ([#1535](https://github.com/cognitedata/cognite-sdk-js/issues/1535)) ([3f5669b](https://github.com/cognitedata/cognite-sdk-js/commit/3f5669ba78ba02c82e9c315c45caffd525ee9d6d))
+
+
+# [0.47.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.46.1...@cognite/sdk-alpha@0.47.0) (2026-10-29)
+
+
+### Features
+
+* **alpha:** add data domains API ([#1536](https://github.com/cognitedata/cognite-sdk-js/issues/1536)) ([61938bd](https://github.com/cognitedata/cognite-sdk-js/commit/61938bdf08faef06d6fc4d000711385f356cba96))
+
+
+
+
+
 ## [0.46.1](https://github.com/cognitedata/cognite-sdk-js/compare/%40cognite%2Fsdk-alpha%400.46.0...%40cognite%2Fsdk-alpha%400.46.1) (2026-10-29)
 
 **Note:** Version bump only for package @cognite/sdk-alpha
