@@ -2,6 +2,7 @@
 import { CogniteClient as CogniteClientStable } from '@cognite/sdk';
 import { accessApi } from '@cognite/sdk-core';
 import { version } from '../package.json';
+import { DataDomainsAPI } from './api/dataDomains/dataDomainsApi';
 import { LimitsAPI } from './api/limits/limitsApi';
 import { MeteringAPI } from './api/metering/meteringApi';
 import { SimulatorsAPI } from './api/simulators/simulatorsApi';
@@ -20,6 +21,7 @@ export default class CogniteClientAlpha extends CogniteClientStable {
   private workflowExecutionsApi?: WorkflowExecutionsAPI;
   private workflowTriggersApi?: WorkflowTriggersAPI;
   private transformationsExternalDataApi?: TransformationsExternalDataAPI;
+  private dataDomainsApi?: DataDomainsAPI;
 
   public get limits() {
     return accessApi(this.limitsApi);
@@ -53,6 +55,10 @@ export default class CogniteClientAlpha extends CogniteClientStable {
     return accessApi(this.transformationsExternalDataApi);
   }
 
+  public get dataDomains() {
+    return accessApi(this.dataDomainsApi);
+  }
+
   protected initAPIs() {
     super.initAPIs();
 
@@ -74,6 +80,7 @@ export default class CogniteClientAlpha extends CogniteClientStable {
       TransformationsExternalDataAPI,
       'transformations/externaldata'
     );
+    this.dataDomainsApi = this.apiFactory(DataDomainsAPI, 'datadomains');
     this.workflowExecutionsApi = new WorkflowExecutionsAPI(
       `${this.projectUrl}/workflows/executions`,
       `${this.projectUrl}/workflows`,
