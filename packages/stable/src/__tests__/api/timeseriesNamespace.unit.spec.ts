@@ -80,7 +80,7 @@ describe('Time series namespace unit test', () => {
   });
 
   test('timeseries.synthetic.query posts to /timeseries/synthetic/query', async () => {
-    const items = [{ expression: "TS{externalId='my-ts'} * 2", limit: 10 }];
+    const items = [{ expression: "TS{space='my-space', externalId='my-ts'} * 2", limit: 10 }];
     nock(mockBaseUrl)
       .post(/\/timeseries\/synthetic\/query$/, { items })
       .twice()

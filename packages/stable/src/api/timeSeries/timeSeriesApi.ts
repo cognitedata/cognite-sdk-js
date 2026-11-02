@@ -59,7 +59,7 @@ export class TimeSeriesAPI extends BaseResourceAPI<TimeSeries> {
    *
    * ```js
    * const results = await client.timeseries.synthetic.query([
-   *   { expression: "TS{externalId='my-ts'} * 2", start: '2d-ago', end: 'now', limit: 100 },
+   *   { expression: "TS{space='my-space', externalId='my-ts'} * 2", start: '2d-ago', end: 'now', limit: 100 },
    * ]);
    * ```
    */
