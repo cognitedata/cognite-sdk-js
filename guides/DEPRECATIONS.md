@@ -31,11 +31,31 @@ release. The methods and types themselves are unchanged.
 
 ### 3D asset mappings
 
-`client.assetMappings3D` is deprecated as of 2026-10-15 as part of asset-centric 3D
-contextualization; no retirement date is announced. The replacement is the 3D contextualization
-APIs in data modeling, which are in public preview and not yet part of this SDK. The other 3D
-APIs (`client.models3D`, `client.revisions3D`, `client.files3D`, `client.viewer3D`) are **not**
-deprecated.
+CDF deprecates asset-centric 3D contextualization as of 2026-10-15; no retirement date is
+announced. The replacement is the 3D contextualization APIs in data modeling, which are in public
+preview and not yet part of this SDK. Nothing changes at runtime.
+
+The CDF API marks these endpoints as deprecated:
+
+| Endpoint                                                                     | In this SDK                                            |
+| ---------------------------------------------------------------------------- | ------------------------------------------------------ |
+| `GET /3d/models/{modelId}/revisions/{revisionId}/mappings`                   | `client.assetMappings3D.list` (deprecated)             |
+| `POST /3d/models/{modelId}/revisions/{revisionId}/mappings`                  | `client.assetMappings3D.create` (deprecated)           |
+| `POST /3d/models/{modelId}/revisions/{revisionId}/mappings/list`             | `client.assetMappings3D.filter` (deprecated)           |
+| `POST /3d/models/{modelId}/revisions/{revisionId}/mappings/delete`           | `client.assetMappings3D.delete` (deprecated)           |
+| `GET /3d/mappings/{assetId}/modelnodes`                                      | No method, nothing to tag                              |
+| `POST /3d/mappings/modelnodes/filter`                                        | No method, nothing to tag                              |
+| `POST /3d/nodes/list`                                                        | No method, nothing to tag                              |
+
+In the SDK, `client.assetMappings3D` and the asset mapping types (`AssetMapping3D`,
+`AssetMapping3DBase`, `CreateAssetMapping3D`, `DeleteAssetMapping3D`, `AssetMappings3DListFilter`,
+`Filter3DAssetMappingsQuery` and the filters they are built from) are marked `@deprecated`.
+
+Everything else in classic 3D is **not** deprecated and is unchanged: `client.models3D`,
+`client.revisions3D` (including its node methods), `client.files3D` and `client.viewer3D`. Note
+that `client.revisions3D.filter3DNodes` calls
+`POST /3d/models/{modelId}/revisions/{revisionId}/nodes/list`, which is a different endpoint from
+the deprecated `POST /3d/nodes/list`, and stays available.
 
 ### Time series: metadata is deprecated
 
