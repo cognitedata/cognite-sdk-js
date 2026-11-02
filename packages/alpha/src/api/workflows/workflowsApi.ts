@@ -46,6 +46,7 @@ export class WorkflowsAPI extends BaseResourceAPI<Workflow> {
    *     description: 'Demo',
    *     maxConcurrentExecutions: 2,
    *     dataDomainExternalId: 'my-data-domain',
+   *     isDataAware: true,
    *   },
    * ]);
    * ```

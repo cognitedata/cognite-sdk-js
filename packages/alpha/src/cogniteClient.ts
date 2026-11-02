@@ -2,11 +2,11 @@
 import { CogniteClient as CogniteClientStable } from '@cognite/sdk';
 import { accessApi } from '@cognite/sdk-core';
 import { version } from '../package.json';
-import { DataProductVersionsAPI } from './api/dataProducts/dataProductVersionsApi';
-import { DataProductsAPI } from './api/dataProducts/dataProductsApi';
+import { DataDomainsAPI } from './api/dataDomains/dataDomainsApi';
 import { LimitsAPI } from './api/limits/limitsApi';
 import { MeteringAPI } from './api/metering/meteringApi';
 import { SimulatorsAPI } from './api/simulators/simulatorsApi';
+import { TransformationsExternalDataAPI } from './api/transformations/transformationsExternalDataApi';
 import { WorkflowExecutionsAPI } from './api/workflows/workflowExecutionsApi';
 import { WorkflowTriggersAPI } from './api/workflows/workflowTriggersApi';
 import { WorkflowVersionsAPI } from './api/workflows/workflowVersionsApi';
@@ -20,8 +20,8 @@ export default class CogniteClientAlpha extends CogniteClientStable {
   private workflowVersionsApi?: WorkflowVersionsAPI;
   private workflowExecutionsApi?: WorkflowExecutionsAPI;
   private workflowTriggersApi?: WorkflowTriggersAPI;
-  private dataProductsApi?: DataProductsAPI;
-  private dataProductVersionsApi?: DataProductVersionsAPI;
+  private transformationsExternalDataApi?: TransformationsExternalDataAPI;
+  private dataDomainsApi?: DataDomainsAPI;
 
   public get limits() {
     return accessApi(this.limitsApi);
@@ -51,12 +51,12 @@ export default class CogniteClientAlpha extends CogniteClientStable {
     return accessApi(this.workflowTriggersApi);
   }
 
-  public get dataProducts() {
-    return accessApi(this.dataProductsApi);
+  public get transformationsExternalData() {
+    return accessApi(this.transformationsExternalDataApi);
   }
 
-  public get dataProductVersions() {
-    return accessApi(this.dataProductVersionsApi);
+  public get dataDomains() {
+    return accessApi(this.dataDomainsApi);
   }
 
   protected initAPIs() {
@@ -76,11 +76,11 @@ export default class CogniteClientAlpha extends CogniteClientStable {
       WorkflowTriggersAPI,
       'workflows/triggers'
     );
-    this.dataProductsApi = this.apiFactory(DataProductsAPI, 'dataproducts');
-    this.dataProductVersionsApi = this.apiFactory(
-      DataProductVersionsAPI,
-      'dataproducts'
+    this.transformationsExternalDataApi = this.apiFactory(
+      TransformationsExternalDataAPI,
+      'transformations/externaldata'
     );
+    this.dataDomainsApi = this.apiFactory(DataDomainsAPI, 'datadomains');
     this.workflowExecutionsApi = new WorkflowExecutionsAPI(
       `${this.projectUrl}/workflows/executions`,
       `${this.projectUrl}/workflows`,

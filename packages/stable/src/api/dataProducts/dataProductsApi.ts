@@ -1,24 +1,34 @@
 // Copyright 2026 Cognite AS
 
-import { BaseResourceAPI } from '@cognite/sdk-core';
-import type {
-  CogniteExternalId,
-  CursorAndAsyncIterator,
+import {
+  BaseResourceAPI,
+  type CDFHttpClient,
+  type CursorAndAsyncIterator,
+  type MetadataMap,
 } from '@cognite/sdk-core';
+import { DataProductVersionsAPI } from './dataProductVersionsApi';
 import type {
   DataProduct,
   DataProductChange,
   DataProductCreate,
-  DataProductDelete,
+  DataProductExternalIdObject,
   DataProductListQuery,
 } from './types';
 
 export class DataProductsAPI extends BaseResourceAPI<DataProduct> {
+  private readonly versionsApi: DataProductVersionsAPI;
+
+  /** @hidden */
+  constructor(resourcePath: string, ...args: [CDFHttpClient, MetadataMap]) {
+    super(resourcePath, ...args);
+    this.versionsApi = new DataProductVersionsAPI(resourcePath, ...args);
+  }
+
   /**
-   * @hidden
+   * [Data product versions](https://api-docs.cognite.com/20230101/tag/Data-products/operation/listDataProductVersions)
    */
-  protected getDateProps() {
-    return this.pickDateProps(['items'], ['createdTime', 'lastUpdatedTime']);
+  public get versions() {
+    return this.versionsApi;
   }
 
   /**
@@ -51,19 +61,24 @@ export class DataProductsAPI extends BaseResourceAPI<DataProduct> {
   };
 
   /**
-   * [Retrieve a data product by external id](https://api-docs.cognite.com/20230101/tag/Data-products/operation/getDataProduct)
+   * [Retrieve data products](https://api-docs.cognite.com/20230101/tag/Data-products/operation/getDataProductsByIds)
    *
    * ```js
-   * const dataProduct = await client.dataProducts.retrieve('my-data-product');
+   * const dataProducts = await client.dataProducts.retrieve([
+   *   { externalId: 'my-data-product' },
+   * ]);
    * ```
    */
-  public retrieve = async (
-    externalId: CogniteExternalId
-  ): Promise<DataProduct> => {
-    const response = await this.get<DataProduct>(
-      this.url(encodeURIComponent(externalId))
+  public retrieve = (
+    ids: DataProductExternalIdObject[]
+  ): Promise<DataProduct[]> => {
+    return this.callEndpointWithMergeAndTransform(ids, (data) =>
+      this.postInParallelWithAutomaticChunking({
+        path: this.byIdsUrl,
+        items: data,
+        chunkSize: 100,
+      })
     );
-    return this.addToMapAndReturn(response.data, response);
   };
 
   /**
@@ -81,7 +96,7 @@ export class DataProductsAPI extends BaseResourceAPI<DataProduct> {
    * ```
    */
   public update = (items: [DataProductChange]): Promise<DataProduct[]> => {
-    return this.updateEndpoint(items, this.url('update'));
+    return this.updateEndpoint(items);
   };
 
   /**
@@ -91,7 +106,7 @@ export class DataProductsAPI extends BaseResourceAPI<DataProduct> {
    * await client.dataProducts.delete([{ externalId: 'my-data-product' }]);
    * ```
    */
-  public delete = (ids: [DataProductDelete]): Promise<object> => {
+  public delete = (ids: [DataProductExternalIdObject]): Promise<object> => {
     return this.deleteEndpoint(ids);
   };
 }

@@ -3,6 +3,52 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [10.18.0](https://github.com/cognitedata/cognite-sdk-js/compare/%40cognite%2Fsdk%4010.17.1...%40cognite%2Fsdk%4010.18.0) (2026-11-02)
+
+### Features
+
+* deprecate asset-centric time series metadata and id/externalId data point access ([#1513](https://github.com/cognitedata/cognite-sdk-js/issues/1513)) ([ed19009](https://github.com/cognitedata/cognite-sdk-js/commit/ed190095ba71a5ddb28b062568fb26bbf460cc1b)), closes [cognitedata/infrastructure#42328](https://github.com/cognitedata/infrastructure/issues/42328) [cognitedata/infrastructure#43882](https://github.com/cognitedata/infrastructure/issues/43882) [#43882](https://github.com/cognitedata/cognite-sdk-js/issues/43882) [cognitedata/infrastructure#44077](https://github.com/cognitedata/infrastructure/issues/44077) [#1498](https://github.com/cognitedata/cognite-sdk-js/issues/1498) [#1497](https://github.com/cognitedata/cognite-sdk-js/issues/1497) [#1527](https://github.com/cognitedata/cognite-sdk-js/issues/1527) [#1521](https://github.com/cognitedata/cognite-sdk-js/issues/1521)
+* **stable:** support concurrency policy for data modeling ([#1525](https://github.com/cognitedata/cognite-sdk-js/issues/1525)) ([4ee8023](https://github.com/cognitedata/cognite-sdk-js/commit/4ee80232b28e0dd4a210c67b72ede66e7ad8f36e))
+* **statistics:** add data modeling statistics ([#1534](https://github.com/cognitedata/cognite-sdk-js/issues/1534)) ([3fcf141](https://github.com/cognitedata/cognite-sdk-js/commit/3fcf141a077cc143a3b1541e370ed9665ca684d7))
+
+
+## [10.17.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@10.17.0...@cognite/sdk@10.17.1) (2026-10-29)
+
+**Note:** Version bump only for package @cognite/sdk
+
+
+
+
+
+# [10.17.0](https://github.com/cognitedata/cognite-sdk-js/compare/%40cognite%2Fsdk%4010.16.0...%40cognite%2Fsdk%4010.17.0) (2026-10-29)
+
+### Features
+
+* deprecate asset-centric APIs, methods and types ([#1497](https://github.com/cognitedata/cognite-sdk-js/issues/1497)) ([cba21ac](https://github.com/cognitedata/cognite-sdk-js/commit/cba21acf264672062e266550ea5143588ae30f06)), closes [#1513](https://github.com/cognitedata/cognite-sdk-js/issues/1513) [#1513](https://github.com/cognitedata/cognite-sdk-js/issues/1513) [#1513](https://github.com/cognitedata/cognite-sdk-js/issues/1513) [#1498](https://github.com/cognitedata/cognite-sdk-js/issues/1498) [#1513](https://github.com/cognitedata/cognite-sdk-js/issues/1513) [#1513](https://github.com/cognitedata/cognite-sdk-js/issues/1513)
+* **extractors:** add zero_copy extractor type ([#1529](https://github.com/cognitedata/cognite-sdk-js/issues/1529)) ([f34a5ba](https://github.com/cognitedata/cognite-sdk-js/commit/f34a5baffeef1dc85132436f3aead43927fc315e))
+
+
+# [10.16.0](https://github.com/cognitedata/cognite-sdk-js/compare/%40cognite%2Fsdk%4010.15.0...%40cognite%2Fsdk%4010.16.0) (2026-10-19)
+
+### Features
+
+* **dataproducts:** move data products API to stable ([#1505](https://github.com/cognitedata/cognite-sdk-js/issues/1505)) ([9180e08](https://github.com/cognitedata/cognite-sdk-js/commit/9180e08c6955e21d01b0180e55a7c416219ad01f))
+* **stable:** add operator to instances SearchRequestV3 ([#1506](https://github.com/cognitedata/cognite-sdk-js/issues/1506)) ([3104376](https://github.com/cognitedata/cognite-sdk-js/commit/3104376ef72b7aa1df0679cc53bf630502ecd031))
+
+
+# [10.15.0](https://github.com/cognitedata/cognite-sdk-js/compare/%40cognite%2Fsdk%4010.14.0...%40cognite%2Fsdk%4010.15.0) (2026-10-07)
+
+### Bug Fixes
+
+* **codegen:** dedupe types that match @cognite/sdk-core exports ([#1485](https://github.com/cognitedata/cognite-sdk-js/issues/1485)) ([0104cf3](https://github.com/cognitedata/cognite-sdk-js/commit/0104cf395fd546e2db2e6eaa1ae6300dad55a483)), closes [#1480](https://github.com/cognitedata/cognite-sdk-js/issues/1480)
+
+### Features
+
+* **extractors:** add list, retrieve, and getSchema ([#1480](https://github.com/cognitedata/cognite-sdk-js/issues/1480)) ([26f7986](https://github.com/cognitedata/cognite-sdk-js/commit/26f79862434d92dd55c2b9cd90bd9dca1bd66427)), closes [#1482](https://github.com/cognitedata/cognite-sdk-js/issues/1482) [#1483](https://github.com/cognitedata/cognite-sdk-js/issues/1483)
+* **extractors:** add releases list and retrieval ([#1483](https://github.com/cognitedata/cognite-sdk-js/issues/1483)) ([ea6475d](https://github.com/cognitedata/cognite-sdk-js/commit/ea6475d214d45b372cf31ef08575809dd3021751))
+* **extractors:** add source systems and solutions list and retrieval ([#1482](https://github.com/cognitedata/cognite-sdk-js/issues/1482)) ([eaed231](https://github.com/cognitedata/cognite-sdk-js/commit/eaed231801a3f9c2efa6240d0affa4720f658106))
+
+
 # [10.14.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@10.13.0...@cognite/sdk@10.14.0) (2026-09-02)
 
 
