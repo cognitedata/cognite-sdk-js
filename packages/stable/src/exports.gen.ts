@@ -1,5 +1,9 @@
 // Copyright 2022 Cognite AS
-export type { EpochTimestamp } from './types.gen';
+export type {
+  EpochTimestamp,
+  ListOfSpaceIdsRequest,
+  SpaceSpecification,
+} from './types.gen';
 export type {
   AnnotationData,
   AnnotationsAssetRef,
@@ -36,6 +40,13 @@ export type {
   AnnotationsUnhandledTextObject,
   AnnotationsView,
 } from './api/annotations/types.gen';
+export type {
+  CountAndLimit,
+  InstancesCountsAndLimits,
+  ProjectStatistics,
+  SpaceStatistics,
+  SpaceStatisticsResponseList,
+} from './api/dataModelingStatistics/types.gen';
 export type {
   CogniteInstanceId,
   Document,
@@ -144,7 +155,6 @@ export type {
 export type {
   CursorQueryParameter,
   IncludeGlobalQueryParameter,
-  ListOfSpaceIdsRequest,
   ListOfSpaceIdsResponse,
   NextCursorV3,
   ReducedLimitQueryParameter,
@@ -153,7 +163,6 @@ export type {
   SpaceCreateCollection,
   SpaceCreateDefinition,
   SpaceDefinition,
-  SpaceSpecification,
   UpsertConflict,
 } from './api/spaces/types.gen';
 export type {
