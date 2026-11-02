@@ -1421,6 +1421,87 @@ export interface ProjectResponse {
   userProfilesConfiguration: UserProfilesConfiguration;
 }
 
+/**
+ * The ACL names and the actions each of them supports, as listed in the `x-capability`
+ * extension of the CDF API reference.
+ */
+export type TokenInspectAclActions = {
+  annotationsAcl: 'SUGGEST' | 'WRITE';
+  assetsAcl: 'READ' | 'WRITE';
+  dataModelInstancesAcl: 'READ' | 'WRITE' | 'WRITE_PROPERTIES';
+  dataModelsAcl: 'READ' | 'WRITE';
+  dataProductsAcl: 'CREATE' | 'DELETE' | 'READ' | 'UPDATE';
+  datasetsAcl: 'READ' | 'WRITE';
+  diagramParsingAcl: 'READ' | 'WRITE';
+  entitymatchingAcl: 'READ' | 'WRITE';
+  eventsAcl: 'READ' | 'WRITE';
+  extractionconfigsAcl: 'READ' | 'WRITE';
+  extractionpipelinesAcl: 'READ' | 'WRITE';
+  extractionrunsAcl: 'READ' | 'WRITE';
+  filesAcl: 'READ' | 'WRITE';
+  functionsAcl: 'READ' | 'RUN' | 'WRITE';
+  geospatialAcl: 'READ' | 'WRITE';
+  geospatialCrsAcl: 'READ' | 'WRITE';
+  groupsAcl: 'CREATE' | 'DELETE' | 'LIST';
+  hostedExtractors: 'READ' | 'WRITE';
+  labelsAcl: 'READ' | 'WRITE';
+  postgresGateway: 'READ' | 'WRITE';
+  projectsAcl: 'LIST';
+  rawAcl: 'LIST' | 'READ' | 'WRITE';
+  relationshipsAcl: 'READ' | 'WRITE';
+  sapWritebackAcl: 'READ' | 'WRITE';
+  sapWritebackRequestsAcl: 'LIST' | 'WRITE';
+  securityCategoriesAcl: 'CREATE' | 'DELETE' | 'LIST';
+  sequencesAcl: 'READ' | 'WRITE';
+  streamRecordsAcl: 'READ' | 'WRITE';
+  streamsAcl: 'CREATE' | 'DELETE' | 'READ';
+  threedAcl: 'CREATE' | 'DELETE' | 'READ' | 'UPDATE';
+  timeSeriesAcl: 'READ' | 'WRITE';
+  timeSeriesSubscriptionsAcl: 'READ' | 'WRITE';
+  userProfilesAcl: 'READ';
+  workflowOrchestrationACL: 'READ' | 'WRITE';
+};
+
+export type TokenInspectAclName = keyof TokenInspectAclActions;
+
+export type TokenInspectAclAction<
+  Name extends TokenInspectAclName = TokenInspectAclName,
+> = TokenInspectAclActions[Name];
+
+export type TokenInspectProjectScope = {
+  projects?: string[];
+  allProjects?: Record<string, never>;
+};
+
+export type TokenInspectAclScope = {
+  all?: Record<string, never>;
+  spaceIdScope?: { spaceIds: string[] };
+  experimentscope?: { experiments: string[] };
+};
+
+export type TokenInspectAcl<Name extends TokenInspectAclName> = {
+  actions: TokenInspectAclAction<Name>[];
+  scope: TokenInspectAclScope;
+};
+
+/**
+ * A single entry of the `capabilities` list: one or more ACLs granted in a project scope.
+ */
+export type TokenInspectCapability = {
+  projectScope: TokenInspectProjectScope;
+} & {
+  [Name in TokenInspectAclName]?: TokenInspectAcl<Name>;
+};
+
+/**
+ * The response of the token inspect endpoint: the CDF access of the current user.
+ */
+export type TokenInspect = {
+  subject: string;
+  projects: { projectUrlName: string; groups: number[] }[];
+  capabilities: TokenInspectCapability[];
+};
+
 export interface UserProfilesConfiguration {
   enabled: boolean;
 }

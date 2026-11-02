@@ -36,6 +36,7 @@ export { FilesMultipartUploadSessionAPI } from './api/files/filesMultipartUpload
 export { GroupsAPI } from './api/groups/groupsApi';
 export { LabelsAPI } from './api/labels/labelsApi';
 export { ProjectsAPI } from './api/projects/projectsApi';
+export { TokenAPI } from './api/token/tokenApi';
 export { RawAPI } from './api/raw/rawApi';
 export { RawRowsAPI } from './api/raw/rawRowsApi';
 export { RawTablesAPI } from './api/raw/rawTablesApi';
