@@ -59,7 +59,7 @@ export class TimeSeriesAPI extends BaseResourceAPI<TimeSeries> {
    *
    * ```js
    * const results = await client.timeseries.synthetic.query([
-   *   { expression: "TS{externalId='my-ts'} * 2", start: '2d-ago', end: 'now', limit: 100 },
+   *   { expression: "TS{space='my-space', externalId='my-ts'} * 2", start: '2d-ago', end: 'now', limit: 100 },
    * ]);
    * ```
    */
@@ -205,10 +205,12 @@ export class TimeSeriesAPI extends BaseResourceAPI<TimeSeries> {
   /**
    * [Synthetic Query](https://docs.cognite.com/api/v1/#operation/querySyntheticTimeseries)
    *
+   * Referencing time series by TS{id=...} or TS{externalId='...'} is deprecated 2026-10-15 and retired 2027-12-31. Use the instance ID, TS{space='...', externalId='...'}.
+   *
    * ```js
    * await client.timeseries.syntheticQuery([
    *   {
-   *     expression: "24 * TS{externalId='production/hour', aggregate='average', granularity='1d'}",
+   *     expression: "24 * TS{space='my-space', externalId='production/hour', aggregate='average', granularity='1d'}",
    *     start: '48h-ago',
    *     end: 'now',
    *     limit: 100

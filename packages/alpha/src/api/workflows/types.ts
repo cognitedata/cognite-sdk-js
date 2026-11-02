@@ -12,6 +12,7 @@ export interface Workflow {
   dataSetId?: CogniteInternalId;
   maxConcurrentExecutions?: number;
   dataDomainExternalId?: CogniteExternalId;
+  isDataAware?: boolean;
   createdTime?: number;
   lastUpdatedTime: number;
 }
@@ -22,6 +23,7 @@ export interface WorkflowUpsert {
   dataSetId?: CogniteInternalId;
   maxConcurrentExecutions?: number;
   dataDomainExternalId?: CogniteExternalId;
+  isDataAware?: boolean;
 }
 
 export interface WorkflowExternalId {
