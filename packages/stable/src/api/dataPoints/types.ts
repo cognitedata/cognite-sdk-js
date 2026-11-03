@@ -112,8 +112,8 @@ export interface StateDatapoint extends DatapointInfo {
    */
   numericValue?: number;
   /**
-   * The string value of the state. Omitted if the data point has Bad status,
-   * or if the numeric value is no longer part of the time series' state set.
+   * The string value of the state. May be missing if the numeric value is no longer part of
+   * the time series' state set, or if the data point has Bad status.
    */
   stringValue?: string;
   /**
