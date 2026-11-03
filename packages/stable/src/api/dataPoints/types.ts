@@ -14,6 +14,7 @@ import type {
   IgnoreUnknownIds,
   Timestamp,
 } from '../../types/common';
+import type { TimeSeriesType } from '../timeSeries/types';
 
 // =====================================================
 // Aggregate function type
@@ -50,9 +51,9 @@ export type Aggregate =
  */
 export interface DatapointStatus {
   /** Numeric status code (e.g. 0 for Good, 2147483648 for Bad) */
-  code: number;
+  code?: number;
   /** Status symbol name (e.g. 'Good', 'Uncertain', 'Bad') */
-  symbol: string;
+  symbol?: string;
 }
 
 // =====================================================
@@ -101,9 +102,44 @@ export interface StringDatapoint extends DatapointInfo {
   status?: DatapointStatus;
 }
 
+/**
+ * A data point of a time series with type `state`.
+ * @see https://docs.cognite.com/dev/concepts/resource_types/state_timeseries
+ */
+export interface StateDatapoint extends DatapointInfo {
+  /**
+   * The numeric value of the state. May be omitted if the data point has Bad status.
+   */
+  numericValue?: number;
+  /**
+   * The string value of the state. Omitted if the data point has Bad status,
+   * or if the numeric value is no longer part of the time series' state set.
+   */
+  stringValue?: string;
+  /**
+   * Never set on state data points. Declared so that `value` can still be read from a
+   * `Datapoints` union without first narrowing on `type`.
+   */
+  // TODO(next-major): Remove so that reading `value` requires narrowing `Datapoints` on `type` first
+  value?: undefined;
+  status?: DatapointStatus;
+}
+
 export interface DatapointWrite {
   timestamp: Timestamp;
   value: number | string;
+  status?: DatapointStatus;
+}
+
+/**
+ * A data point to insert into a time series with type `state`.
+ * Set `numericValue`, `stringValue`, or both (they must refer to the same state in the state set).
+ * Both may be omitted only if the data point has Bad status.
+ */
+export interface StateDatapointWrite {
+  timestamp: Timestamp;
+  numericValue?: number;
+  stringValue?: string;
   status?: DatapointStatus;
 }
 
@@ -164,9 +200,13 @@ export interface DatapointsMetadata extends InternalId {
   instanceId?: CogniteInstanceId;
 
   /**
-   * Whether or not the datapoints are string values.
+   * Whether or not the datapoints are string values. `false` for time series with type `state`.
    */
   isString: boolean;
+  /**
+   * The type of the time series. Use this, rather than `isString`, to tell numeric, string and state datapoints apart.
+   */
+  type: TimeSeriesType;
   /**
    * Name of the physical unit of the time series
    */
@@ -186,10 +226,11 @@ export interface DatapointAggregates extends DatapointsMetadata, NextCursor {
   unitExternalId?: CogniteExternalId;
 }
 
-export type Datapoints = StringDatapoints | DoubleDatapoints;
+export type Datapoints = StringDatapoints | DoubleDatapoints | StateDatapoints;
 
 export interface DoubleDatapoints extends DatapointsMetadata, NextCursor {
   isString: false;
+  type: 'numeric';
   /**
    * Whether the timeseries is a step series or not
    */
@@ -206,10 +247,24 @@ export interface DoubleDatapoints extends DatapointsMetadata, NextCursor {
 
 export interface StringDatapoints extends DatapointsMetadata, NextCursor {
   isString: true;
+  type: 'string';
   /**
    * The list of datapoints
    */
   datapoints: StringDatapoint[];
+}
+
+export interface StateDatapoints extends DatapointsMetadata, NextCursor {
+  isString: false;
+  type: 'state';
+  /**
+   * Whether the timeseries is a step series or not
+   */
+  isStep?: boolean;
+  /**
+   * The list of datapoints
+   */
+  datapoints: StateDatapoint[];
 }
 
 // =====================================================
@@ -217,7 +272,10 @@ export interface StringDatapoints extends DatapointsMetadata, NextCursor {
 // =====================================================
 
 export interface DatapointsInsertProperties {
-  datapoints: DatapointWrite[];
+  /**
+   * Use `StateDatapointWrite` for time series with type `state`, and `DatapointWrite` otherwise.
+   */
+  datapoints: (DatapointWrite | StateDatapointWrite)[];
 }
 
 /** @deprecated Use DatapointsInsertProperties instead. Will be removed in next major release. */
