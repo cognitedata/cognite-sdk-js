@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [10.19.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@10.18.0...@cognite/sdk@10.19.0) (2026-11-03)
+
+
+### Features
+
+* add support for token/inspect endpoint ([#1533](https://github.com/cognitedata/cognite-sdk-js/issues/1533)) ([2588831](https://github.com/cognitedata/cognite-sdk-js/commit/258883111bd1d7529deebf2affe026f31103cceb))
+* deprecate asset-centric file metadata endpoints and filters ([#1518](https://github.com/cognitedata/cognite-sdk-js/issues/1518)) ([568da16](https://github.com/cognitedata/cognite-sdk-js/commit/568da1674679419cff8d275b355c1cc0057034e7)), closes [#1497](https://github.com/cognitedata/cognite-sdk-js/issues/1497) [cognitedata/infrastructure#42328](https://github.com/cognitedata/infrastructure/issues/42328) [#1513](https://github.com/cognitedata/cognite-sdk-js/issues/1513)
+
+
+
+
+
 # [10.18.0](https://github.com/cognitedata/cognite-sdk-js/compare/%40cognite%2Fsdk%4010.17.1...%40cognite%2Fsdk%4010.18.0) (2026-11-02)
 
 ### Features
