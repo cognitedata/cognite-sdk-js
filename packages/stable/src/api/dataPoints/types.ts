@@ -129,6 +129,10 @@ export interface DatapointWrite {
   timestamp: Timestamp;
   value: number | string;
   status?: DatapointStatus;
+  /** Only for time series with type `state`, use `StateDatapointWrite` instead. */
+  numericValue?: never;
+  /** Only for time series with type `state`, use `StateDatapointWrite` instead. */
+  stringValue?: never;
 }
 
 /**
@@ -141,6 +145,8 @@ export interface StateDatapointWrite {
   numericValue?: number;
   stringValue?: string;
   status?: DatapointStatus;
+  /** Not used for state time series, set `numericValue` and/or `stringValue` instead. */
+  value?: never;
 }
 
 /** @deprecated Use DatapointWrite instead. Will be removed in next major release. */
