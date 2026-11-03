@@ -51,10 +51,17 @@ export type Aggregate =
  */
 export interface DatapointStatus {
   /** Numeric status code (e.g. 0 for Good, 2147483648 for Bad) */
-  code?: number;
+  code: number;
   /** Status symbol name (e.g. 'Good', 'Uncertain', 'Bad') */
-  symbol?: string;
+  symbol: string;
 }
+
+/**
+ * Status code to write with a data point. Set `code`, `symbol`, or both (they must be consistent).
+ */
+export type DatapointStatusWrite =
+  | { code: number; symbol?: string }
+  | { code?: number; symbol: string };
 
 // =====================================================
 // Data point value types
@@ -128,7 +135,7 @@ export interface StateDatapoint extends DatapointInfo {
 export interface DatapointWrite {
   timestamp: Timestamp;
   value: number | string;
-  status?: DatapointStatus;
+  status?: DatapointStatusWrite;
   /** Only for time series with type `state`, use `StateDatapointWrite` instead. */
   numericValue?: never;
   /** Only for time series with type `state`, use `StateDatapointWrite` instead. */
@@ -144,7 +151,7 @@ export interface StateDatapointWrite {
   timestamp: Timestamp;
   numericValue?: number;
   stringValue?: string;
-  status?: DatapointStatus;
+  status?: DatapointStatusWrite;
   /** Not used for state time series, set `numericValue` and/or `stringValue` instead. */
   value?: never;
 }
@@ -221,6 +228,8 @@ export interface DatapointsMetadata extends InternalId {
 
 export interface DatapointAggregates extends DatapointsMetadata, NextCursor {
   isString: false;
+  // TODO: Add string and state aggregate variants, so `type` can be narrowed for aggregates too
+  type: 'numeric';
   /**
    * Whether the timeseries is a step series or not
    */

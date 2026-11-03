@@ -97,6 +97,10 @@ export class DataPointsAPI extends BaseResourceAPI<
    *   { instanceId: { space: 'my-space', externalId: 'other-ts' }, before: new Date('21 jan 2018') },
    * ]);
    * ```
+   *
+   * @remarks
+   * Narrow each item on `type` (`'numeric'`, `'string'` or `'state'`) rather than `isString`,
+   * since state time series also have `isString: false`.
    */
   public retrieveLatest = (
     items: LatestDataBeforeRequest[],

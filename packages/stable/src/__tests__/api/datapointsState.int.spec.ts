@@ -2,7 +2,7 @@
 
 import { afterAll, beforeAll, describe, expect, test } from 'vitest';
 import type CogniteClient from '../../cogniteClient';
-import type { NodeWrite, StateDatapoints } from '../../types';
+import type { NodeWrite } from '../../types';
 import { TEST_DATA_SPACE, randomInt, setupLoggedInClient } from '../testUtils';
 
 describe('State time series datapoints integration test', () => {
@@ -61,7 +61,13 @@ describe('State time series datapoints integration test', () => {
 
   beforeAll(async () => {
     client = setupLoggedInClient();
-    await client.spaces.upsert([{ space: TEST_DATA_SPACE }]);
+    await client.spaces.upsert([
+      {
+        space: TEST_DATA_SPACE,
+        name: TEST_DATA_SPACE,
+        description: 'Instance space used for integration tests.',
+      },
+    ]);
     await client.instances.upsert({ items: [stateSet] });
     await client.instances.upsert({ items: [stateTimeSeries] });
   });
@@ -93,7 +99,8 @@ describe('State time series datapoints integration test', () => {
     });
     expect(response.type).toBe('state');
     expect(response.isString).toBe(false);
-    const { datapoints } = response as StateDatapoints;
+    if (response.type !== 'state') return;
+    const { datapoints } = response;
     expect(datapoints).toHaveLength(3);
     expect(datapoints[0].timestamp).toBeInstanceOf(Date);
     expect(datapoints.map((dp) => [dp.numericValue, dp.stringValue])).toEqual([
