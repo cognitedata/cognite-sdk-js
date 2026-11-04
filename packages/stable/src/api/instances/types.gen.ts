@@ -779,6 +779,12 @@ export interface QueryNodeTableExpressionV3 {
 // request/response `debug` placement matches too. Known spec gap, deliberately
 // not typed here: the API also returns `debug` on `list` responses, but the
 // document does not define it on NodeAndEdgeCollectionResponseWithCursorV3Response.
+//
+// Hand-written deviations (marked NOT GENERATED; redo them after regenerating):
+// `DebugResponse.notices` is `(DebugNotice | UnknownDebugNotice)[]` and
+// `UnknownDebugNotice` is added. Notices are mapped at runtime in ./debugNotices.ts,
+// following the Python SDK's `DebugNotice._load`: look up (category, code), and fall
+// back to `UnknownDebugNotice` for anything the SDK does not know yet.
 // ---------------------------------------------------------------------------
 export interface ContainerSubObjectIdentifier {
   /** External id for the container */
@@ -826,8 +832,15 @@ export interface DebugParameters {
  * Contains debug notices if debug flag is set in the query.
  */
 export interface DebugResponse {
-  /** A list of notices that provide insights into the query's execution. These can highlight potential performance issues, offer optimization suggestions, or explain aspects of the query processing. Each notice falls into a category, such as indexing, sorting, filtering, or cursoring, to help identify areas for improvement. */
-  notices?: DebugNotice[];
+  /**
+   * A list of notices that provide insights into the query's execution. These can highlight potential performance issues, offer optimization suggestions, or explain aspects of the query processing. Each notice falls into a category, such as indexing, sorting, filtering, or cursoring, to help identify areas for improvement.
+   *
+   * NOT GENERATED: the spec types this as `DebugNotice[]`. The API adds notices without
+   * a breaking change, so the SDK (like the Python SDK's `DebugNotice._load`) maps every
+   * notice whose (`code`, `category`) pair it does not know to an {@link UnknownDebugNotice}
+   * instead of mistyping it. Use `isUnknownDebugNotice` to narrow to the known notices.
+   */
+  notices?: (DebugNotice | UnknownDebugNotice)[];
 }
 export interface ExcessiveTimeoutNotice {
   category: 'invalidDebugOptions';
@@ -1031,6 +1044,20 @@ export interface UnindexedThroughNotice {
   property: string[];
   /** Identifier for the result set expression that the notice applies to. */
   resultExpression: string;
+}
+/**
+ * NOT GENERATED. A notice whose (`code`, `category`) pair is not known to this SDK
+ * version, e.g. one the API added after this SDK was released. Mirrors
+ * `UnknownDebugNotice` in the Python SDK: the base fields are lifted out and every
+ * other field is kept verbatim in `data`.
+ */
+export interface UnknownDebugNotice {
+  category: string;
+  code: string;
+  hint: string;
+  level: string;
+  /** All remaining fields of the notice as returned by the API. */
+  data: Record<string, unknown>;
 }
 // ---------------------------------------------------------------------------
 export interface QueryRequest {

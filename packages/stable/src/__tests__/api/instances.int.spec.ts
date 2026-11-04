@@ -3,6 +3,7 @@
 import type { ViewReference } from 'stable/src/types';
 import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest';
 import type CogniteClient from '../../cogniteClient';
+import { isUnknownDebugNotice } from '../../index';
 import { randomInt, setupLoggedInClient } from '../testUtils';
 
 type SpaceDefinition = {
@@ -419,6 +420,9 @@ describe('Instances integration test', () => {
         debug: {},
       });
       for (const notice of response.debug?.notices ?? []) {
+        if (isUnknownDebugNotice(notice)) {
+          continue;
+        }
         if (notice.code === 'excessiveTimeout') {
           expect(typeof notice.timeout).toBe('number');
         } else if (notice.code === 'unindexedThrough') {
@@ -475,6 +479,9 @@ describe('Instances integration test', () => {
         debug: {},
       });
       for (const notice of response.debug?.notices ?? []) {
+        if (isUnknownDebugNotice(notice)) {
+          continue;
+        }
         if (notice.code === 'filterIncompatibleWithCursorableIndexScan') {
           expect(notice.reasons.length).toBeGreaterThan(0);
         }

@@ -3025,6 +3025,7 @@ export type {
   SyncNotice,
   UnfilteredContainerScanNotice,
   UnindexedThroughNotice,
+  UnknownDebugNotice,
   DMSExistsFilter,
   DMSExternalId,
   DMSFilterProperty,
