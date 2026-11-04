@@ -15,6 +15,7 @@ import { AnnotationsAPI } from './api/annotations/annotationsApi';
 import { AssetsAPI } from './api/assets/assetsApi';
 import { ContainersAPI } from './api/containers/containersApi';
 import { DataModelingStatisticsAPI } from './api/dataModelingStatistics/dataModelingStatisticsApi';
+import type { DataPointsAPI } from './api/dataPoints/dataPointsApi';
 import { DataProductsAPI } from './api/dataProducts/dataProductsApi';
 import { DataSetsAPI } from './api/datasets/datasetsApi';
 import { DocumentsAPI } from './api/documents/documentsApi';
@@ -62,7 +63,7 @@ export default class CogniteClient extends BaseCogniteClient {
     return accessApi(this.timeSeriesApi);
   }
   public get datapoints() {
-    return this.timeseries.data;
+    return accessApi(this.dataPointsApi);
   }
   /**
    * @deprecated Asset-centric API, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
@@ -243,6 +244,10 @@ export default class CogniteClient extends BaseCogniteClient {
   }
   private assetsApi?: AssetsAPI;
   private timeSeriesApi?: TimeSeriesAPI;
+  /**
+   * @deprecated Use `client.timeseries.data` instead. Kept so subclasses that read or override it keep working. It points to the same instance as `client.timeseries.data` unless overridden. Will be removed in the next major release.
+   */
+  protected dataPointsApi?: DataPointsAPI;
   private sequencesApi?: SequencesAPI;
   private eventsApi?: EventsAPI;
   protected filesApi?: FilesAPI;
@@ -294,6 +299,7 @@ export default class CogniteClient extends BaseCogniteClient {
 
     this.assetsApi = this.apiFactory(AssetsAPI, 'assets');
     this.timeSeriesApi = this.apiFactory(TimeSeriesAPI, 'timeseries');
+    this.dataPointsApi = this.timeSeriesApi.data;
     this.sequencesApi = this.apiFactory(SequencesAPI, 'sequences');
     this.eventsApi = this.apiFactory(EventsAPI, 'events');
     this.filesApi = this.apiFactory(FilesAPI, 'files');

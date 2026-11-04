@@ -2,7 +2,7 @@
 
 import nock from 'nock';
 import { beforeEach, describe, expect, test } from 'vitest';
-import type { CogniteClient } from '../..';
+import { CogniteClient } from '../..';
 import { mockBaseUrl, setupMockableClient } from '../testUtils';
 
 const instanceId = { space: 'my-space', externalId: 'my-ts' };
@@ -105,6 +105,26 @@ describe('Time series namespace unit test', () => {
   describe('client.datapoints and client.timeseries.data are equivalent', () => {
     test('are the same instance', () => {
       expect(client.datapoints).toBe(client.timeseries.data);
+    });
+
+    test('deprecated protected dataPointsApi is the same instance and still honoured', () => {
+      class SubClient extends CogniteClient {
+        readInherited() {
+          return this.dataPointsApi;
+        }
+        override() {
+          this.dataPointsApi = client.timeseries.data;
+        }
+      }
+      const sub = new SubClient({
+        appId: 'JS SDK unit tests',
+        project: 'mock-project',
+        baseUrl: mockBaseUrl,
+        oidcTokenProvider: () => Promise.resolve('test accessToken'),
+      });
+      expect(sub.readInherited()).toBe(sub.timeseries.data);
+      sub.override();
+      expect(sub.datapoints).toBe(client.timeseries.data);
     });
 
     test('insert', async () => {
