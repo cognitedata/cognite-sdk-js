@@ -130,7 +130,7 @@ export type AutoPagingToArray<T> = (
  *
  * These live here rather than in a single SDK package so that generated types
  * can mix them in: codegen emits `extends CreatedTime` for the fields a service
- * declares in the `dateProps` setting of its `codegen.json`.
+ * converts in its `getDateProps()`.
  */
 export interface CreatedTime {
   createdTime: Date;
