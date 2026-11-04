@@ -105,6 +105,8 @@ export class FilesAPI extends BaseResourceAPI<FileInfo> {
    * const aggregates = await client.files.aggregate({ filter: { uploaded: true } });
    * console.log('Number of uploaded files: ', aggregates[0].count)
    * ```
+   *
+   * @deprecated Asset-centric file metadata, deprecated 2026-10-15 and retired 2027-12-31. Create and query files as CogniteFile instances via client.instances instead. Will be removed in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#files-asset-centric-metadata-and-filters.
    */
   public aggregate = (query: FileAggregateQuery): Promise<FileAggregate[]> => {
     return super.aggregateEndpoint(query);
@@ -117,6 +119,8 @@ export class FilesAPI extends BaseResourceAPI<FileInfo> {
    * ```js
    * const files = await client.files.retrieve([{id: 123}, {externalId: 'abc'}]);
    * ```
+   *
+   * @deprecated Asset-centric file metadata, deprecated 2026-10-15 and retired 2027-12-31. Retrieve files as CogniteFile instances via client.instances instead, and get download URLs with getDownloadUrls by instanceId. Will be removed in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#files-asset-centric-metadata-and-filters.
    */
   public retrieve = (
     ids: IdEitherWithInstance[],
@@ -136,6 +140,8 @@ export class FilesAPI extends BaseResourceAPI<FileInfo> {
    *   }
    * }]);
    * ```
+   *
+   * @deprecated Asset-centric file metadata, deprecated 2026-10-15 and retired 2027-12-31. Create and query files as CogniteFile instances via client.instances instead. Will be removed in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#files-asset-centric-metadata-and-filters.
    */
   public update = (changes: FileChangeUpdate[]) => {
     return super.updateEndpoint(changes);
@@ -154,6 +160,8 @@ export class FilesAPI extends BaseResourceAPI<FileInfo> {
    *   }
    * });
    * ```
+   *
+   * @deprecated Asset-centric file metadata, deprecated 2026-10-15 and retired 2027-12-31. Create and query files as CogniteFile instances via client.instances instead. Will be removed in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#files-asset-centric-metadata-and-filters.
    */
   public search = (query: FilesSearchFilter) => {
     return super.searchEndpoint(query);
@@ -165,6 +173,8 @@ export class FilesAPI extends BaseResourceAPI<FileInfo> {
    * ```js
    * await client.files.delete([{id: 123}, {externalId: 'abc'}]);
    * ```
+   *
+   * @deprecated Asset-centric file metadata, deprecated 2026-10-15 and retired 2027-12-31. Delete the CogniteFile instance via client.instances.delete instead. Will be removed in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#files-asset-centric-metadata-and-filters.
    */
   public delete = (ids: IdEither[]) => {
     return super.deleteEndpoint(ids);
@@ -172,9 +182,12 @@ export class FilesAPI extends BaseResourceAPI<FileInfo> {
 
   /**
    * [Get download urls](https://doc.cognitedata.com/api/v1/#operation/downloadLinks)
+   * File content download stays on the Files API; prefer instanceId.
    *
    * ```js
-   * await client.files.getDownloadUrls([{id: 123}, {externalId: 'abc'}]);
+   * await client.files.getDownloadUrls([
+   *   { instanceId: { space: 'my-space', externalId: 'my-file' } },
+   * ]);
    * ```
    */
   public getDownloadUrls = (

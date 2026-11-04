@@ -9,6 +9,7 @@ import {
 } from './constants';
 import type { HttpResponse } from './httpClient/basicHttpClient';
 import { CDFHttpClient } from './httpClient/cdfHttpClient';
+import type { ConcurrencyPolicy } from './httpClient/concurrencyLimiter';
 import type { HttpHeaders } from './httpClient/httpHeaders';
 import {
   type RetryValidator,
@@ -51,6 +52,17 @@ export interface ClientOptions {
    * Used to override the default retry validator.
    */
   retryValidator?: RetryValidator;
+  /**
+   * Opt-in per-API concurrency limits, keyed by API name (for example `dataModeling`).
+   * Requests are not limited unless this is set; an empty object enables the
+   * default limits of every API the SDK package supports.
+   *
+   * @alpha This functionality is experimental. Breaking changes are to be expected
+   * in any release, including patch and minor versions.
+   */
+  concurrency?: Readonly<
+    Record<string, Readonly<Record<string, number | undefined>> | undefined>
+  >;
 }
 
 export function accessApi<T>(api: T | undefined): T {
@@ -66,6 +78,7 @@ export default class BaseCogniteClient {
   private readonly getOidcToken: () => Promise<string | undefined>;
   readonly project: string;
   private retryValidator: RetryValidator;
+  private concurrencyPolicies: ConcurrencyPolicy<string>[] = [];
 
   /**
    * To prevent calling `getToken` method multiple times in parallel, we set
@@ -138,6 +151,15 @@ export default class BaseCogniteClient {
     };
 
     this.initAPIs();
+    const { concurrency } = options;
+    if (concurrency) {
+      this.http.setConcurrencyPolicies(
+        this.concurrencyPolicies.map((policy) => ({
+          policy,
+          options: concurrency[policy.name],
+        }))
+      );
+    }
   }
 
   public authenticate: () => Promise<string | undefined> = async () => {
@@ -336,6 +358,13 @@ export default class BaseCogniteClient {
    */
   protected getRetryValidator(): RetryValidator {
     return this.retryValidator;
+  }
+
+  /**
+   * Limits the requests according to policies, see `options.concurrency`.
+   */
+  protected setConcurrencyPolicies(policies: ConcurrencyPolicy<string>[]) {
+    this.concurrencyPolicies = policies;
   }
 
   protected get version() {

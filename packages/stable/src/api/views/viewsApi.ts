@@ -43,7 +43,8 @@ export class ViewsAPI extends BaseResourceAPI<ViewDefinition> {
    *   viewDefinition
    *  ]);
    *
-   *  // Record views target a stream (usedFor: 'record') and require streamId
+   *  // A view becomes a record view by setting streamId. Do not send usedFor:
+   *  // it is read-only and returned as 'record' when the view is retrieved.
    *  const recordViewDefinition = {
    *    "externalId": "my_record_view",
    *    "space": "my_space",
@@ -65,6 +66,11 @@ export class ViewsAPI extends BaseResourceAPI<ViewDefinition> {
    *   recordViewDefinition
    *  ]);
    * ```
+   *
+   * @remarks
+   * The `streamId` of a record view version cannot be changed after it is
+   * created; publish a new view version to target another stream. A record
+   * view can only be used as a source for records in the stream it targets.
    */
   public upsert = async (
     params: ViewCreateDefinition[]
