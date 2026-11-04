@@ -55,7 +55,7 @@ describe('Time series namespace unit test', () => {
 
   test('timeseries.data.retrieveLatest posts to /timeseries/data/latest', async () => {
     nock(mockBaseUrl)
-      .post(/\/timeseries\/data\/latest$/)
+      .post(/\/timeseries\/data\/latest$/, { items: [{ instanceId }] })
       .once()
       .reply(200, {
         items: [{ id: 1, instanceId, isString: false, datapoints: [] }],
@@ -65,6 +65,7 @@ describe('Time series namespace unit test', () => {
       { instanceId },
     ]);
     expect(result).toHaveLength(1);
+    expect(nock.isDone()).toBe(true);
   });
 
   test('timeseries.data.delete posts to /timeseries/data/delete', async () => {
@@ -102,6 +103,10 @@ describe('Time series namespace unit test', () => {
   });
 
   describe('client.datapoints and client.timeseries.data are equivalent', () => {
+    test('are the same instance', () => {
+      expect(client.datapoints).toBe(client.timeseries.data);
+    });
+
     test('insert', async () => {
       const items = [
         { instanceId, datapoints: [{ timestamp: 1700000000000, value: 1 }] },
