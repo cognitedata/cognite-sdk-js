@@ -3,7 +3,12 @@
 import { afterAll, beforeAll, describe, expect, test } from 'vitest';
 import type CogniteClient from '../../cogniteClient';
 import type { NodeWrite } from '../../types';
-import { TEST_DATA_SPACE, randomInt, setupLoggedInClient } from '../testUtils';
+import {
+  TEST_DATA_SPACE,
+  randomInt,
+  runTestWithRetryWhenFailing,
+  setupLoggedInClient,
+} from '../testUtils';
 
 describe('State time series datapoints integration test', () => {
   let client: CogniteClient;
@@ -94,31 +99,37 @@ describe('State time series datapoints integration test', () => {
   });
 
   test('retrieve raw state datapoints', async () => {
-    const [response] = await client.datapoints.retrieve({
-      items: [{ instanceId: timeSeriesId, start, end: start + 3000 }],
+    await runTestWithRetryWhenFailing(async () => {
+      const [response] = await client.datapoints.retrieve({
+        items: [{ instanceId: timeSeriesId, start, end: start + 3000 }],
+      });
+      expect(response.type).toBe('state');
+      expect(response.isString).toBe(false);
+      if (response.type !== 'state') return;
+      const { datapoints } = response;
+      expect(datapoints).toHaveLength(3);
+      expect(datapoints[0].timestamp).toBeInstanceOf(Date);
+      expect(datapoints.map((dp) => [dp.numericValue, dp.stringValue])).toEqual(
+        [
+          [0, 'CLOSED'],
+          [1, 'OPEN'],
+          [0, 'CLOSED'],
+        ]
+      );
     });
-    expect(response.type).toBe('state');
-    expect(response.isString).toBe(false);
-    if (response.type !== 'state') return;
-    const { datapoints } = response;
-    expect(datapoints).toHaveLength(3);
-    expect(datapoints[0].timestamp).toBeInstanceOf(Date);
-    expect(datapoints.map((dp) => [dp.numericValue, dp.stringValue])).toEqual([
-      [0, 'CLOSED'],
-      [1, 'OPEN'],
-      [0, 'CLOSED'],
-    ]);
   });
 
   test('retrieve latest state datapoint', async () => {
-    const [response] = await client.datapoints.retrieveLatest([
-      { instanceId: timeSeriesId, before: 'now' },
-    ]);
-    expect(response.type).toBe('state');
-    if (response.type !== 'state') return;
-    expect(response.datapoints[0]).toMatchObject({
-      numericValue: 0,
-      stringValue: 'CLOSED',
+    await runTestWithRetryWhenFailing(async () => {
+      const [response] = await client.datapoints.retrieveLatest([
+        { instanceId: timeSeriesId, before: 'now' },
+      ]);
+      expect(response.type).toBe('state');
+      if (response.type !== 'state') return;
+      expect(response.datapoints[0]).toMatchObject({
+        numericValue: 0,
+        stringValue: 'CLOSED',
+      });
     });
   });
 });

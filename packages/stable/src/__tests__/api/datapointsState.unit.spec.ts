@@ -56,4 +56,33 @@ describe('State time series datapoints unit test', () => {
       { timestamp: new Date(2000), numericValue: 7 },
     ]);
   });
+
+  test('retrieveLatest returns state datapoints with Date timestamps', async () => {
+    nock(mockBaseUrl)
+      .post(/\/timeseries\/data\/latest$/, {
+        items: [{ instanceId, before: 'now' }],
+      })
+      .once()
+      .reply(200, {
+        items: [
+          {
+            id: 1,
+            instanceId,
+            isString: false,
+            type: 'state',
+            datapoints: [
+              { timestamp: 3000, numericValue: 0, stringValue: 'CLOSED' },
+            ],
+          },
+        ],
+      });
+    const [response] = await client.datapoints.retrieveLatest([
+      { instanceId, before: 'now' },
+    ]);
+    expect(response.type).toBe('state');
+    if (response.type !== 'state') return;
+    expect(response.datapoints).toEqual([
+      { timestamp: new Date(3000), numericValue: 0, stringValue: 'CLOSED' },
+    ]);
+  });
 });

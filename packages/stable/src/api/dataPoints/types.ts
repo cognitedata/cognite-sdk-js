@@ -219,7 +219,8 @@ export interface DatapointsMetadata extends InternalId {
   /**
    * The type of the time series. Use this, rather than `isString`, to tell numeric, string and state datapoints apart.
    */
-  type: TimeSeriesType;
+  // TODO(next-major): Make required per API spec
+  type?: TimeSeriesType;
   /**
    * Name of the physical unit of the time series
    */
@@ -229,7 +230,8 @@ export interface DatapointsMetadata extends InternalId {
 export interface DatapointAggregates extends DatapointsMetadata, NextCursor {
   isString: false;
   // TODO: Add string and state aggregate variants, so `type` can be narrowed for aggregates too
-  type: 'numeric';
+  // TODO(next-major): Make required per API spec
+  type?: 'numeric';
   /**
    * Whether the timeseries is a step series or not
    */
@@ -245,7 +247,8 @@ export type Datapoints = StringDatapoints | DoubleDatapoints | StateDatapoints;
 
 export interface DoubleDatapoints extends DatapointsMetadata, NextCursor {
   isString: false;
-  type: 'numeric';
+  // TODO(next-major): Make required per API spec
+  type?: 'numeric';
   /**
    * Whether the timeseries is a step series or not
    */
@@ -262,7 +265,8 @@ export interface DoubleDatapoints extends DatapointsMetadata, NextCursor {
 
 export interface StringDatapoints extends DatapointsMetadata, NextCursor {
   isString: true;
-  type: 'string';
+  // TODO(next-major): Make required per API spec
+  type?: 'string';
   /**
    * The list of datapoints
    */
@@ -271,7 +275,8 @@ export interface StringDatapoints extends DatapointsMetadata, NextCursor {
 
 export interface StateDatapoints extends DatapointsMetadata, NextCursor {
   isString: false;
-  type: 'state';
+  // TODO(next-major): Make required per API spec
+  type?: 'state';
   /**
    * Whether the timeseries is a step series or not
    */
