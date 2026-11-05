@@ -1,7 +1,6 @@
 // Copyright 2023 Cognite AS
 
 import { BaseResourceAPI } from '@cognite/sdk-core';
-import { loadDebugNotices } from './debugNotices';
 import type { QueryResponse } from './debugTypes';
 import type {
   AggregationRequest,
@@ -270,7 +269,7 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
     const response = await this.post<QueryResponse>(this.url('query'), {
       data: params,
     });
-    return loadDebugNotices(response.data);
+    return response.data;
   };
 
   /**
@@ -310,7 +309,7 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
     const response = await this.post<QueryResponse>(this.url('sync'), {
       data: params,
     });
-    return loadDebugNotices(response.data);
+    return response.data;
   };
 
   /**
