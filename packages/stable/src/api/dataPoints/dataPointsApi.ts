@@ -62,7 +62,11 @@ export class DataPointsAPI extends BaseResourceAPI<
    * @deprecated Use `retrieve()` with `granularity: '1mo'` instead. Will be removed in next major release.
    *
    * ```js
-   * const monthlyAggregatesData = await client.datapoints.retrieve({ items: [{ id: 123 }], granularity: '1mo', aggregates: ['average'] });
+   * const monthlyAggregatesData = await client.timeseries.data.retrieve({
+   *   items: [{ instanceId: { space: 'my-space', externalId: 'my-ts' } }],
+   *   granularity: '1mo',
+   *   aggregates: ['average'],
+   * });
    * ```
    */
   public retrieveDatapointMonthlyAggregates = async (
