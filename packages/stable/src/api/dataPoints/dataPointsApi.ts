@@ -32,7 +32,7 @@ export class DataPointsAPI extends BaseResourceAPI<
    * Identifying time series by id or externalId is deprecated 2026-10-15 and retired 2027-12-31. Use instanceId.
    *
    * ```js
-   * await client.datapoints.insert([
+   * await client.timeseries.data.insert([
    *   { instanceId: { space: 'my-space', externalId: 'my-ts' }, datapoints: [{ timestamp: 1557320284000, value: -2 }] },
    *   { instanceId: { space: 'my-space', externalId: 'my-state-ts' }, datapoints: [{ timestamp: 1557320284000, numericValue: 1, stringValue: 'OPEN' }] },
    * ]);
@@ -51,7 +51,7 @@ export class DataPointsAPI extends BaseResourceAPI<
    * Identifying time series by id or externalId is deprecated 2026-10-15 and retired 2027-12-31. Use instanceId.
    *
    * ```js
-   * const data = await client.datapoints.retrieve({
+   * const data = await client.timeseries.data.retrieve({
    *   items: [{ instanceId: { space: 'my-space', externalId: 'my-ts' } }],
    * });
    * ```
@@ -71,7 +71,11 @@ export class DataPointsAPI extends BaseResourceAPI<
    * @deprecated Use `retrieve()` with `granularity: '1mo'` instead. Will be removed in next major release.
    *
    * ```js
-   * const monthlyAggregatesData = await client.datapoints.retrieve({ items: [{ id: 123 }], granularity: '1mo', aggregates: ['average'] });
+   * const monthlyAggregatesData = await client.timeseries.data.retrieve({
+   *   items: [{ instanceId: { space: 'my-space', externalId: 'my-ts' } }],
+   *   granularity: '1mo',
+   *   aggregates: ['average'],
+   * });
    * ```
    */
   public retrieveDatapointMonthlyAggregates = async (
@@ -92,7 +96,7 @@ export class DataPointsAPI extends BaseResourceAPI<
    * Identifying time series by id or externalId is deprecated 2026-10-15 and retired 2027-12-31. Use instanceId.
    *
    * ```js
-   * const datapoints = await client.datapoints.retrieveLatest([
+   * const datapoints = await client.timeseries.data.retrieveLatest([
    *   { instanceId: { space: 'my-space', externalId: 'my-ts' }, before: 'now' },
    *   { instanceId: { space: 'my-space', externalId: 'other-ts' }, before: new Date('21 jan 2018') },
    * ]);
@@ -115,7 +119,7 @@ export class DataPointsAPI extends BaseResourceAPI<
    * Identifying time series by id or externalId is deprecated 2026-10-15 and retired 2027-12-31. Use instanceId.
    *
    * ```js
-   * await client.datapoints.delete([
+   * await client.timeseries.data.delete([
    *   { instanceId: { space: 'my-space', externalId: 'my-ts' }, inclusiveBegin: new Date('1 jan 2019') },
    * ]);
    * ```
