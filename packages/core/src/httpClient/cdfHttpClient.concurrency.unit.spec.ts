@@ -130,4 +130,25 @@ describe('CDFHttpClient concurrency limiting', () => {
     requests[2].reply();
     await outcome;
   });
+
+  test.each([
+    [baseUrl, `${query}?debug=true`],
+    [baseUrl, `${baseUrl}/cdf/api/v1/projects/p${query}/?debug=true#result`],
+    [`${baseUrl}/gateway/cdf`, `/api/v1/projects/p${query}?debug=true`],
+    [`${baseUrl}/cdf/api/v1/projects/p/`, 'toy/slow?debug=true'],
+  ])(
+    'classifies the effective pathname for base %s and path %s',
+    async (base, path) => {
+      const client = createClient();
+      client.setBaseUrl(base);
+      const results = [client.post(path), client.post(path)];
+      await setImmediate();
+      expect(requests).toHaveLength(1);
+      requests[0].reply();
+      await setImmediate();
+      expect(requests).toHaveLength(2);
+      requests[1].reply();
+      await Promise.all(results);
+    }
+  );
 });
