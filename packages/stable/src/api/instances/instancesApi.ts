@@ -2,6 +2,7 @@
 
 import { BaseResourceAPI } from '@cognite/sdk-core';
 import { loadDebugNotices } from './debugNotices';
+import type { QueryResponse } from './debugTypes';
 import type {
   AggregationRequest,
   AggregationResponse,
@@ -16,7 +17,6 @@ import type {
   NodeOrEdgeListRequestV3,
   NodeOrEdgeSearchRequest,
   QueryRequest,
-  QueryResponse,
   SlimNodeAndEdgeCollectionResponse,
   SyncRequest,
 } from './types.gen';

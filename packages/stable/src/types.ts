@@ -3102,7 +3102,6 @@ export type {
   CursoringNotice,
   DebugNotice,
   DebugParameters,
-  DebugResponse,
   ExcessiveTimeoutNotice,
   FilteringNotice,
   FilterIncompatibleWithCursorableIndexScanNotice,
@@ -3124,7 +3123,6 @@ export type {
   SyncNotice,
   UnfilteredContainerScanNotice,
   UnindexedThroughNotice,
-  UnknownDebugNotice,
   DMSExistsFilter,
   DMSExternalId,
   DMSFilterProperty,
@@ -3182,7 +3180,6 @@ export type {
   QueryIntersectionTableExpressionV3,
   QueryNodeTableExpressionV3,
   QueryRequest,
-  QueryResponse,
   QuerySelectV3,
   QuerySetOperationTableExpressionV3,
   QueryTableExpressionV3,
@@ -3244,6 +3241,12 @@ export type {
   ViewPropertyReference,
   ViewReference,
 } from './api/instances/types.gen';
+// Hand-written on top of the generated instances types, see ./api/instances/debugTypes.ts
+export type {
+  DebugResponse,
+  QueryResponse,
+  UnknownDebugNotice,
+} from './api/instances/debugTypes';
 
 export type {
   AllVersionsQueryParameter,

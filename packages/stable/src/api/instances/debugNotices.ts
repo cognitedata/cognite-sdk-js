@@ -1,6 +1,7 @@
 // Copyright 2026 Cognite AS
 
-import type { DebugNotice, UnknownDebugNotice } from './types.gen';
+import type { UnknownDebugNotice } from './debugTypes';
+import type { DebugNotice } from './types.gen';
 
 /**
  * Every (`category`, `code`) pair the SDK has a typed `DebugNotice` for.
