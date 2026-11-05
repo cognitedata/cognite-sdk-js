@@ -14,6 +14,7 @@ import type {
   IgnoreUnknownIds,
   Timestamp,
 } from '../../types/common';
+import type { TimeSeriesType } from '../timeSeries/types';
 
 // =====================================================
 // Aggregate function type
@@ -54,6 +55,13 @@ export interface DatapointStatus {
   /** Status symbol name (e.g. 'Good', 'Uncertain', 'Bad') */
   symbol: string;
 }
+
+/**
+ * Status code to write with a data point. Set `code`, `symbol`, or both (they must be consistent).
+ */
+export type DatapointStatusWrite =
+  | { code: number; symbol?: string }
+  | { code?: number; symbol: string };
 
 // =====================================================
 // Data point value types
@@ -101,10 +109,51 @@ export interface StringDatapoint extends DatapointInfo {
   status?: DatapointStatus;
 }
 
+/**
+ * A data point of a time series with type `state`.
+ * @see https://docs.cognite.com/dev/concepts/resource_types/state_timeseries
+ */
+export interface StateDatapoint extends DatapointInfo {
+  /**
+   * The numeric value of the state. May be omitted if the data point has Bad status.
+   */
+  numericValue?: number;
+  /**
+   * The string value of the state. May be missing if the numeric value is no longer part of
+   * the time series' state set, or if the data point has Bad status.
+   */
+  stringValue?: string;
+  /**
+   * Never set on state data points. Declared so that `value` can still be read from a
+   * `Datapoints` union without first narrowing on `type`.
+   */
+  // TODO(next-major): Remove so that reading `value` requires narrowing `Datapoints` on `type` first
+  value?: undefined;
+  status?: DatapointStatus;
+}
+
 export interface DatapointWrite {
   timestamp: Timestamp;
   value: number | string;
-  status?: DatapointStatus;
+  status?: DatapointStatusWrite;
+  /** Only for time series with type `state`, use `StateDatapointWrite` instead. */
+  numericValue?: never;
+  /** Only for time series with type `state`, use `StateDatapointWrite` instead. */
+  stringValue?: never;
+}
+
+/**
+ * A data point to insert into a time series with type `state`.
+ * Set `numericValue`, `stringValue`, or both (they must refer to the same state in the state set).
+ * Both may be omitted only if the data point has Bad status.
+ */
+export interface StateDatapointWrite {
+  timestamp: Timestamp;
+  numericValue?: number;
+  stringValue?: string;
+  status?: DatapointStatusWrite;
+  /** Not used for state time series, set `numericValue` and/or `stringValue` instead. */
+  value?: never;
 }
 
 /** @deprecated Use DatapointWrite instead. Will be removed in next major release. */
@@ -164,9 +213,14 @@ export interface DatapointsMetadata extends InternalId {
   instanceId?: CogniteInstanceId;
 
   /**
-   * Whether or not the datapoints are string values.
+   * Whether or not the datapoints are string values. `false` for time series with type `state`.
    */
   isString: boolean;
+  /**
+   * The type of the time series. Use this, rather than `isString`, to tell numeric, string and state datapoints apart.
+   */
+  // TODO(next-major): Make required per API spec
+  type?: TimeSeriesType;
   /**
    * Name of the physical unit of the time series
    */
@@ -175,6 +229,9 @@ export interface DatapointsMetadata extends InternalId {
 
 export interface DatapointAggregates extends DatapointsMetadata, NextCursor {
   isString: false;
+  // TODO: Add string and state aggregate variants, so `type` can be narrowed for aggregates too
+  // TODO(next-major): Make required per API spec
+  type?: 'numeric';
   /**
    * Whether the timeseries is a step series or not
    */
@@ -186,10 +243,12 @@ export interface DatapointAggregates extends DatapointsMetadata, NextCursor {
   unitExternalId?: CogniteExternalId;
 }
 
-export type Datapoints = StringDatapoints | DoubleDatapoints;
+export type Datapoints = StringDatapoints | DoubleDatapoints | StateDatapoints;
 
 export interface DoubleDatapoints extends DatapointsMetadata, NextCursor {
   isString: false;
+  // TODO(next-major): Make required per API spec
+  type?: 'numeric';
   /**
    * Whether the timeseries is a step series or not
    */
@@ -206,10 +265,26 @@ export interface DoubleDatapoints extends DatapointsMetadata, NextCursor {
 
 export interface StringDatapoints extends DatapointsMetadata, NextCursor {
   isString: true;
+  // TODO(next-major): Make required per API spec
+  type?: 'string';
   /**
    * The list of datapoints
    */
   datapoints: StringDatapoint[];
+}
+
+export interface StateDatapoints extends DatapointsMetadata, NextCursor {
+  isString: false;
+  // TODO(next-major): Make required per API spec
+  type?: 'state';
+  /**
+   * Whether the timeseries is a step series or not
+   */
+  isStep?: boolean;
+  /**
+   * The list of datapoints
+   */
+  datapoints: StateDatapoint[];
 }
 
 // =====================================================
@@ -217,7 +292,10 @@ export interface StringDatapoints extends DatapointsMetadata, NextCursor {
 // =====================================================
 
 export interface DatapointsInsertProperties {
-  datapoints: DatapointWrite[];
+  /**
+   * Use `StateDatapointWrite` for time series with type `state`, and `DatapointWrite` otherwise.
+   */
+  datapoints: (DatapointWrite | StateDatapointWrite)[];
 }
 
 /** @deprecated Use DatapointsInsertProperties instead. Will be removed in next major release. */
