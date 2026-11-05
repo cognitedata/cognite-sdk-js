@@ -100,7 +100,11 @@
     "qs": "^6.5.3",
     "set-value": "^2.0.1",
     "shell-quote": "^1.7.3",
-    "is-svg": "^4.3.0"
+    "is-svg": "^4.3.0",
+    "axios": "1.20.0",
+    "follow-redirects": "1.16.2",
+    "handlebars": "4.7.10",
+    "js-yaml": "4.3.2"
   },
   "packageManager": "yarn@4.6.0"
 }
