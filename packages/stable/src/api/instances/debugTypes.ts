@@ -91,7 +91,8 @@ export const isKnownDebugNotice = (
 
 // Compile-time proof that the wrappers above stay compatible with the generated types:
 // the generated shapes must be assignable to ours. If a regeneration changes the spec
-// shape in an incompatible way, these fail to compile.
+// shape in an incompatible way, these fail to compile. Exported only because
+// `noUnusedLocals` is on; they are not re-exported from the package entry point.
 type Assert<T extends true> = T;
 export type _DebugResponseComplies = Assert<
   GeneratedDebugResponse extends DebugResponse ? true : false
