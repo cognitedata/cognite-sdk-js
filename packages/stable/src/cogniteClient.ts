@@ -16,7 +16,7 @@ import { AssetsAPI } from './api/assets/assetsApi';
 import { ContainersAPI } from './api/containers/containersApi';
 import { dataModelingConcurrencyPolicy } from './api/dataModeling/concurrency';
 import { DataModelingStatisticsAPI } from './api/dataModelingStatistics/dataModelingStatisticsApi';
-import { DataPointsAPI } from './api/dataPoints/dataPointsApi';
+import type { DataPointsAPI } from './api/dataPoints/dataPointsApi';
 import { DataProductsAPI } from './api/dataProducts/dataProductsApi';
 import { DataSetsAPI } from './api/datasets/datasetsApi';
 import { DocumentsAPI } from './api/documents/documentsApi';
@@ -256,6 +256,9 @@ export default class CogniteClient extends BaseCogniteClient {
   }
   private assetsApi?: AssetsAPI;
   private timeSeriesApi?: TimeSeriesAPI;
+  /**
+   * @deprecated Use `client.timeseries.data` instead. Kept so subclasses that read or override it keep working. It points to the same instance as `client.timeseries.data` unless overridden. Will be removed in the next major release.
+   */
   protected dataPointsApi?: DataPointsAPI;
   private sequencesApi?: SequencesAPI;
   private eventsApi?: EventsAPI;
@@ -311,7 +314,7 @@ export default class CogniteClient extends BaseCogniteClient {
 
     this.assetsApi = this.apiFactory(AssetsAPI, 'assets');
     this.timeSeriesApi = this.apiFactory(TimeSeriesAPI, 'timeseries');
-    this.dataPointsApi = this.apiFactory(DataPointsAPI, 'timeseries/data');
+    this.dataPointsApi = this.timeSeriesApi.data;
     this.sequencesApi = this.apiFactory(SequencesAPI, 'sequences');
     this.eventsApi = this.apiFactory(EventsAPI, 'events');
     this.filesApi = this.apiFactory(FilesAPI, 'files');

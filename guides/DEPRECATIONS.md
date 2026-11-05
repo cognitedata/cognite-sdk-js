@@ -47,12 +47,14 @@ writes stay on the Time series API and address a time series by `instanceId` (se
   `retrieve`, together with the `TimeSeries` type and the create, filter, search, update and
   aggregate types. Create and query time series as `CogniteTimeSeries` instances via
   `client.instances` instead.
-- Not deprecated: the data point endpoints (`client.datapoints`) stay available, but identify time
-  series by `instanceId`; see
+- Not deprecated: the data point endpoints (`client.datapoints`, also available as
+  `client.timeseries.data`) stay available, but identify time series by `instanceId`; see
   [Datapoints: identify time series by `instanceId`](#datapoints-identify-time-series-by-instanceid).
-  Synthetic queries (`client.timeseries.syntheticQuery`) also stay available; reference time
-  series in expressions as `TS{space='...', externalId='...'}` instead of `TS{id=...}` or
-  `TS{externalId='...'}`.
+  Synthetic queries (`client.timeseries.syntheticQuery`, also available as
+  `client.timeseries.synthetic.query`) also stay available; reference time series in expressions
+  as `TS{space='...', externalId='...'}` instead of `TS{id=...}` or `TS{externalId='...'}`. See
+  [Data points and synthetic queries under `client.timeseries`](#data-points-and-synthetic-queries-under-clienttimeseries)
+  for the new paths.
 - Subscriptions (`client.timeseries.subscriptions`) stay available, but track time series by
   `instanceIds`; see
   [Data point subscriptions: track time series by `instanceIds`](#data-point-subscriptions-track-time-series-by-instanceids).
@@ -79,12 +81,52 @@ await client.instances.upsert({
 });
 ```
 
+### Data points and synthetic queries under `client.timeseries`
+
+The SDK now also exposes the data point and synthetic query endpoints under `client.timeseries`,
+mirroring their API paths (`/timeseries/data`, `/timeseries/synthetic/query`). The Python SDK uses
+the same layout under `client.time_series`.
+
+```
+client.timeseries
+  create ... aggregate     @deprecated, see "Time series: metadata is deprecated"
+  data                     new, /timeseries/data (same as client.datapoints)
+    insert  retrieve  retrieveLatest  delete
+  synthetic.query          new, /timeseries/synthetic/query (same as syntheticQuery)
+  syntheticQuery           unchanged
+  subscriptions.*          methods unchanged, /timeseries/subscriptions
+client.datapoints          unchanged
+```
+
+- New: `client.timeseries.data` (`insert`, `retrieve`, `retrieveLatest`, `delete`) and
+  `client.timeseries.synthetic.query`.
+- Not deprecated: `client.datapoints` and `client.timeseries.syntheticQuery` keep working. They
+  call the same endpoints as the new paths, so switching is optional.
+
+```ts
+// old path
+await client.datapoints.retrieve({
+  items: [{ instanceId: { space: 'my-space', externalId: 'my-ts' } }],
+});
+await client.timeseries.syntheticQuery([
+  { expression: "TS{space='my-space', externalId='my-ts'} * 2" },
+]);
+
+// new path
+await client.timeseries.data.retrieve({
+  items: [{ instanceId: { space: 'my-space', externalId: 'my-ts' } }],
+});
+await client.timeseries.synthetic.query([
+  { expression: "TS{space='my-space', externalId='my-ts'} * 2" },
+]);
+```
+
 ### Datapoints: identify time series by `instanceId`
 
 Addressing a time series by `id` or `externalId` is deprecated as of 2026-10-15 and retired on
-2027-12-31, in favour of `instanceId`. This applies to all `client.datapoints` methods. The input
-types `DatapointsInsertById`, `DatapointsInsertByExternalId`, `DatapointsQueryId`,
-`DatapointsQueryExternalId`, `LatestDataBeforeRequestId`, `LatestDataBeforeRequestExternalId`,
+2027-12-31, in favour of `instanceId`. This applies to all `client.datapoints` methods and to
+`client.timeseries.data`. The input types `DatapointsInsertById`, `DatapointsInsertByExternalId`,
+`DatapointsQueryId`, `DatapointsQueryExternalId`, `LatestDataBeforeRequestId`, `LatestDataBeforeRequestExternalId`,
 `DatapointsDeleteRequestId` and `DatapointsDeleteRequestExternalId` are deprecated; use
 `DatapointsInsertByInstanceId`, `DatapointsQueryInstanceId`, `LatestDataBeforeRequestInstanceId`
 and `DatapointsDeleteRequestInstanceId`. `TimeSeriesIdEither` is deprecated on the same terms; use
