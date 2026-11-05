@@ -1,9 +1,8 @@
 // Copyright 2024 Cognite AS
 
-import type { ViewReference } from 'stable/src/types';
+import type { DebugNotice, ViewReference } from 'stable/src/types';
 import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest';
 import type CogniteClient from '../../cogniteClient';
-import { isKnownDebugNotice } from '../../index';
 import { randomInt, setupLoggedInClient } from '../testUtils';
 
 type SpaceDefinition = {
@@ -419,10 +418,9 @@ describe('Instances integration test', () => {
         select: { result_set_1: {} },
         debug: {},
       });
-      for (const notice of response.debug?.notices ?? []) {
-        if (!isKnownDebugNotice(notice)) {
-          continue;
-        }
+      // `notices` is typed loosely (the API adds notices without a breaking change); the
+      // cast lets this test check the shapes of the notices this SDK version knows.
+      for (const notice of (response.debug?.notices ?? []) as DebugNotice[]) {
         if (notice.code === 'excessiveTimeout') {
           expect(typeof notice.timeout).toBe('number');
         } else if (notice.code === 'unindexedThrough') {
@@ -478,10 +476,9 @@ describe('Instances integration test', () => {
         select: { result_set_1: {} },
         debug: {},
       });
-      for (const notice of response.debug?.notices ?? []) {
-        if (!isKnownDebugNotice(notice)) {
-          continue;
-        }
+      // `notices` is typed loosely (the API adds notices without a breaking change); the
+      // cast lets this test check the shapes of the notices this SDK version knows.
+      for (const notice of (response.debug?.notices ?? []) as DebugNotice[]) {
         if (notice.code === 'filterIncompatibleWithCursorableIndexScan') {
           expect(notice.reasons.length).toBeGreaterThan(0);
         }

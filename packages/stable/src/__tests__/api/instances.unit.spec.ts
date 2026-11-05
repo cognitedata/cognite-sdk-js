@@ -3,7 +3,6 @@
 import nock from 'nock';
 import { beforeEach, describe, expect, test } from 'vitest';
 import type CogniteClient from '../../cogniteClient';
-import { isKnownDebugNotice } from '../../index';
 import { mockBaseUrl, setupMockableClient } from '../testUtils';
 
 const knownNotice = {
@@ -51,31 +50,6 @@ describe('Instances unit test', () => {
       const response = await client.instances.query(queryRequest);
 
       expect(response.debug?.notices).toEqual([knownNotice, futureNotice]);
-    });
-
-    test('isKnownDebugNotice accepts a known (category, code) pair', () => {
-      expect(isKnownDebugNotice(knownNotice)).toBe(true);
-    });
-
-    test('isKnownDebugNotice rejects an unknown code', () => {
-      expect(isKnownDebugNotice(futureNotice)).toBe(false);
-    });
-
-    test('isKnownDebugNotice rejects a known code under an unknown category', () => {
-      expect(
-        isKnownDebugNotice({ ...knownNotice, category: 'someFutureCategory' })
-      ).toBe(false);
-    });
-
-    test('isKnownDebugNotice is not fooled by inherited object properties', () => {
-      expect(
-        isKnownDebugNotice({
-          category: 'constructor',
-          code: '',
-          hint: '',
-          level: '',
-        })
-      ).toBe(false);
     });
   });
 });

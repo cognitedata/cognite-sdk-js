@@ -57,7 +57,6 @@ export { DocumentsAPI } from './api/documents/documentsApi';
 export { ExtractorsAPI } from './api/extractors/extractorsApi';
 export { GeospatialAPI } from './api/geospatial/geospatialAPI';
 export { InstancesAPI } from './api/instances/instancesApi';
-export { isKnownDebugNotice } from './api/instances/debugTypes';
 export { DataModelsAPI } from './api/models/datamodelsApi';
 export { RecordsAPI } from './api/records/recordsApi';
 export { SessionsApi } from './api/sessions/sessionsApi';

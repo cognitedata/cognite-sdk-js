@@ -3098,8 +3098,8 @@ export type {
   CountAggregateFunctionV3,
   // Debug notices for query/sync/list. Only what users need is exported: the leaf
   // notice interfaces and category unions stay internal, since the API adds and removes
-  // notices without a breaking change. Narrow with `isKnownDebugNotice` and, if a single
-  // notice type is needed, `Extract<DebugNotice, { code: 'unindexedThrough' }>`.
+  // notices without a breaking change. A single notice type can be derived with
+  // `Extract<DebugNotice, { code: 'unindexedThrough' }>`.
   DebugNotice,
   DebugParameters,
   DMSExistsFilter,
