@@ -3221,11 +3221,12 @@ export type {
   ViewReference,
 } from './api/instances/types.gen';
 // Hand-written on top of the generated instances types, see ./api/instances/debugTypes.ts
+// and ./api/instances/queryTypes.ts
 export type {
   DebugResponse,
-  QueryResponse,
   UnknownDebugNotice,
 } from './api/instances/debugTypes';
+export type { QueryResponse } from './api/instances/queryTypes';
 
 export type {
   AllVersionsQueryParameter,

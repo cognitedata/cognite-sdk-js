@@ -1,7 +1,7 @@
 // Copyright 2023 Cognite AS
 
 import { BaseResourceAPI } from '@cognite/sdk-core';
-import type { QueryResponse } from './debugTypes';
+import type { QueryResponse } from './queryTypes';
 import type {
   AggregationRequest,
   AggregationResponse,
