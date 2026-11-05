@@ -1,6 +1,6 @@
 // Copyright 2022 Cognite AS
 
-import { describe, expect, test } from 'vitest';
+import { afterAll, describe, expect, test } from 'vitest';
 import type CogniteClient from '../../cogniteClient';
 import {
   type Channel,
@@ -39,6 +39,18 @@ describe('monitoring tasks api', () => {
   };
 
   let channel: Channel;
+
+  // Safety net: the monitoring task and its channel must never outlive the run,
+  // even if a test fails midway. The project has a hard limit of 1000 channels,
+  // and leaked test channels have previously filled it and broken CI.
+  afterAll(async () => {
+    await client.monitoringTasks
+      .delete([{ externalId: monitoringTaskExternalId }])
+      .catch(() => undefined);
+    await client.alerts
+      .deleteChannels([{ externalId: channelExternalId }])
+      .catch(() => undefined);
+  });
 
   test('create monitoring task', async () => {
     const timeseries = {
