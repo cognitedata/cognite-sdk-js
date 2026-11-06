@@ -191,6 +191,8 @@ export interface ReleaseId {
  * A solution represents a connection between an extractor and a source system it can be configured to read from.
  */
 export interface Solution {
+  /** External ID of the connector of this solution. */
+  connectorExternalId?: string;
   /** Long-form documentation of the solution, describing how to use the referenced extractor to connect to the referenced source. */
   documentation?: string;
   /** The external ID provided by the client. Must be unique for the resource type. */
