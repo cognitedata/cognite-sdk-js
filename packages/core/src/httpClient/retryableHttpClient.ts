@@ -9,7 +9,8 @@ import {
   type HttpResponse,
 } from './basicHttpClient';
 import { ExponentialJitterBackoff } from './exponentialJitterBackoff';
-import { MAX_RETRY_ATTEMPTS, type RetryValidator } from './retryValidator';
+import { DEFAULT_RETRY_CONFIG, RetryTracker } from './retryTracker';
+import type { RetryValidator } from './retryValidator';
 
 /**
  * The `RetryableHttpClient` class extends the functionality of a basic HTTP client
@@ -104,7 +105,7 @@ export class RetryableHttpClient extends BasicHttpClient {
   protected async rawRequest<ResponseType>(
     request: RetryableHttpRequest
   ): Promise<HttpResponse<ResponseType>> {
-    let retryCount = 0;
+    const tracker = new RetryTracker(DEFAULT_RETRY_CONFIG);
     while (true) {
       const response = await super.rawRequest<ResponseType>(request);
 
@@ -112,16 +113,19 @@ export class RetryableHttpClient extends BasicHttpClient {
         ? request.retryValidator
         : this.retryValidator;
 
+      const isAutoRetryable = hasAutoRetryableError(response.data);
       const shouldRetry =
-        retryCount < MAX_RETRY_ATTEMPTS &&
+        tracker.shouldRetry(response.status, isAutoRetryable) &&
         request.retryValidator !== false &&
-        retryValidator(request, response, retryCount);
+        retryValidator(request, response, tracker.total);
       if (!shouldRetry) {
         return response;
       }
-      const delayInMs = RetryableHttpClient.calculateRetryDelayInMs(retryCount);
+      const delayInMs = RetryableHttpClient.calculateRetryDelayInMs(
+        tracker.total
+      );
       await sleepPromise(delayInMs);
-      retryCount++;
+      tracker.status++;
     }
   }
 
@@ -139,3 +143,13 @@ export type RetryableHttpRequestOptions = HttpRequestOptions &
 type HttpRequestRetryValidatorOptions = {
   retryValidator?: false | RetryValidator;
 };
+
+function hasAutoRetryableError(data: unknown): boolean {
+  if (typeof data !== 'object' || data === null) return false;
+
+  if (!('error' in data)) return false;
+
+  const { error } = data;
+  if (typeof error !== 'object' || error === null) return false;
+  return 'isAutoRetryable' in error && error.isAutoRetryable === true;
+}
