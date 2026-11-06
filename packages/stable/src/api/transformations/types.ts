@@ -321,3 +321,37 @@ export type TransformationRunRequest = IdEither & {
    */
   nonce?: TransformationNonceCredentials;
 };
+
+export interface TransformationNotification {
+  id: CogniteInternalId;
+  createdTime: EpochTimestamp;
+  lastUpdatedTime: EpochTimestamp;
+  transformationId: CogniteInternalId;
+  /**
+   * Email address where notifications are sent.
+   */
+  destination: string;
+}
+
+/**
+ * Subscribes an email address to errors of a transformation, identified by
+ * either `transformationId` or `transformationExternalId`.
+ */
+export type TransformationNotificationCreate = {
+  /**
+   * Email address where notifications should be sent.
+   */
+  destination: string;
+} & (
+  | { transformationId: CogniteInternalId }
+  | { transformationExternalId: CogniteExternalId }
+);
+
+export interface TransformationNotificationListQuery extends FilterQuery {
+  transformationId?: CogniteInternalId;
+  transformationExternalId?: CogniteExternalId;
+  /**
+   * Only list notifications sent to this email address.
+   */
+  destination?: string;
+}

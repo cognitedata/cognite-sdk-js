@@ -62,6 +62,7 @@ export { RecordsAPI } from './api/records/recordsApi';
 export { SessionsApi } from './api/sessions/sessionsApi';
 export { SpacesAPI } from './api/spaces/spacesApi';
 export { StreamsAPI } from './api/streams/streamsApi';
+export { TransformationNotificationsAPI } from './api/transformations/transformationNotificationsApi';
 export { TransformationsAPI } from './api/transformations/transformationsApi';
 export { UnitsAPI } from './api/units/unitsApi';
 export { ProfilesAPI } from './api/userProfiles/profilesApi';
