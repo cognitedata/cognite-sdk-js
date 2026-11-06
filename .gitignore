@@ -14,8 +14,6 @@ docs
 .idea
 codeSnippets
 .vscode
-.cursor/worktrees.json
-.cursor/setup-worktree-windows.ps1
 .env
 tmp/*
 .envrc

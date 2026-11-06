@@ -205,7 +205,11 @@ From the repo root, run `yarn lint` (`biome ci`). If it fails, run
 `dist`, so run `yarn workspace @cognite/sdk build` after changing stable.
 
 On Windows, package scripts call `rm -rf` and `cp -r`. Put Git for Windows'
-`usr\bin` on `PATH` first, as `.cursor/setup-worktree-windows.ps1` does.
+`usr\bin` on `PATH` first (PowerShell):
+
+```powershell
+$env:PATH = "$(Split-Path (Split-Path (Get-Command git).Source))\usr\bin;$env:PATH"
+```
 
 ### 8. Commit and open the PR
 
