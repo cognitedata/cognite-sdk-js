@@ -1,5 +1,6 @@
 // Copyright 2026 Cognite AS
 
+import type { WorkflowVersionFilterQuery } from '@cognite/sdk';
 import { BaseResourceAPI } from '@cognite/sdk-core';
 import type { CursorAndAsyncIterator } from '@cognite/sdk-core';
 import type {
@@ -7,7 +8,6 @@ import type {
   VersionDelete,
   VersionUpsert,
   VersionUpsertResponse,
-  WorkflowVersionFilterQuery,
 } from './types';
 
 export class WorkflowVersionsAPI extends BaseResourceAPI<Version> {

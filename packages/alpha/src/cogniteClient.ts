@@ -16,7 +16,7 @@ export default class CogniteClientAlpha extends CogniteClientStable {
   private simulatorsApi?: SimulatorsAPI;
   private limitsApi?: LimitsAPI;
   private meteringApi?: MeteringAPI;
-  private workflowsApi?: WorkflowsAPI;
+  private workflowsAlphaApi?: WorkflowsAPI;
   private workflowVersionsApi?: WorkflowVersionsAPI;
   private workflowExecutionsApi?: WorkflowExecutionsAPI;
   private workflowTriggersApi?: WorkflowTriggersAPI;
@@ -35,10 +35,17 @@ export default class CogniteClientAlpha extends CogniteClientStable {
     return accessApi(this.simulatorsApi);
   }
 
-  public get workflows() {
-    return accessApi(this.workflowsApi);
+  /**
+   * The stable workflows API, with alpha-only fields such as
+   * `dataDomainExternalId` added to its types.
+   */
+  public override get workflows(): WorkflowsAPI {
+    return accessApi(this.workflowsAlphaApi);
   }
 
+  /**
+   * @deprecated Use `client.workflows.versions` instead.
+   */
   public get workflowVersions() {
     return accessApi(this.workflowVersionsApi);
   }
@@ -67,7 +74,7 @@ export default class CogniteClientAlpha extends CogniteClientStable {
     this.simulatorsApi = this.apiFactory(SimulatorsAPI, 'simulators');
     this.limitsApi = this.apiFactory(LimitsAPI, 'limits');
     this.meteringApi = this.apiFactory(MeteringAPI, 'metering');
-    this.workflowsApi = this.apiFactory(WorkflowsAPI, 'workflows');
+    this.workflowsAlphaApi = this.apiFactory(WorkflowsAPI, 'workflows');
     this.workflowVersionsApi = this.apiFactory(
       WorkflowVersionsAPI,
       'workflows/versions'
