@@ -2,3 +2,4 @@
 
 export * from './workflowTypes';
 export * from './workflowVersionTypes';
+export * from './workflowTriggerTypes';

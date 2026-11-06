@@ -133,4 +133,16 @@ describe('Workflows unit test', () => {
     const response = await client.workflows.versions.retrieve('wf-1', '1');
     expect(response).toEqual(version);
   });
+
+  test('triggers sub-API sends the alpha cdf-version header', async () => {
+    nock(mockBaseUrl, {
+      reqheaders: { 'cdf-version': '20230101-alpha' },
+    })
+      .post(/\/workflows\/triggers\/trigger-1\/pause$/)
+      .once()
+      .reply(200, {});
+
+    const response = await client.workflows.triggers.pause('trigger-1');
+    expect(response).toEqual({});
+  });
 });
