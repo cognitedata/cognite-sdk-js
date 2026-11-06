@@ -17,6 +17,10 @@ import type {
  * A notice as the API returns it, typed only by the fields every notice has. It may be
  * one this SDK version knows ({@link DebugNotice}) or one the API added later. Mirrors
  * `UnknownDebugNotice` in the Python SDK.
+ *
+ * The type is wide on purpose, so it can be narrowed (for example by `code`, or against
+ * {@link DebugNotice}), but do not depend on the narrow notice types: debug notices are
+ * volatile, and the API adds, changes and removes them without a breaking change.
  */
 export interface UnknownDebugNotice {
   category: string;
@@ -30,7 +34,12 @@ export interface UnknownDebugNotice {
  * `DebugResponse`, but `notices` are {@link UnknownDebugNotice}s.
  */
 export interface DebugResponse extends Omit<GeneratedDebugResponse, 'notices'> {
-  /** A list of notices that provide insights into the query's execution. These can highlight potential performance issues, offer optimization suggestions, or explain aspects of the query processing. Each notice falls into a category, such as indexing, sorting, filtering, or cursoring, to help identify areas for improvement. */
+  /**
+   * A list of notices that provide insights into the query's execution. These can highlight potential performance issues, offer optimization suggestions, or explain aspects of the query processing. Each notice falls into a category, such as indexing, sorting, filtering, or cursoring, to help identify areas for improvement.
+   *
+   * Typed wide ({@link UnknownDebugNotice}) so it can be narrowed, but do not depend on
+   * narrow notice types: they are volatile and may change without a breaking change.
+   */
   notices?: UnknownDebugNotice[];
 }
 
