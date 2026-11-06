@@ -1,5 +1,9 @@
 // Copyright 2022 Cognite AS
-export type { EpochTimestamp } from './types.gen';
+export type {
+  EpochTimestamp,
+  ListOfSpaceIdsRequest,
+  SpaceSpecification,
+} from './types.gen';
 export type {
   AnnotationData,
   AnnotationsAssetRef,
@@ -37,9 +41,14 @@ export type {
   AnnotationsView,
 } from './api/annotations/types.gen';
 export type {
-  CogniteExternalId,
+  CountAndLimit,
+  InstancesCountsAndLimits,
+  ProjectStatistics,
+  SpaceStatistics,
+  SpaceStatisticsResponseList,
+} from './api/dataModelingStatistics/types.gen';
+export type {
   CogniteInstanceId,
-  CogniteInternalId,
   Document,
   DocumentAggregateFilter,
   DocumentAggregateFilterBool,
@@ -90,12 +99,6 @@ export type {
   DocumentPassagesSearchRequest,
   DocumentPassagesSearchResponse,
   DocumentSearch,
-  DocumentSearchAggregate,
-  DocumentSearchAggregateGroup,
-  DocumentSearchAggregateGroupIdentifier,
-  DocumentSearchAggregates,
-  DocumentSearchCountAggregate,
-  DocumentSearchCountAggregatesGroup,
   DocumentSearchFilter,
   DocumentSearchHighlight,
   DocumentSearchInAggregate,
@@ -134,11 +137,24 @@ export type {
   LabelList,
   PassageDocument,
   PassageSourceFile,
+  Space,
 } from './api/documents/types.gen';
+export type {
+  Artifact,
+  Changelog,
+  Extractor,
+  ExtractorId,
+  ItemType,
+  Link,
+  LinkType,
+  Release,
+  ReleaseId,
+  Solution,
+  SourceSystem,
+} from './api/extractors/types.gen';
 export type {
   CursorQueryParameter,
   IncludeGlobalQueryParameter,
-  ListOfSpaceIdsRequest,
   ListOfSpaceIdsResponse,
   NextCursorV3,
   ReducedLimitQueryParameter,
@@ -147,7 +163,6 @@ export type {
   SpaceCreateCollection,
   SpaceCreateDefinition,
   SpaceDefinition,
-  SpaceSpecification,
   UpsertConflict,
 } from './api/spaces/types.gen';
 export type {
@@ -177,8 +192,6 @@ export type {
   FileReference,
   IndustrialObjectDetection,
   IndustrialObjectDetectionParameters,
-  InstanceExternalId,
-  InstanceSpace,
   JobId,
   JobStatus,
   LevelGaugeDetection,

@@ -3,6 +3,127 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.48.1](https://github.com/cognitedata/cognite-sdk-js/compare/%40cognite%2Fsdk-alpha%400.48.0...%40cognite%2Fsdk-alpha%400.48.1) (2026-11-06)
+
+**Note:** Version bump only for package @cognite/sdk-alpha
+
+
+
+
+
+# [0.48.0](https://github.com/cognitedata/cognite-sdk-js/compare/%40cognite%2Fsdk-alpha%400.46.1...%40cognite%2Fsdk-alpha%400.48.0) (2026-11-02)
+
+### Features
+
+* **alpha:** add data domains API ([#1536](https://github.com/cognitedata/cognite-sdk-js/issues/1536)) ([61938bd](https://github.com/cognitedata/cognite-sdk-js/commit/61938bdf08faef06d6fc4d000711385f356cba96))
+* **stable:** support concurrency policy for data modeling ([#1525](https://github.com/cognitedata/cognite-sdk-js/issues/1525)) ([4ee8023](https://github.com/cognitedata/cognite-sdk-js/commit/4ee80232b28e0dd4a210c67b72ede66e7ad8f36e))
+* **workflows:** add isDataAware flag to Workflow types and upsert API ([#1535](https://github.com/cognitedata/cognite-sdk-js/issues/1535)) ([3f5669b](https://github.com/cognitedata/cognite-sdk-js/commit/3f5669ba78ba02c82e9c315c45caffd525ee9d6d))
+
+
+# [0.47.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.46.1...@cognite/sdk-alpha@0.47.0) (2026-10-29)
+
+
+### Features
+
+* **alpha:** add data domains API ([#1536](https://github.com/cognitedata/cognite-sdk-js/issues/1536)) ([61938bd](https://github.com/cognitedata/cognite-sdk-js/commit/61938bdf08faef06d6fc4d000711385f356cba96))
+
+
+
+
+
+## [0.46.1](https://github.com/cognitedata/cognite-sdk-js/compare/%40cognite%2Fsdk-alpha%400.46.0...%40cognite%2Fsdk-alpha%400.46.1) (2026-10-29)
+
+**Note:** Version bump only for package @cognite/sdk-alpha
+
+
+
+
+
+# [0.46.0](https://github.com/cognitedata/cognite-sdk-js/compare/%40cognite%2Fsdk-alpha%400.45.0...%40cognite%2Fsdk-alpha%400.46.0) (2026-10-19)
+
+### Features
+
+* **dataproducts:** move data products API to stable ([#1505](https://github.com/cognitedata/cognite-sdk-js/issues/1505)) ([9180e08](https://github.com/cognitedata/cognite-sdk-js/commit/9180e08c6955e21d01b0180e55a7c416219ad01f))
+* **transformations:** add transformations/externaldata apis with updated contract to alpha client ([#1494](https://github.com/cognitedata/cognite-sdk-js/issues/1494)) ([33b3a54](https://github.com/cognitedata/cognite-sdk-js/commit/33b3a542b3d63d460338085fbea23a2c4446a9ae))
+
+
+# [0.45.0](https://github.com/cognitedata/cognite-sdk-js/compare/%40cognite%2Fsdk-alpha%400.44.0...%40cognite%2Fsdk-alpha%400.45.0) (2026-10-07)
+
+### Features
+
+* **workflows:** add warnings to workflow version upsert response  ([#1491](https://github.com/cognitedata/cognite-sdk-js/issues/1491)) ([9267b9b](https://github.com/cognitedata/cognite-sdk-js/commit/9267b9b04392752ef007645f4ac973978e2cc5f4))
+
+
+# [0.44.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.43.0...@cognite/sdk-alpha@0.44.0) (2026-09-02)
+
+
+### Bug Fixes
+
+* **alpha:** align MeteringDatapoint with API ([#1452](https://github.com/cognitedata/cognite-sdk-js/issues/1452)) ([e52838e](https://github.com/cognitedata/cognite-sdk-js/commit/e52838e92ea067f68a58ca514f0fae960b098e55))
+
+
+### Features
+
+* **dms:** add support for record views ([#1464](https://github.com/cognitedata/cognite-sdk-js/issues/1464)) ([939f2bc](https://github.com/cognitedata/cognite-sdk-js/commit/939f2bcc75507a26424e865ec538f698651f61cd)), closes [#1345](https://github.com/cognitedata/cognite-sdk-js/issues/1345)
+
+
+
+
+
+# [0.43.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.42.0...@cognite/sdk-alpha@0.43.0) (2026-08-04)
+
+
+### Bug Fixes
+
+* **alpha:** fix flaky test in workflows execution ([#1453](https://github.com/cognitedata/cognite-sdk-js/issues/1453)) ([21508b7](https://github.com/cognitedata/cognite-sdk-js/commit/21508b73d2e9e07d2d9a89bee41ecf96ea99f106))
+
+
+### Features
+
+* **alpha:** add data product versions API support ([#1451](https://github.com/cognitedata/cognite-sdk-js/issues/1451)) ([9876b28](https://github.com/cognitedata/cognite-sdk-js/commit/9876b2882375a3a2b11777d78cc3a4842bf80adb))
+* **alpha:** add data products API support ([#1441](https://github.com/cognitedata/cognite-sdk-js/issues/1441)) ([e595525](https://github.com/cognitedata/cognite-sdk-js/commit/e595525a0f927b7c17436bc7083019aeece8e786))
+* **alpha:** add support for workflows triggers ([#1457](https://github.com/cognitedata/cognite-sdk-js/issues/1457)) ([d1ae578](https://github.com/cognitedata/cognite-sdk-js/commit/d1ae578c335b88af9db03a4de166bb52c3df00f8))
+* **workflows:** add dataDomainExternalId to Workflow and WorkflowUpsert types ([#1460](https://github.com/cognitedata/cognite-sdk-js/issues/1460)) ([5748f01](https://github.com/cognitedata/cognite-sdk-js/commit/5748f01270656296dae1a26e1d331917d68d1c35))
+
+
+
+
+
+# [0.42.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.41.0...@cognite/sdk-alpha@0.42.0) (2026-06-23)
+
+
+### Features
+
+* **alpha:** add support for workflows execution ([#1438](https://github.com/cognitedata/cognite-sdk-js/issues/1438)) ([0316a01](https://github.com/cognitedata/cognite-sdk-js/commit/0316a01041fe0599ccd08adfea794195af9d9410))
+
+
+
+
+
+# [0.41.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.40.0...@cognite/sdk-alpha@0.41.0) (2026-06-05)
+
+
+### Features
+
+* **alpha:** add support for workflow service ([#1429](https://github.com/cognitedata/cognite-sdk-js/issues/1429)) ([06a04dd](https://github.com/cognitedata/cognite-sdk-js/commit/06a04ddc901f4a8d17094c5dd0e38db606fc1038))
+* **alpha:** add support for workflow versions ([#1432](https://github.com/cognitedata/cognite-sdk-js/issues/1432)) ([b3b0f7c](https://github.com/cognitedata/cognite-sdk-js/commit/b3b0f7cd0f8680318dff3e2eab2743c90033ae33))
+
+
+
+
+
+# [0.40.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.39.5...@cognite/sdk-alpha@0.40.0) (2026-05-05)
+
+
+### Features
+
+* **alpha:** add 'queued' status to simulation runs ([#1417](https://github.com/cognitedata/cognite-sdk-js/issues/1417)) ([8760e8a](https://github.com/cognitedata/cognite-sdk-js/commit/8760e8ac54547b18ff6d6f0ea85311fd98785f91))
+* **alpha:** add support for metering-service ([#1415](https://github.com/cognitedata/cognite-sdk-js/issues/1415)) ([872a303](https://github.com/cognitedata/cognite-sdk-js/commit/872a3038ec39892e6f6c96e83e88efc21ae11a53))
+
+
+
+
+
 ## [0.39.5](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.39.4...@cognite/sdk-alpha@0.39.5) (2026-03-05)
 
 **Note:** Version bump only for package @cognite/sdk-alpha

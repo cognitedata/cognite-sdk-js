@@ -42,6 +42,10 @@ describe('cdfRetryValidator', () => {
     ...baseResponse,
     status: 500,
   };
+  const response502: HttpResponse<unknown> = {
+    ...baseResponse,
+    status: 502,
+  };
 
   const endpointList = {
     [HttpMethod.Post]: ['/assets/list'],
@@ -53,23 +57,27 @@ describe('cdfRetryValidator', () => {
   });
 
   test('only retry reasonable times', () => {
-    expect(retryValidator(getRequest, response500, 10)).toBeFalsy();
+    expect(retryValidator(getRequest, response502, 10)).toBeFalsy();
   });
 
-  test('retry GET 500', () => {
-    expect(retryValidator(getRequest, response500, 0)).toBeTruthy();
+  test('retry GET 502', () => {
+    expect(retryValidator(getRequest, response502, 0)).toBeTruthy();
   });
 
   test('retry GET 429', () => {
     expect(retryValidator(getRequest, response429, 0)).toBeTruthy();
   });
 
-  test("don't retry generic POST 500", () => {
-    expect(retryValidator(postRequest, response500, 0)).toBeFalsy();
+  test("don't retry GET 500", () => {
+    expect(retryValidator(getRequest, response500, 0)).toBeFalsy();
   });
 
-  test('retry POST 500 to retryable endpoint', () => {
-    expect(retryValidator(postRetryRequest, response500, 0)).toBeTruthy();
+  test("don't retry generic POST 502", () => {
+    expect(retryValidator(postRequest, response502, 0)).toBeFalsy();
+  });
+
+  test('retry POST 502 to retryable endpoint', () => {
+    expect(retryValidator(postRetryRequest, response502, 0)).toBeTruthy();
   });
 
   test("don't retry POST 4xx (except 429) to retryable endpoint", () => {

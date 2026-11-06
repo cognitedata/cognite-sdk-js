@@ -68,7 +68,7 @@ describe('CogniteClient', () => {
     });
 
     test('custom validator retries set to 1 should prevent from retrying a failed call', async () => {
-      const scope = nock(mockBaseUrl).get('/').times(2).reply(500, {});
+      const scope = nock(mockBaseUrl).get('/').times(2).reply(502, {});
       nock(mockBaseUrl).get('/').reply(200, { a: 42 });
       const client = new BaseCogniteClient({
         appId: 'unit-test',
@@ -78,7 +78,7 @@ describe('CogniteClient', () => {
         retryValidator: createUniversalRetryValidator(1),
       });
       await expect(client.get('/')).rejects.toThrowErrorMatchingInlineSnapshot(
-        '[Error: Request failed | status code: 500]'
+        '[Error: Request failed | status code: 502]'
       );
       expect(scope.isDone()).toBeTruthy();
     });
@@ -106,6 +106,98 @@ describe('CogniteClient', () => {
         expect(result.status).toEqual(200);
         expect(result.data).toEqual({ body: 'request ok' });
         expect(oidcTokenProvider).toHaveBeenCalledTimes(1);
+      });
+
+      test('return 401 for a caller-owned per-request token', async () => {
+        nock(mockBaseUrl, {
+          reqheaders: {
+            authorization: 'Bearer expired-token',
+          },
+        })
+          .post('/test')
+          .reply(401, { error: { message: 'unauthorized' } });
+
+        const oidcTokenProvider = vi.fn().mockResolvedValue('refreshed-token');
+        const client = new BaseCogniteClient({
+          project,
+          appId: 'unit-test',
+          baseUrl: mockBaseUrl,
+          oidcTokenProvider,
+        });
+
+        await expect(
+          client.post('/test', {
+            headers: {
+              authorization: 'Bearer expired-token',
+            },
+          })
+        ).rejects.toMatchObject({ status: 401 });
+
+        expect(oidcTokenProvider).not.toHaveBeenCalled();
+      });
+
+      test('do not retry a caller-owned token when already authenticated', async () => {
+        nock(mockBaseUrl, {
+          reqheaders: {
+            [AUTHORIZATION_HEADER]: 'Bearer expired-token',
+          },
+        })
+          .post('/test')
+          .reply(401, { error: { message: 'unauthorized' } });
+
+        const oidcTokenProvider = vi.fn().mockResolvedValue('cached-token');
+        const client = new BaseCogniteClient({
+          project,
+          appId: 'unit-test',
+          baseUrl: mockBaseUrl,
+          oidcTokenProvider,
+        });
+        await client.authenticate();
+
+        await expect(
+          client.post('/test', {
+            headers: {
+              [AUTHORIZATION_HEADER]: 'Bearer expired-token',
+            },
+          })
+        ).rejects.toMatchObject({ status: 401 });
+
+        expect(oidcTokenProvider).toHaveBeenCalledTimes(1);
+      });
+
+      test('refresh an SDK-managed token when already authenticated', async () => {
+        nock(mockBaseUrl, {
+          reqheaders: {
+            [AUTHORIZATION_HEADER]: 'Bearer cached-token',
+          },
+        })
+          .post('/test')
+          .reply(401, { error: { message: 'unauthorized' } });
+        nock(mockBaseUrl, {
+          reqheaders: {
+            [AUTHORIZATION_HEADER]: 'Bearer refreshed-token',
+          },
+        })
+          .post('/test')
+          .reply(200, { body: 'request ok' });
+
+        const oidcTokenProvider = vi
+          .fn()
+          .mockResolvedValueOnce('cached-token')
+          .mockResolvedValueOnce('refreshed-token');
+        const client = new BaseCogniteClient({
+          project,
+          appId: 'unit-test',
+          baseUrl: mockBaseUrl,
+          oidcTokenProvider,
+        });
+        await client.authenticate();
+
+        const result = await client.post('/test');
+
+        expect(result.status).toEqual(200);
+        expect(result.data).toEqual({ body: 'request ok' });
+        expect(oidcTokenProvider).toHaveBeenCalledTimes(2);
       });
 
       test('ensure deprecated getToken still works', async () => {

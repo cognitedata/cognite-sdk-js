@@ -197,7 +197,7 @@ describe('CDFHttpClient', () => {
       client.addOneTimeHeader(headerKey, headerValue);
       nock(baseUrl, { reqheaders: { [headerKey]: headerValue } })
         .put('/')
-        .reply(101, {});
+        .reply(502, {});
       nock(baseUrl, { reqheaders: { [headerKey]: headerValue } })
         .put('/')
         .reply(200, [1]);

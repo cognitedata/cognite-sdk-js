@@ -1,4 +1,4 @@
-// Copyright 2020 Cognite AS
+// Copyright 2020-2026 Cognite AS
 
 export {
   HttpError,
@@ -9,8 +9,8 @@ export {
   HttpResponseType,
   CogniteError,
   CogniteMultiError,
-  type ClientOptions,
 } from '@cognite/sdk-core';
+export type { ClientOptions } from './clientOptions';
 export { default as CogniteClient } from './cogniteClient';
 
 export { AssetMappings3DAPI } from './api/3d/assetMappings3DApi';
@@ -24,7 +24,10 @@ export { Revisions3DAPI } from './api/3d/revisions3DApi';
 export { UnrealRevisions3DAPI } from './api/3d/unrealRevisions3DApi';
 export { Viewer3DAPI } from './api/3d/viewer3DApi';
 export { AssetsAPI } from './api/assets/assetsApi';
+export { DataModelingStatisticsAPI } from './api/dataModelingStatistics/dataModelingStatisticsApi';
 export { DataPointsAPI } from './api/dataPoints/dataPointsApi';
+export { DataProductsAPI } from './api/dataProducts/dataProductsApi';
+export { DataProductVersionsAPI } from './api/dataProducts/dataProductVersionsApi';
 export { DataSetsAPI } from './api/datasets/datasetsApi';
 export { EventsAggregateAPI } from './api/events/eventsAggregateApi';
 export { EventsAPI } from './api/events/eventsApi';
@@ -33,6 +36,7 @@ export { FilesMultipartUploadSessionAPI } from './api/files/filesMultipartUpload
 export { GroupsAPI } from './api/groups/groupsApi';
 export { LabelsAPI } from './api/labels/labelsApi';
 export { ProjectsAPI } from './api/projects/projectsApi';
+export { TokenAPI } from './api/token/tokenApi';
 export { RawAPI } from './api/raw/rawApi';
 export { RawRowsAPI } from './api/raw/rawRowsApi';
 export { RawTablesAPI } from './api/raw/rawTablesApi';
@@ -42,6 +46,7 @@ export { SecurityCategoriesAPI } from './api/securityCategories/securityCategori
 export { SequenceRowsAPI } from './api/sequences/sequenceRowsApi';
 export { SequencesAPI } from './api/sequences/sequencesApi';
 export { SyntheticTimeSeriesAPI } from './api/timeSeries/syntheticTimeSeriesApi';
+export { DataPointSubscriptionsAPI } from './api/timeSeries/subscriptions/dataPointSubscriptionsApi';
 export { TimeSeriesAPI } from './api/timeSeries/timeSeriesApi';
 export { FunctionsAPI } from './api/functions/functionsApi';
 export * from './api/templates';
@@ -49,6 +54,7 @@ export * from './api/templates';
 export { AnnotationsAPI } from './api/annotations/annotationsApi';
 export { ContainersAPI } from './api/containers/containersApi';
 export { DocumentsAPI } from './api/documents/documentsApi';
+export { ExtractorsAPI } from './api/extractors/extractorsApi';
 export { GeospatialAPI } from './api/geospatial/geospatialAPI';
 export { InstancesAPI } from './api/instances/instancesApi';
 export { DataModelsAPI } from './api/models/datamodelsApi';
@@ -56,6 +62,7 @@ export { RecordsAPI } from './api/records/recordsApi';
 export { SessionsApi } from './api/sessions/sessionsApi';
 export { SpacesAPI } from './api/spaces/spacesApi';
 export { StreamsAPI } from './api/streams/streamsApi';
+export { TransformationsAPI } from './api/transformations/transformationsApi';
 export { UnitsAPI } from './api/units/unitsApi';
 export { ProfilesAPI } from './api/userProfiles/profilesApi';
 export { ViewsAPI } from './api/views/viewsApi';

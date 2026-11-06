@@ -3,6 +3,95 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.4.1](https://github.com/cognitedata/cognite-sdk-js/compare/%40cognite%2Fsdk-core%405.4.0...%40cognite%2Fsdk-core%405.4.1) (2026-11-06)
+
+**Note:** Version bump only for package @cognite/sdk-core
+
+
+
+
+
+# [5.4.0](https://github.com/cognitedata/cognite-sdk-js/compare/%40cognite%2Fsdk-core%405.3.1...%40cognite%2Fsdk-core%405.4.0) (2026-11-02)
+
+### Features
+
+* **stable:** support concurrency policy for data modeling ([#1525](https://github.com/cognitedata/cognite-sdk-js/issues/1525)) ([4ee8023](https://github.com/cognitedata/cognite-sdk-js/commit/4ee80232b28e0dd4a210c67b72ede66e7ad8f36e))
+
+
+## [5.3.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@5.3.0...@cognite/sdk-core@5.3.1) (2026-10-29)
+
+**Note:** Version bump only for package @cognite/sdk-core
+
+
+
+
+
+# [5.3.0](https://github.com/cognitedata/cognite-sdk-js/compare/%40cognite%2Fsdk-core%405.2.7...%40cognite%2Fsdk-core%405.3.0) (2026-10-29)
+
+### Features
+
+* **core:** generic concurrency limiter ([#1517](https://github.com/cognitedata/cognite-sdk-js/issues/1517)) ([f1110f2](https://github.com/cognitedata/cognite-sdk-js/commit/f1110f2c8f3fd34dcd9abaed4a1bf95cb4949739))
+
+
+## [5.2.7](https://github.com/cognitedata/cognite-sdk-js/compare/%40cognite%2Fsdk-core%405.2.6...%40cognite%2Fsdk-core%405.2.7) (2026-10-19)
+
+**Note:** Version bump only for package @cognite/sdk-core
+
+
+
+
+
+## [5.2.6](https://github.com/cognitedata/cognite-sdk-js/compare/%40cognite%2Fsdk-core%405.2.5...%40cognite%2Fsdk-core%405.2.6) (2026-10-07)
+
+**Note:** Version bump only for package @cognite/sdk-core
+
+
+
+
+
+## [5.2.5](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@5.2.4...@cognite/sdk-core@5.2.5) (2026-09-02)
+
+**Note:** Version bump only for package @cognite/sdk-core
+
+
+
+
+
+## [5.2.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@5.2.3...@cognite/sdk-core@5.2.4) (2026-08-04)
+
+
+### Bug Fixes
+
+* **auth:** prevent retries on `401` responses when a custom authorization header is present ([#1456](https://github.com/cognitedata/cognite-sdk-js/issues/1456)) ([29e52c9](https://github.com/cognitedata/cognite-sdk-js/commit/29e52c91e96a0b26b005a4c016df3905d49b9ad1))
+
+
+
+
+
+## [5.2.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@5.2.2...@cognite/sdk-core@5.2.3) (2026-06-23)
+
+**Note:** Version bump only for package @cognite/sdk-core
+
+
+
+
+
+## [5.2.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@5.2.1...@cognite/sdk-core@5.2.2) (2026-06-05)
+
+**Note:** Version bump only for package @cognite/sdk-core
+
+
+
+
+
+## [5.2.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@5.2.0...@cognite/sdk-core@5.2.1) (2026-05-05)
+
+**Note:** Version bump only for package @cognite/sdk-core
+
+
+
+
+
 # [5.2.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@5.1.8...@cognite/sdk-core@5.2.0) (2026-03-05)
 
 

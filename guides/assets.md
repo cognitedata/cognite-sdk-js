@@ -1,5 +1,7 @@
 # Assets
 
+> **Deprecated.** This is an asset-centric API, deprecated 2026-10-15 and retired 2027-12-31. It will be removed or moved in a future major release. See [DEPRECATIONS.md](./DEPRECATIONS.md).
+
 <!--What are Assets?  Generic overview information-->
 
 In Cognite Data Fusion, the [asset](https://docs.cognite.com/dev/concepts/resource_types/assets) **resource type** stores the **digital representations** of objects or groups of **objects from the physical world**. Water pumps, heart rate monitors, machine rooms, and production lines are examples for those assets.

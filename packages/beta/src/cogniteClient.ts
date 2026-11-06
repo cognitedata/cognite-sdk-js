@@ -4,8 +4,8 @@ import { CogniteClient as CogniteClientStable } from '@cognite/sdk';
 import { accessApi } from '@cognite/sdk-core';
 import { version } from '../package.json';
 import { AlertsAPI } from './api/alerts/alertsApi';
-import { DataPointsAPI } from './api/dataPoints/dataPointsApi';
 import { MonitoringTasksAPI } from './api/monitoringTasks/monitoringTasksApi';
+import { TransformationsExternalDataAPI } from './api/transformations/transformationsExternalDataApi';
 
 class CogniteClientCleaned extends CogniteClientStable {
   // Remove type restrictions
@@ -31,6 +31,7 @@ class CogniteClientCleaned extends CogniteClientStable {
 export default class CogniteClient extends CogniteClientCleaned {
   private alertsApi?: AlertsAPI;
   private monitoringTasksApi?: MonitoringTasksAPI;
+  private transformationsExternalDataApi?: TransformationsExternalDataAPI;
 
   public get alerts() {
     return accessApi(this.alertsApi);
@@ -43,11 +44,9 @@ export default class CogniteClient extends CogniteClientCleaned {
     return accessApi(this.monitoringTasksApi);
   }
 
-  public get datapoints() {
-    return accessApi(this.dataPointsApi);
+  public get transformationsExternalData() {
+    return accessApi(this.transformationsExternalDataApi);
   }
-
-  protected dataPointsApi?: DataPointsAPI;
 
   protected get version() {
     return `${version}-beta`;
@@ -63,6 +62,9 @@ export default class CogniteClient extends CogniteClientCleaned {
       MonitoringTasksAPI,
       'monitoringtasks'
     );
-    this.dataPointsApi = this.apiFactory(DataPointsAPI, 'timeseries/data');
+    this.transformationsExternalDataApi = this.apiFactory(
+      TransformationsExternalDataAPI,
+      'transformations/externaldata'
+    );
   }
 }

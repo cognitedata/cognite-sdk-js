@@ -860,6 +860,15 @@ export type RawPropertyValueV3 =
 export interface ReferencedPropertyValueV3 {
   property: string[];
 }
+/**
+ * Controls how multiple search terms are combined when matching documents.
+ * - **OR** (default): A document matches if it contains *any* of the query terms
+ *   in the searchable fields. This typically returns more results but with lower precision.
+ *
+ * - **AND**: A document matches only if it contains *all* of the query terms
+ *   across the searchable fields. This typically returns fewer results but with higher relevance.
+ */
+export type SearchOperator = 'AND' | 'OR';
 export type SearchRequestV3 = {
   view: ViewReference;
   query?: string;
@@ -869,6 +878,7 @@ export type SearchRequestV3 = {
   filter?: FilterDefinition;
   includeTyping?: IncludeTyping;
   sort?: SearchSort[];
+  operator?: SearchOperator;
 } & LimitWithDefault1000;
 export interface SearchResponse {
   /** List of nodes and edges */

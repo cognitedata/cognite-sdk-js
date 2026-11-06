@@ -10,6 +10,7 @@ import {
   passThroughFilter,
 } from './codegen';
 import { PackageConfigManager, ServiceConfigManager } from './configuration';
+import { formatWithBiome } from './format';
 import { AcacodeOpenApiGenerator } from './generator/acacode';
 import { OpenApiSnapshotManager } from './snapshot';
 import {
@@ -113,7 +114,10 @@ async function generateForAllServices(options: GenerateOptions) {
     '\n'
   )}`;
 
-  await fs.writeFile(exportFilePath, fileContent);
+  await fs.writeFile(
+    exportFilePath,
+    formatWithBiome(fileContent, exportFilePath)
+  );
 }
 
 async function generateSharedTypes(

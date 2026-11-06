@@ -1,5 +1,7 @@
 import type { EpochTimestamp, FilterQuery } from '../../types';
 
+export type SessionId = number;
+
 export type SessionStatus =
   | 'READY'
   | 'ACTIVE'

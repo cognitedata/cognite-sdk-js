@@ -3,6 +3,95 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.4.1](https://github.com/cognitedata/cognite-sdk-js/compare/%40cognite%2Fsdk-beta%406.4.0...%40cognite%2Fsdk-beta%406.4.1) (2026-11-06)
+
+**Note:** Version bump only for package @cognite/sdk-beta
+
+
+
+
+
+# [6.4.0](https://github.com/cognitedata/cognite-sdk-js/compare/%40cognite%2Fsdk-beta%406.3.1...%40cognite%2Fsdk-beta%406.4.0) (2026-11-02)
+
+### Features
+
+* **stable:** support concurrency policy for data modeling ([#1525](https://github.com/cognitedata/cognite-sdk-js/issues/1525)) ([4ee8023](https://github.com/cognitedata/cognite-sdk-js/commit/4ee80232b28e0dd4a210c67b72ede66e7ad8f36e))
+
+
+## [6.3.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@6.3.1...@cognite/sdk-beta@6.3.2) (2026-10-29)
+
+**Note:** Version bump only for package @cognite/sdk-beta
+
+
+
+
+
+## [6.3.1](https://github.com/cognitedata/cognite-sdk-js/compare/%40cognite%2Fsdk-beta%406.3.0...%40cognite%2Fsdk-beta%406.3.1) (2026-10-29)
+
+**Note:** Version bump only for package @cognite/sdk-beta
+
+
+
+
+
+# [6.3.0](https://github.com/cognitedata/cognite-sdk-js/compare/%40cognite%2Fsdk-beta%406.2.0...%40cognite%2Fsdk-beta%406.3.0) (2026-10-19)
+
+### Features
+
+* **transformations:** add transformations/externaldata apis with updated contract to alpha client ([#1494](https://github.com/cognitedata/cognite-sdk-js/issues/1494)) ([33b3a54](https://github.com/cognitedata/cognite-sdk-js/commit/33b3a542b3d63d460338085fbea23a2c4446a9ae))
+
+
+# [6.2.0](https://github.com/cognitedata/cognite-sdk-js/compare/%40cognite%2Fsdk-beta%406.1.4...%40cognite%2Fsdk-beta%406.2.0) (2026-10-07)
+
+### Features
+
+* integrations - add zero copy 'externaldata' APIs ([#1488](https://github.com/cognitedata/cognite-sdk-js/issues/1488)) ([7a63134](https://github.com/cognitedata/cognite-sdk-js/commit/7a6313458ab3987f757eda7262e5a581f53891a1))
+
+
+## [6.1.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@6.1.3...@cognite/sdk-beta@6.1.4) (2026-09-02)
+
+**Note:** Version bump only for package @cognite/sdk-beta
+
+
+
+
+
+## [6.1.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@6.1.2...@cognite/sdk-beta@6.1.3) (2026-08-04)
+
+**Note:** Version bump only for package @cognite/sdk-beta
+
+
+
+
+
+## [6.1.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@6.1.1...@cognite/sdk-beta@6.1.2) (2026-06-23)
+
+**Note:** Version bump only for package @cognite/sdk-beta
+
+
+
+
+
+## [6.1.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@6.1.0...@cognite/sdk-beta@6.1.1) (2026-06-05)
+
+**Note:** Version bump only for package @cognite/sdk-beta
+
+
+
+
+
+# [6.1.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@6.0.14...@cognite/sdk-beta@6.1.0) (2026-05-05)
+
+
+### Features
+
+* **datapoints:** simplify monthly aggregates and promote beta to stable ([#1387](https://github.com/cognitedata/cognite-sdk-js/issues/1387)) ([d784ca6](https://github.com/cognitedata/cognite-sdk-js/commit/d784ca6ca4dc22ce305b4cc3d02b6e7efdd87bd5)), closes [#1386](https://github.com/cognitedata/cognite-sdk-js/issues/1386)
+* **timeseries,datapoints:** align types with latest API spec ([#1386](https://github.com/cognitedata/cognite-sdk-js/issues/1386)) ([f5bc4d8](https://github.com/cognitedata/cognite-sdk-js/commit/f5bc4d8a255251f13743ee8be348c230ccf6efb4))
+
+
+
+
+
 ## [6.0.14](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@6.0.13...@cognite/sdk-beta@6.0.14) (2026-03-05)
 
 

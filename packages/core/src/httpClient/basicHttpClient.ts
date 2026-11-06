@@ -209,6 +209,13 @@ export class BasicHttpClient {
     request: HttpRequest
   ): Promise<HttpResponse<ResponseType>> {
     const url = this.constructUrl(request.path, request.params);
+    return this.executeRequest<ResponseType>(request, url);
+  }
+
+  protected async executeRequest<ResponseType>(
+    request: HttpRequest,
+    url: string
+  ): Promise<HttpResponse<ResponseType>> {
     const headers = headersWithDefaultField(
       request.headers || {},
       'Accept',
