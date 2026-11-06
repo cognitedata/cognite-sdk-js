@@ -14,6 +14,8 @@ import type {
   TransformationFilterQuery,
   TransformationJob,
   TransformationListQuery,
+  TransformationPreviewRequest,
+  TransformationPreviewResult,
   TransformationRetrieveParams,
   TransformationRunRequest,
 } from './types';
@@ -155,6 +157,33 @@ export class TransformationsAPI extends BaseResourceAPI<Transformation> {
     const response = await this.post<object>(this.url('cancel'), {
       data: id,
     });
+    return this.addToMapAndReturn(response.data, response);
+  };
+
+  /**
+   * [Run query](https://api-docs.cognite.com/20230101/tag/Query/operation/runPreview)
+   *
+   * Runs a SQL query and returns the inferred schema and the first rows of the result.
+   *
+   * ```js
+   * const { schema, results } = await client.transformations.preview({
+   *   query: 'select * from `db`.`table`',
+   *   limit: 100,
+   * });
+   * ```
+   */
+  public preview = async (
+    request: TransformationPreviewRequest
+  ): Promise<TransformationPreviewResult> => {
+    const response = await this.post<TransformationPreviewResult>(
+      this.url('query/run'),
+      {
+        data: {
+          ...request,
+          convertToString: request.convertToString ?? false,
+        },
+      }
+    );
     return this.addToMapAndReturn(response.data, response);
   };
 }

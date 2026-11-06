@@ -321,3 +321,63 @@ export type TransformationRunRequest = IdEither & {
    */
   nonce?: TransformationNonceCredentials;
 };
+
+export interface TransformationPreviewRequest {
+  /**
+   * SQL query to run for preview.
+   */
+  query: string;
+  /**
+   * Stringify values in the query results.
+   * @default false
+   */
+  convertToString?: boolean;
+  /**
+   * End-result limit of the query.
+   */
+  limit?: number;
+  /**
+   * Limit for how many rows to download from the data sources.
+   */
+  sourceLimit?: number;
+  /**
+   * Limit for how many rows are used for inferring the schema.
+   * @default 10000
+   */
+  inferSchemaLimit?: number;
+  /**
+   * Seconds to wait before cancelling the query. At most 240.
+   * @default 240
+   */
+  timeout?: number;
+}
+
+/**
+ * Nested column type, such as `{ type: 'struct', fields: [...] }`. Only `type`
+ * is described by the API.
+ */
+export interface TransformationPreviewComplexType {
+  type: string;
+  [key: string]: unknown;
+}
+
+export interface TransformationPreviewColumn {
+  name: string;
+  /**
+   * Type of the column in SQL format, for example `bigint`.
+   */
+  sqlType: string;
+  /**
+   * Type of the column in JSON format: a type name, or an object for nested types.
+   */
+  type: string | TransformationPreviewComplexType;
+  nullable: boolean;
+}
+
+export interface TransformationPreviewResult {
+  schema: { items?: TransformationPreviewColumn[] };
+  /**
+   * One object per row, keyed by column name.
+   */
+  results: { items?: Record<string, unknown>[] };
+}
