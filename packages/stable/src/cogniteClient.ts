@@ -48,6 +48,7 @@ import {
 } from './api/templates';
 import { TimeSeriesAPI } from './api/timeSeries/timeSeriesApi';
 import { TokenAPI } from './api/token/tokenApi';
+import { TransformationsAPI } from './api/transformations/transformationsApi';
 import { UnitsAPI } from './api/units/unitsApi';
 import { ProfilesAPI } from './api/userProfiles/profilesApi';
 import { ViewsAPI } from './api/views/viewsApi';
@@ -254,6 +255,9 @@ export default class CogniteClient extends BaseCogniteClient {
   public get dataProducts() {
     return accessApi(this.dataProductsApi);
   }
+  public get transformations() {
+    return accessApi(this.transformationsApi);
+  }
   private assetsApi?: AssetsAPI;
   private timeSeriesApi?: TimeSeriesAPI;
   /**
@@ -295,6 +299,7 @@ export default class CogniteClient extends BaseCogniteClient {
   private recordsApi?: RecordsAPI;
   private extractorsApi?: ExtractorsAPI;
   private dataProductsApi?: DataProductsAPI;
+  private transformationsApi?: TransformationsAPI;
 
   protected get version() {
     return version;
@@ -363,6 +368,10 @@ export default class CogniteClient extends BaseCogniteClient {
     this.recordsApi = this.apiFactory(RecordsAPI, 'streams');
     this.extractorsApi = this.apiFactory(ExtractorsAPI, 'extractors');
     this.dataProductsApi = this.apiFactory(DataProductsAPI, 'dataproducts');
+    this.transformationsApi = this.apiFactory(
+      TransformationsAPI,
+      'transformations'
+    );
   }
 
   static urlEncodeExternalId(externalId: string): string {
