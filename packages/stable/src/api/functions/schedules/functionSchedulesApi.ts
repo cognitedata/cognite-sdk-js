@@ -5,15 +5,50 @@ import {
   type CogniteInternalId,
   type InternalId,
   type ItemsWrapper,
+  promiseAllWithData,
 } from '@cognite/sdk-core';
 import type { IgnoreUnknownIds } from '../../../types';
 import type {
   FunctionSchedule,
+  FunctionScheduleCreate,
   FunctionScheduleInputData,
   FunctionScheduleListQuery,
 } from './types';
 
 export class FunctionSchedulesAPI extends BaseResourceAPI<FunctionSchedule> {
+  /**
+   * [Create schedules](https://api-docs.cognite.com/20230101/tag/Function-schedules/operation/postFunctionSchedules)
+   *
+   * The API accepts one schedule per request, so the SDK sends one request per item, in order.
+   *
+   * ```js
+   * const [session] = await client.sessions.create([{ tokenExchange: true }]);
+   * const schedules = await client.functions.schedules.create([
+   *   {
+   *     name: 'Daily run',
+   *     cronExpression: '5 4 * * *',
+   *     functionId: 123,
+   *     data: { assetId: 42 },
+   *     nonce: session.nonce,
+   *   },
+   * ]);
+   * ```
+   */
+  public create = (
+    items: FunctionScheduleCreate[]
+  ): Promise<FunctionSchedule[]> => {
+    return this.callEndpointWithMergeAndTransform(items, (data) =>
+      promiseAllWithData(
+        BaseResourceAPI.chunk(data, 1),
+        (chunk) =>
+          this.post<ItemsWrapper<FunctionSchedule[]>>(this.url(), {
+            data: { items: chunk },
+          }),
+        true
+      )
+    );
+  };
+
   /**
    * [Filter function schedules](https://api-docs.cognite.com/20230101/tag/Function-schedules/operation/listFunctionSchedules)
    *
@@ -46,6 +81,17 @@ export class FunctionSchedulesAPI extends BaseResourceAPI<FunctionSchedule> {
     params: IgnoreUnknownIds = {}
   ): Promise<FunctionSchedule[]> => {
     return this.retrieveEndpoint(ids, params);
+  };
+
+  /**
+   * [Delete schedules](https://api-docs.cognite.com/20230101/tag/Function-schedules/operation/deleteFunctionSchedules)
+   *
+   * ```js
+   * await client.functions.schedules.delete([{ id: 123 }]);
+   * ```
+   */
+  public delete = (ids: InternalId[]): Promise<object> => {
+    return this.deleteEndpoint(ids);
   };
 
   /**
