@@ -3097,6 +3097,12 @@ export type {
   ContainsAnyFilterV3,
   CorePropertyDefinition,
   CountAggregateFunctionV3,
+  // Debug notices for query/sync/list. Only the request parameters are exported from the
+  // generated types: the generated `DebugNotice` union (and its leaf notice interfaces
+  // and category unions) stays internal, since the API adds and removes notices without
+  // a breaking change and a closed union is not forward compatible. Responses expose
+  // notices as `UnknownDebugNotice`, see ./api/instances/debugTypes.ts.
+  DebugParameters,
   DMSExistsFilter,
   DMSExternalId,
   DMSFilterProperty,
@@ -3154,7 +3160,6 @@ export type {
   QueryIntersectionTableExpressionV3,
   QueryNodeTableExpressionV3,
   QueryRequest,
-  QueryResponse,
   QuerySelectV3,
   QuerySetOperationTableExpressionV3,
   QueryTableExpressionV3,
@@ -3216,6 +3221,13 @@ export type {
   ViewPropertyReference,
   ViewReference,
 } from './api/instances/types.gen';
+// Hand-written on top of the generated instances types, see ./api/instances/debugTypes.ts
+// and ./api/instances/queryTypes.ts
+export type {
+  DebugResponse,
+  UnknownDebugNotice,
+} from './api/instances/debugTypes';
+export type { QueryResponse } from './api/instances/queryTypes';
 
 export type {
   AllVersionsQueryParameter,
