@@ -2,11 +2,14 @@
 
 import {
   BaseResourceAPI,
+  type CDFHttpClient,
   type CursorAndAsyncIterator,
   type CursorResponse,
   type IdEither,
+  type MetadataMap,
 } from '@cognite/sdk-core';
 import type { IgnoreUnknownIds } from '../../types';
+import { TransformationSchedulesAPI } from './transformationSchedulesApi';
 import type {
   Transformation,
   TransformationChange,
@@ -19,6 +22,24 @@ import type {
 } from './types';
 
 export class TransformationsAPI extends BaseResourceAPI<Transformation> {
+  private readonly schedulesApi: TransformationSchedulesAPI;
+
+  /** @hidden */
+  constructor(resourcePath: string, ...args: [CDFHttpClient, MetadataMap]) {
+    super(resourcePath, ...args);
+    this.schedulesApi = new TransformationSchedulesAPI(
+      `${resourcePath}/schedules`,
+      ...args
+    );
+  }
+
+  /**
+   * [Transformation schedules](https://api-docs.cognite.com/20230101/tag/Transformation-Schedules)
+   */
+  public get schedules() {
+    return this.schedulesApi;
+  }
+
   /**
    * [Create transformations](https://api-docs.cognite.com/20230101/tag/Transformations/operation/createTransformations)
    *
