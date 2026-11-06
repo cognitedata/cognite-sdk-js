@@ -16,6 +16,7 @@ import {
   TEST_DATA_SPACE,
   getFileCreateArgs,
   randomInt,
+  retryInSeconds,
   runTestWithRetryWhenFailing,
   setupLoggedInClient,
 } from '../testUtils';
@@ -55,25 +56,49 @@ describe('Files integration test', () => {
     space: fileCdmInstance.space,
   };
 
-  beforeAll(async () => {
-    client = setupLoggedInClient();
-    [asset] = await client.assets.create([
-      {
-        name: `asset_${randomInt()}`,
-      },
-    ]);
-    [label] = await client.labels.create([
-      {
-        externalId: `test-file-lable-${randomInt()}`,
-        name: 'file-label',
-        description: 'test label',
-      },
-    ]);
-    await client.spaces.upsert([testSpace]);
-    await client.instances.upsert({
-      items: [fileCdmInstance],
-    });
-  });
+  const fileInstanceSyncTimeoutSeconds = 3 * 60;
+
+  beforeAll(
+    async () => {
+      client = setupLoggedInClient();
+      [asset] = await client.assets.create([
+        {
+          name: `asset_${randomInt()}`,
+        },
+      ]);
+      [label] = await client.labels.create([
+        {
+          externalId: `test-file-lable-${randomInt()}`,
+          name: 'file-label',
+          description: 'test label',
+        },
+      ]);
+      await client.spaces.upsert([testSpace]);
+      await client.instances.upsert({
+        items: [fileCdmInstance],
+      });
+      // The Files API picks up new CogniteFile instances asynchronously, and in
+      // CI this has taken over a minute. Wait until the file is visible so the
+      // instance id tests below exercise the Files API, not the sync lag.
+      await retryInSeconds(
+        async () => {
+          const files = await client.files.retrieve(
+            [{ instanceId: fileCdmInstanceId }],
+            { ignoreUnknownIds: true }
+          );
+          if (files.length === 0) {
+            throw new Error(
+              'CogniteFile instance not yet visible in Files API'
+            );
+          }
+        },
+        2,
+        404,
+        fileInstanceSyncTimeoutSeconds
+      );
+    },
+    (fileInstanceSyncTimeoutSeconds + 60) * 1000
+  );
 
   afterAll(async () => {
     await client.assets.delete([{ id: asset.id }]);
