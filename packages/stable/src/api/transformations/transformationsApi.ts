@@ -2,11 +2,14 @@
 
 import {
   BaseResourceAPI,
+  type CDFHttpClient,
   type CursorAndAsyncIterator,
   type CursorResponse,
   type IdEither,
+  type MetadataMap,
 } from '@cognite/sdk-core';
 import type { IgnoreUnknownIds } from '../../types';
+import { TransformationQueryAPI } from './transformationQueryApi';
 import type {
   Transformation,
   TransformationChange,
@@ -14,13 +17,29 @@ import type {
   TransformationFilterQuery,
   TransformationJob,
   TransformationListQuery,
-  TransformationPreviewRequest,
-  TransformationPreviewResult,
   TransformationRetrieveParams,
   TransformationRunRequest,
 } from './types';
 
 export class TransformationsAPI extends BaseResourceAPI<Transformation> {
+  private readonly queryApi: TransformationQueryAPI;
+
+  /** @hidden */
+  constructor(resourcePath: string, ...args: [CDFHttpClient, MetadataMap]) {
+    super(resourcePath, ...args);
+    this.queryApi = new TransformationQueryAPI(
+      `${resourcePath}/query`,
+      ...args
+    );
+  }
+
+  /**
+   * [Query](https://api-docs.cognite.com/20230101/tag/Query)
+   */
+  public get query() {
+    return this.queryApi;
+  }
+
   /**
    * [Create transformations](https://api-docs.cognite.com/20230101/tag/Transformations/operation/createTransformations)
    *
@@ -157,33 +176,6 @@ export class TransformationsAPI extends BaseResourceAPI<Transformation> {
     const response = await this.post<object>(this.url('cancel'), {
       data: id,
     });
-    return this.addToMapAndReturn(response.data, response);
-  };
-
-  /**
-   * [Run query](https://api-docs.cognite.com/20230101/tag/Query/operation/runPreview)
-   *
-   * Runs a SQL query and returns the inferred schema and the first rows of the result.
-   *
-   * ```js
-   * const { schema, results } = await client.transformations.preview({
-   *   query: 'select * from `db`.`table`',
-   *   limit: 100,
-   * });
-   * ```
-   */
-  public preview = async (
-    request: TransformationPreviewRequest
-  ): Promise<TransformationPreviewResult> => {
-    const response = await this.post<TransformationPreviewResult>(
-      this.url('query/run'),
-      {
-        data: {
-          ...request,
-          convertToString: request.convertToString ?? false,
-        },
-      }
-    );
     return this.addToMapAndReturn(response.data, response);
   };
 }

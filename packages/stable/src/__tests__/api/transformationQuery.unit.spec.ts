@@ -3,15 +3,18 @@
 import nock from 'nock';
 import { beforeEach, describe, expect, test } from 'vitest';
 import type CogniteClient from '../../cogniteClient';
-import type { TransformationPreviewResult } from '../../types';
+import type {
+  TransformationQueryRunRequest,
+  TransformationQueryRunResult,
+} from '../../types';
 import { mockBaseUrl, setupMockableClient } from '../testUtils';
 
-describe('Transformations preview unit test', () => {
+describe('Transformation query unit test', () => {
   let client: CogniteClient;
 
   const query = 'select * from `db`.`table`';
 
-  const result: TransformationPreviewResult = {
+  const result: TransformationQueryRunResult = {
     schema: {
       items: [
         { name: 'key', sqlType: 'string', type: 'string', nullable: false },
@@ -31,56 +34,40 @@ describe('Transformations preview unit test', () => {
     nock.cleanAll();
   });
 
-  test('preview sends all request fields', async () => {
-    nock(mockBaseUrl)
-      .post(/\/transformations\/query\/run$/, {
-        query,
-        convertToString: true,
-        limit: 100,
-        sourceLimit: 1000,
-        inferSchemaLimit: 500,
-        timeout: 60,
-      })
-      .once()
-      .reply(200, result);
-
-    const response = await client.transformations.preview({
+  test('run sends all request fields', async () => {
+    const request: TransformationQueryRunRequest = {
       query,
       convertToString: true,
       limit: 100,
       sourceLimit: 1000,
       inferSchemaLimit: 500,
       timeout: 60,
-    });
-    expect(response).toEqual(result);
-  });
-
-  test('preview sends convertToString false by default', async () => {
+    };
     nock(mockBaseUrl)
-      .post(/\/transformations\/query\/run$/, {
-        query,
-        convertToString: false,
-      })
+      .post(/\/transformations\/query\/run$/, { ...request })
       .once()
       .reply(200, result);
 
-    const response = await client.transformations.preview({ query });
+    const response = await client.transformations.query.run(request);
     expect(response).toEqual(result);
   });
 
-  test('preview sends convertToString false when it is undefined', async () => {
+  test('run sends only the required fields', async () => {
     nock(mockBaseUrl)
-      .post(/\/transformations\/query\/run$/, {
-        query,
-        convertToString: false,
-      })
+      .post(/\/transformations\/query\/run$/, { query, convertToString: false })
       .once()
       .reply(200, result);
 
-    const response = await client.transformations.preview({
+    const response = await client.transformations.query.run({
       query,
-      convertToString: undefined,
+      convertToString: false,
     });
     expect(response).toEqual(result);
+  });
+
+  test('convertToString is required', () => {
+    // @ts-expect-error convertToString is required
+    const request: TransformationQueryRunRequest = { query };
+    expect(request).toEqual({ query });
   });
 });
