@@ -121,6 +121,21 @@ describe('Transformations unit test', () => {
     expect(retrieved).toEqual([transformation, transformation]);
   });
 
+  test('retrieve requests job details when the flag is undefined', async () => {
+    nock(mockBaseUrl)
+      .post(/\/transformations\/byids$/, {
+        items: [{ id: 1 }],
+        withJobDetails: true,
+      })
+      .once()
+      .reply(200, { items: [transformation] });
+
+    const retrieved = await client.transformations.retrieve([{ id: 1 }], {
+      withJobDetails: undefined,
+    });
+    expect(retrieved).toEqual([transformation]);
+  });
+
   test('retrieve passes flags', async () => {
     nock(mockBaseUrl)
       .post(/\/transformations\/byids$/, {

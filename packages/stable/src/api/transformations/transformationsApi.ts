@@ -89,7 +89,10 @@ export class TransformationsAPI extends BaseResourceAPI<Transformation> {
     ids: IdEither[],
     params: TransformationRetrieveParams = {}
   ): Promise<Transformation[]> => {
-    return this.retrieveEndpoint(ids, { withJobDetails: true, ...params });
+    return this.retrieveEndpoint(ids, {
+      ...params,
+      withJobDetails: params.withJobDetails ?? true,
+    });
   };
 
   /**

@@ -126,15 +126,6 @@ export type TransformationDestination =
 
 export type TransformationDestinationType = TransformationDestination['type'];
 
-export interface TransformationOidcCredentials {
-  clientId: string;
-  clientSecret: string;
-  scopes?: string;
-  tokenUri: string;
-  cdfProjectName: string;
-  audience?: string;
-}
-
 /**
  * Credentials for a CDF session. Get them by creating a session with `client.sessions.create`.
  */
@@ -238,8 +229,6 @@ export interface TransformationCreate {
   destination?: TransformationDestination;
   conflictMode?: TransformationConflictMode;
   isPublic?: boolean;
-  sourceOidcCredentials?: TransformationOidcCredentials;
-  destinationOidcCredentials?: TransformationOidcCredentials;
   sourceNonce?: TransformationNonceCredentials;
   destinationNonce?: TransformationNonceCredentials;
   dataSetId?: CogniteInternalId;
@@ -248,10 +237,6 @@ export interface TransformationCreate {
    */
   tags?: string[];
 }
-
-export type TransformationOidcCredentialsPatch =
-  | { set: Partial<TransformationOidcCredentials> }
-  | { setNull: true };
 
 export type TransformationNonceCredentialsPatch =
   | { set: TransformationNonceCredentials }
@@ -265,8 +250,6 @@ export interface TransformationPatch {
   conflictMode?: SetField<TransformationConflictMode>;
   isPublic?: SetField<boolean>;
   ignoreNullFields?: SetField<boolean>;
-  sourceOidcCredentials?: TransformationOidcCredentialsPatch;
-  destinationOidcCredentials?: TransformationOidcCredentialsPatch;
   sourceNonce?: TransformationNonceCredentialsPatch;
   destinationNonce?: TransformationNonceCredentialsPatch;
   dataSetId?: NullableSinglePatchLong;
