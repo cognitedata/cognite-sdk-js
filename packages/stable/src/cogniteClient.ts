@@ -53,6 +53,7 @@ import { UnitsAPI } from './api/units/unitsApi';
 import { ProfilesAPI } from './api/userProfiles/profilesApi';
 import { ViewsAPI } from './api/views/viewsApi';
 import { VisionAPI } from './api/vision/visionApi';
+import { WorkflowsAPI } from './api/workflows/workflowsApi';
 import type { ClientOptions } from './clientOptions';
 import { retryValidator } from './retryValidator';
 
@@ -258,6 +259,9 @@ export default class CogniteClient extends BaseCogniteClient {
   public get transformations() {
     return accessApi(this.transformationsApi);
   }
+  public get workflows() {
+    return accessApi(this.workflowsApi);
+  }
   private assetsApi?: AssetsAPI;
   private timeSeriesApi?: TimeSeriesAPI;
   /**
@@ -300,6 +304,7 @@ export default class CogniteClient extends BaseCogniteClient {
   private extractorsApi?: ExtractorsAPI;
   private dataProductsApi?: DataProductsAPI;
   private transformationsApi?: TransformationsAPI;
+  private workflowsApi?: WorkflowsAPI;
 
   protected get version() {
     return version;
@@ -372,6 +377,7 @@ export default class CogniteClient extends BaseCogniteClient {
       TransformationsAPI,
       'transformations'
     );
+    this.workflowsApi = this.apiFactory(WorkflowsAPI, 'workflows');
   }
 
   static urlEncodeExternalId(externalId: string): string {
