@@ -12,15 +12,21 @@ import {
 } from '@cognite/sdk-core';
 import type { IgnoreUnknownIds } from '../../types';
 import type { Workflow, WorkflowExternalId, WorkflowUpsert } from './types';
+import { WorkflowExecutionsAPI } from './workflowExecutionsApi';
+import { WorkflowTasksAPI } from './workflowTasksApi';
 import { WorkflowVersionsAPI } from './workflowVersionsApi';
 
 export class WorkflowsAPI extends BaseResourceAPI<Workflow> {
   private readonly versionsApi: WorkflowVersionsAPI;
+  private readonly executionsApi: WorkflowExecutionsAPI;
+  private readonly tasksApi: WorkflowTasksAPI;
 
   /** @hidden */
   constructor(resourcePath: string, ...args: [CDFHttpClient, MetadataMap]) {
     super(resourcePath, ...args);
     this.versionsApi = new WorkflowVersionsAPI(resourcePath, ...args);
+    this.executionsApi = new WorkflowExecutionsAPI(resourcePath, ...args);
+    this.tasksApi = new WorkflowTasksAPI(resourcePath, ...args);
   }
 
   /**
@@ -28,6 +34,20 @@ export class WorkflowsAPI extends BaseResourceAPI<Workflow> {
    */
   public get versions() {
     return this.versionsApi;
+  }
+
+  /**
+   * [Workflow executions](https://api-docs.cognite.com/20230101/tag/Workflow-executions)
+   */
+  public get executions() {
+    return this.executionsApi;
+  }
+
+  /**
+   * [Tasks](https://api-docs.cognite.com/20230101/tag/Tasks)
+   */
+  public get tasks() {
+    return this.tasksApi;
   }
 
   /**

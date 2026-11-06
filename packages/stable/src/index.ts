@@ -67,7 +67,9 @@ export { UnitsAPI } from './api/units/unitsApi';
 export { ProfilesAPI } from './api/userProfiles/profilesApi';
 export { ViewsAPI } from './api/views/viewsApi';
 export { VisionAPI } from './api/vision/visionApi';
+export { WorkflowExecutionsAPI } from './api/workflows/workflowExecutionsApi';
 export { WorkflowsAPI } from './api/workflows/workflowsApi';
+export { WorkflowTasksAPI } from './api/workflows/workflowTasksApi';
 export { WorkflowVersionsAPI } from './api/workflows/workflowVersionsApi';
 
 export * from './types';
