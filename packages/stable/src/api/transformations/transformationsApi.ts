@@ -2,11 +2,14 @@
 
 import {
   BaseResourceAPI,
+  type CDFHttpClient,
   type CursorAndAsyncIterator,
   type CursorResponse,
   type IdEither,
+  type MetadataMap,
 } from '@cognite/sdk-core';
 import type { IgnoreUnknownIds } from '../../types';
+import { TransformationQueryAPI } from './transformationQueryApi';
 import type {
   Transformation,
   TransformationChange,
@@ -19,6 +22,24 @@ import type {
 } from './types';
 
 export class TransformationsAPI extends BaseResourceAPI<Transformation> {
+  private readonly queryApi: TransformationQueryAPI;
+
+  /** @hidden */
+  constructor(resourcePath: string, ...args: [CDFHttpClient, MetadataMap]) {
+    super(resourcePath, ...args);
+    this.queryApi = new TransformationQueryAPI(
+      `${resourcePath}/query`,
+      ...args
+    );
+  }
+
+  /**
+   * [Query](https://api-docs.cognite.com/20230101/tag/Query)
+   */
+  public get query() {
+    return this.queryApi;
+  }
+
   /**
    * [Create transformations](https://api-docs.cognite.com/20230101/tag/Transformations/operation/createTransformations)
    *
