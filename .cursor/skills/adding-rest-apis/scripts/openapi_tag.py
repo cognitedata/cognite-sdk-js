@@ -25,6 +25,7 @@ SPEC_URL = "https://storage.googleapis.com/cognitedata-api-docs/dist/{version}.j
 CACHE_MAX_AGE_SECONDS = 24 * 60 * 60
 HTTP_METHODS = ("get", "post", "put", "patch", "delete")
 GZIP_MAGIC = b"\x1f\x8b"
+SCHEMA_REF_PREFIX = "#/components/schemas/"
 
 Schema = dict[str, Any]
 
@@ -146,20 +147,28 @@ def render_schema(name: str, schema: Schema, describe: bool) -> list[str]:
     return lines
 
 
-def collect_refs(node: Any, found: list[str]) -> None:
-    if isinstance(node, dict):
-        ref = node.get("$ref")
-        if (
-            isinstance(ref, str)
-            and ref.startswith("#/components/schemas/")
-            and ref not in found
-        ):
-            found.append(ref)
-        for value in node.values():
-            collect_refs(value, found)
-    elif isinstance(node, list):
+def collect_refs(spec: Schema, node: Any, found: list[str], visited: set[str]) -> None:
+    """Append schema refs reachable from node to found.
+
+    Refs to other components (responses, requestBodies, parameters) are
+    followed, so the schemas behind them are found too. Schema refs are not
+    followed here; the caller expands them breadth-first.
+    """
+    if isinstance(node, list):
         for value in node:
-            collect_refs(value, found)
+            collect_refs(spec, value, found, visited)
+        return
+    if not isinstance(node, dict):
+        return
+    ref = node.get("$ref")
+    if isinstance(ref, str) and ref not in visited:
+        visited.add(ref)
+        if ref.startswith(SCHEMA_REF_PREFIX):
+            found.append(ref)
+        else:
+            collect_refs(spec, resolve(spec, node), found, visited)
+    for value in node.values():
+        collect_refs(spec, value, found, visited)
 
 
 def body_schema(spec: Schema, holder: Schema | None) -> Schema | None:
@@ -203,13 +212,29 @@ def render_operation(
     return lines
 
 
+def merged_parameters(
+    spec: Schema, path_item: Schema, operation: Schema
+) -> list[Schema]:
+    """Path-level parameters plus the operation's, which override by name and in."""
+    params: dict[tuple[str, str], Schema] = {}
+    for raw_param in [
+        *path_item.get("parameters", []),
+        *operation.get("parameters", []),
+    ]:
+        param = resolve(spec, raw_param)
+        params[(param.get("in", ""), param.get("name", ""))] = raw_param
+    return list(params.values())
+
+
 def tag_operations(spec: Schema, tag: str) -> list[tuple[str, str, Schema]]:
     operations = []
     for path, path_item in spec.get("paths", {}).items():
         for method in HTTP_METHODS:
             operation = path_item.get(method)
-            if operation and tag in operation.get("tags", []):
-                operations.append((method, path, operation))
+            if not operation or tag not in operation.get("tags", []):
+                continue
+            parameters = merged_parameters(spec, path_item, operation)
+            operations.append((method, path, {**operation, "parameters": parameters}))
     return operations
 
 
@@ -268,10 +293,11 @@ def main() -> None:
         )
 
     refs: list[str] = []
-    collect_refs([operation for _, _, operation in operations], refs)
+    visited: set[str] = set()
+    collect_refs(spec, [operation for _, _, operation in operations], refs, visited)
     index = 0
     while index < len(refs):
-        collect_refs(resolve(spec, {"$ref": refs[index]}), refs)
+        collect_refs(spec, resolve(spec, {"$ref": refs[index]}), refs, visited)
         index += 1
 
     print("## Schemas\n")

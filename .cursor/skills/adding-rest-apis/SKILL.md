@@ -13,10 +13,14 @@ description: >-
 
 The reference implementation is
 [PR #1548](https://github.com/cognitedata/cognite-sdk-js/pull/1548), which
-added `client.transformations` (branch `feat/HELIOS-28-transformations`). Read
-its files with
-`git show origin/feat/HELIOS-28-transformations:<path>` when a template
-below is not enough. For code templates, see [reference.md](reference.md).
+added `client.transformations`. When a template below is not enough, read
+its files on `master`:
+
+- `packages/stable/src/api/transformations/types.ts`
+- `packages/stable/src/api/transformations/transformationsApi.ts`
+- `packages/stable/src/__tests__/api/transformations.unit.spec.ts`
+
+For code templates, see [reference.md](reference.md).
 
 ## Workflow
 
