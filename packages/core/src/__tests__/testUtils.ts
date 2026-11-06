@@ -68,15 +68,16 @@ export async function retryInSeconds<ResponseType>(
 }
 
 export async function runTestWithRetryWhenFailing(
-  testFunction: () => Promise<void>
+  testFunction: () => Promise<void>,
+  // Cumulative sleep budget. The default fits the 25s testTimeout; when
+  // raising it, pass a matching per-test timeout to vitest as well.
+  maxSleepMs = 20_000
 ) {
-  vi.setConfig({
-    testTimeout: 3 * 60 * 1000,
-  });
-  const maxNumberOfRetries = 15;
   const delayFactor = 2;
+  // Capped backoff: uncapped doubling would blow the budget after 5 retries.
+  const maxDelayInMs = 2_000;
   let delayInMs = 500;
-  let numberOfRetries = 0;
+  let sleptMs = 0;
   let error: unknown;
   do {
     try {
@@ -85,10 +86,10 @@ export async function runTestWithRetryWhenFailing(
     } catch (err) {
       error = err;
       await sleepPromise(delayInMs);
-      delayInMs *= delayFactor;
-      numberOfRetries++;
+      sleptMs += delayInMs;
+      delayInMs = Math.min(delayInMs * delayFactor, maxDelayInMs);
     }
-  } while (numberOfRetries < maxNumberOfRetries);
+  } while (sleptMs < maxSleepMs);
   throw error;
 }
 

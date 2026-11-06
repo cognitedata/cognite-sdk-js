@@ -1,4 +1,4 @@
-// Copyright 2020 Cognite AS
+// Copyright 2020-2026 Cognite AS
 
 import {
   BaseResourceAPI,
@@ -8,28 +8,70 @@ import {
   type MetadataMap,
 } from '@cognite/sdk-core';
 import type { IdEither, IgnoreUnknownIds } from '../../types';
+import { DataPointsAPI } from '../dataPoints/dataPointsApi';
+import { DataPointSubscriptionsAPI } from './subscriptions/dataPointSubscriptionsApi';
 import { SyntheticTimeSeriesAPI } from './syntheticTimeSeriesApi';
 import type {
-  ExternalTimeseries,
   SyntheticQuery,
+  TimeSeries,
+  TimeSeriesAggregate,
+  TimeSeriesAggregateQuery,
+  TimeSeriesCreate,
+  TimeSeriesFilterQuery,
+  TimeSeriesSearchFilter,
   TimeSeriesUpdate,
-  Timeseries,
-  TimeseriesAggregate,
-  TimeseriesAggregateQuery,
-  TimeseriesFilterQuery,
-  TimeseriesSearchFilter,
 } from './types';
 
-export class TimeSeriesAPI extends BaseResourceAPI<Timeseries> {
+export class TimeSeriesAPI extends BaseResourceAPI<TimeSeries> {
+  private readonly dataPointsApi: DataPointsAPI;
   private syntheticTimeseriesApi: SyntheticTimeSeriesAPI;
+  private readonly dataPointSubscriptionsApi: DataPointSubscriptionsAPI;
 
   /** @hidden */
   constructor(resourcePath: string, ...args: [CDFHttpClient, MetadataMap]) {
     super(resourcePath, ...args);
+    this.dataPointsApi = new DataPointsAPI(this.url('data'), ...args);
     this.syntheticTimeseriesApi = new SyntheticTimeSeriesAPI(
       this.url('synthetic'),
       ...args
     );
+    this.dataPointSubscriptionsApi = new DataPointSubscriptionsAPI(
+      this.url('subscriptions'),
+      ...args
+    );
+  }
+
+  /**
+   * [Data points](https://docs.cognite.com/api/v1/#tag/Time-series/operation/getMultiTimeSeriesDatapoints)
+   *
+   * ```js
+   * const result = await client.timeseries.data.retrieve({
+   *   items: [{ instanceId: { space: 'my-space', externalId: 'my-ts' } }],
+   * });
+   * ```
+   */
+  public get data() {
+    return this.dataPointsApi;
+  }
+
+  /**
+   * [Synthetic time series](https://docs.cognite.com/api/v1/#tag/Synthetic-Time-Series)
+   *
+   * ```js
+   * const results = await client.timeseries.synthetic.query([
+   *   { expression: "TS{space='my-space', externalId='my-ts'} * 2", start: '2d-ago', end: 'now', limit: 100 },
+   * ]);
+   * ```
+   */
+  public get synthetic() {
+    return this.syntheticTimeseriesApi;
+  }
+
+  /**
+   * [Data point subscriptions](https://docs.cognite.com/api/v1/#tag/Data-point-subscriptions)
+   */
+  public get subscriptions() {
+    return this.dataPointSubscriptionsApi;
   }
 
   /**
@@ -49,8 +91,10 @@ export class TimeSeriesAPI extends BaseResourceAPI<Timeseries> {
    * ];
    * const createdTimeseries = await client.timeseries.create(timeseries);
    * ```
+   *
+   * @deprecated Asset-centric time series metadata, deprecated 2026-10-15 and retired 2027-12-31. Create and query time series as CogniteTimeSeries instances via client.instances instead. Will be removed in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#time-series-metadata-is-deprecated.
    */
-  public create = (items: ExternalTimeseries[]): Promise<Timeseries[]> => {
+  public create = (items: TimeSeriesCreate[]): Promise<TimeSeries[]> => {
     return super.createEndpoint(items);
   };
 
@@ -60,10 +104,12 @@ export class TimeSeriesAPI extends BaseResourceAPI<Timeseries> {
    * ```js
    * const timeseries = await client.timeseries.list({ filter: { assetIds: [1, 2] }});
    * ```
+   *
+   * @deprecated Asset-centric time series metadata, deprecated 2026-10-15 and retired 2027-12-31. Create and query time series as CogniteTimeSeries instances via client.instances instead. Will be removed in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#time-series-metadata-is-deprecated.
    */
   public list = (
-    scope?: TimeseriesFilterQuery
-  ): CursorAndAsyncIterator<Timeseries> => {
+    scope?: TimeSeriesFilterQuery
+  ): CursorAndAsyncIterator<TimeSeries> => {
     return super.listEndpoint(this.callListEndpointWithPost, scope);
   };
 
@@ -74,10 +120,12 @@ export class TimeSeriesAPI extends BaseResourceAPI<Timeseries> {
    * const aggregates = await client.timeseries.aggregate({ filter: { isString: true } });
    * console.log('Number of string timeseries: ', aggregates[0].count)
    * ```
+   *
+   * @deprecated Asset-centric time series metadata, deprecated 2026-10-15 and retired 2027-12-31. Create and query time series as CogniteTimeSeries instances via client.instances instead. Will be removed in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#time-series-metadata-is-deprecated.
    */
   public aggregate = (
-    query: TimeseriesAggregateQuery
-  ): Promise<TimeseriesAggregate[]> => {
+    query: TimeSeriesAggregateQuery
+  ): Promise<TimeSeriesAggregate[]> => {
     return super.aggregateEndpoint(query);
   };
 
@@ -90,10 +138,12 @@ export class TimeSeriesAPI extends BaseResourceAPI<Timeseries> {
    *   { externalId: 'abc' }
    * ]);
    * ```
+   *
+   * @deprecated Asset-centric time series metadata, deprecated 2026-10-15 and retired 2027-12-31. Create and query time series as CogniteTimeSeries instances via client.instances instead. Will be removed in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#time-series-metadata-is-deprecated.
    */
   public retrieve = (
     ids: IdEitherWithInstance[],
-    params: TimeseriesRetrieveParams = {}
+    params: IgnoreUnknownIds = {}
   ) => {
     return super.retrieveEndpoint(ids, params);
   };
@@ -109,6 +159,8 @@ export class TimeSeriesAPI extends BaseResourceAPI<Timeseries> {
    *   }
    * }]);
    * ```
+   *
+   * @deprecated Asset-centric time series metadata, deprecated 2026-10-15 and retired 2027-12-31. Create and query time series as CogniteTimeSeries instances via client.instances instead. Will be removed in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#time-series-metadata-is-deprecated.
    */
   public update = (changes: TimeSeriesUpdate[]) => {
     return super.updateEndpoint(changes);
@@ -127,8 +179,10 @@ export class TimeSeriesAPI extends BaseResourceAPI<Timeseries> {
    *   }
    * });
    * ```
+   *
+   * @deprecated Asset-centric time series metadata, deprecated 2026-10-15 and retired 2027-12-31. Create and query time series as CogniteTimeSeries instances via client.instances instead. Will be removed in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#time-series-metadata-is-deprecated.
    */
-  public search = (query: TimeseriesSearchFilter) => {
+  public search = (query: TimeSeriesSearchFilter) => {
     return super.searchEndpoint(query);
   };
 
@@ -141,6 +195,8 @@ export class TimeSeriesAPI extends BaseResourceAPI<Timeseries> {
    *   { externalId: 'abc' }
    * ]);
    * ```
+   *
+   * @deprecated Asset-centric time series metadata, deprecated 2026-10-15 and retired 2027-12-31. Create and query time series as CogniteTimeSeries instances via client.instances instead. Will be removed in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#time-series-metadata-is-deprecated.
    */
   public delete = (ids: IdEither[]) => {
     return super.deleteEndpoint(ids);
@@ -149,10 +205,12 @@ export class TimeSeriesAPI extends BaseResourceAPI<Timeseries> {
   /**
    * [Synthetic Query](https://docs.cognite.com/api/v1/#operation/querySyntheticTimeseries)
    *
+   * Referencing time series by TS{id=...} or TS{externalId='...'} is deprecated 2026-10-15 and retired 2027-12-31. Use the instance ID, TS{space='...', externalId='...'}.
+   *
    * ```js
    * await client.timeseries.syntheticQuery([
    *   {
-   *     expression: "24 * TS{externalId='production/hour', aggregate='average', granularity='1d'}",
+   *     expression: "24 * TS{space='my-space', externalId='production/hour', aggregate='average', granularity='1d'}",
    *     start: '48h-ago',
    *     end: 'now',
    *     limit: 100
@@ -164,5 +222,3 @@ export class TimeSeriesAPI extends BaseResourceAPI<Timeseries> {
     return this.syntheticTimeseriesApi.query(items);
   };
 }
-
-export type TimeseriesRetrieveParams = IgnoreUnknownIds;

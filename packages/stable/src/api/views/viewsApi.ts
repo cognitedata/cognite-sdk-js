@@ -4,15 +4,11 @@ import {
   BaseResourceAPI,
   type CursorAndAsyncIterator,
 } from '@cognite/sdk-core';
+import type { ViewListParams } from './types';
 import type {
-  AllVersionsQueryParameter,
-  CursorQueryParameter,
-  IncludeGlobalQueryParameter,
   IncludeInheritedPropertiesQueryParameter,
   ListOfAllVersionsReferences,
   ListOfVersionReferences,
-  ReducedLimitQueryParameter,
-  SpaceQueryParameter,
   ViewCollectionResponse,
   ViewCreateDefinition,
   ViewDefinition,
@@ -46,7 +42,35 @@ export class ViewsAPI extends BaseResourceAPI<ViewDefinition> {
    *  const response = await client.views.upsert([
    *   viewDefinition
    *  ]);
+   *
+   *  // A view becomes a record view by setting streamId. Do not send usedFor:
+   *  // it is read-only and returned as 'record' when the view is retrieved.
+   *  const recordViewDefinition = {
+   *    "externalId": "my_record_view",
+   *    "space": "my_space",
+   *    "version": "1",
+   *    "streamId": ["my_stream"],
+   *    "properties": {
+   *      "temperature": {
+   *        "container": {
+   *          "type": "container",
+   *          "externalId": "my_record_container",
+   *          "space": "my_space"
+   *        },
+   *        "containerPropertyIdentifier": "temperature"
+   *      }
+   *    }
+   *  };
+   *
+   *  const recordResponse = await client.views.upsert([
+   *   recordViewDefinition
+   *  ]);
    * ```
+   *
+   * @remarks
+   * The `streamId` of a record view version cannot be changed after it is
+   * created; publish a new view version to target another stream. A record
+   * view can only be used as a source for records in the stream it targets.
    */
   public upsert = async (
     params: ViewCreateDefinition[]
@@ -84,17 +108,23 @@ export class ViewsAPI extends BaseResourceAPI<ViewDefinition> {
    * ```js
    *  const response = await client.views.list();
    *
+   *  // Record views are excluded by default; opt in with `usedFor`
+   *  const recordViews = await client.views.list({ usedFor: ['record'] });
+   *
+   *  // List every kind of view
+   *  const allViews = await client.views.list({
+   *    usedFor: ['node', 'edge', 'all', 'record'],
+   *  });
+   *
    * ```
    */
   public list = (
-    params: IncludeGlobalQueryParameter &
-      CursorQueryParameter &
-      ReducedLimitQueryParameter &
-      SpaceQueryParameter &
-      IncludeInheritedPropertiesQueryParameter &
-      AllVersionsQueryParameter = { includeGlobal: false }
+    params: ViewListParams = { includeGlobal: false }
   ): CursorAndAsyncIterator<ViewDefinition> => {
-    return super.listEndpoint(this.callListEndpointWithGet, params);
+    return super.listEndpoint(
+      this.callListGetEndpointWithRepeatedQueryParams,
+      params
+    );
   };
 
   /**

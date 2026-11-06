@@ -13,6 +13,9 @@ import type {
   RelationshipsRetrieveParams,
 } from '../../types';
 
+/**
+ * @deprecated Asset-centric API, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
+ */
 export class RelationshipsApi extends BaseResourceAPI<Relationship> {
   /**
    * @hidden
@@ -36,6 +39,8 @@ export class RelationshipsApi extends BaseResourceAPI<Relationship> {
    * ];
    * const createdRelationships = await client.relationships.create(relationships);
    * ```
+   *
+   * @deprecated Asset-centric API, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release.
    */
   public create = (items: ExternalRelationship[]): Promise<Relationship[]> => {
     return this.createEndpoint(items);
@@ -47,6 +52,8 @@ export class RelationshipsApi extends BaseResourceAPI<Relationship> {
    * ```js
    * const relationships = await client.relationships.list({ filter: { createdTime: { min: new Date('1 jan 2018'), max: new Date('1 jan 2019') }}});
    * ```
+   *
+   * @deprecated Asset-centric API, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release.
    */
   public list = (
     query?: RelationshipsFilterRequest
@@ -60,6 +67,8 @@ export class RelationshipsApi extends BaseResourceAPI<Relationship> {
    * ```js
    * const relationships = await client.relationships.retrieve([{externalId: 'abc'}, {externalId: 'def'}]);
    * ```
+   *
+   * @deprecated Asset-centric API, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release.
    */
   public retrieve = (
     ids: ExternalId[],
@@ -74,6 +83,8 @@ export class RelationshipsApi extends BaseResourceAPI<Relationship> {
    * ```js
    * await client.relationships.delete([{externalId: 'abc'}, {externalId: 'def'}]);
    * ```
+   *
+   * @deprecated Asset-centric API, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release.
    */
   public delete = (
     ids: ExternalId[],
@@ -83,4 +94,5 @@ export class RelationshipsApi extends BaseResourceAPI<Relationship> {
   };
 }
 
+/** @deprecated Asset-centric API type, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. */
 export type RelationshipsDeleteParams = IgnoreUnknownIds;

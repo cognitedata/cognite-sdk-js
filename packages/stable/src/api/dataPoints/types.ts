@@ -14,6 +14,7 @@ import type {
   IgnoreUnknownIds,
   Timestamp,
 } from '../../types/common';
+import type { TimeSeriesType } from '../timeSeries/types';
 
 // =====================================================
 // Aggregate function type
@@ -54,6 +55,13 @@ export interface DatapointStatus {
   /** Status symbol name (e.g. 'Good', 'Uncertain', 'Bad') */
   symbol: string;
 }
+
+/**
+ * Status code to write with a data point. Set `code`, `symbol`, or both (they must be consistent).
+ */
+export type DatapointStatusWrite =
+  | { code: number; symbol?: string }
+  | { code?: number; symbol: string };
 
 // =====================================================
 // Data point value types
@@ -101,11 +109,55 @@ export interface StringDatapoint extends DatapointInfo {
   status?: DatapointStatus;
 }
 
-export interface ExternalDatapoint {
-  timestamp: Timestamp;
-  value: number | string;
+/**
+ * A data point of a time series with type `state`.
+ * @see https://docs.cognite.com/dev/concepts/resource_types/state_timeseries
+ */
+export interface StateDatapoint extends DatapointInfo {
+  /**
+   * The numeric value of the state. May be omitted if the data point has Bad status.
+   */
+  numericValue?: number;
+  /**
+   * The string value of the state. May be missing if the numeric value is no longer part of
+   * the time series' state set, or if the data point has Bad status.
+   */
+  stringValue?: string;
+  /**
+   * Never set on state data points. Declared so that `value` can still be read from a
+   * `Datapoints` union without first narrowing on `type`.
+   */
+  // TODO(next-major): Remove so that reading `value` requires narrowing `Datapoints` on `type` first
+  value?: undefined;
   status?: DatapointStatus;
 }
+
+export interface DatapointWrite {
+  timestamp: Timestamp;
+  value: number | string;
+  status?: DatapointStatusWrite;
+  /** Only for time series with type `state`, use `StateDatapointWrite` instead. */
+  numericValue?: never;
+  /** Only for time series with type `state`, use `StateDatapointWrite` instead. */
+  stringValue?: never;
+}
+
+/**
+ * A data point to insert into a time series with type `state`.
+ * Set `numericValue`, `stringValue`, or both (they must refer to the same state in the state set).
+ * Both may be omitted only if the data point has Bad status.
+ */
+export interface StateDatapointWrite {
+  timestamp: Timestamp;
+  numericValue?: number;
+  stringValue?: string;
+  status?: DatapointStatusWrite;
+  /** Not used for state time series, set `numericValue` and/or `stringValue` instead. */
+  value?: never;
+}
+
+/** @deprecated Use DatapointWrite instead. Will be removed in next major release. */
+export type ExternalDatapoint = DatapointWrite;
 
 // =====================================================
 // Data points delete types
@@ -123,9 +175,23 @@ export interface DatapointsDeleteRange {
 }
 
 export type DatapointsDeleteRequest =
-  | (InternalId & DatapointsDeleteRange)
-  | (ExternalId & DatapointsDeleteRange)
-  | (InstanceId & DatapointsDeleteRange);
+  | DatapointsDeleteRequestId
+  | DatapointsDeleteRequestExternalId
+  | DatapointsDeleteRequestInstanceId;
+
+/** @deprecated Addressing time series by internal id is deprecated 2026-10-15 and retired 2027-12-31, use DatapointsDeleteRequestInstanceId instead. Will be removed in next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#datapoints-identify-time-series-by-instanceid. */
+export interface DatapointsDeleteRequestId
+  extends DatapointsDeleteRange,
+    InternalId {}
+
+/** @deprecated Addressing time series by externalId is deprecated 2026-10-15 and retired 2027-12-31, use DatapointsDeleteRequestInstanceId instead. Will be removed in next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#datapoints-identify-time-series-by-instanceid. */
+export interface DatapointsDeleteRequestExternalId
+  extends DatapointsDeleteRange,
+    ExternalId {}
+
+export interface DatapointsDeleteRequestInstanceId
+  extends DatapointsDeleteRange,
+    InstanceId {}
 
 // =====================================================
 // Data points response types
@@ -147,9 +213,14 @@ export interface DatapointsMetadata extends InternalId {
   instanceId?: CogniteInstanceId;
 
   /**
-   * Whether or not the datapoints are string values.
+   * Whether or not the datapoints are string values. `false` for time series with type `state`.
    */
   isString: boolean;
+  /**
+   * The type of the time series. Use this, rather than `isString`, to tell numeric, string and state datapoints apart.
+   */
+  // TODO(next-major): Make required per API spec
+  type?: TimeSeriesType;
   /**
    * Name of the physical unit of the time series
    */
@@ -158,6 +229,9 @@ export interface DatapointsMetadata extends InternalId {
 
 export interface DatapointAggregates extends DatapointsMetadata, NextCursor {
   isString: false;
+  // TODO: Add string and state aggregate variants, so `type` can be narrowed for aggregates too
+  // TODO(next-major): Make required per API spec
+  type?: 'numeric';
   /**
    * Whether the timeseries is a step series or not
    */
@@ -169,10 +243,12 @@ export interface DatapointAggregates extends DatapointsMetadata, NextCursor {
   unitExternalId?: CogniteExternalId;
 }
 
-export type Datapoints = StringDatapoints | DoubleDatapoints;
+export type Datapoints = StringDatapoints | DoubleDatapoints | StateDatapoints;
 
 export interface DoubleDatapoints extends DatapointsMetadata, NextCursor {
   isString: false;
+  // TODO(next-major): Make required per API spec
+  type?: 'numeric';
   /**
    * Whether the timeseries is a step series or not
    */
@@ -189,34 +265,72 @@ export interface DoubleDatapoints extends DatapointsMetadata, NextCursor {
 
 export interface StringDatapoints extends DatapointsMetadata, NextCursor {
   isString: true;
+  // TODO(next-major): Make required per API spec
+  type?: 'string';
   /**
    * The list of datapoints
    */
   datapoints: StringDatapoint[];
 }
 
-// =====================================================
-// External data points (insert) types
-// =====================================================
-
-export interface ExternalDatapoints {
-  datapoints: ExternalDatapoint[];
+export interface StateDatapoints extends DatapointsMetadata, NextCursor {
+  isString: false;
+  // TODO(next-major): Make required per API spec
+  type?: 'state';
+  /**
+   * Whether the timeseries is a step series or not
+   */
+  isStep?: boolean;
+  /**
+   * The list of datapoints
+   */
+  datapoints: StateDatapoint[];
 }
 
-export type ExternalDatapointsQuery =
-  | ExternalDatapointId
-  | ExternalDatapointExternalId
-  | ExternalDatapointInstanceId;
+// =====================================================
+// Data points insert types
+// =====================================================
 
-export interface ExternalDatapointExternalId
-  extends ExternalDatapoints,
+export interface DatapointsInsertProperties {
+  /**
+   * Use `StateDatapointWrite` for time series with type `state`, and `DatapointWrite` otherwise.
+   */
+  datapoints: (DatapointWrite | StateDatapointWrite)[];
+}
+
+/** @deprecated Use DatapointsInsertProperties instead. Will be removed in next major release. */
+export type ExternalDatapoints = DatapointsInsertProperties;
+
+/** @deprecated Addressing time series by externalId is deprecated 2026-10-15 and retired 2027-12-31, use DatapointsInsertByInstanceId instead. Will be removed in next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#datapoints-identify-time-series-by-instanceid. */
+export interface DatapointsInsertByExternalId
+  extends DatapointsInsertProperties,
     ExternalId {}
 
-export interface ExternalDatapointInstanceId
-  extends ExternalDatapoints,
+/** @deprecated Addressing time series by externalId is deprecated 2026-10-15 and retired 2027-12-31, use DatapointsInsertByInstanceId instead. Will be removed in next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#datapoints-identify-time-series-by-instanceid. */
+export type ExternalDatapointExternalId = DatapointsInsertByExternalId;
+
+export interface DatapointsInsertByInstanceId
+  extends DatapointsInsertProperties,
     InstanceId {}
 
-export interface ExternalDatapointId extends ExternalDatapoints, InternalId {}
+/** @deprecated Use DatapointsInsertByInstanceId instead. Will be removed in next major release. */
+export type ExternalDatapointInstanceId = DatapointsInsertByInstanceId;
+
+/** @deprecated Addressing time series by internal id is deprecated 2026-10-15 and retired 2027-12-31, use DatapointsInsertByInstanceId instead. Will be removed in next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#datapoints-identify-time-series-by-instanceid. */
+export interface DatapointsInsertById
+  extends DatapointsInsertProperties,
+    InternalId {}
+
+/** @deprecated Addressing time series by internal id is deprecated 2026-10-15 and retired 2027-12-31, use DatapointsInsertByInstanceId instead. Will be removed in next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#datapoints-identify-time-series-by-instanceid. */
+export type ExternalDatapointId = DatapointsInsertById;
+
+export type DatapointsInsertItem =
+  | DatapointsInsertById
+  | DatapointsInsertByExternalId
+  | DatapointsInsertByInstanceId;
+
+/** @deprecated Use DatapointsInsertItem instead. Will be removed in next major release. */
+export type ExternalDatapointsQuery = DatapointsInsertItem;
 
 // =====================================================
 // Data points query types
@@ -226,6 +340,9 @@ export interface DatapointsMultiQuery extends DatapointsMultiQueryBase {
   items: DatapointsQuery[];
 }
 
+/**
+ * @deprecated Use DatapointsMultiQuery with `granularity: '1mo'` instead. Will be removed in next major release.
+ */
 export interface DatapointsMonthlyGranularityMultiQuery
   extends Omit<DatapointsMultiQueryBase, 'granularity'> {
   items: DatapointsQuery[];
@@ -264,10 +381,12 @@ export type DatapointsQuery =
   | DatapointsQueryExternalId
   | DatapointsQueryInstanceId;
 
+/** @deprecated Addressing time series by externalId is deprecated 2026-10-15 and retired 2027-12-31, use DatapointsQueryInstanceId instead. Will be removed in next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#datapoints-identify-time-series-by-instanceid. */
 export interface DatapointsQueryExternalId
   extends DatapointsQueryProperties,
     ExternalId {}
 
+/** @deprecated Addressing time series by internal id is deprecated 2026-10-15 and retired 2027-12-31, use DatapointsQueryInstanceId instead. Will be removed in next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#datapoints-identify-time-series-by-instanceid. */
 export interface DatapointsQueryId
   extends DatapointsQueryProperties,
     InternalId {}
@@ -335,9 +454,23 @@ export interface DatapointsQueryProperties extends Limit, Cursor {
 // =====================================================
 
 export type LatestDataBeforeRequest =
-  | (InternalId & LatestDataPropertyFilter)
-  | (ExternalId & LatestDataPropertyFilter)
-  | (InstanceId & LatestDataPropertyFilter);
+  | LatestDataBeforeRequestId
+  | LatestDataBeforeRequestExternalId
+  | LatestDataBeforeRequestInstanceId;
+
+/** @deprecated Addressing time series by internal id is deprecated 2026-10-15 and retired 2027-12-31, use LatestDataBeforeRequestInstanceId instead. Will be removed in next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#datapoints-identify-time-series-by-instanceid. */
+export interface LatestDataBeforeRequestId
+  extends LatestDataPropertyFilter,
+    InternalId {}
+
+/** @deprecated Addressing time series by externalId is deprecated 2026-10-15 and retired 2027-12-31, use LatestDataBeforeRequestInstanceId instead. Will be removed in next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#datapoints-identify-time-series-by-instanceid. */
+export interface LatestDataBeforeRequestExternalId
+  extends LatestDataPropertyFilter,
+    ExternalId {}
+
+export interface LatestDataBeforeRequestInstanceId
+  extends LatestDataPropertyFilter,
+    InstanceId {}
 
 export interface LatestDataPropertyFilter {
   /**
@@ -371,3 +504,10 @@ export interface LatestDataPropertyFilter {
    */
   treatUncertainAsBad?: boolean;
 }
+
+// =====================================================
+// Deprecated re-exports from other modules
+// =====================================================
+
+/** @deprecated Use IgnoreUnknownIds directly. Will be removed in next major release. */
+export type LatestDataParams = IgnoreUnknownIds;

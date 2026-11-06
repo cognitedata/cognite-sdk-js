@@ -7,7 +7,16 @@ import {
 } from '../constants';
 import { handleErrorResponse } from '../error';
 import { bearerString, isJson } from '../utils';
-import type { HttpQueryParams, HttpResponse } from './basicHttpClient';
+import type {
+  HttpQueryParams,
+  HttpRequest,
+  HttpResponse,
+} from './basicHttpClient';
+import {
+  ConcurrencyLimiter,
+  type ConcurrencyPolicyWithOptions,
+  type RequestConcurrencyLimiter,
+} from './concurrencyLimiter';
 import { HttpError } from './httpError';
 import type { HttpHeaders } from './httpHeaders';
 import {
@@ -52,7 +61,29 @@ export class CDFHttpClient extends RetryableHttpClient {
     return filteredHeaders;
   }
 
+  private static hasHeader(headers: HttpHeaders | undefined, name: string) {
+    const lowerCaseName = name.toLowerCase();
+    return Object.keys(headers ?? {}).some(
+      (headerName) => headerName.toLowerCase() === lowerCaseName
+    );
+  }
+
   private oneTimeHeaders: HttpHeaders = {};
+  private concurrencyLimiter?: RequestConcurrencyLimiter;
+
+  /**
+   * Limits concurrent HTTP attempts of the requests the policies match.
+   * The limit is held per attempt, not across retries or backoff.
+   *
+   * @alpha This functionality is experimental. Breaking changes are to be expected
+   * in any release, including patch and minor versions.
+   */
+  public setConcurrencyPolicies(
+    policies: readonly ConcurrencyPolicyWithOptions[]
+  ) {
+    this.concurrencyLimiter =
+      policies.length > 0 ? new ConcurrencyLimiter(policies) : undefined;
+  }
 
   public addOneTimeHeader(name: string, value: string) {
     this.oneTimeHeaders[name] = value;
@@ -86,6 +117,19 @@ export class CDFHttpClient extends RetryableHttpClient {
     };
   }
 
+  protected executeRequest<ResponseType>(
+    request: HttpRequest,
+    url: string
+  ): Promise<HttpResponse<ResponseType>> {
+    const send = () => super.executeRequest<ResponseType>(request, url);
+    return this.concurrencyLimiter
+      ? this.concurrencyLimiter.run(
+          { method: request.method, pathname: new URL(url).pathname },
+          send
+        )
+      : send();
+  }
+
   protected async request<ResponseType>(request: RetryableHttpRequest) {
     request.headers = this.enrichWithOneTimeHeaders(request.headers);
     return super.request<ResponseType>(request);
@@ -102,7 +146,11 @@ export class CDFHttpClient extends RetryableHttpClient {
       if (!(err instanceof HttpError)) {
         throw err;
       }
-      if (err.status === 401 && !this.isTokenInspect(request.path)) {
+      if (
+        err.status === 401 &&
+        !this.isTokenInspect(request.path) &&
+        !CDFHttpClient.hasHeader(request.headers, AUTHORIZATION_HEADER)
+      ) {
         return new Promise((resolvePromise, rejectPromise) => {
           const retry = () => resolvePromise(this.request(request));
           const reject = () => rejectPromise(err);

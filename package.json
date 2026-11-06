@@ -65,9 +65,9 @@
     "@types/yargs": "^17.0.10",
     "@vitest/coverage-v8": "^2.0.5",
     "es-check": "^7.2.1",
-    "happy-dom": "^20.0.0",
+    "happy-dom": "^21.0.4",
     "husky": "^9.1.7",
-    "lerna": "^9.0.0",
+    "lerna": "^10.0.1",
     "markdown-link-check": "^3.10.3",
     "nock": "13.5.6",
     "openapi-types": "^11.0.1",
@@ -100,7 +100,11 @@
     "qs": "^6.5.3",
     "set-value": "^2.0.1",
     "shell-quote": "^1.7.3",
-    "is-svg": "^4.3.0"
+    "is-svg": "^4.3.0",
+    "axios": "1.20.0",
+    "follow-redirects": "1.16.2",
+    "handlebars": "4.7.10",
+    "js-yaml": "4.3.2"
   },
   "packageManager": "yarn@4.6.0"
 }

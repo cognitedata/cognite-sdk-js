@@ -646,7 +646,7 @@ export interface AnnotationsView {
   type: 'view';
   /**
    * Version of the view
-   * @pattern ^[a-zA-Z0-9]([a-zA-Z0-9_-]{0,41}[a-zA-Z0-9])?$
+   * @pattern ^[a-zA-Z0-9]([.a-zA-Z0-9_-]{0,41}[a-zA-Z0-9])?$
    */
   version: string;
 }

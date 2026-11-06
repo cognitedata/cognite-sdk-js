@@ -28,9 +28,11 @@ const client = new CogniteClient({
 
 The first invocation of `oidcTokenProvider` will happen after one of these actions:
 1. `client.authenticate()` is called.
-2. The SDK gets a [HTTP 401 status code](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401) response from the Cognite Data Fusion API.
+2. A request using SDK-managed authentication gets a [HTTP 401 status code](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401) response from the Cognite Data Fusion API.
 
-`oidcTokenProvider` may be invoked several times as the access token is short-lived. Whenever the SDK receives a 401, the SDK will call `oidcTokenProvider` to get an updated token. If the new token differs from the token used in the 401 request, then the request will be retried with the new token.
+`oidcTokenProvider` may be invoked several times as the access token is short-lived. Whenever the SDK receives a 401 for a request using SDK-managed authentication, the SDK will call `oidcTokenProvider` to get an updated token. If the new token differs from the token used in the 401 request, then the request will be retried with the new token.
+
+An `Authorization` header supplied in the options for an individual request is caller-owned. If that request receives a 401, the SDK returns the error without calling `oidcTokenProvider` or retrying the request.
 
 ## Accessing different clusters
 

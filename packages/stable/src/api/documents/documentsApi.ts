@@ -4,6 +4,7 @@ import {
   BaseResourceAPI,
   type CDFHttpClient,
   type CogniteInternalId,
+  type CursorResponse,
   type MetadataMap,
 } from '@cognite/sdk-core';
 
@@ -11,6 +12,7 @@ import type {
   Document,
   DocumentListRequest,
   DocumentListResponse,
+  DocumentSearchItem,
   DocumentSearchRequest,
   DocumentSearchResponse,
 } from '../../types';
@@ -60,10 +62,14 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
    * });
    * ```
    */
-  public search = (
-    query: DocumentSearchRequest
-  ): Promise<DocumentSearchResponse> => {
-    return this.searchDocuments<DocumentSearchResponse>(query);
+  public search = (query: DocumentSearchRequest): DocumentSearchResponse => {
+    return this.cursorBasedEndpoint<DocumentSearchRequest, DocumentSearchItem>(
+      (scope) =>
+        this.post<CursorResponse<DocumentSearchItem[]>>(this.searchUrl, {
+          data: scope ?? {},
+        }),
+      query
+    );
   };
 
   public list = (request: DocumentListRequest): DocumentListResponse => {
@@ -73,16 +79,6 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
   public content = (id: CogniteInternalId): Promise<string> => {
     return this.documentContent(id);
   };
-
-  private async searchDocuments<ResponseType extends object>(
-    query: DocumentSearchRequest
-  ): Promise<ResponseType> {
-    const response = await this.post<ResponseType>(this.searchUrl, {
-      data: query,
-    });
-
-    return this.addToMapAndReturn(response.data, response);
-  }
 
   private async documentContent(id: CogniteInternalId): Promise<string> {
     const response = await this.get<string>(this.url(`${id}/content`), {
