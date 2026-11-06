@@ -15,6 +15,7 @@ import type {
   SinglePatchRequiredString,
 } from '../../types';
 import type { EpochTimestamp } from '../../types.gen';
+import type { SessionId } from '../sessions/types';
 
 /**
  * Behavior when the data already exists.
@@ -130,7 +131,7 @@ export type TransformationDestinationType = TransformationDestination['type'];
  * Credentials for a CDF session. Get them by creating a session with `client.sessions.create`.
  */
 export interface TransformationNonceCredentials {
-  sessionId: CogniteInternalId;
+  sessionId: SessionId;
   nonce: string;
   cdfProjectName: string;
   clientId?: string;
@@ -138,7 +139,7 @@ export interface TransformationNonceCredentials {
 
 export interface TransformationSessionInfo {
   clientId?: string;
-  sessionId?: CogniteInternalId;
+  sessionId?: SessionId;
   projectName?: string;
 }
 
