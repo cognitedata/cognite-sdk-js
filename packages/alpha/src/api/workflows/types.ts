@@ -1,6 +1,7 @@
 // Copyright 2026 Cognite AS
 
 import type {
+  WorkflowAuthentication,
   Workflow as WorkflowStable,
   WorkflowUpsert as WorkflowUpsertStable,
 } from '@cognite/sdk';
@@ -276,10 +277,6 @@ export interface WorkflowExecutionFilter {
 
 export interface WorkflowExecutionFilterQuery extends FilterQuery {
   filter?: WorkflowExecutionFilter;
-}
-
-export interface WorkflowAuthentication {
-  nonce: string;
 }
 
 export interface WorkflowExecutionRunRequest {
