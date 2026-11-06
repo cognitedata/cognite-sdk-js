@@ -8,19 +8,16 @@
 // loose `UnknownDebugNotice` (the base fields every notice has). Nothing is changed on
 // the wire: responses are returned exactly as the API sent them.
 
-import type {
-  DebugNotice,
-  DebugResponse as GeneratedDebugResponse,
-} from './types.gen';
+import type { DebugResponse as GeneratedDebugResponse } from './types.gen';
 
 /**
  * A notice as the API returns it, typed only by the fields every notice has. It may be
- * one this SDK version knows ({@link DebugNotice}) or one the API added later. Mirrors
- * `UnknownDebugNotice` in the Python SDK.
+ * one this SDK version knows or one the API added later. Mirrors `UnknownDebugNotice` in
+ * the Python SDK.
  *
- * The type is wide on purpose, so it can be narrowed (for example by `code`, or against
- * {@link DebugNotice}), but do not depend on the narrow notice types: debug notices are
- * volatile, and the API adds, changes and removes them without a breaking change.
+ * The type is wide on purpose, so it can be narrowed (for example by `code`), but do not
+ * depend on narrow notice types: debug notices are volatile, and the API adds, changes
+ * and removes them without a breaking change.
  */
 export interface UnknownDebugNotice {
   category: string;

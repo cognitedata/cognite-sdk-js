@@ -3096,11 +3096,11 @@ export type {
   ContainsAnyFilterV3,
   CorePropertyDefinition,
   CountAggregateFunctionV3,
-  // Debug notices for query/sync/list. Only what users need is exported: the leaf
-  // notice interfaces and category unions stay internal, since the API adds and removes
-  // notices without a breaking change. A single notice type can be derived with
-  // `Extract<DebugNotice, { code: 'unindexedThrough' }>`.
-  DebugNotice,
+  // Debug notices for query/sync/list. Only the request parameters are exported from the
+  // generated types: the generated `DebugNotice` union (and its leaf notice interfaces
+  // and category unions) stays internal, since the API adds and removes notices without
+  // a breaking change and a closed union is not forward compatible. Responses expose
+  // notices as `UnknownDebugNotice`, see ./api/instances/debugTypes.ts.
   DebugParameters,
   DMSExistsFilter,
   DMSExternalId,

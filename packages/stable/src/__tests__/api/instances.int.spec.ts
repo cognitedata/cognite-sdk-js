@@ -1,6 +1,7 @@
 // Copyright 2024 Cognite AS
 
-import type { DebugNotice, ViewReference } from 'stable/src/types';
+import type { DebugNotice } from 'stable/src/api/instances/types.gen';
+import type { ViewReference } from 'stable/src/types';
 import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest';
 import type CogniteClient from '../../cogniteClient';
 import { randomInt, setupLoggedInClient } from '../testUtils';

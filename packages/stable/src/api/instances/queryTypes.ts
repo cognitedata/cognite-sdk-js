@@ -12,8 +12,7 @@ export interface QueryResponse extends Omit<GeneratedQueryResponse, 'debug'> {
    * Contains debug notices if debug flag is set in the query.
    *
    * The notices are deliberately typed wide ({@link UnknownDebugNotice}): you can narrow
-   * them (for example by `code`, or against `DebugNotice`), but do not depend on the
-   * narrow notice types. Debug notices are volatile: the API adds, changes and removes
+   * them (for example by `code`), but do not depend on narrow notice types. Debug notices are volatile: the API adds, changes and removes
    * them without that being a breaking change, so code that relies on a specific notice
    * or shape may break at any time. Treat them as diagnostic output for humans and
    * tooling, not as a stable contract.
