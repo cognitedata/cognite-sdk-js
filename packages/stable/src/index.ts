@@ -56,6 +56,8 @@ export { ContainersAPI } from './api/containers/containersApi';
 export { DocumentsAPI } from './api/documents/documentsApi';
 export { ExtractorsAPI } from './api/extractors/extractorsApi';
 export { GeospatialAPI } from './api/geospatial/geospatialAPI';
+export { HostedExtractorsAPI } from './api/hostedExtractors/hostedExtractorsApi';
+export { HostedExtractorSourcesAPI } from './api/hostedExtractors/sourcesApi';
 export { InstancesAPI } from './api/instances/instancesApi';
 export { DataModelsAPI } from './api/models/datamodelsApi';
 export { RecordsAPI } from './api/records/recordsApi';
