@@ -32,6 +32,32 @@ export interface FunctionSchedule {
   sessionId: SessionId;
 }
 
+export interface FunctionScheduleCreate {
+  /**
+   * Between 1 and 140 characters.
+   */
+  name: string;
+  /**
+   * At most 500 characters.
+   */
+  description?: string;
+  /**
+   * Cron expression that describes when the function is called.
+   */
+  cronExpression: string;
+  functionId: CogniteInternalId;
+  /**
+   * Input data passed to the function on each call. Do not put secrets here;
+   * use the function's `secrets` instead.
+   */
+  data?: Record<string, unknown>;
+  /**
+   * Nonce from `client.sessions.create`. The schedule binds the session and
+   * keeps it alive for the lifetime of the schedule.
+   */
+  nonce: string;
+}
+
 export interface FunctionScheduleFilter {
   name?: string;
   /**

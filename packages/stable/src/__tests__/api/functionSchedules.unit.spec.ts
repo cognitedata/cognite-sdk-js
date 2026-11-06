@@ -5,6 +5,7 @@ import { beforeEach, describe, expect, test } from 'vitest';
 import type CogniteClient from '../../cogniteClient';
 import type {
   FunctionSchedule,
+  FunctionScheduleCreate,
   FunctionScheduleInputData,
   FunctionScheduleListQuery,
 } from '../../types';
@@ -27,6 +28,53 @@ describe('Function schedules unit test', () => {
   beforeEach(() => {
     client = setupMockableClient();
     nock.cleanAll();
+  });
+
+  const scheduleCreate = {
+    name: schedule.name,
+    description: schedule.description,
+    cronExpression: schedule.cronExpression,
+    functionId: schedule.functionId,
+    data: { assetId: 42 },
+    nonce: 'nonce-1',
+  } satisfies FunctionScheduleCreate;
+
+  test('create', async () => {
+    nock(mockBaseUrl)
+      .post(/\/functions\/schedules\/?$/, { items: [scheduleCreate] })
+      .once()
+      .reply(201, { items: [schedule] });
+
+    const created = await client.functions.schedules.create([scheduleCreate]);
+    expect(created).toEqual([schedule]);
+  });
+
+  test('create sends one request per item, in order', async () => {
+    const second = { ...scheduleCreate, name: 'Second', nonce: 'nonce-2' };
+    const createdSecond = { ...schedule, id: 2, name: 'Second' };
+    nock(mockBaseUrl)
+      .post(/\/functions\/schedules\/?$/, { items: [scheduleCreate] })
+      .once()
+      .reply(201, { items: [schedule] })
+      .post(/\/functions\/schedules\/?$/, { items: [second] })
+      .once()
+      .reply(201, { items: [createdSecond] });
+
+    const created = await client.functions.schedules.create([
+      scheduleCreate,
+      second,
+    ]);
+    expect(created).toEqual([schedule, createdSecond]);
+  });
+
+  test('delete', async () => {
+    nock(mockBaseUrl)
+      .post(/\/functions\/schedules\/delete$/, { items: [{ id: 1 }] })
+      .once()
+      .reply(200, {});
+
+    const response = await client.functions.schedules.delete([{ id: 1 }]);
+    expect(response).toEqual({});
   });
 
   test('list', async () => {
