@@ -49,6 +49,7 @@ export { SyntheticTimeSeriesAPI } from './api/timeSeries/syntheticTimeSeriesApi'
 export { DataPointSubscriptionsAPI } from './api/timeSeries/subscriptions/dataPointSubscriptionsApi';
 export { TimeSeriesAPI } from './api/timeSeries/timeSeriesApi';
 export { FunctionsAPI } from './api/functions/functionsApi';
+export { FunctionSchedulesAPI } from './api/functions/schedules/functionSchedulesApi';
 export * from './api/templates';
 
 export { AnnotationsAPI } from './api/annotations/annotationsApi';

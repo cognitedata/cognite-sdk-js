@@ -1,8 +1,14 @@
 // Copyright 2025 Cognite AS
 
 import { BaseResourceAPI } from '@cognite/sdk-core';
-import type { IdEither, ItemsWrapper } from '@cognite/sdk-core';
+import type {
+  CDFHttpClient,
+  IdEither,
+  ItemsWrapper,
+  MetadataMap,
+} from '@cognite/sdk-core';
 import type { IgnoreUnknownIds } from '../../types';
+import { FunctionSchedulesAPI } from './schedules/functionSchedulesApi';
 import type {
   CogniteFunction,
   ExternalCogniteFunctionItem,
@@ -12,6 +18,28 @@ import type {
 } from './types';
 
 export class FunctionsAPI extends BaseResourceAPI<CogniteFunction> {
+  private readonly schedulesApi: FunctionSchedulesAPI;
+
+  /** @hidden */
+  constructor(resourcePath: string, ...args: [CDFHttpClient, MetadataMap]) {
+    super(resourcePath, ...args);
+    this.schedulesApi = new FunctionSchedulesAPI(
+      this.url('schedules'),
+      ...args
+    );
+  }
+
+  /**
+   * [Function schedules](https://api-docs.cognite.com/20230101/tag/Function-schedules)
+   *
+   * ```js
+   * const schedules = await client.functions.schedules.list();
+   * ```
+   */
+  public get schedules() {
+    return this.schedulesApi;
+  }
+
   /**
    * @hidden
    */
