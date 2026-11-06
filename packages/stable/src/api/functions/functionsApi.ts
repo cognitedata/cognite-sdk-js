@@ -3,12 +3,14 @@
 import { BaseResourceAPI } from '@cognite/sdk-core';
 import type {
   CDFHttpClient,
+  CogniteInternalId,
   IdEither,
   ItemsWrapper,
   MetadataMap,
 } from '@cognite/sdk-core';
 import type { IgnoreUnknownIds } from '../../types';
 import { FunctionCallsAPI } from './calls/functionCallsApi';
+import type { FunctionCall, FunctionCallRequest } from './calls/types';
 import type {
   CogniteFunction,
   ExternalCogniteFunctionItem,
@@ -96,6 +98,31 @@ export class FunctionsAPI extends BaseResourceAPI<CogniteFunction> {
    */
   public delete = (ids: IdEither[], params: IgnoreUnknownIds = {}) => {
     return super.deleteEndpoint(ids, params);
+  };
+
+  /**
+   * [Call a function asynchronously](https://api-docs.cognite.com/20230101/tag/Function-calls/operation/postFunctionsCall)
+   *
+   * Starts a call and returns it without waiting for it to finish. Use
+   * `client.functions.calls.retrieve` to follow its status.
+   *
+   * ```js
+   * const [session] = await client.sessions.create([{ tokenExchange: true }]);
+   * const call = await client.functions.call(123, {
+   *   nonce: session.nonce,
+   *   data: { assetId: 456 },
+   * });
+   * ```
+   */
+  public call = async (
+    functionId: CogniteInternalId,
+    request: FunctionCallRequest
+  ): Promise<FunctionCall> => {
+    const response = await this.post<FunctionCall>(
+      this.url(`${functionId}/call`),
+      { data: request }
+    );
+    return this.addToMapAndReturn(response.data, response);
   };
 
   /**

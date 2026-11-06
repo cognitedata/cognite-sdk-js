@@ -28,6 +28,19 @@ export interface FunctionCall {
   scheduledTime?: EpochTimestamp;
 }
 
+export interface FunctionCallRequest {
+  /**
+   * Passed to the function's `handle()` as the `data` argument.
+   * Don't put secrets here; use the function's `secrets` instead.
+   */
+  data?: object;
+  /**
+   * Nonce from `client.sessions.create`. The function runs with the
+   * session's credentials.
+   */
+  nonce: string;
+}
+
 export interface FunctionCallFilter {
   scheduleId?: CogniteInternalId;
   status?: FunctionCallStatus;

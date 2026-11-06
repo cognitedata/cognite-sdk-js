@@ -7,6 +7,7 @@ import type {
   FunctionCall,
   FunctionCallFilterQuery,
   FunctionCallLogEntry,
+  FunctionCallRequest,
   FunctionCallResponse,
 } from '../../types';
 import { mockBaseUrl, setupMockableClient } from '../testUtils';
@@ -25,6 +26,41 @@ describe('Function calls unit test', () => {
   beforeEach(() => {
     client = setupMockableClient();
     nock.cleanAll();
+  });
+
+  test('call', async () => {
+    const request = {
+      nonce: 'session-nonce',
+      data: { assetId: 789 },
+    } satisfies FunctionCallRequest;
+    const runningCall: FunctionCall = {
+      id: 456,
+      status: 'Running',
+      startTime: 1730000000000,
+      functionId: 123,
+    };
+    nock(mockBaseUrl)
+      .post(/\/functions\/123\/call$/, request)
+      .once()
+      .reply(201, runningCall);
+
+    const call = await client.functions.call(123, request);
+    expect(call).toEqual(runningCall);
+  });
+
+  test('call is not retried on server errors', async () => {
+    nock(mockBaseUrl)
+      .post(/\/functions\/123\/call$/)
+      .once()
+      .reply(503, {})
+      .post(/\/functions\/123\/call$/)
+      .once()
+      .reply(201, functionCall);
+
+    await expect(
+      client.functions.call(123, { nonce: 'session-nonce' })
+    ).rejects.toMatchObject({ status: 503 });
+    expect(nock.pendingMocks()).toHaveLength(1);
   });
 
   test('list', async () => {

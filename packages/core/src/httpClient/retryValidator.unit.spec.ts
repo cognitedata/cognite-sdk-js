@@ -90,7 +90,12 @@ describe('cdfRetryValidator', () => {
 
   describe('endpoint with a path parameter', () => {
     const wildcardValidator = createRetryValidator(
-      { [HttpMethod.Post]: ['/functions/*/calls/list'] },
+      {
+        [HttpMethod.Post]: [
+          '/functions/*/calls/list',
+          '/functions/*/calls/byids',
+        ],
+      },
       5
     );
     const postTo = (path: string): HttpRequest => ({
@@ -103,6 +108,7 @@ describe('cdfRetryValidator', () => {
       ['/api/v1/projects/abc/FUNCTIONS/123/CALLS/LIST', true],
       ['/api/v1/projects/abc/functions/calls/list', false],
       ['/api/v1/projects/abc/functions/1/2/calls/list', false],
+      ['/api/v1/projects/abc/functions/123/calls/byids', true],
       ['/api/v1/projects/abc/functions/123/call', false],
     ])('POST 502 to %s retried: %s', (path, expected) => {
       expect(wildcardValidator(postTo(path), response502, 0)).toBe(expected);
