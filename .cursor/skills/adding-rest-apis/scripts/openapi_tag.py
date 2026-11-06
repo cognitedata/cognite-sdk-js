@@ -26,6 +26,20 @@ CACHE_MAX_AGE_SECONDS = 24 * 60 * 60
 HTTP_METHODS = ("get", "post", "put", "patch", "delete")
 GZIP_MAGIC = b"\x1f\x8b"
 SCHEMA_REF_PREFIX = "#/components/schemas/"
+COMPOSITIONS = (("oneOf", " | "), ("anyOf", " | "), ("allOf", " & "))
+TYPE_KEYS = (
+    "$ref",
+    "type",
+    "const",
+    "enum",
+    "oneOf",
+    "anyOf",
+    "allOf",
+    "properties",
+    "additionalProperties",
+    "items",
+    "format",
+)
 
 Schema = dict[str, Any]
 
@@ -69,15 +83,39 @@ def ref_name(ref: str) -> str:
     return ref.rsplit("/", 1)[-1]
 
 
+def has_type(schema: Schema) -> bool:
+    """False for parts that only annotate or constrain, like {"description": ...}."""
+    return any(key in schema for key in TYPE_KEYS)
+
+
+def inferred_type(schema: Schema) -> str | None:
+    if "items" in schema:
+        return "array"
+    if "properties" in schema or "additionalProperties" in schema:
+        return "object"
+    if "format" in schema:
+        return "string"
+    if "minimum" in schema or "maximum" in schema:
+        return "number"
+    return None
+
+
 def type_str(schema: Schema) -> str:
     if "$ref" in schema:
         return ref_name(schema["$ref"])
+    if "const" in schema:
+        return json.dumps(schema["const"])
     if "enum" in schema:
         return " | ".join(json.dumps(value) for value in schema["enum"])
-    for key, joiner in (("oneOf", " | "), ("anyOf", " | "), ("allOf", " & ")):
-        if key in schema:
-            return joiner.join(type_str(part) for part in schema[key])
-    schema_type = schema.get("type")
+    for key, joiner in COMPOSITIONS:
+        parts = [type_str(part) for part in schema.get(key, []) if has_type(part)]
+        if parts:
+            return joiner.join(parts)
+    schema_type = schema.get("type") or inferred_type(schema)
+    if isinstance(schema_type, list):
+        return " | ".join(type_str({**schema, "type": item}) for item in schema_type)
+    if schema_type == "string" and "format" in schema:
+        return f"string({schema['format']})"
     if schema_type == "array":
         inner = type_str(schema.get("items", {}))
         return f"({inner})[]" if " " in inner else f"{inner}[]"
@@ -121,11 +159,35 @@ def render_properties(schema: Schema, indent: str, describe: bool) -> list[str]:
         optional = "" if name in required else "?"
         lines.append(f"{indent}{name}{optional}: {type_str(prop)}{annotations(prop)}")
         lines.extend(description_lines(prop, indent, describe))
-        if "properties" in prop:
-            lines.extend(render_properties(prop, indent + "  ", describe))
-        items = prop.get("items", {})
-        if "properties" in items:
-            lines.extend(render_properties(items, indent + "  ", describe))
+        lines.extend(render_fields(prop, indent + "  ", describe))
+        lines.extend(render_fields(prop.get("items", {}), indent + "  ", describe))
+    return lines
+
+
+def render_fields(
+    schema: Schema, indent: str, describe: bool, label_refs: bool = False
+) -> list[str]:
+    """Properties of schema and of its inline oneOf/anyOf/allOf parts.
+
+    Ref parts are already named by type_str, so they only get a line of their
+    own when label_refs is set. Parts that only list required properties, as in
+    anyOf: [{required: [a]}, {required: [b]}], are printed as "requires a".
+    """
+    lines = render_properties(schema, indent, describe)
+    for key, _ in COMPOSITIONS:
+        for part in schema.get(key, []):
+            if not has_type(part):
+                if part.get("required"):
+                    lines.append(
+                        f"{indent}{key}: requires {', '.join(part['required'])}"
+                    )
+                continue
+            fields = (
+                [] if "$ref" in part else render_fields(part, indent + "  ", describe)
+            )
+            if fields or label_refs:
+                lines.append(f"{indent}{key}: {type_str(part)}")
+                lines.extend(fields)
     return lines
 
 
@@ -134,14 +196,8 @@ def render_schema(name: str, schema: Schema, describe: bool) -> list[str]:
         f"### {name}{annotations(schema)}",
         *description_lines(schema, "", describe),
     ]
-    if "properties" in schema:
-        lines.extend(render_properties(schema, "  ", describe))
-        return lines
     header_length = len(lines)
-    for key in ("oneOf", "anyOf", "allOf"):
-        for part in schema.get(key, []):
-            lines.append(f"  {key}: {type_str(part)}")
-            lines.extend(render_properties(part, "    ", describe))
+    lines.extend(render_fields(schema, "  ", describe, label_refs=True))
     if len(lines) == header_length:
         lines.append(f"  = {type_str(schema)}")
     return lines
@@ -201,7 +257,7 @@ def render_operation(
     request = body_schema(spec, operation.get("requestBody"))
     if request:
         lines.append(f"  request body: {type_str(request)}")
-        lines.extend(render_properties(resolve(spec, request), "    ", describe))
+        lines.extend(render_fields(resolve(spec, request), "    ", describe))
     for status, response in operation.get("responses", {}).items():
         if not status.startswith("2"):
             continue
@@ -209,6 +265,8 @@ def render_operation(
         lines.append(
             f"  response {status}: {type_str(schema) if schema else '(empty)'}"
         )
+        if schema and "$ref" not in schema:
+            lines.extend(render_fields(schema, "    ", describe))
     return lines
 
 
