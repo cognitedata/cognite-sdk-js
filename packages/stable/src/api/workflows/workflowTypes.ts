@@ -31,3 +31,10 @@ export interface WorkflowUpsert {
 export interface WorkflowExternalId {
   externalId: CogniteExternalId;
 }
+
+export interface WorkflowAuthentication {
+  /**
+   * The nonce of a root session, from `client.sessions.create`.
+   */
+  nonce: string;
+}
