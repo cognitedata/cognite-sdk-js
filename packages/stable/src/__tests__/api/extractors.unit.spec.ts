@@ -94,6 +94,13 @@ const mockSolution: Solution = {
   extractorExternalId: 'cognite-pi',
 };
 
+const mockConnectorSolution: Solution = {
+  externalId: 'cognite-snowflake-snowflake',
+  name: 'Snowflake to CDF',
+  sourceSystemExternalId: 'snowflake',
+  connectorExternalId: 'cognite-snowflake-connector',
+};
+
 const mockExtractorItemsResponse: ItemsResponseWire<Extractor> = {
   items: [mockExtractor],
 };
@@ -111,7 +118,7 @@ const mockSourceSystemItemsResponse: ItemsResponseWire<SourceSystem> = {
 };
 
 const mockSolutionItemsResponse: ItemsResponseWire<Solution> = {
-  items: [mockSolution],
+  items: [mockSolution, mockConnectorSolution],
 };
 
 describe('Extractors unit test', () => {
@@ -297,8 +304,9 @@ describe('Extractors unit test', () => {
       .reply(200, mockSolutionItemsResponse);
 
     const response = await client.extractors.solutions.list();
-    expect(response.items).toHaveLength(1);
+    expect(response.items).toHaveLength(2);
     expect(response.items[0]).toEqual(mockSolution);
+    expect(response.items[1]).toEqual(mockConnectorSolution);
   });
 
   test('retrieve solutions', async () => {
@@ -312,8 +320,9 @@ describe('Extractors unit test', () => {
     const result = await client.extractors.solutions.retrieve([
       { externalId: 'cognite-pi-pi' },
     ]);
-    expect(result).toHaveLength(1);
+    expect(result).toHaveLength(2);
     expect(result[0]).toEqual(mockSolution);
+    expect(result[1]).toEqual(mockConnectorSolution);
   });
 
   test('getSchema encodes path segments', async () => {
