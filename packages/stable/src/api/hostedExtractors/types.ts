@@ -2,3 +2,4 @@
 
 export * from './commonTypes';
 export * from './sourcesTypes';
+export * from './mappingsTypes';
