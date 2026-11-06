@@ -1,8 +1,14 @@
 // Copyright 2025 Cognite AS
 
 import { BaseResourceAPI } from '@cognite/sdk-core';
-import type { IdEither, ItemsWrapper } from '@cognite/sdk-core';
+import type {
+  CDFHttpClient,
+  IdEither,
+  ItemsWrapper,
+  MetadataMap,
+} from '@cognite/sdk-core';
 import type { IgnoreUnknownIds } from '../../types';
+import { FunctionCallsAPI } from './calls/functionCallsApi';
 import type {
   CogniteFunction,
   ExternalCogniteFunctionItem,
@@ -12,11 +18,26 @@ import type {
 } from './types';
 
 export class FunctionsAPI extends BaseResourceAPI<CogniteFunction> {
+  private readonly callsApi: FunctionCallsAPI;
+
+  /** @hidden */
+  constructor(resourcePath: string, ...args: [CDFHttpClient, MetadataMap]) {
+    super(resourcePath, ...args);
+    this.callsApi = new FunctionCallsAPI(resourcePath, ...args);
+  }
+
   /**
    * @hidden
    */
   protected getDateProps() {
     return this.pickDateProps(['items'], ['createdTime', 'lastCalled']);
+  }
+
+  /**
+   * [Function calls](https://api-docs.cognite.com/20230101/tag/Function-calls)
+   */
+  public get calls() {
+    return this.callsApi;
   }
 
   /**

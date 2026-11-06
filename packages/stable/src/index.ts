@@ -48,6 +48,7 @@ export { SequencesAPI } from './api/sequences/sequencesApi';
 export { SyntheticTimeSeriesAPI } from './api/timeSeries/syntheticTimeSeriesApi';
 export { DataPointSubscriptionsAPI } from './api/timeSeries/subscriptions/dataPointSubscriptionsApi';
 export { TimeSeriesAPI } from './api/timeSeries/timeSeriesApi';
+export { FunctionCallsAPI } from './api/functions/calls/functionCallsApi';
 export { FunctionsAPI } from './api/functions/functionsApi';
 export * from './api/templates';
 
