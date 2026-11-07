@@ -2,16 +2,14 @@
 
 import type { CogniteExternalId } from '@cognite/sdk-core';
 import type {
+  Metadata,
+  MetadataPatch,
   SetField,
   SinglePatch,
   SinglePatchRequiredString,
   SinglePatchString,
 } from '../../types';
 import type { EpochTimestamp } from '../../types.gen';
-import type {
-  HostedExtractorMetadata,
-  HostedExtractorMetadataPatch,
-} from './commonTypes';
 
 // Authentication
 
@@ -219,7 +217,7 @@ interface HostedExtractorSourceCommon {
   externalId: CogniteExternalId;
   name?: string;
   description?: string;
-  metadata?: HostedExtractorMetadata;
+  metadata?: Metadata;
 }
 
 interface HostedExtractorSourceReadCommon extends HostedExtractorSourceCommon {
@@ -389,7 +387,7 @@ export type HostedExtractorSourceCreate =
 interface HostedExtractorSourcePatchCommon {
   name?: SinglePatchString;
   description?: SinglePatchString;
-  metadata?: HostedExtractorMetadataPatch;
+  metadata?: MetadataPatch;
 }
 
 interface HostedExtractorSourceCertificatesPatch {

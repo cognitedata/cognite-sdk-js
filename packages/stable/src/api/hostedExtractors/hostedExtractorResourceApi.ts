@@ -71,6 +71,6 @@ export abstract class HostedExtractorResourceAPI<
       params,
       chunkSize: READ_CHUNK_SIZE,
     });
-    return this.addToMapAndReturn({}, responses[0])
+    return this.addToMapAndReturn({}, responses[0]);
   }
 }
