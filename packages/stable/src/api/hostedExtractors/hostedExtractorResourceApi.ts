@@ -62,12 +62,15 @@ export abstract class HostedExtractorResourceAPI<
     ids: ExternalId[],
     params: HostedExtractorDeleteParams = {}
   ) {
+    if (ids.length === 0) {
+      return {};
+    }
     const responses = await this.postInParallelWithAutomaticChunking({
       path: this.deleteUrl,
       items: ids,
       params,
       chunkSize: READ_CHUNK_SIZE,
     });
-    return this.addToMapAndReturn({}, responses[0]);
+    return this.addToMapAndReturn({}, responses[0])
   }
 }
