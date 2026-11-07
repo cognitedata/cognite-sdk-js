@@ -10,6 +10,7 @@ import {
 } from '@cognite/sdk-core';
 import type { IgnoreUnknownIds } from '../../types';
 import { TransformationSchedulesAPI } from './transformationSchedulesApi';
+import { TransformationSchemaAPI } from './transformationSchemaApi';
 import type {
   Transformation,
   TransformationChange,
@@ -23,12 +24,17 @@ import type {
 
 export class TransformationsAPI extends BaseResourceAPI<Transformation> {
   private readonly schedulesApi: TransformationSchedulesAPI;
+  private readonly schemaApi: TransformationSchemaAPI;
 
   /** @hidden */
   constructor(resourcePath: string, ...args: [CDFHttpClient, MetadataMap]) {
     super(resourcePath, ...args);
     this.schedulesApi = new TransformationSchedulesAPI(
       `${resourcePath}/schedules`,
+      ...args
+    );
+    this.schemaApi = new TransformationSchemaAPI(
+      `${resourcePath}/schema`,
       ...args
     );
   }
@@ -38,6 +44,13 @@ export class TransformationsAPI extends BaseResourceAPI<Transformation> {
    */
   public get schedules() {
     return this.schedulesApi;
+  }
+
+  /**
+   * [Transformation schema](https://api-docs.cognite.com/20230101/tag/Schema)
+   */
+  public get schema() {
+    return this.schemaApi;
   }
 
   /**
