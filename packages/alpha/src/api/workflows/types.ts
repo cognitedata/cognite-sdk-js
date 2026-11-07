@@ -1,34 +1,22 @@
 // Copyright 2026 Cognite AS
 
 import type {
-  CogniteExternalId,
-  CogniteInternalId,
-  FilterQuery,
-} from '@cognite/sdk-core';
+  WorkflowAuthentication,
+  Workflow as WorkflowStable,
+  WorkflowUpsert as WorkflowUpsertStable,
+} from '@cognite/sdk';
+import type { CogniteExternalId, FilterQuery } from '@cognite/sdk-core';
 
-export interface Workflow {
-  externalId: CogniteExternalId;
-  description?: string;
-  dataSetId?: CogniteInternalId;
-  maxConcurrentExecutions?: number;
-  dataDomainExternalId?: CogniteExternalId;
-  isDataAware?: boolean;
-  createdTime?: number;
-  lastUpdatedTime: number;
-}
-
-export interface WorkflowUpsert {
-  externalId: CogniteExternalId;
-  description?: string;
-  dataSetId?: CogniteInternalId;
-  maxConcurrentExecutions?: number;
+interface WorkflowAlphaFields {
   dataDomainExternalId?: CogniteExternalId;
   isDataAware?: boolean;
 }
 
-export interface WorkflowExternalId {
-  externalId: CogniteExternalId;
-}
+export interface Workflow extends WorkflowStable, WorkflowAlphaFields {}
+
+export interface WorkflowUpsert
+  extends WorkflowUpsertStable,
+    WorkflowAlphaFields {}
 
 /** JSON-serializable values used in workflow task parameters. */
 export type JsonValue =
@@ -190,19 +178,6 @@ export type VersionUpsert = {
   workflowDefinition: WorkflowDefinitionCreate;
 };
 
-export interface WorkflowVersionWorkflowFilter {
-  externalId: CogniteExternalId;
-  version?: string;
-}
-
-export interface WorkflowVersionFilter {
-  workflowFilters?: WorkflowVersionWorkflowFilter[];
-}
-
-export interface WorkflowVersionFilterQuery extends FilterQuery {
-  filter?: WorkflowVersionFilter;
-}
-
 export type FunctionOutput = {
   callId: number;
   functionId: number;
@@ -302,10 +277,6 @@ export interface WorkflowExecutionFilter {
 
 export interface WorkflowExecutionFilterQuery extends FilterQuery {
   filter?: WorkflowExecutionFilter;
-}
-
-export interface WorkflowAuthentication {
-  nonce: string;
 }
 
 export interface WorkflowExecutionRunRequest {
