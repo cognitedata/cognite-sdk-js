@@ -71,6 +71,7 @@ export * from './api/timeSeries/subscriptions/types';
 export * from './api/dataPoints/types';
 export * from './api/dataProducts/types';
 export * from './api/functions/types';
+export * from './api/functions/calls/types';
 export * from './api/extractors/types';
 export * from './api/transformations/types';
 
