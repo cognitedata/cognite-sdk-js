@@ -27,6 +27,7 @@ import { FilesAPI } from './api/files/filesApi';
 import { FunctionsAPI } from './api/functions/functionsApi';
 import { GeospatialAPI } from './api/geospatial/geospatialAPI';
 import { GroupsAPI } from './api/groups/groupsApi';
+import { HostedExtractorsAPI } from './api/hostedExtractors/hostedExtractorsApi';
 import { InstancesAPI } from './api/instances/instancesApi';
 import { LabelsAPI } from './api/labels/labelsApi';
 import { DataModelsAPI } from './api/models/datamodelsApi';
@@ -258,6 +259,9 @@ export default class CogniteClient extends BaseCogniteClient {
   public get transformations() {
     return accessApi(this.transformationsApi);
   }
+  public get hostedExtractors() {
+    return accessApi(this.hostedExtractorsApi);
+  }
   private assetsApi?: AssetsAPI;
   private timeSeriesApi?: TimeSeriesAPI;
   /**
@@ -300,6 +304,7 @@ export default class CogniteClient extends BaseCogniteClient {
   private extractorsApi?: ExtractorsAPI;
   private dataProductsApi?: DataProductsAPI;
   private transformationsApi?: TransformationsAPI;
+  private hostedExtractorsApi?: HostedExtractorsAPI;
 
   protected get version() {
     return version;
@@ -371,6 +376,10 @@ export default class CogniteClient extends BaseCogniteClient {
     this.transformationsApi = this.apiFactory(
       TransformationsAPI,
       'transformations'
+    );
+    this.hostedExtractorsApi = this.apiFactory(
+      HostedExtractorsAPI,
+      'hostedextractors'
     );
   }
 
