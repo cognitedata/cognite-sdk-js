@@ -3,14 +3,7 @@
 import type { CogniteExternalId, CogniteInternalId } from '@cognite/sdk-core';
 import type { EpochTimestamp } from '../../types.gen';
 
-export interface Workflow {
-  externalId: CogniteExternalId;
-  description?: string;
-  dataSetId?: CogniteInternalId;
-  /**
-   * Maximum number of concurrent executions of this workflow, between 1 and 10000.
-   */
-  maxConcurrentExecutions?: number | null;
+export interface Workflow extends WorkflowUpsert {
   createdTime: EpochTimestamp;
   lastUpdatedTime: EpochTimestamp;
 }
