@@ -1,13 +1,14 @@
 // Copyright 2026 Cognite AS
 
 import type { CogniteExternalId, CogniteInternalId } from '@cognite/sdk-core';
-import type { SinglePatch, SinglePatchString } from '../../types';
+import type {
+  Metadata,
+  MetadataPatch,
+  SinglePatch,
+  SinglePatchString,
+} from '../../types';
 import type { EpochTimestamp } from '../../types.gen';
 import type { SessionId } from '../sessions/types';
-import type {
-  HostedExtractorMetadata,
-  HostedExtractorMetadataPatch,
-} from './commonTypes';
 
 /**
  * Credentials for writing to CDF through a CDF session.
@@ -33,7 +34,7 @@ interface HostedExtractorDestinationCommon {
    * At most 500 characters.
    */
   description?: string;
-  metadata?: HostedExtractorMetadata;
+  metadata?: Metadata;
 }
 
 export interface HostedExtractorDestination
@@ -57,7 +58,7 @@ export interface HostedExtractorDestinationPatch {
   targetDataSetId?: SinglePatch<CogniteInternalId>;
   name?: SinglePatchString;
   description?: SinglePatchString;
-  metadata?: HostedExtractorMetadataPatch;
+  metadata?: MetadataPatch;
 }
 
 export interface HostedExtractorDestinationChange {
