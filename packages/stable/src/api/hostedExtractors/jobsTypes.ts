@@ -1,12 +1,13 @@
 // Copyright 2026 Cognite AS
 
 import type { CogniteExternalId, FilterQuery } from '@cognite/sdk-core';
-import type { SetField, SinglePatchString } from '../../types';
-import type { EpochTimestamp } from '../../types.gen';
 import type {
-  HostedExtractorMetadata,
-  HostedExtractorMetadataPatch,
-} from './commonTypes';
+  Metadata,
+  MetadataPatch,
+  SetField,
+  SinglePatchString,
+} from '../../types';
+import type { EpochTimestamp } from '../../types.gen';
 
 // Formats
 
@@ -266,7 +267,7 @@ export type HostedExtractorJobStatus =
   | 'cdf_write_error'
   | 'transform_error';
 
-export interface HostedExtractorJob {
+interface HostedExtractorJobBase {
   externalId: CogniteExternalId;
   /**
    * External ID of the destination the job writes to.
@@ -276,6 +277,18 @@ export interface HostedExtractorJob {
    * External ID of the source the job reads from.
    */
   sourceId: CogniteExternalId;
+  /**
+   * At most 50 characters.
+   */
+  name?: string;
+  /**
+   * At most 500 characters.
+   */
+  description?: string;
+  metadata?: Metadata;
+}
+
+export interface HostedExtractorJob extends HostedExtractorJobBase {
   format: HostedExtractorJobFormat;
   targetStatus: HostedExtractorJobTargetStatus;
   status: HostedExtractorJobStatus;
@@ -287,32 +300,11 @@ export interface HostedExtractorJob {
   dlqEnabled?: boolean;
   createdTime: EpochTimestamp;
   lastUpdatedTime: EpochTimestamp;
-  name?: string;
-  description?: string;
-  metadata?: HostedExtractorMetadata;
 }
 
-export interface HostedExtractorJobCreate {
-  externalId: CogniteExternalId;
-  /**
-   * External ID of the destination the job writes to.
-   */
-  destinationId: CogniteExternalId;
-  /**
-   * External ID of the source the job reads from.
-   */
-  sourceId: CogniteExternalId;
+export interface HostedExtractorJobCreate extends HostedExtractorJobBase {
   format: HostedExtractorJobFormatCreate;
   config?: HostedExtractorJobConfig;
-  /**
-   * At most 50 characters.
-   */
-  name?: string;
-  /**
-   * At most 500 characters.
-   */
-  description?: string;
-  metadata?: HostedExtractorMetadata;
 }
 
 export interface HostedExtractorJobPatch {
@@ -329,7 +321,7 @@ export interface HostedExtractorJobPatch {
   dlqEnabled?: SetField<boolean>;
   name?: SinglePatchString;
   description?: SinglePatchString;
-  metadata?: HostedExtractorMetadataPatch;
+  metadata?: MetadataPatch;
 }
 
 export interface HostedExtractorJobChange {
