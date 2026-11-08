@@ -10,6 +10,7 @@ import {
 } from '@cognite/sdk-core';
 import type { IgnoreUnknownIds } from '../../types';
 import { TransformationNotificationsAPI } from './transformationNotificationsApi';
+import { TransformationSchedulesAPI } from './transformationSchedulesApi';
 import type {
   Transformation,
   TransformationChange,
@@ -23,12 +24,17 @@ import type {
 
 export class TransformationsAPI extends BaseResourceAPI<Transformation> {
   private readonly notificationsApi: TransformationNotificationsAPI;
+  private readonly schedulesApi: TransformationSchedulesAPI;
 
   /** @hidden */
   constructor(resourcePath: string, ...args: [CDFHttpClient, MetadataMap]) {
     super(resourcePath, ...args);
     this.notificationsApi = new TransformationNotificationsAPI(
       `${resourcePath}/notifications`,
+      ...args
+    );
+    this.schedulesApi = new TransformationSchedulesAPI(
+      `${resourcePath}/schedules`,
       ...args
     );
   }
@@ -38,6 +44,13 @@ export class TransformationsAPI extends BaseResourceAPI<Transformation> {
    */
   public get notifications() {
     return this.notificationsApi;
+  }
+
+  /**
+   * [Transformation schedules](https://api-docs.cognite.com/20230101/tag/Transformation-Schedules)
+   */
+  public get schedules() {
+    return this.schedulesApi;
   }
 
   /**
