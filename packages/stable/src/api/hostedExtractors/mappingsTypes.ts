@@ -1,12 +1,14 @@
 // Copyright 2026 Cognite AS
 
 import type { CogniteExternalId } from '@cognite/sdk-core';
-import type { SetField, SinglePatch, SinglePatchString } from '../../types';
-import type { EpochTimestamp } from '../../types.gen';
 import type {
-  HostedExtractorMetadata,
-  HostedExtractorMetadataPatch,
-} from './commonTypes';
+  Metadata,
+  MetadataPatch,
+  SetField,
+  SinglePatch,
+  SinglePatchString,
+} from '../../types';
+import type { EpochTimestamp } from '../../types.gen';
 
 export interface HostedExtractorMappingExpression {
   /**
@@ -105,14 +107,9 @@ export type HostedExtractorMappingInputType =
 
 // Mapping
 
-export interface HostedExtractorMappingCreate {
+interface HostedExtractorMappingBase {
   externalId: CogniteExternalId;
   mapping: HostedExtractorMappingExpression;
-  /**
-   * How to convert the input to JSON before it is passed to the expression.
-   * @default { type: 'json' }
-   */
-  input?: HostedExtractorMappingInputCreate;
   /**
    * Whether jobs can use this mapping.
    */
@@ -125,11 +122,19 @@ export interface HostedExtractorMappingCreate {
    * At most 500 characters.
    */
   description?: string;
-  metadata?: HostedExtractorMetadata;
+  metadata?: Metadata;
 }
 
-export interface HostedExtractorMapping
-  extends Omit<HostedExtractorMappingCreate, 'input'> {
+export interface HostedExtractorMappingCreate
+  extends HostedExtractorMappingBase {
+  /**
+   * How to convert the input to JSON before it is passed to the expression.
+   * @default { type: 'json' }
+   */
+  input?: HostedExtractorMappingInputCreate;
+}
+
+export interface HostedExtractorMapping extends HostedExtractorMappingBase {
   input: HostedExtractorMappingInput;
   createdTime: EpochTimestamp;
   lastUpdatedTime: EpochTimestamp;
@@ -147,7 +152,7 @@ export interface HostedExtractorMappingPatch {
    */
   name?: SinglePatchString;
   description?: SinglePatchString;
-  metadata?: HostedExtractorMetadataPatch;
+  metadata?: MetadataPatch;
 }
 
 export interface HostedExtractorMappingChange {
