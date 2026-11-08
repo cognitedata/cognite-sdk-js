@@ -9,6 +9,7 @@ import {
   type MetadataMap,
 } from '@cognite/sdk-core';
 import type { IgnoreUnknownIds } from '../../types';
+import { TransformationQueryAPI } from './transformationQueryApi';
 import { TransformationSchedulesAPI } from './transformationSchedulesApi';
 import { TransformationSchemaAPI } from './transformationSchemaApi';
 import type {
@@ -23,12 +24,17 @@ import type {
 } from './types';
 
 export class TransformationsAPI extends BaseResourceAPI<Transformation> {
+  private readonly queryApi: TransformationQueryAPI;
   private readonly schedulesApi: TransformationSchedulesAPI;
   private readonly schemaApi: TransformationSchemaAPI;
 
   /** @hidden */
   constructor(resourcePath: string, ...args: [CDFHttpClient, MetadataMap]) {
     super(resourcePath, ...args);
+    this.queryApi = new TransformationQueryAPI(
+      `${resourcePath}/query`,
+      ...args
+    );
     this.schedulesApi = new TransformationSchedulesAPI(
       `${resourcePath}/schedules`,
       ...args
@@ -37,6 +43,13 @@ export class TransformationsAPI extends BaseResourceAPI<Transformation> {
       `${resourcePath}/schema`,
       ...args
     );
+  }
+
+  /**
+   * [Query](https://api-docs.cognite.com/20230101/tag/Query)
+   */
+  public get query() {
+    return this.queryApi;
   }
 
   /**
