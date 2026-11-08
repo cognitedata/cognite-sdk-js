@@ -410,6 +410,32 @@ export interface TransformationQueryComplexType {
   [key: string]: unknown;
 }
 
+/**
+ * Spark type of a nested column, for example
+ * `{ type: 'struct', fields: [...] }` or `{ type: 'array', elementType: 'string', containsNull: true }`.
+ */
+export interface TransformationSchemaComplexType {
+  type: string;
+  [key: string]: unknown;
+}
+
+/**
+ * Column type in JSON format. Simple types are strings, such as `'string'` or `'long'`.
+ */
+export type TransformationSchemaColumnType =
+  | string
+  | TransformationSchemaComplexType;
+
+export interface TransformationSchemaColumn {
+  name: string;
+  /**
+   * Column type in SQL format, for example `STRING` or `ARRAY<STRING>`.
+   */
+  sqlType: string;
+  type: TransformationSchemaColumnType;
+  nullable: boolean;
+}
+
 export interface TransformationQueryColumn {
   name: string;
   /**

@@ -12,6 +12,7 @@ import type { IgnoreUnknownIds } from '../../types';
 import { TransformationJobsAPI } from './transformationJobsApi';
 import { TransformationQueryAPI } from './transformationQueryApi';
 import { TransformationSchedulesAPI } from './transformationSchedulesApi';
+import { TransformationSchemaAPI } from './transformationSchemaApi';
 import type {
   Transformation,
   TransformationChange,
@@ -27,6 +28,7 @@ export class TransformationsAPI extends BaseResourceAPI<Transformation> {
   private readonly jobsApi: TransformationJobsAPI;
   private readonly queryApi: TransformationQueryAPI;
   private readonly schedulesApi: TransformationSchedulesAPI;
+  private readonly schemaApi: TransformationSchemaAPI;
 
   /** @hidden */
   constructor(resourcePath: string, ...args: [CDFHttpClient, MetadataMap]) {
@@ -38,6 +40,10 @@ export class TransformationsAPI extends BaseResourceAPI<Transformation> {
     );
     this.schedulesApi = new TransformationSchedulesAPI(
       `${resourcePath}/schedules`,
+      ...args
+    );
+    this.schemaApi = new TransformationSchemaAPI(
+      `${resourcePath}/schema`,
       ...args
     );
   }
@@ -61,6 +67,13 @@ export class TransformationsAPI extends BaseResourceAPI<Transformation> {
    */
   public get jobs() {
     return this.jobsApi;
+  }
+
+  /**
+   * [Transformation schema](https://api-docs.cognite.com/20230101/tag/Schema)
+   */
+  public get schema() {
+    return this.schemaApi;
   }
 
   /**
