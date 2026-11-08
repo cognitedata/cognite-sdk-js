@@ -188,6 +188,34 @@ export interface TransformationSchedule {
   isPaused: boolean;
 }
 
+export type TransformationScheduleCreate = IdEither & {
+  /**
+   * Cron expression that describes when the transformation should run.
+   */
+  interval: string;
+  /**
+   * If true, the transformation is not scheduled.
+   */
+  isPaused?: boolean;
+};
+
+export interface TransformationSchedulePatch {
+  interval?: SetField<string>;
+  isPaused?: SetField<boolean>;
+}
+
+export type TransformationScheduleChange = IdEither & {
+  update: TransformationSchedulePatch;
+};
+
+export interface TransformationScheduleListQuery extends FilterQuery {
+  /**
+   * Whether to include schedules of public transformations.
+   * @default true
+   */
+  includePublic?: boolean;
+}
+
 export interface Transformation {
   id: CogniteInternalId;
   externalId: CogniteExternalId;
