@@ -77,19 +77,7 @@ export type WorkflowTriggerRule =
 
 export type WorkflowTriggerType = WorkflowTriggerRule['triggerType'];
 
-export interface WorkflowTrigger {
-  externalId?: CogniteExternalId;
-  triggerRule?: WorkflowTriggerRule;
-  input?: Record<string, unknown>;
-  metadata?: Record<string, string>;
-  workflowExternalId?: CogniteExternalId;
-  workflowVersion?: string;
-  createdTime?: EpochTimestamp;
-  lastUpdatedTime?: EpochTimestamp;
-  isPaused?: boolean;
-}
-
-export interface WorkflowTriggerUpsert {
+interface WorkflowTriggerBase {
   externalId: CogniteExternalId;
   triggerRule: WorkflowTriggerRule;
   /**
@@ -103,7 +91,16 @@ export interface WorkflowTriggerUpsert {
   metadata?: Record<string, string>;
   workflowExternalId: CogniteExternalId;
   workflowVersion: string;
+}
+
+export interface WorkflowTriggerUpsert extends WorkflowTriggerBase {
   authentication: WorkflowAuthentication;
+}
+
+export interface WorkflowTrigger extends WorkflowTriggerBase {
+  createdTime: EpochTimestamp;
+  lastUpdatedTime: EpochTimestamp;
+  isPaused: boolean;
 }
 
 export interface WorkflowTriggerExternalId {
