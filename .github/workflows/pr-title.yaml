@@ -5,10 +5,11 @@ on:
     branches:
       - master
       - release-*
-    types: [opened, edited, synchronize, reopened]
+    types: [opened, edited, synchronize, reopened, ready_for_review]
 
 jobs:
   pr-title:
+    if: '!github.event.pull_request.draft'
     runs-on: ubuntu-latest
 
     steps:

@@ -16,7 +16,7 @@ import { AssetsAPI } from './api/assets/assetsApi';
 import { ContainersAPI } from './api/containers/containersApi';
 import { dataModelingConcurrencyPolicy } from './api/dataModeling/concurrency';
 import { DataModelingStatisticsAPI } from './api/dataModelingStatistics/dataModelingStatisticsApi';
-import { DataPointsAPI } from './api/dataPoints/dataPointsApi';
+import type { DataPointsAPI } from './api/dataPoints/dataPointsApi';
 import { DataProductsAPI } from './api/dataProducts/dataProductsApi';
 import { DataSetsAPI } from './api/datasets/datasetsApi';
 import { DocumentsAPI } from './api/documents/documentsApi';
@@ -27,6 +27,7 @@ import { FilesAPI } from './api/files/filesApi';
 import { FunctionsAPI } from './api/functions/functionsApi';
 import { GeospatialAPI } from './api/geospatial/geospatialAPI';
 import { GroupsAPI } from './api/groups/groupsApi';
+import { HostedExtractorsAPI } from './api/hostedExtractors/hostedExtractorsApi';
 import { InstancesAPI } from './api/instances/instancesApi';
 import { LabelsAPI } from './api/labels/labelsApi';
 import { DataModelsAPI } from './api/models/datamodelsApi';
@@ -48,6 +49,7 @@ import {
 } from './api/templates';
 import { TimeSeriesAPI } from './api/timeSeries/timeSeriesApi';
 import { TokenAPI } from './api/token/tokenApi';
+import { TransformationsAPI } from './api/transformations/transformationsApi';
 import { UnitsAPI } from './api/units/unitsApi';
 import { ProfilesAPI } from './api/userProfiles/profilesApi';
 import { ViewsAPI } from './api/views/viewsApi';
@@ -254,8 +256,17 @@ export default class CogniteClient extends BaseCogniteClient {
   public get dataProducts() {
     return accessApi(this.dataProductsApi);
   }
+  public get transformations() {
+    return accessApi(this.transformationsApi);
+  }
+  public get hostedExtractors() {
+    return accessApi(this.hostedExtractorsApi);
+  }
   private assetsApi?: AssetsAPI;
   private timeSeriesApi?: TimeSeriesAPI;
+  /**
+   * @deprecated Use `client.timeseries.data` instead. Kept so subclasses that read or override it keep working. It points to the same instance as `client.timeseries.data` unless overridden. Will be removed in the next major release.
+   */
   protected dataPointsApi?: DataPointsAPI;
   private sequencesApi?: SequencesAPI;
   private eventsApi?: EventsAPI;
@@ -292,6 +303,8 @@ export default class CogniteClient extends BaseCogniteClient {
   private recordsApi?: RecordsAPI;
   private extractorsApi?: ExtractorsAPI;
   private dataProductsApi?: DataProductsAPI;
+  private transformationsApi?: TransformationsAPI;
+  private hostedExtractorsApi?: HostedExtractorsAPI;
 
   protected get version() {
     return version;
@@ -311,7 +324,7 @@ export default class CogniteClient extends BaseCogniteClient {
 
     this.assetsApi = this.apiFactory(AssetsAPI, 'assets');
     this.timeSeriesApi = this.apiFactory(TimeSeriesAPI, 'timeseries');
-    this.dataPointsApi = this.apiFactory(DataPointsAPI, 'timeseries/data');
+    this.dataPointsApi = this.timeSeriesApi.data;
     this.sequencesApi = this.apiFactory(SequencesAPI, 'sequences');
     this.eventsApi = this.apiFactory(EventsAPI, 'events');
     this.filesApi = this.apiFactory(FilesAPI, 'files');
@@ -360,6 +373,14 @@ export default class CogniteClient extends BaseCogniteClient {
     this.recordsApi = this.apiFactory(RecordsAPI, 'streams');
     this.extractorsApi = this.apiFactory(ExtractorsAPI, 'extractors');
     this.dataProductsApi = this.apiFactory(DataProductsAPI, 'dataproducts');
+    this.transformationsApi = this.apiFactory(
+      TransformationsAPI,
+      'transformations'
+    );
+    this.hostedExtractorsApi = this.apiFactory(
+      HostedExtractorsAPI,
+      'hostedextractors'
+    );
   }
 
   static urlEncodeExternalId(externalId: string): string {

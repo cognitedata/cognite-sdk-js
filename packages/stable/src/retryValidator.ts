@@ -17,6 +17,8 @@ const ENDPOINTS_TO_RETRY: EndpointList = {
     '/files/initupload',
     '/files/list',
     '/files/search',
+    '/functions/*/calls/byids',
+    '/functions/*/calls/list',
     '/models/statistics/spaces/byids',
     '/records/aggregate',
     '/records/delete',
