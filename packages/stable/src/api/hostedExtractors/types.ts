@@ -4,3 +4,4 @@ export * from './commonTypes';
 export * from './destinationsTypes';
 export * from './jobsTypes';
 export * from './sourcesTypes';
+export * from './mappingsTypes';
