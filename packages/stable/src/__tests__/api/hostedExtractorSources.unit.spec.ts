@@ -65,26 +65,64 @@ describe('Hosted extractor sources unit test', () => {
     expect(created).toEqual([source]);
   });
 
-  test('create sends at most 10 items per request', async () => {
-    const items = Array.from({ length: 11 }, (_, i) => ({
-      ...sourceCreate,
-      externalId: `source-${i}`,
-    }));
-    const firstChunk = nock(mockBaseUrl)
-      .post(sourcesPath, { items: items.slice(0, 10) })
-      .once()
-      .reply(200, { items: [source] });
-    const secondChunk = nock(mockBaseUrl)
-      .post(sourcesPath, { items: items.slice(10) })
-      .once()
-      .reply(200, { items: [kafkaSource] });
+  test.each([
+    {
+      name: 'create',
+      chunkSize: 10,
+      path: sourcesPath,
+      makeItem: (i: number) => ({ ...sourceCreate, externalId: `source-${i}` }),
+      call: (items: HostedExtractorSourceCreate[]) =>
+        client.hostedExtractors.sources.create(items),
+    },
+    {
+      name: 'update',
+      chunkSize: 10,
+      path: /\/hostedextractors\/sources\/update$/,
+      makeItem: (i: number) =>
+        ({
+          type: 'mqtt5',
+          externalId: `source-${i}`,
+          update: { host: { set: 'mqtt2.example.com' } },
+        }) satisfies HostedExtractorSourceChange,
+      call: (items: HostedExtractorSourceChange[]) =>
+        client.hostedExtractors.sources.update(items),
+    },
+    {
+      name: 'retrieve',
+      chunkSize: 100,
+      path: /\/hostedextractors\/sources\/byIds$/,
+      makeItem: (i: number) => ({ externalId: `source-${i}` }),
+      call: (items: { externalId: string }[]) =>
+        client.hostedExtractors.sources.retrieve(items),
+    },
+    {
+      name: 'delete',
+      chunkSize: 100,
+      path: /\/hostedextractors\/sources\/delete$/,
+      makeItem: (i: number) => ({ externalId: `source-${i}` }),
+      call: (items: { externalId: string }[]) =>
+        client.hostedExtractors.sources.delete(items),
+    },
+  ])(
+    '$name sends at most $chunkSize items per request',
+    async ({ chunkSize, path, makeItem, call }) => {
+      const items = Array.from({ length: chunkSize + 1 }, (_, i) =>
+        makeItem(i)
+      );
+      const firstChunk = nock(mockBaseUrl)
+        .post(path, (body) => body.items.length === chunkSize)
+        .once()
+        .reply(200, { items: [] });
+      const secondChunk = nock(mockBaseUrl)
+        .post(path, (body) => body.items.length === 1)
+        .once()
+        .reply(200, { items: [] });
 
-    const created = await client.hostedExtractors.sources.create(items);
-    expect({
-      created,
-      done: firstChunk.isDone() && secondChunk.isDone(),
-    }).toEqual({ created: [source, kafkaSource], done: true });
-  });
+      // biome-ignore lint/suspicious/noExplicitAny: items type varies per case
+      await call(items as any);
+      expect(firstChunk.isDone() && secondChunk.isDone()).toBe(true);
+    }
+  );
 
   test('list', async () => {
     nock(mockBaseUrl)
