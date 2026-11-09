@@ -3,7 +3,11 @@
 import { afterAll, beforeAll, describe, expect, test } from 'vitest';
 import type CogniteClient from '../../cogniteClient';
 import type { WorkflowExecution, WorkflowTaskDefinition } from '../../types';
-import { randomInt, setupLoggedInClient } from '../testUtils';
+import {
+  randomInt,
+  runTestWithRetryWhenFailing,
+  setupLoggedInClient,
+} from '../testUtils';
 
 const workflowTask: WorkflowTaskDefinition = {
   externalId: 'int-execution-task-1',
@@ -46,9 +50,18 @@ describe('Workflow executions integration test', () => {
         .cancel(createdExecution.id, {
           reason: 'cleanup after integration test',
         })
-        .catch();
+        .catch(() => {});
     }
-    await client.workflows.delete([{ externalId: workflowExternalId }]).catch();
+    // Deleting is rejected with "running executions" for a short while after
+    // the execution has been terminated.
+    await runTestWithRetryWhenFailing(async () => {
+      await client.workflows.delete([{ externalId: workflowExternalId }]);
+    }).catch((error) => {
+      console.warn(
+        'Workflow executions integration test cleanup failed',
+        error
+      );
+    });
   });
 
   test('run', async () => {
