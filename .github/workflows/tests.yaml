@@ -5,12 +5,14 @@ on:
     branches:
       - master
       - release-*
+    types: [opened, synchronize, reopened, ready_for_review]
  push:
     branches:
       - master
 
 jobs:
   snippets:
+    if: github.event_name != 'pull_request' || !github.event.pull_request.draft
     runs-on: ubuntu-latest
 
     steps:
@@ -40,6 +42,7 @@ jobs:
         run: yarn test-snippets
 
   samples:
+    if: github.event_name != 'pull_request' || !github.event.pull_request.draft
     runs-on: ubuntu-latest
 
     steps:
@@ -69,6 +72,7 @@ jobs:
         run: yarn test-samples
 
   lint:
+    if: github.event_name != 'pull_request' || !github.event.pull_request.draft
     runs-on: ubuntu-latest
 
     steps:
@@ -98,6 +102,7 @@ jobs:
         run: yarn lint
 
   tests:
+    if: github.event_name != 'pull_request' || !github.event.pull_request.draft
 
     runs-on: ubuntu-latest
 

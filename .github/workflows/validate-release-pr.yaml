@@ -3,10 +3,11 @@ name: Validate Release PR
 on:
   pull_request:
     branches: [master]
+    types: [opened, synchronize, reopened, ready_for_review]
 
 jobs:
   validate-release:
-    if: startsWith(github.head_ref, 'release/automated-')
+    if: startsWith(github.head_ref, 'release/automated-') && !github.event.pull_request.draft
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
