@@ -74,6 +74,7 @@ export * from './api/functions/types';
 export * from './api/extractors/types';
 export * from './api/transformations/types';
 export * from './api/hostedExtractors/types';
+export * from './api/workflows/types';
 
 export interface Acl<ActionsType, ScopeType> {
   actions: ActionsType[];
