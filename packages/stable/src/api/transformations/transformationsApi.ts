@@ -10,6 +10,7 @@ import {
 } from '@cognite/sdk-core';
 import type { IgnoreUnknownIds } from '../../types';
 import { TransformationJobsAPI } from './transformationJobsApi';
+import { TransformationNotificationsAPI } from './transformationNotificationsApi';
 import { TransformationQueryAPI } from './transformationQueryApi';
 import { TransformationSchedulesAPI } from './transformationSchedulesApi';
 import { TransformationSchemaAPI } from './transformationSchemaApi';
@@ -26,6 +27,7 @@ import type {
 
 export class TransformationsAPI extends BaseResourceAPI<Transformation> {
   private readonly jobsApi: TransformationJobsAPI;
+  private readonly notificationsApi: TransformationNotificationsAPI;
   private readonly queryApi: TransformationQueryAPI;
   private readonly schedulesApi: TransformationSchedulesAPI;
   private readonly schemaApi: TransformationSchemaAPI;
@@ -34,6 +36,10 @@ export class TransformationsAPI extends BaseResourceAPI<Transformation> {
   constructor(resourcePath: string, ...args: [CDFHttpClient, MetadataMap]) {
     super(resourcePath, ...args);
     this.jobsApi = new TransformationJobsAPI(`${resourcePath}/jobs`, ...args);
+    this.notificationsApi = new TransformationNotificationsAPI(
+      `${resourcePath}/notifications`,
+      ...args
+    );
     this.queryApi = new TransformationQueryAPI(
       `${resourcePath}/query`,
       ...args
@@ -53,6 +59,13 @@ export class TransformationsAPI extends BaseResourceAPI<Transformation> {
    */
   public get query() {
     return this.queryApi;
+  }
+
+  /**
+   * [Transformation notifications](https://api-docs.cognite.com/20230101/tag/Transformation-Notifications)
+   */
+  public get notifications() {
+    return this.notificationsApi;
   }
 
   /**
