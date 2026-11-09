@@ -2,16 +2,34 @@
 
 import {
   BaseResourceAPI,
+  type CDFHttpClient,
   type CogniteExternalId,
   type CursorAndAsyncIterator,
   type FilterQuery,
   type ItemsWrapper,
+  type MetadataMap,
   promiseAllWithData,
 } from '@cognite/sdk-core';
 import type { IgnoreUnknownIds } from '../../types';
 import type { Workflow, WorkflowExternalId, WorkflowUpsert } from './types';
+import { WorkflowVersionsAPI } from './workflowVersionsApi';
 
 export class WorkflowsAPI extends BaseResourceAPI<Workflow> {
+  private readonly versionsApi: WorkflowVersionsAPI;
+
+  /** @hidden */
+  constructor(resourcePath: string, ...args: [CDFHttpClient, MetadataMap]) {
+    super(resourcePath, ...args);
+    this.versionsApi = new WorkflowVersionsAPI(resourcePath, ...args);
+  }
+
+  /**
+   * [Workflow versions](https://api-docs.cognite.com/20230101/tag/Workflow-versions)
+   */
+  public get versions() {
+    return this.versionsApi;
+  }
+
   /**
    * [Create or update a workflow](https://api-docs.cognite.com/20230101/tag/Workflows/operation/CreateOrUpdateWorkflow)
    *

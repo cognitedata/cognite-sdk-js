@@ -178,19 +178,6 @@ export type VersionUpsert = {
   workflowDefinition: WorkflowDefinitionCreate;
 };
 
-export interface WorkflowVersionWorkflowFilter {
-  externalId: CogniteExternalId;
-  version?: string;
-}
-
-export interface WorkflowVersionFilter {
-  workflowFilters?: WorkflowVersionWorkflowFilter[];
-}
-
-export interface WorkflowVersionFilterQuery extends FilterQuery {
-  filter?: WorkflowVersionFilter;
-}
-
 export type FunctionOutput = {
   callId: number;
   functionId: number;

@@ -120,4 +120,17 @@ describe('Workflows unit test', () => {
 
     await client.workflows.delete([{ externalId: 'wf-1' }]);
   });
+
+  test('versions sub-API sends the alpha cdf-version header', async () => {
+    const version = { workflowExternalId: 'wf-1', version: '1' };
+    nock(mockBaseUrl, {
+      reqheaders: { 'cdf-version': '20230101-alpha' },
+    })
+      .get(/\/workflows\/wf-1\/versions\/1$/)
+      .once()
+      .reply(200, version);
+
+    const response = await client.workflows.versions.retrieve('wf-1', '1');
+    expect(response).toEqual(version);
+  });
 });
