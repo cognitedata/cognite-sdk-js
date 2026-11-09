@@ -134,6 +134,48 @@ describe('Workflows unit test', () => {
     expect(response).toEqual(version);
   });
 
+  test('executions sub-API sends the alpha cdf-version header', async () => {
+    const execution = {
+      id: 'execution-1',
+      workflowExternalId: 'wf-1',
+      status: 'RUNNING',
+      engineExecutionId: 'engine-1',
+      createdTime: 1730000000000,
+      metadata: {},
+    };
+    nock(mockBaseUrl, {
+      reqheaders: { 'cdf-version': '20230101-alpha' },
+    })
+      .post(/\/workflows\/executions\/list$/, {})
+      .once()
+      .reply(200, { items: [execution] });
+
+    const response = await client.workflows.executions.list();
+    expect(response.items).toEqual([execution]);
+  });
+
+  test('tasks sub-API sends the alpha cdf-version header', async () => {
+    const task = {
+      id: 'task-1',
+      externalId: 'task-1',
+      status: 'COMPLETED',
+      taskType: 'function',
+      input: {},
+      output: {},
+    };
+    nock(mockBaseUrl, {
+      reqheaders: { 'cdf-version': '20230101-alpha' },
+    })
+      .post(/\/workflows\/tasks\/task-1\/update$/, { status: 'COMPLETED' })
+      .once()
+      .reply(200, task);
+
+    const response = await client.workflows.tasks.update('task-1', {
+      status: 'COMPLETED',
+    });
+    expect(response).toEqual(task);
+  });
+
   test('triggers sub-API sends the alpha cdf-version header', async () => {
     nock(mockBaseUrl, {
       reqheaders: { 'cdf-version': '20230101-alpha' },

@@ -3,3 +3,5 @@
 export * from './workflowTypes';
 export * from './workflowTriggerTypes';
 export * from './workflowVersionTypes';
+export * from './workflowExecutionTypes';
+export * from './workflowTaskTypes';
