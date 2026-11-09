@@ -38,9 +38,12 @@ export class WorkflowTriggersAPI extends BaseResourceAPI<WorkflowTrigger> {
    * ]);
    * ```
    */
-  public upsert = (
+  public upsert = async (
     items: WorkflowTriggerUpsert[]
   ): Promise<WorkflowTrigger[]> => {
+    if (items.length === 0) {
+      return [];
+    }
     return this.callEndpointWithMergeAndTransform(items, (data) =>
       promiseAllWithData(
         data,
@@ -83,6 +86,9 @@ export class WorkflowTriggersAPI extends BaseResourceAPI<WorkflowTrigger> {
    * ```
    */
   public delete = async (ids: WorkflowTriggerExternalId[]): Promise<object> => {
+    if (ids.length === 0) {
+      return {};
+    }
     const responses = await promiseAllWithData(
       ids,
       (id) =>

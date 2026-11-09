@@ -127,6 +127,17 @@ describe('Workflow triggers unit test', () => {
     expect(response).toEqual(items.map(toTrigger));
   });
 
+  test('upsert with no items sends no request', async () => {
+    const scope = nock(mockBaseUrl)
+      .post(/\/workflows\/triggers$/)
+      .reply(200, {});
+    const response = await client.workflows.triggers.upsert([]);
+    expect({ response, done: scope.isDone() }).toEqual({
+      response: [],
+      done: false,
+    });
+  });
+
   test('list', async () => {
     const trigger = toTrigger(scheduleUpsert);
     nock(mockBaseUrl)
@@ -184,6 +195,17 @@ describe('Workflow triggers unit test', () => {
       ])
     ).rejects.toThrow();
     expect(second.isDone()).toBe(false);
+  });
+
+  test('delete with no ids sends no request', async () => {
+    const scope = nock(mockBaseUrl)
+      .post(/\/workflows\/triggers\/delete$/)
+      .reply(200, {});
+    const response = await client.workflows.triggers.delete([]);
+    expect({ response, done: scope.isDone() }).toEqual({
+      response: {},
+      done: false,
+    });
   });
 
   test('listRuns encodes the trigger external id', async () => {

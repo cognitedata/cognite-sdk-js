@@ -42,9 +42,12 @@ export class WorkflowVersionsAPI extends BaseResourceAPI<WorkflowVersion> {
    * ]);
    * ```
    */
-  public upsert = (
+  public upsert = async (
     items: WorkflowVersionUpsert[]
   ): Promise<WorkflowVersionUpsertResponse[]> => {
+    if (items.length === 0) {
+      return [];
+    }
     return this.callEndpointWithMergeAndTransform(items, (data) =>
       promiseAllWithData(
         data,

@@ -56,7 +56,10 @@ export class WorkflowsAPI extends BaseResourceAPI<Workflow> {
    * ]);
    * ```
    */
-  public upsert = (items: WorkflowUpsert[]): Promise<Workflow[]> => {
+  public upsert = async (items: WorkflowUpsert[]): Promise<Workflow[]> => {
+    if (items.length === 0) {
+      return [];
+    }
     return this.callEndpointWithMergeAndTransform(items, (data) =>
       promiseAllWithData(
         data,
