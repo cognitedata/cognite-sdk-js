@@ -50,6 +50,7 @@ export { DataPointSubscriptionsAPI } from './api/timeSeries/subscriptions/dataPo
 export { TimeSeriesAPI } from './api/timeSeries/timeSeriesApi';
 export { FunctionCallsAPI } from './api/functions/calls/functionCallsApi';
 export { FunctionsAPI } from './api/functions/functionsApi';
+export { FunctionSchedulesAPI } from './api/functions/schedules/functionSchedulesApi';
 export * from './api/templates';
 
 export { AnnotationsAPI } from './api/annotations/annotationsApi';
@@ -77,5 +78,6 @@ export { UnitsAPI } from './api/units/unitsApi';
 export { ProfilesAPI } from './api/userProfiles/profilesApi';
 export { ViewsAPI } from './api/views/viewsApi';
 export { VisionAPI } from './api/vision/visionApi';
+export { WorkflowsAPI } from './api/workflows/workflowsApi';
 
 export * from './types';

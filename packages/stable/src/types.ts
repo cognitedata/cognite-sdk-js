@@ -72,9 +72,11 @@ export * from './api/dataPoints/types';
 export * from './api/dataProducts/types';
 export * from './api/functions/types';
 export * from './api/functions/calls/types';
+export * from './api/functions/schedules/types';
 export * from './api/extractors/types';
 export * from './api/transformations/types';
 export * from './api/hostedExtractors/types';
+export * from './api/workflows/types';
 
 export interface Acl<ActionsType, ScopeType> {
   actions: ActionsType[];
