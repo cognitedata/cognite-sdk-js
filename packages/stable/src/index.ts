@@ -61,6 +61,8 @@ export { GeospatialAPI } from './api/geospatial/geospatialAPI';
 export { HostedExtractorsAPI } from './api/hostedExtractors/hostedExtractorsApi';
 export { HostedExtractorSourcesAPI } from './api/hostedExtractors/sourcesApi';
 export { HostedExtractorJobsAPI } from './api/hostedExtractors/jobsApi';
+export { HostedExtractorMappingsAPI } from './api/hostedExtractors/mappingsApi';
+export { HostedExtractorDestinationsAPI } from './api/hostedExtractors/destinationsApi';
 export { InstancesAPI } from './api/instances/instancesApi';
 export { DataModelsAPI } from './api/models/datamodelsApi';
 export { RecordsAPI } from './api/records/recordsApi';
@@ -80,6 +82,7 @@ export { VisionAPI } from './api/vision/visionApi';
 export { WorkflowExecutionsAPI } from './api/workflows/workflowExecutionsApi';
 export { WorkflowsAPI } from './api/workflows/workflowsApi';
 export { WorkflowTasksAPI } from './api/workflows/workflowTasksApi';
+export { WorkflowTriggersAPI } from './api/workflows/workflowTriggersApi';
 export { WorkflowVersionsAPI } from './api/workflows/workflowVersionsApi';
 
 export * from './types';

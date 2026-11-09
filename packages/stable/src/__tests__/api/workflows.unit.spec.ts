@@ -53,6 +53,17 @@ describe('Workflows unit test', () => {
     expect(upserted).toEqual([workflow, otherWorkflow]);
   });
 
+  test('upsert with no items sends no request', async () => {
+    const scope = nock(mockBaseUrl)
+      .post(/\/workflows$/)
+      .reply(200, {});
+    const response = await client.workflows.upsert([]);
+    expect({ response, done: scope.isDone() }).toEqual({
+      response: [],
+      done: false,
+    });
+  });
+
   test('list', async () => {
     nock(mockBaseUrl)
       .get(/\/workflows\/?$/)

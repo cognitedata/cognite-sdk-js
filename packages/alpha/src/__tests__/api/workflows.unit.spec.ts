@@ -175,4 +175,16 @@ describe('Workflows unit test', () => {
     });
     expect(response).toEqual(task);
   });
+
+  test('triggers sub-API sends the alpha cdf-version header', async () => {
+    nock(mockBaseUrl, {
+      reqheaders: { 'cdf-version': '20230101-alpha' },
+    })
+      .post(/\/workflows\/triggers\/trigger-1\/pause$/)
+      .once()
+      .reply(200, {});
+
+    const response = await client.workflows.triggers.pause('trigger-1');
+    expect(response).toEqual({});
+  });
 });

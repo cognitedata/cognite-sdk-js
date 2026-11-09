@@ -1,7 +1,9 @@
 // Copyright 2026 Cognite AS
 
 import type { CDFHttpClient, MetadataMap } from '@cognite/sdk-core';
+import { HostedExtractorDestinationsAPI } from './destinationsApi';
 import { HostedExtractorJobsAPI } from './jobsApi';
+import { HostedExtractorMappingsAPI } from './mappingsApi';
 import { HostedExtractorSourcesAPI } from './sourcesApi';
 
 /**
@@ -11,6 +13,8 @@ import { HostedExtractorSourcesAPI } from './sourcesApi';
 export class HostedExtractorsAPI {
   private readonly sourcesApi: HostedExtractorSourcesAPI;
   private readonly jobsApi: HostedExtractorJobsAPI;
+  private readonly mappingsApi: HostedExtractorMappingsAPI;
+  private readonly destinationsApi: HostedExtractorDestinationsAPI;
 
   /** @hidden */
   constructor(resourcePath: string, ...args: [CDFHttpClient, MetadataMap]) {
@@ -19,6 +23,14 @@ export class HostedExtractorsAPI {
       ...args
     );
     this.jobsApi = new HostedExtractorJobsAPI(`${resourcePath}/jobs`, ...args);
+    this.mappingsApi = new HostedExtractorMappingsAPI(
+      `${resourcePath}/mappings`,
+      ...args
+    );
+    this.destinationsApi = new HostedExtractorDestinationsAPI(
+      `${resourcePath}/destinations`,
+      ...args
+    );
   }
 
   /**
@@ -44,5 +56,29 @@ export class HostedExtractorsAPI {
    */
   public get jobs() {
     return this.jobsApi;
+  }
+
+  /**
+   * [Mappings](https://api-docs.cognite.com/20230101/tag/Mappings): the
+   * expressions that transform source messages into CDF data.
+   *
+   * ```js
+   * const mappings = await client.hostedExtractors.mappings.list();
+   * ```
+   */
+  public get mappings() {
+    return this.mappingsApi;
+  }
+
+  /**
+   * [Destinations](https://api-docs.cognite.com/20230101/tag/Destinations): the
+   * CDF sessions and data sets that hosted extractors write to.
+   *
+   * ```js
+   * const destinations = await client.hostedExtractors.destinations.list();
+   * ```
+   */
+  public get destinations() {
+    return this.destinationsApi;
   }
 }

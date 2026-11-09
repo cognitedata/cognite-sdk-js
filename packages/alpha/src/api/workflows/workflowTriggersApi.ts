@@ -1,5 +1,9 @@
 // Copyright 2026 Cognite AS
 
+import type {
+  WorkflowTriggerExternalId,
+  WorkflowTriggerRun,
+} from '@cognite/sdk';
 import { BaseResourceAPI } from '@cognite/sdk-core';
 import type {
   CogniteExternalId,
@@ -7,12 +11,7 @@ import type {
   CursorResponse,
   FilterQuery,
 } from '@cognite/sdk-core';
-import type {
-  WorkflowTrigger,
-  WorkflowTriggerExternalId,
-  WorkflowTriggerRun,
-  WorkflowTriggerUpsert,
-} from './types';
+import type { WorkflowTrigger, WorkflowTriggerUpsert } from './types';
 
 export class WorkflowTriggersAPI extends BaseResourceAPI<WorkflowTrigger> {
   /**

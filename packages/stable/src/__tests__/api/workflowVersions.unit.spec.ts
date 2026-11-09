@@ -79,6 +79,17 @@ describe('Workflow versions unit test', () => {
     expect(response).toEqual([upserted, otherUpserted]);
   });
 
+  test('upsert with no items sends no request', async () => {
+    const scope = nock(mockBaseUrl)
+      .post(/\/workflows\/versions$/)
+      .reply(200, {});
+    const response = await client.workflows.versions.upsert([]);
+    expect({ response, done: scope.isDone() }).toEqual({
+      response: [],
+      done: false,
+    });
+  });
+
   test('list', async () => {
     const query = {
       filter: { workflowFilters: [{ externalId: 'wf-1', version: '1' }] },

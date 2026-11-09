@@ -7,5 +7,8 @@ export type {
   WorkflowDefinition,
   WorkflowExecution,
   WorkflowTaskExecution,
+  WorkflowTrigger,
+  WorkflowTriggerRule,
+  WorkflowTriggerUpsert,
   WorkflowUpsert,
 } from './types';

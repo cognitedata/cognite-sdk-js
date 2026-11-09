@@ -22,6 +22,9 @@ export type {
   WorkflowDefinition,
   WorkflowExecution,
   WorkflowTaskExecution,
+  WorkflowTrigger,
+  WorkflowTriggerRule,
+  WorkflowTriggerUpsert,
   WorkflowUpsert,
 } from './api/workflows/types';
 export * from './api/transformations/types';

@@ -14,12 +14,14 @@ import type { IgnoreUnknownIds } from '../../types';
 import type { Workflow, WorkflowExternalId, WorkflowUpsert } from './types';
 import { WorkflowExecutionsAPI } from './workflowExecutionsApi';
 import { WorkflowTasksAPI } from './workflowTasksApi';
+import { WorkflowTriggersAPI } from './workflowTriggersApi';
 import { WorkflowVersionsAPI } from './workflowVersionsApi';
 
 export class WorkflowsAPI extends BaseResourceAPI<Workflow> {
   private readonly versionsApi: WorkflowVersionsAPI;
   private readonly executionsApi: WorkflowExecutionsAPI;
   private readonly tasksApi: WorkflowTasksAPI;
+  private readonly triggersApi: WorkflowTriggersAPI;
 
   /** @hidden */
   constructor(resourcePath: string, ...args: [CDFHttpClient, MetadataMap]) {
@@ -27,6 +29,7 @@ export class WorkflowsAPI extends BaseResourceAPI<Workflow> {
     this.versionsApi = new WorkflowVersionsAPI(resourcePath, ...args);
     this.executionsApi = new WorkflowExecutionsAPI(resourcePath, ...args);
     this.tasksApi = new WorkflowTasksAPI(resourcePath, ...args);
+    this.triggersApi = new WorkflowTriggersAPI(resourcePath, ...args);
   }
 
   /**
@@ -51,6 +54,13 @@ export class WorkflowsAPI extends BaseResourceAPI<Workflow> {
   }
 
   /**
+   * [Workflow triggers](https://api-docs.cognite.com/20230101/tag/Workflow-triggers)
+   */
+  public get triggers() {
+    return this.triggersApi;
+  }
+
+  /**
    * [Create or update a workflow](https://api-docs.cognite.com/20230101/tag/Workflows/operation/CreateOrUpdateWorkflow)
    *
    * The API accepts one workflow per request, so the SDK sends one request
@@ -66,7 +76,10 @@ export class WorkflowsAPI extends BaseResourceAPI<Workflow> {
    * ]);
    * ```
    */
-  public upsert = (items: WorkflowUpsert[]): Promise<Workflow[]> => {
+  public upsert = async (items: WorkflowUpsert[]): Promise<Workflow[]> => {
+    if (items.length === 0) {
+      return [];
+    }
     return this.callEndpointWithMergeAndTransform(items, (data) =>
       promiseAllWithData(
         data,

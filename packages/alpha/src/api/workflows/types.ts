@@ -259,10 +259,6 @@ export interface WorkflowExecutionDetails extends WorkflowExecution {
   input?: Record<string, JsonValue>;
 }
 
-export interface WorkflowTriggerExternalId {
-  externalId: CogniteExternalId;
-}
-
 export interface ManualWorkflowTriggerRule {
   triggerType: 'manual';
 }
@@ -346,15 +342,3 @@ export type WorkflowTrigger =
 
 export type WorkflowTriggerUpsert =
   WorkflowTriggerRequestBase<WorkflowTriggerUpsertRule>;
-
-export type WorkflowTriggerRunStatus = 'success' | 'failed';
-
-export interface WorkflowTriggerRun {
-  fireTime: number;
-  externalId: CogniteExternalId;
-  workflowExternalId: CogniteExternalId;
-  workflowVersion: string;
-  status: WorkflowTriggerRunStatus;
-  workflowExecutionId?: string | null;
-  reasonForFailure?: string | null;
-}
