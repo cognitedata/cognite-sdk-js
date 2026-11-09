@@ -178,19 +178,6 @@ export type VersionUpsert = {
   workflowDefinition: WorkflowDefinitionCreate;
 };
 
-export interface WorkflowVersionWorkflowFilter {
-  externalId: CogniteExternalId;
-  version?: string;
-}
-
-export interface WorkflowVersionFilter {
-  workflowFilters?: WorkflowVersionWorkflowFilter[];
-}
-
-export interface WorkflowVersionFilterQuery extends FilterQuery {
-  filter?: WorkflowVersionFilter;
-}
-
 export type FunctionOutput = {
   callId: number;
   functionId: number;
@@ -306,10 +293,6 @@ export interface WorkflowExecutionCancelRequest {
   reason?: string;
 }
 
-export interface WorkflowTriggerExternalId {
-  externalId: CogniteExternalId;
-}
-
 export interface ManualWorkflowTriggerRule {
   triggerType: 'manual';
 }
@@ -393,15 +376,3 @@ export type WorkflowTrigger =
 
 export type WorkflowTriggerUpsert =
   WorkflowTriggerRequestBase<WorkflowTriggerUpsertRule>;
-
-export type WorkflowTriggerRunStatus = 'success' | 'failed';
-
-export interface WorkflowTriggerRun {
-  fireTime: number;
-  externalId: CogniteExternalId;
-  workflowExternalId: CogniteExternalId;
-  workflowVersion: string;
-  status: WorkflowTriggerRunStatus;
-  workflowExecutionId?: string | null;
-  reasonForFailure?: string | null;
-}

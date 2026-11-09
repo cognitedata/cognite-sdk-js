@@ -35,6 +35,7 @@ const ENDPOINTS_TO_RETRY: EndpointList = {
     '/timeseries/search',
     '/timeseries/subscriptions/data/list',
     '/timeseries/synthetic/query',
+    '/workflows/versions/list',
   ],
 };
 

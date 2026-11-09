@@ -43,6 +43,9 @@ export default class CogniteClientAlpha extends CogniteClientStable {
     return accessApi(this.workflowsAlphaApi);
   }
 
+  /**
+   * @deprecated Use `client.workflows.versions` instead.
+   */
   public get workflowVersions() {
     return accessApi(this.workflowVersionsApi);
   }
@@ -51,6 +54,9 @@ export default class CogniteClientAlpha extends CogniteClientStable {
     return accessApi(this.workflowExecutionsApi);
   }
 
+  /**
+   * @deprecated Use `client.workflows.triggers` instead.
+   */
   public get workflowTriggers() {
     return accessApi(this.workflowTriggersApi);
   }

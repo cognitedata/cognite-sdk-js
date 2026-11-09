@@ -16,8 +16,15 @@ import type {
 
 export * from '@cognite/sdk';
 export * from './api/workflows/types';
-// The alpha versions extend the stable types of the same name.
-export type { Workflow, WorkflowUpsert } from './api/workflows/types';
+// The alpha versions extend or differ from the stable types of the same name.
+export type {
+  Workflow,
+  WorkflowDefinition,
+  WorkflowTrigger,
+  WorkflowTriggerRule,
+  WorkflowTriggerUpsert,
+  WorkflowUpsert,
+} from './api/workflows/types';
 export * from './api/transformations/types';
 export * from './api/dataDomains/types';
 

@@ -2,16 +2,44 @@
 
 import {
   BaseResourceAPI,
+  type CDFHttpClient,
   type CogniteExternalId,
   type CursorAndAsyncIterator,
   type FilterQuery,
   type ItemsWrapper,
+  type MetadataMap,
   promiseAllWithData,
 } from '@cognite/sdk-core';
 import type { IgnoreUnknownIds } from '../../types';
 import type { Workflow, WorkflowExternalId, WorkflowUpsert } from './types';
+import { WorkflowTriggersAPI } from './workflowTriggersApi';
+import { WorkflowVersionsAPI } from './workflowVersionsApi';
 
 export class WorkflowsAPI extends BaseResourceAPI<Workflow> {
+  private readonly versionsApi: WorkflowVersionsAPI;
+  private readonly triggersApi: WorkflowTriggersAPI;
+
+  /** @hidden */
+  constructor(resourcePath: string, ...args: [CDFHttpClient, MetadataMap]) {
+    super(resourcePath, ...args);
+    this.versionsApi = new WorkflowVersionsAPI(resourcePath, ...args);
+    this.triggersApi = new WorkflowTriggersAPI(resourcePath, ...args);
+  }
+
+  /**
+   * [Workflow versions](https://api-docs.cognite.com/20230101/tag/Workflow-versions)
+   */
+  public get versions() {
+    return this.versionsApi;
+  }
+
+  /**
+   * [Workflow triggers](https://api-docs.cognite.com/20230101/tag/Workflow-triggers)
+   */
+  public get triggers() {
+    return this.triggersApi;
+  }
+
   /**
    * [Create or update a workflow](https://api-docs.cognite.com/20230101/tag/Workflows/operation/CreateOrUpdateWorkflow)
    *
@@ -28,7 +56,10 @@ export class WorkflowsAPI extends BaseResourceAPI<Workflow> {
    * ]);
    * ```
    */
-  public upsert = (items: WorkflowUpsert[]): Promise<Workflow[]> => {
+  public upsert = async (items: WorkflowUpsert[]): Promise<Workflow[]> => {
+    if (items.length === 0) {
+      return [];
+    }
     return this.callEndpointWithMergeAndTransform(items, (data) =>
       promiseAllWithData(
         data,
