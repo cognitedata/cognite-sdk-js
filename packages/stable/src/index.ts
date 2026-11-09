@@ -48,6 +48,7 @@ export { SequencesAPI } from './api/sequences/sequencesApi';
 export { SyntheticTimeSeriesAPI } from './api/timeSeries/syntheticTimeSeriesApi';
 export { DataPointSubscriptionsAPI } from './api/timeSeries/subscriptions/dataPointSubscriptionsApi';
 export { TimeSeriesAPI } from './api/timeSeries/timeSeriesApi';
+export { FunctionCallsAPI } from './api/functions/calls/functionCallsApi';
 export { FunctionsAPI } from './api/functions/functionsApi';
 export * from './api/templates';
 
@@ -58,6 +59,7 @@ export { ExtractorsAPI } from './api/extractors/extractorsApi';
 export { GeospatialAPI } from './api/geospatial/geospatialAPI';
 export { HostedExtractorsAPI } from './api/hostedExtractors/hostedExtractorsApi';
 export { HostedExtractorSourcesAPI } from './api/hostedExtractors/sourcesApi';
+export { HostedExtractorJobsAPI } from './api/hostedExtractors/jobsApi';
 export { InstancesAPI } from './api/instances/instancesApi';
 export { DataModelsAPI } from './api/models/datamodelsApi';
 export { RecordsAPI } from './api/records/recordsApi';
