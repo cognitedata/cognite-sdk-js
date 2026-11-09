@@ -63,6 +63,7 @@ export { SessionsApi } from './api/sessions/sessionsApi';
 export { SpacesAPI } from './api/spaces/spacesApi';
 export { StreamsAPI } from './api/streams/streamsApi';
 export { TransformationJobsAPI } from './api/transformations/transformationJobsApi';
+export { TransformationNotificationsAPI } from './api/transformations/transformationNotificationsApi';
 export { TransformationQueryAPI } from './api/transformations/transformationQueryApi';
 export { TransformationSchedulesAPI } from './api/transformations/transformationSchedulesApi';
 export { TransformationSchemaAPI } from './api/transformations/transformationSchemaApi';
