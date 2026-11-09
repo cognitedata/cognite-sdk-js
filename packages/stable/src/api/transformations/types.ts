@@ -176,6 +176,28 @@ export interface TransformationJob {
   error?: string;
 }
 
+export interface TransformationJobListQuery extends FilterQuery {
+  /**
+   * List only jobs for the transformation with this ID.
+   */
+  transformationId?: CogniteInternalId;
+  /**
+   * List only jobs for the transformation with this external ID.
+   */
+  transformationExternalId?: CogniteExternalId;
+}
+
+export interface TransformationJobMetric {
+  /**
+   * Name of the metric. For example, `assets.read` counts items fetched from CDF,
+   * `assets.create` and `assets.update` count created or updated items, and
+   * `requests` counts HTTP requests made to CDF.
+   */
+  name: string;
+  count: number;
+  timestamp: EpochTimestamp;
+}
+
 export interface TransformationSchedule {
   id: CogniteInternalId;
   externalId: CogniteExternalId;
