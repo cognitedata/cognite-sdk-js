@@ -176,6 +176,28 @@ export interface TransformationJob {
   error?: string;
 }
 
+export interface TransformationJobListQuery extends FilterQuery {
+  /**
+   * List only jobs for the transformation with this ID.
+   */
+  transformationId?: CogniteInternalId;
+  /**
+   * List only jobs for the transformation with this external ID.
+   */
+  transformationExternalId?: CogniteExternalId;
+}
+
+export interface TransformationJobMetric {
+  /**
+   * Name of the metric. For example, `assets.read` counts items fetched from CDF,
+   * `assets.create` and `assets.update` count created or updated items, and
+   * `requests` counts HTTP requests made to CDF.
+   */
+  name: string;
+  count: number;
+  timestamp: EpochTimestamp;
+}
+
 export interface TransformationSchedule {
   id: CogniteInternalId;
   externalId: CogniteExternalId;
@@ -349,6 +371,91 @@ export type TransformationRunRequest = IdEither & {
    */
   nonce?: TransformationNonceCredentials;
 };
+
+export interface TransformationQueryRunRequest {
+  /**
+   * SQL query to run for preview.
+   */
+  query: string;
+  /**
+   * Stringify values in the query results.
+   */
+  convertToString: boolean;
+  /**
+   * End-result limit of the query.
+   */
+  limit?: number;
+  /**
+   * Limit for how many rows to download from the data sources.
+   */
+  sourceLimit?: number;
+  /**
+   * Limit for how many rows are used for inferring the schema.
+   * @default 10000
+   */
+  inferSchemaLimit?: number;
+  /**
+   * Seconds to wait before cancelling the query. At most 240.
+   * @default 240
+   */
+  timeout?: number;
+}
+
+/**
+ * Nested column type, such as `{ type: 'struct', fields: [...] }`. Only `type`
+ * is described by the API.
+ */
+export interface TransformationQueryComplexType {
+  type: string;
+  [key: string]: unknown;
+}
+
+/**
+ * Spark type of a nested column, for example
+ * `{ type: 'struct', fields: [...] }` or `{ type: 'array', elementType: 'string', containsNull: true }`.
+ */
+export interface TransformationSchemaComplexType {
+  type: string;
+  [key: string]: unknown;
+}
+
+/**
+ * Column type in JSON format. Simple types are strings, such as `'string'` or `'long'`.
+ */
+export type TransformationSchemaColumnType =
+  | string
+  | TransformationSchemaComplexType;
+
+export interface TransformationSchemaColumn {
+  name: string;
+  /**
+   * Column type in SQL format, for example `STRING` or `ARRAY<STRING>`.
+   */
+  sqlType: string;
+  type: TransformationSchemaColumnType;
+  nullable: boolean;
+}
+
+export interface TransformationQueryColumn {
+  name: string;
+  /**
+   * Type of the column in SQL format, for example `bigint`.
+   */
+  sqlType: string;
+  /**
+   * Type of the column in JSON format: a type name, or an object for nested types.
+   */
+  type: string | TransformationQueryComplexType;
+  nullable: boolean;
+}
+
+export interface TransformationQueryRunResult {
+  schema: { items?: TransformationQueryColumn[] };
+  /**
+   * One object per row, keyed by column name.
+   */
+  results: { items?: Record<string, unknown>[] };
+}
 
 export interface TransformationNotification {
   id: CogniteInternalId;
