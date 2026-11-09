@@ -163,6 +163,29 @@ describe('Workflow triggers unit test', () => {
     });
   });
 
+  test('delete sends the requests in sequence', async () => {
+    nock(mockBaseUrl)
+      .post(/\/workflows\/triggers\/delete$/, {
+        items: [{ externalId: 'trigger-1' }],
+      })
+      .once()
+      .reply(400, { error: { code: 400, message: 'bad trigger' } });
+    const second = nock(mockBaseUrl)
+      .post(/\/workflows\/triggers\/delete$/, {
+        items: [{ externalId: 'trigger-2' }],
+      })
+      .once()
+      .reply(200, {});
+
+    await expect(
+      client.workflows.triggers.delete([
+        { externalId: 'trigger-1' },
+        { externalId: 'trigger-2' },
+      ])
+    ).rejects.toThrow();
+    expect(second.isDone()).toBe(false);
+  });
+
   test('listRuns encodes the trigger external id', async () => {
     nock(mockBaseUrl)
       .get(/\/workflows\/triggers\/my%20trigger%2F1\/history$/)

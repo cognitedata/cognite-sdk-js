@@ -76,18 +76,21 @@ export class WorkflowTriggersAPI extends BaseResourceAPI<WorkflowTrigger> {
    * [Delete triggers](https://api-docs.cognite.com/20230101/tag/Workflow-triggers/operation/deleteTriggers)
    *
    * The API accepts one trigger per request, so the SDK sends one request
-   * per item.
+   * per item, in sequence.
    *
    * ```js
    * await client.workflows.triggers.delete([{ externalId: 'my-trigger' }]);
    * ```
    */
   public delete = async (ids: WorkflowTriggerExternalId[]): Promise<object> => {
-    const responses = await this.postInParallelWithAutomaticChunking({
-      path: this.url('triggers/delete'),
-      items: ids,
-      chunkSize: 1,
-    });
+    const responses = await promiseAllWithData(
+      ids,
+      (id) =>
+        this.post<object>(this.url('triggers/delete'), {
+          data: { items: [id] },
+        }),
+      true
+    );
     return this.addToMapAndReturn({}, responses[0]);
   };
 
