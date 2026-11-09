@@ -74,6 +74,16 @@ function matchPathWithEndpoints(path: string, endpoints: string[]) {
   return some(endpoints, (endpoint) => matchPathWithEndpoint(path, endpoint));
 }
 
+// Matches when `endpoint` occurs anywhere in `path`, ignoring case. A `*`
+// in `endpoint` matches one path segment, for endpoints with a path
+// parameter such as '/functions/*/calls/list'.
 function matchPathWithEndpoint(path: string, endpoint: string) {
-  return path.toUpperCase().indexOf(endpoint.toUpperCase()) !== -1;
+  if (!endpoint.includes('*')) {
+    return path.toUpperCase().indexOf(endpoint.toUpperCase()) !== -1;
+  }
+  const pattern = endpoint
+    .split('*')
+    .map((part) => part.replace(/[.+?^${}()|[\]\\]/g, '\\$&'))
+    .join('[^/]+');
+  return new RegExp(pattern, 'i').test(path);
 }

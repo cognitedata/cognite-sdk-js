@@ -87,4 +87,31 @@ describe('cdfRetryValidator', () => {
   test("don't retry GET 4xx (except 429)", () => {
     expect(retryValidator(getRequest, response415, 0)).toBeFalsy();
   });
+
+  describe('endpoint with a path parameter', () => {
+    const wildcardValidator = createRetryValidator(
+      {
+        [HttpMethod.Post]: [
+          '/functions/*/calls/list',
+          '/functions/*/calls/byids',
+        ],
+      },
+      5
+    );
+    const postTo = (path: string): HttpRequest => ({
+      method: HttpMethod.Post,
+      path,
+    });
+
+    test.each([
+      ['/api/v1/projects/abc/functions/123/calls/list', true],
+      ['/api/v1/projects/abc/FUNCTIONS/123/CALLS/LIST', true],
+      ['/api/v1/projects/abc/functions/calls/list', false],
+      ['/api/v1/projects/abc/functions/1/2/calls/list', false],
+      ['/api/v1/projects/abc/functions/123/calls/byids', true],
+      ['/api/v1/projects/abc/functions/123/call', false],
+    ])('POST 502 to %s retried: %s', (path, expected) => {
+      expect(wildcardValidator(postTo(path), response502, 0)).toBe(expected);
+    });
+  });
 });
