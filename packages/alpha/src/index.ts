@@ -2,3 +2,4 @@
 export * from '@cognite/sdk';
 export { default as CogniteClientAlpha } from './cogniteClient';
 export * from './types';
+export type { Workflow, WorkflowUpsert } from './types';
