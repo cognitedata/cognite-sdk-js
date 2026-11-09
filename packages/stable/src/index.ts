@@ -50,6 +50,7 @@ export { DataPointSubscriptionsAPI } from './api/timeSeries/subscriptions/dataPo
 export { TimeSeriesAPI } from './api/timeSeries/timeSeriesApi';
 export { FunctionCallsAPI } from './api/functions/calls/functionCallsApi';
 export { FunctionsAPI } from './api/functions/functionsApi';
+export { FunctionSchedulesAPI } from './api/functions/schedules/functionSchedulesApi';
 export * from './api/templates';
 
 export { AnnotationsAPI } from './api/annotations/annotationsApi';

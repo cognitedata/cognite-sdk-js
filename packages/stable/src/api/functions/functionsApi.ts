@@ -11,6 +11,7 @@ import type {
 import type { IgnoreUnknownIds } from '../../types';
 import { FunctionCallsAPI } from './calls/functionCallsApi';
 import type { FunctionCall, FunctionCallRequest } from './calls/types';
+import { FunctionSchedulesAPI } from './schedules/functionSchedulesApi';
 import type {
   CogniteFunction,
   ExternalCogniteFunctionItem,
@@ -21,11 +22,27 @@ import type {
 
 export class FunctionsAPI extends BaseResourceAPI<CogniteFunction> {
   private readonly callsApi: FunctionCallsAPI;
+  private readonly schedulesApi: FunctionSchedulesAPI;
 
   /** @hidden */
   constructor(resourcePath: string, ...args: [CDFHttpClient, MetadataMap]) {
     super(resourcePath, ...args);
     this.callsApi = new FunctionCallsAPI(resourcePath, ...args);
+    this.schedulesApi = new FunctionSchedulesAPI(
+      this.url('schedules'),
+      ...args
+    );
+  }
+
+  /**
+   * [Function schedules](https://api-docs.cognite.com/20230101/tag/Function-schedules)
+   *
+   * ```js
+   * const schedules = await client.functions.schedules.list();
+   * ```
+   */
+  public get schedules() {
+    return this.schedulesApi;
   }
 
   /**
