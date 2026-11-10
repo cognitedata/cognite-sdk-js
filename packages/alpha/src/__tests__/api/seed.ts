@@ -358,11 +358,55 @@ export function createTestIdentifiers(): TestIdentifiers {
   };
 }
 
+// `test_routine_sim_` and `test_runs_sim_` are prefixes older versions of
+// these tests used. Nothing creates them anymore, but some are left in CDF.
+const TEST_SIMULATOR_PREFIXES = [
+  'test_sim_',
+  'test_routine_sim_',
+  'test_runs_sim_',
+];
+// Long enough that a concurrent CI job never loses a simulator it is using.
+const STALE_TEST_SIMULATOR_AGE_MS = 60 * 60 * 1000;
+
+/**
+ * Deletes test simulators left behind by runs that crashed or timed out
+ * before their cleanup ran. Deleting a simulator also deletes its
+ * integrations, models, routines and runs.
+ */
+export async function deleteStaleTestSimulators(client: CogniteClientAlpha) {
+  const cutoff = Date.now() - STALE_TEST_SIMULATOR_AGE_MS;
+  try {
+    const simulators = await client.simulators
+      .list({ limit: 1000 })
+      .autoPagingToArray({ limit: Number.POSITIVE_INFINITY });
+    const stale = simulators.filter(
+      (simulator) =>
+        TEST_SIMULATOR_PREFIXES.some((prefix) =>
+          simulator.externalId.startsWith(prefix)
+        ) && simulator.createdTime.valueOf() < cutoff
+    );
+    // The delete endpoint accepts exactly one item per request.
+    const results = await Promise.allSettled(
+      stale.map(({ id }) => client.simulators.delete([{ id }]))
+    );
+    const failed = results.filter((result) => result.status === 'rejected');
+    if (failed.length) {
+      console.error(
+        `Failed to delete ${failed.length} of ${stale.length} stale simulators`,
+        failed[0].reason
+      );
+    }
+  } catch (e) {
+    console.error('An error occured when trying to delete stale simulators', e);
+  }
+}
+
 /**
  * Creates a simulator with its own integration, model and routine, and starts
  * a simulation run on it. Every resource uses the given identifiers, so tests
  * can filter on them instead of picking up runs created by concurrent jobs.
- * Deleting the returned simulator deletes everything else.
+ * Deleting the returned simulator deletes everything else, and if any step
+ * fails, the simulator is deleted before the error is rethrown.
  */
 export async function createSimulationRun(
   client: CogniteClientAlpha,
@@ -381,6 +425,21 @@ export async function createSimulationRun(
       modelTypes,
     },
   ]);
+  try {
+    const run = await startRunOnSimulator(client, ids, dataSetId, fileId);
+    return { simulatorId: simulator.id, run };
+  } catch (error) {
+    await client.simulators.delete([{ id: simulator.id }]);
+    throw error;
+  }
+}
+
+async function startRunOnSimulator(
+  client: CogniteClientAlpha,
+  ids: TestIdentifiers,
+  dataSetId: number,
+  fileId: number
+): Promise<SimulationRun> {
   await client.simulators.createIntegrations([
     {
       externalId: ids.simulatorIntegrationExternalId,
@@ -432,5 +491,5 @@ export async function createSimulationRun(
       queue: true,
     },
   ]);
-  return { simulatorId: simulator.id, run };
+  return run;
 }

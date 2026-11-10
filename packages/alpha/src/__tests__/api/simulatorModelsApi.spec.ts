@@ -1,6 +1,6 @@
 // Copyright 2023 Cognite AS
 
-import { beforeAll, describe, expect, test } from 'vitest';
+import { afterAll, beforeAll, describe, expect, test } from 'vitest';
 import type CogniteClientAlpha from '../../cogniteClient';
 import {
   getOrCreateDataSet,
@@ -24,6 +24,14 @@ describe('simulator models api', () => {
   } = createTestIdentifiers();
   const client: CogniteClientAlpha = setupLoggedInClient();
   let simulatorId: number;
+  // Set by the delete test; afterAll cleans up if a failure skipped it.
+  let simulatorDeleted = false;
+
+  afterAll(async () => {
+    if (simulatorId && !simulatorDeleted) {
+      await client.simulators.delete([{ id: simulatorId }]);
+    }
+  });
   let testDataSetId: number;
   let testFileId: number;
 
@@ -180,6 +188,7 @@ describe('simulator models api', () => {
           id: simulatorId,
         },
       ]);
+      simulatorDeleted = true;
       expect(response).toEqual({});
       const responseAfterDelete = await client.simulators.list();
       expect(
