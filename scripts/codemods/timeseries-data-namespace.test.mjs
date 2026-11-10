@@ -209,6 +209,22 @@ await client.timeseries.data.retrieveDatapointMonthlyAggregates({});`
   assert.equal(run(output).changes, 0);
 });
 
+test('recognizes a call receiver only when the function is a client accessor', () => {
+  const src = `getClientData().datapoints.retrieve({});
+createMockCogniteClientDependencies().datapoints.retrieve({});`;
+  const { changes, warnings } = run(src);
+  assert.equal(changes, 0);
+  assert.equal(warnings.length, 2);
+  // Naming the function opts it in.
+  assert.equal(
+    run(src, { clientNames: ['createMockCogniteClientDependencies'] }).changes,
+    1
+  );
+  for (const name of ['useSDK', 'getSdk', 'useCogniteClient', 'createClient']) {
+    assert.equal(run(`${name}().datapoints.retrieve({});`).changes, 1, name);
+  }
+});
+
 test('rewrites typeof of the old path, and only a typeof', () => {
   assert.equal(
     run(
@@ -271,6 +287,201 @@ test('warns on destructuring a client parameter or a client returned from a call
   const { warnings } = run(`function f({ datapoints }: CogniteClient) {}
 const { datapoints } = useSDK();`);
   assert.equal(warnings.length, 2);
+});
+
+// A stand-in for the installed SDK. The codemod recognizes the SDK by the
+// package path of the declaration, so the stub lives in node_modules/@cognite/sdk.
+const SDK_STUB = `export interface DatapointAggregate {
+  timestamp: Date;
+  average?: number;
+}
+// The SDK declares a \`datapoints\` member on its response types too.
+export interface DatapointAggregates {
+  id: number;
+  datapoints: DatapointAggregate[];
+}
+export declare class DataPointsAPI {
+  insert(items: unknown[]): Promise<object>;
+  retrieve(query: unknown): Promise<unknown[]>;
+  retrieveLatest(items: unknown[]): Promise<unknown[]>;
+  retrieveDatapointMonthlyAggregates(query: unknown): Promise<unknown[]>;
+  delete(items: unknown[]): Promise<object>;
+}
+export declare class TimeSeriesAPI {
+  get data(): DataPointsAPI;
+  syntheticQuery(items: unknown[]): Promise<unknown[]>;
+}
+export declare class CogniteClient {
+  get datapoints(): DataPointsAPI;
+  get timeseries(): TimeSeriesAPI;
+  project: string;
+}
+`;
+
+/** Creates a project in a temp dir and runs the CLI with `--project` on `src`. */
+const runProject = ({ sdk, files, args = [] }) =>
+  withTempDir((root) => {
+    if (sdk) {
+      const dir = path.join(root, 'node_modules', '@cognite', 'sdk');
+      fs.mkdirSync(dir, { recursive: true });
+      fs.writeFileSync(path.join(dir, 'index.d.ts'), SDK_STUB);
+      fs.writeFileSync(
+        path.join(dir, 'package.json'),
+        '{"name":"@cognite/sdk","version":"0.0.0","types":"index.d.ts"}'
+      );
+    }
+    fs.writeFileSync(
+      path.join(root, 'tsconfig.json'),
+      JSON.stringify({
+        compilerOptions: {
+          target: 'ES2022',
+          module: 'ESNext',
+          moduleResolution: 'Bundler',
+          strict: true,
+          noEmit: true,
+          skipLibCheck: true,
+          types: [],
+        },
+        include: ['src'],
+      })
+    );
+    for (const [name, content] of Object.entries(files)) {
+      const file = path.join(root, name);
+      fs.mkdirSync(path.dirname(file), { recursive: true });
+      fs.writeFileSync(file, content);
+    }
+    const res = spawnSync(
+      process.execPath,
+      [
+        script,
+        `--project=${path.join(root, 'tsconfig.json')}`,
+        ...args,
+        path.join(root, 'src'),
+        ...(files['other/x.ts'] === undefined
+          ? []
+          : [path.join(root, 'other')]),
+      ],
+      { encoding: 'utf8' }
+    );
+    // Read inside the callback: the directory is removed when it returns.
+    const out = Object.fromEntries(
+      Object.keys(files).map((name) => [
+        name,
+        fs.readFileSync(path.join(root, name), 'utf8'),
+      ])
+    );
+    return { res, out };
+  });
+
+test('--project recognizes the SDK by its declaration, not by the name of the receiver', () => {
+  const { res, out } = runProject({
+    sdk: true,
+    files: {
+      'src/app.ts': `import { CogniteClient, DatapointAggregates } from '@cognite/sdk';
+
+declare const sdk: CogniteClient;
+declare const cdf: CogniteClient;
+declare function useThing(): CogniteClient;
+type Sdk = CogniteClient;
+declare const res: { datapoints: { retrieve(q: unknown): void } };
+declare const loose: any;
+declare const response: DatapointAggregates;
+
+sdk.datapoints.retrieve({});
+useThing().datapoints.insert([]);
+cdf['datapoints'].retrieveLatest([]);
+const alias = sdk;
+alias.datapoints.delete([]);
+sdk.timeseries.syntheticQuery([]);
+type Latest = Sdk['datapoints']['retrieveLatest'];
+res.datapoints.retrieve({});
+loose.datapoints.retrieve({});
+type Keys = 'datapoints' | 'project';
+type Narrow = Pick<Sdk, Keys>;
+function f({ datapoints }: Sdk) {
+  return datapoints;
+}
+const points = response.datapoints;
+const first = response.datapoints[0];
+type Points = DatapointAggregates['datapoints'];
+const { datapoints: fromResponse } = response;
+type Picked = Pick<DatapointAggregates, 'datapoints'>;
+`,
+    },
+  });
+
+  assert.equal(res.status, 0, res.stderr);
+  assert.equal(
+    out['src/app.ts'],
+    `import { CogniteClient, DatapointAggregates } from '@cognite/sdk';
+
+declare const sdk: CogniteClient;
+declare const cdf: CogniteClient;
+declare function useThing(): CogniteClient;
+type Sdk = CogniteClient;
+declare const res: { datapoints: { retrieve(q: unknown): void } };
+declare const loose: any;
+declare const response: DatapointAggregates;
+
+sdk.timeseries.data.retrieve({});
+useThing().timeseries.data.insert([]);
+cdf['timeseries']['data'].retrieveLatest([]);
+const alias = sdk;
+alias.timeseries.data.delete([]);
+sdk.timeseries.synthetic.query([]);
+type Latest = Sdk['timeseries']['data']['retrieveLatest'];
+res.datapoints.retrieve({});
+loose.datapoints.retrieve({});
+type Keys = 'datapoints' | 'project';
+type Narrow = Pick<Sdk, Keys>;
+function f({ datapoints }: Sdk) {
+  return datapoints;
+}
+const points = response.datapoints;
+const first = response.datapoints[0];
+type Points = DatapointAggregates['datapoints'];
+const { datapoints: fromResponse } = response;
+type Picked = Pick<DatapointAggregates, 'datapoints'>;
+`
+  );
+  // `res` is resolved to something that is not the SDK, so it is neither
+  // rewritten nor reported. `loose` is `any`, so the checker cannot tell.
+  const warnings = res.stderr
+    .split('\n')
+    .filter((l) => l.startsWith('warning:'));
+  assert.equal(warnings.length, 3, res.stderr);
+  assert.ok(warnings.some((w) => w.includes("'loose' is not recognized")));
+  assert.ok(warnings.some((w) => w.includes("'datapoints' in Pick")));
+  assert.ok(warnings.some((w) => w.includes("destructured 'datapoints'")));
+  assert.ok(!warnings.some((w) => w.includes("'res'")));
+});
+
+test('--project falls back to names when the SDK types are missing or a file is not in the project', () => {
+  const { res, out } = runProject({
+    sdk: false,
+    files: {
+      'src/app.ts': 'client.datapoints.retrieve({});\n',
+      'other/x.ts': 'client.datapoints.retrieve({});\n',
+    },
+  });
+
+  assert.equal(res.status, 0, res.stderr);
+  assert.match(res.stderr, /no @cognite\/sdk types found/);
+  assert.match(res.stdout, /1 file\(s\) are not part of any --project/);
+  assert.equal(out['src/app.ts'], 'client.timeseries.data.retrieve({});\n');
+  assert.equal(out['other/x.ts'], 'client.timeseries.data.retrieve({});\n');
+});
+
+test('--project fails on a tsconfig that does not exist', () => {
+  withTempDir((root) => {
+    const res = spawnSync(
+      process.execPath,
+      [script, `--project=${path.join(root, 'tsconfig.json')}`, root],
+      { encoding: 'utf8' }
+    );
+    assert.equal(res.status, 2);
+    assert.match(res.stderr, /tsconfig\.json does not exist/);
+  });
 });
 
 test('handles tsx and preserves formatting', () => {
