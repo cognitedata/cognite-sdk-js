@@ -51,10 +51,13 @@ async function loadTypescript() {
 
 const ts = await loadTypescript();
 
+// The methods of the data points API, which `client.datapoints` and
+// `client.timeseries.data` share.
 const DATAPOINT_METHODS = new Set([
   'insert',
   'retrieve',
   'retrieveLatest',
+  'retrieveDatapointMonthlyAggregates',
   'delete',
 ]);
 const EXTENSIONS = new Set([
@@ -121,6 +124,59 @@ function indexLiteral(node) {
     : undefined;
 }
 
+/** Whether a qualified name is the operand of a `typeof` type: `typeof a.b.c`. */
+function inTypeQuery(name) {
+  let parent = name.parent;
+  while (ts.isQualifiedName(parent)) parent = parent.parent;
+  return ts.isTypeQueryNode(parent);
+}
+
+/** The string literals of a key type such as `'a' | 'b'`. */
+function keyLiterals(type) {
+  if (ts.isLiteralTypeNode(type) && ts.isStringLiteral(type.literal)) {
+    return [type.literal.text];
+  }
+  if (ts.isUnionTypeNode(type)) return type.types.flatMap(keyLiterals);
+  if (ts.isParenthesizedTypeNode(type)) return keyLiterals(type.type);
+  return [];
+}
+
+/** `x.name` or `x['name']`; undefined for any other expression. */
+function memberOf(node) {
+  if (ts.isPropertyAccessExpression(node)) {
+    return { name: node.name.text, nameNode: node.name, element: false };
+  }
+  if (
+    ts.isElementAccessExpression(node) &&
+    ts.isStringLiteralLike(node.argumentExpression)
+  ) {
+    return {
+      name: node.argumentExpression.text,
+      nameNode: node.argumentExpression,
+      element: true,
+    };
+  }
+  return undefined;
+}
+
+/**
+ * How `node` is used when it is the receiver of a member access: `{ name }`
+ * (`name` is undefined for a computed key). Undefined when it is used as a value.
+ */
+function accessedAs(node) {
+  const parent = node.parent;
+  const isAccess =
+    (ts.isPropertyAccessExpression(parent) ||
+      ts.isElementAccessExpression(parent)) &&
+    parent.expression === node;
+  return isAccess ? { name: memberOf(parent)?.name } : undefined;
+}
+
+const unwrap = (expr) =>
+  ts.isNonNullExpression(expr) || ts.isParenthesizedExpression(expr)
+    ? unwrap(expr.expression)
+    : expr;
+
 /**
  * @param {string} source
  * @param {string} fileName
@@ -131,7 +187,18 @@ export function transform(source, fileName, options = {}) {
   const extra = new Set(options.clientNames ?? []);
   const isClientName = (name) =>
     name !== undefined && (extra.has(name) || /client/i.test(name));
-  const isClient = (expr) => isClientName(lastName(expr));
+  // A call such as `useSDK()` or `getClient()`: judged by the function's name,
+  // which also matches `sdk` because that is how SDK hooks are usually named.
+  const isClient = (expr) => {
+    const inner = unwrap(expr);
+    if (ts.isCallExpression(inner)) {
+      const name = lastName(inner.expression);
+      return (
+        name !== undefined && (extra.has(name) || /client|sdk/i.test(name))
+      );
+    }
+    return isClientName(lastName(inner));
+  };
   const isClientType = (type) => isClientName(typeLastName(type));
 
   // Type-level forms. `<Client>['datapoints']` and `<Client>['timeseries']['data']`
@@ -165,37 +232,82 @@ export function transform(source, fileName, options = {}) {
     return `${fileName}:${line + 1}`;
   };
 
+  // Replaces the member name of `x.name` / `x['name']` with a path, keeping the
+  // quote style of an element access: ['datapoints'] -> ['timeseries']['data'].
+  const rewriteMember = (m, keys) => {
+    const q = m.nameNode.getText(sf)[0];
+    const text = m.element
+      ? keys.map((key) => `${q}${key}${q}`).join('][')
+      : keys.join('.');
+    edits.push([m.nameNode.getStart(sf), m.nameNode.getEnd(), text]);
+  };
+  // A receiver that is not recognized as a client is never rewritten, because
+  // `x.datapoints.delete(...)` may be a Map. It is reported so that it is not
+  // lost, since the old path still compiles and nothing else would flag it.
+  const warnUnrecognized = (node, what, receiver) => {
+    const text = unwrap(receiver).getText(sf);
+    const shown = text.length > 40 ? `${text.slice(0, 37)}...` : text;
+    warnings.push(
+      `${where(node)}: ${what} looks like the SDK, but '${shown}' is not recognized as a client and was left alone. Add its name to --client-names or migrate it by hand`
+    );
+  };
+
   const visit = (node) => {
-    if (ts.isPropertyAccessExpression(node)) {
-      const name = node.name.text;
-      const parent = node.parent;
-      // <client>.datapoints, with a known method or used as a value
-      if (name === 'datapoints' && isClient(node.expression)) {
-        const isMethodCall =
-          ts.isPropertyAccessExpression(parent) &&
-          parent.expression === node &&
-          DATAPOINT_METHODS.has(parent.name.text);
-        const isBareValue = !(
-          ts.isPropertyAccessExpression(parent) && parent.expression === node
-        );
-        if (isMethodCall || isBareValue) {
-          edits.push([
-            node.name.getStart(sf),
-            node.name.getEnd(),
-            'timeseries.data',
-          ]);
+    const m = memberOf(node);
+    // <client>.datapoints, with a known method or used as a value
+    if (m?.name === 'datapoints') {
+      const accessed = accessedAs(node);
+      const isMethodCall =
+        accessed?.name !== undefined && DATAPOINT_METHODS.has(accessed.name);
+      const isBareValue = accessed === undefined;
+      if (isMethodCall || isBareValue) {
+        if (isClient(node.expression)) {
+          rewriteMember(m, ['timeseries', 'data']);
+        } else if (isMethodCall) {
+          warnUnrecognized(
+            node,
+            `.datapoints.${accessed.name}`,
+            node.expression
+          );
         }
       }
-      // <client>.timeseries.syntheticQuery
+    }
+    // <client>.timeseries.syntheticQuery
+    if (
+      m?.name === 'syntheticQuery' &&
+      memberOf(node.expression)?.name === 'timeseries'
+    ) {
+      if (isClient(node.expression.expression)) {
+        rewriteMember(m, ['synthetic', 'query']);
+      } else {
+        warnUnrecognized(
+          node,
+          '.timeseries.syntheticQuery',
+          node.expression.expression
+        );
+      }
+    }
+    // typeof client.datapoints.retrieve -> typeof client.timeseries.data.retrieve
+    if (ts.isQualifiedName(node) && inTypeQuery(node)) {
       if (
-        name === 'syntheticQuery' &&
-        ts.isPropertyAccessExpression(node.expression) &&
-        node.expression.name.text === 'timeseries' &&
-        isClient(node.expression.expression)
+        node.right.text === 'datapoints' &&
+        isClientName(entityLastName(node.left))
       ) {
         edits.push([
-          node.name.getStart(sf),
-          node.name.getEnd(),
+          node.right.getStart(sf),
+          node.right.getEnd(),
+          'timeseries.data',
+        ]);
+      }
+      if (
+        node.right.text === 'syntheticQuery' &&
+        ts.isQualifiedName(node.left) &&
+        node.left.right.text === 'timeseries' &&
+        isClientName(entityLastName(node.left.left))
+      ) {
+        edits.push([
+          node.right.getStart(sf),
+          node.right.getEnd(),
           'synthetic.query',
         ]);
       }
@@ -231,23 +343,51 @@ export function transform(source, fileName, options = {}) {
       );
     }
     // const { datapoints } = client  /  const { syntheticQuery } = client.timeseries
-    if (
-      ts.isVariableDeclaration(node) &&
-      ts.isObjectBindingPattern(node.name) &&
-      node.initializer
-    ) {
-      for (const el of node.name.elements) {
-        const prop = (el.propertyName ?? el.name).getText(sf);
-        const init = node.initializer;
+    // function f({ datapoints }: CogniteClient)
+    if (ts.isObjectBindingPattern(node)) {
+      const owner = node.parent;
+      const init = ts.isVariableDeclaration(owner)
+        ? owner.initializer
+        : undefined;
+      const type = ts.isParameter(owner) ? owner.type : undefined;
+      const fromClient = init
+        ? isClient(init)
+        : type !== undefined && isClientType(type);
+      const fromTimeseries = init
+        ? memberOf(init)?.name === 'timeseries' && isClient(init.expression)
+        : type !== undefined && isTimeseriesOf(type);
+      for (const el of node.elements) {
+        const key = el.propertyName ?? el.name;
+        const prop =
+          ts.isIdentifier(key) || ts.isStringLiteralLike(key)
+            ? key.text
+            : undefined;
         if (
-          (prop === 'datapoints' && isClient(init)) ||
-          (prop === 'syntheticQuery' &&
-            ts.isPropertyAccessExpression(init) &&
-            init.name.text === 'timeseries' &&
-            isClient(init.expression))
+          (prop === 'datapoints' && fromClient) ||
+          (prop === 'syntheticQuery' && fromTimeseries)
         ) {
           warnings.push(
             `${where(el)}: destructured '${prop}' not rewritten, migrate by hand`
+          );
+        }
+      }
+    }
+    // Pick<CogniteClient, 'datapoints'>: the key moved, which is not a rename.
+    if (
+      ts.isTypeReferenceNode(node) &&
+      ts.isIdentifier(node.typeName) &&
+      (node.typeName.text === 'Pick' || node.typeName.text === 'Omit') &&
+      node.typeArguments?.length === 2
+    ) {
+      const [owner, keys] = node.typeArguments;
+      const moved = keyLiterals(keys);
+      for (const [key, matches, moveTo] of [
+        ['datapoints', isClientType(owner), 'timeseries.data'],
+        ['syntheticQuery', isTimeseriesOf(owner), 'timeseries.synthetic.query'],
+      ]) {
+        if (matches && moved.includes(key)) {
+          warnings.push(
+            `${where(node)}: '${key}' in ${node.typeName.text}<...> not renamed, it moved to ${moveTo}: change the type by hand`
           );
         }
       }

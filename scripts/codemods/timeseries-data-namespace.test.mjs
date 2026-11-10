@@ -189,6 +189,90 @@ test('fails before changing anything when a target does not exist', () => {
   });
 });
 
+test('rewrites element access, call receivers and monthly aggregates', () => {
+  const src = `await client['datapoints'].retrieve({});
+await useSDK().datapoints.insert([]);
+await getClient().timeseries.syntheticQuery([]);
+await client.timeseries['syntheticQuery']([]);
+await client.datapoints.retrieveDatapointMonthlyAggregates({});`;
+  const { output, changes, warnings } = run(src);
+  assert.equal(changes, 5);
+  assert.equal(
+    output,
+    `await client['timeseries']['data'].retrieve({});
+await useSDK().timeseries.data.insert([]);
+await getClient().timeseries.synthetic.query([]);
+await client.timeseries['synthetic']['query']([]);
+await client.timeseries.data.retrieveDatapointMonthlyAggregates({});`
+  );
+  assert.equal(warnings.length, 0);
+  assert.equal(run(output).changes, 0);
+});
+
+test('rewrites typeof of the old path, and only a typeof', () => {
+  assert.equal(
+    run(
+      'type R = typeof client.datapoints.retrieve; type S = typeof client.timeseries.syntheticQuery;'
+    ).output,
+    'type R = typeof client.timeseries.data.retrieve; type S = typeof client.timeseries.synthetic.query;'
+  );
+  assert.equal(run('type T = client.datapoints.Foo;').changes, 0);
+});
+
+test('warns, without rewriting, on a receiver that is not recognized as a client', () => {
+  const src = `sdk.datapoints.retrieve({});
+const dp = client;
+dp.datapoints.insert([]);
+foo().timeseries.syntheticQuery([]);
+const n = res.datapoints.length;
+const raw = res.datapoints;`;
+  const { output, changes, warnings } = run(src);
+  assert.equal(changes, 0);
+  assert.equal(output, src);
+  assert.equal(warnings.length, 3);
+  assert.match(
+    warnings[0],
+    /^a\.ts:1: \.datapoints\.retrieve .*'sdk' is not recognized/
+  );
+  assert.match(
+    warnings[1],
+    /^a\.ts:3: \.datapoints\.insert .*'dp' is not recognized/
+  );
+  assert.match(
+    warnings[2],
+    /^a\.ts:4: \.timeseries\.syntheticQuery .*'foo\(\)' is not recognized/
+  );
+  // Naming the receiver turns the warning into a rewrite.
+  assert.equal(
+    run('sdk.datapoints.retrieve({});', { clientNames: ['sdk'] }).output,
+    'sdk.timeseries.data.retrieve({});'
+  );
+});
+
+test('warns on Pick and Omit that name a key that moved', () => {
+  const src = `type A = Pick<CogniteClient, 'datapoints' | 'project'>;
+type B = Omit<
+  CogniteClient,
+  'datapoints'
+>;
+type C = Pick<CogniteClient['timeseries'], 'syntheticQuery' | 'retrieve'>;
+type D = Pick<CogniteClient, 'assets' | 'project'>;
+type E = Pick<Response, 'datapoints'>;`;
+  const { output, changes, warnings } = run(src);
+  assert.equal(changes, 0);
+  assert.equal(output, src);
+  assert.equal(warnings.length, 3);
+  assert.match(warnings[0], /^a\.ts:1: 'datapoints' in Pick/);
+  assert.match(warnings[1], /^a\.ts:2: 'datapoints' in Omit/);
+  assert.match(warnings[2], /^a\.ts:6: 'syntheticQuery' in Pick/);
+});
+
+test('warns on destructuring a client parameter or a client returned from a call', () => {
+  const { warnings } = run(`function f({ datapoints }: CogniteClient) {}
+const { datapoints } = useSDK();`);
+  assert.equal(warnings.length, 2);
+});
+
 test('handles tsx and preserves formatting', () => {
   const { output } = transform(
     'const A = () => <div>{String(client\n  .datapoints\n  .retrieve({}))}</div>;',
