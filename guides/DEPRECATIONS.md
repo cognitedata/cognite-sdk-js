@@ -125,19 +125,37 @@ await client.timeseries.synthetic.query([
 
 `scripts/codemods/timeseries-data-namespace.mjs` rewrites the access paths for you
 (`client.datapoints.*` to `client.timeseries.data.*`, `client.timeseries.syntheticQuery` to
-`client.timeseries.synthetic.query`). It does not change request bodies; moving from `id` /
-`externalId` to `instanceId` needs a space and must be done by hand.
+`client.timeseries.synthetic.query`), and the matching type references (`CogniteClient['datapoints']`
+to `CogniteClient['timeseries']['data']`, `CogniteClient['timeseries']['syntheticQuery']` to
+`CogniteClient['timeseries']['synthetic']['query']`). It does not change request bodies; moving from
+`id` / `externalId` to `instanceId` needs a space and must be done by hand.
 
 ```sh
 curl -O https://raw.githubusercontent.com/cognitedata/cognite-sdk-js/master/scripts/codemods/timeseries-data-namespace.mjs
 node timeseries-data-namespace.mjs --dry src   # preview
 node timeseries-data-namespace.mjs src         # apply
+npx prettier --write <changed files>           # or your own formatter
 ```
 
-It needs `typescript` installed in your project. Only receivers that look like a client
+It needs `typescript` installed in your project. Only receivers and types that look like a client
 (name matches `/client/i`) are rewritten, so response fields such as `result.datapoints` are left
-alone; add other names with `--client-names=sdk,cdf`. Destructuring such as
-`const { datapoints } = client` is reported as a warning and left for you to migrate.
+alone; add other names with `--client-names=sdk,cdf`. Symlinks are not followed.
+
+The codemod keeps your formatting but does not format, and the new access path is longer, so run
+your formatter on the changed files afterwards.
+
+A few things are reported as warnings and left for you to migrate by hand:
+
+- Destructuring such as `const { datapoints } = client`.
+- A member of your own client type that is typed from the old path, for example
+  `type Deps = { datapoints: Pick<CogniteClient['datapoints'], 'retrieve'> }`. The type inside is
+  rewritten, but the member keeps its name `datapoints` because it has to move under
+  `timeseries.data`. Calls such as `this.client.datapoints.retrieve(...)` are rewritten to
+  `this.client.timeseries.data.retrieve(...)`, so the type has to be changed to match.
+
+Mock objects that fake the client, such as `{ datapoints: { retrieve: vi.fn() } }`, are not
+detected. If you pass a hand-written client around, update its shape after running the codemod and
+let `tsc` point out what is left.
 
 ### Datapoints: identify time series by `instanceId`
 
