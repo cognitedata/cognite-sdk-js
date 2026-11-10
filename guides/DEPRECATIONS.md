@@ -137,25 +137,51 @@ node timeseries-data-namespace.mjs src         # apply
 npx prettier --write <changed files>           # or your own formatter
 ```
 
-It needs `typescript` installed in your project. Only receivers and types that look like a client
-(name matches `/client/i`) are rewritten, so response fields such as `result.datapoints` are left
-alone; add other names with `--client-names=sdk,cdf`. Symlinks are not followed.
+It needs `typescript` installed in your project. Symlinks are not followed.
+
+**Which receivers are rewritten.** By default the codemod goes by name, so that an unrelated
+`.datapoints` property, such as the one on a retrieve response, is left alone: the receiver has to
+look like a client (its name matches `/client/i`, or you list it with `--client-names=sdk,cdf`), or
+be a call to a client accessor such as `useSDK()`, `getClient()` or `useCogniteClient()`.
+
+With `--project` the TypeScript type checker decides instead of the name, so a member is rewritten
+when it is the SDK's own, whatever the receiver is called (`sdk.datapoints`, `useThing().datapoints`,
+an alias, a type alias of `CogniteClient`). The `datapoints` member on the SDK's response types is
+left alone. It needs your dependencies installed so that `@cognite/sdk` resolves, and the tsconfig
+that includes your sources (not a solution-style one that only has `references`):
+
+```sh
+node timeseries-data-namespace.mjs --project=tsconfig.app.json --project=tsconfig.spec.json src
+```
+
+Where the checker cannot tell (an `any` receiver, a file that is not part of a project) the name
+rules apply, and the run says how many files were matched by name only.
 
 The codemod keeps your formatting but does not format, and the new access path is longer, so run
 your formatter on the changed files afterwards.
 
-A few things are reported as warnings and left for you to migrate by hand:
+**Reported as warnings, and left for you to migrate by hand:**
 
-- Destructuring such as `const { datapoints } = client`.
+- `<x>.datapoints.<method>` or `<x>.timeseries.syntheticQuery` on a receiver that is not recognized
+  as a client. It is not rewritten, because `x.datapoints.delete(...)` may be a `Map`, but the old
+  path still compiles, so nothing else would point it out. Add the name to `--client-names`, use
+  `--project`, or migrate it yourself.
+- Destructuring such as `const { datapoints } = client` or `({ datapoints }: CogniteClient)`.
+- `Pick` or `Omit` over the client that names a moved key, such as
+  `Pick<CogniteClient, 'datapoints' | 'project'>`. The key moved to `timeseries.data`, so the type
+  has to be changed by hand; swapping in `'timeseries'` would widen it to the whole time series API.
 - A member of your own client type that is typed from the old path, for example
   `type Deps = { datapoints: Pick<CogniteClient['datapoints'], 'retrieve'> }`. The type inside is
   rewritten, but the member keeps its name `datapoints` because it has to move under
   `timeseries.data`. Calls such as `this.client.datapoints.retrieve(...)` are rewritten to
   `this.client.timeseries.data.retrieve(...)`, so the type has to be changed to match.
 
-Mock objects that fake the client, such as `{ datapoints: { retrieve: vi.fn() } }`, are not
-detected. If you pass a hand-written client around, update its shape after running the codemod and
-let `tsc` point out what is left.
+**Not detected.** Mock objects that fake the client, such as `{ datapoints: { retrieve: vi.fn() } }`,
+and `vi.mock('@cognite/sdk', ...)` factories have no type link to the SDK. Update a hand-written
+client's shape after running the codemod and let `tsc` point out what is left. TypeScript marks any
+use of the old path that is still there as deprecated, which editors show as a strikethrough, and a
+lint rule that reports deprecated APIs, such as `@typescript-eslint/no-deprecated`, can list them in
+CI.
 
 ### Datapoints: identify time series by `instanceId`
 
