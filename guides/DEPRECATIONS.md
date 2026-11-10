@@ -121,6 +121,24 @@ await client.timeseries.synthetic.query([
 ]);
 ```
 
+#### Codemod
+
+`scripts/codemods/timeseries-data-namespace.mjs` rewrites the access paths for you
+(`client.datapoints.*` to `client.timeseries.data.*`, `client.timeseries.syntheticQuery` to
+`client.timeseries.synthetic.query`). It does not change request bodies; moving from `id` /
+`externalId` to `instanceId` needs a space and must be done by hand.
+
+```sh
+curl -O https://raw.githubusercontent.com/cognitedata/cognite-sdk-js/master/scripts/codemods/timeseries-data-namespace.mjs
+node timeseries-data-namespace.mjs --dry src   # preview
+node timeseries-data-namespace.mjs src         # apply
+```
+
+It needs `typescript` installed in your project. Only receivers that look like a client
+(name matches `/client/i`) are rewritten, so response fields such as `result.datapoints` are left
+alone; add other names with `--client-names=sdk,cdf`. Destructuring such as
+`const { datapoints } = client` is reported as a warning and left for you to migrate.
+
 ### Datapoints: identify time series by `instanceId`
 
 Addressing a time series by `id` or `externalId` is deprecated as of 2026-10-15 and retired on
