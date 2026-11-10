@@ -34,8 +34,12 @@ export class DataPointsAPI extends BaseResourceAPI<
    * ```js
    * await client.timeseries.data.insert([
    *   { instanceId: { space: 'my-space', externalId: 'my-ts' }, datapoints: [{ timestamp: 1557320284000, value: -2 }] },
+   *   { instanceId: { space: 'my-space', externalId: 'my-state-ts' }, datapoints: [{ timestamp: 1557320284000, numericValue: 1, stringValue: 'OPEN' }] },
    * ]);
    * ```
+   *
+   * @remarks
+   * Time series with type `state` take `numericValue` and/or `stringValue` instead of `value`.
    */
   public insert = (items: DatapointsInsertItem[]): Promise<object> => {
     return this.insertEndpoint(items);
@@ -51,6 +55,11 @@ export class DataPointsAPI extends BaseResourceAPI<
    *   items: [{ instanceId: { space: 'my-space', externalId: 'my-ts' } }],
    * });
    * ```
+   *
+   * @remarks
+   * Raw data points are returned as numeric, string or state data points depending on the time series type.
+   * Narrow each item on `type` (`'numeric'`, `'string'` or `'state'`) rather than `isString`,
+   * since state time series also have `isString: false`.
    */
   public retrieve = (
     query: DatapointsMultiQuery
@@ -92,6 +101,10 @@ export class DataPointsAPI extends BaseResourceAPI<
    *   { instanceId: { space: 'my-space', externalId: 'other-ts' }, before: new Date('21 jan 2018') },
    * ]);
    * ```
+   *
+   * @remarks
+   * Narrow each item on `type` (`'numeric'`, `'string'` or `'state'`) rather than `isString`,
+   * since state time series also have `isString: false`.
    */
   public retrieveLatest = (
     items: LatestDataBeforeRequest[],

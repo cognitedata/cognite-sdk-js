@@ -1,0 +1,4 @@
+{
+  "setup-worktree-unix": ["yarn install --immutable", "yarn build"],
+  "setup-worktree-windows": "setup-worktree-windows.ps1"
+}

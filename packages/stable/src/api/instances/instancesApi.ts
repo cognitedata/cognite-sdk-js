@@ -1,6 +1,7 @@
 // Copyright 2023 Cognite AS
 
 import { BaseResourceAPI } from '@cognite/sdk-core';
+import type { QueryResponse } from './queryTypes';
 import type {
   AggregationRequest,
   AggregationResponse,
@@ -15,7 +16,6 @@ import type {
   NodeOrEdgeListRequestV3,
   NodeOrEdgeSearchRequest,
   QueryRequest,
-  QueryResponse,
   SlimNodeAndEdgeCollectionResponse,
   SyncRequest,
 } from './types.gen';
@@ -235,6 +235,28 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    *       result_set_1: {},
    *     },
    *   });
+   *
+   * // With debug notices for performance analysis
+   * const debugResponse = await client.instances.query({
+   *   with: {
+   *     result_set_1: {
+   *       nodes: {
+   *         filter: {
+   *           equals: { property: ['node', 'externalId'], value: 'node-external-id' },
+   *         },
+   *       },
+   *     },
+   *   },
+   *   select: { result_set_1: {} },
+   *   debug: {},
+   * });
+   *
+   * // Profile mode: deep analysis (requires `emitResults: false`)
+   * const profileResponse = await client.instances.query({
+   *   with: { result_set_1: { nodes: {} } },
+   *   select: { result_set_1: {} },
+   *   debug: { emitResults: false, profile: true, timeout: 30000 },
+   * });
    * ```
    */
   public query = async (params: QueryRequest): Promise<QueryResponse> => {
@@ -265,6 +287,13 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    *       result_set_1: {},
    *     },
    *   });
+   *
+   * // With debug notices for performance analysis
+   * const debugResponse = await client.instances.sync({
+   *   with: { result_set_1: { nodes: {} } },
+   *   select: { result_set_1: {} },
+   *   debug: {},
+   * });
    * ```
    */
   public sync = async (params: SyncRequest): Promise<QueryResponse> => {
