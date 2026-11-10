@@ -23,7 +23,9 @@ describe('Sequences integration test', () => {
   let sequences: Sequence[];
   const testValues = [1, 1.5, 'two'];
   const testExternalId = `sequence${randomInt()}`;
+  const searchExternalId = `sequence_search_${randomInt()}`;
   const sequenceToCreate: ExternalSequence = {
+    externalId: searchExternalId,
     name: 'sequence1',
     description: 'description',
     columns: [
@@ -181,10 +183,12 @@ describe('Sequences integration test', () => {
     async () => {
       await runTestWithRetryWhenFailing(async () => {
         // The search endpoint matches whole words: wildcard patterns like
-        // 'des*tion' never match anything.
+        // 'des*tion' never match anything. 'hey' is the description set by
+        // the update test above.
         const result = await client.sequences.search({
+          filter: { externalIdPrefix: searchExternalId },
           search: {
-            query: 'description',
+            query: 'hey',
           },
         });
         expect(result.some((s) => s.id === sequences[0].id)).toBe(true);

@@ -170,7 +170,8 @@ describe('simulator runs api', () => {
       filter: {
         simulatorExternalIds: [simulatorExternalId],
         createdTime: {
-          max: new Date(),
+          // Leaves room for the CDF clock running ahead of the local clock.
+          max: new Date(Date.now() + 60 * 1000),
         },
       },
       sort: [
