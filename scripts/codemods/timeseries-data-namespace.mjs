@@ -38,7 +38,8 @@
  * files afterwards. Symlinks are not followed.
  *
  * Usage:
- *   node timeseries-data-namespace.mjs [--dry] [--client-names=a,b] <file|dir>...
+ *   node timeseries-data-namespace.mjs [--dry] [--client-names=a,b]
+ *        [--project=tsconfig.json]... <file|dir>...
  *
  * `typescript` is resolved from the current working directory first.
  *
@@ -47,6 +48,16 @@
  * receiver's last identifier matches /client/i or is listed in --client-names, or
  * it is a call to a client accessor such as `useSDK()`, `getClient()` or
  * `useCogniteClient()`.
+ *
+ * With `--project=<tsconfig>` (repeatable) the TypeScript type checker decides
+ * instead of the name: a member is rewritten when it is the SDK's own, whatever
+ * the receiver is called (`sdk.datapoints`, `useThing().datapoints`, an alias, a
+ * type alias of CogniteClient). The SDK's response types also have a `datapoints`
+ * member, and those are left alone. It needs the project's dependencies installed
+ * so that `@cognite/sdk` resolves; where the checker cannot tell (an `any`
+ * receiver, a file outside the project) the name rules above apply. Pass the
+ * tsconfig that includes your sources, for example `tsconfig.app.json` and
+ * `tsconfig.spec.json`, not a solution-style one that only has "references".
  */
 import fs from 'node:fs';
 import { createRequire } from 'node:module';
@@ -89,6 +100,10 @@ const SKIP_DIRS = new Set([
   'build',
   'coverage',
 ]);
+
+// Files of the SDK package, as the type checker sees them (the real path, so
+// this also holds for pnpm's `.pnpm/@cognite+sdk@x/node_modules/@cognite/sdk`).
+const SDK_FILE = /[\\/]node_modules[\\/]@cognite[\\/]sdk(-beta|-alpha)?[\\/]/;
 
 function scriptKindFor(fileName) {
   switch (path.extname(fileName)) {
@@ -192,17 +207,27 @@ const unwrap = (expr) =>
 /**
  * @param {string} source
  * @param {string} fileName
- * @param {{ clientNames?: string[] }} [options]
+ * @param {{ clientNames?: string[], program?: import('typescript').Program }} [options]
+ *   `program` is a program that contains `fileName`: the type checker then
+ *   recognizes the SDK's `datapoints` and `syntheticQuery` by where they are
+ *   declared, whatever the receiver is called.
  * @returns {{ output: string, changes: number, warnings: string[] }}
  */
 export function transform(source, fileName, options = {}) {
-  const sf = ts.createSourceFile(
-    fileName,
-    source,
-    ts.ScriptTarget.Latest,
-    true,
-    scriptKindFor(fileName)
-  );
+  // With a program the checker only works on the program's own source file, and
+  // only if the file has not changed since the program read it.
+  const programFile = options.program?.getSourceFile(path.resolve(fileName));
+  const semantic = programFile !== undefined && programFile.text === source;
+  const sf = semantic
+    ? programFile
+    : ts.createSourceFile(
+        fileName,
+        source,
+        ts.ScriptTarget.Latest,
+        true,
+        scriptKindFor(fileName)
+      );
+  const checker = semantic ? options.program.getTypeChecker() : undefined;
 
   const extra = new Set(options.clientNames ?? []);
   const isClientName = (name) =>
@@ -224,8 +249,67 @@ export function transform(source, fileName, options = {}) {
   };
   const isClientType = (type) => isClientName(typeLastName(type));
 
-  const isClientOwner = (typeNode) => isClientType(typeNode);
-  const keysOf = (typeNode) => keyLiterals(typeNode);
+  // With a program, the checker knows where a member or type is declared, so
+  // the SDK is recognized by what it is and not by what it is called. It has to
+  // be the right SDK class: the SDK also declares a `datapoints` member on its
+  // response types (`DatapointAggregates`), and that one must not be touched.
+  // `true` and `false` are answers; undefined means the checker cannot tell (an
+  // `any` receiver, or the SDK's types are not installed), and the name decides.
+  // `false` only silences the warning for an unrecognized receiver: an app's
+  // own injected client type declares its own `datapoints`, so it is still
+  // rewritten when its name looks like a client.
+  const OWNER = new Map([
+    ['datapoints', 'CogniteClient'],
+    ['syntheticQuery', 'TimeSeriesAPI'],
+  ]);
+  const ownedBySdk = (symbol, owner) => {
+    const declarations = symbol?.declarations;
+    return declarations?.length
+      ? declarations.some(
+          (d) =>
+            SDK_FILE.test(d.getSourceFile().fileName) &&
+            d.parent?.name?.text === owner
+        )
+      : undefined;
+  };
+  const memberInSdk = (access, owner) => {
+    const m = memberOf(access);
+    if (!checker || !m) return undefined;
+    return ownedBySdk(
+      checker.getSymbolAtLocation(m.nameNode) ??
+        checker.getPropertyOfType(
+          checker.getNonNullableType(
+            checker.getTypeAtLocation(access.expression)
+          ),
+          m.name
+        ),
+      owner
+    );
+  };
+  // The SDK class a type node resolves to, through aliases: 'CogniteClient'.
+  // (The class is `export default`, so its symbol is called 'default'; the name
+  // is on the declaration.)
+  const sdkClassName = (typeNode) => {
+    if (!checker) return undefined;
+    const type = checker.getTypeFromTypeNode(typeNode);
+    const symbol = type.getSymbol() ?? type.aliasSymbol;
+    return symbol?.declarations?.find((d) =>
+      SDK_FILE.test(d.getSourceFile().fileName)
+    )?.name?.text;
+  };
+  const isClientOwner = (typeNode) =>
+    isClientType(typeNode) || sdkClassName(typeNode) === 'CogniteClient';
+  // The string literals of a key type, resolved through aliases when possible.
+  const keysOf = (typeNode) => {
+    const keys = keyLiterals(typeNode);
+    if (checker) {
+      const type = checker.getTypeFromTypeNode(typeNode);
+      for (const part of type.isUnion() ? type.types : [type]) {
+        if (part.isStringLiteral()) keys.push(part.value);
+      }
+    }
+    return keys;
+  };
 
   // Type-level forms. `<Client>['datapoints']` and `<Client>['timeseries']['data']`
   // are the same member before and after the rewrite, so the warning below stays
@@ -280,9 +364,10 @@ export function transform(source, fileName, options = {}) {
         accessed?.name !== undefined && DATAPOINT_METHODS.has(accessed.name);
       const isBareValue = accessed === undefined;
       if (isMethodCall || isBareValue) {
-        if (isClient(node.expression)) {
+        const inSdk = memberInSdk(node, OWNER.get('datapoints'));
+        if (inSdk === true || isClient(node.expression)) {
           rewriteMember(m, ['timeseries', 'data']);
-        } else if (isMethodCall) {
+        } else if (isMethodCall && inSdk === undefined) {
           warnUnrecognized(
             node,
             `.datapoints.${accessed.name}`,
@@ -296,9 +381,10 @@ export function transform(source, fileName, options = {}) {
       m?.name === 'syntheticQuery' &&
       memberOf(node.expression)?.name === 'timeseries'
     ) {
-      if (isClient(node.expression.expression)) {
+      const inSdk = memberInSdk(node, OWNER.get('syntheticQuery'));
+      if (inSdk === true || isClient(node.expression.expression)) {
         rewriteMember(m, ['synthetic', 'query']);
-      } else {
+      } else if (inSdk === undefined) {
         warnUnrecognized(
           node,
           '.timeseries.syntheticQuery',
@@ -308,9 +394,14 @@ export function transform(source, fileName, options = {}) {
     }
     // typeof client.datapoints.retrieve -> typeof client.timeseries.data.retrieve
     if (ts.isQualifiedName(node) && inTypeQuery(node)) {
+      const owner = OWNER.get(node.right.text);
+      const inSdk =
+        checker && owner
+          ? ownedBySdk(checker.getSymbolAtLocation(node.right), owner)
+          : undefined;
       if (
         node.right.text === 'datapoints' &&
-        isClientName(entityLastName(node.left))
+        (inSdk === true || isClientName(entityLastName(node.left)))
       ) {
         edits.push([
           node.right.getStart(sf),
@@ -322,7 +413,7 @@ export function transform(source, fileName, options = {}) {
         node.right.text === 'syntheticQuery' &&
         ts.isQualifiedName(node.left) &&
         node.left.right.text === 'timeseries' &&
-        isClientName(entityLastName(node.left.left))
+        (inSdk === true || isClientName(entityLastName(node.left.left)))
       ) {
         edits.push([
           node.right.getStart(sf),
@@ -375,15 +466,26 @@ export function transform(source, fileName, options = {}) {
       const fromTimeseries = init
         ? memberOf(init)?.name === 'timeseries' && isClient(init.expression)
         : type !== undefined && isTimeseriesOf(type);
+      // What is destructured, according to the checker.
+      const patternType = checker
+        ? checker.getNonNullableType(checker.getTypeAtLocation(node))
+        : undefined;
       for (const el of node.elements) {
         const key = el.propertyName ?? el.name;
         const prop =
           ts.isIdentifier(key) || ts.isStringLiteralLike(key)
             ? key.text
             : undefined;
+        const inSdk =
+          patternType !== undefined &&
+          OWNER.has(prop) &&
+          ownedBySdk(
+            checker.getPropertyOfType(patternType, prop),
+            OWNER.get(prop)
+          ) === true;
         if (
-          (prop === 'datapoints' && fromClient) ||
-          (prop === 'syntheticQuery' && fromTimeseries)
+          (prop === 'datapoints' && (fromClient || inSdk)) ||
+          (prop === 'syntheticQuery' && (fromTimeseries || inSdk))
         ) {
           warnings.push(
             `${where(el)}: destructured '${prop}' not rewritten, migrate by hand`
@@ -440,16 +542,59 @@ function* walk(target) {
   }
 }
 
+function loadPrograms(projects) {
+  return projects.map((project) => {
+    const configPath = path.resolve(project);
+    if (!fs.existsSync(configPath)) {
+      console.error(`error: ${project} does not exist`);
+      process.exit(2);
+    }
+    const config = ts.getParsedCommandLineOfConfigFile(
+      configPath,
+      {},
+      {
+        ...ts.sys,
+        onUnRecoverableConfigFileDiagnostic: (d) => {
+          const message = ts.flattenDiagnosticMessageText(d.messageText, '\n');
+          console.error(`error: ${project}: ${message}`);
+          process.exit(2);
+        },
+      }
+    );
+    const program = ts.createProgram({
+      rootNames: config.fileNames,
+      options: config.options,
+      projectReferences: config.projectReferences,
+    });
+    if (config.fileNames.length === 0) {
+      console.warn(
+        `warning: ${project} lists no files (does it only have "references"?). Pass the tsconfig that includes your sources.`
+      );
+    } else if (
+      !program.getSourceFiles().some((f) => SDK_FILE.test(f.fileName))
+    ) {
+      console.warn(
+        `warning: ${project}: no @cognite/sdk types found (are the dependencies installed?), so its files are matched by name only`
+      );
+    }
+    return program;
+  });
+}
+
 function main(argv) {
   const dry = argv.includes('--dry');
   const clientNames = argv
     .filter((a) => a.startsWith('--client-names='))
     .flatMap((a) => a.slice('--client-names='.length).split(','))
     .filter(Boolean);
+  const projects = argv
+    .filter((a) => a.startsWith('--project='))
+    .map((a) => a.slice('--project='.length))
+    .filter(Boolean);
   const targets = argv.filter((a) => !a.startsWith('--'));
   if (targets.length === 0) {
     console.error(
-      'Usage: node timeseries-data-namespace.mjs [--dry] [--client-names=a,b] <file|dir>...'
+      'Usage: node timeseries-data-namespace.mjs [--dry] [--client-names=a,b] [--project=tsconfig.json]... <file|dir>...'
     );
     process.exit(2);
   }
@@ -461,12 +606,16 @@ function main(argv) {
       process.exit(2);
     }
   }
+  const programs = loadPrograms(projects);
   let files = 0;
   let changes = 0;
+  let uncovered = 0;
   for (const target of targets) {
     for (const file of walk(target)) {
       const source = fs.readFileSync(file, 'utf8');
-      const result = transform(source, file, { clientNames });
+      const program = programs.find((p) => p.getSourceFile(path.resolve(file)));
+      if (programs.length > 0 && !program) uncovered++;
+      const result = transform(source, file, { clientNames, program });
       for (const w of result.warnings) console.warn(`warning: ${w}`);
       if (result.changes === 0) continue;
       files++;
@@ -480,6 +629,11 @@ function main(argv) {
   console.log(
     `${changes} change(s) in ${files} file(s)${dry ? ' (dry run)' : ''}`
   );
+  if (uncovered > 0) {
+    console.log(
+      `${uncovered} file(s) are not part of any --project and were matched by name only`
+    );
+  }
   if (changes > 0 && !dry) {
     console.log(
       'Run your formatter (for example prettier --write) on the changed files: the new access path is longer.'
