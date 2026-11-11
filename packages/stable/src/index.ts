@@ -11,6 +11,7 @@ export {
   CogniteMultiError,
 } from '@cognite/sdk-core';
 export type { ClientOptions } from './clientOptions';
+export type { ExperimentalOptions } from './experimental';
 export { default as CogniteClient } from './cogniteClient';
 
 export { AssetMappings3DAPI } from './api/3d/assetMappings3DApi';

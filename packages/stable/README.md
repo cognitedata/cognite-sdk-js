@@ -84,6 +84,32 @@ quickstart();
 - [API reference documentation](https://doc.cognitedata.com/api/v1)
 - [JS SDK reference documentation](https://cognitedata.github.io/cognite-sdk-js/classes/cogniteclient.html)
 
+## Experimental APIs (opt-in)
+
+> **Experimental:** the `experimental` option is experimental. Breaking changes
+> are to be expected in any release, including patch and minor versions.
+
+Newly added APIs that may still change are disabled by default. Accessing one
+without opting in throws an error naming the flag to set.
+
+```js
+const client = new CogniteClient({
+  appId: 'YOUR APPLICATION NAME',
+  project: 'my-project',
+  oidcTokenProvider,
+  experimental: { workflows: true, hostedExtractors: true },
+});
+```
+
+| Flag               | Enables                                                                                     |
+| ------------------ | ------------------------------------------------------------------------------------------- |
+| `hostedExtractors` | `client.hostedExtractors` (sources, jobs, mappings, destinations)                           |
+| `workflows`        | `client.workflows` (versions, executions, tasks, triggers)                                  |
+| `functions`        | `client.functions.calls`, `client.functions.schedules`                                      |
+| `transformations`  | `client.transformations.jobs`, `.notifications`, `.query`, `.schedules`, `.schema`          |
+
+APIs that have already been released are not gated.
+
 ## Concurrency
 
 > **Experimental:** the `concurrency` option is experimental. Breaking changes
