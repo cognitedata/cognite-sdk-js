@@ -81,6 +81,59 @@ test('does not touch request bodies', () => {
   );
 });
 
+test("rewrites CogniteClient['datapoints'] and keeps the quote style", () => {
+  const src = `type A = Pick<CogniteClient['datapoints'], 'retrieve' | 'insert'>;
+type B = CogniteClient["datapoints"];`;
+  const { output, changes } = run(src);
+  assert.equal(changes, 2);
+  assert.equal(
+    output,
+    `type A = Pick<CogniteClient['timeseries']['data'], 'retrieve' | 'insert'>;
+type B = CogniteClient["timeseries"]["data"];`
+  );
+});
+
+test("rewrites CogniteClient['timeseries']['syntheticQuery']", () => {
+  assert.equal(
+    run("type Q = CogniteClient['timeseries']['syntheticQuery'];").output,
+    "type Q = CogniteClient['timeseries']['synthetic']['query'];"
+  );
+});
+
+test('leaves unrelated indexed access types alone', () => {
+  const src = `type A = Response['datapoints'];
+type B = CogniteClient['timeseries']['create'];
+type C = CogniteClient['assets'];
+type D = Other['timeseries']['syntheticQuery'];`;
+  const { output, changes, warnings } = run(src);
+  assert.equal(changes, 0);
+  assert.equal(output, src);
+  assert.equal(warnings.length, 0);
+});
+
+test("warns on a client-type member 'datapoints', before and after the rewrite", () => {
+  const src =
+    "type Deps = { datapoints: Pick<CogniteClient['datapoints'], 'retrieve'>; project: string };";
+  const first = run(src);
+  assert.equal(
+    first.output,
+    "type Deps = { datapoints: Pick<CogniteClient['timeseries']['data'], 'retrieve'>; project: string };"
+  );
+  assert.equal(first.warnings.length, 1);
+  assert.match(first.warnings[0], /^a\.ts:1: member 'datapoints'/);
+  // Running again changes nothing, and the member that still needs a hand
+  // migration is still reported.
+  const second = run(first.output);
+  assert.equal(second.changes, 0);
+  assert.equal(second.warnings.length, 1);
+});
+
+test("does not warn on a 'datapoints' member that is not typed from the client", () => {
+  const { warnings } = run(`type Series = { datapoints: ExternalDatapoint[] };
+interface Res { datapoints: Pick<Response['datapoints'], 'length'> }`);
+  assert.equal(warnings.length, 0);
+});
+
 test('does not follow symlinks and survives dangling links', () => {
   withTempDir((root) => {
     const body = 'client.datapoints.retrieve({});';
@@ -162,6 +215,16 @@ createMockCogniteClientDependencies().datapoints.retrieve({});`;
   for (const name of ['useSDK', 'getSdk', 'useCogniteClient', 'createClient']) {
     assert.equal(run(`${name}().datapoints.retrieve({});`).changes, 1, name);
   }
+});
+
+test('rewrites typeof of the old path, and only a typeof', () => {
+  assert.equal(
+    run(
+      'type R = typeof client.datapoints.retrieve; type S = typeof client.timeseries.syntheticQuery;'
+    ).output,
+    'type R = typeof client.timeseries.data.retrieve; type S = typeof client.timeseries.synthetic.query;'
+  );
+  assert.equal(run('type T = client.datapoints.Foo;').changes, 0);
 });
 
 test('warns, without rewriting, on a receiver that is not recognized as a client', () => {
