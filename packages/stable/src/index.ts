@@ -57,6 +57,7 @@ export * from './api/templates';
 export { AnnotationsAPI } from './api/annotations/annotationsApi';
 export { ContainersAPI } from './api/containers/containersApi';
 export { DocumentsAPI } from './api/documents/documentsApi';
+export { ExtractionPipelineRunsAPI } from './api/extractionPipelines/extractionPipelineRunsApi';
 export { ExtractionPipelinesAPI } from './api/extractionPipelines/extractionPipelinesApi';
 export { ExtractorsAPI } from './api/extractors/extractorsApi';
 export { GeospatialAPI } from './api/geospatial/geospatialAPI';
