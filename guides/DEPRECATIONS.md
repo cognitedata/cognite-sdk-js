@@ -144,6 +144,19 @@ It needs `typescript` installed in your project. Symlinks are not followed.
 look like a client (its name matches `/client/i`, or you list it with `--client-names=sdk,cdf`), or
 be a call to a client accessor such as `useSDK()`, `getClient()` or `useCogniteClient()`.
 
+With `--project` the TypeScript type checker decides instead of the name, so a member is rewritten
+when it is the SDK's own, whatever the receiver is called (`sdk.datapoints`, `useThing().datapoints`,
+an alias, a type alias of `CogniteClient`). The `datapoints` member on the SDK's response types is
+left alone. It needs your dependencies installed so that `@cognite/sdk` resolves, and the tsconfig
+that includes your sources (not a solution-style one that only has `references`):
+
+```sh
+node timeseries-data-namespace.mjs --project=tsconfig.app.json --project=tsconfig.spec.json src
+```
+
+Where the checker cannot tell (an `any` receiver, a file that is not part of a project) the name
+rules apply, and the run says how many files were matched by name only.
+
 The codemod keeps your formatting but does not format, and the new access path is longer, so run
 your formatter on the changed files afterwards.
 
@@ -151,7 +164,7 @@ your formatter on the changed files afterwards.
 
 - `<x>.datapoints.<method>` or `<x>.timeseries.syntheticQuery` on a receiver that is not recognized
   as a client. It is not rewritten, because `x.datapoints.delete(...)` may be a `Map`. Add the name
-  to `--client-names` or migrate it yourself.
+  to `--client-names`, use `--project`, or migrate it yourself.
 - Destructuring such as `const { datapoints } = client` or `({ datapoints }: CogniteClient)`.
 - `Pick` or `Omit` over the client that names a moved key, such as
   `Pick<CogniteClient, 'datapoints' | 'project'>`. The key moved to `timeseries.data`, so the type
