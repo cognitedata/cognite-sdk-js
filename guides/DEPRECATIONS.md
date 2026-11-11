@@ -152,6 +152,10 @@ your formatter on the changed files afterwards.
 - `<x>.datapoints.<method>` or `<x>.timeseries.syntheticQuery` on a receiver that is not recognized
   as a client. It is not rewritten, because `x.datapoints.delete(...)` may be a `Map`. Add the name
   to `--client-names` or migrate it yourself.
+- Destructuring such as `const { datapoints } = client` or `({ datapoints }: CogniteClient)`.
+- `Pick` or `Omit` over the client that names a moved key, such as
+  `Pick<CogniteClient, 'datapoints' | 'project'>`. The key moved to `timeseries.data`, so the type
+  has to be changed by hand; swapping in `'timeseries'` would widen it to the whole time series API.
 - A member of your own client type that is typed from the old path, for example
   `type Deps = { datapoints: Pick<CogniteClient['datapoints'], 'retrieve'> }`. The type inside is
   rewritten, but the member keeps its name `datapoints` because it has to move under
