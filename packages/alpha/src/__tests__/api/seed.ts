@@ -1,12 +1,11 @@
 import { afterAll } from 'vitest';
 import type CogniteClientAlpha from '../../cogniteClient';
 import type {
-  SimulationRun,
   SimulatorRoutineRevisionConfiguration,
   SimulatorRoutineScript,
   SimulatorUnitQuantity,
 } from '../../types';
-import { getOrCreateDataSet, getOrCreateFile, randomInt } from '../testUtils';
+import { randomInt } from '../testUtils';
 
 export const unitQuantities: SimulatorUnitQuantity[] = [
   {
@@ -423,97 +422,4 @@ export function deleteSimulatorAfterAll(
       deleted = true;
     },
   };
-}
-
-/**
- * Creates a simulator with its own integration, model and routine, and starts
- * a simulation run on it. Every resource uses the given identifiers, so tests
- * can filter on them instead of picking up runs created by concurrent jobs.
- * Deleting the returned simulator deletes everything else, and if any step
- * fails, the simulator is deleted before the error is rethrown.
- */
-export async function createSimulationRun(
-  client: CogniteClientAlpha,
-  ids: TestIdentifiers
-): Promise<{ simulatorId: number; run: SimulationRun }> {
-  const dataSetId = await getOrCreateDataSet(client);
-  const fileId = await getOrCreateFile(client, dataSetId);
-
-  const [simulator] = await client.simulators.create([
-    {
-      externalId: ids.simulatorExternalId,
-      name: ids.simulatorName,
-      fileExtensionTypes,
-      stepFields,
-      unitQuantities,
-      modelTypes,
-    },
-  ]);
-  try {
-    const run = await startRunOnSimulator(client, ids, dataSetId, fileId);
-    return { simulatorId: simulator.id, run };
-  } catch (error) {
-    await client.simulators.delete([{ id: simulator.id }]);
-    throw error;
-  }
-}
-
-async function startRunOnSimulator(
-  client: CogniteClientAlpha,
-  ids: TestIdentifiers,
-  dataSetId: number,
-  fileId: number
-): Promise<SimulationRun> {
-  await client.simulators.createIntegrations([
-    {
-      externalId: ids.simulatorIntegrationExternalId,
-      simulatorExternalId: ids.simulatorExternalId,
-      heartbeat: new Date(),
-      dataSetId,
-      connectorVersion: '1.0.0',
-      simulatorVersion: '1.0.0',
-      licenseStatus: 'UNKNOWN',
-      connectorStatus: 'IDLE',
-    },
-  ]);
-  await client.simulators.createModels([
-    {
-      externalId: ids.modelExternalId,
-      simulatorExternalId: ids.simulatorExternalId,
-      name: 'Test Simulator Model',
-      dataSetId,
-      type: 'WaterWell',
-    },
-  ]);
-  await client.simulators.createModelRevisions([
-    {
-      externalId: ids.modelRevisionExternalId,
-      modelExternalId: ids.modelExternalId,
-      fileId,
-    },
-  ]);
-  await client.simulators.createRoutines([
-    {
-      externalId: ids.routineExternalId,
-      modelExternalId: ids.modelExternalId,
-      simulatorIntegrationExternalId: ids.simulatorIntegrationExternalId,
-      name: 'Test Routine',
-    },
-  ]);
-  await client.simulators.createRoutineRevisions([
-    {
-      externalId: ids.routineRevisionExternalId,
-      routineExternalId: ids.routineExternalId,
-      configuration: routineRevisionConfiguration,
-      script: [],
-    },
-  ]);
-  const [run] = await client.simulators.runSimulation([
-    {
-      routineExternalId: ids.routineExternalId,
-      runType: 'external',
-      queue: true,
-    },
-  ]);
-  return run;
 }
