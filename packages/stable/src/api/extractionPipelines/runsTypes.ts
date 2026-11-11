@@ -11,7 +11,7 @@ import type { EpochTimestamp } from '../../types.gen';
 export type ExtractionPipelineRunStatus = 'success' | 'failure' | 'seen';
 
 export interface ExtractionPipelineRun {
-  id?: CogniteInternalId;
+  id: CogniteInternalId;
   /**
    * Usually `'success'`, `'failure'` or `'seen'`.
    */
@@ -21,9 +21,11 @@ export interface ExtractionPipelineRun {
    */
   message?: string;
   createdTime?: EpochTimestamp;
+  /**
+   * External ID of the extraction pipeline. Only returned by `create`.
+   */
   externalId?: CogniteExternalId;
 }
-
 
 export interface ExtractionPipelineRunCreate {
   /**

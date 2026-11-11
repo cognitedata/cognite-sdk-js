@@ -26,9 +26,7 @@ export class ExtractionPipelineRunsAPI extends BaseResourceAPI<ExtractionPipelin
   public create = (
     items: ExtractionPipelineRunCreate[]
   ): Promise<ExtractionPipelineRun[]> => {
-    return this.createEndpoint(items) as Promise<
-      ExtractionPipelineRun[]
-    >;
+    return this.createEndpoint(items);
   };
 
   /**
