@@ -21,15 +21,9 @@ export interface ExtractionPipelineRun {
    */
   message?: string;
   createdTime?: EpochTimestamp;
-}
-
-export interface ExtractionPipelineRunWithExternalId
-  extends ExtractionPipelineRun {
-  /**
-   * External ID of the extraction pipeline.
-   */
   externalId?: CogniteExternalId;
 }
+
 
 export interface ExtractionPipelineRunCreate {
   /**

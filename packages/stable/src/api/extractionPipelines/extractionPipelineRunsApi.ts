@@ -9,7 +9,6 @@ import type {
   ExtractionPipelineRunCreate,
   ExtractionPipelineRunFilterQuery,
   ExtractionPipelineRunListQuery,
-  ExtractionPipelineRunWithExternalId,
 } from './runsTypes';
 
 export class ExtractionPipelineRunsAPI extends BaseResourceAPI<ExtractionPipelineRun> {
@@ -26,9 +25,9 @@ export class ExtractionPipelineRunsAPI extends BaseResourceAPI<ExtractionPipelin
    */
   public create = (
     items: ExtractionPipelineRunCreate[]
-  ): Promise<ExtractionPipelineRunWithExternalId[]> => {
+  ): Promise<ExtractionPipelineRun[]> => {
     return this.createEndpoint(items) as Promise<
-      ExtractionPipelineRunWithExternalId[]
+      ExtractionPipelineRun[]
     >;
   };
 
