@@ -78,7 +78,7 @@ export interface ExtractionPipelineCreate {
 }
 
 export interface ExtractionPipeline extends ExtractionPipelineCreate {
-  id?: CogniteInternalId;
+  id: CogniteInternalId;
   /**
    * Time of the last successful run.
    */
