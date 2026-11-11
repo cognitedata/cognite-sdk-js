@@ -7,7 +7,6 @@ import type {
   ExtractionPipelineRun,
   ExtractionPipelineRunCreate,
   ExtractionPipelineRunFilterQuery,
-  ExtractionPipelineRunWithExternalId,
 } from '../../types';
 import { mockBaseUrl, setupMockableClient } from '../testUtils';
 
@@ -34,7 +33,7 @@ describe('Extraction pipeline runs unit test', () => {
   });
 
   test('create', async () => {
-    const created: ExtractionPipelineRunWithExternalId = {
+    const created: ExtractionPipelineRun = {
       ...run,
       externalId: 'my-pipeline',
     };
