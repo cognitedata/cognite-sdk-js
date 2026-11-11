@@ -12,7 +12,18 @@
  * `id` / `externalId` to `instanceId` needs a space and cannot be inferred. See
  * guides/DEPRECATIONS.md.
  *
- * Reported as a warning, and left for you to migrate by hand:
+ * Type-level references to the client are rewritten the same way:
+ *   CogniteClient['datapoints']
+ *     -> CogniteClient['timeseries']['data']
+ *   CogniteClient['timeseries']['syntheticQuery']
+ *     -> CogniteClient['timeseries']['synthetic']['query']
+ *   typeof client.datapoints.retrieve
+ *     -> typeof client.timeseries.data.retrieve
+ *
+ * Reported as warnings, and left for you to migrate by hand:
+ *   - a `datapoints` member of your own client type that is typed from the old
+ *     path, for example `{ datapoints: Pick<CogniteClient['datapoints'], 'retrieve'> }`:
+ *     it has to move under `timeseries.data`, which is not a rename;
  *   - `<x>.datapoints.<method>` and `<x>.timeseries.syntheticQuery` on a receiver
  *     that is not recognized as a client (see below): it is not rewritten, because
  *     `x.datapoints.delete(...)` may be a Map, but the old path still compiles and
@@ -102,6 +113,34 @@ function lastName(expr) {
   return undefined;
 }
 
+function entityLastName(name) {
+  return ts.isIdentifier(name) ? name.text : name.right.text;
+}
+
+/** Last identifier of a type such as `CogniteClient` or `typeof this.client`. */
+function typeLastName(type) {
+  if (ts.isTypeReferenceNode(type)) return entityLastName(type.typeName);
+  if (ts.isTypeQueryNode(type)) return entityLastName(type.exprName);
+  if (ts.isParenthesizedTypeNode(type)) return typeLastName(type.type);
+  return undefined;
+}
+
+/** The string literal of `T['key']`, or undefined for any other type node. */
+function indexLiteral(node) {
+  return ts.isIndexedAccessTypeNode(node) &&
+    ts.isLiteralTypeNode(node.indexType) &&
+    ts.isStringLiteral(node.indexType.literal)
+    ? node.indexType.literal
+    : undefined;
+}
+
+/** Whether a qualified name is the operand of a `typeof` type: `typeof a.b.c`. */
+function inTypeQuery(name) {
+  let parent = name.parent;
+  while (ts.isQualifiedName(parent)) parent = parent.parent;
+  return ts.isTypeQueryNode(parent);
+}
+
 /** `x.name` or `x['name']`; undefined for any other expression. */
 function memberOf(node) {
   if (ts.isPropertyAccessExpression(node)) {
@@ -171,6 +210,26 @@ export function transform(source, fileName, options = {}) {
     }
     return isClientName(lastName(inner));
   };
+  const isClientType = (type) => isClientName(typeLastName(type));
+
+  const isClientOwner = (typeNode) => isClientType(typeNode);
+
+  // Type-level forms. `<Client>['datapoints']` and `<Client>['timeseries']['data']`
+  // are the same member before and after the rewrite, so the warning below stays
+  // visible when the codemod is run again.
+  const isTimeseriesOf = (node) =>
+    indexLiteral(node)?.text === 'timeseries' && isClientOwner(node.objectType);
+  const isDatapointsType = (node) =>
+    indexLiteral(node)?.text === 'datapoints' && isClientOwner(node.objectType);
+  const isTimeseriesDataType = (node) =>
+    indexLiteral(node)?.text === 'data' && isTimeseriesOf(node.objectType);
+  const isSyntheticQueryType = (node) =>
+    indexLiteral(node)?.text === 'syntheticQuery' &&
+    isTimeseriesOf(node.objectType);
+  const containsClientDataType = (node) =>
+    isDatapointsType(node) ||
+    isTimeseriesDataType(node) ||
+    ts.forEachChild(node, containsClientDataType) === true;
 
   const edits = [];
   const warnings = [];
@@ -233,6 +292,61 @@ export function transform(source, fileName, options = {}) {
           node.expression.expression
         );
       }
+    }
+    // typeof client.datapoints.retrieve -> typeof client.timeseries.data.retrieve
+    if (ts.isQualifiedName(node) && inTypeQuery(node)) {
+      if (
+        node.right.text === 'datapoints' &&
+        isClientName(entityLastName(node.left))
+      ) {
+        edits.push([
+          node.right.getStart(sf),
+          node.right.getEnd(),
+          'timeseries.data',
+        ]);
+      }
+      if (
+        node.right.text === 'syntheticQuery' &&
+        ts.isQualifiedName(node.left) &&
+        node.left.right.text === 'timeseries' &&
+        isClientName(entityLastName(node.left.left))
+      ) {
+        edits.push([
+          node.right.getStart(sf),
+          node.right.getEnd(),
+          'synthetic.query',
+        ]);
+      }
+    }
+    // CogniteClient['datapoints'] -> CogniteClient['timeseries']['data']
+    // CogniteClient['timeseries']['syntheticQuery']
+    //   -> CogniteClient['timeseries']['synthetic']['query']
+    for (const [matches, keys] of [
+      [isDatapointsType, ['timeseries', 'data']],
+      [isSyntheticQueryType, ['synthetic', 'query']],
+    ]) {
+      if (matches(node)) {
+        const literal = indexLiteral(node);
+        const q = literal.getText(sf)[0];
+        edits.push([
+          literal.getStart(sf),
+          literal.getEnd(),
+          keys.map((key) => `${q}${key}${q}`).join(']['),
+        ]);
+      }
+    }
+    // { datapoints: Pick<CogniteClient['datapoints'], ...> }: the member itself
+    // has to move under `timeseries.data`, which cannot be done mechanically.
+    if (
+      ts.isPropertySignature(node) &&
+      node.type &&
+      (ts.isIdentifier(node.name) || ts.isStringLiteral(node.name)) &&
+      node.name.text === 'datapoints' &&
+      containsClientDataType(node.type)
+    ) {
+      warnings.push(
+        `${where(node)}: member 'datapoints' of a client type not renamed, move it under timeseries.data by hand`
+      );
     }
     ts.forEachChild(node, visit);
   };
