@@ -17,7 +17,7 @@ to run it from a clean, current `master`, check the result, and open the PR.
 | `lerna.json` | `"version": "independent"`. Each package is versioned separately. `*.md`, tests and specs don't count as changes. |
 | `yarn release` | Requires being on `master` == `origin/master` with a **completely clean** tree (untracked files count). Fetches tags, creates `release/automated-<UTC timestamp>` (e.g. `release/automated-2026-11-06T12-42-27`), runs lerna, commits `chore(release): publish new package versions`, then pushes the branch. It does **not** open the PR. It prints a compare URL. |
 | `.github/workflows/validate-release-pr.yaml` | On `release/automated-*` PRs, it fails if the branch's merge-base isn't the current `origin/master` HEAD or if master was merged in. If master moves before merge, close the PR and run the release again. Never rebase or merge master in. |
-| `.github/workflows/publish-on-merge.yaml` | On push to master that touches `packages/*/package.json` **and** whose head commit message contains `chore(release): publish new package versions`, it builds, runs `lerna publish from-package` (npm with OIDC), creates tags such as `@cognite/sdk@10.19.0` and deploys docs to gh-pages. **Squash-merge** so the commit message keeps that title. |
+| `.github/workflows/publish-on-merge.yaml` | On push to master that touches `packages/*/package.json` **and** whose head commit message contains `chore(release): publish new package versions`, it builds, runs `lerna publish from-package` (npm with OIDC), creates tags such as `@cognite/sdk@10.19.0` and deploys docs to gh-pages. **Squash-merge** so the commit message keeps that title. All recent release PRs (#1511–#1551) were squash-merged into a single commit `chore(release): publish new package versions (#N)`. |
 
 Published packages: `@cognite/sdk` (packages/stable), `@cognite/sdk-core` (core),
 `@cognite/sdk-beta` (beta) and `@cognite/sdk-alpha` (alpha). `codegen` and `template` are
@@ -125,8 +125,12 @@ hand-edit, unless the user explicitly asks.
 
    <list each package: old → new, and the headline changes>"
    ```
-   Then bind and follow the PR as usual (CI, reviews). The PR needs human approval.
-   Remind the user to **squash-merge** it and not to update it from master.
+   Then bind and follow the PR as usual. Expect `validate-release`, `pr-title`, `lint`,
+   `tests (22)`, `tests (24)`, `snippets`, `samples` and `stable`. It needs one approving
+   review from a teammate; after that, the author usually merges it. Remind the user to
+   **squash-merge** it and not to update it from master. If master moves first (or
+   `validate-release` fails), close the PR with a comment such as "superseded by #N",
+   and repeat from step 1. #1510 → #1511 was handled this way.
 
 6. **After merge**, confirm the publish went through:
    ```bash
@@ -134,7 +138,17 @@ hand-edit, unless the user explicitly asks.
    npm view @cognite/sdk version   # repeat for each bumped package
    git fetch --tags && git tag --sort=-creatordate | head
    ```
-   Then switch back to `master` and pull. Offer to restore anything stashed in step 1.
+   Every bumped package must have a new tag and the new version on npm. Then switch back
+   to `master` and pull. Offer to restore anything stashed in step 1.
+
+   **Partial publish failures happen.** In #1537 the CD run failed with
+   `TLOG_CREATE_ENTRY_ERROR ... (409)` (npm provenance/sigstore) for `sdk-alpha` and
+   `sdk-beta`. core and stable were published, but alpha 0.47.0 and beta 6.3.2 never
+   reached npm, and the next release skipped past them. If the run fails, list the
+   versions missing from npm/tags and tell the user. Retrying with
+   `gh run rerun <id> --failed` is safe because `lerna publish from-package` only
+   publishes versions that aren't on the registry yet. That's a publish, so ask before
+   rerunning.
 
 ## Don'ts
 
