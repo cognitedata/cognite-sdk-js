@@ -61,6 +61,19 @@ A package that only follows a dependency gets:
 **Note:** Version bump only for package @cognite/sdk-core
 ```
 
+**What goes in (level of detail).** It isn't every PR. A package's entry lists only
+`feat`, `fix`, `perf`, `revert` and `BREAKING CHANGE` commits that touched files under
+that package's directory since its last tag, one bullet per squashed PR. `chore`, `ci`,
+`docs`, `test`, `refactor`, `build` and dependency bumps are left out, even when they
+touch the package. For example, `chore: data modeling concurrency policy (#1524)` is in
+the 10.18.0 range but not in its changelog. A PR that touches several packages appears in
+each of them; #1525 (`feat(stable): …`) is in both the stable and alpha 0.48.0 entries.
+A package whose only change is a dependency bump gets the one-line "Version bump only"
+note and no bullets. The "closes …" tail comes from `#123` references in the squash
+commit body (#1521's is long) and is kept as is. All five recent release PRs (#1511,
+#1530, #1537, #1539, #1551) had one commit, straight from `yarn release`. Nobody trimmed
+or rewrote the generated text.
+
 Sections are `### Features`, `### Bug Fixes` and `### BREAKING CHANGES`. A bullet is
 `* **scope:** subject (#PR) (sha)`. The commit's scope is used and the subject is taken
 as written, so a bad changelog line means a bad commit message. Report it; don't
@@ -123,7 +136,7 @@ hand-edit, unless the user explicitly asks.
      --title "chore(release): publish new package versions" \
      --body "Automated version bump for release. Merging this PR will publish packages to NPM.
 
-   <list each package: old → new, and the headline changes>"
+   <optional: one line per package, old → new>"
    ```
    Then bind and follow the PR as usual. Expect `validate-release`, `pr-title`, `lint`,
    `tests (22)`, `tests (24)`, `snippets`, `samples` and `stable`. It needs one approving
