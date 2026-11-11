@@ -42,6 +42,12 @@ function setupMockableClient(options: Partial<ClientOptions> = {}) {
     project: process.env.COGNITE_PROJECT as string,
     baseUrl: mockBaseUrl,
     oidcTokenProvider: () => Promise.resolve('test accessToken'),
+    experimental: {
+      hostedExtractors: true,
+      workflows: true,
+      functions: true,
+      transformations: true,
+    },
     ...options,
   });
 }

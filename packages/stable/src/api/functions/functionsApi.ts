@@ -8,6 +8,7 @@ import type {
   ItemsWrapper,
   MetadataMap,
 } from '@cognite/sdk-core';
+import { assertExperimentalEnabled } from '../../experimental';
 import type { IgnoreUnknownIds } from '../../types';
 import { FunctionCallsAPI } from './calls/functionCallsApi';
 import type { FunctionCall, FunctionCallRequest } from './calls/types';
@@ -23,6 +24,7 @@ import type {
 export class FunctionsAPI extends BaseResourceAPI<CogniteFunction> {
   private readonly callsApi: FunctionCallsAPI;
   private readonly schedulesApi: FunctionSchedulesAPI;
+  private experimentalEnabled = true;
 
   /** @hidden */
   constructor(resourcePath: string, ...args: [CDFHttpClient, MetadataMap]) {
@@ -35,13 +37,30 @@ export class FunctionsAPI extends BaseResourceAPI<CogniteFunction> {
   }
 
   /**
+   * Called by `CogniteClient` to apply the `experimental.functions` option.
+   * Directly constructed instances are enabled.
+   *
+   * @hidden
+   */
+  public setExperimentalEnabled(enabled: boolean) {
+    this.experimentalEnabled = enabled;
+  }
+
+  /**
    * [Function schedules](https://api-docs.cognite.com/20230101/tag/Function-schedules)
+   *
+   * @alpha Experimental, requires `experimental: { functions: true }` in the client options.
    *
    * ```js
    * const schedules = await client.functions.schedules.list();
    * ```
    */
   public get schedules() {
+    assertExperimentalEnabled(
+      this.experimentalEnabled,
+      'functions',
+      'client.functions.schedules'
+    );
     return this.schedulesApi;
   }
 
@@ -54,8 +73,15 @@ export class FunctionsAPI extends BaseResourceAPI<CogniteFunction> {
 
   /**
    * [Function calls](https://api-docs.cognite.com/20230101/tag/Function-calls)
+   *
+   * @alpha Experimental, requires `experimental: { functions: true }` in the client options.
    */
   public get calls() {
+    assertExperimentalEnabled(
+      this.experimentalEnabled,
+      'functions',
+      'client.functions.calls'
+    );
     return this.callsApi;
   }
 

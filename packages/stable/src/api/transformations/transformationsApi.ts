@@ -8,6 +8,7 @@ import {
   type IdEither,
   type MetadataMap,
 } from '@cognite/sdk-core';
+import { assertExperimentalEnabled } from '../../experimental';
 import type { IgnoreUnknownIds } from '../../types';
 import { TransformationJobsAPI } from './transformationJobsApi';
 import { TransformationNotificationsAPI } from './transformationNotificationsApi';
@@ -31,6 +32,7 @@ export class TransformationsAPI extends BaseResourceAPI<Transformation> {
   private readonly queryApi: TransformationQueryAPI;
   private readonly schedulesApi: TransformationSchedulesAPI;
   private readonly schemaApi: TransformationSchemaAPI;
+  private experimentalEnabled = true;
 
   /** @hidden */
   constructor(resourcePath: string, ...args: [CDFHttpClient, MetadataMap]) {
@@ -55,37 +57,70 @@ export class TransformationsAPI extends BaseResourceAPI<Transformation> {
   }
 
   /**
+   * Called by `CogniteClient` to apply the `experimental.transformations`
+   * option. Directly constructed instances are enabled.
+   *
+   * @hidden
+   */
+  public setExperimentalEnabled(enabled: boolean) {
+    this.experimentalEnabled = enabled;
+  }
+
+  private assertExperimental(subApi: string) {
+    assertExperimentalEnabled(
+      this.experimentalEnabled,
+      'transformations',
+      `client.transformations.${subApi}`
+    );
+  }
+
+  /**
    * [Query](https://api-docs.cognite.com/20230101/tag/Query)
+   *
+   * @alpha Experimental, requires `experimental: { transformations: true }` in the client options.
    */
   public get query() {
+    this.assertExperimental('query');
     return this.queryApi;
   }
 
   /**
    * [Transformation notifications](https://api-docs.cognite.com/20230101/tag/Transformation-Notifications)
+   *
+   * @alpha Experimental, requires `experimental: { transformations: true }` in the client options.
    */
   public get notifications() {
+    this.assertExperimental('notifications');
     return this.notificationsApi;
   }
 
   /**
    * [Transformation schedules](https://api-docs.cognite.com/20230101/tag/Transformation-Schedules)
+   *
+   * @alpha Experimental, requires `experimental: { transformations: true }` in the client options.
    */
   public get schedules() {
+    this.assertExperimental('schedules');
     return this.schedulesApi;
   }
 
   /**
    * [Transformation jobs](https://api-docs.cognite.com/20230101/tag/Transformation-Jobs)
+   *
+   * @alpha Experimental, requires `experimental: { transformations: true }` in the client options.
    */
   public get jobs() {
+    this.assertExperimental('jobs');
     return this.jobsApi;
   }
 
   /**
    * [Transformation schema](https://api-docs.cognite.com/20230101/tag/Schema)
+   *
+   * @alpha Experimental, requires `experimental: { transformations: true }` in the client options.
    */
   public get schema() {
+    this.assertExperimental('schema');
     return this.schemaApi;
   }
 
