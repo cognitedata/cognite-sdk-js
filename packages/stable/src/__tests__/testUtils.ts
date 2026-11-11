@@ -15,6 +15,7 @@ const allExperimental = {
   workflows: true,
   functions: true,
   transformations: true,
+  extractionPipelines: true,
 };
 
 function setupClient(baseUrl: string = process.env.COGNITE_BASE_URL as string) {
