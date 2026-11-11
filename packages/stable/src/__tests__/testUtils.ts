@@ -10,12 +10,21 @@ import type { ExternalFileInfo, NodeOrEdge } from '../types';
 import { login } from './login';
 import { testConcurrency } from './testConcurrency';
 
+const allExperimental = {
+  hostedExtractors: true,
+  workflows: true,
+  functions: true,
+  transformations: true,
+  extractionPipelines: true,
+};
+
 function setupClient(baseUrl: string = process.env.COGNITE_BASE_URL as string) {
   return new CogniteClient({
     appId: 'JS SDK integration tests',
     project: 'unit-test',
     baseUrl,
     oidcTokenProvider: () => Promise.resolve('not logged in'),
+    experimental: allExperimental,
   });
 }
 
@@ -32,6 +41,7 @@ function setupLoggedInClient() {
         return account.access_token;
       }),
     concurrency: testConcurrency,
+    experimental: allExperimental,
   });
   return client;
 }
@@ -42,6 +52,7 @@ function setupMockableClient(options: Partial<ClientOptions> = {}) {
     project: process.env.COGNITE_PROJECT as string,
     baseUrl: mockBaseUrl,
     oidcTokenProvider: () => Promise.resolve('test accessToken'),
+    experimental: allExperimental,
     ...options,
   });
 }
@@ -235,6 +246,7 @@ export function setupLoggedInClientForUnitTest() {
       login().then((account) => {
         return account.access_token;
       }),
+    experimental: allExperimental,
   });
 }
 

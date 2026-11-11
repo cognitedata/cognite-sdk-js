@@ -1,3 +1,5 @@
+import { afterAll } from 'vitest';
+import type CogniteClientAlpha from '../../cogniteClient';
 import type {
   SimulatorRoutineRevisionConfiguration,
   SimulatorRoutineScript,
@@ -353,5 +355,71 @@ export function createTestIdentifiers(): TestIdentifiers {
     routineRevisionExternalId: `test_sim_routine_revision_${uniqueSuffix}`,
     simulatorIntegrationExternalId: `test_sim_integration_${uniqueSuffix}`,
     simulatorName: `TestSim - ${uniqueSuffix}`,
+  };
+}
+
+// `test_routine_sim_` and `test_runs_sim_` are prefixes older versions of
+// these tests used. Nothing creates them anymore, but some are left in CDF.
+const TEST_SIMULATOR_PREFIXES = [
+  'test_sim_',
+  'test_routine_sim_',
+  'test_runs_sim_',
+];
+// Long enough that a concurrent CI job never loses a simulator it is using.
+const STALE_TEST_SIMULATOR_AGE_MS = 60 * 60 * 1000;
+
+/**
+ * Deletes test simulators left behind by runs that crashed or timed out
+ * before their cleanup ran. Deleting a simulator also deletes its
+ * integrations, models, routines and runs.
+ */
+export async function deleteStaleTestSimulators(client: CogniteClientAlpha) {
+  const cutoff = Date.now() - STALE_TEST_SIMULATOR_AGE_MS;
+  try {
+    const simulators = await client.simulators
+      .list({ limit: 1000 })
+      .autoPagingToArray({ limit: Number.POSITIVE_INFINITY });
+    const stale = simulators.filter(
+      (simulator) =>
+        TEST_SIMULATOR_PREFIXES.some((prefix) =>
+          simulator.externalId.startsWith(prefix)
+        ) && simulator.createdTime.valueOf() < cutoff
+    );
+    // The delete endpoint accepts exactly one item per request.
+    const results = await Promise.allSettled(
+      stale.map(({ id }) => client.simulators.delete([{ id }]))
+    );
+    const failed = results.filter((result) => result.status === 'rejected');
+    if (failed.length) {
+      console.error(
+        `Failed to delete ${failed.length} of ${stale.length} stale simulators`,
+        failed[0].reason
+      );
+    }
+  } catch (e) {
+    console.error('An error occured when trying to delete stale simulators', e);
+  }
+}
+
+/**
+ * Registers an `afterAll` that deletes the spec's simulator, so it is cleaned
+ * up even when a failure skips the spec's own delete test. Call
+ * `markDeleted` once that test has deleted the simulator.
+ */
+export function deleteSimulatorAfterAll(
+  client: CogniteClientAlpha,
+  getSimulatorId: () => number | undefined
+): { markDeleted: () => void } {
+  let deleted = false;
+  afterAll(async () => {
+    const id = getSimulatorId();
+    if (id && !deleted) {
+      await client.simulators.delete([{ id }]);
+    }
+  });
+  return {
+    markDeleted: () => {
+      deleted = true;
+    },
   };
 }

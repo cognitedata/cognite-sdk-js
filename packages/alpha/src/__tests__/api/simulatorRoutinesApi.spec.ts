@@ -10,6 +10,7 @@ import {
 } from '../testUtils';
 import {
   createTestIdentifiers,
+  deleteSimulatorAfterAll,
   fileExtensionTypes,
   modelTypes,
   routineRevisionConfiguration,
@@ -30,6 +31,7 @@ describe('simulator routines api', () => {
   } = createTestIdentifiers();
   const client: CogniteClientAlpha = setupLoggedInClient();
   let simulatorId: number;
+  const simulatorCleanup = deleteSimulatorAfterAll(client, () => simulatorId);
   let testDataSetId: number;
   let testFileId: number;
 
@@ -266,6 +268,7 @@ describe('simulator routines api', () => {
           id: simulatorId,
         },
       ]);
+      simulatorCleanup.markDeleted();
       expect(response).toEqual({});
       const responseAfterDelete = await client.simulators.list();
       expect(

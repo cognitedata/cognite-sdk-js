@@ -22,6 +22,7 @@ import { DataSetsAPI } from './api/datasets/datasetsApi';
 import { DocumentsAPI } from './api/documents/documentsApi';
 import { EntityMatchingApi } from './api/entityMatching/entityMatchingApi';
 import { EventsAPI } from './api/events/eventsApi';
+import { ExtractionPipelinesAPI } from './api/extractionPipelines/extractionPipelinesApi';
 import { ExtractorsAPI } from './api/extractors/extractorsApi';
 import { FilesAPI } from './api/files/filesApi';
 import { FunctionsAPI } from './api/functions/functionsApi';
@@ -56,12 +57,22 @@ import { ViewsAPI } from './api/views/viewsApi';
 import { VisionAPI } from './api/vision/visionApi';
 import { WorkflowsAPI } from './api/workflows/workflowsApi';
 import type { ClientOptions } from './clientOptions';
+import {
+  type ExperimentalOptions,
+  assertExperimentalEnabled,
+} from './experimental';
 import { retryValidator } from './retryValidator';
 
 export default class CogniteClient extends BaseCogniteClient {
-  // biome-ignore lint/complexity/noUselessConstructor: narrows the options type to include typed `concurrency`
+  private readonly experimental: ExperimentalOptions;
+
   constructor(options: ClientOptions) {
     super(options);
+    this.experimental = { ...options.experimental };
+    this.functionsApi?.setExperimentalEnabled(!!this.experimental.functions);
+    this.transformationsApi?.setExperimentalEnabled(
+      !!this.experimental.transformations
+    );
   }
 
   /**
@@ -263,11 +274,38 @@ export default class CogniteClient extends BaseCogniteClient {
   public get transformations() {
     return accessApi(this.transformationsApi);
   }
+  /**
+   * @alpha Experimental, disabled unless the client is created with `experimental: { hostedExtractors: true }`.
+   */
   public get hostedExtractors() {
+    assertExperimentalEnabled(
+      !!this.experimental.hostedExtractors,
+      'hostedExtractors',
+      'client.hostedExtractors'
+    );
     return accessApi(this.hostedExtractorsApi);
   }
+  /**
+   * @alpha Experimental, disabled unless the client is created with `experimental: { workflows: true }`.
+   */
   public get workflows() {
+    assertExperimentalEnabled(
+      !!this.experimental.workflows,
+      'workflows',
+      'client.workflows'
+    );
     return accessApi(this.workflowsApi);
+  }
+  /**
+   * @alpha Experimental, disabled unless the client is created with `experimental: { extractionPipelines: true }`.
+   */
+  public get extractionPipelines() {
+    assertExperimentalEnabled(
+      !!this.experimental.extractionPipelines,
+      'extractionPipelines',
+      'client.extractionPipelines'
+    );
+    return accessApi(this.extractionPipelinesApi);
   }
   private assetsApi?: AssetsAPI;
   private timeSeriesApi?: TimeSeriesAPI;
@@ -313,6 +351,7 @@ export default class CogniteClient extends BaseCogniteClient {
   private transformationsApi?: TransformationsAPI;
   private hostedExtractorsApi?: HostedExtractorsAPI;
   private workflowsApi?: WorkflowsAPI;
+  private extractionPipelinesApi?: ExtractionPipelinesAPI;
 
   protected get version() {
     return version;
@@ -390,6 +429,10 @@ export default class CogniteClient extends BaseCogniteClient {
       'hostedextractors'
     );
     this.workflowsApi = this.apiFactory(WorkflowsAPI, 'workflows');
+    this.extractionPipelinesApi = this.apiFactory(
+      ExtractionPipelinesAPI,
+      'extpipes'
+    );
   }
 
   static urlEncodeExternalId(externalId: string): string {

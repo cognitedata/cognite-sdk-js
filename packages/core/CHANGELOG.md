@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.5.0](https://github.com/cognitedata/cognite-sdk-js/compare/%40cognite%2Fsdk-core%405.4.1...%40cognite%2Fsdk-core%405.5.0) (2026-11-11)
+
+### Bug Fixes
+
+* **core:** restrict retryable HTTP status codes to match Python SDK ([#1396](https://github.com/cognitedata/cognite-sdk-js/issues/1396)) ([7cd9cbc](https://github.com/cognitedata/cognite-sdk-js/commit/7cd9cbc8ec6a5b1486cdd590c8f624370113ee91))
+
+### Features
+
+* **functions:** add function calls API ([#1555](https://github.com/cognitedata/cognite-sdk-js/issues/1555)) ([e6a4f5f](https://github.com/cognitedata/cognite-sdk-js/commit/e6a4f5fee128c46df061d08430820b5e961fa25d)), closes [#1505](https://github.com/cognitedata/cognite-sdk-js/issues/1505)
+
+
 ## [5.4.1](https://github.com/cognitedata/cognite-sdk-js/compare/%40cognite%2Fsdk-core%405.4.0...%40cognite%2Fsdk-core%405.4.1) (2026-11-06)
 
 **Note:** Version bump only for package @cognite/sdk-core

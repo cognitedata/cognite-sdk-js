@@ -89,16 +89,19 @@ describe('data sets integration test', () => {
     });
 
     afterAll(async () => {
-      await client.files.delete([{ id: file.id }]);
+      if (file) {
+        await client.files.delete([{ id: file.id }]);
+      }
     });
 
+    // Waiting for the upload to be acknowledged can take up to ~50s.
     test('upload', async () => {
       const { localFileMeta, fileContent } = getFileCreateArgs({ dataSetId });
 
       file = await client.files.upload(localFileMeta, fileContent, false, true);
 
       expect(file.dataSetId).toEqual(dataSetId);
-    });
+    }, 90_000);
 
     test('list', async () => {
       await runTestWithRetryWhenFailing(async () => {
