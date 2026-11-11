@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.49.0](https://github.com/cognitedata/cognite-sdk-js/compare/%40cognite%2Fsdk-alpha%400.48.1...%40cognite%2Fsdk-alpha%400.49.0) (2026-11-11)
+
+### Features
+
+* **workflows:** add workflow executions and tasks API to stable ([#1565](https://github.com/cognitedata/cognite-sdk-js/issues/1565)) ([ad913b1](https://github.com/cognitedata/cognite-sdk-js/commit/ad913b15389b0aaab0bd1b75621440a5522a79f6)), closes [#1564](https://github.com/cognitedata/cognite-sdk-js/issues/1564) [#1564](https://github.com/cognitedata/cognite-sdk-js/issues/1564)
+* **workflows:** move workflow versions API to stable ([#1567](https://github.com/cognitedata/cognite-sdk-js/issues/1567)) ([0e7898a](https://github.com/cognitedata/cognite-sdk-js/commit/0e7898aff22c14f47400ac9bc4848c2aa50a0569)), closes [#1564](https://github.com/cognitedata/cognite-sdk-js/issues/1564) [#1564](https://github.com/cognitedata/cognite-sdk-js/issues/1564)
+* **workflows:** move workflows API to stable ([#1564](https://github.com/cognitedata/cognite-sdk-js/issues/1564)) ([9ff586b](https://github.com/cognitedata/cognite-sdk-js/commit/9ff586b76d8ce4fdac21c7f6673ae1efb5e57c75)), closes [#1505](https://github.com/cognitedata/cognite-sdk-js/issues/1505) [#1567](https://github.com/cognitedata/cognite-sdk-js/issues/1567) [#1428](https://github.com/cognitedata/cognite-sdk-js/issues/1428)
+
+
 ## [0.48.1](https://github.com/cognitedata/cognite-sdk-js/compare/%40cognite%2Fsdk-alpha%400.48.0...%40cognite%2Fsdk-alpha%400.48.1) (2026-11-06)
 
 **Note:** Version bump only for package @cognite/sdk-alpha
