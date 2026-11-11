@@ -121,6 +121,64 @@ await client.timeseries.synthetic.query([
 ]);
 ```
 
+#### Codemod
+
+`scripts/codemods/timeseries-data-namespace.mjs` rewrites the access paths for you
+(`client.datapoints.*` to `client.timeseries.data.*`, `client.timeseries.syntheticQuery` to
+`client.timeseries.synthetic.query`), and the matching type references (`CogniteClient['datapoints']`
+to `CogniteClient['timeseries']['data']`, `CogniteClient['timeseries']['syntheticQuery']` to
+`CogniteClient['timeseries']['synthetic']['query']`). It does not change request bodies; moving from
+`id` / `externalId` to `instanceId` needs a space and must be done by hand.
+
+```sh
+curl -O https://raw.githubusercontent.com/cognitedata/cognite-sdk-js/master/scripts/codemods/timeseries-data-namespace.mjs
+node timeseries-data-namespace.mjs --dry src   # preview
+node timeseries-data-namespace.mjs src         # apply
+npx prettier --write <changed files>           # or your own formatter
+```
+
+It needs `typescript` installed in your project. Symlinks are not followed.
+
+**Which receivers are rewritten.** By default the codemod goes by name, so that an unrelated
+`.datapoints` property, such as the one on a retrieve response, is left alone: the receiver has to
+look like a client (its name matches `/client/i`, or you list it with `--client-names=sdk,cdf`), or
+be a call to a client accessor such as `useSDK()`, `getClient()` or `useCogniteClient()`.
+
+With `--project` the TypeScript type checker decides instead of the name, so a member is rewritten
+when it is the SDK's own, whatever the receiver is called (`sdk.datapoints`, `useThing().datapoints`,
+an alias, a type alias of `CogniteClient`). The `datapoints` member on the SDK's response types is
+left alone. It needs your dependencies installed so that `@cognite/sdk` resolves, and the tsconfig
+that includes your sources (not a solution-style one that only has `references`):
+
+```sh
+node timeseries-data-namespace.mjs --project=tsconfig.app.json --project=tsconfig.spec.json src
+```
+
+Where the checker cannot tell (an `any` receiver, a file that is not part of a project) the name
+rules apply, and the run says how many files were matched by name only.
+
+The codemod keeps your formatting but does not format, and the new access path is longer, so run
+your formatter on the changed files afterwards.
+
+**Reported as warnings, and left for you to migrate by hand:**
+
+- `<x>.datapoints.<method>` or `<x>.timeseries.syntheticQuery` on a receiver that is not recognized
+  as a client. It is not rewritten, because `x.datapoints.delete(...)` may be a `Map`. Add the name
+  to `--client-names`, use `--project`, or migrate it yourself.
+- Destructuring such as `const { datapoints } = client` or `({ datapoints }: CogniteClient)`.
+- `Pick` or `Omit` over the client that names a moved key, such as
+  `Pick<CogniteClient, 'datapoints' | 'project'>`. The key moved to `timeseries.data`, so the type
+  has to be changed by hand; swapping in `'timeseries'` would widen it to the whole time series API.
+- A member of your own client type that is typed from the old path, for example
+  `type Deps = { datapoints: Pick<CogniteClient['datapoints'], 'retrieve'> }`. The type inside is
+  rewritten, but the member keeps its name `datapoints` because it has to move under
+  `timeseries.data`. Calls such as `this.client.datapoints.retrieve(...)` are rewritten to
+  `this.client.timeseries.data.retrieve(...)`, so the type has to be changed to match.
+
+**Not detected.** Mock objects that fake the client, such as `{ datapoints: { retrieve: vi.fn() } }`,
+and `vi.mock('@cognite/sdk', ...)` factories have no type link to the SDK. Update a hand-written
+client's shape after running the codemod and let `tsc` point out what is left.
+
 ### Datapoints: identify time series by `instanceId`
 
 Addressing a time series by `id` or `externalId` is deprecated as of 2026-10-15 and retired on
