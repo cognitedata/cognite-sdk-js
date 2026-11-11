@@ -73,6 +73,14 @@ test('is idempotent', () => {
   assert.equal(twice.output, once);
 });
 
+test('warns on destructuring without rewriting', () => {
+  const src =
+    'const { datapoints } = client;\nconst { syntheticQuery } = client.timeseries;';
+  const { output, warnings } = run(src);
+  assert.equal(output, src);
+  assert.equal(warnings.length, 2);
+});
+
 test('does not touch request bodies', () => {
   const src = 'client.datapoints.retrieve({ items: [{ externalId: "a" }] });';
   assert.equal(
@@ -255,6 +263,30 @@ const raw = res.datapoints;`;
     run('sdk.datapoints.retrieve({});', { clientNames: ['sdk'] }).output,
     'sdk.timeseries.data.retrieve({});'
   );
+});
+
+test('warns on Pick and Omit that name a key that moved', () => {
+  const src = `type A = Pick<CogniteClient, 'datapoints' | 'project'>;
+type B = Omit<
+  CogniteClient,
+  'datapoints'
+>;
+type C = Pick<CogniteClient['timeseries'], 'syntheticQuery' | 'retrieve'>;
+type D = Pick<CogniteClient, 'assets' | 'project'>;
+type E = Pick<Response, 'datapoints'>;`;
+  const { output, changes, warnings } = run(src);
+  assert.equal(changes, 0);
+  assert.equal(output, src);
+  assert.equal(warnings.length, 3);
+  assert.match(warnings[0], /^a\.ts:1: 'datapoints' in Pick/);
+  assert.match(warnings[1], /^a\.ts:2: 'datapoints' in Omit/);
+  assert.match(warnings[2], /^a\.ts:6: 'syntheticQuery' in Pick/);
+});
+
+test('warns on destructuring a client parameter or a client returned from a call', () => {
+  const { warnings } = run(`function f({ datapoints }: CogniteClient) {}
+const { datapoints } = useSDK();`);
+  assert.equal(warnings.length, 2);
 });
 
 test('handles tsx and preserves formatting', () => {

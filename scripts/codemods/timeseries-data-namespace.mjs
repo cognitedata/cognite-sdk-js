@@ -24,6 +24,8 @@
  *   - a `datapoints` member of your own client type that is typed from the old
  *     path, for example `{ datapoints: Pick<CogniteClient['datapoints'], 'retrieve'> }`:
  *     it has to move under `timeseries.data`, which is not a rename;
+ *   - `Pick` / `Omit` over the client that names a moved key, and destructuring
+ *     (`const { datapoints } = client`, `({ datapoints }: CogniteClient)`);
  *   - `<x>.datapoints.<method>` and `<x>.timeseries.syntheticQuery` on a receiver
  *     that is not recognized as a client (see below): it is not rewritten, because
  *     `x.datapoints.delete(...)` may be a Map, but the old path still compiles and
@@ -141,6 +143,16 @@ function inTypeQuery(name) {
   return ts.isTypeQueryNode(parent);
 }
 
+/** The string literals of a key type such as `'a' | 'b'`. */
+function keyLiterals(type) {
+  if (ts.isLiteralTypeNode(type) && ts.isStringLiteral(type.literal)) {
+    return [type.literal.text];
+  }
+  if (ts.isUnionTypeNode(type)) return type.types.flatMap(keyLiterals);
+  if (ts.isParenthesizedTypeNode(type)) return keyLiterals(type.type);
+  return [];
+}
+
 /** `x.name` or `x['name']`; undefined for any other expression. */
 function memberOf(node) {
   if (ts.isPropertyAccessExpression(node)) {
@@ -213,6 +225,7 @@ export function transform(source, fileName, options = {}) {
   const isClientType = (type) => isClientName(typeLastName(type));
 
   const isClientOwner = (typeNode) => isClientType(typeNode);
+  const keysOf = (typeNode) => keyLiterals(typeNode);
 
   // Type-level forms. `<Client>['datapoints']` and `<Client>['timeseries']['data']`
   // are the same member before and after the rewrite, so the warning below stays
@@ -347,6 +360,56 @@ export function transform(source, fileName, options = {}) {
       warnings.push(
         `${where(node)}: member 'datapoints' of a client type not renamed, move it under timeseries.data by hand`
       );
+    }
+    // const { datapoints } = client  /  const { syntheticQuery } = client.timeseries
+    // function f({ datapoints }: CogniteClient)
+    if (ts.isObjectBindingPattern(node)) {
+      const owner = node.parent;
+      const init = ts.isVariableDeclaration(owner)
+        ? owner.initializer
+        : undefined;
+      const type = ts.isParameter(owner) ? owner.type : undefined;
+      const fromClient = init
+        ? isClient(init)
+        : type !== undefined && isClientType(type);
+      const fromTimeseries = init
+        ? memberOf(init)?.name === 'timeseries' && isClient(init.expression)
+        : type !== undefined && isTimeseriesOf(type);
+      for (const el of node.elements) {
+        const key = el.propertyName ?? el.name;
+        const prop =
+          ts.isIdentifier(key) || ts.isStringLiteralLike(key)
+            ? key.text
+            : undefined;
+        if (
+          (prop === 'datapoints' && fromClient) ||
+          (prop === 'syntheticQuery' && fromTimeseries)
+        ) {
+          warnings.push(
+            `${where(el)}: destructured '${prop}' not rewritten, migrate by hand`
+          );
+        }
+      }
+    }
+    // Pick<CogniteClient, 'datapoints'>: the key moved, which is not a rename.
+    if (
+      ts.isTypeReferenceNode(node) &&
+      ts.isIdentifier(node.typeName) &&
+      (node.typeName.text === 'Pick' || node.typeName.text === 'Omit') &&
+      node.typeArguments?.length === 2
+    ) {
+      const [owner, keys] = node.typeArguments;
+      const moved = keysOf(keys);
+      for (const [key, matches, moveTo] of [
+        ['datapoints', isClientOwner(owner), 'timeseries.data'],
+        ['syntheticQuery', isTimeseriesOf(owner), 'timeseries.synthetic.query'],
+      ]) {
+        if (matches && moved.includes(key)) {
+          warnings.push(
+            `${where(node)}: '${key}' in ${node.typeName.text}<...> not renamed, it moved to ${moveTo}: change the type by hand`
+          );
+        }
+      }
     }
     ts.forEachChild(node, visit);
   };
