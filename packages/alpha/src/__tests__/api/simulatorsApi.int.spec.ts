@@ -1,11 +1,13 @@
 // Copyright 2023 Cognite AS
 
-import { describe, expect, test } from 'vitest';
+import { beforeAll, describe, expect, test } from 'vitest';
 import type CogniteClientAlpha from '../../cogniteClient';
 import type { SimulatorPatch } from '../../types';
 import { setupLoggedInClient } from '../testUtils';
 import {
   createTestIdentifiers,
+  deleteSimulatorAfterAll,
+  deleteStaleTestSimulators,
   fileExtensionTypes,
   modelTypes,
   stepFields,
@@ -17,6 +19,13 @@ describe('simulators api', () => {
 
   const { simulatorExternalId, simulatorName } = createTestIdentifiers();
   let simulatorId: number;
+  const simulatorCleanup = deleteSimulatorAfterAll(client, () => simulatorId);
+
+  // The sweep runs only here so parallel simulator suites don't race to
+  // delete the same simulators.
+  beforeAll(async () => {
+    await deleteStaleTestSimulators(client);
+  }, 120_000);
 
   test('create simulators', async () => {
     const response = await client.simulators.create([
@@ -113,6 +122,7 @@ describe('simulators api', () => {
           id: simulatorId,
         },
       ]);
+      simulatorCleanup.markDeleted();
       expect(response).toEqual({});
       const responseAfterDelete = await client.simulators.list();
       expect(

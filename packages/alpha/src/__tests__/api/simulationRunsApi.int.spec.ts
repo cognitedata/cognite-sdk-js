@@ -9,6 +9,7 @@ import {
 } from '../testUtils';
 import {
   createTestIdentifiers,
+  deleteSimulatorAfterAll,
   fileExtensionTypes,
   modelTypes,
   routineRevisionConfiguration,
@@ -30,6 +31,7 @@ describe('simulator runs api', () => {
   const client: CogniteClientAlpha = setupLoggedInClient();
   let runId = 0;
   let simulatorId: number;
+  const simulatorCleanup = deleteSimulatorAfterAll(client, () => simulatorId);
   let testDataSetId: number;
   let testFileId: number;
 
@@ -170,7 +172,8 @@ describe('simulator runs api', () => {
       filter: {
         simulatorExternalIds: [simulatorExternalId],
         createdTime: {
-          max: new Date(),
+          // Leaves room for the CDF clock running ahead of the local clock.
+          max: new Date(Date.now() + 60 * 1000),
         },
       },
       sort: [
@@ -242,6 +245,7 @@ describe('simulator runs api', () => {
           id: simulatorId,
         },
       ]);
+      simulatorCleanup.markDeleted();
       expect(response).toEqual({});
       const responseAfterDelete = await client.simulators.list();
       expect(

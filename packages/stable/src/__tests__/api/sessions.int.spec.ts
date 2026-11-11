@@ -1,7 +1,14 @@
-import type { SessionFilter } from 'stable/src/api/sessions/types';
+import type {
+  SessionCreateResultItem,
+  SessionFilter,
+} from 'stable/src/api/sessions/types';
 import { beforeAll, describe, expect, test } from 'vitest';
 import type CogniteClient from '../../cogniteClient';
-import { setupLoggedInClient } from '../testUtils';
+import { runTestWithRetryWhenFailing, setupLoggedInClient } from '../testUtils';
+
+// Timestamps come from the CDF server clock, which can run ahead of the
+// clock on the machine running the tests.
+const CLOCK_SKEW_TOLERANCE_MS = 60 * 1000;
 
 describe('Sessions integration test', () => {
   let testSessionId: number | undefined = undefined;
@@ -11,17 +18,21 @@ describe('Sessions integration test', () => {
     client = setupLoggedInClient();
   });
 
+  // POST /sessions is not idempotent, so the SDK does not retry it on 5xx.
   test('create', async () => {
     const clientSecret = process.env.COGNITE_CLIENT_SECRET || '';
     const clientId = process.env.COGNITE_CLIENT_ID || '';
     expect(clientSecret).toBeTruthy();
     expect(clientId).toBeTruthy();
-    const result = await client.sessions.create([
-      {
-        clientSecret,
-        clientId,
-      },
-    ]);
+    let result: SessionCreateResultItem[] = [];
+    await runTestWithRetryWhenFailing(async () => {
+      result = await client.sessions.create([
+        {
+          clientSecret,
+          clientId,
+        },
+      ]);
+    });
 
     expect(result).toHaveLength(1);
     expect(typeof result[0].id).toBe('number');
@@ -31,7 +42,7 @@ describe('Sessions integration test', () => {
     expect(typeof result[0].nonce).toBe('string');
     expect(result[0].type).toBe('CLIENT_CREDENTIALS');
     expect(result[0].clientId).toBe(clientId);
-  });
+  }, 60_000);
 
   test('list', async () => {
     expect(testSessionId).toBeTruthy();
@@ -41,7 +52,9 @@ describe('Sessions integration test', () => {
     expect(items.length).toBeGreaterThan(0);
     const foundSession = items.find((session) => session.id === testSessionId);
     expect(foundSession).toBeDefined();
-    expect(foundSession?.creationTime).toBeLessThan(Date.now());
+    expect(foundSession?.creationTime).toBeLessThan(
+      Date.now() + CLOCK_SKEW_TOLERANCE_MS
+    );
     expect(foundSession?.expirationTime).toBeGreaterThan(Date.now());
   });
 
