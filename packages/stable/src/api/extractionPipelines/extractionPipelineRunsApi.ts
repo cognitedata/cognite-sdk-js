@@ -16,7 +16,7 @@ export class ExtractionPipelineRunsAPI extends BaseResourceAPI<ExtractionPipelin
   /**
    * [Create extraction pipeline runs](https://api-docs.cognite.com/20230101/tag/Extraction-Pipelines-Runs/operation/createRuns)
    *
-   * Reports the status of extraction pipelines. The API currently accepts one run per request.
+   * Reports the status of extraction pipelines.
    *
    * ```js
    * const runs = await client.extractionPipelines.runs.create([
