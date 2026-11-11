@@ -23,6 +23,11 @@ describe('experimental opt-in', () => {
     ],
     ['client.workflows', 'workflows', (c: CogniteClient) => c.workflows],
     [
+      'client.extractionPipelines',
+      'extractionPipelines',
+      (c: CogniteClient) => c.extractionPipelines,
+    ],
+    [
       'client.functions.calls',
       'functions',
       (c: CogniteClient) => c.functions.calls,
@@ -88,6 +93,7 @@ describe('experimental opt-in', () => {
     const client = setupMockableClient();
     expect(client.workflows).toBeDefined();
     expect(client.hostedExtractors).toBeDefined();
+    expect(client.extractionPipelines).toBeDefined();
     expect(client.functions.calls).toBeDefined();
     expect(client.transformations.jobs).toBeDefined();
   });

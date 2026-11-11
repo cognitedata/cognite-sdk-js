@@ -20,6 +20,8 @@ export type ExperimentalOptions = {
    * `.schedules` and `.schema`. The transformations CRUD methods are not gated.
    */
   transformations?: boolean;
+  /** Enables `client.extractionPipelines`. */
+  extractionPipelines?: boolean;
 };
 
 export type ExperimentalFeature = keyof ExperimentalOptions;

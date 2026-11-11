@@ -101,12 +101,13 @@ const client = new CogniteClient({
 });
 ```
 
-| Flag               | Enables                                                                                     |
-| ------------------ | ------------------------------------------------------------------------------------------- |
-| `hostedExtractors` | `client.hostedExtractors` (sources, jobs, mappings, destinations)                           |
-| `workflows`        | `client.workflows` (versions, executions, tasks, triggers)                                  |
-| `functions`        | `client.functions.calls`, `client.functions.schedules`                                      |
-| `transformations`  | `client.transformations.jobs`, `.notifications`, `.query`, `.schedules`, `.schema`          |
+| Flag                  | Enables                                                                                     |
+| --------------------- | ------------------------------------------------------------------------------------------- |
+| `hostedExtractors`    | `client.hostedExtractors` (sources, jobs, mappings, destinations)                           |
+| `workflows`           | `client.workflows` (versions, executions, tasks, triggers)                                  |
+| `functions`           | `client.functions.calls`, `client.functions.schedules`                                      |
+| `transformations`     | `client.transformations.jobs`, `.notifications`, `.query`, `.schedules`, `.schema`          |
+| `extractionPipelines` | `client.extractionPipelines`                                                                |
 
 APIs that have already been released are not gated.
 

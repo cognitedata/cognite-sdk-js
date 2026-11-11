@@ -22,6 +22,7 @@ import { DataSetsAPI } from './api/datasets/datasetsApi';
 import { DocumentsAPI } from './api/documents/documentsApi';
 import { EntityMatchingApi } from './api/entityMatching/entityMatchingApi';
 import { EventsAPI } from './api/events/eventsApi';
+import { ExtractionPipelinesAPI } from './api/extractionPipelines/extractionPipelinesApi';
 import { ExtractorsAPI } from './api/extractors/extractorsApi';
 import { FilesAPI } from './api/files/filesApi';
 import { FunctionsAPI } from './api/functions/functionsApi';
@@ -292,6 +293,17 @@ export default class CogniteClient extends BaseCogniteClient {
     );
     return accessApi(this.workflowsApi);
   }
+  /**
+   * @alpha Experimental, disabled unless the client is created with `experimental: { extractionPipelines: true }`.
+   */
+  public get extractionPipelines() {
+    assertExperimentalEnabled(
+      !!this.experimental.extractionPipelines,
+      'extractionPipelines',
+      'client.extractionPipelines'
+    );
+    return accessApi(this.extractionPipelinesApi);
+  }
   private assetsApi?: AssetsAPI;
   private timeSeriesApi?: TimeSeriesAPI;
   /**
@@ -336,6 +348,7 @@ export default class CogniteClient extends BaseCogniteClient {
   private transformationsApi?: TransformationsAPI;
   private hostedExtractorsApi?: HostedExtractorsAPI;
   private workflowsApi?: WorkflowsAPI;
+  private extractionPipelinesApi?: ExtractionPipelinesAPI;
 
   protected get version() {
     return version;
@@ -413,6 +426,10 @@ export default class CogniteClient extends BaseCogniteClient {
       'hostedextractors'
     );
     this.workflowsApi = this.apiFactory(WorkflowsAPI, 'workflows');
+    this.extractionPipelinesApi = this.apiFactory(
+      ExtractionPipelinesAPI,
+      'extpipes'
+    );
   }
 
   static urlEncodeExternalId(externalId: string): string {
