@@ -115,7 +115,7 @@ export interface Extractor {
    * Type
    * Type of extractor. "Global" means that it is globally available and maintained by cognite. "Community" means that it is unofficial and community maintained. "Unreleased" means that it is not yet publicly available and it is visible only as a prerelease or private beta. "Hosted" means it is a hosted extractor that runs as part of the CDF platform.
    */
-  type: 'global' | 'community' | 'unreleased' | 'hosted';
+  type: 'global' | 'community' | 'unreleased' | 'hosted' | 'zero_copy';
 }
 /**
  * Identifier for an extractor
@@ -191,6 +191,8 @@ export interface ReleaseId {
  * A solution represents a connection between an extractor and a source system it can be configured to read from.
  */
 export interface Solution {
+  /** External ID of the connector of this solution. */
+  connectorExternalId?: string;
   /** Long-form documentation of the solution, describing how to use the referenced extractor to connect to the referenced source. */
   documentation?: string;
   /** The external ID provided by the client. Must be unique for the resource type. */

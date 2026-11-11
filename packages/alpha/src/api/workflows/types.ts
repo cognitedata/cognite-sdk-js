@@ -1,32 +1,24 @@
 // Copyright 2026 Cognite AS
 
 import type {
-  CogniteExternalId,
-  CogniteInternalId,
-  FilterQuery,
-} from '@cognite/sdk-core';
+  WorkflowAuthentication,
+  WorkflowExecutionStatus,
+  Workflow as WorkflowStable,
+  WorkflowTaskExecutionStatus,
+  WorkflowUpsert as WorkflowUpsertStable,
+} from '@cognite/sdk';
+import type { CogniteExternalId } from '@cognite/sdk-core';
 
-export interface Workflow {
-  externalId: CogniteExternalId;
-  description?: string;
-  dataSetId?: CogniteInternalId;
-  maxConcurrentExecutions?: number;
+interface WorkflowAlphaFields {
   dataDomainExternalId?: CogniteExternalId;
-  createdTime?: number;
-  lastUpdatedTime: number;
+  isDataAware?: boolean;
 }
 
-export interface WorkflowUpsert {
-  externalId: CogniteExternalId;
-  description?: string;
-  dataSetId?: CogniteInternalId;
-  maxConcurrentExecutions?: number;
-  dataDomainExternalId?: CogniteExternalId;
-}
+export interface Workflow extends WorkflowStable, WorkflowAlphaFields {}
 
-export interface WorkflowExternalId {
-  externalId: CogniteExternalId;
-}
+export interface WorkflowUpsert
+  extends WorkflowUpsertStable,
+    WorkflowAlphaFields {}
 
 /** JSON-serializable values used in workflow task parameters. */
 export type JsonValue =
@@ -188,19 +180,6 @@ export type VersionUpsert = {
   workflowDefinition: WorkflowDefinitionCreate;
 };
 
-export interface WorkflowVersionWorkflowFilter {
-  externalId: CogniteExternalId;
-  version?: string;
-}
-
-export interface WorkflowVersionFilter {
-  workflowFilters?: WorkflowVersionWorkflowFilter[];
-}
-
-export interface WorkflowVersionFilterQuery extends FilterQuery {
-  filter?: WorkflowVersionFilter;
-}
-
 export type FunctionOutput = {
   callId: number;
   functionId: number;
@@ -235,24 +214,10 @@ export type OutputType =
   | SimulationOutput
   | EmptyTaskOutput;
 
-export type WorkflowExecutionStatus =
-  | 'RUNNING'
-  | 'COMPLETED'
-  | 'FAILED'
-  | 'TIMED_OUT'
-  | 'TERMINATED';
-
-export type WorkflowTaskExecutionStatus =
-  | 'IN_PROGRESS'
-  | 'CANCELED'
-  | 'FAILED'
-  | 'FAILED_WITH_TERMINAL_ERROR'
-  | 'COMPLETED'
-  | 'COMPLETED_WITH_ERRORS'
-  | 'SCHEDULED'
-  | 'TIMED_OUT'
-  | 'SKIPPED';
-
+/**
+ * The execution type of the deprecated `client.workflowExecutions`.
+ * `client.workflows.executions` returns the stable `WorkflowExecution`.
+ */
 export interface WorkflowExecution {
   id: string;
   workflowExternalId: CogniteExternalId;
@@ -266,6 +231,10 @@ export interface WorkflowExecution {
   reasonForIncompletion?: string;
 }
 
+/**
+ * The task execution type of the deprecated `client.workflowExecutions`.
+ * `client.workflows.executions` returns the stable `WorkflowTaskExecution`.
+ */
 export interface WorkflowTaskExecution {
   id: string;
   externalId?: string;
@@ -280,48 +249,14 @@ export interface WorkflowTaskExecution {
   reasonForIncompletion?: string;
 }
 
+/**
+ * @deprecated Use `WorkflowExecutionDetailed`, returned by
+ * `client.workflows.executions.retrieve`.
+ */
 export interface WorkflowExecutionDetails extends WorkflowExecution {
   workflowDefinition: WorkflowDefinition;
   executedTasks: WorkflowTaskExecution[];
   input?: Record<string, JsonValue>;
-}
-
-export interface WorkflowExecutionWorkflowFilter {
-  externalId: CogniteExternalId;
-  version?: string;
-}
-
-export interface WorkflowExecutionFilter {
-  workflowFilters?: WorkflowExecutionWorkflowFilter[];
-  createdTimeStart?: number;
-  createdTimeEnd?: number;
-  status?: WorkflowExecutionStatus[];
-}
-
-export interface WorkflowExecutionFilterQuery extends FilterQuery {
-  filter?: WorkflowExecutionFilter;
-}
-
-export interface WorkflowAuthentication {
-  nonce: string;
-}
-
-export interface WorkflowExecutionRunRequest {
-  authentication: WorkflowAuthentication;
-  input?: Record<string, JsonValue>;
-  metadata?: Record<string, string>;
-}
-
-export interface WorkflowExecutionRetryRequest {
-  authentication: WorkflowAuthentication;
-}
-
-export interface WorkflowExecutionCancelRequest {
-  reason?: string;
-}
-
-export interface WorkflowTriggerExternalId {
-  externalId: CogniteExternalId;
 }
 
 export interface ManualWorkflowTriggerRule {
@@ -407,15 +342,3 @@ export type WorkflowTrigger =
 
 export type WorkflowTriggerUpsert =
   WorkflowTriggerRequestBase<WorkflowTriggerUpsertRule>;
-
-export type WorkflowTriggerRunStatus = 'success' | 'failed';
-
-export interface WorkflowTriggerRun {
-  fireTime: number;
-  externalId: CogniteExternalId;
-  workflowExternalId: CogniteExternalId;
-  workflowVersion: string;
-  status: WorkflowTriggerRunStatus;
-  workflowExecutionId?: string | null;
-  reasonForFailure?: string | null;
-}

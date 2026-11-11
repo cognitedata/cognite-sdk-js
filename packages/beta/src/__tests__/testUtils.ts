@@ -4,6 +4,7 @@ import { createReadStream, readFileSync, statSync } from 'node:fs';
 import { PassThrough } from 'node:stream';
 import { Constants } from '@cognite/sdk-core';
 import { mockBaseUrl, project } from '../../../core/src/__tests__/testUtils';
+import { testConcurrency } from '../../../stable/src/__tests__/testConcurrency';
 import CogniteClient from '../cogniteClient';
 import { login } from './login';
 
@@ -16,6 +17,7 @@ export function setupClient(baseUrl: string = Constants.BASE_URL) {
       login().then((account) => {
         return account.access_token;
       }),
+    concurrency: testConcurrency,
     // Promise.resolve(
     //   '' // This is a dummy token, for intergration tests you should use login() to get a real token
     // ),
@@ -31,6 +33,7 @@ export function setupLoggedInClient() {
       login().then((account) => {
         return account.access_token;
       }),
+    concurrency: testConcurrency,
   });
 }
 

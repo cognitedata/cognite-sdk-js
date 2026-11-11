@@ -29,9 +29,17 @@ export class DataPointsAPI extends BaseResourceAPI<
   /**
    * [Insert data points](https://doc.cognitedata.com/api/v1/#operation/postMultiTimeSeriesDatapoints)
    *
+   * Identifying time series by id or externalId is deprecated 2026-10-15 and retired 2027-12-31. Use instanceId.
+   *
    * ```js
-   * await client.datapoints.insert([{ id: 123, datapoints: [{timestamp: 1557320284000, value: -2}] }]);
+   * await client.timeseries.data.insert([
+   *   { instanceId: { space: 'my-space', externalId: 'my-ts' }, datapoints: [{ timestamp: 1557320284000, value: -2 }] },
+   *   { instanceId: { space: 'my-space', externalId: 'my-state-ts' }, datapoints: [{ timestamp: 1557320284000, numericValue: 1, stringValue: 'OPEN' }] },
+   * ]);
    * ```
+   *
+   * @remarks
+   * Time series with type `state` take `numericValue` and/or `stringValue` instead of `value`.
    */
   public insert = (items: DatapointsInsertItem[]): Promise<object> => {
     return this.insertEndpoint(items);
@@ -40,9 +48,18 @@ export class DataPointsAPI extends BaseResourceAPI<
   /**
    * [Retrieve data points](https://doc.cognitedata.com/api/v1/#operation/getMultiTimeSeriesDatapoints)
    *
+   * Identifying time series by id or externalId is deprecated 2026-10-15 and retired 2027-12-31. Use instanceId.
+   *
    * ```js
-   * const data = await client.datapoints.retrieve({ items: [{ id: 123 }] });
+   * const data = await client.timeseries.data.retrieve({
+   *   items: [{ instanceId: { space: 'my-space', externalId: 'my-ts' } }],
+   * });
    * ```
+   *
+   * @remarks
+   * Raw data points are returned as numeric, string or state data points depending on the time series type.
+   * Narrow each item on `type` (`'numeric'`, `'string'` or `'state'`) rather than `isString`,
+   * since state time series also have `isString: false`.
    */
   public retrieve = (
     query: DatapointsMultiQuery
@@ -54,7 +71,11 @@ export class DataPointsAPI extends BaseResourceAPI<
    * @deprecated Use `retrieve()` with `granularity: '1mo'` instead. Will be removed in next major release.
    *
    * ```js
-   * const monthlyAggregatesData = await client.datapoints.retrieve({ items: [{ id: 123 }], granularity: '1mo', aggregates: ['average'] });
+   * const monthlyAggregatesData = await client.timeseries.data.retrieve({
+   *   items: [{ instanceId: { space: 'my-space', externalId: 'my-ts' } }],
+   *   granularity: '1mo',
+   *   aggregates: ['average'],
+   * });
    * ```
    */
   public retrieveDatapointMonthlyAggregates = async (
@@ -72,18 +93,18 @@ export class DataPointsAPI extends BaseResourceAPI<
   /**
    * [Get latest data point in a time series](https://doc.cognitedata.com/api/v1/#operation/getLatest)
    *
+   * Identifying time series by id or externalId is deprecated 2026-10-15 and retired 2027-12-31. Use instanceId.
+   *
    * ```js
-   * const datapoints = await client.datapoints.retrieveLatest([
-   *   {
-   *    before: 'now',
-   *    id: 123
-   *  },
-   *  {
-   *    externalId: 'abc',
-   *    before: new Date('21 jan 2018'),
-   *  }
+   * const datapoints = await client.timeseries.data.retrieveLatest([
+   *   { instanceId: { space: 'my-space', externalId: 'my-ts' }, before: 'now' },
+   *   { instanceId: { space: 'my-space', externalId: 'other-ts' }, before: new Date('21 jan 2018') },
    * ]);
    * ```
+   *
+   * @remarks
+   * Narrow each item on `type` (`'numeric'`, `'string'` or `'state'`) rather than `isString`,
+   * since state time series also have `isString: false`.
    */
   public retrieveLatest = (
     items: LatestDataBeforeRequest[],
@@ -95,8 +116,12 @@ export class DataPointsAPI extends BaseResourceAPI<
   /**
    * [Delete data points](https://doc.cognitedata.com/api/v1/#operation/deleteDatapoints)
    *
+   * Identifying time series by id or externalId is deprecated 2026-10-15 and retired 2027-12-31. Use instanceId.
+   *
    * ```js
-   * await client.datapoints.delete([{id: 123, inclusiveBegin: new Date('1 jan 2019')}]);
+   * await client.timeseries.data.delete([
+   *   { instanceId: { space: 'my-space', externalId: 'my-ts' }, inclusiveBegin: new Date('1 jan 2019') },
+   * ]);
    * ```
    */
   public delete = (items: DatapointsDeleteRequest[]): Promise<object> => {

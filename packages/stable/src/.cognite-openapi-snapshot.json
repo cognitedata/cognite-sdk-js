@@ -74368,7 +74368,8 @@
               "global",
               "community",
               "unreleased",
-              "hosted"
+              "hosted",
+              "zero_copy"
             ]
           }
         },
@@ -74692,6 +74693,12 @@
           "extractorExternalId": {
             "type": "string",
             "description": "External ID of the extractor of this solution.",
+            "maxLength": 255,
+            "minLength": 1
+          },
+          "connectorExternalId": {
+            "type": "string",
+            "description": "External ID of the connector of this solution.",
             "maxLength": 255,
             "minLength": 1
           }

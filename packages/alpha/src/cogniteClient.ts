@@ -2,6 +2,7 @@
 import { CogniteClient as CogniteClientStable } from '@cognite/sdk';
 import { accessApi } from '@cognite/sdk-core';
 import { version } from '../package.json';
+import { DataDomainsAPI } from './api/dataDomains/dataDomainsApi';
 import { LimitsAPI } from './api/limits/limitsApi';
 import { MeteringAPI } from './api/metering/meteringApi';
 import { SimulatorsAPI } from './api/simulators/simulatorsApi';
@@ -15,11 +16,12 @@ export default class CogniteClientAlpha extends CogniteClientStable {
   private simulatorsApi?: SimulatorsAPI;
   private limitsApi?: LimitsAPI;
   private meteringApi?: MeteringAPI;
-  private workflowsApi?: WorkflowsAPI;
+  private workflowsAlphaApi?: WorkflowsAPI;
   private workflowVersionsApi?: WorkflowVersionsAPI;
   private workflowExecutionsApi?: WorkflowExecutionsAPI;
   private workflowTriggersApi?: WorkflowTriggersAPI;
   private transformationsExternalDataApi?: TransformationsExternalDataAPI;
+  private dataDomainsApi?: DataDomainsAPI;
 
   public get limits() {
     return accessApi(this.limitsApi);
@@ -33,24 +35,41 @@ export default class CogniteClientAlpha extends CogniteClientStable {
     return accessApi(this.simulatorsApi);
   }
 
-  public get workflows() {
-    return accessApi(this.workflowsApi);
+  /**
+   * The stable workflows API, with alpha-only fields such as
+   * `dataDomainExternalId` added to its types.
+   */
+  public override get workflows(): WorkflowsAPI {
+    return accessApi(this.workflowsAlphaApi);
   }
 
+  /**
+   * @deprecated Use `client.workflows.versions` instead.
+   */
   public get workflowVersions() {
     return accessApi(this.workflowVersionsApi);
   }
 
+  /**
+   * @deprecated Use `client.workflows.executions` instead.
+   */
   public get workflowExecutions() {
     return accessApi(this.workflowExecutionsApi);
   }
 
+  /**
+   * @deprecated Use `client.workflows.triggers` instead.
+   */
   public get workflowTriggers() {
     return accessApi(this.workflowTriggersApi);
   }
 
   public get transformationsExternalData() {
     return accessApi(this.transformationsExternalDataApi);
+  }
+
+  public get dataDomains() {
+    return accessApi(this.dataDomainsApi);
   }
 
   protected initAPIs() {
@@ -61,7 +80,7 @@ export default class CogniteClientAlpha extends CogniteClientStable {
     this.simulatorsApi = this.apiFactory(SimulatorsAPI, 'simulators');
     this.limitsApi = this.apiFactory(LimitsAPI, 'limits');
     this.meteringApi = this.apiFactory(MeteringAPI, 'metering');
-    this.workflowsApi = this.apiFactory(WorkflowsAPI, 'workflows');
+    this.workflowsAlphaApi = this.apiFactory(WorkflowsAPI, 'workflows');
     this.workflowVersionsApi = this.apiFactory(
       WorkflowVersionsAPI,
       'workflows/versions'
@@ -74,6 +93,7 @@ export default class CogniteClientAlpha extends CogniteClientStable {
       TransformationsExternalDataAPI,
       'transformations/externaldata'
     );
+    this.dataDomainsApi = this.apiFactory(DataDomainsAPI, 'datadomains');
     this.workflowExecutionsApi = new WorkflowExecutionsAPI(
       `${this.projectUrl}/workflows/executions`,
       `${this.projectUrl}/workflows`,

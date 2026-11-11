@@ -9,7 +9,7 @@ export type ConcurrencyOptions<C extends string> = Partial<Record<C, number>>;
 export interface ConcurrencyRule<C extends string> {
   /** Matches any method when omitted. */
   readonly method?: HttpMethod;
-  /** Matched against the normalized pathname. Must not use the `g` or `y` flag */
+  /** Matched against the {@link normalizePath normalized} pathname. Must not use the `g` or `y` flag */
   readonly pattern: RegExp;
   readonly category: C;
 }
@@ -24,8 +24,6 @@ export interface ConcurrencyPolicy<C extends string> {
   readonly defaults: Readonly<Record<C, number>>;
   /** First match wins, so order matters when rules overlap. */
   readonly rules: readonly ConcurrencyRule<C>[];
-  /** Maps a request pathname to the form the rules are written against. */
-  readonly normalizePath?: (pathname: string) => string;
   /** Category for paths no rule matches. Return `undefined` to leave them unlimited. */
   readonly fallback?: (normalizedPath: string) => C | undefined;
 }
@@ -42,6 +40,22 @@ export interface ConcurrencyLimitedRequest {
 
 export interface RequestConcurrencyLimiter {
   run<T>(request: ConcurrencyLimitedRequest, fn: () => Promise<T>): Promise<T>;
+}
+
+/**
+ * Strips trailing slashes and any proxy prefix plus `/api/<version>/projects/<project>`,
+ * so rules are written against the project-relative path:
+ *
+ * - `/api/v1/projects/my-project/models/instances/query` -> `/models/instances/query`
+ * - `/cdf/api/v1/projects/my-project/models/views/` -> `/models/views`
+ * - `/gateway/cdf/api/20230101/projects/p/dml/graphql` -> `/dml/graphql`
+ * - `/models/instances` -> `/models/instances` (already normalized)
+ * - `/api/v1/token/inspect` -> unchanged, not under a project
+ */
+export function normalizePath(pathname: string): string {
+  return pathname
+    .replace(/\/+$/, '')
+    .replace(/^.*?\/api\/[^/]+\/projects\/[^/]+(?=\/)/, '');
 }
 
 /** Limits concurrent HTTP attempts per category of a {@link ConcurrencyPolicy}. */
@@ -88,7 +102,7 @@ export class ConcurrencyLimiter implements RequestConcurrencyLimiter {
   }
 
   public classify(method: HttpMethod, pathname: string): string | undefined {
-    const path = this.policy.normalizePath?.(pathname) ?? pathname;
+    const path = normalizePath(pathname);
     for (const rule of this.policy.rules) {
       if (
         (rule.method === undefined || rule.method === method) &&

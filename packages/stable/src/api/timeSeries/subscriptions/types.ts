@@ -14,6 +14,7 @@ import type {
 import type {
   DatapointsDeleteRange,
   DoubleDatapoint,
+  StateDatapoint,
   StringDatapoint,
 } from '../../dataPoints/types';
 import type { TimeSeriesType } from '../types';
@@ -103,12 +104,14 @@ export interface DataPointSubscriptionCreateBase {
   externalId: CogniteExternalId;
   name?: string;
   description?: string;
+  /** @deprecated Data sets on subscriptions are deprecated 2026-10-15 and retired 2027-12-31. Will be removed in next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#data-point-subscriptions-track-time-series-by-instanceids. */
   dataSetId?: CogniteInternalId;
   partitionCount: number;
 }
 
 export type DataPointSubscriptionCreate =
   | (DataPointSubscriptionCreateBase & {
+      /** @deprecated Defining subscription members by time series externalId (timeSeriesIds) is deprecated 2026-10-15 and retired 2027-12-31, use instanceIds instead. Will be removed in next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#data-point-subscriptions-track-time-series-by-instanceids. */
       timeSeriesIds: CogniteExternalId[];
       instanceIds?: undefined;
       filter?: undefined;
@@ -119,6 +122,7 @@ export type DataPointSubscriptionCreate =
       filter?: undefined;
     })
   | (DataPointSubscriptionCreateBase & {
+      /** @deprecated Filter subscriptions are deprecated 2026-10-15 and retired 2027-12-31, list the time series in instanceIds instead. Will be removed in next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#data-point-subscriptions-track-time-series-by-instanceids. */
       filter: SubscriptionFilterLanguage;
       timeSeriesIds?: undefined;
       instanceIds?: undefined;
@@ -128,16 +132,20 @@ export interface DataPointSubscription {
   externalId: CogniteExternalId;
   name?: string;
   description?: string;
+  /** @deprecated Data sets on subscriptions are deprecated 2026-10-15 and retired 2027-12-31. Will be removed in next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#data-point-subscriptions-track-time-series-by-instanceids. */
   dataSetId?: CogniteInternalId;
   partitionCount: number;
   timeSeriesCount?: number;
+  /** @deprecated Filter subscriptions are deprecated 2026-10-15 and retired 2027-12-31, use subscriptions defined by instanceIds instead. Will be removed in next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#data-point-subscriptions-track-time-series-by-instanceids. */
   filter?: SubscriptionFilterLanguage;
   createdTime: Date;
   lastUpdatedTime: Date;
 }
 
 export interface DataPointSubscriptionMember {
+  /** @deprecated Identifying subscription members by externalId is deprecated 2026-10-15 and retired 2027-12-31, use instanceId instead. Will be removed in next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#data-point-subscriptions-track-time-series-by-instanceids. */
   externalId?: CogniteExternalId;
+  /** @deprecated Identifying subscription members by internal id is deprecated 2026-10-15 and retired 2027-12-31, use instanceId instead. Will be removed in next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#data-point-subscriptions-track-time-series-by-instanceids. */
   id?: CogniteInternalId;
   instanceId?: CogniteInstanceId;
 }
@@ -161,6 +169,7 @@ export interface DataPointSubscriptionMembersListResponse {
   nextCursor?: string;
 }
 
+/** @deprecated Updating subscription members by time series externalId (timeSeriesIds) is deprecated 2026-10-15 and retired 2027-12-31, use DataPointSubscriptionInstanceIdsUpdate instead. Will be removed in next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#data-point-subscriptions-track-time-series-by-instanceids. */
 export type DataPointSubscriptionTimeSeriesIdsUpdate =
   | { add: CogniteExternalId[]; remove: CogniteExternalId[] }
   | { set: CogniteExternalId[] };
@@ -170,11 +179,14 @@ export type DataPointSubscriptionInstanceIdsUpdate =
   | { set: CogniteInstanceId[] };
 
 export interface DataPointSubscriptionUpdateBody {
+  /** @deprecated Updating subscription members by time series externalId (timeSeriesIds) is deprecated 2026-10-15 and retired 2027-12-31, use instanceIds instead. Will be removed in next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#data-point-subscriptions-track-time-series-by-instanceids. */
   timeSeriesIds?: DataPointSubscriptionTimeSeriesIdsUpdate;
   instanceIds?: DataPointSubscriptionInstanceIdsUpdate;
   name?: NullableSinglePatchString;
   description?: NullableSinglePatchString;
+  /** @deprecated Data sets on subscriptions are deprecated 2026-10-15 and retired 2027-12-31. Will be removed in next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#data-point-subscriptions-track-time-series-by-instanceids. */
   dataSetId?: NullableSinglePatchLong;
+  /** @deprecated Filter subscriptions are deprecated 2026-10-15 and retired 2027-12-31, use subscriptions defined by instanceIds instead. Will be removed in next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#data-point-subscriptions-track-time-series-by-instanceids. */
   filter?: { set: SubscriptionFilterLanguage };
 }
 
@@ -212,14 +224,19 @@ export interface DataPointSubscriptionListDataQuery {
 }
 
 export interface GetTimeSeriesForSubscription {
+  /** @deprecated Identifying time series by internal id is deprecated 2026-10-15 and retired 2027-12-31, use instanceId instead. Will be removed in next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#data-point-subscriptions-track-time-series-by-instanceids. */
   id: CogniteInternalId;
+  /** @deprecated Identifying time series by externalId is deprecated 2026-10-15 and retired 2027-12-31, use instanceId instead. Will be removed in next major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#data-point-subscriptions-track-time-series-by-instanceids. */
   externalId?: CogniteExternalId;
   instanceId?: CogniteInstanceId;
   isString: boolean;
   type: TimeSeriesType;
 }
 
-export type SubscriptionDataUpsert = DoubleDatapoint | StringDatapoint;
+export type SubscriptionDataUpsert =
+  | DoubleDatapoint
+  | StringDatapoint
+  | StateDatapoint;
 
 export interface DataPointSubscriptionDataUpdate {
   timeSeries?: GetTimeSeriesForSubscription;

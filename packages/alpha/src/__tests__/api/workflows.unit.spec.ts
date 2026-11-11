@@ -19,6 +19,7 @@ describe('Workflows unit test', () => {
 
   const mockWorkflow = {
     ...workflowFixture,
+    isDataAware: false,
     createdTime: Date.now(),
     lastUpdatedTime: Date.now() + 1000,
   };
@@ -55,6 +56,30 @@ describe('Workflows unit test', () => {
 
     const response = await client.workflows.retrieve('wf-2');
     expect(response.externalId).toEqual('wf-2');
+  });
+
+  test('upsert forwards isDataAware', async () => {
+    const upsertBody = {
+      externalId: 'wf-data-aware',
+      isDataAware: true,
+    };
+    nock(mockBaseUrl)
+      .post(/\/workflows$/, matches({ items: [upsertBody] }))
+      .once()
+      .reply(200, {
+        items: [
+          {
+            ...mockWorkflow,
+            externalId: upsertBody.externalId,
+            isDataAware: true,
+          },
+        ],
+      });
+
+    const items = await client.workflows.upsert([upsertBody]);
+
+    expect(items).toHaveLength(1);
+    expect(items[0].isDataAware).toBe(true);
   });
 
   test('upsert forwards maxConcurrentExecutions, dataSetId, and dataDomainExternalId', async () => {
@@ -94,5 +119,72 @@ describe('Workflows unit test', () => {
       .reply(200, {});
 
     await client.workflows.delete([{ externalId: 'wf-1' }]);
+  });
+
+  test('versions sub-API sends the alpha cdf-version header', async () => {
+    const version = { workflowExternalId: 'wf-1', version: '1' };
+    nock(mockBaseUrl, {
+      reqheaders: { 'cdf-version': '20230101-alpha' },
+    })
+      .get(/\/workflows\/wf-1\/versions\/1$/)
+      .once()
+      .reply(200, version);
+
+    const response = await client.workflows.versions.retrieve('wf-1', '1');
+    expect(response).toEqual(version);
+  });
+
+  test('executions sub-API sends the alpha cdf-version header', async () => {
+    const execution = {
+      id: 'execution-1',
+      workflowExternalId: 'wf-1',
+      status: 'RUNNING',
+      engineExecutionId: 'engine-1',
+      createdTime: 1730000000000,
+      metadata: {},
+    };
+    nock(mockBaseUrl, {
+      reqheaders: { 'cdf-version': '20230101-alpha' },
+    })
+      .post(/\/workflows\/executions\/list$/, {})
+      .once()
+      .reply(200, { items: [execution] });
+
+    const response = await client.workflows.executions.list();
+    expect(response.items).toEqual([execution]);
+  });
+
+  test('tasks sub-API sends the alpha cdf-version header', async () => {
+    const task = {
+      id: 'task-1',
+      externalId: 'task-1',
+      status: 'COMPLETED',
+      taskType: 'function',
+      input: {},
+      output: {},
+    };
+    nock(mockBaseUrl, {
+      reqheaders: { 'cdf-version': '20230101-alpha' },
+    })
+      .post(/\/workflows\/tasks\/task-1\/update$/, { status: 'COMPLETED' })
+      .once()
+      .reply(200, task);
+
+    const response = await client.workflows.tasks.update('task-1', {
+      status: 'COMPLETED',
+    });
+    expect(response).toEqual(task);
+  });
+
+  test('triggers sub-API sends the alpha cdf-version header', async () => {
+    nock(mockBaseUrl, {
+      reqheaders: { 'cdf-version': '20230101-alpha' },
+    })
+      .post(/\/workflows\/triggers\/trigger-1\/pause$/)
+      .once()
+      .reply(200, {});
+
+    const response = await client.workflows.triggers.pause('trigger-1');
+    expect(response).toEqual({});
   });
 });
