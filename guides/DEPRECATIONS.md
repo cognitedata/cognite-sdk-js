@@ -121,6 +121,40 @@ await client.timeseries.synthetic.query([
 ]);
 ```
 
+#### Codemod
+
+`scripts/codemods/timeseries-data-namespace.mjs` rewrites the access paths for you
+(`client.datapoints.*` to `client.timeseries.data.*`, `client.timeseries.syntheticQuery` to
+`client.timeseries.synthetic.query`). It does not change request bodies; moving from
+`id` / `externalId` to `instanceId` needs a space and must be done by hand.
+
+```sh
+curl -O https://raw.githubusercontent.com/cognitedata/cognite-sdk-js/master/scripts/codemods/timeseries-data-namespace.mjs
+node timeseries-data-namespace.mjs --dry src   # preview
+node timeseries-data-namespace.mjs src         # apply
+npx prettier --write <changed files>           # or your own formatter
+```
+
+It needs `typescript` installed in your project. Symlinks are not followed.
+
+**Which receivers are rewritten.** By default the codemod goes by name, so that an unrelated
+`.datapoints` property, such as the one on a retrieve response, is left alone: the receiver has to
+look like a client (its name matches `/client/i`, or you list it with `--client-names=sdk,cdf`), or
+be a call to a client accessor such as `useSDK()`, `getClient()` or `useCogniteClient()`.
+
+The codemod keeps your formatting but does not format, and the new access path is longer, so run
+your formatter on the changed files afterwards.
+
+**Reported as a warning, and left for you to migrate by hand:**
+
+- `<x>.datapoints.<method>` or `<x>.timeseries.syntheticQuery` on a receiver that is not recognized
+  as a client. It is not rewritten, because `x.datapoints.delete(...)` may be a `Map`. Add the name
+  to `--client-names` or migrate it yourself.
+
+**Not detected.** Mock objects that fake the client, such as `{ datapoints: { retrieve: vi.fn() } }`,
+and `vi.mock('@cognite/sdk', ...)` factories have no type link to the SDK. Update a hand-written
+client's shape after running the codemod and let `tsc` point out what is left.
+
 ### Datapoints: identify time series by `instanceId`
 
 Addressing a time series by `id` or `externalId` is deprecated as of 2026-10-15 and retired on
