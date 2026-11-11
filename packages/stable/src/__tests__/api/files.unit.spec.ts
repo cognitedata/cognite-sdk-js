@@ -1,9 +1,15 @@
 // Copyright 2020 Cognite AS
 
+import { sleepPromise } from '@cognite/sdk-core';
 import nock from 'nock';
-import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
 import type CogniteClient from '../../cogniteClient';
 import { mockBaseUrl, setupMockableClient } from '../testUtils';
+
+vi.mock('@cognite/sdk-core', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@cognite/sdk-core')>()),
+  sleepPromise: vi.fn(async () => {}),
+}));
 
 describe('Files unit test', () => {
   let client: CogniteClient;
@@ -27,7 +33,7 @@ describe('Files unit test', () => {
     });
 
     beforeEach(() => {
-      vi.useFakeTimers({ toFake: ['setTimeout'] });
+      vi.mocked(sleepPromise).mockClear();
       nock(mockBaseUrl)
         .post(/\/files\/$/)
         .query(true)
@@ -43,28 +49,8 @@ describe('Files unit test', () => {
       nock(mockBaseUrl).put('/upload').once().reply(200);
     });
 
-    afterEach(() => {
-      vi.useRealTimers();
-    });
-
-    async function runToCompletion<T>(start: () => Promise<T>) {
-      const sleeps: number[] = [];
-      const setTimeoutSpy = vi.spyOn(globalThis, 'setTimeout');
-      let settled = false;
-      const result = start().finally(() => {
-        settled = true;
-      });
-      result.catch(() => {});
-      while (!settled) {
-        await vi.runAllTimersAsync();
-      }
-      for (const [, delay] of setTimeoutSpy.mock.calls) {
-        if (typeof delay === 'number' && delay >= 1000) {
-          sleeps.push(delay);
-        }
-      }
-      return { result, sleeps };
-    }
+    const sleeps = () =>
+      vi.mocked(sleepPromise).mock.calls.map(([delay]) => delay);
 
     test('polls with increasing delays until the file is uploaded', async () => {
       const byIds = nock(mockBaseUrl)
@@ -75,13 +61,16 @@ describe('Files unit test', () => {
         .once()
         .reply(200, fileResponse(true));
 
-      const { result, sleeps } = await runToCompletion(() =>
-        client.files.upload({ name: 'file' }, 'content', false, true)
+      const result = await client.files.upload(
+        { name: 'file' },
+        'content',
+        false,
+        true
       );
 
       expect({
-        uploaded: (await result).uploaded,
-        sleeps,
+        uploaded: result.uploaded,
+        sleeps: sleeps(),
         done: byIds.isDone(),
       }).toEqual({ uploaded: true, sleeps: [1000, 1500, 2250], done: true });
     });
@@ -92,12 +81,10 @@ describe('Files unit test', () => {
         .times(10)
         .reply(200, fileResponse(false));
 
-      const { result, sleeps } = await runToCompletion(() =>
+      await expect(
         client.files.upload({ name: 'file' }, 'content', false, true)
-      );
-
-      await expect(result).rejects.toThrow("File never marked as 'uploaded'");
-      expect({ sleeps, done: byIds.isDone() }).toEqual({
+      ).rejects.toThrow("File never marked as 'uploaded'");
+      expect({ sleeps: sleeps(), done: byIds.isDone() }).toEqual({
         sleeps: [1000, 1500, 2250, 3375, 5062.5, 7593.75, 10000, 10000, 10000],
         done: true,
       });

@@ -241,6 +241,8 @@ export class FilesAPI extends BaseResourceAPI<FileInfo> {
     fileId: CogniteInternalId
   ): Promise<FileInfo> {
     const MAX_ATTEMPTS = 10;
+    const INITIAL_DELAY_IN_MS = 1000;
+    const BACKOFF_FACTOR = 1.5;
     const MAX_DELAY_IN_MS = 10_000;
     for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
       const [fileInfo] = await this.retrieve([{ id: fileId }]);
@@ -248,7 +250,12 @@ export class FilesAPI extends BaseResourceAPI<FileInfo> {
         return fileInfo;
       }
       if (attempt < MAX_ATTEMPTS - 1) {
-        await sleepPromise(Math.min(MAX_DELAY_IN_MS, 1000 * 1.5 ** attempt));
+        await sleepPromise(
+          Math.min(
+            MAX_DELAY_IN_MS,
+            INITIAL_DELAY_IN_MS * BACKOFF_FACTOR ** attempt
+          )
+        );
       }
     }
     throw Error(`File never marked as 'uploaded'`);

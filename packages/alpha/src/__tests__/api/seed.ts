@@ -1,3 +1,4 @@
+import { afterAll } from 'vitest';
 import type CogniteClientAlpha from '../../cogniteClient';
 import type {
   SimulationRun,
@@ -399,6 +400,29 @@ export async function deleteStaleTestSimulators(client: CogniteClientAlpha) {
   } catch (e) {
     console.error('An error occured when trying to delete stale simulators', e);
   }
+}
+
+/**
+ * Registers an `afterAll` that deletes the spec's simulator, so it is cleaned
+ * up even when a failure skips the spec's own delete test. Call
+ * `markDeleted` once that test has deleted the simulator.
+ */
+export function deleteSimulatorAfterAll(
+  client: CogniteClientAlpha,
+  getSimulatorId: () => number | undefined
+): { markDeleted: () => void } {
+  let deleted = false;
+  afterAll(async () => {
+    const id = getSimulatorId();
+    if (id && !deleted) {
+      await client.simulators.delete([{ id }]);
+    }
+  });
+  return {
+    markDeleted: () => {
+      deleted = true;
+    },
+  };
 }
 
 /**
