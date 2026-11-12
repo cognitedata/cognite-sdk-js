@@ -114,11 +114,12 @@ export interface DatapointAggregate extends CommonDatapointAggregate {
 }
 
 /**
- * Aggregates of a string time series. `interpolation` and `stepInterpolation` both return
- * the last value at or before the start of the interval.
+ * Aggregates of a string time series.
  */
 export interface StringDatapointAggregate extends CommonDatapointAggregate {
+  /** The last value before or at the start of the interval */
   interpolation?: string;
+  /** Same as `interpolation`, since string time series are always stepwise */
   stepInterpolation?: string;
 }
 
@@ -156,7 +157,7 @@ export interface StateAggregate extends StateValue {
 export interface StateDatapointAggregate extends CommonDatapointAggregate {
   /** The last state before or at the start of the interval */
   interpolation?: StateValue;
-  /** The last state before or at the start of the interval */
+  /** Same as `interpolation`, since state time series are always stepwise */
   stepInterpolation?: StateValue;
   /** One entry per state seen in the interval, with the requested `stateCount`, `stateTransitions` and `stateDuration` */
   stateAggregates?: StateAggregate[];
