@@ -1,9 +1,30 @@
 // Copyright 2025 Cognite AS
 
 import { BaseResourceAPI } from '@cognite/sdk-core';
+import type { CDFHttpClient, MetadataMap } from '@cognite/sdk-core';
+import { StreamTemplatesAPI } from './templates/streamTemplatesApi';
 import type { Stream, StreamRetrieveParams, StreamWrite } from './types';
 
 export class StreamsAPI extends BaseResourceAPI<Stream> {
+  private readonly templatesApi: StreamTemplatesAPI;
+
+  /** @hidden */
+  constructor(resourcePath: string, ...args: [CDFHttpClient, MetadataMap]) {
+    super(resourcePath, ...args);
+    this.templatesApi = new StreamTemplatesAPI(this.url('templates'), ...args);
+  }
+
+  /**
+   * [Stream templates](https://developer.cognite.com/api#tag/Streams/operation/listStreamTemplates)
+   *
+   * ```js
+   * const templates = await client.streams.templates.list();
+   * ```
+   */
+  public get templates() {
+    return this.templatesApi;
+  }
+
   /**
    * @hidden
    */
