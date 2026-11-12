@@ -17,6 +17,10 @@ const ENDPOINTS_TO_RETRY: EndpointList = {
     '/files/initupload',
     '/files/list',
     '/files/search',
+    '/functions/*/calls/byids',
+    '/functions/*/calls/list',
+    '/functions/schedules/byids',
+    '/functions/schedules/list',
     '/models/statistics/spaces/byids',
     '/records/aggregate',
     '/records/delete',
@@ -31,6 +35,8 @@ const ENDPOINTS_TO_RETRY: EndpointList = {
     '/timeseries/search',
     '/timeseries/subscriptions/data/list',
     '/timeseries/synthetic/query',
+    '/workflows/executions/list',
+    '/workflows/versions/list',
   ],
 };
 

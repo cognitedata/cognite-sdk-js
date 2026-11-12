@@ -22,6 +22,11 @@ import {
 
 const testfile = join(__dirname, '../test3dFile.fbx');
 
+// Syncing a CogniteFile instance to the files API can lag well beyond the
+// default retry budget.
+const INSTANCE_SYNC_TEST_TIMEOUT_MS = 2 * 60 * 1000;
+const INSTANCE_SYNC_RETRY_BUDGET_MS = INSTANCE_SYNC_TEST_TIMEOUT_MS - 30 * 1000;
+
 describe('Files integration test', () => {
   let client: CogniteClient;
   let asset: Asset;
@@ -135,39 +140,51 @@ describe('Files integration test', () => {
     expect(retrievedFile.directory).toEqual('/test/testing');
   });
 
-  test('retrieve by instance id', async () => {
-    // Syncing from instance to files API is eventually consistant
-    await runTestWithRetryWhenFailing(async () => {
-      const [retrievedFile] = await client.files.retrieve([
-        { instanceId: fileCdmInstanceId },
-      ]);
-      expect(retrievedFile.instanceId).toEqual(fileCdmInstanceId);
-    });
-  });
+  test(
+    'retrieve by instance id',
+    async () => {
+      // Syncing from instance to files API is eventually consistant
+      await runTestWithRetryWhenFailing(async () => {
+        const [retrievedFile] = await client.files.retrieve([
+          { instanceId: fileCdmInstanceId },
+        ]);
+        expect(retrievedFile.instanceId).toEqual(fileCdmInstanceId);
+      }, INSTANCE_SYNC_RETRY_BUDGET_MS);
+    },
+    INSTANCE_SYNC_TEST_TIMEOUT_MS
+  );
 
-  test('update by instance id', async () => {
-    // Syncing from instance to files API is eventually consistant
-    await runTestWithRetryWhenFailing(async () => {
-      const testMetadata = { testKey: 'testVal' };
-      const [retrievedFile] = await client.files.update([
-        {
-          instanceId: fileCdmInstanceId,
-          update: { metadata: { set: testMetadata } },
-        },
-      ]);
-      expect(retrievedFile.instanceId).toEqual(fileCdmInstanceId);
-      expect(retrievedFile.metadata).toEqual(testMetadata);
-    });
-  });
+  test(
+    'update by instance id',
+    async () => {
+      // Syncing from instance to files API is eventually consistant
+      await runTestWithRetryWhenFailing(async () => {
+        const testMetadata = { testKey: 'testVal' };
+        const [retrievedFile] = await client.files.update([
+          {
+            instanceId: fileCdmInstanceId,
+            update: { metadata: { set: testMetadata } },
+          },
+        ]);
+        expect(retrievedFile.instanceId).toEqual(fileCdmInstanceId);
+        expect(retrievedFile.metadata).toEqual(testMetadata);
+      }, INSTANCE_SYNC_RETRY_BUDGET_MS);
+    },
+    INSTANCE_SYNC_TEST_TIMEOUT_MS
+  );
 
-  test('download by instance id', async () => {
-    // Syncing from instance to files API is eventually consistant
-    await runTestWithRetryWhenFailing(async () => {
-      await expect(
-        client.files.getDownloadUrls([{ instanceId: fileCdmInstanceId }])
-      ).rejects.toThrow(/Files not uploaded/);
-    });
-  });
+  test(
+    'download by instance id',
+    async () => {
+      // Syncing from instance to files API is eventually consistant
+      await runTestWithRetryWhenFailing(async () => {
+        await expect(
+          client.files.getDownloadUrls([{ instanceId: fileCdmInstanceId }])
+        ).rejects.toThrow(/Files not uploaded/);
+      }, INSTANCE_SYNC_RETRY_BUDGET_MS);
+    },
+    INSTANCE_SYNC_TEST_TIMEOUT_MS
+  );
 
   test.skip('retrieve with non-existent id', async () => {
     const res = await client.files.retrieve([{ id: 1 }], {

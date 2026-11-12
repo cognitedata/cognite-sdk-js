@@ -1,8 +1,18 @@
 // Copyright 2025 Cognite AS
 
 import { BaseResourceAPI } from '@cognite/sdk-core';
-import type { IdEither, ItemsWrapper } from '@cognite/sdk-core';
+import type {
+  CDFHttpClient,
+  CogniteInternalId,
+  IdEither,
+  ItemsWrapper,
+  MetadataMap,
+} from '@cognite/sdk-core';
+import { assertExperimentalEnabled } from '../../experimental';
 import type { IgnoreUnknownIds } from '../../types';
+import { FunctionCallsAPI } from './calls/functionCallsApi';
+import type { FunctionCall, FunctionCallRequest } from './calls/types';
+import { FunctionSchedulesAPI } from './schedules/functionSchedulesApi';
 import type {
   CogniteFunction,
   ExternalCogniteFunctionItem,
@@ -12,11 +22,67 @@ import type {
 } from './types';
 
 export class FunctionsAPI extends BaseResourceAPI<CogniteFunction> {
+  private readonly callsApi: FunctionCallsAPI;
+  private readonly schedulesApi: FunctionSchedulesAPI;
+  private experimentalEnabled = true;
+
+  /** @hidden */
+  constructor(resourcePath: string, ...args: [CDFHttpClient, MetadataMap]) {
+    super(resourcePath, ...args);
+    this.callsApi = new FunctionCallsAPI(resourcePath, ...args);
+    this.schedulesApi = new FunctionSchedulesAPI(
+      this.url('schedules'),
+      ...args
+    );
+  }
+
+  /**
+   * Called by `CogniteClient` to apply the `experimental.functions` option.
+   * Directly constructed instances are enabled.
+   *
+   * @hidden
+   */
+  public setExperimentalEnabled(enabled: boolean) {
+    this.experimentalEnabled = enabled;
+  }
+
+  /**
+   * [Function schedules](https://api-docs.cognite.com/20230101/tag/Function-schedules)
+   *
+   * @alpha Experimental, requires `experimental: { functions: true }` in the client options.
+   *
+   * ```js
+   * const schedules = await client.functions.schedules.list();
+   * ```
+   */
+  public get schedules() {
+    assertExperimentalEnabled(
+      this.experimentalEnabled,
+      'functions',
+      'client.functions.schedules'
+    );
+    return this.schedulesApi;
+  }
+
   /**
    * @hidden
    */
   protected getDateProps() {
     return this.pickDateProps(['items'], ['createdTime', 'lastCalled']);
+  }
+
+  /**
+   * [Function calls](https://api-docs.cognite.com/20230101/tag/Function-calls)
+   *
+   * @alpha Experimental, requires `experimental: { functions: true }` in the client options.
+   */
+  public get calls() {
+    assertExperimentalEnabled(
+      this.experimentalEnabled,
+      'functions',
+      'client.functions.calls'
+    );
+    return this.callsApi;
   }
 
   /**
@@ -75,6 +141,31 @@ export class FunctionsAPI extends BaseResourceAPI<CogniteFunction> {
    */
   public delete = (ids: IdEither[], params: IgnoreUnknownIds = {}) => {
     return super.deleteEndpoint(ids, params);
+  };
+
+  /**
+   * [Call a function asynchronously](https://api-docs.cognite.com/20230101/tag/Function-calls/operation/postFunctionsCall)
+   *
+   * Starts a call and returns it without waiting for it to finish. Use
+   * `client.functions.calls.retrieve` to follow its status.
+   *
+   * ```js
+   * const [session] = await client.sessions.create([{ tokenExchange: true }]);
+   * const call = await client.functions.call(123, {
+   *   nonce: session.nonce,
+   *   data: { assetId: 456 },
+   * });
+   * ```
+   */
+  public call = async (
+    functionId: CogniteInternalId,
+    request: FunctionCallRequest
+  ): Promise<FunctionCall> => {
+    const response = await this.post<FunctionCall>(
+      this.url(`${functionId}/call`),
+      { data: request }
+    );
+    return this.addToMapAndReturn(response.data, response);
   };
 
   /**

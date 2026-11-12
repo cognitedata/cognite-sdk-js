@@ -42,6 +42,10 @@ describe('cdfRetryValidator', () => {
     ...baseResponse,
     status: 500,
   };
+  const response502: HttpResponse<unknown> = {
+    ...baseResponse,
+    status: 502,
+  };
 
   const endpointList = {
     [HttpMethod.Post]: ['/assets/list'],
@@ -53,23 +57,27 @@ describe('cdfRetryValidator', () => {
   });
 
   test('only retry reasonable times', () => {
-    expect(retryValidator(getRequest, response500, 10)).toBeFalsy();
+    expect(retryValidator(getRequest, response502, 10)).toBeFalsy();
   });
 
-  test('retry GET 500', () => {
-    expect(retryValidator(getRequest, response500, 0)).toBeTruthy();
+  test('retry GET 502', () => {
+    expect(retryValidator(getRequest, response502, 0)).toBeTruthy();
   });
 
   test('retry GET 429', () => {
     expect(retryValidator(getRequest, response429, 0)).toBeTruthy();
   });
 
-  test("don't retry generic POST 500", () => {
-    expect(retryValidator(postRequest, response500, 0)).toBeFalsy();
+  test("don't retry GET 500", () => {
+    expect(retryValidator(getRequest, response500, 0)).toBeFalsy();
   });
 
-  test('retry POST 500 to retryable endpoint', () => {
-    expect(retryValidator(postRetryRequest, response500, 0)).toBeTruthy();
+  test("don't retry generic POST 502", () => {
+    expect(retryValidator(postRequest, response502, 0)).toBeFalsy();
+  });
+
+  test('retry POST 502 to retryable endpoint', () => {
+    expect(retryValidator(postRetryRequest, response502, 0)).toBeTruthy();
   });
 
   test("don't retry POST 4xx (except 429) to retryable endpoint", () => {
@@ -78,5 +86,32 @@ describe('cdfRetryValidator', () => {
 
   test("don't retry GET 4xx (except 429)", () => {
     expect(retryValidator(getRequest, response415, 0)).toBeFalsy();
+  });
+
+  describe('endpoint with a path parameter', () => {
+    const wildcardValidator = createRetryValidator(
+      {
+        [HttpMethod.Post]: [
+          '/functions/*/calls/list',
+          '/functions/*/calls/byids',
+        ],
+      },
+      5
+    );
+    const postTo = (path: string): HttpRequest => ({
+      method: HttpMethod.Post,
+      path,
+    });
+
+    test.each([
+      ['/api/v1/projects/abc/functions/123/calls/list', true],
+      ['/api/v1/projects/abc/FUNCTIONS/123/CALLS/LIST', true],
+      ['/api/v1/projects/abc/functions/calls/list', false],
+      ['/api/v1/projects/abc/functions/1/2/calls/list', false],
+      ['/api/v1/projects/abc/functions/123/calls/byids', true],
+      ['/api/v1/projects/abc/functions/123/call', false],
+    ])('POST 502 to %s retried: %s', (path, expected) => {
+      expect(wildcardValidator(postTo(path), response502, 0)).toBe(expected);
+    });
   });
 });

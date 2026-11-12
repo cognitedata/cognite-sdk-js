@@ -11,6 +11,7 @@ export {
   CogniteMultiError,
 } from '@cognite/sdk-core';
 export type { ClientOptions } from './clientOptions';
+export type { ExperimentalOptions } from './experimental';
 export { default as CogniteClient } from './cogniteClient';
 
 export { AssetMappings3DAPI } from './api/3d/assetMappings3DApi';
@@ -48,23 +49,42 @@ export { SequencesAPI } from './api/sequences/sequencesApi';
 export { SyntheticTimeSeriesAPI } from './api/timeSeries/syntheticTimeSeriesApi';
 export { DataPointSubscriptionsAPI } from './api/timeSeries/subscriptions/dataPointSubscriptionsApi';
 export { TimeSeriesAPI } from './api/timeSeries/timeSeriesApi';
+export { FunctionCallsAPI } from './api/functions/calls/functionCallsApi';
 export { FunctionsAPI } from './api/functions/functionsApi';
+export { FunctionSchedulesAPI } from './api/functions/schedules/functionSchedulesApi';
 export * from './api/templates';
 
 export { AnnotationsAPI } from './api/annotations/annotationsApi';
 export { ContainersAPI } from './api/containers/containersApi';
 export { DocumentsAPI } from './api/documents/documentsApi';
+export { ExtractionPipelinesAPI } from './api/extractionPipelines/extractionPipelinesApi';
 export { ExtractorsAPI } from './api/extractors/extractorsApi';
 export { GeospatialAPI } from './api/geospatial/geospatialAPI';
+export { HostedExtractorsAPI } from './api/hostedExtractors/hostedExtractorsApi';
+export { HostedExtractorSourcesAPI } from './api/hostedExtractors/sourcesApi';
+export { HostedExtractorJobsAPI } from './api/hostedExtractors/jobsApi';
+export { HostedExtractorMappingsAPI } from './api/hostedExtractors/mappingsApi';
+export { HostedExtractorDestinationsAPI } from './api/hostedExtractors/destinationsApi';
 export { InstancesAPI } from './api/instances/instancesApi';
 export { DataModelsAPI } from './api/models/datamodelsApi';
 export { RecordsAPI } from './api/records/recordsApi';
 export { SessionsApi } from './api/sessions/sessionsApi';
 export { SpacesAPI } from './api/spaces/spacesApi';
 export { StreamsAPI } from './api/streams/streamsApi';
+export { TransformationJobsAPI } from './api/transformations/transformationJobsApi';
+export { TransformationNotificationsAPI } from './api/transformations/transformationNotificationsApi';
+export { TransformationQueryAPI } from './api/transformations/transformationQueryApi';
+export { TransformationSchedulesAPI } from './api/transformations/transformationSchedulesApi';
+export { TransformationSchemaAPI } from './api/transformations/transformationSchemaApi';
+export { TransformationsAPI } from './api/transformations/transformationsApi';
 export { UnitsAPI } from './api/units/unitsApi';
 export { ProfilesAPI } from './api/userProfiles/profilesApi';
 export { ViewsAPI } from './api/views/viewsApi';
 export { VisionAPI } from './api/vision/visionApi';
+export { WorkflowExecutionsAPI } from './api/workflows/workflowExecutionsApi';
+export { WorkflowsAPI } from './api/workflows/workflowsApi';
+export { WorkflowTasksAPI } from './api/workflows/workflowTasksApi';
+export { WorkflowTriggersAPI } from './api/workflows/workflowTriggersApi';
+export { WorkflowVersionsAPI } from './api/workflows/workflowVersionsApi';
 
 export * from './types';

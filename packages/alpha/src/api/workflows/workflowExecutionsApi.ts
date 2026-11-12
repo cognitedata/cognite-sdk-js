@@ -1,5 +1,11 @@
 // Copyright 2026 Cognite AS
 
+import type {
+  WorkflowExecutionCancelRequest,
+  WorkflowExecutionFilterQuery,
+  WorkflowExecutionRetryRequest,
+  WorkflowExecutionRunRequest,
+} from '@cognite/sdk';
 import { BaseResourceAPI } from '@cognite/sdk-core';
 import type {
   CDFHttpClient,
@@ -7,14 +13,7 @@ import type {
   CursorAndAsyncIterator,
   MetadataMap,
 } from '@cognite/sdk-core';
-import type {
-  WorkflowExecution,
-  WorkflowExecutionCancelRequest,
-  WorkflowExecutionDetails,
-  WorkflowExecutionFilterQuery,
-  WorkflowExecutionRetryRequest,
-  WorkflowExecutionRunRequest,
-} from './types';
+import type { WorkflowExecution, WorkflowExecutionDetails } from './types';
 
 export class WorkflowExecutionsAPI extends BaseResourceAPI<WorkflowExecution> {
   private readonly workflowsPath: string;

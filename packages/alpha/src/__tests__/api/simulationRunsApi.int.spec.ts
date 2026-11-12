@@ -9,6 +9,7 @@ import {
 } from '../testUtils';
 import {
   createTestIdentifiers,
+  deleteSimulatorAfterAll,
   fileExtensionTypes,
   modelTypes,
   routineRevisionConfiguration,
@@ -30,6 +31,7 @@ describe('simulator runs api', () => {
   const client: CogniteClientAlpha = setupLoggedInClient();
   let runId = 0;
   let simulatorId: number;
+  const simulatorCleanup = deleteSimulatorAfterAll(client, () => simulatorId);
   let testDataSetId: number;
   let testFileId: number;
 
@@ -170,7 +172,8 @@ describe('simulator runs api', () => {
       filter: {
         simulatorExternalIds: [simulatorExternalId],
         createdTime: {
-          max: new Date(),
+          // Leaves room for the CDF clock running ahead of the local clock.
+          max: new Date(Date.now() + 60 * 1000),
         },
       },
       sort: [
@@ -207,6 +210,33 @@ describe('simulator runs api', () => {
     expect(item.id).toBe(runId);
   });
 
+  test('list simulation run data', async () => {
+    expect(runId).toBeGreaterThan(0);
+
+    const runData = await client.simulators.listRunData([{ runId }]);
+
+    expect(runData.length).toBeGreaterThan(0);
+    expect(runData[0].runId).toBe(runId);
+  });
+
+  test('retrieve simulator log by id', async () => {
+    const [run] = await client.simulators.retrieveRuns([runId]);
+    const logId = run.logId;
+    if (!logId) {
+      throw new Error('No logId found');
+    }
+
+    const [log] = await client.simulators.retrieveLogs([{ id: logId }]);
+
+    expect(log.id).toBe(logId);
+    expect(log.createdTime).toBeDefined();
+    expect(log.dataSetId).toBeDefined();
+    expect(log.lastUpdatedTime).toBeDefined();
+    for (const data of log.data) {
+      expect(data.timestamp).toBeInstanceOf(Date);
+    }
+  });
+
   test('delete simulator and integrations', async () => {
     // Since we do not have a delete endpoint for integrations, if we delete the simulator, the integrations will be deleted as well
     if (simulatorId) {
@@ -215,6 +245,7 @@ describe('simulator runs api', () => {
           id: simulatorId,
         },
       ]);
+      simulatorCleanup.markDeleted();
       expect(response).toEqual({});
       const responseAfterDelete = await client.simulators.list();
       expect(

@@ -68,7 +68,7 @@ describe('CogniteClient', () => {
     });
 
     test('custom validator retries set to 1 should prevent from retrying a failed call', async () => {
-      const scope = nock(mockBaseUrl).get('/').times(2).reply(500, {});
+      const scope = nock(mockBaseUrl).get('/').times(2).reply(502, {});
       nock(mockBaseUrl).get('/').reply(200, { a: 42 });
       const client = new BaseCogniteClient({
         appId: 'unit-test',
@@ -78,7 +78,7 @@ describe('CogniteClient', () => {
         retryValidator: createUniversalRetryValidator(1),
       });
       await expect(client.get('/')).rejects.toThrowErrorMatchingInlineSnapshot(
-        '[Error: Request failed | status code: 500]'
+        '[Error: Request failed | status code: 502]'
       );
       expect(scope.isDone()).toBeTruthy();
     });

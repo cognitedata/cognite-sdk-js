@@ -2,6 +2,7 @@
 
 import type { ClientOptions as CoreClientOptions } from '@cognite/sdk-core';
 import type { DataModelingConcurrencyOptions } from './api/dataModeling/concurrency';
+import type { ExperimentalOptions } from './experimental';
 
 export type ConcurrencyOptions = {
   /**
@@ -26,4 +27,16 @@ export interface ClientOptions extends Omit<CoreClientOptions, 'concurrency'> {
    * in any release, including patch and minor versions.
    */
   concurrency?: ConcurrencyOptions;
+  /**
+   * Opt-in to new APIs that may still change. These APIs are disabled unless
+   * their flag is set; accessing one that is not enabled throws.
+   *
+   * ```js
+   * const client = new CogniteClient({ ..., experimental: { workflows: true } });
+   * ```
+   *
+   * @alpha This functionality is experimental. Breaking changes are to be expected
+   * in any release, including patch and minor versions.
+   */
+  experimental?: ExperimentalOptions;
 }
