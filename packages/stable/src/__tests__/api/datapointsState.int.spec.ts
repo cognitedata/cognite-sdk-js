@@ -132,4 +132,50 @@ describe('State time series datapoints integration test', () => {
       });
     });
   });
+  test('retrieve state aggregates', async () => {
+    await runTestWithRetryWhenFailing(async () => {
+      const [response] = await client.timeseries.data.retrieve({
+        items: [{ instanceId: timeSeriesId, start, end: start + 3000 }],
+        aggregates: [
+          'count',
+          'stateCount',
+          'stateTransitions',
+          'stateDuration',
+        ],
+        granularity: '1h',
+      });
+      expect(response.type).toBe('state');
+      if (response.type !== 'state') return;
+      const { datapoints } = response;
+      expect(datapoints.length).toBeGreaterThan(0);
+      expect(datapoints[0].timestamp).toBeInstanceOf(Date);
+      // The three points may straddle an hour boundary, so sum over intervals
+      const totals = new Map<
+        number,
+        { count: number; transitions: number; duration: number }
+      >();
+      let count = 0;
+      for (const dp of datapoints) {
+        count += dp.count ?? 0;
+        for (const state of dp.stateAggregates ?? []) {
+          const total = totals.get(state.numericValue) ?? {
+            count: 0,
+            transitions: 0,
+            duration: 0,
+          };
+          total.count += state.stateCount ?? 0;
+          total.transitions += state.stateTransitions ?? 0;
+          total.duration += state.stateDuration ?? 0;
+          totals.set(state.numericValue, total);
+        }
+      }
+      expect(count).toBe(3);
+      expect(totals.get(0)).toMatchObject({ count: 2, transitions: 2 });
+      expect(totals.get(1)).toEqual({
+        count: 1,
+        transitions: 1,
+        duration: 1000,
+      });
+    });
+  });
 });

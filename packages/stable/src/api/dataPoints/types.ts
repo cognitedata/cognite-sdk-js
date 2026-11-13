@@ -38,7 +38,10 @@ export type Aggregate =
   | 'countBad'
   | 'durationGood'
   | 'durationUncertain'
-  | 'durationBad';
+  | 'durationBad'
+  | 'stateCount'
+  | 'stateDuration'
+  | 'stateTransitions';
 
 // =====================================================
 // Data point status types
@@ -73,9 +76,29 @@ export type DatapointStatusWrite =
 export interface DatapointExtremum {
   timestamp: Date;
   value: number;
+  status?: DatapointStatus;
 }
 
-export interface DatapointAggregate extends DatapointInfo {
+/**
+ * Aggregates available for numeric, string and state time series.
+ */
+export interface CommonDatapointAggregate extends DatapointInfo {
+  count?: number;
+  countGood?: number;
+  countUncertain?: number;
+  countBad?: number;
+  /** Duration in milliseconds with Good status */
+  durationGood?: number;
+  /** Duration in milliseconds with Uncertain status */
+  durationUncertain?: number;
+  /** Duration in milliseconds with Bad status */
+  durationBad?: number;
+}
+
+/**
+ * Aggregates of a numeric time series.
+ */
+export interface DatapointAggregate extends CommonDatapointAggregate {
   average?: number;
   max?: number;
   min?: number;
@@ -88,15 +111,56 @@ export interface DatapointAggregate extends DatapointInfo {
   totalVariation?: number;
   maxDatapoint?: DatapointExtremum;
   minDatapoint?: DatapointExtremum;
-  countGood?: number;
-  countUncertain?: number;
-  countBad?: number;
-  /** Duration in milliseconds with Good status */
-  durationGood?: number;
-  /** Duration in milliseconds with Uncertain status */
-  durationUncertain?: number;
-  /** Duration in milliseconds with Bad status */
-  durationBad?: number;
+}
+
+/**
+ * Aggregates of a string time series.
+ */
+export interface StringDatapointAggregate extends CommonDatapointAggregate {
+  /** The last value before or at the start of the interval */
+  interpolation?: string;
+  /** Same as `interpolation`, since string time series are always stepwise */
+  stepInterpolation?: string;
+}
+
+/**
+ * A state of a state time series.
+ */
+export interface StateValue {
+  numericValue: number;
+  /** May be omitted if the state no longer exists in the time series' state set. */
+  stringValue?: string;
+}
+
+/**
+ * Aggregates of one state within an aggregate interval.
+ */
+export interface StateAggregate extends StateValue {
+  /** Number of data points with this state in the interval */
+  stateCount?: number;
+  /**
+   * Number of times the state changed to this value in the interval. Also counts the very first
+   * data point, and transitions from a data point with Bad status.
+   */
+  stateTransitions?: number;
+  /**
+   * Duration in milliseconds spent in this state in the interval. Carries over from the previous
+   * interval, so it may be non-zero even if the state does not occur in this interval.
+   */
+  stateDuration?: number;
+}
+
+/**
+ * Aggregates of a state time series.
+ * @see https://docs.cognite.com/dev/concepts/resource_types/state_timeseries
+ */
+export interface StateDatapointAggregate extends CommonDatapointAggregate {
+  /** The last state before or at the start of the interval */
+  interpolation?: StateValue;
+  /** Same as `interpolation`, since state time series are always stepwise */
+  stepInterpolation?: StateValue;
+  /** One entry per state seen in the interval, with the requested `stateCount`, `stateTransitions` and `stateDuration` */
+  stateAggregates?: StateAggregate[];
 }
 
 export interface DoubleDatapoint extends DatapointInfo {
@@ -227,9 +291,12 @@ export interface DatapointsMetadata extends InternalId {
   unit?: string;
 }
 
+/**
+ * Aggregates of a numeric time series.
+ */
+// TODO(next-major): Rename to NumericDatapointAggregates and use this name for AnyDatapointAggregates
 export interface DatapointAggregates extends DatapointsMetadata, NextCursor {
   isString: false;
-  // TODO: Add string and state aggregate variants, so `type` can be narrowed for aggregates too
   // TODO(next-major): Make required per API spec
   type?: 'numeric';
   /**
@@ -243,6 +310,45 @@ export interface DatapointAggregates extends DatapointsMetadata, NextCursor {
   unitExternalId?: CogniteExternalId;
 }
 
+export interface StringDatapointAggregates
+  extends DatapointsMetadata,
+    NextCursor {
+  isString: true;
+  // TODO(next-major): Make required per API spec
+  type?: 'string';
+  isStep: boolean;
+  datapoints: StringDatapointAggregate[];
+  unitExternalId?: CogniteExternalId;
+}
+
+export interface StateDatapointAggregates
+  extends DatapointsMetadata,
+    NextCursor {
+  isString: false;
+  // TODO(next-major): Make required per API spec
+  type?: 'state';
+  isStep: boolean;
+  datapoints: StateDatapointAggregate[];
+  unitExternalId?: CogniteExternalId;
+}
+
+/**
+ * Aggregates of a numeric, string or state time series. Narrow on `type` to tell them apart.
+ * The API always returns `type`. It is optional in these types only so that objects built by hand,
+ * such as test mocks, keep compiling; such objects without `type` can't be narrowed this way.
+ */
+// TODO(next-major): Drop the note on optional `type` once it is required
+export type AnyDatapointAggregates =
+  | DatapointAggregates
+  | StringDatapointAggregates
+  | StateDatapointAggregates;
+
+/**
+ * Raw data points of a numeric, string or state time series. Narrow on `type` to tell them apart.
+ * The API always returns `type`. It is optional in these types only so that objects built by hand,
+ * such as test mocks, keep compiling; such objects without `type` can't be narrowed this way.
+ */
+// TODO(next-major): Drop the note on optional `type` once it is required
 export type Datapoints = StringDatapoints | DoubleDatapoints | StateDatapoints;
 
 export interface DoubleDatapoints extends DatapointsMetadata, NextCursor {
@@ -339,6 +445,34 @@ export type ExternalDatapointsQuery = DatapointsInsertItem;
 export interface DatapointsMultiQuery extends DatapointsMultiQueryBase {
   items: DatapointsQuery[];
 }
+
+/**
+ * A {@link DatapointsMultiQuery} that sets no aggregates, at the top level or on any item,
+ * so it returns raw data points.
+ */
+export interface RawDatapointsMultiQuery extends DatapointsMultiQuery {
+  aggregates?: undefined;
+  items: (DatapointsQuery & { aggregates?: undefined })[];
+}
+
+/**
+ * At least one aggregate. An empty list returns raw data points. Use this type for an aggregate
+ * list built at runtime, so `retrieve` can type its result as aggregates only.
+ */
+export type NonEmptyAggregates = [Aggregate, ...Aggregate[]];
+
+/**
+ * A {@link DatapointsMultiQuery} where every item gets aggregates, either from the top level or
+ * from the item itself, so it returns aggregates only.
+ */
+export type AggregateDatapointsMultiQuery =
+  | (DatapointsMultiQuery & {
+      aggregates: NonEmptyAggregates;
+      items: (DatapointsQuery & { aggregates?: NonEmptyAggregates })[];
+    })
+  | (DatapointsMultiQuery & {
+      items: (DatapointsQuery & { aggregates: NonEmptyAggregates })[];
+    });
 
 /**
  * @deprecated Use DatapointsMultiQuery with `granularity: '1mo'` instead. Will be removed in next major release.
