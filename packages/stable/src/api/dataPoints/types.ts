@@ -334,12 +334,21 @@ export interface StateDatapointAggregates
 
 /**
  * Aggregates of a numeric, string or state time series. Narrow on `type` to tell them apart.
+ * The API always returns `type`. It is optional in these types only so that objects built by hand,
+ * such as test mocks, keep compiling; such objects without `type` can't be narrowed this way.
  */
+// TODO(next-major): Drop the note on optional `type` once it is required
 export type AnyDatapointAggregates =
   | DatapointAggregates
   | StringDatapointAggregates
   | StateDatapointAggregates;
 
+/**
+ * Raw data points of a numeric, string or state time series. Narrow on `type` to tell them apart.
+ * The API always returns `type`. It is optional in these types only so that objects built by hand,
+ * such as test mocks, keep compiling; such objects without `type` can't be narrowed this way.
+ */
+// TODO(next-major): Drop the note on optional `type` once it is required
 export type Datapoints = StringDatapoints | DoubleDatapoints | StateDatapoints;
 
 export interface DoubleDatapoints extends DatapointsMetadata, NextCursor {
