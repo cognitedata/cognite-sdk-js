@@ -4,6 +4,7 @@ import { CogniteClient as CogniteClientStable } from '@cognite/sdk';
 import { accessApi } from '@cognite/sdk-core';
 import { version } from '../package.json';
 import { AlertsAPI } from './api/alerts/alertsApi';
+import { BetaDataPointsAPI } from './api/dataPoints/dataPointsApi';
 import { MonitoringTasksAPI } from './api/monitoringTasks/monitoringTasksApi';
 import { TransformationsExternalDataAPI } from './api/transformations/transformationsExternalDataApi';
 
@@ -33,9 +34,17 @@ export default class CogniteClient extends CogniteClientCleaned {
   private monitoringTasksApi?: MonitoringTasksAPI;
   private transformationsExternalDataApi?: TransformationsExternalDataAPI;
 
+  /** @hidden Narrowed in beta to expose {@link BetaDataPointsAPI.insertWithUnitConversion}. */
+  protected declare dataPointsApi?: BetaDataPointsAPI;
+
   public get alerts() {
     return accessApi(this.alertsApi);
   }
+
+  public override get datapoints() {
+    return accessApi(this.dataPointsApi);
+  }
+
   public get files() {
     return accessApi(this.filesApi);
   }
@@ -56,6 +65,14 @@ export default class CogniteClient extends CogniteClientCleaned {
     super.initAPIs();
 
     this.httpClient.setDefaultHeader('cdf-version', 'beta');
+
+    this.dataPointsApi = new BetaDataPointsAPI(
+      `${this.projectUrl}/timeseries/data`,
+      this.httpClient,
+      this.metadataMap,
+      this.timeseries,
+      this.units
+    );
 
     this.alertsApi = this.apiFactory(AlertsAPI, 'alerts');
     this.monitoringTasksApi = this.apiFactory(
