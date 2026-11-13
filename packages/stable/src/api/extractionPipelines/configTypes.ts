@@ -64,5 +64,5 @@ export interface ExtractionPipelineConfigRevertRequest {
   /**
    * Revision number to revert to.
    */
-  revision?: number;
+  revision: number;
 }
