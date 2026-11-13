@@ -1,0 +1,38 @@
+id: timeseries-data-datapoints
+valid:
+  # a field of a response, not the client
+  - const pts = res[0].datapoints;
+  - const n = series.datapoints.length;
+  # not recognized as a client: reported by timeseries-data-unrecognized-datapoints instead
+  - foo.datapoints.retrieve();
+  - sdk.datapoints.retrieve({});
+  - getClientData().datapoints.retrieve({});
+  - createMockCogniteClientDependencies().datapoints.retrieve({});
+  # a member access on client.datapoints that is not a method of the data points API
+  - client.datapoints.length;
+  - client.datapoints[0];
+  # already migrated
+  - client.timeseries.data.retrieve({});
+  - client.timeseries.synthetic.query([]);
+invalid:
+  - 'await client.datapoints.retrieve({ items: [] });'
+  - await this.client.datapoints.insert([]);
+  - await cogniteClient?.datapoints.retrieveLatest([]);
+  - await client!.datapoints.delete({});
+  - 'await client.datapoints.retrieveDatapointMonthlyAggregates({});'
+  # a client accessor
+  - await useSDK().datapoints.insert([]);
+  - await getClient().datapoints.retrieve({});
+  - await useCogniteClient().datapoints.retrieve({});
+  - await createClient().datapoints.retrieve({});
+  # a bare reference
+  - const dp = client.datapoints;
+  # the formatting around the property is kept
+  - |
+    const x = client
+      .datapoints
+      .retrieve({});
+  # the request body is not touched
+  - 'client.datapoints.retrieve({ items: [{ externalId: "a" }] });'
+  # tsx
+  - const A = () => <div>{String(client.datapoints.retrieve({}))}</div>;

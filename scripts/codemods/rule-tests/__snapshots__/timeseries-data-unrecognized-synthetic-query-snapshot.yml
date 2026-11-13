@@ -1,0 +1,46 @@
+id: timeseries-data-unrecognized-synthetic-query
+snapshots:
+  "foo().timeseries.syntheticQuery([]);":
+    labels:
+    - source: syntheticQuery
+      style: primary
+      start: 17
+      end: 31
+    - source: timeseries
+      style: secondary
+      start: 6
+      end: 16
+    - source: foo()
+      style: secondary
+      start: 0
+      end: 5
+    - source: foo().timeseries
+      style: secondary
+      start: 0
+      end: 16
+    - source: foo().timeseries.syntheticQuery
+      style: secondary
+      start: 0
+      end: 31
+  "sdk.timeseries.syntheticQuery([]);":
+    labels:
+    - source: syntheticQuery
+      style: primary
+      start: 15
+      end: 29
+    - source: timeseries
+      style: secondary
+      start: 4
+      end: 14
+    - source: sdk
+      style: secondary
+      start: 0
+      end: 3
+    - source: sdk.timeseries
+      style: secondary
+      start: 0
+      end: 14
+    - source: sdk.timeseries.syntheticQuery
+      style: secondary
+      start: 0
+      end: 29

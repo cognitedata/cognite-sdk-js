@@ -15,6 +15,109 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@ast-grep/cli-darwin-arm64@npm:0.51.2":
+  version: 0.51.2
+  resolution: "@ast-grep/cli-darwin-arm64@npm:0.51.2"
+  conditions: os=darwin & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@ast-grep/cli-darwin-x64@npm:0.51.2":
+  version: 0.51.2
+  resolution: "@ast-grep/cli-darwin-x64@npm:0.51.2"
+  conditions: os=darwin & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@ast-grep/cli-linux-arm64-gnu@npm:0.51.2":
+  version: 0.51.2
+  resolution: "@ast-grep/cli-linux-arm64-gnu@npm:0.51.2"
+  conditions: os=linux & cpu=arm64 & libc=glibc
+  languageName: node
+  linkType: hard
+
+"@ast-grep/cli-linux-arm64-musl@npm:0.51.2":
+  version: 0.51.2
+  resolution: "@ast-grep/cli-linux-arm64-musl@npm:0.51.2"
+  conditions: os=linux & cpu=arm64 & libc=musl
+  languageName: node
+  linkType: hard
+
+"@ast-grep/cli-linux-x64-gnu@npm:0.51.2":
+  version: 0.51.2
+  resolution: "@ast-grep/cli-linux-x64-gnu@npm:0.51.2"
+  conditions: os=linux & cpu=x64 & libc=glibc
+  languageName: node
+  linkType: hard
+
+"@ast-grep/cli-linux-x64-musl@npm:0.51.2":
+  version: 0.51.2
+  resolution: "@ast-grep/cli-linux-x64-musl@npm:0.51.2"
+  conditions: os=linux & cpu=x64 & libc=musl
+  languageName: node
+  linkType: hard
+
+"@ast-grep/cli-win32-arm64-msvc@npm:0.51.2":
+  version: 0.51.2
+  resolution: "@ast-grep/cli-win32-arm64-msvc@npm:0.51.2"
+  conditions: os=win32 & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@ast-grep/cli-win32-ia32-msvc@npm:0.51.2":
+  version: 0.51.2
+  resolution: "@ast-grep/cli-win32-ia32-msvc@npm:0.51.2"
+  conditions: os=win32 & cpu=ia32
+  languageName: node
+  linkType: hard
+
+"@ast-grep/cli-win32-x64-msvc@npm:0.51.2":
+  version: 0.51.2
+  resolution: "@ast-grep/cli-win32-x64-msvc@npm:0.51.2"
+  conditions: os=win32 & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@ast-grep/cli@npm:^0.51.2":
+  version: 0.51.2
+  resolution: "@ast-grep/cli@npm:0.51.2"
+  dependencies:
+    "@ast-grep/cli-darwin-arm64": "npm:0.51.2"
+    "@ast-grep/cli-darwin-x64": "npm:0.51.2"
+    "@ast-grep/cli-linux-arm64-gnu": "npm:0.51.2"
+    "@ast-grep/cli-linux-arm64-musl": "npm:0.51.2"
+    "@ast-grep/cli-linux-x64-gnu": "npm:0.51.2"
+    "@ast-grep/cli-linux-x64-musl": "npm:0.51.2"
+    "@ast-grep/cli-win32-arm64-msvc": "npm:0.51.2"
+    "@ast-grep/cli-win32-ia32-msvc": "npm:0.51.2"
+    "@ast-grep/cli-win32-x64-msvc": "npm:0.51.2"
+    detect-libc: "npm:2.1.2"
+  dependenciesMeta:
+    "@ast-grep/cli-darwin-arm64":
+      optional: true
+    "@ast-grep/cli-darwin-x64":
+      optional: true
+    "@ast-grep/cli-linux-arm64-gnu":
+      optional: true
+    "@ast-grep/cli-linux-arm64-musl":
+      optional: true
+    "@ast-grep/cli-linux-x64-gnu":
+      optional: true
+    "@ast-grep/cli-linux-x64-musl":
+      optional: true
+    "@ast-grep/cli-win32-arm64-msvc":
+      optional: true
+    "@ast-grep/cli-win32-ia32-msvc":
+      optional: true
+    "@ast-grep/cli-win32-x64-msvc":
+      optional: true
+  bin:
+    ast-grep: ast-grep
+    sg: sg
+  checksum: 10c0/49a4f231597461d4aa4e0b5770372e9d6071fcbddc4d2df8be80f2424b1fd7c1a78516187bb90d982563810abdb18df87cff3fc51591629d17d31a7bcbadd792
+  languageName: node
+  linkType: hard
+
 "@azure/msal-common@npm:13.3.1":
   version: 13.3.1
   resolution: "@azure/msal-common@npm:13.3.1"
@@ -279,6 +382,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@cognite/sdk-monorepo@workspace:."
   dependencies:
+    "@ast-grep/cli": "npm:^0.51.2"
     "@azure/msal-node": "npm:^1.18.4"
     "@biomejs/biome": "npm:1.9.4"
     "@commitlint/cli": "npm:^17.8.1"
@@ -3793,6 +3897,13 @@ __metadata:
   version: 2.3.1
   resolution: "deprecation@npm:2.3.1"
   checksum: 10c0/23d688ba66b74d09b908c40a76179418acbeeb0bfdf218c8075c58ad8d0c315130cb91aa3dffb623aa3a411a3569ce56c6460de6c8d69071c17fe6dd2442f032
+  languageName: node
+  linkType: hard
+
+"detect-libc@npm:2.1.2":
+  version: 2.1.2
+  resolution: "detect-libc@npm:2.1.2"
+  checksum: 10c0/acc675c29a5649fa1fb6e255f993b8ee829e510b6b56b0910666949c80c364738833417d0edb5f90e4e46be17228b0f2b66a010513984e18b15deeeac49369c4
   languageName: node
   linkType: hard
 

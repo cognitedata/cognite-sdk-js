@@ -1,0 +1,68 @@
+id: timeseries-data-unrecognized-datapoints
+snapshots:
+  "const dp = client;\ndp.datapoints.insert([]);\n":
+    labels:
+    - source: datapoints
+      style: primary
+      start: 22
+      end: 32
+    - source: dp
+      style: secondary
+      start: 19
+      end: 21
+    - source: insert
+      style: secondary
+      start: 33
+      end: 39
+    - source: dp.datapoints.insert
+      style: secondary
+      start: 19
+      end: 39
+    - source: dp.datapoints
+      style: secondary
+      start: 19
+      end: 32
+  "getClientData().datapoints.retrieve({});":
+    labels:
+    - source: datapoints
+      style: primary
+      start: 16
+      end: 26
+    - source: getClientData()
+      style: secondary
+      start: 0
+      end: 15
+    - source: retrieve
+      style: secondary
+      start: 27
+      end: 35
+    - source: getClientData().datapoints.retrieve
+      style: secondary
+      start: 0
+      end: 35
+    - source: getClientData().datapoints
+      style: secondary
+      start: 0
+      end: 26
+  "sdk.datapoints.retrieve({});":
+    labels:
+    - source: datapoints
+      style: primary
+      start: 4
+      end: 14
+    - source: sdk
+      style: secondary
+      start: 0
+      end: 3
+    - source: retrieve
+      style: secondary
+      start: 15
+      end: 23
+    - source: sdk.datapoints.retrieve
+      style: secondary
+      start: 0
+      end: 23
+    - source: sdk.datapoints
+      style: secondary
+      start: 0
+      end: 14

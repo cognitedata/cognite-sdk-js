@@ -1,0 +1,35 @@
+# client.datapoints.<method> -> client.timeseries.data.<method>, and a bare client.datapoints.
+# Only the property name is replaced, so the formatting around it is kept.
+id: timeseries-data-datapoints
+language: Tsx
+severity: error
+message: client.datapoints moved to client.timeseries.data
+rule:
+  kind: property_identifier
+  regex: '^datapoints$'
+  inside:
+    kind: member_expression
+    field: property
+    stopBy: neighbor
+    all:
+      - has:
+          field: object
+          matches: is-sdk-client
+      - any:
+          # used as a method of the data points API
+          - inside:
+              kind: member_expression
+              field: object
+              stopBy: neighbor
+              has:
+                field: property
+                regex: '^(insert|retrieve|retrieveLatest|retrieveDatapointMonthlyAggregates|delete)$'
+          # or used as a value, not as the object of another member access
+          - not:
+              inside:
+                any:
+                  - kind: member_expression
+                  - kind: subscript_expression
+                field: object
+                stopBy: neighbor
+fix: timeseries.data

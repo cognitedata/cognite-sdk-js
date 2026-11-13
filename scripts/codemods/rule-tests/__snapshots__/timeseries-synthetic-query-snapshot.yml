@@ -1,0 +1,71 @@
+id: timeseries-synthetic-query
+snapshots:
+  "await client.timeseries.syntheticQuery([{ expression: \"1\" }]);":
+    fixed: "await client.timeseries.synthetic.query([{ expression: \"1\" }]);"
+    labels:
+    - source: syntheticQuery
+      style: primary
+      start: 24
+      end: 38
+    - source: timeseries
+      style: secondary
+      start: 13
+      end: 23
+    - source: client
+      style: secondary
+      start: 6
+      end: 12
+    - source: client.timeseries
+      style: secondary
+      start: 6
+      end: 23
+    - source: client.timeseries.syntheticQuery
+      style: secondary
+      start: 6
+      end: 38
+  "await getClient().timeseries.syntheticQuery([]);":
+    fixed: await getClient().timeseries.synthetic.query([]);
+    labels:
+    - source: syntheticQuery
+      style: primary
+      start: 29
+      end: 43
+    - source: timeseries
+      style: secondary
+      start: 18
+      end: 28
+    - source: getClient()
+      style: secondary
+      start: 6
+      end: 17
+    - source: getClient().timeseries
+      style: secondary
+      start: 6
+      end: 28
+    - source: getClient().timeseries.syntheticQuery
+      style: secondary
+      start: 6
+      end: 43
+  "await this.client.timeseries?.syntheticQuery([]);":
+    fixed: await this.client.timeseries?.synthetic.query([]);
+    labels:
+    - source: syntheticQuery
+      style: primary
+      start: 30
+      end: 44
+    - source: timeseries
+      style: secondary
+      start: 18
+      end: 28
+    - source: this.client
+      style: secondary
+      start: 6
+      end: 17
+    - source: this.client.timeseries
+      style: secondary
+      start: 6
+      end: 28
+    - source: this.client.timeseries?.syntheticQuery
+      style: secondary
+      start: 6
+      end: 44

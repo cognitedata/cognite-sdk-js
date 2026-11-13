@@ -1,0 +1,11 @@
+id: timeseries-data-unrecognized-datapoints
+valid:
+  - client.datapoints.retrieve({});
+  - const n = res.datapoints.length;
+  - const raw = res.datapoints;
+invalid:
+  - sdk.datapoints.retrieve({});
+  - |
+    const dp = client;
+    dp.datapoints.insert([]);
+  - getClientData().datapoints.retrieve({});

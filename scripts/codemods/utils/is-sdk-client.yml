@@ -1,0 +1,10 @@
+# An expression that is recognized as a CogniteClient, by name:
+#   - it ends in an identifier containing "client": client, cogniteClient, this.client, client!
+#   - or it is a call to a client accessor: useSDK(), getClient(), useCogniteClient(), createClient()
+#     (but not getClientData())
+# To rewrite a client that has another name (for example `sdk` or `cdf`), add the name to the
+# first alternative, for example `[\w$]*(client|sdk|cdf)[\w$]*`.
+id: is-sdk-client
+language: Tsx
+rule:
+  regex: '(?i)^(.*\.)?([\w$]*client[\w$]*!?|(use|get|create)?(cognite)?(client|sdk)\(.*\))$'

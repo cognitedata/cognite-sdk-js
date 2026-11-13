@@ -1,0 +1,52 @@
+# Not rewritten, only reported: `x.datapoints.delete(...)` may be a Map, but the old path still
+# compiles, so nothing else would point it out.
+id: timeseries-data-unrecognized-datapoints
+language: Tsx
+severity: warning
+message: >-
+  .datapoints.<method> looks like the SDK, but the receiver is not recognized as a client and was
+  left alone. Migrate it by hand, or add its name to utils/is-sdk-client.yml.
+rule:
+  kind: property_identifier
+  regex: '^datapoints$'
+  inside:
+    kind: member_expression
+    field: property
+    stopBy: neighbor
+    all:
+      - has:
+          field: object
+          not:
+            matches: is-sdk-client
+      - inside:
+          kind: member_expression
+          field: object
+          stopBy: neighbor
+          has:
+            field: property
+            regex: '^(insert|retrieve|retrieveLatest|retrieveDatapointMonthlyAggregates|delete)$'
+---
+id: timeseries-data-unrecognized-synthetic-query
+language: Tsx
+severity: warning
+message: >-
+  .timeseries.syntheticQuery looks like the SDK, but the receiver is not recognized as a client and
+  was left alone. Migrate it by hand, or add its name to utils/is-sdk-client.yml.
+rule:
+  kind: property_identifier
+  regex: '^syntheticQuery$'
+  inside:
+    kind: member_expression
+    field: property
+    stopBy: neighbor
+    has:
+      field: object
+      kind: member_expression
+      all:
+        - has:
+            field: property
+            regex: '^timeseries$'
+        - has:
+            field: object
+            not:
+              matches: is-sdk-client
