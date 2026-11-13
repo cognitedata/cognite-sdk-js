@@ -1,0 +1,301 @@
+id: timeseries-data-datapoints
+snapshots:
+  "await client!.datapoints.delete({});":
+    fixed: await client!.timeseries.data.delete({});
+    labels:
+    - source: datapoints
+      style: primary
+      start: 14
+      end: 24
+    - source: client!
+      style: secondary
+      start: 6
+      end: 13
+    - source: delete
+      style: secondary
+      start: 25
+      end: 31
+    - source: client!.datapoints.delete
+      style: secondary
+      start: 6
+      end: 31
+    - source: client!.datapoints
+      style: secondary
+      start: 6
+      end: 24
+  "await client.datapoints.retrieve({ items: [] });":
+    fixed: "await client.timeseries.data.retrieve({ items: [] });"
+    labels:
+    - source: datapoints
+      style: primary
+      start: 13
+      end: 23
+    - source: client
+      style: secondary
+      start: 6
+      end: 12
+    - source: retrieve
+      style: secondary
+      start: 24
+      end: 32
+    - source: client.datapoints.retrieve
+      style: secondary
+      start: 6
+      end: 32
+    - source: client.datapoints
+      style: secondary
+      start: 6
+      end: 23
+  "await client.datapoints.retrieveDatapointMonthlyAggregates({});":
+    fixed: await client.timeseries.data.retrieveDatapointMonthlyAggregates({});
+    labels:
+    - source: datapoints
+      style: primary
+      start: 13
+      end: 23
+    - source: client
+      style: secondary
+      start: 6
+      end: 12
+    - source: retrieveDatapointMonthlyAggregates
+      style: secondary
+      start: 24
+      end: 58
+    - source: client.datapoints.retrieveDatapointMonthlyAggregates
+      style: secondary
+      start: 6
+      end: 58
+    - source: client.datapoints
+      style: secondary
+      start: 6
+      end: 23
+  "await cogniteClient?.datapoints.retrieveLatest([]);":
+    fixed: await cogniteClient?.timeseries.data.retrieveLatest([]);
+    labels:
+    - source: datapoints
+      style: primary
+      start: 21
+      end: 31
+    - source: cogniteClient
+      style: secondary
+      start: 6
+      end: 19
+    - source: retrieveLatest
+      style: secondary
+      start: 32
+      end: 46
+    - source: cogniteClient?.datapoints.retrieveLatest
+      style: secondary
+      start: 6
+      end: 46
+    - source: cogniteClient?.datapoints
+      style: secondary
+      start: 6
+      end: 31
+  "await createClient().datapoints.retrieve({});":
+    fixed: await createClient().timeseries.data.retrieve({});
+    labels:
+    - source: datapoints
+      style: primary
+      start: 21
+      end: 31
+    - source: createClient()
+      style: secondary
+      start: 6
+      end: 20
+    - source: retrieve
+      style: secondary
+      start: 32
+      end: 40
+    - source: createClient().datapoints.retrieve
+      style: secondary
+      start: 6
+      end: 40
+    - source: createClient().datapoints
+      style: secondary
+      start: 6
+      end: 31
+  "await getClient().datapoints.retrieve({});":
+    fixed: await getClient().timeseries.data.retrieve({});
+    labels:
+    - source: datapoints
+      style: primary
+      start: 18
+      end: 28
+    - source: getClient()
+      style: secondary
+      start: 6
+      end: 17
+    - source: retrieve
+      style: secondary
+      start: 29
+      end: 37
+    - source: getClient().datapoints.retrieve
+      style: secondary
+      start: 6
+      end: 37
+    - source: getClient().datapoints
+      style: secondary
+      start: 6
+      end: 28
+  "await this.client.datapoints.insert([]);":
+    fixed: await this.client.timeseries.data.insert([]);
+    labels:
+    - source: datapoints
+      style: primary
+      start: 18
+      end: 28
+    - source: this.client
+      style: secondary
+      start: 6
+      end: 17
+    - source: insert
+      style: secondary
+      start: 29
+      end: 35
+    - source: this.client.datapoints.insert
+      style: secondary
+      start: 6
+      end: 35
+    - source: this.client.datapoints
+      style: secondary
+      start: 6
+      end: 28
+  "await useCogniteClient().datapoints.retrieve({});":
+    fixed: await useCogniteClient().timeseries.data.retrieve({});
+    labels:
+    - source: datapoints
+      style: primary
+      start: 25
+      end: 35
+    - source: useCogniteClient()
+      style: secondary
+      start: 6
+      end: 24
+    - source: retrieve
+      style: secondary
+      start: 36
+      end: 44
+    - source: useCogniteClient().datapoints.retrieve
+      style: secondary
+      start: 6
+      end: 44
+    - source: useCogniteClient().datapoints
+      style: secondary
+      start: 6
+      end: 35
+  "await useSDK().datapoints.insert([]);":
+    fixed: await useSDK().timeseries.data.insert([]);
+    labels:
+    - source: datapoints
+      style: primary
+      start: 15
+      end: 25
+    - source: useSDK()
+      style: secondary
+      start: 6
+      end: 14
+    - source: insert
+      style: secondary
+      start: 26
+      end: 32
+    - source: useSDK().datapoints.insert
+      style: secondary
+      start: 6
+      end: 32
+    - source: useSDK().datapoints
+      style: secondary
+      start: 6
+      end: 25
+  "client.datapoints.retrieve({ items: [{ externalId: \"a\" }] });":
+    fixed: "client.timeseries.data.retrieve({ items: [{ externalId: \"a\" }] });"
+    labels:
+    - source: datapoints
+      style: primary
+      start: 7
+      end: 17
+    - source: client
+      style: secondary
+      start: 0
+      end: 6
+    - source: retrieve
+      style: secondary
+      start: 18
+      end: 26
+    - source: client.datapoints.retrieve
+      style: secondary
+      start: 0
+      end: 26
+    - source: client.datapoints
+      style: secondary
+      start: 0
+      end: 17
+  "const A = () => <div>{String(client.datapoints.retrieve({}))}</div>;":
+    fixed: const A = () => <div>{String(client.timeseries.data.retrieve({}))}</div>;
+    labels:
+    - source: datapoints
+      style: primary
+      start: 36
+      end: 46
+    - source: client
+      style: secondary
+      start: 29
+      end: 35
+    - source: retrieve
+      style: secondary
+      start: 47
+      end: 55
+    - source: client.datapoints.retrieve
+      style: secondary
+      start: 29
+      end: 55
+    - source: client.datapoints
+      style: secondary
+      start: 29
+      end: 46
+  const dp = client.datapoints;:
+    fixed: const dp = client.timeseries.data;
+    labels:
+    - source: datapoints
+      style: primary
+      start: 18
+      end: 28
+    - source: client
+      style: secondary
+      start: 11
+      end: 17
+    - source: client.datapoints
+      style: secondary
+      start: 11
+      end: 28
+  "const x = client\n  .datapoints\n  .retrieve({});\n":
+    fixed: |
+      const x = client
+        .timeseries.data
+        .retrieve({});
+    labels:
+    - source: datapoints
+      style: primary
+      start: 20
+      end: 30
+    - source: client
+      style: secondary
+      start: 10
+      end: 16
+    - source: retrieve
+      style: secondary
+      start: 34
+      end: 42
+    - source: |-
+        client
+          .datapoints
+          .retrieve
+      style: secondary
+      start: 10
+      end: 42
+    - source: |-
+        client
+          .datapoints
+      style: secondary
+      start: 10
+      end: 30

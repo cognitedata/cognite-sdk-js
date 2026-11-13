@@ -1,0 +1,10 @@
+id: timeseries-synthetic-query
+valid:
+  - client.timeseries.syntheticQuery([]);
+  - other.timeseries.syntheticQuery([]);
+  - getClientData().timeseries.syntheticQuery([]);
+  - client.timeseries.synthetic.query([]);
+invalid:
+  - 'await client.timeseries.syntheticQuery([{ expression: "1" }]);'
+  - await getClient().timeseries.syntheticQuery([]);
+  - await this.client.timeseries?.syntheticQuery([]);

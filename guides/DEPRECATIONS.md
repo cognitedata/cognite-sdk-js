@@ -121,6 +121,42 @@ await client.timeseries.synthetic.query([
 ]);
 ```
 
+#### Codemod
+
+The [ast-grep](https://ast-grep.github.io/) rules in `scripts/codemods` rewrite the access paths for
+you (`client.datapoints.*` to `client.timeseries.data.*`, `client.timeseries.syntheticQuery` to
+`client.timeseries.synthetic.query`). They do not change request bodies; moving from `id` /
+`externalId` to `instanceId` needs a space and must be done by hand.
+
+```sh
+npx degit cognitedata/cognite-sdk-js/scripts/codemods .sdk-codemods                  # fetch the rules
+npx @ast-grep/cli scan --config .sdk-codemods/sgconfig.yml src                       # preview
+npx @ast-grep/cli scan --config .sdk-codemods/sgconfig.yml --update-all src          # apply
+npx prettier --write <changed files>                                                 # or your own formatter
+```
+
+Only the property name is replaced, so your formatting and comments are kept. The new access path is
+longer, so run your formatter on the changed files afterwards. `.ts`, `.tsx`, `.js`, `.jsx`, `.mts`, `.cts`, `.mjs` and
+`.cjs` files are covered, and files that your `.gitignore` excludes (such as `node_modules`) are skipped.
+
+**Which receivers are rewritten.** The rules go by name, so that an unrelated `.datapoints`
+property, such as the one on a retrieve response, is left alone: the receiver has to look like a
+client (it ends in a name containing `client`, such as `client`, `cogniteClient` or `this.client`),
+or be a call to a client accessor such as `useSDK()`, `getClient()` or `useCogniteClient()`. To
+rewrite a client that has another name, such as `sdk` or `cdf`, add it to the regex in
+`.sdk-codemods/utils/is-sdk-client.yml`.
+
+**Reported as a warning, and left for you to migrate by hand:**
+
+- `<x>.datapoints.<method>` or `<x>.timeseries.syntheticQuery` on a receiver that is not recognized
+  as a client. It is not rewritten, because `x.datapoints.delete(...)` may be a `Map`. Add the name
+  to `is-sdk-client.yml` and run again, or migrate it yourself.
+
+**Not detected.** The element access forms `client['datapoints']` and
+`client.timeseries['syntheticQuery']`, mock objects that fake the client, such as
+`{ datapoints: { retrieve: vi.fn() } }`, and `vi.mock('@cognite/sdk', ...)` factories have no type
+link to the SDK. Update them by hand after running the rules and let `tsc` point out what is left.
+
 ### Datapoints: identify time series by `instanceId`
 
 Addressing a time series by `id` or `externalId` is deprecated as of 2026-10-15 and retired on

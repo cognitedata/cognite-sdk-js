@@ -1,0 +1,6 @@
+id: timeseries-data-unrecognized-synthetic-query
+valid:
+  - client.timeseries.syntheticQuery([]);
+invalid:
+  - foo().timeseries.syntheticQuery([]);
+  - sdk.timeseries.syntheticQuery([]);

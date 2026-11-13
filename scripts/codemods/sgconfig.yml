@@ -1,0 +1,10 @@
+# ast-grep configuration for the codemods in this folder. See guides/DEPRECATIONS.md.
+ruleDirs:
+  - rules
+utilDirs:
+  - utils
+testConfigs:
+  - testDir: rule-tests
+languageGlobs:
+  # One parser for TypeScript, JavaScript and JSX, so that a single rule covers them all.
+  Tsx: ['*.ts', '*.tsx', '*.mts', '*.cts', '*.js', '*.jsx', '*.mjs', '*.cjs']

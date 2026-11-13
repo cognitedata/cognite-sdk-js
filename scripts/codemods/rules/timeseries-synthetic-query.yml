@@ -1,0 +1,23 @@
+# client.timeseries.syntheticQuery -> client.timeseries.synthetic.query
+id: timeseries-synthetic-query
+language: Tsx
+severity: error
+message: client.timeseries.syntheticQuery moved to client.timeseries.synthetic.query
+rule:
+  kind: property_identifier
+  regex: '^syntheticQuery$'
+  inside:
+    kind: member_expression
+    field: property
+    stopBy: neighbor
+    has:
+      field: object
+      kind: member_expression
+      all:
+        - has:
+            field: property
+            regex: '^timeseries$'
+        - has:
+            field: object
+            matches: is-sdk-client
+fix: synthetic.query
