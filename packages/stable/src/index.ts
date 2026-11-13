@@ -72,6 +72,7 @@ export { RecordsAPI } from './api/records/recordsApi';
 export { SessionsApi } from './api/sessions/sessionsApi';
 export { SpacesAPI } from './api/spaces/spacesApi';
 export { StreamsAPI } from './api/streams/streamsApi';
+export { StreamTemplatesAPI } from './api/streams/templates/streamTemplatesApi';
 export { TransformationJobsAPI } from './api/transformations/transformationJobsApi';
 export { TransformationNotificationsAPI } from './api/transformations/transformationNotificationsApi';
 export { TransformationQueryAPI } from './api/transformations/transformationQueryApi';

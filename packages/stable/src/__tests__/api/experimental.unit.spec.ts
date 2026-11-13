@@ -87,6 +87,7 @@ describe('experimental opt-in', () => {
     expect(client.transformations).toBeDefined();
     expect(client.transformations.list).toBeTypeOf('function');
     expect(client.functions.list).toBeTypeOf('function');
+    expect(client.streams.templates.list).toBeTypeOf('function');
   });
 
   test('the mockable test client enables everything', () => {
