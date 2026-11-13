@@ -107,7 +107,7 @@ const client = new CogniteClient({
 | `workflows`           | `client.workflows` (versions, executions, tasks, triggers)                                  |
 | `functions`           | `client.functions.calls`, `client.functions.schedules`                                      |
 | `transformations`     | `client.transformations.jobs`, `.notifications`, `.query`, `.schedules`, `.schema`          |
-| `extractionPipelines` | `client.extractionPipelines`                                                                |
+| `extractionPipelines` | `client.extractionPipelines` (runs)                                                         |
 
 APIs that have already been released are not gated.
 

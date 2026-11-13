@@ -2,11 +2,14 @@
 
 import {
   BaseResourceAPI,
+  type CDFHttpClient,
   type CursorAndAsyncIterator,
   type FilterQuery,
   type IdEither,
+  type MetadataMap,
 } from '@cognite/sdk-core';
 import type { IgnoreUnknownIds } from '../../types';
+import { ExtractionPipelineRunsAPI } from './extractionPipelineRunsApi';
 import type {
   ExtractionPipeline,
   ExtractionPipelineChange,
@@ -15,6 +18,24 @@ import type {
 } from './types';
 
 export class ExtractionPipelinesAPI extends BaseResourceAPI<ExtractionPipeline> {
+  private readonly runsApi: ExtractionPipelineRunsAPI;
+
+  /** @hidden */
+  constructor(resourcePath: string, ...args: [CDFHttpClient, MetadataMap]) {
+    super(resourcePath, ...args);
+    this.runsApi = new ExtractionPipelineRunsAPI(
+      `${resourcePath}/runs`,
+      ...args
+    );
+  }
+
+  /**
+   * [Extraction pipeline runs](https://api-docs.cognite.com/20230101/tag/Extraction-Pipelines-Runs)
+   */
+  public get runs() {
+    return this.runsApi;
+  }
+
   /**
    * [Create extraction pipelines](https://api-docs.cognite.com/20230101/tag/Extraction-Pipelines/operation/createExtPipes)
    *
