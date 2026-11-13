@@ -4,6 +4,7 @@ import type {
   CogniteExternalId,
   CogniteInstanceId,
   CogniteInternalId,
+  CreatedAndLastUpdatedTime,
   ExternalId,
   FilterQuery,
   IdEither,
@@ -14,7 +15,6 @@ import type {
 import type {
   AggregateResponse,
   ArrayPatchLong,
-  CreatedAndLastUpdatedTime,
   CreatedAndLastUpdatedTimeFilter,
   DatapointInfo,
   ExternalIdPrefix,
