@@ -21,7 +21,9 @@ import type {
   FunctionsLimits,
 } from './types';
 
-export class FunctionsAPI extends BaseResourceAPI<CogniteFunction> {
+export class FunctionsAPI<
+  Enabled extends boolean = false,
+> extends BaseResourceAPI<CogniteFunction> {
   private readonly callsApi: FunctionCallsAPI;
   private readonly schedulesApi: FunctionSchedulesAPI;
   private experimentalEnabled = true;
@@ -55,13 +57,17 @@ export class FunctionsAPI extends BaseResourceAPI<CogniteFunction> {
    * const schedules = await client.functions.schedules.list();
    * ```
    */
-  public get schedules() {
+  public get schedules(): Enabled extends true
+    ? FunctionSchedulesAPI
+    : unknown {
     assertExperimentalEnabled(
       this.experimentalEnabled,
       'functions',
       'client.functions.schedules'
     );
-    return this.schedulesApi;
+    return this.schedulesApi as Enabled extends true
+      ? FunctionSchedulesAPI
+      : unknown;
   }
 
   /**
@@ -76,13 +82,13 @@ export class FunctionsAPI extends BaseResourceAPI<CogniteFunction> {
    *
    * @alpha Experimental, requires `experimental: { functions: true }` in the client options.
    */
-  public get calls() {
+  public get calls(): Enabled extends true ? FunctionCallsAPI : unknown {
     assertExperimentalEnabled(
       this.experimentalEnabled,
       'functions',
       'client.functions.calls'
     );
-    return this.callsApi;
+    return this.callsApi as Enabled extends true ? FunctionCallsAPI : unknown;
   }
 
   /**

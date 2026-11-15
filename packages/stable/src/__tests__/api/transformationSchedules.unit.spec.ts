@@ -2,16 +2,19 @@
 
 import nock from 'nock';
 import { beforeEach, describe, expect, test } from 'vitest';
-import type CogniteClient from '../../cogniteClient';
 import type {
   TransformationSchedule,
   TransformationScheduleChange,
   TransformationScheduleCreate,
 } from '../../types';
-import { mockBaseUrl, setupMockableClient } from '../testUtils';
+import {
+  type ExperimentalTestClient,
+  mockBaseUrl,
+  setupMockableClient,
+} from '../testUtils';
 
 describe('Transformation schedules unit test', () => {
-  let client: CogniteClient;
+  let client: ExperimentalTestClient;
 
   const scheduleCreate = {
     externalId: 'my-transformation',

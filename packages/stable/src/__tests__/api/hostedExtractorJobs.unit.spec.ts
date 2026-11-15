@@ -2,7 +2,6 @@
 
 import nock from 'nock';
 import { beforeEach, describe, expect, test } from 'vitest';
-import type CogniteClient from '../../cogniteClient';
 import type {
   HostedExtractorJob,
   HostedExtractorJobChange,
@@ -11,10 +10,14 @@ import type {
   HostedExtractorJobLog,
   HostedExtractorJobMetric,
 } from '../../types';
-import { mockBaseUrl, setupMockableClient } from '../testUtils';
+import {
+  type ExperimentalTestClient,
+  mockBaseUrl,
+  setupMockableClient,
+} from '../testUtils';
 
 describe('Hosted extractor jobs unit test', () => {
-  let client: CogniteClient;
+  let client: ExperimentalTestClient;
 
   const jobCreate = {
     externalId: 'my-mqtt-job',

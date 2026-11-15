@@ -24,7 +24,28 @@ export type ExperimentalOptions = {
   extractionPipelines?: boolean;
 };
 
+/**
+ * The default for `CogniteClient`'s type parameter: no experimental API enabled.
+ *
+ * @hidden
+ */
+export type NoExperimentalOptions = Record<never, never>;
+
 export type ExperimentalFeature = keyof ExperimentalOptions;
+
+/**
+ * Resolves to `T` when the options type `E` enables `K` with the literal `true`,
+ * and to `unknown` otherwise. Using `unknown` means a client without the flag
+ * has no usable members on the gated API (`client.workflows.list` is a compile
+ * error) while a client with the flag stays assignable to one without it.
+ *
+ * @hidden
+ */
+export type WhenExperimental<
+  E extends ExperimentalOptions,
+  K extends ExperimentalFeature,
+  T,
+> = E extends { readonly [P in K]: true } ? T : unknown;
 
 /**
  * @hidden

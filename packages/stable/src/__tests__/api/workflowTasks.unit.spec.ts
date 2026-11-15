@@ -2,12 +2,15 @@
 
 import nock from 'nock';
 import { beforeEach, describe, expect, test } from 'vitest';
-import type CogniteClient from '../../cogniteClient';
 import type { WorkflowTaskExecution, WorkflowTaskUpdate } from '../../types';
-import { mockBaseUrl, setupMockableClient } from '../testUtils';
+import {
+  type ExperimentalTestClient,
+  mockBaseUrl,
+  setupMockableClient,
+} from '../testUtils';
 
 describe('Workflow tasks unit test', () => {
-  let client: CogniteClient;
+  let client: ExperimentalTestClient;
 
   beforeEach(() => {
     client = setupMockableClient();

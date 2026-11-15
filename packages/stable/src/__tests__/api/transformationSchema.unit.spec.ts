@@ -2,12 +2,15 @@
 
 import nock from 'nock';
 import { beforeEach, describe, expect, test } from 'vitest';
-import type CogniteClient from '../../cogniteClient';
 import type { TransformationSchemaColumn } from '../../types';
-import { mockBaseUrl, setupMockableClient } from '../testUtils';
+import {
+  type ExperimentalTestClient,
+  mockBaseUrl,
+  setupMockableClient,
+} from '../testUtils';
 
 describe('Transformation schema unit test', () => {
-  let client: CogniteClient;
+  let client: ExperimentalTestClient;
 
   const columns: TransformationSchemaColumn[] = [
     { name: 'externalId', sqlType: 'STRING', type: 'string', nullable: false },

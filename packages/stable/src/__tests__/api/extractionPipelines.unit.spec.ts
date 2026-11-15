@@ -2,17 +2,20 @@
 
 import nock from 'nock';
 import { beforeEach, describe, expect, test } from 'vitest';
-import type CogniteClient from '../../cogniteClient';
 import type {
   ExtractionPipeline,
   ExtractionPipelineChange,
   ExtractionPipelineCreate,
   ExtractionPipelineFilterQuery,
 } from '../../types';
-import { mockBaseUrl, setupMockableClient } from '../testUtils';
+import {
+  type ExperimentalTestClient,
+  mockBaseUrl,
+  setupMockableClient,
+} from '../testUtils';
 
 describe('Extraction pipelines unit test', () => {
-  let client: CogniteClient;
+  let client: ExperimentalTestClient;
 
   const pipelineCreate = {
     externalId: 'my-pipeline',
