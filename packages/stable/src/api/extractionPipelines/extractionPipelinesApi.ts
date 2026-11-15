@@ -9,6 +9,7 @@ import {
   type MetadataMap,
 } from '@cognite/sdk-core';
 import type { IgnoreUnknownIds } from '../../types';
+import { ExtractionPipelineConfigsAPI } from './extractionPipelineConfigsApi';
 import { ExtractionPipelineRunsAPI } from './extractionPipelineRunsApi';
 import type {
   ExtractionPipeline,
@@ -19,6 +20,7 @@ import type {
 
 export class ExtractionPipelinesAPI extends BaseResourceAPI<ExtractionPipeline> {
   private readonly runsApi: ExtractionPipelineRunsAPI;
+  private readonly configApi: ExtractionPipelineConfigsAPI;
 
   /** @hidden */
   constructor(resourcePath: string, ...args: [CDFHttpClient, MetadataMap]) {
@@ -27,6 +29,7 @@ export class ExtractionPipelinesAPI extends BaseResourceAPI<ExtractionPipeline> 
       `${resourcePath}/runs`,
       ...args
     );
+    this.configApi = new ExtractionPipelineConfigsAPI(resourcePath, ...args);
   }
 
   /**
@@ -34,6 +37,13 @@ export class ExtractionPipelinesAPI extends BaseResourceAPI<ExtractionPipeline> 
    */
   public get runs() {
     return this.runsApi;
+  }
+
+  /**
+   * [Extraction pipeline configuration revisions](https://api-docs.cognite.com/20230101/tag/Extraction-Pipelines-Config)
+   */
+  public get config() {
+    return this.configApi;
   }
 
   /**
