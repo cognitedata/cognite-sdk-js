@@ -2,17 +2,20 @@
 
 import nock from 'nock';
 import { beforeEach, describe, expect, test } from 'vitest';
-import type CogniteClient from '../../cogniteClient';
 import type {
   WorkflowExecution,
   WorkflowExecutionDetailed,
   WorkflowExecutionFilterQuery,
   WorkflowExecutionRunRequest,
 } from '../../types';
-import { mockBaseUrl, setupMockableClient } from '../testUtils';
+import {
+  type ExperimentalTestClient,
+  mockBaseUrl,
+  setupMockableClient,
+} from '../testUtils';
 
 describe('Workflow executions unit test', () => {
-  let client: CogniteClient;
+  let client: ExperimentalTestClient;
 
   const executionId = '550e8400-e29b-41d4-a716-446655440000';
 

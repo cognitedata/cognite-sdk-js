@@ -2,17 +2,20 @@
 
 import nock from 'nock';
 import { beforeEach, describe, expect, test } from 'vitest';
-import type CogniteClient from '../../cogniteClient';
 import type {
   FunctionSchedule,
   FunctionScheduleCreate,
   FunctionScheduleInputData,
   FunctionScheduleListQuery,
 } from '../../types';
-import { mockBaseUrl, setupMockableClient } from '../testUtils';
+import {
+  type ExperimentalTestClient,
+  mockBaseUrl,
+  setupMockableClient,
+} from '../testUtils';
 
 describe('Function schedules unit test', () => {
-  let client: CogniteClient;
+  let client: ExperimentalTestClient;
 
   const schedule: FunctionSchedule = {
     id: 1,

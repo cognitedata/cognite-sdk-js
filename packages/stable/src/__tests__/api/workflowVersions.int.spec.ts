@@ -1,9 +1,12 @@
 // Copyright 2026 Cognite AS
 
 import { afterAll, beforeAll, describe, expect, test } from 'vitest';
-import type CogniteClient from '../../cogniteClient';
 import type { WorkflowTaskDefinition } from '../../types';
-import { randomInt, setupLoggedInClient } from '../testUtils';
+import {
+  type ExperimentalTestClient,
+  randomInt,
+  setupLoggedInClient,
+} from '../testUtils';
 
 const workflowTask: WorkflowTaskDefinition = {
   externalId: 'int-task-1',
@@ -14,7 +17,7 @@ const workflowTask: WorkflowTaskDefinition = {
 };
 
 describe('Workflow versions integration test', () => {
-  let client: CogniteClient;
+  let client: ExperimentalTestClient;
   const workflowExternalId = `int-workflow-version-${randomInt()}`;
   const version = '1';
 

@@ -111,6 +111,32 @@ const client = new CogniteClient({
 
 APIs that have already been released are not gated.
 
+### TypeScript
+
+The flags are part of the client's type. `CogniteClient` takes the enabled
+flags as a type parameter, inferred from the options you pass, so a gated API
+is only usable (and shows up as `unknown` otherwise) when its flag is set to
+the literal `true`. Forgetting a flag is a compile error rather than a runtime
+throw:
+
+```ts
+const client = new CogniteClient({ ..., experimental: { workflows: true } });
+client.workflows.list(); // ok
+client.hostedExtractors.sources.list(); // error: 'client.hostedExtractors' is of type 'unknown'
+```
+
+A plain `CogniteClient` annotation means "no experimental APIs". When you pass a
+client around and the receiver needs a gated API, say so in its type:
+
+```ts
+function listWorkflows(client: CogniteClient<{ workflows: true }>) {
+  return client.workflows.list();
+}
+```
+
+Options held in a variable typed as `ClientOptions` lose the literal flags, so
+set `experimental` in the object you pass to the constructor.
+
 ## Concurrency
 
 > **Experimental:** the `concurrency` option is experimental. Breaking changes

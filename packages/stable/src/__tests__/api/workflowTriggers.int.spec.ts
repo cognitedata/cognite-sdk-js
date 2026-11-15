@@ -1,12 +1,15 @@
 // Copyright 2026 Cognite AS
 
 import { afterAll, beforeAll, describe, expect, test } from 'vitest';
-import type CogniteClient from '../../cogniteClient';
 import type { WorkflowTriggerUpsert } from '../../types';
-import { randomInt, setupLoggedInClient } from '../testUtils';
+import {
+  type ExperimentalTestClient,
+  randomInt,
+  setupLoggedInClient,
+} from '../testUtils';
 
 describe('Workflow triggers integration test', () => {
-  let client: CogniteClient;
+  let client: ExperimentalTestClient;
   const workflowExternalId = `int-workflow-trigger-${randomInt()}`;
   const workflowVersion = '1';
   const triggerExternalId = `int-trigger-${randomInt()}`;

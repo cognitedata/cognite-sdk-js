@@ -15,7 +15,9 @@ vi.mock('cross-fetch', async (importOriginal) => ({
 
 describe('Client Data Modeling concurrency', () => {
   let requests: ReturnType<typeof controlFetch>;
-  const createClient = (options: Partial<ClientOptions> = {}) =>
+  const createClient = (
+    options: Partial<Omit<ClientOptions, 'experimental'>> = {}
+  ) =>
     setupMockableClient({
       project: 'test',
       concurrency: {},

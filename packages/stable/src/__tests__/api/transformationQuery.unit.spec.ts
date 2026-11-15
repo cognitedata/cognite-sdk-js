@@ -2,15 +2,18 @@
 
 import nock from 'nock';
 import { beforeEach, describe, expect, test } from 'vitest';
-import type CogniteClient from '../../cogniteClient';
 import type {
   TransformationQueryRunRequest,
   TransformationQueryRunResult,
 } from '../../types';
-import { mockBaseUrl, setupMockableClient } from '../testUtils';
+import {
+  type ExperimentalTestClient,
+  mockBaseUrl,
+  setupMockableClient,
+} from '../testUtils';
 
 describe('Transformation query unit test', () => {
-  let client: CogniteClient;
+  let client: ExperimentalTestClient;
 
   const query = 'select * from `db`.`table`';
 

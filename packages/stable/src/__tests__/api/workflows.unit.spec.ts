@@ -2,12 +2,15 @@
 
 import nock from 'nock';
 import { beforeEach, describe, expect, test } from 'vitest';
-import type CogniteClient from '../../cogniteClient';
 import type { Workflow, WorkflowUpsert } from '../../types';
-import { mockBaseUrl, setupMockableClient } from '../testUtils';
+import {
+  type ExperimentalTestClient,
+  mockBaseUrl,
+  setupMockableClient,
+} from '../testUtils';
 
 describe('Workflows unit test', () => {
-  let client: CogniteClient;
+  let client: ExperimentalTestClient;
 
   const workflowUpsert = {
     externalId: 'wf-1',

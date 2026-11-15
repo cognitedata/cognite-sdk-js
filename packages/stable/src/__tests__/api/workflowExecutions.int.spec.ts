@@ -1,9 +1,9 @@
 // Copyright 2026 Cognite AS
 
 import { afterAll, beforeAll, describe, expect, test } from 'vitest';
-import type CogniteClient from '../../cogniteClient';
 import type { WorkflowExecution, WorkflowTaskDefinition } from '../../types';
 import {
+  type ExperimentalTestClient,
   randomInt,
   runTestWithRetryWhenFailing,
   setupLoggedInClient,
@@ -18,7 +18,7 @@ const workflowTask: WorkflowTaskDefinition = {
 };
 
 describe('Workflow executions integration test', () => {
-  let client: CogniteClient;
+  let client: ExperimentalTestClient;
   const workflowExternalId = `int-workflow-execution-${randomInt()}`;
   const version = '1';
   let createdExecution: WorkflowExecution | undefined;
