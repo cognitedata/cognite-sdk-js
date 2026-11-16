@@ -222,7 +222,10 @@ export interface DatapointsMetadata extends InternalId {
   // TODO(next-major): Make required per API spec
   type?: TimeSeriesType;
   /**
-   * Name of the physical unit of the time series
+   * Name of the physical unit of the time series.
+   *
+   * Note: this is a plain string. It is not the `unit` direct relation to `CogniteUnit` found on
+   * `CogniteTimeSeries` instances in Data Modeling.
    */
   unit?: string;
 }
