@@ -112,10 +112,11 @@ export class RetryableHttpClient extends BasicHttpClient {
         ? request.retryValidator
         : this.retryValidator;
 
+      const isAutoRetryable = hasAutoRetryableError(response.data);
       const shouldRetry =
         retryCount < MAX_RETRY_ATTEMPTS &&
         request.retryValidator !== false &&
-        retryValidator(request, response, retryCount);
+        (isAutoRetryable || retryValidator(request, response, retryCount));
       if (!shouldRetry) {
         return response;
       }
@@ -139,3 +140,13 @@ export type RetryableHttpRequestOptions = HttpRequestOptions &
 type HttpRequestRetryValidatorOptions = {
   retryValidator?: false | RetryValidator;
 };
+
+function hasAutoRetryableError(data: unknown): boolean {
+  if (typeof data !== 'object' || data === null) return false;
+
+  if (!('error' in data)) return false;
+
+  const { error } = data;
+  if (typeof error !== 'object' || error === null) return false;
+  return 'isAutoRetryable' in error && error.isAutoRetryable === true;
+}
