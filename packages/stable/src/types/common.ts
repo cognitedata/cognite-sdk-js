@@ -25,11 +25,6 @@ export type ExternalIdPrefix = string;
  */
 export type Partition = string;
 
-export interface CreatedAndLastUpdatedTime {
-  lastUpdatedTime: Date;
-  createdTime: Date;
-}
-
 export interface CreatedAndLastUpdatedTimeFilter {
   lastUpdatedTime?: DateRange;
   createdTime?: DateRange;
