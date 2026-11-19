@@ -296,3 +296,32 @@ test('handles tsx and preserves formatting', () => {
   );
   assert.ok(output.includes('.timeseries.data\n  .retrieve'));
 });
+
+test('rewrites and skips the same receivers as the ast-grep rules did', () => {
+  const rewritten = [
+    'await this.client.datapoints.insert([]);',
+    'await cogniteClient?.datapoints.retrieveLatest([]);',
+    'await client!.datapoints.delete({});',
+    'await createClient().datapoints.retrieve({});',
+    'const dp = client.datapoints;',
+    'const A = () => <div>{String(client.datapoints.retrieve({}))}</div>;',
+  ];
+  for (const src of rewritten) {
+    const { output, changes } = transform(src, 'a.tsx');
+    assert.equal(changes, 1, src);
+    assert.equal(output, src.replace('datapoints', 'timeseries.data'));
+  }
+  const untouched = [
+    'const pts = res[0].datapoints;',
+    'const n = series.datapoints.length;',
+    'getClientData().datapoints.retrieve({});',
+    'createMockCogniteClientDependencies().datapoints.retrieve({});',
+    'client.datapoints.length;',
+    'client.datapoints[0];',
+    'client.timeseries.data.retrieve({});',
+    'client.timeseries.synthetic.query([]);',
+  ];
+  for (const src of untouched) {
+    assert.equal(transform(src, 'a.tsx').changes, 0, src);
+  }
+});
