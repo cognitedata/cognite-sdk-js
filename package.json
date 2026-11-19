@@ -49,14 +49,13 @@
     "docs:bundle": "rm -rf docs/ && yarn allsdk docs:bundle --stream && touch docs/.nojekyll",
     "validateDocLinks": "find . -name \\*.md -not -path '*/node_modules/*' -print0 | xargs -0 -n1 yarn markdown-link-check -c ./markdownlint.json",
     "test-snippets": "yarn allsdk test-snippets --stream",
-    "test-codemods": "ast-grep test --config scripts/codemods/sgconfig.yml",
+    "test-codemods": "node --test scripts/codemods/*.test.mjs",
     "test-samples": "SKIP_PREFLIGHT_CHECK=true yarn allsamples test --stream",
     "codegen": "ts-node packages/codegen/src/cli.ts",
     "release": "node scripts/create-release-pr.js",
     "prepare": "husky"
   },
   "devDependencies": {
-    "@ast-grep/cli": "^0.51.2",
     "@azure/msal-node": "^1.18.4",
     "@biomejs/biome": "1.9.4",
     "@commitlint/cli": "^17.8.1",
@@ -75,6 +74,7 @@
     "openapi-types": "^11.0.1",
     "swagger-typescript-api-nextgen": "^10.0.1",
     "tmp-promise": "^3.0.3",
+    "ts-morph": "^28.0.0",
     "ts-node": "^10.9.2",
     "typedoc": "^0.26.5",
     "typedoc-plugin-missing-exports": "^3.0.0",
