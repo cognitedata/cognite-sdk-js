@@ -33,12 +33,11 @@
  *
  * The codemod keeps your formatting but does not format. The new access path is
  * longer, so run your formatter (for example `prettier --write`) on the changed
- * files afterwards. Symlinks are not followed.
+ * files afterwards. Files are parsed with ts-morph and edited as text, only at the
+ * property name. Symlinks are not followed.
  *
  * Usage:
  *   node timeseries-data-namespace.mjs [--dry] [--client-names=a,b] <file|dir>...
- *
- * `typescript` is resolved from the current working directory first.
  *
  * Which receivers are rewritten. By default by name, so that an unrelated
  * `.datapoints` property (for example on a retrieve response) is left alone: the
@@ -47,19 +46,9 @@
  * `useCogniteClient()`.
  */
 import fs from 'node:fs';
-import { createRequire } from 'node:module';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-
-async function loadTypescript() {
-  try {
-    return createRequire(path.join(process.cwd(), 'noop.js'))('typescript');
-  } catch {
-    return (await import('typescript')).default;
-  }
-}
-
-const ts = await loadTypescript();
+import { Node, Project } from 'ts-morph';
 
 // The methods of the data points API, which `client.datapoints` and
 // `client.timeseries.data` share.
@@ -88,73 +77,77 @@ const SKIP_DIRS = new Set([
   'coverage',
 ]);
 
-function scriptKindFor(fileName) {
-  switch (path.extname(fileName)) {
-    case '.tsx':
-      return ts.ScriptKind.TSX;
-    case '.jsx':
-      return ts.ScriptKind.JSX;
-    case '.js':
-    case '.mjs':
-    case '.cjs':
-      return ts.ScriptKind.JS;
-    default:
-      return ts.ScriptKind.TS;
-  }
-}
+// Files are read and written by this script, so ts-morph only parses: an in-memory
+// file system, and no type checking or module resolution.
+const project = new Project({
+  useInMemoryFileSystem: true,
+  skipAddingFilesFromTsConfig: true,
+  skipFileDependencyResolution: true,
+  compilerOptions: { allowJs: true },
+});
 
 /** Last identifier of an expression such as `a.b.client` or `this.client`. */
 function lastName(expr) {
-  if (ts.isIdentifier(expr)) return expr.text;
-  if (ts.isPropertyAccessExpression(expr)) return expr.name.text;
-  if (ts.isNonNullExpression(expr) || ts.isParenthesizedExpression(expr)) {
-    return lastName(expr.expression);
+  if (Node.isIdentifier(expr)) return expr.getText();
+  if (Node.isPropertyAccessExpression(expr)) return expr.getName();
+  if (Node.isNonNullExpression(expr) || Node.isParenthesizedExpression(expr)) {
+    return lastName(expr.getExpression());
   }
   return undefined;
 }
 
+const unwrap = (expr) =>
+  Node.isNonNullExpression(expr) || Node.isParenthesizedExpression(expr)
+    ? unwrap(expr.getExpression())
+    : expr;
+
 function entityLastName(name) {
-  return ts.isIdentifier(name) ? name.text : name.right.text;
+  return Node.isIdentifier(name) ? name.getText() : name.getRight().getText();
 }
 
 /** Last identifier of a type such as `CogniteClient` or `typeof this.client`. */
 function typeLastName(type) {
-  if (ts.isTypeReferenceNode(type)) return entityLastName(type.typeName);
-  if (ts.isTypeQueryNode(type)) return entityLastName(type.exprName);
-  if (ts.isParenthesizedTypeNode(type)) return typeLastName(type.type);
+  if (Node.isTypeReference(type)) return entityLastName(type.getTypeName());
+  if (Node.isTypeQuery(type)) return entityLastName(type.getExprName());
+  if (Node.isParenthesizedTypeNode(type)) {
+    return typeLastName(type.getTypeNode());
+  }
   return undefined;
 }
 
 /** The string literal of `T['key']`, or undefined for any other type node. */
 function indexLiteral(node) {
-  return ts.isIndexedAccessTypeNode(node) &&
-    ts.isLiteralTypeNode(node.indexType) &&
-    ts.isStringLiteral(node.indexType.literal)
-    ? node.indexType.literal
-    : undefined;
+  if (!Node.isIndexedAccessTypeNode(node)) return undefined;
+  const index = node.getIndexTypeNode();
+  if (!Node.isLiteralTypeNode(index)) return undefined;
+  const literal = index.getLiteral();
+  return Node.isStringLiteral(literal) ? literal : undefined;
 }
 
 /** Whether a qualified name is the operand of a `typeof` type: `typeof a.b.c`. */
 function inTypeQuery(name) {
-  let parent = name.parent;
-  while (ts.isQualifiedName(parent)) parent = parent.parent;
-  return ts.isTypeQueryNode(parent);
+  let parent = name.getParent();
+  while (Node.isQualifiedName(parent)) parent = parent.getParent();
+  return Node.isTypeQuery(parent);
 }
 
 /** `x.name` or `x['name']`; undefined for any other expression. */
 function memberOf(node) {
-  if (ts.isPropertyAccessExpression(node)) {
-    return { name: node.name.text, nameNode: node.name, element: false };
-  }
-  if (
-    ts.isElementAccessExpression(node) &&
-    ts.isStringLiteralLike(node.argumentExpression)
-  ) {
+  if (Node.isPropertyAccessExpression(node)) {
     return {
-      name: node.argumentExpression.text,
-      nameNode: node.argumentExpression,
-      element: true,
+      name: node.getName(),
+      nameNode: node.getNameNode(),
+      element: false,
     };
+  }
+  if (Node.isElementAccessExpression(node)) {
+    const key = node.getArgumentExpression();
+    if (
+      key &&
+      (Node.isStringLiteral(key) || Node.isNoSubstitutionTemplateLiteral(key))
+    ) {
+      return { name: key.getLiteralText(), nameNode: key, element: true };
+    }
   }
   return undefined;
 }
@@ -164,18 +157,13 @@ function memberOf(node) {
  * (`name` is undefined for a computed key). Undefined when it is used as a value.
  */
 function accessedAs(node) {
-  const parent = node.parent;
+  const parent = node.getParent();
   const isAccess =
-    (ts.isPropertyAccessExpression(parent) ||
-      ts.isElementAccessExpression(parent)) &&
-    parent.expression === node;
+    (Node.isPropertyAccessExpression(parent) ||
+      Node.isElementAccessExpression(parent)) &&
+    parent.getExpression() === node;
   return isAccess ? { name: memberOf(parent)?.name } : undefined;
 }
-
-const unwrap = (expr) =>
-  ts.isNonNullExpression(expr) || ts.isParenthesizedExpression(expr)
-    ? unwrap(expr.expression)
-    : expr;
 
 /**
  * @param {string} source
@@ -184,14 +172,19 @@ const unwrap = (expr) =>
  * @returns {{ output: string, changes: number, warnings: string[] }}
  */
 export function transform(source, fileName, options = {}) {
-  const sf = ts.createSourceFile(
-    fileName,
+  const sf = project.createSourceFile(
+    path.posix.join('/', fileName.split(path.sep).join('/')),
     source,
-    ts.ScriptTarget.Latest,
-    true,
-    scriptKindFor(fileName)
+    { overwrite: true }
   );
+  try {
+    return transformSourceFile(sf, source, fileName, options);
+  } finally {
+    project.removeSourceFile(sf);
+  }
+}
 
+function transformSourceFile(sf, source, fileName, options) {
   const extra = new Set(options.clientNames ?? []);
   const isClientName = (name) =>
     name !== undefined && (extra.has(name) || /client/i.test(name));
@@ -202,8 +195,8 @@ export function transform(source, fileName, options = {}) {
   const CLIENT_ACCESSOR = /^(use|get|create)?(cognite)?(client|sdk)$/i;
   const isClient = (expr) => {
     const inner = unwrap(expr);
-    if (ts.isCallExpression(inner)) {
-      const name = lastName(inner.expression);
+    if (Node.isCallExpression(inner)) {
+      const name = lastName(inner.getExpression());
       return (
         name !== undefined && (extra.has(name) || CLIENT_ACCESSOR.test(name))
       );
@@ -217,48 +210,50 @@ export function transform(source, fileName, options = {}) {
   // Type-level forms. `<Client>['datapoints']` and `<Client>['timeseries']['data']`
   // are the same member before and after the rewrite, so the warning below stays
   // visible when the codemod is run again.
+  const indexKey = (node) => indexLiteral(node)?.getLiteralText();
   const isTimeseriesOf = (node) =>
-    indexLiteral(node)?.text === 'timeseries' && isClientOwner(node.objectType);
+    indexKey(node) === 'timeseries' && isClientOwner(node.getObjectTypeNode());
   const isDatapointsType = (node) =>
-    indexLiteral(node)?.text === 'datapoints' && isClientOwner(node.objectType);
+    indexKey(node) === 'datapoints' && isClientOwner(node.getObjectTypeNode());
   const isTimeseriesDataType = (node) =>
-    indexLiteral(node)?.text === 'data' && isTimeseriesOf(node.objectType);
+    indexKey(node) === 'data' && isTimeseriesOf(node.getObjectTypeNode());
   const isSyntheticQueryType = (node) =>
-    indexLiteral(node)?.text === 'syntheticQuery' &&
-    isTimeseriesOf(node.objectType);
+    indexKey(node) === 'syntheticQuery' &&
+    isTimeseriesOf(node.getObjectTypeNode());
+  const isClientDataType = (node) =>
+    isDatapointsType(node) || isTimeseriesDataType(node);
   const containsClientDataType = (node) =>
-    isDatapointsType(node) ||
-    isTimeseriesDataType(node) ||
-    ts.forEachChild(node, containsClientDataType) === true;
+    isClientDataType(node) ||
+    node.forEachDescendant((child) =>
+      isClientDataType(child) ? true : undefined
+    ) === true;
 
   const edits = [];
   const warnings = [];
-  const where = (node) => {
-    const { line } = sf.getLineAndCharacterOfPosition(node.getStart(sf));
-    return `${fileName}:${line + 1}`;
-  };
+  const where = (node) =>
+    `${fileName}:${sf.getLineAndColumnAtPos(node.getStart()).line}`;
 
   // Replaces the member name of `x.name` / `x['name']` with a path, keeping the
   // quote style of an element access: ['datapoints'] -> ['timeseries']['data'].
   const rewriteMember = (m, keys) => {
-    const q = m.nameNode.getText(sf)[0];
+    const q = m.nameNode.getText()[0];
     const text = m.element
       ? keys.map((key) => `${q}${key}${q}`).join('][')
       : keys.join('.');
-    edits.push([m.nameNode.getStart(sf), m.nameNode.getEnd(), text]);
+    edits.push([m.nameNode.getStart(), m.nameNode.getEnd(), text]);
   };
   // A receiver that is not recognized as a client is never rewritten, because
   // `x.datapoints.delete(...)` may be a Map. It is reported so that it is not
   // lost, since the old path still compiles and nothing else would flag it.
   const warnUnrecognized = (node, what, receiver) => {
-    const text = unwrap(receiver).getText(sf);
+    const text = unwrap(receiver).getText();
     const shown = text.length > 40 ? `${text.slice(0, 37)}...` : text;
     warnings.push(
       `${where(node)}: ${what} looks like the SDK, but '${shown}' is not recognized as a client and was left alone. Add its name to --client-names or migrate it by hand`
     );
   };
 
-  const visit = (node) => {
+  sf.forEachDescendant((node) => {
     const m = memberOf(node);
     // <client>.datapoints, with a known method or used as a value
     if (m?.name === 'datapoints') {
@@ -267,13 +262,13 @@ export function transform(source, fileName, options = {}) {
         accessed?.name !== undefined && DATAPOINT_METHODS.has(accessed.name);
       const isBareValue = accessed === undefined;
       if (isMethodCall || isBareValue) {
-        if (isClient(node.expression)) {
+        if (isClient(node.getExpression())) {
           rewriteMember(m, ['timeseries', 'data']);
         } else if (isMethodCall) {
           warnUnrecognized(
             node,
             `.datapoints.${accessed.name}`,
-            node.expression
+            node.getExpression()
           );
         }
       }
@@ -281,41 +276,32 @@ export function transform(source, fileName, options = {}) {
     // <client>.timeseries.syntheticQuery
     if (
       m?.name === 'syntheticQuery' &&
-      memberOf(node.expression)?.name === 'timeseries'
+      memberOf(node.getExpression())?.name === 'timeseries'
     ) {
-      if (isClient(node.expression.expression)) {
+      const receiver = node.getExpression().getExpression();
+      if (isClient(receiver)) {
         rewriteMember(m, ['synthetic', 'query']);
       } else {
-        warnUnrecognized(
-          node,
-          '.timeseries.syntheticQuery',
-          node.expression.expression
-        );
+        warnUnrecognized(node, '.timeseries.syntheticQuery', receiver);
       }
     }
     // typeof client.datapoints.retrieve -> typeof client.timeseries.data.retrieve
-    if (ts.isQualifiedName(node) && inTypeQuery(node)) {
+    if (Node.isQualifiedName(node) && inTypeQuery(node)) {
+      const right = node.getRight();
+      const left = node.getLeft();
       if (
-        node.right.text === 'datapoints' &&
-        isClientName(entityLastName(node.left))
+        right.getText() === 'datapoints' &&
+        isClientName(entityLastName(left))
       ) {
-        edits.push([
-          node.right.getStart(sf),
-          node.right.getEnd(),
-          'timeseries.data',
-        ]);
+        edits.push([right.getStart(), right.getEnd(), 'timeseries.data']);
       }
       if (
-        node.right.text === 'syntheticQuery' &&
-        ts.isQualifiedName(node.left) &&
-        node.left.right.text === 'timeseries' &&
-        isClientName(entityLastName(node.left.left))
+        right.getText() === 'syntheticQuery' &&
+        Node.isQualifiedName(left) &&
+        left.getRight().getText() === 'timeseries' &&
+        isClientName(entityLastName(left.getLeft()))
       ) {
-        edits.push([
-          node.right.getStart(sf),
-          node.right.getEnd(),
-          'synthetic.query',
-        ]);
+        edits.push([right.getStart(), right.getEnd(), 'synthetic.query']);
       }
     }
     // CogniteClient['datapoints'] -> CogniteClient['timeseries']['data']
@@ -327,9 +313,9 @@ export function transform(source, fileName, options = {}) {
     ]) {
       if (matches(node)) {
         const literal = indexLiteral(node);
-        const q = literal.getText(sf)[0];
+        const q = literal.getText()[0];
         edits.push([
-          literal.getStart(sf),
+          literal.getStart(),
           literal.getEnd(),
           keys.map((key) => `${q}${key}${q}`).join(']['),
         ]);
@@ -337,20 +323,25 @@ export function transform(source, fileName, options = {}) {
     }
     // { datapoints: Pick<CogniteClient['datapoints'], ...> }: the member itself
     // has to move under `timeseries.data`, which cannot be done mechanically.
-    if (
-      ts.isPropertySignature(node) &&
-      node.type &&
-      (ts.isIdentifier(node.name) || ts.isStringLiteral(node.name)) &&
-      node.name.text === 'datapoints' &&
-      containsClientDataType(node.type)
-    ) {
-      warnings.push(
-        `${where(node)}: member 'datapoints' of a client type not renamed, move it under timeseries.data by hand`
-      );
+    if (Node.isPropertySignature(node)) {
+      const nameNode = node.getNameNode();
+      const typeNode = node.getTypeNode();
+      const name = Node.isIdentifier(nameNode)
+        ? nameNode.getText()
+        : Node.isStringLiteral(nameNode)
+          ? nameNode.getLiteralText()
+          : undefined;
+      if (
+        typeNode &&
+        name === 'datapoints' &&
+        containsClientDataType(typeNode)
+      ) {
+        warnings.push(
+          `${where(node)}: member 'datapoints' of a client type not renamed, move it under timeseries.data by hand`
+        );
+      }
     }
-    ts.forEachChild(node, visit);
-  };
-  visit(sf);
+  });
 
   let output = source;
   for (const [start, end, text] of edits.sort((a, b) => b[0] - a[0])) {
