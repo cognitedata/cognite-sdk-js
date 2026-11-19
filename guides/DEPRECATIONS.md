@@ -130,14 +130,22 @@ to `CogniteClient['timeseries']['data']`, `CogniteClient['timeseries']['syntheti
 `CogniteClient['timeseries']['synthetic']['query']`). It does not change request bodies; moving from
 `id` / `externalId` to `instanceId` needs a space and must be done by hand.
 
+It is a single file that parses your code with [ts-morph](https://ts-morph.com/). Install ts-morph
+next to a copy of the script, so that your own `package.json` is not touched, and point it at your
+sources:
+
 ```sh
+mkdir .sdk-codemod && cd .sdk-codemod && npm init -y && npm install ts-morph
 curl -O https://raw.githubusercontent.com/cognitedata/cognite-sdk-js/master/scripts/codemods/timeseries-data-namespace.mjs
-node timeseries-data-namespace.mjs --dry src   # preview
-node timeseries-data-namespace.mjs src         # apply
-npx prettier --write <changed files>           # or your own formatter
+node timeseries-data-namespace.mjs --dry ../src   # preview
+node timeseries-data-namespace.mjs ../src         # apply
+cd .. && npx prettier --write <changed files>     # or your own formatter
 ```
 
-It needs `typescript` installed in your project. Symlinks are not followed.
+Only the property name is replaced, so your formatting and comments are kept. The new access path is
+longer, so run your formatter on the changed files afterwards. `.ts`, `.tsx`, `.js`, `.jsx`,
+`.mts`, `.cts`, `.mjs` and `.cjs` files are covered. `node_modules`, `dist`, `build` and
+`coverage` are skipped, and symlinks are not followed.
 
 **Which receivers are rewritten.** By default the codemod goes by name, so that an unrelated
 `.datapoints` property, such as the one on a retrieve response, is left alone: the receiver has to
@@ -151,14 +159,11 @@ left alone. It needs your dependencies installed so that `@cognite/sdk` resolves
 that includes your sources (not a solution-style one that only has `references`):
 
 ```sh
-node timeseries-data-namespace.mjs --project=tsconfig.app.json --project=tsconfig.spec.json src
+node timeseries-data-namespace.mjs --project=../tsconfig.app.json --project=../tsconfig.spec.json ../src
 ```
 
 Where the checker cannot tell (an `any` receiver, a file that is not part of a project) the name
 rules apply, and the run says how many files were matched by name only.
-
-The codemod keeps your formatting but does not format, and the new access path is longer, so run
-your formatter on the changed files afterwards.
 
 **Reported as warnings, and left for you to migrate by hand:**
 
@@ -176,8 +181,8 @@ your formatter on the changed files afterwards.
   `this.client.timeseries.data.retrieve(...)`, so the type has to be changed to match.
 
 **Not detected.** Mock objects that fake the client, such as `{ datapoints: { retrieve: vi.fn() } }`,
-and `vi.mock('@cognite/sdk', ...)` factories have no type link to the SDK. Update a hand-written
-client's shape after running the codemod and let `tsc` point out what is left.
+and `vi.mock('@cognite/sdk', ...)` factories have no type link to the SDK. Update them by hand after
+running the codemod and let `tsc` point out what is left.
 
 ### Datapoints: identify time series by `instanceId`
 
