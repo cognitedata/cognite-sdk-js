@@ -166,7 +166,7 @@ check your own code for `id` or `externalId` in datapoint requests. Nothing chan
 await client.datapoints.retrieve({ items: [{ externalId: 'my-ts' }] });
 
 // after
-await client.datapoints.retrieve({
+await client.timeseries.data.retrieve({
   items: [{ instanceId: { space: 'my-space', externalId: 'my-ts' } }],
 });
 ```
