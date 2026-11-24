@@ -310,7 +310,7 @@ export default class CogniteClient extends BaseCogniteClient {
   private assetsApi?: AssetsAPI;
   private timeSeriesApi?: TimeSeriesAPI;
   /**
-   * @deprecated Use `client.timeseries.data` instead. Kept so subclasses that read or override it keep working. It points to the same instance as `client.timeseries.data` unless overridden. Will be removed in the next major release.
+   * @deprecated Use `client.timeseries.data` instead. Kept so subclasses that read or override it keep working. It points to the same instance as `client.timeseries.data` unless overridden. Will be removed or moved in a future major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#data-points-and-synthetic-queries-move-under-clienttimeseries.
    */
   protected dataPointsApi?: DataPointsAPI;
   private sequencesApi?: SequencesAPI;

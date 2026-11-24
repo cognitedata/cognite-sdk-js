@@ -125,14 +125,17 @@ await client.timeseries.synthetic.query([
 
 Only the access path changes; requests and responses are the same.
 
-1. Replace the method calls on the old paths. Your editor's search and replace works, or from the
+1. Commit or stash your changes first, so that the rewrite is easy to review and to undo. Then
+   replace the method calls on the old paths. Your editor's search and replace works, or from the
    root of your project:
 
    ```sh
-   grep -rlE '\.datapoints\.|\.syntheticQuery\b' src | xargs perl -pi -e \
+   grep -rlE --null '\.datapoints\.|\.syntheticQuery\b' src | xargs -0 perl -pi -e \
      's/\.datapoints\.(insert|retrieve|retrieveLatest|retrieveDatapointMonthlyAggregates|delete)\b/.timeseries.data.$1/g;
       s/\.timeseries\.syntheticQuery\b/.timeseries.synthetic.query/g'
    ```
+
+   Change `src` to your source folders, and include test folders that live outside it.
 
 2. Review the diff. The pattern goes by text, so it also matches anything else that has a
    `.datapoints.delete(...)`-style call, such as a `Map` called `datapoints`, and it misses a call
@@ -143,6 +146,20 @@ Only the access path changes; requests and responses are the same.
    the old paths as deprecated, which editors show as a strikethrough. To list them all, enable
    [`@typescript-eslint/no-deprecated`](https://typescript-eslint.io/rules/no-deprecated/) (it needs
    linting with type information); it also lists the other deprecated APIs in this guide.
+4. If you subclass `CogniteClient` and read or override the protected `dataPointsApi` field, note
+   that only `client.datapoints` honours the override. `client.timeseries.data` does not, so
+   renaming the call drops it. `dataPointsApi` is deprecated too and has no replacement hook yet,
+   so keep using `client.datapoints` for that subclass until you can stop overriding the field.
+   The same goes for test doubles that replace `client.datapoints`: replace `client.timeseries.data`
+   instead.
+
+#### What to expect on upgrade
+
+Nothing changes at runtime, but the deprecation can fail a build. If your project lints with
+`@typescript-eslint/no-deprecated` (or `eslint-plugin-deprecation`) at error level, or runs CI with
+`--max-warnings 0`, every use of `client.datapoints` and `client.timeseries.syntheticQuery` fails
+the lint step after you upgrade. Migrate first as described above, or lower the rule to a warning
+until you have.
 
 ### Datapoints: identify time series by `instanceId`
 

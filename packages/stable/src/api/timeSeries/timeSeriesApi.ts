@@ -208,7 +208,7 @@ export class TimeSeriesAPI extends BaseResourceAPI<TimeSeries> {
    * Referencing time series by TS{id=...} or TS{externalId='...'} is deprecated 2026-10-15 and retired 2027-12-31. Use the instance ID, TS{space='...', externalId='...'}.
    *
    * ```js
-   * await client.timeseries.syntheticQuery([
+   * await client.timeseries.synthetic.query([
    *   {
    *     expression: "24 * TS{space='my-space', externalId='production/hour', aggregate='average', granularity='1d'}",
    *     start: '48h-ago',
