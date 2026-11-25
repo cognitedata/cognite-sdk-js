@@ -11,7 +11,7 @@ import type {
   WorkflowTaskExecutionStatus,
   WorkflowUpsert as WorkflowUpsertStable,
 } from '@cognite/sdk';
-import type { CogniteExternalId } from '@cognite/sdk-core';
+import type { CogniteExternalId, CogniteInstanceId } from '@cognite/sdk-core';
 
 interface WorkflowAlphaFields {
   dataDomainExternalId?: CogniteExternalId;
@@ -157,7 +157,7 @@ export type DataStore =
 export type DataSelectorFilter = FilterDefinition | Record<string, never>;
 
 /** Specifies a data store and the properties to read from or write to. */
-export type DataSelectorSource = {
+export type DataStorePropertySpec = {
   dataStore: DataStore;
   properties: string[];
 };
@@ -165,12 +165,12 @@ export type DataSelectorSource = {
 /** Selects data using a filter and property sources. */
 export type DataSelectorPayload = {
   filter: DataSelectorFilter;
-  sources: DataSelectorSource[];
+  sources: DataStorePropertySpec[];
 };
 
 /** Specifies the properties written to a target data node. */
 export type DataSpecPayload = {
-  properties: DataSelectorSource[];
+  properties: DataStorePropertySpec[];
 };
 
 /** A source data node that reads from DMS. */
@@ -353,15 +353,10 @@ export interface WorkflowExecutionDetails extends WorkflowExecution {
   input?: Record<string, JsonValue>;
 }
 
-export interface InstanceId {
-  space: string;
-  externalId: string;
-}
-
 /** Alpha extension of the stable run request with DMS instance items. */
 export interface WorkflowExecutionRunRequest
   extends WorkflowExecutionRunRequestStable {
-  items?: InstanceId[];
+  items?: CogniteInstanceId[];
 }
 
 export interface ManualWorkflowTriggerRule {
