@@ -5,6 +5,7 @@ import type {
   FilterDefinition,
   ViewReference,
   WorkflowAuthentication,
+  WorkflowExecutionRunRequest as WorkflowExecutionRunRequestStable,
   WorkflowExecutionStatus,
   Workflow as WorkflowStable,
   WorkflowTaskExecutionStatus,
@@ -350,6 +351,17 @@ export interface WorkflowExecutionDetails extends WorkflowExecution {
   workflowDefinition: WorkflowDefinition;
   executedTasks: WorkflowTaskExecution[];
   input?: Record<string, JsonValue>;
+}
+
+export interface InstanceId {
+  space: string;
+  externalId: string;
+}
+
+/** Alpha extension of the stable run request with DMS instance items. */
+export interface WorkflowExecutionRunRequest
+  extends WorkflowExecutionRunRequestStable {
+  items?: InstanceId[];
 }
 
 export interface ManualWorkflowTriggerRule {

@@ -21,6 +21,7 @@ export type {
   Workflow,
   WorkflowDefinition,
   WorkflowExecution,
+  WorkflowExecutionRunRequest,
   WorkflowTaskExecution,
   WorkflowTrigger,
   WorkflowTriggerRule,
