@@ -148,29 +148,29 @@ export type TaskDefinition = {
   onFailure?: OnFailureType;
 };
 
-/** A reference to a DMS container or view. */
-export type DmsDataStore =
+/** A reference to a container or view data store. */
+export type DataStore =
   | Pick<ContainerReference, 'type' | 'space' | 'externalId'>
   | Pick<ViewReference, 'type' | 'space' | 'externalId' | 'version'>;
 
-/** A DMS filter expression, or an empty object for no filter. */
-export type DmsDataSelectorFilter = FilterDefinition | Record<string, never>;
+/** A filter expression, or an empty object for no filter. */
+export type DataSelectorFilter = FilterDefinition | Record<string, never>;
 
 /** Specifies a data store and the properties to read from or write to. */
-export type DmsDataSelectorSource = {
-  dataStore: DmsDataStore;
+export type DataSelectorSource = {
+  dataStore: DataStore;
   properties: string[];
 };
 
-/** Selects data from DMS using a filter and property sources. */
-export type DmsDataSelectorPayload = {
-  filter: DmsDataSelectorFilter;
-  sources: DmsDataSelectorSource[];
+/** Selects data using a filter and property sources. */
+export type DataSelectorPayload = {
+  filter: DataSelectorFilter;
+  sources: DataSelectorSource[];
 };
 
 /** Specifies the properties written to a target data node. */
-export type DmsDataSpecPayload = {
-  properties: DmsDataSelectorSource[];
+export type DataSpecPayload = {
+  properties: DataSelectorSource[];
 };
 
 /** A source data node that reads from DMS. */
@@ -182,7 +182,7 @@ export type SourceDataNode = {
   retries?: number;
   timeout?: number;
   onFailure?: OnFailureType;
-  dataSelector: DmsDataSelectorPayload;
+  dataSelector: DataSelectorPayload;
 };
 
 /** A target data node that writes into DMS. */
@@ -195,7 +195,7 @@ export type TargetDataNode = {
   timeout?: number;
   onFailure?: OnFailureType;
   dependsOn: TaskDependency[];
-  dataSpec: DmsDataSpecPayload;
+  dataSpec: DataSpecPayload;
 };
 
 /** Sources and targets for a data-aware workflow. */
