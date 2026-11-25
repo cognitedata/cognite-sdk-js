@@ -1,13 +1,16 @@
 // Copyright 2026 Cognite AS
 
 import type {
+  ContainerReference,
+  FilterDefinition,
+  ViewReference,
   WorkflowAuthentication,
   WorkflowExecutionStatus,
   Workflow as WorkflowStable,
   WorkflowTaskExecutionStatus,
   WorkflowUpsert as WorkflowUpsertStable,
 } from '@cognite/sdk';
-import type { CogniteExternalId } from '@cognite/sdk-core';
+import type { CogniteExternalId, FilterQuery } from '@cognite/sdk-core';
 
 interface WorkflowAlphaFields {
   dataDomainExternalId?: CogniteExternalId;
@@ -144,10 +147,100 @@ export type TaskDefinition = {
   onFailure?: OnFailureType;
 };
 
+/** A reference to a DMS container or view. */
+export type DmsDataStore =
+  | Pick<ContainerReference, 'type' | 'space' | 'externalId'>
+  | Pick<ViewReference, 'type' | 'space' | 'externalId' | 'version'>;
+
+/** A DMS filter expression, or an empty object for no filter. */
+export type DmsDataSelectorFilter = FilterDefinition | Record<string, never>;
+
+/** Specifies a data store and the properties to read from or write to. */
+export type DmsDataSelectorSource = {
+  dataStore: DmsDataStore;
+  properties: string[];
+};
+
+/** Selects data from DMS using a filter and property sources. */
+export type DmsDataSelectorPayload = {
+  filter: DmsDataSelectorFilter;
+  sources: DmsDataSelectorSource[];
+};
+
+/** Specifies the properties written to a target data node. */
+export type DmsDataSpecPayload = {
+  properties: DmsDataSelectorSource[];
+};
+
+/** A source data node that reads from DMS. */
+export type SourceDataNode = {
+  externalId: string;
+  type: 'nodes';
+  name?: string;
+  description?: string;
+  retries?: number;
+  timeout?: number;
+  onFailure?: OnFailureType;
+  dataSelector: DmsDataSelectorPayload;
+};
+
+/** A target data node that writes into DMS. */
+export type TargetDataNode = {
+  externalId: string;
+  type: 'nodes';
+  name?: string;
+  description?: string;
+  retries?: number;
+  timeout?: number;
+  onFailure?: OnFailureType;
+  dependsOn: TaskDependency[];
+  dataSpec: DmsDataSpecPayload;
+};
+
+/** Sources and targets for a data-aware workflow. */
+export type DataDefinition = {
+  sources: SourceDataNode[];
+  targets: TargetDataNode[];
+};
+
+export const VALIDATION_OPERATORS = [
+  'EQ',
+  'GT',
+  'GTE',
+  'LT',
+  'LTE',
+  'STARTS_WITH',
+  'ENDS_WITH',
+  'CONTAINS',
+] as const;
+
+export type ValidationOperator = (typeof VALIDATION_OPERATORS)[number];
+
+export type ValidationRule = {
+  property: string;
+  operator: ValidationOperator;
+  value: string | number | boolean;
+};
+
+/** Acceptance rules for task output in a data-aware workflow. */
+export type ValidationDefinition = {
+  externalId: string;
+  name?: string;
+  description?: string;
+  dependsOn: TaskDependency[];
+  targetExternalId: string;
+  rules: ValidationRule[];
+  flowsApp?: {
+    externalId: string;
+  };
+};
+
 export type WorkflowDefinition = {
   hash: string;
   description?: string;
   tasks: TaskDefinition[];
+  data?: DataDefinition;
+  validation?: ValidationDefinition;
 };
 
 export type Version = {
@@ -171,7 +264,7 @@ export type VersionDelete = {
 
 export type WorkflowDefinitionCreate = Pick<
   WorkflowDefinition,
-  'description' | 'tasks'
+  'description' | 'tasks' | 'data' | 'validation'
 >;
 
 export type VersionUpsert = {
@@ -259,6 +352,45 @@ export interface WorkflowExecutionDetails extends WorkflowExecution {
   input?: Record<string, JsonValue>;
 }
 
+export interface WorkflowExecutionWorkflowFilter {
+  externalId: CogniteExternalId;
+  version?: string;
+}
+
+export interface WorkflowExecutionFilter {
+  workflowFilters?: WorkflowExecutionWorkflowFilter[];
+  createdTimeStart?: number;
+  createdTimeEnd?: number;
+  status?: WorkflowExecutionStatus[];
+}
+
+export interface WorkflowExecutionFilterQuery extends FilterQuery {
+  filter?: WorkflowExecutionFilter;
+}
+
+export interface InstanceId {
+  space: string;
+  externalId: string;
+}
+
+export interface WorkflowExecutionRunRequest {
+  authentication: WorkflowAuthentication;
+  items?: InstanceId[];
+  input?: Record<string, JsonValue>;
+  metadata?: Record<string, string>;
+}
+
+export interface WorkflowExecutionRetryRequest {
+  authentication: WorkflowAuthentication;
+}
+
+export interface WorkflowExecutionCancelRequest {
+  reason?: string;
+}
+
+export interface WorkflowTriggerExternalId {
+  externalId: CogniteExternalId;
+}
 export interface ManualWorkflowTriggerRule {
   triggerType: 'manual';
 }
