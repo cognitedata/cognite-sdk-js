@@ -10,7 +10,7 @@ import type {
   WorkflowTaskExecutionStatus,
   WorkflowUpsert as WorkflowUpsertStable,
 } from '@cognite/sdk';
-import type { CogniteExternalId, FilterQuery } from '@cognite/sdk-core';
+import type { CogniteExternalId } from '@cognite/sdk-core';
 
 interface WorkflowAlphaFields {
   dataDomainExternalId?: CogniteExternalId;
@@ -352,45 +352,6 @@ export interface WorkflowExecutionDetails extends WorkflowExecution {
   input?: Record<string, JsonValue>;
 }
 
-export interface WorkflowExecutionWorkflowFilter {
-  externalId: CogniteExternalId;
-  version?: string;
-}
-
-export interface WorkflowExecutionFilter {
-  workflowFilters?: WorkflowExecutionWorkflowFilter[];
-  createdTimeStart?: number;
-  createdTimeEnd?: number;
-  status?: WorkflowExecutionStatus[];
-}
-
-export interface WorkflowExecutionFilterQuery extends FilterQuery {
-  filter?: WorkflowExecutionFilter;
-}
-
-export interface InstanceId {
-  space: string;
-  externalId: string;
-}
-
-export interface WorkflowExecutionRunRequest {
-  authentication: WorkflowAuthentication;
-  items?: InstanceId[];
-  input?: Record<string, JsonValue>;
-  metadata?: Record<string, string>;
-}
-
-export interface WorkflowExecutionRetryRequest {
-  authentication: WorkflowAuthentication;
-}
-
-export interface WorkflowExecutionCancelRequest {
-  reason?: string;
-}
-
-export interface WorkflowTriggerExternalId {
-  externalId: CogniteExternalId;
-}
 export interface ManualWorkflowTriggerRule {
   triggerType: 'manual';
 }
