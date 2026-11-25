@@ -159,6 +159,45 @@ describe('Datapoint aggregates unit test', () => {
       status: { code: 1073741824, symbol: 'Uncertain' },
     });
   });
+  test('retrieve sends fill on every item', async () => {
+    const otherInstanceId = { space: 'my-space', externalId: 'other-ts' };
+    let body: { items: { fill?: unknown }[] } | undefined;
+    nock(mockBaseUrl)
+      .post(/\/timeseries\/data\/list$/, (requestBody) => {
+        body = requestBody;
+        return true;
+      })
+      .once()
+      .reply(200, {
+        items: [instanceId, otherInstanceId].map((id, i) => ({
+          id: i + 1,
+          instanceId: id,
+          isString: false,
+          isStep: false,
+          type: 'numeric',
+          datapoints: [{ timestamp: 3600000, average: 1.5 }],
+        })),
+      });
+    const response = await client.timeseries.data.retrieve({
+      items: [
+        { instanceId, fill: { limit: '2h' } },
+        { instanceId: otherInstanceId, fill: { limit: '2h' } },
+      ],
+      aggregates: ['average'],
+      granularity: '1h',
+    });
+    expect(nock.isDone()).toBe(true);
+    expect(body?.items).toHaveLength(2);
+    expect(body?.items.every((item) => item.fill)).toBe(true);
+    expect(body?.items.map((item) => item.fill)).toEqual([
+      { limit: '2h' },
+      { limit: '2h' },
+    ]);
+    expect(response[0].datapoints).toEqual([
+      { timestamp: new Date(3600000), average: 1.5 },
+    ]);
+  });
+
   test('retrieve overloads type the result from the query', () => {
     // Only type-checked: the calls are never run
     const typeChecks = () => {
@@ -178,6 +217,10 @@ describe('Datapoint aggregates unit test', () => {
           items: [{ instanceId, aggregates: [] }],
           aggregates: ['count'],
         })
+      ).resolves.toEqualTypeOf<AnyDatapointAggregates[] | Datapoints[]>();
+      // Gap filling needs aggregates, so a query with fill alone is not typed as raw-only
+      expectTypeOf(
+        retrieve({ items: [{ instanceId, fill: { limit: '4h' } }] })
       ).resolves.toEqualTypeOf<AnyDatapointAggregates[] | Datapoints[]>();
       // A list that may be empty can't be told apart from raw
       const aggregates: Aggregate[] = ['count'];
