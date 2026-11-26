@@ -204,24 +204,18 @@ export type DataDefinition = {
   targets: TargetDataNode[];
 };
 
-export const VALIDATION_OPERATORS = [
-  'EQ',
-  'GT',
-  'GTE',
-  'LT',
-  'LTE',
-  'STARTS_WITH',
-  'ENDS_WITH',
-  'CONTAINS',
-] as const;
-
-export type ValidationOperator = (typeof VALIDATION_OPERATORS)[number];
-
-export type ValidationRule = {
-  property: string;
-  operator: ValidationOperator;
-  value: string | number | boolean;
-};
+export type ValidationRule =
+  | { property: string; operator: 'EQ'; value: string | number | boolean }
+  | {
+      property: string;
+      operator: 'GT' | 'GTE' | 'LT' | 'LTE';
+      value: number;
+    }
+  | {
+      property: string;
+      operator: 'STARTS_WITH' | 'ENDS_WITH' | 'CONTAINS';
+      value: string;
+    };
 
 /** Acceptance rules for task output in a data-aware workflow. */
 export type ValidationDefinition = {
