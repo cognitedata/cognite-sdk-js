@@ -4,6 +4,8 @@ import { BaseResourceAPI } from '@cognite/sdk-core';
 import type { ItemsWrapper } from '@cognite/sdk-core';
 import type { DatapointInfo, IgnoreUnknownIds } from '../../types/common';
 import type {
+  AggregateDatapointsMultiQuery,
+  AnyDatapointAggregates,
   DatapointAggregates,
   Datapoints,
   DatapointsDeleteRequest,
@@ -11,10 +13,11 @@ import type {
   DatapointsMonthlyGranularityMultiQuery,
   DatapointsMultiQuery,
   LatestDataBeforeRequest,
+  RawDatapointsMultiQuery,
 } from './types';
 
 export class DataPointsAPI extends BaseResourceAPI<
-  DatapointAggregates | Datapoints
+  AnyDatapointAggregates | Datapoints
 > {
   /**
    * @hidden
@@ -54,17 +57,33 @@ export class DataPointsAPI extends BaseResourceAPI<
    * const data = await client.timeseries.data.retrieve({
    *   items: [{ instanceId: { space: 'my-space', externalId: 'my-ts' } }],
    * });
+   * const stateAggregates = await client.timeseries.data.retrieve({
+   *   items: [{ instanceId: { space: 'my-space', externalId: 'my-state-ts' } }],
+   *   aggregates: ['stateCount', 'stateTransitions', 'stateDuration'],
+   *   granularity: '1h',
+   * });
    * ```
    *
    * @remarks
-   * Raw data points are returned as numeric, string or state data points depending on the time series type.
+   * Raw data points and aggregates are returned in a shape that depends on the time series type.
    * Narrow each item on `type` (`'numeric'`, `'string'` or `'state'`) rather than `isString`,
    * since state time series also have `isString: false`.
+   * State aggregates are returned per state, in the `stateAggregates` array of each aggregate data point.
+   * A query that sets no aggregates is typed as returning raw data points only, and one that
+   * gives every item a non-empty list of aggregates as returning aggregates only.
+   * Type an aggregate list built at runtime as `NonEmptyAggregates` to get the aggregates-only type.
    */
-  public retrieve = (
-    query: DatapointsMultiQuery
-  ): Promise<DatapointAggregates[] | Datapoints[]> => {
-    return this.retrieveDatapointsEndpoint(query);
+  public retrieve: {
+    (query: RawDatapointsMultiQuery): Promise<Datapoints[]>;
+    (query: AggregateDatapointsMultiQuery): Promise<AnyDatapointAggregates[]>;
+    (
+      query: DatapointsMultiQuery
+    ): Promise<AnyDatapointAggregates[] | Datapoints[]>;
+  } = (query: DatapointsMultiQuery) => {
+    const result: Promise<AnyDatapointAggregates[] | Datapoints[]> =
+      this.retrieveDatapointsEndpoint(query);
+    // The overloads above give callers the real result type, so this only needs to fit all of them
+    return result as Promise<never>;
   };
 
   /**
@@ -135,8 +154,8 @@ export class DataPointsAPI extends BaseResourceAPI<
   }
 
   protected async retrieveDatapointsEndpoint<
-    T extends DatapointAggregates[] | Datapoints[] =
-      | DatapointAggregates[]
+    T extends AnyDatapointAggregates[] | Datapoints[] =
+      | AnyDatapointAggregates[]
       | Datapoints[],
   >(query: DatapointsMultiQuery) {
     const path = this.listPostUrl;
