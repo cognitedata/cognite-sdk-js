@@ -1,13 +1,17 @@
 // Copyright 2026 Cognite AS
 
 import type {
+  ContainerReference,
+  FilterDefinition,
+  ViewReference,
   WorkflowAuthentication,
+  WorkflowExecutionRunRequest as WorkflowExecutionRunRequestStable,
   WorkflowExecutionStatus,
   Workflow as WorkflowStable,
   WorkflowTaskExecutionStatus,
   WorkflowUpsert as WorkflowUpsertStable,
 } from '@cognite/sdk';
-import type { CogniteExternalId } from '@cognite/sdk-core';
+import type { CogniteExternalId, CogniteInstanceId } from '@cognite/sdk-core';
 
 interface WorkflowAlphaFields {
   dataDomainExternalId?: CogniteExternalId;
@@ -144,10 +148,94 @@ export type TaskDefinition = {
   onFailure?: OnFailureType;
 };
 
+/** A reference to a container or view data store. */
+export type DataStore =
+  | Pick<ContainerReference, 'type' | 'space' | 'externalId'>
+  | Pick<ViewReference, 'type' | 'space' | 'externalId' | 'version'>;
+
+/** A filter expression, or an empty object for no filter. */
+export type DataSelectorFilter = FilterDefinition | Record<string, never>;
+
+/** Specifies a data store and the properties to read from or write to. */
+export type DataStorePropertySpec = {
+  dataStore: DataStore;
+  properties: string[];
+};
+
+/** Selects data using a filter and property sources. */
+export type DataSelectorPayload = {
+  filter: DataSelectorFilter;
+  sources: DataStorePropertySpec[];
+};
+
+/** Specifies the properties written to a target data node. */
+export type DataSpecPayload = {
+  properties: DataStorePropertySpec[];
+};
+
+/** A source data node that reads from DMS. */
+export type SourceDataNode = {
+  externalId: string;
+  type: 'nodes';
+  name?: string;
+  description?: string;
+  retries?: number;
+  timeout?: number;
+  onFailure?: OnFailureType;
+  dataSelector: DataSelectorPayload;
+};
+
+/** A target data node that writes into DMS. */
+export type TargetDataNode = {
+  externalId: string;
+  type: 'nodes';
+  name?: string;
+  description?: string;
+  retries?: number;
+  timeout?: number;
+  onFailure?: OnFailureType;
+  dependsOn: TaskDependency[];
+  dataSpec: DataSpecPayload;
+};
+
+/** Sources and targets for a data-aware workflow. */
+export type DataDefinition = {
+  sources: SourceDataNode[];
+  targets: TargetDataNode[];
+};
+
+export type ValidationRule =
+  | { property: string; operator: 'EQ'; value: string | number | boolean }
+  | {
+      property: string;
+      operator: 'GT' | 'GTE' | 'LT' | 'LTE';
+      value: number;
+    }
+  | {
+      property: string;
+      operator: 'STARTS_WITH' | 'ENDS_WITH' | 'CONTAINS';
+      value: string;
+    };
+
+/** Acceptance rules for task output in a data-aware workflow. */
+export type ValidationDefinition = {
+  externalId: string;
+  name?: string;
+  description?: string;
+  dependsOn: TaskDependency[];
+  targetExternalId: string;
+  rules: ValidationRule[];
+  flowsApp?: {
+    externalId: string;
+  };
+};
+
 export type WorkflowDefinition = {
   hash: string;
   description?: string;
   tasks: TaskDefinition[];
+  data?: DataDefinition;
+  validation?: ValidationDefinition;
 };
 
 export type Version = {
@@ -171,7 +259,7 @@ export type VersionDelete = {
 
 export type WorkflowDefinitionCreate = Pick<
   WorkflowDefinition,
-  'description' | 'tasks'
+  'description' | 'tasks' | 'data' | 'validation'
 >;
 
 export type VersionUpsert = {
@@ -257,6 +345,12 @@ export interface WorkflowExecutionDetails extends WorkflowExecution {
   workflowDefinition: WorkflowDefinition;
   executedTasks: WorkflowTaskExecution[];
   input?: Record<string, JsonValue>;
+}
+
+/** Alpha extension of the stable run request with DMS instance items. */
+export interface WorkflowExecutionRunRequest
+  extends WorkflowExecutionRunRequestStable {
+  items?: CogniteInstanceId[];
 }
 
 export interface ManualWorkflowTriggerRule {
