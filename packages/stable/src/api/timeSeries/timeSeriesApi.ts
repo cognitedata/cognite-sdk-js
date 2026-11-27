@@ -208,7 +208,7 @@ export class TimeSeriesAPI extends BaseResourceAPI<TimeSeries> {
    * Referencing time series by TS{id=...} or TS{externalId='...'} is deprecated 2026-10-15 and retired 2027-12-31. Use the instance ID, TS{space='...', externalId='...'}.
    *
    * ```js
-   * await client.timeseries.syntheticQuery([
+   * await client.timeseries.synthetic.query([
    *   {
    *     expression: "24 * TS{space='my-space', externalId='production/hour', aggregate='average', granularity='1d'}",
    *     start: '48h-ago',
@@ -217,6 +217,8 @@ export class TimeSeriesAPI extends BaseResourceAPI<TimeSeries> {
    *   }
    * ]);
    * ```
+   *
+   * @deprecated Use client.timeseries.synthetic.query instead. Will be removed or moved in a future major release. See https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#data-points-and-synthetic-queries-move-under-clienttimeseries.
    */
   public syntheticQuery = (items: SyntheticQuery[]) => {
     return this.syntheticTimeseriesApi.query(items);

@@ -47,14 +47,14 @@ writes stay on the Time series API and address a time series by `instanceId` (se
   `retrieve`, together with the `TimeSeries` type and the create, filter, search, update and
   aggregate types. Create and query time series as `CogniteTimeSeries` instances via
   `client.instances` instead.
-- Not deprecated: the data point endpoints (`client.datapoints`, also available as
-  `client.timeseries.data`) stay available, but identify time series by `instanceId`; see
+- Not deprecated: the data point endpoints (`client.timeseries.data`) stay available, but identify
+  time series by `instanceId`; see
   [Datapoints: identify time series by `instanceId`](#datapoints-identify-time-series-by-instanceid).
-  Synthetic queries (`client.timeseries.syntheticQuery`, also available as
-  `client.timeseries.synthetic.query`) also stay available; reference time series in expressions
-  as `TS{space='...', externalId='...'}` instead of `TS{id=...}` or `TS{externalId='...'}`. See
-  [Data points and synthetic queries under `client.timeseries`](#data-points-and-synthetic-queries-under-clienttimeseries)
-  for the new paths.
+  Synthetic queries (`client.timeseries.synthetic.query`) also stay available; reference time
+  series in expressions as `TS{space='...', externalId='...'}` instead of `TS{id=...}` or
+  `TS{externalId='...'}`. The old entry points `client.datapoints` and
+  `client.timeseries.syntheticQuery` are deprecated in favour of these; see
+  [Data points and synthetic queries move under `client.timeseries`](#data-points-and-synthetic-queries-move-under-clienttimeseries).
 - Subscriptions (`client.timeseries.subscriptions`) stay available, but track time series by
   `instanceIds`; see
   [Data point subscriptions: track time series by `instanceIds`](#data-point-subscriptions-track-time-series-by-instanceids).
@@ -81,30 +81,30 @@ await client.instances.upsert({
 });
 ```
 
-### Data points and synthetic queries under `client.timeseries`
+### Data points and synthetic queries move under `client.timeseries`
 
-The SDK now also exposes the data point and synthetic query endpoints under `client.timeseries`,
-mirroring their API paths (`/timeseries/data`, `/timeseries/synthetic/query`). The Python SDK uses
-the same layout under `client.time_series`.
+The data point and synthetic query endpoints are unchanged. The SDK namespace is reshaped to
+mirror their API paths (`/timeseries/data`, `/timeseries/synthetic/query`):
 
 ```
 client.timeseries
   create ... aggregate     @deprecated, see "Time series: metadata is deprecated"
-  data                     new, /timeseries/data (same as client.datapoints)
+  data                     new, /timeseries/data (was client.datapoints)
     insert  retrieve  retrieveLatest  delete
-  synthetic.query          new, /timeseries/synthetic/query (same as syntheticQuery)
-  syntheticQuery           unchanged
+  synthetic.query          new, /timeseries/synthetic/query (was syntheticQuery)
+  syntheticQuery           @deprecated, use synthetic.query
   subscriptions.*          methods unchanged, /timeseries/subscriptions
-client.datapoints          unchanged
+client.datapoints          @deprecated, use client.timeseries.data
 ```
 
-- New: `client.timeseries.data` (`insert`, `retrieve`, `retrieveLatest`, `delete`) and
-  `client.timeseries.synthetic.query`.
-- Not deprecated: `client.datapoints` and `client.timeseries.syntheticQuery` keep working. They
-  call the same endpoints as the new paths, so switching is optional.
+- Moved: `client.datapoints` is now `client.timeseries.data` and `client.timeseries.syntheticQuery`
+  is `client.timeseries.synthetic.query`. The old paths keep working in 10.x and are removed or moved in
+  a future major release.
+
+The Python SDK uses the same layout under `client.time_series`.
 
 ```ts
-// old path
+// before
 await client.datapoints.retrieve({
   items: [{ instanceId: { space: 'my-space', externalId: 'my-ts' } }],
 });
@@ -112,7 +112,7 @@ await client.timeseries.syntheticQuery([
   { expression: "TS{space='my-space', externalId='my-ts'} * 2" },
 ]);
 
-// new path
+// after
 await client.timeseries.data.retrieve({
   items: [{ instanceId: { space: 'my-space', externalId: 'my-ts' } }],
 });
@@ -121,15 +121,56 @@ await client.timeseries.synthetic.query([
 ]);
 ```
 
+#### How to migrate
+
+Only the access path changes; requests and responses are the same.
+
+1. Commit or stash your changes first, so that the rewrite is easy to review and to undo. Then
+   replace the method calls on the old paths. Your editor's search and replace works, or from the
+   root of your project:
+
+   ```sh
+   grep -rlE --null '\.datapoints\.|\.syntheticQuery\b' src | xargs -0 perl -pi -e \
+     's/\.datapoints\.(insert|retrieve|retrieveLatest|retrieveDatapointMonthlyAggregates|delete)\b/.timeseries.data.$1/g;
+      s/\.timeseries\.syntheticQuery\b/.timeseries.synthetic.query/g'
+   ```
+
+   Change `src` to your source folders, and include test folders that live outside it.
+
+2. Review the diff. The pattern goes by text, so it also matches anything else that has a
+   `.datapoints.delete(...)`-style call, such as a `Map` called `datapoints`, and it misses a call
+   chain that is split across lines, with `.datapoints` on a line of its own.
+3. Find what is left: bare references (`const dp = client.datapoints`), type references
+   (`CogniteClient['datapoints']`, `typeof client.datapoints.retrieve`), destructuring
+   (`const { datapoints } = client`) and mocks typed from the client. TypeScript marks every use of
+   the old paths as deprecated, which editors show as a strikethrough. To list them all, enable
+   [`@typescript-eslint/no-deprecated`](https://typescript-eslint.io/rules/no-deprecated/) (it needs
+   linting with type information); it also lists the other deprecated APIs in this guide.
+4. If you subclass `CogniteClient` and read or override the protected `dataPointsApi` field, note
+   that only `client.datapoints` honours the override. `client.timeseries.data` does not, so
+   renaming the call drops it. `dataPointsApi` is deprecated too and has no replacement hook yet,
+   so keep using `client.datapoints` for that subclass until you can stop overriding the field.
+   The same goes for test doubles that replace `client.datapoints`: replace `client.timeseries.data`
+   instead.
+
+#### What to expect on upgrade
+
+Nothing changes at runtime, but the deprecation can fail a build. If your project lints with
+`@typescript-eslint/no-deprecated` (or `eslint-plugin-deprecation`) at error level, or runs CI with
+`--max-warnings 0`, every use of `client.datapoints` and `client.timeseries.syntheticQuery` fails
+the lint step after you upgrade. Migrate first as described above, or lower the rule to a warning
+until you have.
+
 ### Datapoints: identify time series by `instanceId`
 
 Addressing a time series by `id` or `externalId` is deprecated as of 2026-10-15 and retired on
-2027-12-31, in favour of `instanceId`. This applies to all `client.datapoints` methods and to
-`client.timeseries.data`. The input types `DatapointsInsertById`, `DatapointsInsertByExternalId`,
-`DatapointsQueryId`, `DatapointsQueryExternalId`, `LatestDataBeforeRequestId`, `LatestDataBeforeRequestExternalId`,
-`DatapointsDeleteRequestId` and `DatapointsDeleteRequestExternalId` are deprecated; use
-`DatapointsInsertByInstanceId`, `DatapointsQueryInstanceId`, `LatestDataBeforeRequestInstanceId`
-and `DatapointsDeleteRequestInstanceId`. `TimeSeriesIdEither` is deprecated on the same terms; use
+2027-12-31, in favour of `instanceId`. This applies to `client.timeseries.data` and to the
+deprecated `client.datapoints` alike. The input types `DatapointsInsertById`,
+`DatapointsInsertByExternalId`, `DatapointsQueryId`, `DatapointsQueryExternalId`,
+`LatestDataBeforeRequestId`, `LatestDataBeforeRequestExternalId`, `DatapointsDeleteRequestId` and
+`DatapointsDeleteRequestExternalId` are deprecated; use `DatapointsInsertByInstanceId`,
+`DatapointsQueryInstanceId`, `LatestDataBeforeRequestInstanceId` and
+`DatapointsDeleteRequestInstanceId`. `TimeSeriesIdEither` is deprecated on the same terms; use
 `InstanceId` instead.
 
 These types (and the aliases `ExternalDatapointId`, `ExternalDatapointExternalId` and
@@ -142,7 +183,7 @@ check your own code for `id` or `externalId` in datapoint requests. Nothing chan
 await client.datapoints.retrieve({ items: [{ externalId: 'my-ts' }] });
 
 // after
-await client.datapoints.retrieve({
+await client.timeseries.data.retrieve({
   items: [{ instanceId: { space: 'my-space', externalId: 'my-ts' } }],
 });
 ```

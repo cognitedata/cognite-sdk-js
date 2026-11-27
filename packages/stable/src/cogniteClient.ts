@@ -84,6 +84,9 @@ export default class CogniteClient extends BaseCogniteClient {
   public get timeseries() {
     return accessApi(this.timeSeriesApi);
   }
+  /**
+   * @deprecated Use client.timeseries.data instead, with instanceId. If you have a subclass that reads or overrides dataPointsApi, follow the migration guidance in https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#data-points-and-synthetic-queries-move-under-clienttimeseries. client.datapoints will be removed or moved in a future major release.
+   */
   public get datapoints() {
     return accessApi(this.dataPointsApi);
   }
@@ -307,7 +310,7 @@ export default class CogniteClient extends BaseCogniteClient {
   private assetsApi?: AssetsAPI;
   private timeSeriesApi?: TimeSeriesAPI;
   /**
-   * @deprecated Use `client.timeseries.data` instead. Kept so subclasses that read or override it keep working. It points to the same instance as `client.timeseries.data` unless overridden. Will be removed in the next major release.
+   * @deprecated Use `client.timeseries.data` instead for regular use. This property is kept so subclasses that read or override dataPointsApi keep working. It points to the same instance as `client.timeseries.data` unless overridden. If you read or override dataPointsApi in a subclass, follow the migration guidance in https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md#data-points-and-synthetic-queries-move-under-clienttimeseries. Will be removed or moved in a future major release.
    */
   protected dataPointsApi?: DataPointsAPI;
   private sequencesApi?: SequencesAPI;
