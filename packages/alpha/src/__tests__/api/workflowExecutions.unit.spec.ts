@@ -118,6 +118,35 @@ describe('Workflow executions unit test', () => {
     expect(response.status).toEqual('RUNNING');
   });
 
+  test('run with items for data-aware workflows', async () => {
+    const runRequest = {
+      authentication: { nonce: 'session-nonce' },
+      items: [
+        { space: 'my-space', externalId: 'item-1' },
+        { space: 'my-space', externalId: 'item-2' },
+      ],
+      input: { source: 'manual' },
+    };
+
+    nock(mockBaseUrl)
+      .post(/\/workflows\/wf-daw\/versions\/1\/run$/, matches(runRequest))
+      .once()
+      .reply(202, {
+        ...mockExecution,
+        workflowExternalId: 'wf-daw',
+      });
+
+    const response = await client.workflowExecutions.run(
+      'wf-daw',
+      '1',
+      runRequest
+    );
+
+    expect(response.id).toEqual(executionId);
+    expect(response.workflowExternalId).toEqual('wf-daw');
+    expect(response.status).toEqual('RUNNING');
+  });
+
   test('retry', async () => {
     const retryRequest = {
       authentication: { nonce: 'session-nonce' },

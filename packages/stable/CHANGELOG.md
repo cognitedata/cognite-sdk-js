@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [10.22.0](https://github.com/cognitedata/cognite-sdk-js/compare/%40cognite%2Fsdk%4010.20.0...%40cognite%2Fsdk%4010.22.0) (2026-11-27)
+
+### Bug Fixes
+
+* wait longer for file uploads and fix flaky integration tests ([#1568](https://github.com/cognitedata/cognite-sdk-js/issues/1568)) ([832080f](https://github.com/cognitedata/cognite-sdk-js/commit/832080f04cf5b455f2399f8ad24483a4d1fd5207))
+
+### Features
+
+* **extraction-pipelines:** add extraction pipeline config API ([#1578](https://github.com/cognitedata/cognite-sdk-js/issues/1578)) ([ca62b2a](https://github.com/cognitedata/cognite-sdk-js/commit/ca62b2a6e53b418d79a28826ea7ee0c85a65d649)), closes [#1577](https://github.com/cognitedata/cognite-sdk-js/issues/1577) [#1576](https://github.com/cognitedata/cognite-sdk-js/issues/1576)
+* **extraction-pipelines:** add extraction pipeline runs API ([#1577](https://github.com/cognitedata/cognite-sdk-js/issues/1577)) ([c05e994](https://github.com/cognitedata/cognite-sdk-js/commit/c05e9944323746ab5a1ca8fac4da201e65254d1e)), closes [#1576](https://github.com/cognitedata/cognite-sdk-js/issues/1576)
+* **extraction-pipelines:** add extraction pipelines API ([#1576](https://github.com/cognitedata/cognite-sdk-js/issues/1576)) ([610d81e](https://github.com/cognitedata/cognite-sdk-js/commit/610d81ec01ea29b57494443bd894bc29483cfe17)), closes [#1570](https://github.com/cognitedata/cognite-sdk-js/issues/1570)
+* **stable:** support string and state datapoint aggregates ([#1547](https://github.com/cognitedata/cognite-sdk-js/issues/1547)) ([d608e1f](https://github.com/cognitedata/cognite-sdk-js/commit/d608e1f2a70bd27245b064348349ff6c1db7a9dc)), closes [#1542](https://github.com/cognitedata/cognite-sdk-js/issues/1542) [#1542](https://github.com/cognitedata/cognite-sdk-js/issues/1542)
+
+
+# [10.21.0](https://github.com/cognitedata/cognite-sdk-js/compare/%40cognite%2Fsdk%4010.20.0...%40cognite%2Fsdk%4010.21.0) (2026-11-26)
+
+### Bug Fixes
+
+* wait longer for file uploads and fix flaky integration tests ([#1568](https://github.com/cognitedata/cognite-sdk-js/issues/1568)) ([832080f](https://github.com/cognitedata/cognite-sdk-js/commit/832080f04cf5b455f2399f8ad24483a4d1fd5207))
+
+### Features
+
+* **extraction-pipelines:** add extraction pipeline config API ([#1578](https://github.com/cognitedata/cognite-sdk-js/issues/1578)) ([ca62b2a](https://github.com/cognitedata/cognite-sdk-js/commit/ca62b2a6e53b418d79a28826ea7ee0c85a65d649)), closes [#1577](https://github.com/cognitedata/cognite-sdk-js/issues/1577) [#1576](https://github.com/cognitedata/cognite-sdk-js/issues/1576)
+* **extraction-pipelines:** add extraction pipeline runs API ([#1577](https://github.com/cognitedata/cognite-sdk-js/issues/1577)) ([c05e994](https://github.com/cognitedata/cognite-sdk-js/commit/c05e9944323746ab5a1ca8fac4da201e65254d1e)), closes [#1576](https://github.com/cognitedata/cognite-sdk-js/issues/1576)
+* **extraction-pipelines:** add extraction pipelines API ([#1576](https://github.com/cognitedata/cognite-sdk-js/issues/1576)) ([610d81e](https://github.com/cognitedata/cognite-sdk-js/commit/610d81ec01ea29b57494443bd894bc29483cfe17)), closes [#1570](https://github.com/cognitedata/cognite-sdk-js/issues/1570)
+* **stable:** support string and state datapoint aggregates ([#1547](https://github.com/cognitedata/cognite-sdk-js/issues/1547)) ([d608e1f](https://github.com/cognitedata/cognite-sdk-js/commit/d608e1f2a70bd27245b064348349ff6c1db7a9dc)), closes [#1542](https://github.com/cognitedata/cognite-sdk-js/issues/1542) [#1542](https://github.com/cognitedata/cognite-sdk-js/issues/1542)
+
+
 # [10.20.0](https://github.com/cognitedata/cognite-sdk-js/compare/%40cognite%2Fsdk%4010.19.0...%40cognite%2Fsdk%4010.20.0) (2026-11-11)
 
 ### Features

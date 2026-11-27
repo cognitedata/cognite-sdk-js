@@ -4,7 +4,6 @@ import type {
   WorkflowExecutionCancelRequest,
   WorkflowExecutionFilterQuery,
   WorkflowExecutionRetryRequest,
-  WorkflowExecutionRunRequest,
 } from '@cognite/sdk';
 import { BaseResourceAPI } from '@cognite/sdk-core';
 import type {
@@ -13,7 +12,11 @@ import type {
   CursorAndAsyncIterator,
   MetadataMap,
 } from '@cognite/sdk-core';
-import type { WorkflowExecution, WorkflowExecutionDetails } from './types';
+import type {
+  WorkflowExecution,
+  WorkflowExecutionDetails,
+  WorkflowExecutionRunRequest,
+} from './types';
 
 export class WorkflowExecutionsAPI extends BaseResourceAPI<WorkflowExecution> {
   private readonly workflowsPath: string;
