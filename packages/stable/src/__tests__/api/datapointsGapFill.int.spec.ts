@@ -69,7 +69,8 @@ describe('Datapoints gap filling integration test', () => {
       const [noFill, withFill] = await client.timeseries.data.retrieve({
         items: [{ instanceId }, { instanceId, fill: { limit: '3h' } }],
         start: t0,
-        end: t0 + 11 * hour,
+        // Well past the last point plus the limit, so the carry-forward has to stop on its own
+        end: t0 + 14 * hour,
         aggregates: ['interpolation'],
         granularity: '1h',
       });
@@ -85,13 +86,13 @@ describe('Datapoints gap filling integration test', () => {
       expect(noFill.datapoints.map((dp) => dp.interpolation)).toEqual([
         1, 3, 8,
       ]);
-      // The 2h gap is interpolated, the last value is carried forward for up to the limit,
-      // and the 5h gap is left out
+      // The 2h gap is interpolated and the 5h gap is left out. The last value is carried
+      // forward up to the limit (8h + 3h), and nothing is returned after that
       expect(timestamps(withFill.datapoints)).toEqual(
-        [1, 2, 3, 8, 9, 10].map((h) => t0 + h * hour)
+        [1, 2, 3, 8, 9, 10, 11].map((h) => t0 + h * hour)
       );
       expect(withFill.datapoints.map((dp) => dp.interpolation)).toEqual([
-        1, 2, 3, 8, 8, 8,
+        1, 2, 3, 8, 8, 8, 8,
       ]);
     });
   });
