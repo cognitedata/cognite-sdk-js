@@ -3,17 +3,6 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-# [0.50.0](https://github.com/cognitedata/cognite-sdk-js/compare/%40cognite%2Fsdk-alpha%400.49.0...%40cognite%2Fsdk-alpha%400.50.0) (2026-11-26)
-
-### Bug Fixes
-
-* wait longer for file uploads and fix flaky integration tests ([#1568](https://github.com/cognitedata/cognite-sdk-js/issues/1568)) ([832080f](https://github.com/cognitedata/cognite-sdk-js/commit/832080f04cf5b455f2399f8ad24483a4d1fd5207))
-
-### Features
-
-* **alpha:** add data-aware workflow types and execution support ([#1588](https://github.com/cognitedata/cognite-sdk-js/issues/1588)) ([831dd81](https://github.com/cognitedata/cognite-sdk-js/commit/831dd812fc177ef490fc0ad0b351dcba338eac8c))
-
-
 # [0.49.0](https://github.com/cognitedata/cognite-sdk-js/compare/%40cognite%2Fsdk-alpha%400.48.1...%40cognite%2Fsdk-alpha%400.49.0) (2026-11-11)
 
 ### Features
