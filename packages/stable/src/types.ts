@@ -64,6 +64,7 @@ export * from './api/containers/types';
 export * from './api/views/types';
 export * from './api/geospatial/types';
 export * from './api/streams/types';
+export * from './api/streams/templates/types';
 export * from './api/records/types';
 export * from './api/sessions/types';
 export * from './api/timeSeries/types';

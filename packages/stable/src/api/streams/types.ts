@@ -95,6 +95,10 @@ export interface StreamLimitSettings {
    */
   maxGigaBytesTotal: StreamLimit;
   /**
+   * Maximum number of unique properties with data that can be stored in the stream
+   */
+  maxUniquePropertiesWithData?: StreamLimit;
+  /**
    * Maximum length of time that the lastUpdatedTime filter can retrieve records for
    */
   maxFilteringInterval?: string;
@@ -109,7 +113,9 @@ export interface StreamLimit {
    */
   provisioned: number;
   /**
-   * Amount of resource consumed
+   * Amount of resource consumed. Only returned when retrieving a stream with
+   * `includeStatistics: true`, and only for `maxRecordsTotal`,
+   * `maxGigaBytesTotal` and `maxUniquePropertiesWithData`.
    */
   consumed?: number;
 }

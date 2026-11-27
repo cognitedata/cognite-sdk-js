@@ -88,6 +88,28 @@ describe('streams integration test', () => {
     expect(retrieved.settings.limits.maxRecordsTotal.provisioned).toBeDefined();
     // consumed should be present with includeStatistics
     expect(retrieved.settings.limits.maxRecordsTotal.consumed).toBeDefined();
+    expect(
+      retrieved.settings.limits.maxUniquePropertiesWithData?.provisioned
+    ).toBeDefined();
+    expect(
+      retrieved.settings.limits.maxUniquePropertiesWithData?.consumed
+    ).toBeDefined();
+  });
+
+  test('list templates', async () => {
+    const templates = await client.streams.templates.list();
+    const names = templates.map((t) => t.name);
+    expect(names).toEqual([...names].sort());
+
+    const liveData = templates.find((t) => t.name === 'BasicLiveData');
+    expect(liveData?.type).toBe('Mutable');
+    expect(liveData?.maxStreams.provisioned).toBeGreaterThan(0);
+    expect(
+      liveData?.settings.limits.uniquePropertiesWithData?.value
+    ).toBeDefined();
+    expect(
+      liveData?.settings.lifecycle.retainedAfterSoftDelete?.value
+    ).toBeDefined();
   });
 
   test('delete non-existent stream (idempotent)', async () => {
