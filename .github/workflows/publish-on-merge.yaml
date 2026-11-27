@@ -40,7 +40,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: lerna publish from-package --yes --no-git-reset
+        run: yarn lerna publish from-package --yes --no-git-reset
 
       - name: Build documentation
         run: yarn docs:bundle
