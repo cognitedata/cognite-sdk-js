@@ -448,11 +448,11 @@ export interface DatapointsMultiQuery extends DatapointsMultiQueryBase {
 
 /**
  * A {@link DatapointsMultiQuery} that sets no aggregates, at the top level or on any item,
- * so it returns raw data points.
+ * so it returns raw data points. It sets no `fill` either, since gap filling needs aggregates.
  */
 export interface RawDatapointsMultiQuery extends DatapointsMultiQuery {
   aggregates?: undefined;
-  items: (DatapointsQuery & { aggregates?: undefined })[];
+  items: (DatapointsQuery & { aggregates?: undefined; fill?: undefined })[];
 }
 
 /**
@@ -581,6 +581,25 @@ export interface DatapointsQueryProperties extends Limit, Cursor {
    * @default true
    */
   treatUncertainAsBad?: boolean;
+  /**
+   * Fill gaps in aggregates. Only valid for aggregate queries. Omit to leave out intervals
+   * without data points (the default).
+   * @see https://docs.cognite.com/dev/concepts/aggregation/gap_filling
+   */
+  fill?: DatapointsFill;
+}
+
+/**
+ * Gap filling for aggregate queries.
+ * @see https://docs.cognite.com/dev/concepts/aggregation/gap_filling
+ */
+export interface DatapointsFill {
+  /**
+   * The longest gap between two data points that is still treated as continuous, in the same
+   * format as `granularity` but without month units (e.g. '15s', '30m', '6h', '1d').
+   * Must be at least the granularity.
+   */
+  limit: string;
 }
 
 // =====================================================

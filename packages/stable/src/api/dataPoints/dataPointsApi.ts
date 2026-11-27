@@ -62,6 +62,11 @@ export class DataPointsAPI extends BaseResourceAPI<
    *   aggregates: ['stateCount', 'stateTransitions', 'stateDuration'],
    *   granularity: '1h',
    * });
+   * const gapFilled = await client.timeseries.data.retrieve({
+   *   items: [{ instanceId: { space: 'my-space', externalId: 'my-ts' }, fill: { limit: '4h' } }],
+   *   aggregates: ['average'],
+   *   granularity: '1h',
+   * });
    * ```
    *
    * @remarks
