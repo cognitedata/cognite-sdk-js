@@ -16,7 +16,7 @@ This repository contains several packages for different API versions.
 
 To get started with the stable API, see the README [here](./packages/stable/README.md).
 
-There is also a [beta API](./packages/beta/README.md).
+There is also a [beta API](./packages/beta/README.md) and an [alpha API](./packages/alpha/README.md).
 
 ## Samples
 
