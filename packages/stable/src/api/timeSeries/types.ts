@@ -80,6 +80,14 @@ export interface TimeSeries extends InternalId, CreatedAndLastUpdatedTime {
    * Additional metadata. String key -> String value.
    */
   metadata?: Metadata;
+  /**
+   * Free-text name of the physical unit, as returned by the asset-centric `/timeseries` API.
+   *
+   * Note: this is a plain string and only describes the asset-centric API. In Data Modeling,
+   * `CogniteTimeSeries.unit` is a direct relation (`{ space, externalId }`) to a `CogniteUnit`
+   * instance, while the free-text unit is stored in `sourceUnit`. Do not use this type to describe
+   * time series instances returned by the Data Modeling API (`client.instances`).
+   */
   unit?: string;
   /**
    * Asset that this time series belongs to.
