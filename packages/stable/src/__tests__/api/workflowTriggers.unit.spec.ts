@@ -2,16 +2,19 @@
 
 import nock from 'nock';
 import { beforeEach, describe, expect, test } from 'vitest';
-import type CogniteClient from '../../cogniteClient';
 import type {
   WorkflowTrigger,
   WorkflowTriggerRun,
   WorkflowTriggerUpsert,
 } from '../../types';
-import { mockBaseUrl, setupMockableClient } from '../testUtils';
+import {
+  type ExperimentalTestClient,
+  mockBaseUrl,
+  setupMockableClient,
+} from '../testUtils';
 
 describe('Workflow triggers unit test', () => {
-  let client: CogniteClient;
+  let client: ExperimentalTestClient;
 
   const scheduleUpsert = {
     externalId: 'trigger-1',

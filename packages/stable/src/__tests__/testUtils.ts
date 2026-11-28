@@ -16,7 +16,10 @@ const allExperimental = {
   functions: true,
   transformations: true,
   extractionPipelines: true,
-};
+} as const;
+
+/** A client with every experimental API enabled, for tests that use gated APIs. */
+export type ExperimentalTestClient = CogniteClient<typeof allExperimental>;
 
 function setupClient(baseUrl: string = process.env.COGNITE_BASE_URL as string) {
   return new CogniteClient({
@@ -46,8 +49,10 @@ function setupLoggedInClient() {
   return client;
 }
 
-function setupMockableClient(options: Partial<ClientOptions> = {}) {
-  return new CogniteClient({
+function setupMockableClient(
+  options: Partial<ClientOptions<typeof allExperimental>> = {}
+) {
+  return new CogniteClient<typeof allExperimental>({
     appId: 'JS SDK integration tests',
     project: process.env.COGNITE_PROJECT as string,
     baseUrl: mockBaseUrl,

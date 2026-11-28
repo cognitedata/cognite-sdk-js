@@ -18,7 +18,9 @@ export type ConcurrencyOptions = {
   dataModeling?: DataModelingConcurrencyOptions;
 };
 
-export interface ClientOptions extends Omit<CoreClientOptions, 'concurrency'> {
+export interface ClientOptions<
+  E extends ExperimentalOptions = ExperimentalOptions,
+> extends Omit<CoreClientOptions, 'concurrency'> {
   /**
    * Opt-in per-API request concurrency limits. Requests are not limited unless
    * this is set; `{}` enables the default limits.
@@ -29,7 +31,8 @@ export interface ClientOptions extends Omit<CoreClientOptions, 'concurrency'> {
   concurrency?: ConcurrencyOptions;
   /**
    * Opt-in to new APIs that may still change. These APIs are disabled unless
-   * their flag is set; accessing one that is not enabled throws.
+   * their flag is set; accessing one that is not enabled throws. Pass the flags
+   * as literals so TypeScript knows which gated APIs are available on the client.
    *
    * ```js
    * const client = new CogniteClient({ ..., experimental: { workflows: true } });
@@ -38,5 +41,5 @@ export interface ClientOptions extends Omit<CoreClientOptions, 'concurrency'> {
    * @alpha This functionality is experimental. Breaking changes are to be expected
    * in any release, including patch and minor versions.
    */
-  experimental?: ExperimentalOptions;
+  experimental?: E;
 }

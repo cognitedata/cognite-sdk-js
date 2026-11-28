@@ -2,17 +2,20 @@
 
 import nock from 'nock';
 import { beforeEach, describe, expect, test } from 'vitest';
-import type CogniteClient from '../../cogniteClient';
 import type {
   HostedExtractorSource,
   HostedExtractorSourceChange,
   HostedExtractorSourceCreate,
   HostedExtractorSourceMqtt5,
 } from '../../types';
-import { mockBaseUrl, setupMockableClient } from '../testUtils';
+import {
+  type ExperimentalTestClient,
+  mockBaseUrl,
+  setupMockableClient,
+} from '../testUtils';
 
 describe('Hosted extractor sources unit test', () => {
-  let client: CogniteClient;
+  let client: ExperimentalTestClient;
 
   const sourceCreate = {
     type: 'mqtt5',

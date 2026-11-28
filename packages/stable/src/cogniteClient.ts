@@ -59,16 +59,21 @@ import { WorkflowsAPI } from './api/workflows/workflowsApi';
 import type { ClientOptions } from './clientOptions';
 import {
   type ExperimentalOptions,
+  type NoExperimentalOptions,
+  type WhenExperimental,
   assertExperimentalEnabled,
 } from './experimental';
 import { retryValidator } from './retryValidator';
 
-export default class CogniteClient extends BaseCogniteClient {
-  private readonly experimental: ExperimentalOptions;
+export default class CogniteClient<
+  const E extends ExperimentalOptions = NoExperimentalOptions,
+> extends BaseCogniteClient {
+  /** Also carries `E` in a member so TypeScript tracks it when comparing clients. */
+  private readonly experimental: E;
 
-  constructor(options: ClientOptions) {
+  constructor(options: ClientOptions<E>) {
     super(options);
-    this.experimental = { ...options.experimental };
+    this.experimental = { ...options.experimental } as E;
     this.functionsApi?.setExperimentalEnabled(!!this.experimental.functions);
     this.transformationsApi?.setExperimentalEnabled(
       !!this.experimental.transformations
@@ -106,7 +111,9 @@ export default class CogniteClient extends BaseCogniteClient {
     return accessApi(this.filesApi);
   }
   public get functions() {
-    return accessApi(this.functionsApi);
+    return accessApi(this.functionsApi) as FunctionsAPI<
+      E extends { readonly functions: true } ? true : false
+    >;
   }
   /**
    * @deprecated Asset-centric API, deprecated 2026-10-15 and retired 2027-12-31. Will be removed or moved in a future major release. See https://docs.cognite.com/cdf/deprecated and https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/DEPRECATIONS.md.
@@ -272,40 +279,62 @@ export default class CogniteClient extends BaseCogniteClient {
     return accessApi(this.dataProductsApi);
   }
   public get transformations() {
-    return accessApi(this.transformationsApi);
+    return accessApi(this.transformationsApi) as TransformationsAPI<
+      E extends { readonly transformations: true } ? true : false
+    >;
   }
   /**
    * @alpha Experimental, disabled unless the client is created with `experimental: { hostedExtractors: true }`.
    */
-  public get hostedExtractors() {
+  public get hostedExtractors(): WhenExperimental<
+    E,
+    'hostedExtractors',
+    HostedExtractorsAPI
+  > {
     assertExperimentalEnabled(
       !!this.experimental.hostedExtractors,
       'hostedExtractors',
       'client.hostedExtractors'
     );
-    return accessApi(this.hostedExtractorsApi);
+    return accessApi(this.hostedExtractorsApi) as WhenExperimental<
+      E,
+      'hostedExtractors',
+      HostedExtractorsAPI
+    >;
   }
   /**
    * @alpha Experimental, disabled unless the client is created with `experimental: { workflows: true }`.
    */
-  public get workflows() {
+  public get workflows(): WhenExperimental<E, 'workflows', WorkflowsAPI> {
     assertExperimentalEnabled(
       !!this.experimental.workflows,
       'workflows',
       'client.workflows'
     );
-    return accessApi(this.workflowsApi);
+    return accessApi(this.workflowsApi) as WhenExperimental<
+      E,
+      'workflows',
+      WorkflowsAPI
+    >;
   }
   /**
    * @alpha Experimental, disabled unless the client is created with `experimental: { extractionPipelines: true }`.
    */
-  public get extractionPipelines() {
+  public get extractionPipelines(): WhenExperimental<
+    E,
+    'extractionPipelines',
+    ExtractionPipelinesAPI
+  > {
     assertExperimentalEnabled(
       !!this.experimental.extractionPipelines,
       'extractionPipelines',
       'client.extractionPipelines'
     );
-    return accessApi(this.extractionPipelinesApi);
+    return accessApi(this.extractionPipelinesApi) as WhenExperimental<
+      E,
+      'extractionPipelines',
+      ExtractionPipelinesAPI
+    >;
   }
   private assetsApi?: AssetsAPI;
   private timeSeriesApi?: TimeSeriesAPI;

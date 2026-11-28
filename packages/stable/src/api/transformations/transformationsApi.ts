@@ -26,7 +26,9 @@ import type {
   TransformationRunRequest,
 } from './types';
 
-export class TransformationsAPI extends BaseResourceAPI<Transformation> {
+export class TransformationsAPI<
+  Enabled extends boolean = false,
+> extends BaseResourceAPI<Transformation> {
   private readonly jobsApi: TransformationJobsAPI;
   private readonly notificationsApi: TransformationNotificationsAPI;
   private readonly queryApi: TransformationQueryAPI;
@@ -79,9 +81,11 @@ export class TransformationsAPI extends BaseResourceAPI<Transformation> {
    *
    * @alpha Experimental, requires `experimental: { transformations: true }` in the client options.
    */
-  public get query() {
+  public get query(): Enabled extends true ? TransformationQueryAPI : unknown {
     this.assertExperimental('query');
-    return this.queryApi;
+    return this.queryApi as Enabled extends true
+      ? TransformationQueryAPI
+      : unknown;
   }
 
   /**
@@ -89,9 +93,13 @@ export class TransformationsAPI extends BaseResourceAPI<Transformation> {
    *
    * @alpha Experimental, requires `experimental: { transformations: true }` in the client options.
    */
-  public get notifications() {
+  public get notifications(): Enabled extends true
+    ? TransformationNotificationsAPI
+    : unknown {
     this.assertExperimental('notifications');
-    return this.notificationsApi;
+    return this.notificationsApi as Enabled extends true
+      ? TransformationNotificationsAPI
+      : unknown;
   }
 
   /**
@@ -99,9 +107,13 @@ export class TransformationsAPI extends BaseResourceAPI<Transformation> {
    *
    * @alpha Experimental, requires `experimental: { transformations: true }` in the client options.
    */
-  public get schedules() {
+  public get schedules(): Enabled extends true
+    ? TransformationSchedulesAPI
+    : unknown {
     this.assertExperimental('schedules');
-    return this.schedulesApi;
+    return this.schedulesApi as Enabled extends true
+      ? TransformationSchedulesAPI
+      : unknown;
   }
 
   /**
@@ -109,9 +121,11 @@ export class TransformationsAPI extends BaseResourceAPI<Transformation> {
    *
    * @alpha Experimental, requires `experimental: { transformations: true }` in the client options.
    */
-  public get jobs() {
+  public get jobs(): Enabled extends true ? TransformationJobsAPI : unknown {
     this.assertExperimental('jobs');
-    return this.jobsApi;
+    return this.jobsApi as Enabled extends true
+      ? TransformationJobsAPI
+      : unknown;
   }
 
   /**
@@ -119,9 +133,13 @@ export class TransformationsAPI extends BaseResourceAPI<Transformation> {
    *
    * @alpha Experimental, requires `experimental: { transformations: true }` in the client options.
    */
-  public get schema() {
+  public get schema(): Enabled extends true
+    ? TransformationSchemaAPI
+    : unknown {
     this.assertExperimental('schema');
-    return this.schemaApi;
+    return this.schemaApi as Enabled extends true
+      ? TransformationSchemaAPI
+      : unknown;
   }
 
   /**

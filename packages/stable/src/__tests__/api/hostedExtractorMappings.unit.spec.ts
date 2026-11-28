@@ -2,16 +2,19 @@
 
 import nock from 'nock';
 import { beforeEach, describe, expect, test } from 'vitest';
-import type CogniteClient from '../../cogniteClient';
 import type {
   HostedExtractorMapping,
   HostedExtractorMappingChange,
   HostedExtractorMappingCreate,
 } from '../../types';
-import { mockBaseUrl, setupMockableClient } from '../testUtils';
+import {
+  type ExperimentalTestClient,
+  mockBaseUrl,
+  setupMockableClient,
+} from '../testUtils';
 
 describe('Hosted extractor mappings unit test', () => {
-  let client: CogniteClient;
+  let client: ExperimentalTestClient;
 
   const mappingCreate = {
     externalId: 'my-mapping',
