@@ -5,6 +5,7 @@ import { DEFAULT_DOMAIN } from '../constants';
 import { isJson } from '../utils';
 import { HttpError, type HttpErrorData } from './httpError';
 import type { HttpHeaders } from './httpHeaders';
+import { mapKeys } from 'lodash';
 
 /**
  * The `BasicHttpClient` class provides a simplified HTTP client for making
@@ -114,7 +115,7 @@ export class BasicHttpClient {
    *
    * @param baseUrl
    */
-  constructor(protected baseUrl: string) {}
+  constructor(protected baseUrl: string) { }
 
   public setDefaultHeader(name: string, value: string) {
     this.defaultHeaders[name] = value;
@@ -199,9 +200,13 @@ export class BasicHttpClient {
   }
 
   protected populateDefaultHeaders(headers: HttpHeaders = {}) {
+    const mapFn = (_: unknown, key: string) => {
+      const lcKey = key.toLowerCase();
+      return lcKey === 'authorization' ? 'Authorization' : lcKey;
+    };
     return {
-      ...this.defaultHeaders,
-      ...headers,
+      ...mapKeys(this.defaultHeaders, mapFn),
+      ...mapKeys(headers, mapFn),
     };
   }
 
